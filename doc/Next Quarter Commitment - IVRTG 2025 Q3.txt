@@ -1,0 +1,205 @@
+ Overview
+Team announces their next quarter commitments along with a refresh of their 12 month roadmap.
+What initiatives is the team committing to for the next quarter? What does success look like for each?
+What is the new 12-month plan?
+Date
+ 
+Team
+IVRTG
+Participants
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Next Quarter Commits
+List out next quarter commitments, with target date and definition of success for each item. 
+Jira Plans link can also be embedded below, but we want a full record of commitments for comparison at a later date. 
+IVRTG Prod Eng. Capacity
+Implementation (3)
+Compass Platform (4)
+Compass Broadcast (4)
+Engineering Support (3)
+Average Velocity Last 12 Sprints
+30
+36
+33
+28
+Total Capacity for Quarter
+180
+216
+198
+168
+Capacity for Vacations / Issues (Less 20%)
+36
+44
+40
+34
+Available Capacity
+144
+172
+158
+134
+Total Available Capacity
+608 points
+Commitment
+T-Shirt Size
+Layer Cake
+Team
+Target Date
+Definition of Success
+Payment IVR - Contact Center Payment
+M
+Major Enhancements
+Implementation
+ 
+Create and facilitate enablement plan for new Product across GTM, CSM, and Product Marketing teams
+Payment IVR - Complete Shopping Cart Discovery 
+M
+Innovation / Discovery
+Implementation
+ 
+Key Outcome: Allow Payers to pay multiple open invoices with a single transaction. 
+Design UX workflow
+Update call flow documentation
+Define API update requirements
+Outbound Campaigns - Complete Discovery for EBPP Integration
+S
+Innovation / Discovery
+Implementation
+ 
+Key Outcome: Display outbound campaign communication history in the EBPP.
+Work with Product to define UI and UX requirements and design wireframe
+Define API requirements 
+Payer AI Agent
+EBPP-204
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+https://invoicecloud.atlassian.net/browse/PLAT-2314
+https://invoicecloud.atlassian.net/browse/PLAT-2397
+L
+Innovation / Discovery
+Compass Platform
+ 
+Ready for Biller Beta Participant Outreach
+Completion of:
+Enablement Material
+Legal / Compliance Approval & Deliverables
+Demo / Prod Environment
+Data / Reporting
+SF Client Services Feedback Channel
+Participate in product enablement planning
+Address gaps identified during planning
+Compass Platform CQI - I
+M
+Non-Discretionary Technical Upkeep
+Compass Platform
+ 
+Ensure lint and test stages are run in CI pipelines
+Include non-blocking coverage, SAST and dependency vulnerability scanning as part of pre-commit and CI.
+Outbound Campaigns - Move To DB / Server Side Pagination & Filtering
+XS
+Technology Roadmap
+Compass Broadcast
+ 
+Fixed Compass Broadcast Portal Loading Slowness Problem. Specifically for NFG main client account.
+Ensure all data table filtering is performed at the database level.
+Outbound Campaigns - Increase Throughput
+M
+Technology Roadmap
+Compass Broadcast
+ 
+Currently Voice, Text and Email Campaigns run synchronously.
+Run Voice Campaigns in parallel.
+Run Text Campaigns in parallel.
+Run Email Campaigns in parallel.
+Outbound Campaigns - Contact Group Rework
+L
+Technology Roadmap
+Compass Broadcast
+ 
+Spill over into Q4
+Move away from utilizing single document for storing contact group to separate collections removing size limits.
+Rework all aspect of product to utilize new contact group data structure.
+Payment IVR - Paperless and AutoPay Adoption Drivers
+M
+Major Enhancements
+Engineering - Support
+ 
+Complete testing by 7/31
+Create and facilitate enablement plan for new features across GTM, CSM, and Product Marketing teams
+Deploy to Production
+Contrast Rollout
+M
+Non-Discretionary Technical Upkeep
+Engineering Support
+ 
+Add Contrast to Non Compass Platform applications.
+Decommission legacy mail server
+S
+Non-Discretionary Technical Upkeep
+Engineering Support
+ 
+Provide platform team with all internal mail aliases.
+Work with platform team to decommission legacy mail server.
+Planned Points
+150 + 160 + 195 + 150 = 655 points
+ New 12 Month Roadmap
+Add a 12 Month view. This should be from Jira Product Discovery. Create a View and just copy/paste the link below, and it should render appropriately. In the table below, list any noteworthy changes.
+Item
+Notes
+Voice Bot - IC Payment IVR 4.0 Discovery
+Redesign IC Payment IVR to support NLP for an intent-driven UX using AI.
+Scheduled Payments Discovery
+Add the ability to schedule payments in the payment IVR
+Payment Extensions Discovery
+Add the ability to request and setup a payment extension in the payment IVR (requires CIS specific integration)
+Kong API Gateway Upgrades
+Upgrade to the latest stable version of Kong API Gateway
+Start utilizing Hashicorp Vault for credential management
+Migrate all apps to leverage dynamic vault credentials to improve security posture
+Compass Platform CQI - II
+Add test cases around routing for Django projects
+Upgrade to Django 4 LTS
+Compass Broadcast Contrast Rollout
+Add Contrast to:
+Compass Broadcast
+UM API
+Ninja API
+Click to Call
+Compass Broadcast CQI
+Ensure lint and test stages are run in CI pipelines
+Include non-blocking coverage, SAST and dependency vulnerability scanning as part of pre-commit and CI.
+Add test cases around routing for Django projects
+Upgrade to Django 4 LTS
+Non Compass Apps CQI
+Ensure lint and test stages are run in CI pipelines
+Include non-blocking coverage, SAST and dependency vulnerability scanning as part of pre-commit and CI.
+Add test cases around routing for Django projects
+Upgrade to Django 4 LTS
+Compass Broadcast - Unified Authentication for API and Portal
+Today there is authentication context divergence. Portal users are validated via Auth0 and API users are validate by DRF.
+We need to have unified authentication. Whether we fully switch to Auth0 or bring SSO auth via SAML in house using packages like djangosaml2 or django-saml2-auth.
+ Open Questions
+Provide a list of any discussion questions the team has, especially if there are decisions/actions needed to unblock the next quarter’s roadmap. 
+
+
+
+
+23
+
+
+23
+
+
+incomplete
+
+
+
+
+ URL:/spaces/PE/pages/4442816513/Next+Quarter+Commitment+-+IVRTG+2025+Q3

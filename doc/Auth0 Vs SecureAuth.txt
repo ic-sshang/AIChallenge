@@ -1,0 +1,511 @@
+A page to provide some highlights of the comparison between the Identity Providers Auth0 and SecureAuth.
+Why we are only comparing these two on this page?
+We researched and compared various competitive Identity providers available in the Market to identify and compare the various attributes from those IDPs but based on the various features offered, Auth0, SecureAuth, KeyCloak and PingID are the ones which offer almost all those features and functionalities. 
+We then ruled our KeyCloak because it is an open source solution and can have risks on the security aspects.
+Based on the spike done by the PRISM team, we got to know that the PING ID is not very suitable with the .Net technology and the Auth0 and SecureAuth can be more compatible for our Biller Portal at Invoice Cloud.
+Pricing Models received from Auth0 and SecureAuth:
+Auth0: (Quoted per annum)
+Auth0 - Enterprise Premium: $57,251.03 
+Auth0 + Attack Protection: $67,047.30 
+Auth0 + Attack Protection & Adaptive MFA: $79,185.26 
+SecureAuth: (3 years package till December 2027)
+Elite (Includes everything): $78,750
+Per annum:  $26,250
+ 
+3. Offerings in the fully loaded Auth0 package:
+Offerings in the fully loaded SecureAuth package:
+Comparison:
+Features Comparison:
+Here's a detailed comparison of 
+Auth0
+ and 
+SecureAuth
+ specifically for Identity Management (IDM) with 
+Single Sign-On (SSO)
+ and 
+Multi-Factor Authentication (MFA)
+, in context of a 
+.NET-based SaaS application in the Electronic Bill Presentment and Payment (EBPP) domain
+.
+🔍 Contextual Considerations for EBPP SaaS in .NET
+Compliance & Security:
+ PCI DSS, SOC2, and GDPR are often mandatory.
+User Types:
+ Mix of consumers (retail), business users (enterprise portals), and possibly internal admin users.
+Integration:
+ .NET stack, likely using 
+ASP.NET
+ Core and SQL-based backend.
+Scalability:
+ Support for growing user base with high security expectations.
+UX:
+ Frictionless user experience while maintaining strong security.
+✅ Feature Comparison Table: Auth0 vs SecureAuth
+Feature
+Auth0
+SecureAuth
+Notes - 
+SecureAuth
+ or 
+Auth0
+ Drawbacks
+SSO Capabilities
+Full SAML, OIDC, OAuth2 support. Strong support for B2B and B2C SSO.
+Strong support for enterprise SSO with adaptive risk-based access control.
+SecureAuth 
+does support SAML, OIDC, and OAuth2
+, but 
+with nuances
+. 
+Not designed for high-scale B2C applications. Lacks native support for hosted login experiences, social logins, or scalable multi-tenant B2C auth without heavy customization.
+Here's a focused breakdown for the capabilities we are comparing:
+✅ SecureAuth – Protocol Support Overview
+Protocol
+Support Level
+Notes
+SAML 2.0
+✅ Full
+Core protocol; SecureAuth is very strong in enterprise SSO via SAML, especially for internal users or partner orgs.
+OIDC (OpenID Connect)
+✅ Partial to Full
+Available, but not as seamless as in developer-centric platforms like Auth0. Configuration can be more complex.
+OAuth 2.0
+✅ Partial
+SecureAuth supports OAuth 2.0 for delegated access, but it's primarily focused on securing web and enterprise apps, not API-first or SaaS-first experiences.
+🔁 B2B and B2C SSO Support
+Capability
+Support Level
+Comments
+B2B SSO
+✅ Strong
+SecureAuth is well-suited for enterprise federation (via SAML/LDAP/ADFS). You can integrate multiple identity providers (IdPs) for partner orgs.
+B2C SSO
+⚠️ Limited
+Not designed for high-scale B2C applications. Lacks native support for hosted login experiences, social logins, or scalable multi-tenant B2C auth without heavy customization.
+Summary
+Feature
+SecureAuth Support
+Full SAML 2.0
+✅ Yes
+Full OpenID Connect (OIDC)
+✅ With effort
+Full OAuth2
+✅ But more limited
+B2B SSO
+✅ Strong
+B2C SSO
+⚠️ Weak
+🔍 Takeaway for Us
+If your SaaS app is 
+primarily B2B (e.g., bill presentment portals for businesses or municipalities)
+ and you can manage SSO federation per client, SecureAuth can support you — 
+but you may encounter friction in dev workflows
+.
+However, if you want:
+Out-of-the-box support for social logins
+, customizable hosted pages, and dynamic onboarding of consumer users (B2C),
+Simple OIDC/OAuth2 integration
+ into a .NET API-first stack,
+Or if you're planning 
+self-service onboarding
+, lightweight tenants, or embedded login UIs,
+Then 
+Auth0 is a better fit
+.
+✅ Summary: Does Auth0 Provide Strong Enterprise SSO + Adaptive Risk-Based Access?
+Capability
+Auth0 Support
+Notes
+Enterprise SSO (SAML, OIDC, WS-Fed)
+✅ Strong
+Fully supported, widely used in B2B SaaS.
+Federated IdPs per tenant
+✅ Excellent
+Via “Organizations” feature.
+Adaptive MFA
+✅ Yes
+Built-in + configurable rules.
+Risk-based conditional access
+✅ Moderate to Strong
+Some features are native; others require rules, actions, or external services.
+Developer/Policy Customization
+✅ High
+Via extensibility framework (Rules, Actions, Hooks).
+🚀 Conclusion
+Yes, 
+Auth0 provides strong enterprise SSO and solid adaptive access controls
+, particularly for SaaS providers in the 
+B2B or B2B2C space
+. For high-stakes security workflows (like those in 
+Electronic Bill Presentment and Payment
+), Auth0 is well-suited — and scalable.
+MFA Options
+SMS, Email, TOTP, Push via Guardian app, WebAuthn, Duo integration
+TOTP, Push, WebAuthn, Biometric, Phone call, SMS, FIDO2
+If you 
+require Guardian or Duo specifically
+, SecureAuth may not be ideal.
+ But if you're open to using 
+SecureAuth's own MFA app and ecosystem
+, it 
+does provide comprehensive MFA coverage
+, including modern protocols like WebAuthn.
+Auth0 supports all modern MFA methods except voice/phone call MFA
+. If that method is essential, you’ll need custom integration. 
+For a 
+.NET-based SaaS in EBPP
+, the current support covers most compliance and usability needs.
+.NET Integration
+SDKs for 
+ASP.NET
+ Core, OWIN, Web API; easy integration with IdentityModel
+Native .NET integration available; documentation less developer-centric
+✅ 
+Auth0 vs SecureAuth for .NET Integration
+Criteria
+Auth0
+SecureAuth
+.NET SDKs & Tooling
+✅ Excellent – Official SDKs for 
+http://ASP.NET
+  Core, Web API, Blazor
+⚠️ Limited – Mostly standards-based, fewer modern SDKs
+Integration Simplicity
+✅ Easy – Plug-and-play with middleware, OIDC templates
+❌ Manual – Relies on SAML, WS-Fed, or custom token handling
+Hosted Login (Universal Login)
+✅ Yes – Fully customizable and hosted
+⚠️ Partial – Requires more on-premise effort
+API Protection (OAuth2/OIDC)
+✅ Full support for securing APIs via bearer tokens
+⚠️ SAML-centric – OAuth2/OIDC support is functional but secondary
+B2B/B2C Use Cases
+✅ Strong support – via “Organizations” & self-service onboarding
+⚠️ Primarily B2B – B2C flows require customization
+Documentation for .NET
+✅ Rich, current, scenario-based docs
+❌ Sparse or dated – Less guidance for modern .NET Core apps
+Deployment Model
+✅ Cloud-native – SaaS, multitenant
+⚠️ Primarily on-premise or private cloud
+MFA & Adaptive Access in .NET Flows
+✅ Built-in support, configurable via dashboard or Actions
+⚠️ Complex – Often requires manual logic
+Logging & Debugging for Developers
+✅ Excellent – Real-time logs, debugging tools
+⚠️ Basic – More sysadmin-focused than dev-centric
+Dev Onboarding & Test Environments
+✅ Free tier + tenant separation
+❌ Less developer-friendly – licensing-based dev/test environments
+Developer Experience
+Excellent docs, quickstarts, and UI SDKs for .NET. CI/CD-friendly
+Less developer-focused, more enterprise/IT admin configuration oriented
+Security Compliance
+SOC2, ISO27001, GDPR, HIPAA, and supports PCI-DSS apps
+Strong on compliance; FICAM, FedRAMP-ready (for U.S. public sector)
+Both provide the same security compliance features.
+User Management
+Hosted user management UI + APIs; extensible via Rules & Actions
+Strong user directory with adaptive policies and advanced threat intel
+Customization & Branding
+High: Customizable login pages, hosted or embedded login
+Moderate: More enterprise-configurable than developer-customizable
+Adaptive Authentication
+Yes: Risk-based MFA, IP filtering, anomaly detection
+Yes: Strong adaptive policies based on location, device, IP, behavior
+Pricing Model
+Pay-as-you-go (MAU-based); startup and enterprise plans
+Typically enterprise licensing; contact for pricing
+Multi-tenancy Support
+Excellent; ideal for B2B2C SaaS with tenant isolation
+Limited; better suited to single-tenant or B2E (Business to Employee) use
+SSO Federation for Enterprises
+Strong support (SAML, WS-Fed, OIDC); ideal for B2B SaaS
+Also strong, but often positioned for internal enterprise use cases
+Customer Support
+Good for paid tiers; rich community and marketplace
+Enterprise-focused support, often with dedicated account managers
+Hosting & Deployment
+Fully cloud-based (Auth0 by Okta); global availability
+On-prem, cloud, and hybrid deployment available
+🔧 Recommendation for Your Use Case
+📌 Choose 
+Auth0
+ if:
+You prioritize 
+rapid integration with your .NET stack
+.
+You need 
+multi-tenant support
+ for different client organizations (a common SaaS EBPP requirement).
+You want a 
+cloud-first
+, developer-friendly platform with strong documentation and extensibility.
+You expect a 
+B2C/B2B2C
+ user model with hosted login or embedded widgets.
+You want scalable pricing without immediate enterprise licensing negotiations.
+📌 Choose 
+SecureAuth
+ if:
+You have strict requirements for 
+on-prem or hybrid deployment
+.
+Your clients are 
+public sector or highly regulated enterprises
+ with a strong preference for 
+customizable MFA and adaptive policies
+.
+You need deep 
+enterprise IT integration
+, possibly with legacy systems or specialized protocols.
+You prefer an 
+IT-admin managed model
+ over developer-led customization.
+Final Verdict
+For a 
+modern .NET SaaS product
+ in the 
+EBPP space
+, especially if you're managing 
+consumer and business client identities
+, 
+Auth0
+ is typically a better fit due to:
+Superior 
+multi-tenant support
+,
+Better 
+developer tooling and extensibility
+,
+Rich 
+B2B/B2C support
+,
+Simplified 
+pricing and onboarding
+.
+SecureAuth
+ is better suited for 
+enterprise-only, internal employee identity management
+, or if your clients demand 
+hybrid hosting with enterprise-grade MFA
+ and 
+custom IT policy controls
+.
+Would you like a cost model estimate or implementation checklist for Auth0 in your .NET app?
+Attributes Matrix
+Attribute
+SecureAuth
+Auth0
+Protocol support
+ SAML
+ OAuth2
+ OIDC
+idP support 
+(should we also include enterprise idPs like LDAP and MS AD?)
+ Okta
+ Auth0
+ Ping Identity
+ Entra ID (Azure AD)
+ OneLogin
+ Salesforce
+ LDAP
+ Active Directory
+MFA factors
+Knowledge
+ Passwords
+ PINs
+ Security Questions
+Possession
+ OTP Tokens (GA)
+ OTP Tokens (MS)
+ OTP Tokens (Authy)
+ SMS
+ Email
+ WebAuthn
+Inherence
+ Biometric
+Location
+ Geolocation
+ IP Address
+Compliance 
+(is this necessary?)
+ PCI
+ Other?
+Hosted login page
+Fully 
+customizable hosted login page
+.
+Drag-and-drop 
+Login Workflow Designer
+ for creating tailored authentication flows.
+Supports 
+branding, theming, and multi-language support
+.
+Compatible with modern protocols: 
+OIDC, SAML, WS-Fed
+.
+Fully Hosted (Universal Login):
+ Auth0 handles the infrastructure, security, and scalability of the login page.
+Simplified Setup:
+ Quick and easy to configure with minimal infrastructure management.
+Customization Options:
+ Offers a visual editor and the ability to customize with HTML, CSS, and JavaScript (within limitations).
+Multiple Login Methods:
+ Supports social logins, enterprise identity providers (like Active Directory, Azure AD), and passwordless authentication out-of-the-box.
+Reduced Operational Burden:
+ Frees up your team from managing login infrastructure.
+Threat detection
+Built-in 
+risk-based adaptive authentication
+.
+Supports:
+Geo-velocity
+ (impossible travel)
+Device fingerprinting
+IP reputation
+Behavioral biometrics
+Dynamic policy enforcement based on 
+risk score evaluation
+.
+Advanced Anomaly Detection:
+ Identifies unusual login patterns and activities.
+Breached Password Detection:
+ Warns users if their passwords have been found in known data breaches.
+Bot Detection:
+ Helps to prevent automated attacks on login endpoints.
+Real-time Analysis:
+ Continuously analyzes login attempts and flags suspicious behavior.
+Managed Service:
+ Threat detection features are managed and updated by Auth0.
+Administration features
+Centralized 
+admin dashboard
+ for managing:
+Policies
+User groups
+Devices
+MFA workflows
+Delegated admin
+ support for distributed IT governance.
+Visual policy builder
+ enables low-code configuration of authentication flows.
+Application Management
+User Management
+Security Settings
+Branding
+Permissions management
+Supports 
+Role-Based Access Control (RBAC)
+ via external identity sources (e.g., Active Directory, LDAP).
+Claims-based and context-aware access decisions
+.
+Integration with identity governance tools for provisioning and entitlements.
+Auth0 provides comprehensive role-based access control (RBAC) features
+Key permissions management options include:
+Role Management
+:
+User Permissions
+:
+API Permissions
+:
+Dashboard and Management API
+Analytics & reporting
+Real-time 
+login analytics, risk scoring, and threat activity reporting
+.
+Audit logs
+ for compliance and monitoring.
+Integration with 
+SIEM tools
+ (Security Information and Event Management) for deeper insights.
+Comprehensive Dashboard Analytics:
+ Provides detailed insights into logins, sign-ups, active users, errors, and security events.
+Pre-built Reports:
+ Offers various pre-configured reports for common metrics.
+Customizable Dashboards:
+ Allows you to tailor the dashboard to your specific needs.
+Data Retention Policies:
+ Auth0 has its own data retention policies for analytics data.
+Pricing model
+ 
+Subscription-Based:
+ Pricing is typically based on the number of monthly active users (MAU) and the specific features included in your plan.
+Tiered Plans:
+ Offers different pricing tiers with varying features and support levels.
+Predictable Costs (potentially):
+ Subscription model can provide more predictable costs compared to self-hosting.
+Scalability Considerations:
+ Pricing can increase as your user base grows.
+ 
+Auth0
+Auth0 provides several SDKs tailored for different types of .NET applications, including 
+http://ASP.NET
+  Core and Web API
+. Auth0's SDKs support various authentication and authorization features, such as JWT middleware for token validation
+. Auth0 is known for its ease of use, extensive documentation, and flexibility in integrating with different .NET versions and frameworks
+Comparison
+Ease of Integration
+: Auth0 generally offers a more straightforward integration process with comprehensive documentation and examples
+Features
+: PingID excels in enterprise-level MFA and SSO solutions, while Auth0 provides a wide range of authentication and authorization features suitable for various application types.
+Flexibility
+: Auth0 supports multiple .NET frameworks and versions, making it highly adaptable.
+Assumed TCO
+Medium to high TCO
+, justified by:
+Strong security capabilities.
+Flexibility in deployment.
+Reduced engineering effort due to drag-and-drop workflow design.
+Best suited for 
+security-conscious mid to large enterprises
+.
+Higher Direct Subscription Costs:
+ Ongoing subscription fees based on usage.
+Lower Indirect Costs:
+ Reduced need for infrastructure management, patching, and dedicated security expertise for the identity platform.
+Faster Time-to-Market:
+ Simplified setup and configuration can lead to quicker deployment.
+Scalability Included:
+ Auth0 handles the scalability of the identity platform.
+Developer Experience & SDKs
+Offers 
+RESTful APIs and SDKs
+ to integrate with custom apps.
+Supports:
+.NET/.NET Core SDKs
+Integration guides for 
+http://ASP.NET
+   MVC/Web API apps.
+Extensive documentation and 
+developer support portal
+.
+Hooks and extensibility points
+ for post-auth processing, adaptive policies, etc.
+Developer-Centric Platform:
+ Designed with developers in mind, offering excellent documentation, quick starts, and comprehensive SDKs for various languages, including .NET.  
+Abstraction Layers:
+ Often provides higher-level abstractions that simplify common authentication and authorization tasks.
+Rules and Hooks:
+ Offers a powerful way to customize authentication flows with serverless functions, reducing the need to modify the core application.
+Extensive API:
+ Well-documented Management API and Authentication API for seamless integration.
+Compatibility with .NET Web Applications
+Full support for 
+http://ASP.NET
+  and
+ 
+http://ASP.NET
+  Core applications.
+Supports integration using:
+OIDC middleware
+SAML toolkits
+WS-Federation for legacy .NET apps
+Sample code and walkthroughs for 
+login, token validation, and SSO setup
+.
+Easily integrates with 
+.NET Identity and custom claims handling
+.
+Auth0 generally offers the smoothest and most developer-friendly experience for integrating with .NET web applications due to its dedicated and well-supported .NET SDK. This can lead to faster development times and reduced complexity.
+ URL:/spaces/PRODUCT/pages/4327440386/Auth0+Vs+SecureAuth

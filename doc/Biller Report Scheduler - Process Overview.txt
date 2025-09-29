@@ -1,0 +1,38 @@
+Description
+This application currently runs on Automate/Skybot at 2:00 am CST daily. 
+High-level overview
+The application first checks if there are any command-line arguments passed. If the first argument is "healthtest", it performs a health check and then exits.
+If the "healthtest" argument is not passed, it fetches records to process from the database. If the ReRun property is true, it fetches records ignoring any reports that have been inserted for the current day. Otherwise, it fetches all records.
+For each record, it creates a 
+Scheduler 
+object and calculates the next processing date. If the next processing date is not today, it skips the current iteration and moves to the next record.
+If the next processing date is today, it checks the 
+EnableDynamicDates 
+colum in the data row and if true, it will call the 
+DynamicDatesHandler (see below) 
+and update the SQL in the database.
+It then inserts the record into the queue for processing and fetches the email recipients for the report.
+It creates a table of email addresses and inserts them into the database.
+If any exception occurs during the processing of a record, it logs the exception and sets the exit code to 1.
+Finally, it returns the exit code. If everything went smoothly, it returns 0. If there were any exceptions, it returns 1.
+Once the reports are scheduled and created, they will be picked up and sent out via the 
+Biller Report Generator
+Scheduler Object
+The Scheduler class is used to calculate the next processing date based on the frequency ID, day of week ID, and frequency day ID. It supports daily, weekly, and monthly frequencies.
+Daily (ScheduledReportFrequencyID is 2): The next processing date is simply the current date. This means the report is scheduled to run daily.
+Weekly (ScheduledReportFrequencyID is 3): The next processing date is calculated by iterating over the days starting from the current date until it finds a day that matches the ScheduledReportDayOfWeekID. This means the report is scheduled to run on a specific day of the week.
+Monthly (ScheduledReportFrequencyID is 4): The next processing date is calculated by iterating over the days starting from the current date until it finds a day that matches the ScheduledReportFrequencyDayID. If the ScheduledReportFrequencyDayID is greater than the number of days in the current month, it uses the last day of the month. This means the report is scheduled to run on a specific day of the month.
+Dynamic Dates Handler
+The DynamicDatesHandler class has a static method UpdateForDynamicDates that updates the start and end dates in a SQL query string based on a given frequency ID.  
+Explanation of what the method does:
+The class creates a StoredProcedureSQLParser object with the SQL query string to parse out the start and end date parameters.
+It checks if the start and end date parameters were found in the SQL query string. If not, it returns false.
+It tries to parse the values of the start and end date parameters as DateTime objects. If it fails to parse either of them, it returns false.
+It then calculates the modified start and end dates based on the ScheduledReportFrequencyID:
+If the frequency ID is 2 (daily), it increases the start and end dates by one day.
+If the frequency ID is 3 (weekly), it increases the start and end dates by seven days.
+If the frequency ID is 4 (monthly), it increases the start and end dates by one month.
+If the frequency ID is anything else, it returns false.
+It then replaces the old start and end dates in the SQL query string with the modified start and end dates.
+Finally, it updates the original SQL query string with the modified SQL query string and returns true.
+ URL:/spaces/ED/pages/3013705785/Biller+Report+Scheduler+-+Process+Overview

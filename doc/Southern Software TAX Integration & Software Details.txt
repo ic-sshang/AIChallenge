@@ -1,0 +1,140 @@
+Page Navigation
+Document Status
+Complete
+Green
+Document Owner
+ 
+Knowledge Transfer
+Gong URL
+Integration Summary
+Southern Software Tax integration will use the BIF file for invoices and BAF file for adjustments.  The BIF and BAF file will be transmitted through webservices.  Payment Export will be File Type ID 310 IF_Southern Software-Tax.   
+Invoice Cloud virtual site will be in use for the integration.  
+Data Synchronization
+This section enumerates the data/record types for which the defined integration provides data synchronization solutions.
+Type
+Specification (Layout, Endpoint, etc.)
+Method
+Additional Details
+Invoice
+BIF
+IC Web Service
+Adjustment/Balance
+BAF
+IC Web Service
+Payment
+Partner TXT File
+SFTP
+File Type ID 310 IF_Southern Software-Tax.   
+Chargeback
+IC
+Manual Update into CIS 
+ACH Reject
+IC
+Manual Update into CIS
+Void
+IC
+Manual Update into CIS
+Change Log - AutoPay Enrollment
+Who’s specifications? Partner or IC? Ex: ABC Partner Web Services, BAF, Partner TXT File
+Partner Webhook (Data Pump)
+SFTP
+Change Log - Paperless Enrollment
+Who’s specifications? Partner or IC? Ex: ABC Partner Web Services, BAF, Partner TXT File
+Partner Webhook (Data Pump)
+SFTP
+Change Log - Phone Number
+Who’s specifications? Partner or IC? Ex: ABC Partner Web Services, BAF, Partner TXT File
+Partner Webhook (Data Pump)
+SFTP
+Change Log - Email Address
+Who’s specifications? Partner or IC? Ex: ABC Partner Web Services, BAF, Partner TXT File
+Partner Webhook (Data Pump)
+SFTP
+Bill Images 
+PDF Linking - Supported
+PDF Extraction - Supported
+Template - Not Supported
+Web Service
+SFTP
+No standard bill presentment.  Bill presentment will be determined on a biller by biller basis.  
+Products
+This section enumerates the Invoice Cloud products/services included (supported/recommended) for this integration.
+Product
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Supported through Online Bank Direct
+Cloud Payments (CPV2)
+Not Supported  
+CloudPay Web Services
+Not Supported  
+Cloud SSO Connect
+Not Supported 
+Cloud Store
+Supported but not part of the standard integration
+EMV
+Supported through biller portal only
+IVR
+Supported.  Recommended search parameter-account number
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+SAML SSO
+Not Supported
+Features
+This section enumerates select product features required or recommended to achieve the desired data synchronization and user experience integration.
+Feature
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Standard IC email/pwd linking
+       Multi-User Log In
+Standard IC Multi-User
+       Co-Owner Registration
+Standard IC Co-Owner functionality 
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+BIF customization
+Batch Closure
+11:59 PM local time
+Billing Options 
+       Open Item Billing
+Supported
+Block Payment
+Biller Portal
+Conveyance
+Define how this conveyance is handled (auto conveyance, conveyance web service, customer conveyance file). Include details about the conveyance use case, e.g., when and how conveyance is used.
+Data Conversions
+Biller to provide data for any conversion
+Email Notification Schedule
+BIF customization
+Expire Bill for Payment
+Not Supported
+Minimum Payment
+Not supported
+Paperless
+Supported
+Partial Payments
+BIF customization
+Past Due Payments
+Value can be provided in the BIF
+Scheduled Payments
+Supported through Virtual Site
+Supported Credit Card Readers
+The credit card readers supported by this integration are listed below.
+Device
+Definitions/Details
+Magtek REV Devices
+Can be supported through biller portal
+IDTech SRED Key
+Can be supported through biller portal
+Ingenico EMV
+Can be supported through biller portal
+Other EMV Devices
+Can be supported through biller portal
+ URL:/spaces/IM/pages/4165140481/Southern+Software+TAX+Integration+Software+Details

@@ -1,0 +1,258 @@
+Epic Link: 
+EBPP-16826
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-16823
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ Can you please add the epics
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+COMPLETE
+Green
+ 
+IN PROCESS
+Yellow
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+ Problem Alignment
+Background: 
+Farm Bureaus are membership organizations that represent the interests of farmers, ranchers, and rural communities across the US. Members include farmers, ranchers, agricultural business, and any non-farmers that support the industry. The farm bureau provides services such as legal representation, legal support, education/training, information, business support, and insurance products. 
+Farm Bureaus are strategic for InvoiceCloud because: 
+They are multi-billion dollar Insurance Businesses 
+They are organized by state
+They share best practices
+They are moving off older technology 
+We gain larger referencable insurance customers in a word-of-mouth industry
+The Southern Farm and Texas Farm go-lives were one of our 2024 strategic priorities to expand in the insurance vertical. 
+This PDR is focusing on the work for Southern Farm Bureau ($86k MRR). They cover six states: Arkansas, Colorado, Florida, Louisiana, Mississippi, and South Carolina. The Farm Bureau manages the insurance policies, and each state has a federation that manages the membership and political action committee (PAC) payments. The project aims to move all federations and insurance payments to Invoice Cloud.
+Problem: 
+As we move upmarket in Insurance, billers have new expectations to meet industry needs. 
+Biller is unhappy with the timing of DataPump and are concerned that agents will have to wait too long to complete transactions in a timely fashion; which has led to the ask for the listener.
+ Objective
+There are three main development opportunities SFB identified. 
+Faster status updates: Adds better functionality for billers who need to understand the flow of where payers are when using AgentConnect/SSOConnect by adding a “listener” so billers can track payer progress as well as size their IFrame to fit correctly within the flow.
+Custom subtotal displays: custom work work allow SFB to display subtotals to their preference 
+Permissions by Invoice type: SFB needs to restrict access to the IC data based on state, federation, & insurance responsibilities. 
+ Success Metrics
+List the project goals and metrics that will be used to determine its success.
+Goal
+Metric
+Current
+Good
+Great
+Reduce checkout flow drop-off rate
+45%
+35%
+25%
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Target Audience
+Group
+Impact
+Insurance Partners, but can be used by other billers 
+How is this group affected by this (or lack of this) today? How will this group be affected by this when it launches?
+ 
+ 
+ 
+ 
+User Interaction and Design
+Is this a revision to existing UI or a blue sky approach?  What deliverables are expected as a result?  Place mockups, flow diagrams, etc, here when available.
+ Components Impacted
+What components within the Invoice Cloud platform will be impacted?
+Component
+Impact
+Agent Connect 
+Will add two new pages (one for pricing, one for terminals), and new filters to invoice types page.
+ SSOConnect
+ 
+ 
+ 
+ Technical Architecture
+Add any applicable component diagrams and data flow diagrams here.
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Serviceability/Observability
+What are the right questions to ask or diagrams to provide for this section?
+ Requirements
+Change to rely on Jira, pull in epic details
+Requirement
+Importance
+Jira Link
+Notes
+Must be Mobile Responsive
+HIGH
+Red
+ 
+ 
+ Must work for IFrame
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Dependencies
+Dependency
+Team/Product
+Notes
+Permissions by Invoice type is dependent on the roles and permissions project completion 
+BMS 
+ 
+ 
+ 
+ 
+ 
+ 
+ Assumptions
+List any assumptions you have about your users, technical constrains, business goals, etc.
+ We are not sending any information that is considered a PCI risk (account number)
+ 
+ 
+ 
+ Timeline
+Event
+Date
+Confidence
+Status
+Kickoff call
+Type // to add a date
+ 
+ 
+HIGH
+Green
+ 
+COMPLETE
+Green
+Design review
+ 
+MEDIUM
+Yellow
+ 
+INCOMPLETE
+Red
+ 
+Deliverable #1
+ 
+Low
+Red
+   
+ 
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+Subtotal SOW is pending customer approval
+ 
+ 
+ 
+Here is the answer to that question
+Type // to add a date
+ Do we still need to restrict autopay enrollment in the one time payer route to enforce SFB business rules?
+ 
+ 
+ 
+ 
+ Are we handling the listener work in a sustainable and appropriate way?
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+ 
+ 
+ 
+ 
+ 
+ 
+Early Access Billers
+ 
+ 
+All Billers
+ 
+ 
+Partners
+ 
+ 
+Internal \ Training
+ 
+ 
+Internal \ Support+CSM
+ 
+ 
+Internal \ Sales
+ 
+ 
+Internal \ Boarding
+Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+ 
+ 
+Internal \ General
+ 
+ 
+Add rows if needed
+ 
+ 
+ URL:/spaces/PRODUCT/pages/3239805317/Southern+Farm+Bureau

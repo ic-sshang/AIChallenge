@@ -1,0 +1,31 @@
+Objective:  
+To not update the auto pay payment method when we set any payment method as default
+Ticket: 
+SPARK-222
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Summary:
+ 
+If we update any payment method as default as shown below 
+then AutoPay is updated with the same default payment method as shown below
+Technical Summary: 
+On updating the any payment method as default payment method in saved payment then DefaultCreditCardId and DefaultbankId are updating in the CustomerAutopay table as highlighted in below pics 
+In CustomerRecurringScheduledPayments below columns are updating 
+PaymentMethodFKID
+PaymentTypeID
+In ScheduledPayments below columns are updating 
+FKID
+PaymentTypeID
+While saving Default bank or default credit/debit card below methods in bank.aspx.vb or creditcard.aspx.vb are tiggred i.e
+InsertCustomerCreditCard
+UpdateCustomerCreditCard
+InsertCustomerBank
+UpdateCustomerBank
+From CustomerLoginSession file to save the data by calling below Stored procedures respectively 
+ 1. mcl.insCustomerCreditCards
+ 2. mcl.updCustomerCreditCards
+mcl.insCustomerBanks
+mcl.updCustomerBanks
+So here we need to add a new flag to the above stored procedures so the upon passing the parameter as true we need to update the default payment 
+ URL:/spaces/PE/pages/4337729538/Default+Payment+Enhancement

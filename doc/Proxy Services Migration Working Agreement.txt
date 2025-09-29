@@ -1,0 +1,148 @@
+This is a statement of understanding between the Platform Team and the Architecture, Shared Services, and Integration Teams regarding the Proxy Services containerization and migration hosting on Kubernetes Clusters as part of the shared Q2 2025 initiative.  
+Agreement discussed on 
+ with:
+ 
+ 
+ 
+ 
+ 
+There are 4 Proxy Services that will be containerized and migrated.  3 of the 4 already have 
+k8s-migration
+ branches that are ~90% complete and are planned to be used during this initiative.  
+1
+6
+false
+default
+list
+true
+It has been decided to have a separation of accountability and responsibility between the Platform Team and the App Dev Teams that own the Services (and the Source Code for the Services).  The Platform Team will work on Infrastructure, ADO Build and Deploy Pipeline, and Infrastructure Observability change items.  The App Dev Teams will work on the Service Source Code and Docker File (containerization) change items.  This will allow and enable the App Dev Teams to understand the changes to the Source Code required for Containerization and Kubernetes hosting so they will be able to better support the Service and Source Code moving forward.
+ICDatabaseService  
+The ICDatabaseService is owned by the new Shared Services Team under the Architecture organization.  
+The ICDatabaseService has a 
+k8s-migration
+ branch that is recommended to be used to finish off the migration.  
+The App Dev Engineers working on this work will be 
+ 
+ 
+ and will be responsible for the following Items:
+PLAT-2024
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2077
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+The App Dev Team will create Items on their own Jira Board and link the Items to the PLAT Items above for tracking purposes.
+ICBusinessService  
+The ICBusinessService is owned by the new Shared Services Team under the Architecture organization.  
+The ICBusinessService has a 
+k8s-migration
+ branch that is recommended to be used to finish off the migration.  
+The App Dev Engineers working on this work will be 
+ 
+ 
+ and will be responsible for the following Items:
+PLAT-2176
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2078
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+The App Dev Team will create Items on their own Jira Board and link the Items to the PLAT Items above for tracking purposes.
+ICCryptoService
+The ICCryptoService is owned by the new Shared Services Team under the Architecture organization.
+The ICCryptoService does not have a 
+k8s-migration
+ branch.
+There is a project going to enable the ICCryptoService to be made public which will enable more and better support for that Repo:
+ARC-100
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+The Add Dev Engineers working on this work will be 
+ 
+ 
+ and will be responsible for the following Items:
+JEDI-92
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-96
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-93
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-100
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-99
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-101
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-88
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-87
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-91
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-90
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-95
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-94
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-89
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-112
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+The App Dev Team will create Items on their own Jira Board and link the Items to the PLAT Items above for tracking purposes.
+ICRTDRService  
+The ICRTDRService is owned by the Integrations Team under Product Engineering organization.  
+The ICRTDRService has a 
+k8s-migration
+ branch that is recommended to be used to finish off the migration.  
+The App Dev Engineers working on this work will be 
+ and his Team and will be responsible for the following Items:
+PLAT-2177
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2079
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+The App Dev Team will create Items on their own Jira Board and link the Items to the PLAT Items above for tracking purposes.  Per 
+ we created an ITG Request to get this process moving 
+https://invoicecloud.atlassian.net/servicedesk/customer/portal/5/ITG-3550?created=true
+ 
+Notes
+ requested we enable OTEL Support for Windows based Containers and Nodes in Q3 2025.
+ URL:/spaces/platform/pages/4245225500/Proxy+Services+Migration+Working+Agreement

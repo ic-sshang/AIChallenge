@@ -1,0 +1,56 @@
+Cloudflare documentation:
+https://developers.cloudflare.com/dns/zone-setups/conversions/convert-partial-to-full/
+ 
+Run the test script and save the result to a txt file to use as a before and after change verification
+Backup/Export Current Cloudflare DNS Records
+Export the DNS settings in GoDaddy
+Open the exported file
+For all of the CNAME entries pointing to Cloudflare replace the part to the right of the CNAME (example: 
+ic-keith.com.cdn.cloudflare.net
+.) with pal name (example: pal)
+Delete the lines in the ; NS Record section of the file corresponding to the NS servers
+Delete the line for SOA
+Convert the domain to Full DNS setup in Cloudflare
+Go to DNS > Settings.
+Select Convert to Primary DNS (this will not affect how your traffic is proxied).
+Import the DNS records into Cloudflare
+Any duplicate DNS entries will not be changed in Cloudflare. 
+For example if there is a CNAME entry in Cloudflare for www pointing to 
+pal.invoicecloud.com
+, and there is a record in the GoDaddy file for www (
+www.invoicecloud.com
+)  pointing to 
+www.invoicecloud.com.cdn.cloudflare.net
+, then the entry would still be there pointing to 
+pal.invoicecloud.com
+ after the import.
+Verify that all of the records imported properly
+Change Nameservers
+It can take up to 8 hours for it to take affect for everybody
+Change/Verify the root record has @ and the firewall load balancer IP 20.75.169.117
+Verify DNS settings
+Verify the new name servers NS are active:
+nslookup -type=ns 
+ic-keith.com
+ 1.1.1.1
+Verify the primary records are responding correctly and that you can access the site/services
+Run the test script, copy the output to a txt file, run verify to compare the vaules before the change to after.
+Manual lookup individual records if necessary:
+nslookup -type=ns 
+ic-keith.com
+ 1.1.1.1
+nslookup -type=soa 
+ic-keith.com
+ 1.1.1.1
+nslookup -type=a 
+www.ic-keith.com
+ 1.1.1.1
+nslookup -type=a 
+www2.ic-keith.com
+ 1.1.1.1
+nslookup -type=mx 
+ic-keith.com
+ 1.1.1.1
+pause
+Run manual, smoke, and regression tests as necessary
+ URL:/spaces/platform/pages/4269637745/Migrate+DNS+to+Cloudflare

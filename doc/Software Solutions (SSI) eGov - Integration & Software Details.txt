@@ -1,0 +1,152 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+TXT
+SFTP
+Biller may have two invoice files - one for standard billing and one for delinquents. File format is the same, only the name of the file differs.
+Biller may have different bill image formats for standard vs delinquent bills. By naming the files differently, IC can determine while bill image format to use for display.
+Adjustments/Balances
+TXT
+SFTP
+The adjustment file can be sent as many times as is needed to Invoice Cloud. Customers are encouraged to run the Daily Process after there have been changes to account balances such as after posting penalties to accounts or whenever they need account balances to update.
+Payments
+TXT
+SFTP
+ACH Rejects Posting
+Not Supported
+Void
+Not Supported
+Manually handled in biller portal
+Change Log - AutoPay Enrollment
+Not Supported
+SFTP
+Change Log - Paperless Enrollment
+TXT
+SFTP
+These records create the Email records in eGov and can be seen in the Customer Master file in the Options menu -- Email/eBill records.
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images 
+PDF Linking - Not Supported
+PDF Extraction - Supported
+Template - Supported
+If PDF Extraction, SFTP
+Bill images are normally template but billers have the option for PDF Extraction. 
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+If the utility would like to take a credit card payment for customers that do not have a bill they will need to purchase Cloud Store from Invoice Cloud. Payments taken through Cloud Store must manually be entered into eGov.
+CSRConnect
+Not Supported
+EMV
+Not Supported
+IVR
+Supported 
+IVR search method - account number
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported 
+Outbound IVR
+Supported 
+Never implemented but could be supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Standard IC email/pwd linking
+       Multi-User Log In
+Not Supported
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported 
+BIF customization
+Batch Closure
+Custom 
+11:59pm local time
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not Supported 
+Block Payment
+Supported 
+Handled manually in the biller portal
+Conveyance
+Supported
+Most billers do not use auto conveyance but for those that need it, this feature can be turned on.
+Data Conversions
+Not Supported
+No paperless and autopay conversions
+Email Notification Schedule
+Supported 
+BIF customization
+Expire Bill for Payment
+Not Supported
+Not used - could be set as BIF customization, if needed
+Flex Pay
+Not Supported
+Minimum Payment
+Not Supported
+Not used - could be set as BIF customization, if needed
+Paperless
+Supported 
+Partial Payments
+Supported 
+BIF customization
+Past Due Payments
+Not Supported
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Supported 
+Used through the IC biller portal
+Ingenico EMV
+Not Supported
+Other EMV Devices
+Not Supported
+ URL:/spaces/IM/pages/2354315279/Software+Solutions+SSI+eGov+-+Integration+Software+Details

@@ -1,0 +1,84 @@
+🎁Summary
+Quick find API is a unified search endpoint that returns a mixed (streamed) sequence of Customers, Payments, and Invoices for a specific Biller.
+Results are returned as a server-side async stream (
+IAsyncEnumerable<SearchResult>
+), allowing the client to begin processing before the full search completes.
+🎢How Azure Cognitive Search works
+Quick find API using Azure Cognitive Search to retrieve search results.
+Data Ingestion (Indexing) 
+You start by 
+importing data
+ into Azure Cognitive Search.
+Data can come from many sources:
+Azure Blob Storage
+Azure SQL Database
+Cosmos DB
+SharePoint Online
+Or even external/custom sources through APIs.
+The data is processed and stored in an 
+index
+ (a specialized structure optimized for search queries).
+Index structure
+The index contains 
+documents
+ (similar to rows in a database).
+Each document has 
+fields
+ (like columns: title, description, tags, etc.).
+Fields can be configured as:
+Searchable
+ (full-text search applied)
+Filterable
+ (used for filters/facets)
+Sortable
+ (used in ordering results)
+Retrievable
+ (returned in search results).
+Querying
+Applications query the index using a 
+rich query syntax
+ or REST/SDKs.
+Queries can include:
+Full-text search (with relevance ranking).
+Filters (e.g., only show documents from 2024).
+Facets (group results by category, date range, etc.).
+Semantic search (natural language, powered by AI/ML).
+Azure Cognitive Search automatically handles 
+scoring and ranking
+, returning the most relevant results first.
+Integration
+via Azure search API
+🔑Key Components
+API call (POST /api/v1/search) enters Search Controller.
+Domain Command Handler (
+SearchCommandHandler
+) 
+Orchestrates three underlying domain searches: Customer, Payment, Invoice
+Each domain-specific command handler
+CustomerSearchCommandHandler
+ queries customer index.
+PaymentSearchCommandHandler
+ queries payment index.
+InvoiceSearchCommandHandler
+ queries invoice index.
+Merge Logic (
+MergeSearchResults
+) 
+Concurrently consumes three 
+IAsyncEnumerable<SearchResult>
+ streams (customers, payments, invoices) and multiplexes them into a single unified async stream via a channel.
+Configuration (appsettings.json)
+json
+"IC": { 
+  "Search": { 
+    "SearchInstance": "<https://<azure-search>>.search.windows.net" },
+    "CustomerSearch": { "Index": "customer-index" }, 
+    "PaymentSearch":  { "Index": "payment-index" }, 
+    "InvoiceSearch":  { "Index": "invoice-index" } 
+}
+🫠Limitations
+Result ordering is nondeterministic (dependent on completion timing of each domain enumeration).
+ Related articles
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/4626448467/How+to+test+Quick+Find+API+in+local?atlOrigin=eyJpIjoiODJjM2JiZmQ3MTc2NGM4MmIzZTllZjJmOTVlMTg1NDQiLCJwIjoiYyJ9
+ 
+ URL:/spaces/ED/pages/4645683285/Quick+find+API+Implementation+Detail

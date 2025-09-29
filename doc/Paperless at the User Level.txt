@@ -1,0 +1,115 @@
+Problem Alignment
+Project 
+Paperless at the User Level 
+Objective 
+To introduce paperless at the user level instead of the account level so individual users on an account, for multi user billers, can control their individual paperless preferences. 
+Status 
+In concept
+ Moving forward with solution for Truckee Meadows and S&S integration. Evaluating benefits of this work for other software partners based off their interest and level of effort by the software partner and IC.
+Jira
+https://invoicecloud.atlassian.net/browse/EBPP-2903
+ 
+Target Release Date 
+on going 
+Team 
+PF Changes 
+The Problem
+Currently we only support paperless registration at the account level for multi user billers. This means that even if there are other payers on the account other than the account owner, these users have no control over their personal paperless settings. The account owner is in sole control of paperless settings for all payers on the account. This means account oversights, account co-owners, and account guests will receive whatever paperless setting the account owner chooses. This causes a problem for tenants and landlords in particular who may have different preferences. 
+Why: How do we know this is a real problem and worth solving?
+This is a real problem worth solving because we currently have multi user billers with payers who believe they have signed up for paperless but in fact have not signed up. This is immediately causing issues for Truckee Meadows data pump and signing users up for paperless. 
+Audience: Who are we building for?
+We are building this for multi-user billers. 
+Below are stats of current multi-user billers and software integrations:
+113 billers with multi-user enabled 
+35 software integrations with multi user
+Systems and Software, Cogsdale, Harris Advanced Utility, Harris Cayenta, Daffron, Harris NorthStar are software partners with over 10 billers on multi-user. 15 software partners only have 1 biller on multi-user.
+The most vocal software partners asking for paperless at the user level are Muni-Link and Caselle. 
+Raw data can be found here: 
+Supporting Resources and Research
+Multi User Training Documentation: 
+https://invoicecloud.app.box.com/folder/82905540637
+ 
+Research Findings and Use Cases:
+What about billers who allow username login over email address. In this scenario we might not have email address. Should we add a prompt then for a user to have to add an email address?  --- RESEARCH
+Some billers might want to keep paperless registration at the account level. This could be because it is less expensive for them to have fewer people not on paperless. If we enable more people to have the option of paperless some billers may be afraid this would actually increase their paper billing user base.  We think we should add any option for paperless at account or user level in the CRM.
+What about users who call in? User creation from the biller portal. Lexington has no way to create a user and sign them up for paperless from the biller portal. (Lexington BID2228). See Related Work below.
+Note insurance billers have the options for multiple account owners. Assuming that we would simply put these account owners as individuals that can sign up for paperless at an individual level.  ---- RESEARCH
+Notifications to trigger for specific users based on their paperless setting (currently if the account is paperless then everyone on the account received notifications. Would we want to change this so that way only the user who is paperless receives the notification? this could be handled later). 
+Biller option for Autopay sign up - user is also automatically enrolled in Paperless. What are the changes want to make with this? Currently the only live billers with the new paperless + autopay option enabled are BIDs 679 and 1945. They are both multi-user accounts. 
+Unsubscribe from invoice notifications in the account settings. I assume for all user levels if they are signed up for paperless, invoice notifications are still sent to the payer even if they select this? ---- RESEARCH
+Conveyance - all users still have access to the account, but the new account owner is unregistered, and no users have access to it? --RESEARCH
+High-level Approach
+The Stages of approaching this problem are: 
+Solve Immediate issue for Truckee Meadows BID 1885: 
+Send the account oversight email instead of the autopayconvert user which doesn’t an email address. This is to stop the paperless data pump sync errors. 
+Provide option for software partners to select offering paperless at the user level. This needs to be designed for software partners to opt-in to offer their billers. 
+Paperless Registrations is moved to user level for X many software integrations. CRM biller option for paperless to be at account or user level is added. 
+Creation of account, and paperless registration within the biller portal. 
+Development Approach and Considerations:
+Data Service work and CRM option. We have list of repos, starting at the database level, splitting by repo and then we will break out MYIIS further. This work will be pushed and hidden behind the biller option. (2-3 months). Consideration: 
+Onboarding and the file imports. 
+“Opt in” option. We will construct in partnership with integrations an opt-in option for partners to join and solution for data pump for billers on, not on paperless at the user level.  Options are:
+provide login GUID. today software partners don’t have this.
+endpoint for all emails
+UI/UX and Notification updates. We will update the customer portal, virtual site, biller portal and email notifications to reflect paperless at the user level. (2 weeks)
+Success
+How do we know if we’ve solved this problem?
+We will know we have solved this problem in a few stages: 
+Truckee Meadows data pumps are successfully sending emails associated to paperless.
+Option available for software partners to elect for paperless at the user level. 
+Paperless registration is moved to the user level for (TBD) number of integrations.
+(TBD) Multi user account creation improvement. 
+Solution Alignment
+Key Features
+CRM option to enable paperless at the user level for a biller 
+Opt-in solution for software partners to provide paperless at the user level 
+UI/UX updates on payer site, and biller portal → customer profile to show paperless at the user level
+Paperless notifications at the user level 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+N
+Sales
+Do you need sales enablement materials?
+Y
+Yes this could be an additional feature for multi user billers, and software partners
+Marketing
+Does this impact marketing?
+Y 
+Yes this would be an added feature to our multi  user product and should be highlighted. 
+Training
+Do you need to update support content or training?
+Y 
+Yes, we will need to training to be aware this is an option for multi user billers.
+Implementations
+Changes to questionnaire
+Y
+Yes, implementations will need to know this is an option for multi user billers.
+Delivery
+Set up and Enablement
+Y
+Yes, delivery will need to know this is an option for multi user billers.
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+N
+No, we would not offer this as an additional costs, or feature.
+Support
+Biller questions and support
+Y 
+Yes, support would need to know this is an option some multi-users billers
+Legal
+Are there potential legal ramifications?
+N
+Reconciliations
+Questions from billers about charges
+N
+Related Work
+Biller Onboarding and Stored Payment Verification 
+For non multi users we’ve found there is a potential problem when doing biller onboarding and importing stored payment information. If we onboard a non multi-user biller and import their stored payment information to preserve autopay enrollments then that payer when registering for the account can see and edit the stored payment method. Technically the user prior to reaching this must provide their account number and address (found on a paper bill) however this could still be a concern that that information could be accessible from someone other than the true payment method holder. An example of this is Clayton BID1386. 
+Feature Flagging 
+Feature flagging. We believe because of the size this could be a good project for introducing a feature flag concept. Currently we will have to use a biller option to control releasing and testing. A feature flag would help us better control the release and ease of testing. We will research this further but is not in scope for this project. 
+ URL:/spaces/PRODUCT/pages/2044657672/Paperless+at+the+User+Level

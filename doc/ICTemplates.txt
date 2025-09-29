@@ -1,0 +1,23 @@
+Running ICTemplates Locally
+Overview
+ICTemplates manages how we display PDF's for our billers and Customers
+Instructions
+Go to the Biller's Portal and find a customer with Invoices where a PDF is linked then copy the link address, this will be used in the next few steps
+https://www.invoicecloud.com/templates/InfoSend/pdfviewer.aspx?InvoiceGUID=abcde&LCT=abcde&BillerGUID=abcde&pdf=1
+Clone or download the most recent branch of ICTemplates then look for the format you wish to run
+Look for the Template you wish to test out, with the link above it would be in 
+https://www.invoicecloud.com/templates
+ /InfoSend/pdfviewer.aspx?....
+Set the page above to the start page and Run, this will likely open an empty page named 
+- 
+EX: 
+http://localhost:33638/InfoSend/pdfviewer.aspx
+Using the PDF link saved, copy everything after the ".aspx" and paste it in the local host page at the end
+https://www.invoicecloud.com/templates/InfoSend/pdfviewer.aspx
+?InvoiceGUID=abcde&LCT=abcde&BillerGUID=abcde&pdf=1
+Then load the page, it will run through the code
+Video Tutorial - 
+IC-Templates.mp4
+Guru Page - 
+https://app.getguru.com/card/Tb8zkgEc/Running-ICTemplates-Locally
+ URL:/spaces/DS/pages/2573074433/ICTemplates

@@ -1,0 +1,21 @@
+Summary
+Real-time integration that uses web services for all data transfer (invoice data, balance updates, payment posting, block payment flags, paperless and autopay detail).
+There are three real-time integrations between IC and Cogsdale, only Version 3 is actively implemented. The functionality listed below is what is added in the applicable version:
+Version
+Supported
+Detail
+1
+Not supported / No longer implemented
+2
+Supported / No longer implemented
+Standard RTDR functionality to update Balance Due
+If the balance is not updated due to a newer invoice on the account that IC has not received yet, IC will display an error message “unable to update balance, new bill has been generated"
+3
+Supported / Currently implementing
+Added RTDR functionality for Past Due, Block CC and Block ACH flag updates. 
+If the balance is not updated due to a newer invoice on the account that IC has not received yet, IC will display an error message “unable to update balance, new bill has been generated"
+Navigation
+true
+Knowledge Transfer
+N/A
+ URL:/spaces/IM/pages/1956970623/Harris+Cogsdale

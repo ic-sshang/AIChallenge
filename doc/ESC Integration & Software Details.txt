@@ -1,0 +1,169 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+ 
+Knowledge Transfer
+ESC integration can support a batch integration for retiree benefits.  ESC will send a BIF and BAF and Invoice Cloud provide a custom payment file.  NO PAPERLESS OR PRESENTMENT. 
+See BID 4168 McAllen TX for example configuration.  
+IMPORTANT-SELECT INTGRATOR AS HOMEGROWN for this type of integration.
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF File
+IC UploadInvoiceFile Webservices
+ESC will code to our BIF file and send through WebServices
+Adjustments/Balances
+ESC retrieveBalance web services
+RTDR
+ESC to provide biller’s domain and API key for RTDR on 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/2181136393/ESC+Implementation+Details#Implementation-Worksheet
+ 
+Payments
+ESC Add Payment web services
+DataPump
+ESC to provide biller’s domain and API key for RTDR on 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/2181136393/ESC+Implementation+Details#Implementation-Worksheet
+ .  We are also passing charge backs.  
+ACH Rejects Posting
+ESC cancelPayment web services
+DataPump
+C-Code Rejects are included. See 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/2181038120/ESC+Technical+Design#API-Documentation
+ for reject mapping. 
+Void
+ESC cancelPayment web services
+DataPump
+Change Log - AutoPay Enrollment
+ESC updateAccount web services 
+accountChangeType: AP
+DataPump
+ESC to provide biller’s domain and API key for RTDR on 
+Implementation Worksheet
+Change Log - Paperless Enrollment
+ESC updateAccount web services 
+accountChangeType: PL
+DataPump
+ESC to provide biller’s domain and API key for RTDR on 
+Implementation Worksheet
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images 
+PDF Linking
+Webservices
+PDF linking between IC and ESC is supported.  If the biller uses a third party print vendor, that integration will be handled separately.  
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Supported
+Hosted through ESC portal.  
+Check Free - FISERV - Cash
+Not Supported
+ 
+CloudPay
+Supported
+iFrame CPV2 for guest pay option
+CloudPay Web Services
+Not Supported 
+CloudStore
+Not Supported 
+ 
+CSRConnect
+Not Supported 
+EMV
+Supported 
+IVR
+Supported
+Suggested search option account number
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+Not Supported 
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Handled by ESC via SSO integration using IC ‘link accounts’ web services 
+       Multi-User Log In
+Not Supported 
+ 
+       Co-Owner Registration
+Not Supported 
+ 
+ 
+ SSO
+Supported
+Through ESC
+AutoPay Collection Date
+Supported
+BIF customization
+Batch Closure
+Custom
+Close time determined by biller 
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Block CC and block ACH flags will be updated from a flag sent in RTDR
+Conveyance
+Not Supported
+Data Conversions
+Supported
+ESC would provide data through secure uplink
+Email Notification Schedule
+Supported
+Determined by biller and setup as BIF customization 
+Expire Bill for Payment
+N/A
+Flex Pay
+Supported
+Minimum Payment
+Supported
+Determined by biller and setup as BIF customization 
+Paperless
+Supported
+Partial Payments
+Supported
+Received in BIF
+Past Due Payments
+Supported
+Received in BIF
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported 
+IDTech SRED Key
+Not Supported 
+Ingenico EMV
+Supported 
+Other EMV Devices
+Not Supported 
+ URL:/spaces/IM/pages/2181038093/ESC+Integration+Software+Details

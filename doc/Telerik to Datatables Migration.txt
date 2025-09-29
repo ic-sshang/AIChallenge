@@ -1,0 +1,150 @@
+📌 Purpose
+This page documents the 
+mandatory migration
+ from Telerik Grids to 
+DataTables.js
+ across our enterprise SaaS product. The decision is based on a 
+critical security vulnerability
+ affecting Telerik UI components.
+🛑 
+Deadline for full migration: TBD
+All modules currently using Telerik 
+RadGrid
+ must be migrated to DataTables.js to eliminate active security risks.
+🛡️ Security Risk Summary
+Risk Type
+Description
+Remote Code Execution (RCE)
+Exploitable via deserialization in Telerik DLLs
+ViewState Exposure
+Encrypted ViewState can still be intercepted or abused
+CVEs
+e.g., 
+CVE-2019-1893
+CSP Incompatibility
+Telerik injects inline scripts violating CSP
+These risks exist even in patched versions due to architectural constraints and cannot be fully mitigated via hotfixes alone.
+📐 Scope
+What’s included:
+All use of 
+RadGrid
+ in:
+http://ASP.NET
+  WebForms
+MVC Hybrid Views
+Grid features like:
+Command buttons
+Filtering
+Export
+Inline editing
+Paging and sorting
+🔄 Feature Comparison
+Feature
+Telerik Grid
+DataTables
+Security
+❌ Vulnerable to RCE
+✅ Open-source and auditable
+Data Binding
+ViewState-bound
+API/JSON driven
+Filtering
+Built-in UI
+Plugin-based
+Export
+Built-in
+Buttons
+ extension
+Styling
+Telerik themes
+Bootstrap/Tailwind/custom
+CSP Compliance
+❌
+✅
+Server-Side Support
+✅
+✅
+🧱 Migration Process
+1. 
+Audit Existing Telerik Usage
+Search for 
+RadGrid
+ in 
+.aspx
+, 
+.cshtml
+, 
+.razor
+ files
+Document:
+Bound data sources
+Command configurations
+Templates, client-side logic
+(Insert prioritized list for migration here)
+2. 
+Refactor Grid Markup
+Replace Telerik markup with standard HTML table:
+<table id="UsersGrid">
+  <thead>
+    <tr><th>Name</th><th>Email</th><th>Action</th></tr>
+  </thead>
+</table>
+
+3. 
+Initialize DataTables
+$(document).ready(function () {
+  $('#UsersGrid').DataTable({
+    ajax: '/api/users',
+    columns: [
+      { data: 'name' },
+      { data: 'email' },
+      {
+        data: null,
+        render: function (data, type, row) {
+          return `<button class="btn-delete" data-id="${row.id}">Delete</button>`;
+        }
+      }
+    ],
+    serverSide: true,
+    processing: true
+  });
+});
+
+4. 
+Add Plugins
+Use these as needed:
+Buttons
+: export
+Select
+: row selection
+Responsive
+: mobile layout
+Scroller
+: large dataset support
+🧪 Post-Migration Security Checklist
+All Telerik references removed
+No use of ViewState or embedded state in markup
+CSP headers enabled and passing
+Subresource Integrity (SRI) in place for all CDN assets
+jQuery and DataTables updated to latest stable versions
+🗓 Timeline
+(Timeline TBD)
+📎 Appendix: Snippet Reference
+Delete Button Render (DataTables):
+{
+  data: null,
+  render: function(data, type, row) {
+    return `<button class="btn-delete" data-id="${row.id}">Delete</button>`;
+  }
+}
+
+Event Binding for Row Action:
+$(document).on('click', '.btn-delete', function () {
+  const id = $(this).data('id');
+  $.ajax({
+    url: `/api/users/${id}`,
+    type: 'DELETE'
+  }).done(() => table.ajax.reload());
+});
+
+ URL:/spaces/PRODUCT/pages/4556652620/Telerik+to+Datatables+Migration

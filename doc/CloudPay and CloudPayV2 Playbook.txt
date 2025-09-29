@@ -1,0 +1,254 @@
+Playbook name
+CloudPay  and CloudPay v2
+Description
+CloudPay v1 vs CloudPay v2 and how to set them up. 
+On this page
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+Summary
+This API based payment integration allows 3rd party applications to utilize a "Pay Now" button within their application to redirect the user to the Invoice Cloud Payment Route where they can enter in all the payment information and submit the payment. Once the payment has been approved, the IC Payment Route will display a printable receipt and provide a method to return the user back to the calling application.
+There are two versions CloudPay v1 and CloudPay v2.
+note
+Documentation
+
+
+Documentation
+
+
+Link to documentation - 
+InvoiceCloud Docs
+ 
+Steps
+Description
+Role Responsible
+1
+Navigate to Documentation
+Biller Portal > Support > Documentation / APIs > Integration Documentation
+This will be redirected to the Documentation page where you can learn more about the data, fields, settings, and options needed for a successful transition from CloudPay v1 to CloudPay v2.
+On the documentation page click the here hyperlink or the document picture (both are highlighted below). Then you will be taken to a new page for InvoiceCloud Docs. 
+IM, DS, or CS 
+2
+InvoiceCloud Docs
+Go to the menu on the left-hand side under Specifications select Cloud Payments and of Cloud Payments v2 to explore the data, fields, settings, and options.
+IM, DS, or CS 
+Steps to Add CloudPay & CloudPayV2 and API
+Steps
+Description
+Role Responsible
+1
+Product
+Cloud Pay Product must be enabled.
+IM
+2
+API Key (if applicable)
+API Key - Partner/Billers will require an API Key that can be accessed from the Biller Portal at the following location: Biller Portal > Support > Documentation / APIs > Application API Keys.
+IM
+3
+Contact CIS (Vendor)
+Reach out to the Software Partner for their role in setting up the CloudPay or CloudPayV2
+IM
+4
+Ensure all Integration Specific Needs are Met
+Ensure if any specific integration needs are required for a particular CP or CPV2 integration (see table below) that those needs are met.
+IM
+Cloud Pay Software Partners and Example BIDs
+Vendor
+Common Invoice Type IDs
+Example BIDs
+Integration Specific Needs
+CloudPay Version
+EMV?
+Contacts
+Accella
+43-Permits 
+57-Business License 
+93-Government Services II 
+1054, 2298, 3116, 2298, 2249, 1515
+Biller must be added to the IC Accela configuration table. Name of this table is 1AccelaConfig.
+Biller or Accela must provide the AgencyID with Accela for the config table.
+Biller Advanced Setting 30 must be enabled in the CRM with the Value of ACCELA-
+Link to Guru: 
+https://app.getguru.com/card/TjXA9e6c/Accela-Permits
+ 
+V2
+Yes
+araghavendra@accela.com
+Avitar Associates 
+0-Invoice
+6-Government Services
+7-Personal Property Taxes
+8-Real Estate Taxes
+13-Dog Licenses
+33-Motor Vehicle
+1624, 3719, 4024
+GURU 
+https://app.getguru.com/card/RcAR54Gc/Avitar-Associates-Implementation-Overview
+Confluence 
+https://invoicecloud.atlassian.net/wiki/x/P4ABlQ
+ 
+V2
+Yes
+Melissa Cunningham - 
+melissa@avitarassociates.com
+Amy Roberge - 
+amy@avitarassociates.com
+SmartGov-Brightly - New Granicus-Granicus
+43-Permits
+57-BusinessC License
+4273 (phase II), 4122, 3564, 2699, 2597, 415
+Standard Cloud Pay v2 integration for Permits.
+NOTE: Very important to ask SmartGov first if the Biller is doing phase I or Phase II with SmartGov. 
+V2
+Wendy Cordero  - 
+wendy.cordero@granicus.com
+CityView
+43-Permits
+1029, 1615
+V2
+Yes
+CityWorks 
+43-Permits
+2032, 2575
+CIS works with Timmons third party integrator
+NOTE: BID 2032 Used Third Party Integrator - Woolpert
+V2
+Full Circle Technology -PermitEyes
+13-Dog License
+43-Permits
+6-Government Services
+88-Permits II
+93-Government Services II
+94-Permits III
+95-Government Services 3
+96-Governement Services 4
+97-Government Services 5 
+98-Government Services 6 
+2191, 2136, 1877, 1054, 994, 600, 580, 349
+Share credentials (GUID, Invoice Type)
+Town of Bedford BID 349 has 19 invoice types with Full Circle Technology they are all cloud pay but some are using a cloud store type ID. 
+V1
+No
+Jeremy Solomons - 
+jeremy@fullcircletech.com
+Kian Phillips - 
+kian@fullcircletech.com
+GovQA-
+Granicus
+93-Government Services II
+95-Government Services
+1944
+2575 (used a cloud store invoice type ID for this Cloud Pay-FOIA Cloud Pay with Granicus-GovQA)
+2298 (used a cloud store invoice type ID for this Cloud Pay-Police payments through GovQA)
+V1
+No
+Jodey Smith 
+Joedy.smith@granicus.com
+Laserfiche 
+Accelerated Information Systems product Laserfiche
+43-Permits
+57-Business License 
+2858, 2695
+None Known
+No
+LOGIS
+43-Permits
+57-Business License
+769, 977, 1206, 1649
+Logis always required a test BID
+NOTE: Open a Jira and Request a File Payment as soon as you started the project
+(e.g 
+https://invoicecloud.atlassian.net/browse/INT-4467)
+ 
+BID 1206 has Cloud Pay for Data Requests that is using a cloud store invoice type ID.
+Rachel Romansky - 
+rromansky@logis.org
+Navient OnBase (Heavy Cloud Pay/Lite EBPP)
+93-Government Services II
+2635
+Navient OnBase New custom One-off Integration for Connecticut Water Company XML invoice file.
+Peak Software
+71-CloudStore - Misc Generic Item 4 (this was used for this cloud pay)
+864
+Can only accept one invoice type, reporting will have to be done on their end
+Zach Warrell - 
+zwarrell@peakinfo.com
+PeopleGIS
+43-Permits
+983, 1132
+None Known
+V1
+No
+Zenny Chareas 
+zenny@peoplegis.com
+RecDesk
+14-Parks & Recreation
+43-Permits
+3961, 3733, 3428, 2961, 2423, 2179, 1211, 1099
+None Known
+V1
+No
+Megan Jackson - 
+megan.jackson@recdesk.com
+ - Dir Customer Exp
+Mike Morris - 
+mike.morris@recdesk.com
+Lisa Barlow - 
+lisa.barlow@recdesk.com
+CloudPermit
+43-Permits
+94-Permits III
+2131, 3781
+Standard Cloud Pay v2 integration for Permits
+NOTE: They have modules, better to clarify before
+starts which module they are going to use for the integration. / Must share credentials (API Key, Invoice Type)
+V2
+Rhonda Lake 
+rhonda.lake@cloudpermit.com
+CitizenServe
+43-Permits
+3615, 2961, 2666
+GURU 
+https://app.getguru.com/card/iL7qL9rT/CitizenServe
+V2
+EPR Systems 
+22-Fire
+3269
+None Known
+benny@eprsys.com
+ 
+Community Core
+43-Permits
+4143
+None Known
+No
+Conduent
+19-Parking Tickets
+97-Government Services 5
+1796
+V2
+GovOS
+88-Permits II (OTC)
+68-CloudStore however this is a CP not a cloud store (Short Term Rental Payments)
+420, 3317, 3866
+SME: Joe Patterson
+See also Integrations Summary Page 
+-
+-
+https://invoicecloud.atlassian.net/wiki/x/BQALAQ
+ 
+-
+-
+-
+Resouces Document 
+-
+-
+Cloud Pay Billers with SWP and Invoice Type IDs.pdf
+-
+-
+-
+ URL:/spaces/Implementa/pages/3738370050/CloudPay+and+CloudPayV2+Playbook

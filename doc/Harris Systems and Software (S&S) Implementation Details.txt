@@ -1,0 +1,274 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+Complete
+Green
+Document owner
+ 
+Knowledge transfer
+N/A
+Summary
+Summary
+Details
+Software Partner Name
+Systems and Software (S&S)
+Software Product Name
+enQuesta
+Software Cashiering System
+enQuesta
+Supported Versions
+enQuesta versions 4.0, 4.5, 4.7, 5, and 6.XX 
+Integration Requirements and Pre-Requisites
+Each S&S biller gets their own instance. An Instance is a special version of IC assigned to only that particular biller. All Billers will have 2 instances, A test instance and a Prod instance.
+Vertical
+GUB
+Sample Biller Implementation
+Truckee Meadows Water Authority (BID: 1885)
+Planning
+Test Portals
+IC Hosted Test Portal:
+Harris - Systems and Software Demo (BID: 327)
+Systems and Software Demo (BID: 1534)
+Systems and Software Demo 2 (BID: 3363)
+Partner Hosted Test Portal: N/A
+Biller Test Portal: Required - Systems and Software has requested that each biller have a test portal created along with a prod portal. Systems and Software refer to this as the "Developer Portal".
+Rules of Engagement
+Always include the S&S Project Manager in all communications. They will route issues accordingly.
+Integration Requirements
+High level implementation steps (From S&S Product Manager):
+InvoiceCloud sets up standard ss_support_acronym and ss_support_acronym_trn portal users
+InvoiceCloud provides biller guid
+Determine whether we are going to have multi user or single user integration. If multi-user, validate if it will it be unique by email or by username
+Determine where the integration will be launched from for the utility users
+Determine where Bill Images are coming from
+Configuration of BIF/BAF process in enQuesta
+Configuration of links to InvoiceCloud from any customer-facing applications in Train, then Prod
+Provide endpoints to InvoiceCloud
+Ensure that InvoiceCloud can connect
+Test all integration functionality
+Timeline
+~90-120 days 
+Configuration
+Invoice Types
+Beginning with City of Greensboro (BID: 1488) (June 2019), S&S will send over everything as Invoice Type ID 1 unless otherwise specified in sales process.
+Virtual Site
+Typically do not use our Virtual Site. S&S has a method for one time payers to drop them into Invoice Cloud payment route. 
+Required Options
+ID
+Option Description
+Details
+74
+ENABLE Multiple Customer Login Functionality
+If enabled, the Biller will be able to use the Multiple Customer Login functionality in the Biller Portal as well as the Customer Portal. The Pay By Text and Autopay option will also be hidden through the payment route for non-authenticated sessions, and the use of saved method payments through the IVR will be disabled.
+Enabled
+Only enable this option if the Biller requires multiple registrations per account. 
+127
+Allow Biller to Change the Email Address for Multiple Linked Accounts
+Allow Biller to Change the Email Address for Multiple Linked Accounts If enabled, the biller will be able to update an email address, even if that email address is linked to multiple accounts. This option only applies to billers with the authentication type username with password. This option is Off by default.
+This option is 
+Off
+ by default
+It was found that Option 127 needed to be enabled for any new McLogin or conversion to McLogin S&S billers.
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Invoice Cloud Coding Requirements
+Note: Systems & Software has more integration points with enhanced functionality. Additional information on the Systems & Software enhanced functionality can be found under the 'Important Details' column below for: 
+Data Pump Logic
+/Cutoff Times
+Tender Types
+Operator Numbers
+Batch ID
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+The initial Invoice File is large file that contains all accounts. 
+Adjustment File
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+Bill Presentment 
+Partner 
+Upon Request after kick off (Endpoint and URL for PDF Linking)
+Example: 
+Standard: PDF Linking -  Example: Truckee Meadows Water Authority (BID: 1885)
+Supported: PDF Extraction
+RTDR API (test)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+RTDR Passcode (test)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+RTDR API (prod)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+RTDR Passcode (prod)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+DataPump API (test)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+DataPump Passcode (test)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+DataPump API (prod)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+DataPump Passcode (prod)
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller. 
+Data Pump Logic
+/Cutoff Times
+Partner
+Upon Request after kick off call
+Each night, S&S billers perform "system maintenance", which includes taking a backup of their entire enQuesta system. During this time, the S&S web services (RTDR and DataPump) are both unavailable. To mitigate any payment posting issues, we hardcode a window of time per biller (Cutoff Time), that we will not send transactions through the DataPump or RTDR. Once the window is over we will begin sending transactions again. This will need to be asked by the Invoice Cloud Implementations Project Manager during Implementation and sent to Invoice Cloud Engineering with the Coding information.
+When we post payments through the DataPump, we also send the batch date. Depending on the timing, we will add days as necessary, so the posting date is based on the next business day(s). Upon batch close, we will add an additional day to transactions being posted, so they show in a separate batch in enQuesta (CIS). Most S&S billers have specific batch numbers, tender types, and dates to add logic for the DataPump. Please consult Implementation project files for specifics on each biller.
+See below for a prior S&S Project’s cutoff times and DataPump logic. In the below, 11:55 is the cutoff window. 
+https://invoicecloud.box.com/s/splvrqku8qool0nuw3q1jfthgeh0vq8y
+ 
+Tender Types
+Partner or Biller
+Upon Request after kick off call
+Request Tender Types. Tender Types vary per Biller. 
+Tender Types are a method for S&S Billers to track granular payment details in the Enquesta CIS system.  Each payment sent via DataPump must contain a tender type for the payment to be consumed by Enquesta.
+Payment Source IDs in Invoice Cloud are translated to Tender Types which the Biller and S&S have already created in Enquesta.  Please note that Tender Types can also have detail setup for both Credit Card, EFT/ACH and OBD.  These values also assist the Enquesta reconciliation reporting for the biller and their financial accounting staff. If Invoice Cloud needs to walk the Biller through these values, it is best to start buy explaining and showing the biller the Search > Payments report and noting the various Payment Source IDs that Invoice Cloud can track per payment.  
+Please note that Invoice Cloud cannot add new Payment Source IDs, but additional Tender Types can be added in Enquesta to capture the detail of Payment Source ID + Payment Type (CC, EFT/ACH, OBD, etc.).  If this biller is new to S&S Enquesta, then S&S must be involved in these conversations to configure their side of the DataPump for Tender Types.
+Invoice Cloud must receive Tender Types from the Biller or Sy&S prior to coding submission. These will be tested by Invoice Cloud in the DataPump before coding is completed. The Invoice Cloud Implementations Project Manager should work with Invoice Cloud Engineering, the Biller, and S&S on the testing results. 
+Example of Tender Types: 
+Operator Numbers
+Partner
+Upon Request after kick off call
+Operator numbers allow for the payment batch controls in S&S Enquesta CIS to accept all Invoice Cloud payments into one common grouping.  This value helps drive reconciliation reporting in Enquesta. The Invoice Cloud Implementations Project Manager should work with S&S and the Biller to obtain this value. Typically Invoice Cloud will receive a value for TEST and PROD; these will not change and will only be set once in coding.
+The Invoice Cloud Implementations Project Manager should work with Invoice Cloud Engineering, the Biller, and S&S for testing results.
+Examples of Operator Numbers: 
+Batch ID
+Upon Request after kick off call
+All Invoice Cloud payments will be entered into specific Batch values. This helps drive automation and reconciliation reporting in S&S Enquesta; Invoice Cloud sends a Batch ID with every payment in the DataPump. Since this is sent for each DataPump payment transaction, this value is required for our coding efforts.
+The Invoice Cloud Implementations Project Manager should work with S&S and the Biller to obtain this value.  The Invoice Cloud Implementations Project Manager should work with Invoice Cloud Engineering, the Biller, and S&S for testing results.
+SSO URL 
+Partner
+Upon Request after kick off call
+Data unique/specific to each biller
+Whitelisting IP Addresses
+Invoice Cloud
+After kick off call
+IPs allow listing: All S&S clients filter the Inbound IP Addresses to Clients. They do not use Outbound.
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+Project Assignment 
+BID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format GUID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Type ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller Contact Information
+Partner
+Project Assignment 
+Provide detail on where to find this value - CRM
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Katrina Meyers
+Product Manager
+kmeyers@harriscomputer.com
+802-865-1170 x882121
+Y
+John Knight
+Senior Director, Professional Services
+Jknight@harriscomputer.com
+Y
+ URL:/spaces/IM/pages/2365325313/Harris+Systems+and+Software+S+S+Implementation+Details

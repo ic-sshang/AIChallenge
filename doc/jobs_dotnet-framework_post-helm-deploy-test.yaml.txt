@@ -1,0 +1,38 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+serviceName
+n/a
+name of service. used to select resources on Azure and in the target clusters
+instance
+n/a
+name of the instance to target for deployment
+environment
+n/a
+environment being targeted. used to build Azure resource names, determine variable groups to access, and passed as a value to the helm deploy command
+groupName
+n/a
+variable group name based on environment it is getting deployed to
+dependsOn
+n/a
+depends on previous job to complete
+testFilterExtension
+" "
+testFilterExtension for integration/smoke tests running in deployment pipeline
+testFilter
+" "
+testFilterExtension for integration/smoke tests running in deployment pipeline
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+jobs/helm-deploy.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../../tasks/dotnet-framework/test.yaml
+../../tasks/dotnet-framework/build.yaml
+ URL:/spaces/platform/pages/3635478778/jobs+dotnet-framework+post-helm-deploy-test.yaml

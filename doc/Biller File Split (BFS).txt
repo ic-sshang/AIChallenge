@@ -1,0 +1,37 @@
+Author: Fernando Cavazos Covarrubias
+This process splits or modifies raw files such as invoices, adjustments, and updates coming from the biller. It is only for files via FTP. The reasons for using this may vary. Breaking up files for size, breaking “Full report files” into ifferent types of files (invoices, adjustments, changes) or some other integration specific modifications. 
+Billers integrating via FTP connect to us via an FTP username and password and drop files into specified folders available to that user. Normally we take those files and directly move them forward to our file import process for our different types of files (invoices, adjustments, PDFs etc.) this expects a file to be of a certain type. 
+Certain files, however, are outside of the norm and can’t be directly taken into our StratusFileProcessor or PDFLinking process. This is where a Biller file split task would be inserted, to pre-process the file before those files are meant to be loaded in our system. 
+High level process flow of a file: 
+Without any file modification process: 
+Biller/Software Partner connects to FTP and drops the file in a specific folder. 
+A process configured under FTP Management in the CRM is sweeping that specified folder and will move the file to an internal folder. 
+Zipping and conversion from text files may occur. 
+The following process (StratusFileProcessor for most files / PDFQueueByFilename PDFQueueByExptraction for PDFs) will convert the file and import the file into our system. 
+With billerFileSplit: 
+Biller/SoftwarePartner connects to FTP and drops the file in a specific folder. 
+Biller file split will take in the file and break it down as configured for the integration. Usually smaller files. Those files will be set into different output folders within the FTP folders. 
+Zipping and conversion from text files may occur. 
+A process configured under FTP Management in the crm is sweeping the output  folder(s) and will move the file(s) to an internal folder. 
+The following process (StratusFileProcessor for most files / PDFQueueByFilename PDFQueueByExptraction for PDFs) will convert the file and import the file into our system. 
+Setup: 
+Currently there is no configurable setup in the CRM. We are actively working on adding a configuration and something will be available in the FTP Management section along with the current File import, PDF import, and Unzipping. 
+As a new integration is planned, there is a discussion between the biller/Software Partner and Devs to determine if biller file split needs to be used. Once this is determined it becomes a part of the Integration Epic and a dev works to set the specific process. 
+A biller must use FTP if this is required.
+They need to have an FTP user and password.
+The specific FTP folders need to be provided to the user.
+The folder path for the File Import management tasks needs to match the Biller File Split output path. 
+Biller file split runs every 20 minutes, taking all the configured tasks and sweeping all the folders for matching files. 
+Example: 
+Frey Municipal Software 
+Frey Municipal Software is a software partner where their billers send a single file consisting of all the invoice records on their system, daily. This type of file is not something we can convert into one of our file formats. 
+An integration was coded specifically for them in biller file split which takes in that full report file, analyzes each record and writes it into one or more output files. 
+If the record’s invoice number exists in our system, but the balance does not match what we have in our system it will be placed in the “Adjustments” split file. 
+If the record’s customer info is different from what we have recorded in our system, it will be placed in the “Customer Update” split file 
+If the record’s invoice information differs from what we have in our system it will be placed in the “invoice update” split file. 
+The same record could be placed in different export files depending on if it matches the specifications. We might need to adjust the invoice balance and update the invoice fields, so that a record will appear in the adjustment and invoice update files. 
+Remember that the exported file format is usually not an IC format file. The next process will still convert the file into a format we can import in our system. 
+This is how a Frey configuration looks like in the database: 
+After biller file split is done, we set tasks to pick up those exported split files from the folders BFS saved them: 
+In this integration example, invoices are sent separately and meant only to load new invoices in our system therefore, they do not need to go through BFS. This is reflected in how the Invoice task is different from the other three. 
+ URL:/spaces/ET/pages/3597402170/Biller+File+Split+BFS

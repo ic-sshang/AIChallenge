@@ -1,0 +1,226 @@
+none
+note
+Overview
+
+
+Overview
+
+
+This is the project implementation phase, which involves setting up and configuring the CRM, Virtual Site, Biller Portal, and Customer Site. Coding steps are also completed in this phase, ensuring that files will load for the next validation phase. 
+Project Roles
+Name
+Team
+1
+Conversion Manager (CM)
+Conversions
+2
+Project Manager (PM)
+Conversions
+3
+Inspectors
+Conversions
+4
+Integrations Project Manager (IT)
+Information Technology
+5
+Boarding Specialist (BS)
+Boarding
+6
+Delivery Specialist (DS)
+Implementations
+Change Log
+Changes Made
+Date
+Author
+Version
+Description
+Process Steps
+Process steps and task owners.
+Category
+Step
+Description
+Required?
+Responsible
+1
+Terminal IDs
+Map Invoice Types
+If applicable, link Invoice Types to correct Credit/Debit & ACH terminals, add MAX Caps, and add IC Service Fee terminal, if applicable, Link/Map invoice types to correct credit/debit & ACH terminals, add MAX caps, and add IC service fee terminal, if applicable. 
+https://invoicecloud.atlassian.net/wiki/x/AgBeug
+ 
+CRM
+ → 
+Terminals
+If Applicable
+DS
+2
+Terminal IDs
+Confirmation
+Confirm production terminals were created. 
+CRM
+ → 
+Terminals
+Note
+: Production terminals are setup by the Boarding Team when the Terminal IDs have come.
+Yes
+DS
+3
+Boarding Team
+Submit Boarding Case(s)
+ Is a new TD needed, submit a Boarding Case. 
+If Applicable
+PM
+4
+Payment Test
+PM Payment Test Checklist
+Execute the steps listed in the Smart Sheet artifact 
+If Applicable
+PM
+5
+Payment Test
+Initiate Payment Test
+Initiate and validate the payment test was successful.
+If Applicable
+DS
+6
+Payment Test
+Initiate Refund Test
+Initiate and validate the refund test was successful.
+If Applicable
+DS
+7
+Payment Test
+Payment QC
+Complete QC payment test.
+If Applicable
+DS
+8
+CRM Configuration Test/Demo
+Configure CRM
+Configure CRM in Test/Demo, such as Invoice Type settings, Options, Invoicing (BOF, Internal Questionnaire, and Biller Questionnaire items) Integration Summary, Data Pump if applicable, FTP or Stratus if applicable, Advanced Settings.
+https://invoicecloud.atlassian.net/wiki/x/AoBTvg
+ 
+Yes
+PM
+9
+Virtual Site
+Setup Virtual Site
+Setup virtual site in Demo - 
+https://invoicecloud.atlassian.net/wiki/x/DIANv
+ 
+If Applicable
+PM
+10
+Biller Portal Users
+Biller Portal Users
+Setup Biller portal users (Demo and Prod)
+Yes
+PM
+11
+CRM Configuration Test/Demo
+Enable Web Services 
+Enable Web Service Logging on Test BID (Option 84)
+If Applicable
+PM
+12
+Integration Coding
+Complete Coding Form
+Complete Integration Coding Form (Test/Demo)
+If applicable and no coding ticket is needed. INT360 
+https://invoicecloud.atlassian.net/wiki/x/AQDAuQ
+ 
+If Applicable
+PM
+13
+Integration Coding
+Submit Jira to IC IT
+Submit Jira request via 
+Jira Service Request Portal
+ to IC IT. For Coding, Presentment, and Stratus Install if applicable. Include Technical Consultant. 
+https://invoicecloud.atlassian.net/wiki/x/CIC1vQ
+ 
+Note:
+ If an Integration Modification is needed, there needs to be an Integration coding Jira ticket to cross-reference in the Integration Modification request. If the project was an INT360, please notate that in the INT MOD request, as there will be no Integration coding Jira ticket. 
+Yes
+PM/IT
+14
+Integration Coding
+Jira (ITG)
+Request InvoiceFormatGUID by submitting a Data Services ITR Jira request
+If Applicable
+PM/IT
+15
+Integration Coding
+Coding approval
+Coding form approval > 10K MRR
+If Applicable
+Inspectors
+16
+Integration Coding
+Coding Complete
+IT Completes Coding & Presentment
+Yes
+PM/IT
+17
+Integration Coding
+Coding Checklist
+PM completes - End to End Testing Checklist (Demo)
+Yes
+PM
+18
+IVR (Inbound) Changes (Test/Demo)
+Submit Boarding Form
+Refer to Integrator Checklist for unique SP-specific IVR changes
+Submit the boarding form to IVR Tech and save it in BOX. Enable Product CLOUD IVR CONNECT 
+CRM → Products → Cloud IVR Connect → Active radio box. 
+https://invoicecloud.atlassian.net/wiki/x/B4Bcv
+If Applicable follow steps in IVR Playbook. 
+If Applicable
+PM
+19
+IVR (Inbound) Changes (Test/Demo)
+Test IVR - Confirmation 
+Test IVR changes - Verify success response (IVR Test Tool), then provide a number to the biller. Get email confirmation that the biller has approved the IVR call flow.
+If Applicable
+PM
+20
+CRM Configuration Test/Demo
+Equipment
+Equipment (Card Readers, and EMVs, if applicable) 
+Equipment Non-EMV or EMV order, process, enter in CRM, and ship to biller.
+Non-EMV Process - 
+Non-EMV Card Reader Ordering & FAQs
+ 
+EMV Process - 
+https://invoicecloud.atlassian.net/wiki/spaces/Implementa/folder/3963420677
+ 
+If Applicable
+PM
+21
+Quality Core Functions
+QC Datasheet
+Complete QC Datasheet - CRM
+Yes
+PM
+22
+Quality Core Functions
+QC Datasheet
+Complete QC Datasheet - Virtual Site
+Yes
+PM
+23
+Quality Core Functions
+Schedule Meeting
+Schedule a meeting for testing and training in the next section
+Yes
+PM
+24
+Open Marketing Request
+Content, Timeline, Request, and Execute
+The Biller provides the email language, email recipients, and when to send it out.
+ -Conversions IM opens a request with Marketing - Biller Marketing 
+https://invoicecloud.atlassian.net/jira/core/projects/CMR/form/27
+-Marketing prepares and sends the emails
+If Applicable
+PM
+25
+ URL:/spaces/Implementa/pages/3240657015/CP2+-+Implementation

@@ -1,0 +1,19 @@
+Overview
+This will be a guide to assist resolving issue where a payment is received but is processed on an inactive terminal. A scenario where this could happen is when a Mastercard or Fiserv file is received before the CASS funding start date. This leaves the payment processed in the shard unable to access a live terminal and direct to the default and possibly inactive OBD terminal. The Gateway is unable to fund the payments appropriately and biller is left questioning where the payments are.
+ Instructions
+To resolve this issue, we would need to make sure to upload RPPS entries to the gateway, fund the biller, balance the ledger, correctly represent entry details in the gateway and settled batch deposit date within the shard so the biller can view it in reports.
+ For Uploading entries, you can use the following script 
+  and update the following info:
+Pass the appropriate biller ID(s) for either Fiserv or Mastercard and the FileID obtained from the RPPS_Files table in the IC gateway DB.
+Add the correct date the file was received for the entry date.
+Only run the loop for the necessary OBD source (Fiserv/Mastercard).
+After running the script verify the entries are in the gateway.
+To fund the biller, get assistance from Wicked Tendies SME (subject matter expert) to see if there is a record of funding available in the gateway. If not use the script 
+ and update the following info:
+billerId, settledBatchId, merchantAccountId, shardTerminalID, paymentDate
+add breakpoints before funding records are added to make sure the correct payments are picked up.
+Cleanup
+After the funds have been processed make sure to create a database request to insert the PaymentIDs and RPPSEntryID’s towards the RPPSEntryDetails table inside the gateway DB
+Update the settled batch deposit date in the shard DB
+Update the payment/settle batch terminal ID to the correct and active one as well
+ URL:/spaces/ED/pages/4356210911/Fixing+OBD+Payments+through+an+inactive+terminal

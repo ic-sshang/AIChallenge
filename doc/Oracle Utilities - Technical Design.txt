@@ -1,0 +1,2561 @@
+DRAFT
+Yellow
+ 
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+In progress
+Yellow
+Document owner
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+CC&B Demo site
+The CC&B demo site can be found at
+ 
+https://demo.bhcglobal.com:7002/ccb29/loginPage.jsp
+Login: 
+ICUSER
+Password: 
+ICu2023!
+Oracle Integration & Test Validation Docs
+Note: The test case numbers in the validation test plan correspond to the numbered integration details.
+SOAP WSDLs
+Test Accounts
+The following accounts can be used for testing:
+1151198836 Fred Frion
+3405604813 Frankie Gray
+0564857428 Debbie Yale
+Note: Currently, executing the C1-ThirdPartyOneTimePayNotification with the 
+C1AD
+ add action has a known bug that creates duplicate data with the same 
+accounId
+ key. When executing the subsequent 
+C1UP
+ update action, it has been common to get the error message, “List has 2 references with the same keys [accountId].” The folks at Blue Heron are able to clean up the duplicate data after the add action, before the update action, in order to get a successful update response. Oracle is working on a fix.
+Integration Details
+1.1 RTDR - Verify account details
+Description
+Get information about an account
+IC Use
+RTDR - account refresh
+Partner API Name
+C1-ThirdPartyVerifyAccount
+Request Specs
+action
+ → 
+C1VE
+accountId
+ → AccountNumber
+Response Specs
+If 
+isVerified = true
+, 
+isInError = false
+ and 
+dueDate = InvoiceDueDate
+, update values, if necessary:
+accountBalance
+ → BalanceDue
+pastDueAmount
+ → PastDue
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyVerifyAccount">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <c1:C1-ThirdPartyVerifyAccount>
+      <c1:head>
+        <c1:action>C1VE</c1:action>
+        <c1:accountId>9220311736</c1:accountId>
+      </c1:head>
+    </c1:C1-ThirdPartyVerifyAccount>
+  </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Header/>
+  <SOAP-ENV:Body>
+    <ouaf:C1-ThirdPartyVerifyAccount xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyVerifyAccount">
+      <ouaf:head>
+          <ouaf:action>C1VE</ouaf:action>
+          <ouaf:accountId>9220311736</ouaf:accountId>
+      </ouaf:head>
+      <ouaf:accountVerification>
+          <ouaf:output>
+             <ouaf:isVerified>true</ouaf:isVerified>
+             <ouaf:accountBalance>24.00</ouaf:accountBalance>
+             <ouaf:pastDueAmount>24</ouaf:pastDueAmount>
+             <ouaf:dueDate>2022-02-16</ouaf:dueDate>
+             <ouaf:autoPayExists>false</ouaf:autoPayExists>
+          </ouaf:output>
+      </ouaf:accountVerification>
+      <ouaf:errorInformation>
+          <ouaf:isInError>false</ouaf:isInError>
+      </ouaf:errorInformation>
+    </ouaf:C1-ThirdPartyVerifyAccount>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyVerifyAccount xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyVerifyAccount">
+         <ouaf:head>
+            <ouaf:action>C1VE</ouaf:action>
+            <ouaf:accountId>9220311737</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:accountVerification>
+            <ouaf:output>
+               <ouaf:isVerified>false</ouaf:isVerified>
+            </ouaf:output>
+         </ouaf:accountVerification>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>1850</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Input request field Account has an invalid value.  Referenced FK ACCT Account ID 9220311737 by table Account does not exist.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyVerifyAccount>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+1.2 RTDR - Verify account details (error - account does not exist)
+Description
+Get information about an account error - account does not exist. Should not require additional coding beyond the work done for 1.1.
+IC Use
+RTDR - account refresh
+Partner API Name
+C1-ThirdPartyVerifyAccount
+Request Specs
+action
+ → 
+C1VE
+accountId
+ → AccountNumber
+Response Specs
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyVerifyAccount">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <c1:C1-ThirdPartyVerifyAccount>
+            <c1:head>
+                <c1:action>C1VE</c1:action>
+                <c1:accountId>1569113685</c1:accountId>
+            </c1:head>
+        </c1:C1-ThirdPartyVerifyAccount>
+    </soapenv:Body>
+</soapenv:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ouaf:C1-ThirdPartyVerifyAccount xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyVerifyAccount">
+            <ouaf:head>
+                <ouaf:action>C1VE</ouaf:action>
+                <ouaf:accountId>1569113685</ouaf:accountId>
+            </ouaf:head>
+            <ouaf:accountVerification>
+                <ouaf:output>
+                <ouaf:isVerified>false</ouaf:isVerified>
+                </ouaf:output>
+            </ouaf:accountVerification>
+            <ouaf:errorInformation>
+                <ouaf:isInError>true</ouaf:isInError>
+                <ouaf:errorReference>
+                    <ouaf:category>11001</ouaf:category>
+                    <ouaf:number>1850</ouaf:number>
+                </ouaf:errorReference>
+                <ouaf:errorMessage>Input request field Account has an invalid value.  Referenced FK ACCT Account ID 1569113685 by table Account does not exist.</ouaf:errorMessage>
+            </ouaf:errorInformation>
+        </ouaf:C1-ThirdPartyVerifyAccount>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.1.1 DataPump - Send immediate CC payment
+Description
+Send notification of an immediate, one-time CC payment
+IC Use
+DataPump - payments
+Partner API Name
+C1-ThirdPartyOneTimePayNotification (see WSDL)
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be less than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ → 
+CREDITCARD
+cardType
+ → credit card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+    Other → 
+C1OT
+cardNumber
+ → in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-12345
+ for AMEX
+accountName
+ → CustomerName
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+zipCode
+ → card zip code
+email
+ → EmailAddress
+extReferenceNumber
+ → PaymentGUID
+extParentReferenceNumber
+ → ReceiptGUID
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+paymentEventId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <c1:C1-ThirdPartyOneTimePayNotification>
+            <c1:head>
+                <c1:action>C1AD</c1:action>
+                <c1:accountId>9220311736</c1:accountId>
+            </c1:head>
+            <c1:paymentInfo>
+                <c1:input>
+                    <c1:paymentDateTime>2023-07-02T09:15:00-04:00</c1:paymentDateTime>
+                    <c1:paymentAmount>1.01</c1:paymentAmount>
+                    <c1:paymentType>CREDITCARD</c1:paymentType>
+                    <c1:creditCardInfo>
+                        <c1:cardType>C1VS</c1:cardType>
+                        <c1:cardNumber>xxxx-xxxx-xxxx-1111</c1:cardNumber>
+                        <c1:accountName>Jason Account</c1:accountName>
+                        <c1:expMonth>01</c1:expMonth>
+                        <c1:expYear>2027</c1:expYear>
+                        <c1:zipCode>33605</c1:zipCode>
+                    </c1:creditCardInfo>
+                    <c1:email>jprosek@invoicecloud.com</c1:email>
+                    <c1:extReferenceNumber>12345</c1:extReferenceNumber>
+                    <c1:extParentRefNumber>67890</c1:extParentRefNumber>
+                </c1:input>
+            </c1:paymentInfo>
+        </c1:C1-ThirdPartyOneTimePayNotification>
+    </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-07-02T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+               <ouaf:extParentRefNumber>67890</ouaf:extParentRefNumber>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+               <ouaf:paymentEventId>922892637135</ouaf:paymentEventId>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:customOutput/>
+            </ouaf:output>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-07-02T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount xsi:nil="true"/>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+               <ouaf:extParentRefNumber>67890</ouaf:extParentRefNumber>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11102</ouaf:category>
+               <ouaf:number>10423</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Payment Amount is required</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.1.2 DataPump - Send immediate ACH payment
+Description
+Send notification of an immediate, one-time ACH payment
+IC Use
+DataPump - payments
+Partner API Name
+C1-ThirdPartyOneTimePayNotification
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be less than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ → 
+CHECKING
+ or 
+SAVINGS
+accountNumber
+→ bank account number in format 
+xxxxxxxxxxxx12
+routingNumber
+ → bank account routing number
+accountName
+ → CustomerName
+extReferenceNumber
+ → PaymentGUID
+extParentReferenceNumber
+ → ReceiptGUID
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+paymentEventId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-07-05T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>1.01</c1:paymentAmount>
+               <c1:paymentType>CHECKING</c1:paymentType>
+               <c1:bankAccountInfo>
+                  <c1:accountNumber>xxxxxxxxxxxx12</c1:accountNumber>
+                  <c1:routingNumber>056008849</c1:routingNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+               </c1:bankAccountInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+               <c1:extReferenceNumber>12345</c1:extReferenceNumber>
+               <c1:extParentRefNumber>67890</c1:extParentRefNumber>
+             </c1:input>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-07-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+               <ouaf:extParentRefNumber>67890</ouaf:extParentRefNumber>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+               <ouaf:paymentEventId>922892637135</ouaf:paymentEventId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-07-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+               <ouaf:extParentRefNumber>67890</ouaf:extParentRefNumber>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11006</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Unable to determine auto pay source. Please check Routing Number.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.2 DataPump - Cancel processed payment
+Description
+Send notification that a processed payment was canceled
+IC Use
+DataPump - payments
+Partner API Name
+C1-ThirdPartyOneTimePayNotification
+Request Specs
+action
+ → 
+C1CA
+accountId
+ → AccountNumber
+serviceTaskId
+ → DataPump JSON
+paymentEventId
+ → DataPump JSON
+cancelReason
+ → 
+THPT
+Response Specs
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1CA</c1:action>
+            <c1:accountId>1569113684</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:inputOutput>
+               <c1:serviceTaskId>86936934517945</c1:serviceTaskId>
+               <c1:paymentEventId>922892637135</c1:paymentEventId>
+        	   <c1:cancelReason>THPT</c1:cancelReason>
+            </c1:inputOutput>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1CA</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+               <ouaf:paymentEventId>922892637135</ouaf:paymentEventId>
+               <ouaf:cancelReason>THPT</ouaf:cancelReason>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:cancellationServiceTaskId>46701828677595</ouaf:cancellationServiceTaskId>
+               <ouaf:payCancelReasonsList>
+                  <ouaf:cancelReason>THPT</ouaf:cancelReason>
+                  <ouaf:description>Canceled from third party payment processor</ouaf:description>
+               </ouaf:payCancelReasonsList>
+            </ouaf:output>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1CA</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517946</ouaf:serviceTaskId>
+               <ouaf:paymentEventId>922892637135</ouaf:paymentEventId>
+               <ouaf:cancelReason>THPT</ouaf:cancelReason>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>401</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>86936934517946 not found.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.3.1 DataPump - Schedule CC payment
+Description
+Send notification that a one-time CC payment was scheduled (used by processing test in 2.4)
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ = 
+CREDITCARD
+cardType
+ → card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+cardNumber
+ → in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-x1234
+ for AMEX
+accountName
+ → CustomerName
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+zipCode
+ → zip code
+email
+ → EmailAddress
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>1569113684</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-06T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>123.45</c1:paymentAmount>
+               <c1:paymentType>CREDITCARD</c1:paymentType>
+               <c1:creditCardInfo>
+                  <c1:cardType>C1VS</c1:cardType>
+                  <c1:cardNumber>xxxx-xxxx-xxxx-1111</c1:cardNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+                  <c1:expMonth>01</c1:expMonth>
+                  <c1:expYear>2027</c1:expYear>
+                  <c1:zipCode>33605</c1:zipCode>
+               </c1:creditCardInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+             </c1:input>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>1569113684</ouaf:accountId>
+                  <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>16188674533142</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>1569113684</ouaf:accountId>
+                  <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>101</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Encrypted Value field missing.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.3.2 DataPump - Schedule ACH payment
+Description
+Send notification that a one-time CC payment was scheduled (used by processing test in 2.4)
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date, formatted 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ → 
+CHECKING
+ or 
+SAVINGS
+accountNumber
+→ bank account number in format 
+xxxxxxxxxxxx12
+routingNumber
+ → bank routing number
+accountName
+ → CustomerName
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-05T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>1.01</c1:paymentAmount>
+               <c1:paymentType>CHECKING</c1:paymentType>
+               <c1:bankAccountInfo>
+                  <c1:accountNumber>xxxxxxxxxxxx12</c1:accountNumber>
+                  <c1:routingNumber>056008849</c1:routingNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+               </c1:bankAccountInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+             </c1:input>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11006</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Unable to determine auto pay source. Please check Routing Number.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.4 DataPump - Process scheduled payment
+Description
+Send notification a scheduled, one-time payment was processed
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1PR
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate formatted 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+serviceTaskId
+ → DataPump JSON
+Response Specs
+If 
+isInError = true
+,  store record:
+paymentEventId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1PR</c1:action>
+            <c1:accountId>1569113684</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+         	<c1:input>
+		       <c1:paymentDateTime>2023-08-06T09:15:00-04:00</c1:paymentDateTime>
+         	</c1:input>
+            <c1:inputOutput>
+               <c1:serviceTaskId>16188674533142</c1:serviceTaskId>
+            </c1:inputOutput>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1PR</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>16188674533142</ouaf:serviceTaskId>
+               <ouaf:paymentEventId>156871301037</ouaf:paymentEventId>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:customOutput/>
+            </ouaf:output>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1PR</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>16188674533143</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>401</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>16188674533143 not found.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.5.1 DataPump - Schedule CC payment for update/cancel
+Description
+Send notification a one-time CC payment was scheduled. 
+*Should not require additional coding beyond the work done for 2.3.1
+.
+ This is for testing 2.6 and 2.7.
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ = 
+CREDITCARD
+cardType
+ → card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+cardNumber
+ → in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-x1234
+ for AMEX
+accountName
+ → CustomerName
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+zipCode
+ → zip code
+email
+ → EmailAddress
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>1569113684</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-06T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>123.45</c1:paymentAmount>
+               <c1:paymentType>CREDITCARD</c1:paymentType>
+               <c1:creditCardInfo>
+                  <c1:cardType>C1VS</c1:cardType>
+                  <c1:cardNumber>xxxx-xxxx-xxxx-1111</c1:cardNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+                  <c1:expMonth>01</c1:expMonth>
+                  <c1:expYear>2027</c1:expYear>
+                  <c1:zipCode>33605</c1:zipCode>
+               </c1:creditCardInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+             </c1:input>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>1569113684</ouaf:accountId>
+                  <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>16188674533142</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-06T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>1569113684</ouaf:accountId>
+                  <ouaf:paymentAmount>123.45</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>101</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Encrypted Value field missing.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.5.2 DataPump - Schedule ACH payment for update/cancel
+Description
+Send notification a one-time ACH payment was scheduled. 
+*
+Should not require additional coding beyond the work done for 2.3.2. This is for testing 2.6 and 2.7.
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ → 
+CHECKING
+ or 
+SAVINGS
+accountNumber
+ → bank account number in format 
+xxxxxxxxxxxx12
+routingNumber
+ → bank routing number
+accountName
+ → CustomerName
+email
+ → EmailAddress
+Response Specs
+If 
+isInError = false
+, store custom fields:
+serviceTaskId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-05T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>1.01</c1:paymentAmount>
+               <c1:paymentType>CHECKING</c1:paymentType>
+               <c1:bankAccountInfo>
+                  <c1:accountNumber>xxxxxxxxxxxx12</c1:accountNumber>
+                  <c1:routingNumber>056008849</c1:routingNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+               </c1:bankAccountInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+             </c1:input>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>1.01</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11006</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Unable to determine auto pay source. Please check Routing Number.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.6.1 DataPump - Update a scheduled CC payment
+Description
+Send notification that a scheduled, one-time CC payment was updated
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1UP
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ = 
+CREDITCARD
+cardType
+ → card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+cardNumber
+ → in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-x1234
+ for AMEX
+accountName
+ → CustomerName
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+zipCode
+ → zip code
+email
+ → EmailAddress
+serviceTaskId
+ → DataPump JSON
+Response Specs
+If 
+isInError = false
+, no action required
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+Note: Currently, executing the C1-ThirdPartyOneTimePayNotification with the 
+C1AD
+ add action has a known bug that creates duplicate data with the same 
+accountId
+ key. When executing the subsequent 
+C1UP
+ update action, it has been common to get the error message, “List has 2 references with the same keys [accountId].” The folks at Blue Heron are able to clean up the duplicate data after the add action, before the update action, in order to get a successful update response. Oracle is working on a fix.
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1UP</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-08T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>3.03</c1:paymentAmount>
+               <c1:paymentType>CREDITCARD</c1:paymentType>
+               <c1:creditCardInfo>
+                  <c1:cardType>C1VS</c1:cardType>
+                  <c1:cardNumber>xxxx-xxxx-xxxx-1111</c1:cardNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+                  <c1:expMonth>01</c1:expMonth>
+                  <c1:expYear>2027</c1:expYear>
+                  <c1:zipCode>33605</c1:zipCode>
+               </c1:creditCardInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+            </c1:input>
+            <c1:inputOutput>
+               <c1:serviceTaskId>96473650062953</c1:serviceTaskId>
+            </c1:inputOutput>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-08T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>3.03</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>3.03</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>96473650062953</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-08T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>3.03</ouaf:paymentAmount>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>3.03</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:creditCardInfo>
+                  <ouaf:cardType>C1VS</ouaf:cardType>
+                  <ouaf:cardNumber>xxxx-xxxx-xxxx-1111</ouaf:cardNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+                  <ouaf:expMonth>01</ouaf:expMonth>
+                  <ouaf:expYear>2027</ouaf:expYear>
+                  <ouaf:zipCode>33605</ouaf:zipCode>
+               </ouaf:creditCardInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>96473650062953</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>1881</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>List has 2 references with the same keys [9220311736 ].</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.6.2 DataPump - Update a scheduled ACH payment
+Description
+Send notification that a scheduled, one-time ACH payment was updated
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1UP
+accountId
+ → AccountNumber
+paymentDateTime
+ → PaymentDate must be greater than current date, in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+paymentAmount
+ → PaymentAmount
+paymentType
+ → 
+CHECKING
+ or 
+SAVINGS
+accountNumber
+ → bank account number in format 
+xxxxxxxxxxxx12
+routingNumber
+ → bank routing number
+accountName
+ → CustomerName
+email
+ → EmailAddress
+serviceTaskId
+ → DataPump JSON
+Response Specs
+If 
+isInError = false
+, no action required
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+Note: Currently, executing the C1-ThirdPartyOneTimePayNotification with the 
+C1AD
+ add action has a known bug that creates duplicate data with the same 
+accountId
+ key. When executing the subsequent 
+C1UP
+ update action, it has been common to get the error message, “List has 2 references with the same keys [accountId].” The folks at Blue Heron are able to clean up the duplicate data after the add action, before the update action, in order to get a successful update response. Oracle is working on a fix.
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1UP</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:input>
+               <c1:paymentDateTime>2023-08-05T09:15:00-04:00</c1:paymentDateTime>
+               <c1:paymentAmount>2.02</c1:paymentAmount>
+               <c1:paymentType>CHECKING</c1:paymentType>
+               <c1:bankAccountInfo>
+                  <c1:accountNumber>xxxxxxxxxxxx12</c1:accountNumber>
+                  <c1:routingNumber>056008849</c1:routingNumber>
+                  <c1:accountName>Jason Account</c1:accountName>
+               </c1:bankAccountInfo>
+               <c1:email>jprosek@invoicecloud.com</c1:email>
+             </c1:input>
+             <c1:inputOutput>
+               <c1:serviceTaskId>96473650062953</c1:serviceTaskId>
+            </c1:inputOutput>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>2.02</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>2.02</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>86936934517945</ouaf:serviceTaskId>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:input>
+               <ouaf:paymentDateTime>2023-08-05T09:15:00-04:00</ouaf:paymentDateTime>
+               <ouaf:paymentAmount>2.02</ouaf:paymentAmount>
+               <ouaf:paymentType>SAVINGS</ouaf:paymentType>
+               <ouaf:multiAccount>
+                  <ouaf:accountId>9220311736</ouaf:accountId>
+                  <ouaf:paymentAmount>2.02</ouaf:paymentAmount>
+               </ouaf:multiAccount>
+               <ouaf:bankAccountInfo>
+                  <ouaf:accountNumber>xxxxxxxxxxxx12</ouaf:accountNumber>
+                  <ouaf:routingNumber>056008849</ouaf:routingNumber>
+                  <ouaf:accountName>Jason Account</ouaf:accountName>
+               </ouaf:bankAccountInfo>
+               <ouaf:email>jprosek@invoicecloud.com</ouaf:email>
+               <ouaf:extReferenceNumber>12345</ouaf:extReferenceNumber>
+            </ouaf:input>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11006</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Unable to determine auto pay source. Please check Routing Number.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+2.7 DataPump - Cancel a scheduled payment
+Description
+Schedule a payment for processing test 2.4
+IC Use
+DataPump - scheduled payments
+Partner API Name
+C1-ThirdPartyOneTimeNotification
+Request Specs
+action
+ → 
+C1CA
+accountId
+ → AccountNumber
+serviceTaskId
+ → DataPump JSON
+cancelReason
+ → 
+THPT
+Response Specs
+If 
+isInError = false
+, no action required
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyOneTimePayNotification>
+         <c1:head>
+            <c1:action>C1CA</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:paymentInfo>
+            <c1:inputOutput>
+                <c1:serviceTaskId>17941097691515</c1:serviceTaskId>
+        	    <c1:cancelReason>THPT</c1:cancelReason>
+            </c1:inputOutput>
+         </c1:paymentInfo>
+      </c1:C1-ThirdPartyOneTimePayNotification>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Success
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1CA</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>17941097691515</ouaf:serviceTaskId>
+               <ouaf:cancelReason>THPT</ouaf:cancelReason>
+            </ouaf:inputOutput>
+            <ouaf:output/>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyOneTimePayNotification xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyOneTimePayNotification">
+         <ouaf:head>
+            <ouaf:action>C1CA</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:paymentInfo>
+            <ouaf:inputOutput>
+               <ouaf:serviceTaskId>17941097691516</ouaf:serviceTaskId>
+               <ouaf:cancelReason>THPT</ouaf:cancelReason>
+            </ouaf:inputOutput>
+         </ouaf:paymentInfo>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11001</ouaf:category>
+               <ouaf:number>401</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>17941097691516 not found.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyOneTimePayNotification>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+3.1.1 DataPump - Enroll CC in autopay
+Description
+Enroll an account in autopay with a credit card
+IC Use
+DataPump - autopay enrollment
+Partner API Name
+C1-ThirdPartyAutoPaySetup (see WSDL)
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber cannot be enrolled in autopay
+startDate
+→ current date in format 
+YYYY-MM-DD
+endDate
+→ 
+9999-12-31
+paymentType
+ → 
+CREDITCARD
+cardType
+ → card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+externalAccountId
+ → card number in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-x1234
+ for AMEX
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+name
+ → CustomerName
+Response Specs
+If 
+isInError = false
+, store the autopay ID:
+autoPayId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyAutoPaySetup>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:autoPayInformation>
+            <c1:input>
+               <c1:startDate>2023-07-15</c1:startDate>
+               <c1:endDate>9999-12-31</c1:endDate>
+               <c1:paymentType>CREDITCARD</c1:paymentType>
+               <c1:cardType>C1VS</c1:cardType>
+               <c1:externalAccountId>xxxx-xxxx-xxxx-1111</c1:externalAccountId>
+               <c1:expMonth>01</c1:expMonth>
+               <c1:expYear>2027</c1:expYear>
+               <c1:name>Jason Prosek</c1:name>
+            </c1:input>
+         </c1:autoPayInformation>
+      </c1:C1-ThirdPartyAutoPaySetup>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-07-15</ouaf:startDate>
+               <ouaf:endDate>9999-12-31</ouaf:endDate>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:cardType>C1VS</ouaf:cardType>
+               <ouaf:externalAccountId>xxxx-xxxx-xxxx-1111</ouaf:externalAccountId>
+               <ouaf:expMonth>01</ouaf:expMonth>
+               <ouaf:expYear>2027</ouaf:expYear>
+               <ouaf:name>Jason Prosek</ouaf:name>
+            </ouaf:input>
+         </ouaf:autoPayInformation>
+         <ouaf:inputOutput>
+            <ouaf:autoPayId>9225314747</ouaf:autoPayId>
+         </ouaf:inputOutput>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-07-15</ouaf:startDate>
+               <ouaf:endDate>9999-12-31</ouaf:endDate>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:cardType>C1VS</ouaf:cardType>
+               <ouaf:externalAccountId>xxxx-xxxx-xxxx-1111</ouaf:externalAccountId>
+               <ouaf:expMonth>01</ouaf:expMonth>
+               <ouaf:expYear>2027</ouaf:expYear>
+               <ouaf:name>Jason Prosek</ouaf:name>
+            </ouaf:input>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>3</ouaf:category>
+               <ouaf:number>40004</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>An account cannot have multiple auto-pay options effective at the same time.  (Account 9220311736)</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+3.1.2 DataPump - Enroll ACH in autopay
+Description
+Enroll an account in autopay with ACH
+IC Use
+DataPump - autopay enrollment
+Partner API Name
+C1-ThirdPartyAutoPaySetup (see WSDL)
+Request Specs
+action
+ → 
+C1AD
+accountId
+ → AccountNumber cannot be enrolled in autopay
+startDate
+→ current date in format 
+YYYY-MM-DD
+endDate
+→ 
+9999-12-31
+paymentType
+ → 
+CREDITCARD
+externalAccountId
+ → bank account number in format 
+xxxxxxxxxx1234
+bankRoutingNumber
+ → bank routing number
+name
+ → CustomerName
+Response Specs
+If 
+isInError = false
+, store the autopay ID:
+autoPayId
+ → DataPump JSON
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyAutoPaySetup>
+         <c1:head>
+            <c1:action>C1AD</c1:action>
+            <c1:accountId>1569113684</c1:accountId>
+         </c1:head>
+         <c1:autoPayInformation>
+            <c1:input>
+               <c1:startDate>2023-11-13</c1:startDate>
+               <c1:endDate>9999-12-31</c1:endDate>
+               <c1:paymentType>CHECKING</c1:paymentType>
+               <c1:externalAccountId>xxxxxxxxxx1234</c1:externalAccountId>
+               <c1:bankRoutingNumber>056008849</c1:bankRoutingNumber>
+               <c1:name>Rob Test</c1:name>
+            </c1:input>
+         </c1:autoPayInformation>
+      </c1:C1-ThirdPartyAutoPaySetup>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-11-13</ouaf:startDate>
+               <ouaf:endDate>9999-12-31</ouaf:endDate>
+               <ouaf:paymentType>CHECKING</ouaf:paymentType>
+               <ouaf:externalAccountId>xxxxxxxxxx1234</ouaf:externalAccountId>
+               <ouaf:name>Rob Test</ouaf:name>
+               <ouaf:bankRoutingNumber>056008849</ouaf:bankRoutingNumber>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:autoPayId>1567713267</ouaf:autoPayId>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:customOutput/>
+            </ouaf:output>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1AD</ouaf:action>
+            <ouaf:accountId>1569113684</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-11-10</ouaf:startDate>
+               <ouaf:endDate>9999-12-31</ouaf:endDate>
+               <ouaf:paymentType>CHECKING</ouaf:paymentType>
+               <ouaf:externalAccountId>xxxxxxxxxx1234</ouaf:externalAccountId>
+               <ouaf:name>Rob Test</ouaf:name>
+               <ouaf:bankRoutingNumber>056008849</ouaf:bankRoutingNumber>
+            </ouaf:input>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11024</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Start Date must be on or after the current date when Action is Add or Update.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+3.2 DataPump - Update autopay enrollment
+Description
+Update an account’s autopay enrollment
+IC Use
+DataPump - autopay enrollment
+Partner API Name
+C1-ThirdPartyAutoPaySetup
+Request Specs
+action
+ → 
+C1UP
+accountId
+ → AccountNumber cannot be enrolled in autopay
+startDate
+→ current date in format 
+YYYY-MM-DD
+endDate
+→ 
+9999-12-31
+paymentType
+ → 
+CREDITCARD
+cardType
+ → card type:
+    American Express → 
+C1AM
+    Discover → 
+C1DV
+    MasterCard → 
+C1MC
+    Visa → 
+C1VS
+externalAccountId
+ → card number in format 
+xxxx-xxxx-xxxx-1234
+ or 
+XXXX-XXXXXX-x1234
+ for AMEX
+expMonth
+ → expiration month in format 
+MM
+expYear
+ → expiration year in format 
+YYYY
+zipCode
+ → zip code
+name
+ → CustomerName
+autoPayId
+ → DataPump JSON
+Response Specs
+If 
+isInError = false
+, no action required
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyAutoPaySetup>
+         <c1:head>
+            <c1:action>C1UP</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:autoPayInformation>
+            <c1:input>
+               <c1:startDate>2023-07-22</c1:startDate>
+               <c1:endDate>2024-12-31</c1:endDate>
+               <c1:paymentType>CREDITCARD</c1:paymentType>
+               <c1:cardType>C1VS</c1:cardType>
+               <c1:externalAccountId>xxxx-xxxx-xxxx-1111</c1:externalAccountId>
+               <c1:expMonth>01</c1:expMonth>
+               <c1:expYear>2027</c1:expYear>
+               <c1:name>Jason Prosek</c1:name>
+            </c1:input>
+            <c1:inputOutput>
+               <c1:autoPayId>9225314747</c1:autoPayId>
+            </c1:inputOutput>
+         </c1:autoPayInformation>
+      </c1:C1-ThirdPartyAutoPaySetup>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-07-22</ouaf:startDate>
+               <ouaf:endDate>2024-12-31</ouaf:endDate>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:cardType>C1VS</ouaf:cardType>
+               <ouaf:externalAccountId>xxxx-xxxx-xxxx-1111</ouaf:externalAccountId>
+               <ouaf:expMonth>01</ouaf:expMonth>
+               <ouaf:expYear>2027</ouaf:expYear>
+               <ouaf:name>Jason Prosek</ouaf:name>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:autoPayId>9225314747</ouaf:autoPayId>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:customOutput/>
+            </ouaf:output>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1UP</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:startDate>2023-07-22</ouaf:startDate>
+               <ouaf:endDate>2024-12-31</ouaf:endDate>
+               <ouaf:paymentType>CREDITCARD</ouaf:paymentType>
+               <ouaf:cardType>C1VS</ouaf:cardType>
+               <ouaf:externalAccountId>xxxx-xxxx-xxxx-1111</ouaf:externalAccountId>
+               <ouaf:expMonth>01</ouaf:expMonth>
+               <ouaf:expYear>2027</ouaf:expYear>
+               <ouaf:name>Jason Prosek</ouaf:name>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:autoPayId>9225314746</ouaf:autoPayId>
+            </ouaf:inputOutput>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11023</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Input request field Auto Pay ID has an invalid value.  Auto Pay ID (9225314746) does not exist.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+3.3 
+DataPump 
+- Cancel autopay enrollment
+Description
+Cancel an account’s autopay enrollment
+IC Use
+DataPump - autopay enrollment
+Partner API Name
+C1-ThirdPartyAutoPaySetup
+Request Specs
+action
+ → 
+C1CN
+accountId
+ → AccountNumber must be enrolled in autopay
+endDate
+ → current date in format 
+YYYY-MM-DD
+autoPayId
+ → DataPump JSON
+Response Specs
+If 
+isInError = false
+, no action required
+If 
+isInError = true
+, log error 
+category
+, error 
+number
+, and 
+errorMessage
+ 
+SOAP Request
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:c1="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <c1:C1-ThirdPartyAutoPaySetup>
+         <c1:head>
+            <c1:action>C1CN</c1:action>
+            <c1:accountId>9220311736</c1:accountId>
+         </c1:head>
+         <c1:autoPayInformation>
+            <c1:input>
+               <c1:endDate>2023-07-22</c1:endDate>
+		 	</c1:input>
+            <c1:inputOutput>
+               <c1:autoPayId>9225314747</c1:autoPayId>
+            </c1:inputOutput>
+         </c1:autoPayInformation>
+      </c1:C1-ThirdPartyAutoPaySetup>
+   </soapenv:Body>
+</soapenv:Envelope>
+SOAP Response
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1CN</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:endDate>2023-07-22</ouaf:endDate>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:autoPayId>9225314747</ouaf:autoPayId>
+            </ouaf:inputOutput>
+            <ouaf:output>
+               <ouaf:customOutput/>
+            </ouaf:output>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>false</ouaf:isInError>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+SOAP Error
+xml
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP-ENV:Header/>
+   <SOAP-ENV:Body>
+      <ouaf:C1-ThirdPartyAutoPaySetup xmlns:ouaf="http://ouaf.oracle.com/webservices/c1/C1-ThirdPartyAutoPaySetup">
+         <ouaf:head>
+            <ouaf:action>C1CN</ouaf:action>
+            <ouaf:accountId>9220311736</ouaf:accountId>
+         </ouaf:head>
+         <ouaf:autoPayInformation>
+            <ouaf:input>
+               <ouaf:endDate>2023-07-22</ouaf:endDate>
+            </ouaf:input>
+            <ouaf:inputOutput>
+               <ouaf:autoPayId>9225314748</ouaf:autoPayId>
+            </ouaf:inputOutput>
+         </ouaf:autoPayInformation>
+         <ouaf:errorInformation>
+            <ouaf:isInError>true</ouaf:isInError>
+            <ouaf:errorReference>
+               <ouaf:category>11125</ouaf:category>
+               <ouaf:number>11023</ouaf:number>
+            </ouaf:errorReference>
+            <ouaf:errorMessage>Input request field Auto Pay ID has an invalid value.  Auto Pay ID (9225314748) does not exist.</ouaf:errorMessage>
+         </ouaf:errorInformation>
+      </ouaf:C1-ThirdPartyAutoPaySetup>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+4.* Third party automatic payment extract file (TAPEX)
+Description
+A TAPEX file will be uploaded to IC via SFTP. The TAPEX file contains autopayments scheduled on the Oracle side for that given day. It needs to be converted into an 
+Invoice Update File
+ for payment processing. TAPEX files will be generated nightly and need to be processed prior to IC processing autopay so that the 
+Custom1:autoPayStagingId
+ is available.
+IC Use
+DataPump - autopay
+Partner Batch Process Name
+C1-TAPEX
+TAPEX File Specs
+Each record contains the following comma-separated values, in order:
+accountId,autoPayAmount,dueDate,maximumWithdrawalAmount,autoPayStagingId
+The footer contains the total number of records in the file and the total amount to be collected, as such:
+numberOfRecordsProcessed,totalAmount
+Note: 
+autoPayStagingId
+ needs to be stored in a custom field for confirming/canceling payments in the future
+IUF Conversion Specs
+AccountNumber
+ → 
+accountId
+InvoiceNumber
+ → required in IUF, look up by 
+AccountNumber
+ and 
+InvoiceDueDate
+if no invoice matches on 
+AccountNumber
+ and 
+InvoiceDueDate
+, use the oldest non-zero invoice
+InvoiceDueDate
+ → 
+dueDate
+AutoPayCollectionDate
+ → always set to the current date in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+Custom1
+ → 
+autoPayStagingId
+TAPEX CSV Sample
+xml
+9708839257,10.00,2023-07-25,"2,000.00",9703134083181
+9708839258,20.00,2023-07-25,"1,000.00",9703134083182
+2,30.00
+IUF Sample
+json
+{
+    "Invoices": [
+        {
+            "AccountNumber": "9708839257",
+            "InvoiceNumber": "970061127527",
+            "InvoiceDueDate": "07/25/2023",
+            "AutoPayCollectionDate": "2023-07-25T09:15:00-04:00",
+            "Custom1": "9703134083181"
+        },
+        {
+            "AccountNumber": "9708839258",
+            "InvoiceNumber": "970061127528",
+            "InvoiceDueDate": "07/25/2023",
+            "AutoPayCollectionDate": "2023-07-25T09:15:00-04:00",
+            "Custom1": "9703134083182"
+        }
+    ]
+}
+5.* Third party automatic payment confirmation file
+Description
+After processing autopay transactions from the TAPEX file in test case 4, a CSV file confirming all successful autopay transactions needs to be created for upload to Oracle.
+IC Use
+DataPump - autopay
+Partner Batch Process Name
+C1-TAPDF
+Confirmation CSV File Specs
+Each successful transaction record contains the following comma-separated values
+, in order:
+accountId,autoPayStagingId,paymentDateTime
+The CSV file should be named TAPEX_CONFIRM_[dateTime].csv like 
+TAPEX_CONFIRM_20230825173048.csv
+. If there are no transactions to report, no file is necessary.
+Data Conversion Specs
+AccountNumber
+ → 
+accountId
+Custom1
+ → 
+autoPayStagingId
+AutoPayCollectionDate
+→ 
+paymentDateTime
+ in format 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+CSV Sample
+xml
+9708839257,9703134083181,2023-07-25T09:15:00-04:00
+9708839258,9703134083182,2023-07-25T09:15:00-04:00
+6.* Third party automatic payment error file
+Description
+After processing autopay transactions from the TAPEX file in test case 4, a CSV file containing 
+all failed autopay transactions
+ needs to be created for upload to Oracle.
+IC Use
+DataPump - autopay
+Partner Batch Process Name
+C1-TAPCN
+CSV File Specs
+Each failed transaction record contains the following comma-separated values, in order:
+accountId,autoPayStagingId
+If there are no transactions to report, no file is necessary.
+Data Conversion Specs
+AccountNumber
+ → 
+accountId
+Custom1
+ → 
+autoPayStagingId
+CSV Sample
+xml
+9708839257,9703134083181
+9708839258,9703134083182
+Automatic payment plan extract file (APPEX)
+Description
+An APPEX file will be uploaded to IC via SFTP. The APPEX file contains payment plan payments scheduled in Oracle for that given day. These payments are already represented by invoices containing the total account balance in IC. For each payment record in the APPEX file:
+Create a scheduled payment to be paid that day against the account's existing invoice for the given 
+autoPayAmount
+The 
+autoPayStagingId
+ needs to be stored in a custom field for the confirmation/error files (see 5 & 6 above). Note: if stored at the invoice level, we will only have the latest 
+autoPayStagingId
+ and it will not be associated with the scheduled payment record.
+Data pump record cannot be sent for the scheduled payment because Oracle expects the payment confirmation/error files. Can this be done by checking to see if the 
+autoPayStagingId
+ exists on the invoice record?
+IC Use
+DataPump - autopay
+Partner Batch Process Name
+CM-APPEX
+APPEX File Specs
+Each record contains the following comma-separated values, in order:
+accountId,customerName,autoPayAmount,dueDate,autoPayStagingId
+The footer contains the total number of records in the file and the total amount to be collected, as such:
+numberOfRecordsProcessed,totalAmount
+Note: 
+autoPayStagingId
+ needs to be stored in a custom field for confirming/canceling payments in the future
+APPEX CSV Sample
+none
+1222485831,Jon Smith,77.59,2023-07-10,122082634293
+3195389998,Tom Brooks,54.78,2023-07-10,319575042471
+7060845202,Cindy Nelson,31.91,2023-07-10,706276062397
+3,164.28
+ URL:/spaces/IM/pages/2759294980/Oracle+Utilities+-+Technical+Design

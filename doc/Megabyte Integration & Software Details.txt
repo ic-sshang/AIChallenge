@@ -1,0 +1,157 @@
+Page Navigation
+Document Status
+Complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+Gong URL
+Figma Demo
+Payment flow through Megabyte
+https://www.figma.com/proto/b7ptJzdXTbkrfDMHQTD0Wk/Megabyte-Systems---County-Websites-Prototype?node-id=12-5&starting-point-node-id=12%3A5
+ 
+Agent Experience through Megabyte
+https://www.figma.com/proto/0QJsj3BPfYAajGiqCkwCvq/Megabyte-Systems---Cashiering?node-id=2-15&starting-point-node-id=2%3A15
+ 
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+Web Services, SFTP, 
+Adjustments/Balances
+Megabyte Web Services 
+RTDR
+Note specific values that are updated by the webservices in addition to Balance Due (ex: Block CC, Block ACH, Total Amount Due, Past Due)
+Payments
+Megabyte Web Services 
+Data Pump
+Regular payment amount.  Service fee not included 
+ACH Rejects Posting
+Biller Portal 
+Manually through biller portal then balance updated in Megabyte
+Void
+Biller Portal 
+Manually through biller portal then balance updated in Megabyte
+Change Log - AutoPay Enrollment
+N/A
+Megabyte does not have the ability to store Autopay enrollments in their system
+Change Log - Paperless Enrollment
+N/A
+Megabyte does not have the ability to store Paperless enrollments in their system
+Change Log - Pay by Text Enrollment
+N/A
+Change Log - Email Address
+N/A
+Megabyte does not have the ability to store email address in their system
+Bill Images 
+PDF Linking - Supported
+Web Services
+The integration supports PDF Linking. If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller. 
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Supported 
+Through OBD
+CloudPay
+Supported 
+CPV2 redirect from Megabyte cashiering system and county website
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+Counties will use Cloud Store to collect various un invoiced items such as- Business License, TOT (Transient Occupancy Tax), etc.   
+EMV
+Supported 
+Point of Sale through Megabyte cashiering system
+IVR
+Supported
+Search Method- Parcel Fee Number (Account Number)
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported 
+Can be supported but not in use for first implementation 
+POSConnect
+ Not Supported
+Not in use due to CPV2 
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+ Standard IC email/pwd linking through registered experience in virtual site.  
+       Multi-User Log In
+Not Supported 
+       Co-Owner Registration
+Not Supported 
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported
+BIF Customization 
+Batch Closure
+Supported 
+Auto close.  Recommendation 11:59 PM local time
+Billing Options 
+       Balance Forward
+Not Supported
+       Open Item Billing
+Supported
+Block Payment
+Supported 
+Block payment through Biller Portal
+Conveyance
+Supported
+Customer conveyance file uploaded by the county to the SFTP
+Data Conversions
+Supported
+Can be supported but not in use for first implementation
+Email Notification Schedule
+Supported 
+BIF customization
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Not Supported
+Minimum Payment
+Not Supported
+Paperless
+Supported 
+Partial Payments
+Not Supported
+Past Due Payments
+Not Supported
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Other EMV Devices
+Supported 
+PAX A80 connected through CPV2 Megabyte cashiering 
+Integration Requirements 
+Deliverable
+Requirement
+Notes
+Sample Invoice File
+Yes
+Reach out to John Tucci (
+jtucci@megabytesystems.com
+) to provide sample file
+ URL:/spaces/IM/pages/3498278994/Megabyte+Integration+Software+Details

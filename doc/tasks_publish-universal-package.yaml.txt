@@ -1,0 +1,36 @@
+Code-Generated Docs
+Description
+
+Publishes a package to a universal artifact feed.
+Universal packages are pretty much zip files / tarballs
+You just provide a directory to push, and the entire contents of that directory get compressed and published to the artifact feed.
+Before publication, this task runs a script to ensure that the artifact name and version and compliant with the universal artifact naming standards.
+This standard is enforced by the feed itself; it's not our standard.
+
+Parameters
+Parameter
+Default
+Description
+artifact
+n/a
+Universal packages are pretty much zip files / tarballs You just provide a directory to push, and the entire contents of that directory get compressed and published to the artifact
+version
+n/a
+You just provide a directory to push, and the entire contents of that directory get compressed and published to the artifact feed. Before publication, this task runs a script to ensure that the artifact name and version
+artifactDirectory
+$(Build.ArtifactStagingDirectory)
+path (relative to workspace or absolute) containing the files which comprise the artifact
+feed
+n/a
+Universal packages are pretty much zip files / tarballs You just provide a directory to push, and the entire contents of that directory get compressed and published to the artifact feed
+description
+$(Build.SourceVersionMessage)
+Description of the package that will be published. Defaults to commit message.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+azure-batch-build.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+ URL:/spaces/platform/pages/3634725197/tasks+publish-universal-package.yaml

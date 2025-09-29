@@ -1,0 +1,79 @@
+Introduction
+This page will describe how to debit a biller for a PayPal chargeback. This occasionally comes up from the Finance team whenever a chargeback is processed however banking information for chargebacks is not properly set up. Once the banking information is updated by the boarding team, the chargeback will need to be reprocessed. It is advised to ask Adrian from Wicked Tendies for supervision when performing this process.
+Environment Setup
+This process must be performed from the Bastion production servers.
+Cloning the Repo
+In Visual Studio, clone the PayPalChargebackProcessing repo from the Src project.
+Finding the Chargeback record
+The PayPal chargeback records are in the ChargebackDisputes table in ICGW_Master. The TerminalID and the amount are good identifying factors for these records. The Terminal for the MerchantAccountID and BillerID and the amount for the record itself. The FundsRecoveredDate field is generally NULL for the chargebacks that need to be reprocessed, there are exceptions however this should be cleared up by the Finance team.
+Useful scripts
+sql
+select top 10 ChargeBackDisputeID,TerminalID,FundsRecovered,RecoveryPaymentID,DateRecAdded,* from chargebackdisputes where paypaldisputeid like '5w6z6vpcxytzz8cz'
+select top 10 * from rejectedrecoverypayments where chargebackdisputeid=252
+Setting up the Project
+app.config
+In the appSettings section, update the DatabaseName value to DBLive and ICGEnvironment to 2 so that the project uses the production DB and ICGateway client.
+Program.cs
+The driver of this program starts the process by calling 
+ImportChargebacks
+.
+This method takes in a chargeback date. This is the date we will use the have the program pick up the intended record. Before the 
+ImportChargebacks
+ call, set the 
+chargebackDate
+ variable to the 
+DateRecAdded
+ of the chargeback record from the ChargebackDisputes table. Do this by using DateTime.Parse on the date.
+ChargebackProcessing.cs
+There are a few methods that will get called after the initial 
+ImportChargebacks
+ call. Some of these methods need slight modifications to allow this process to work accordingly. I strongly recommend setting breakpoints and stepping through these methods to avoid mistakes.
+This is the order in which the methods are executed:
+ImportChargebacks
+ - Needs Modification
+ProcessChargebacks
+ - Needs Modification
+GetBankChargeBackGroups
+ProcessChargebackGroups
+ - Needs Modification
+PostDisputes
+ChargeBackImport
+ /
+InsertChargeback
+- See the 
+ProcessChargebackGroups
+ section below
+ImportChargebacks
+This method has a variable called 
+chargebacks
+ which is a list of the chargebacks from the ChargebackDisputes table based on the date that was passed earlier. Since this list is populated by a report method, it may sometimes contain other chargebacks from that day. To avoid processing other chargebacks, make sure to filter out the extra chargebacks.
+Here is an example of how I have accomplished this by using the amount:
+chargebacks = (from chargeback in chargebacks
+                               where chargeback.Amount.Equals(122.89)//modify amount
+                               select chargeback).ToList();
+ProcessChargebacks
+This method has logic to remove chargebacks from the chargebacks list if a matching record already exists on the biller shard. This can generally cause an issue if the record already exists, which in many cases it will since we are reprocessing chargebacks. To avoid the chargebacks from being removed, comment out this section of code.
+ProcessChargebackGroups
+This method will call the 
+PostDisputes
+ and 
+ChargeBackImport
+ methods. 
+PostDisputes
+ will call the gateway client to process the chargebacks, move the money, and update the record in the ChargebackDisputes table. 
+ChargeBackImport
+ has the logic to import the processed chargebacks into the biller shard. This step is not always necessary since the chargeback may already exist on the biller shard and a duplicate can cause reconciliation issues. Generally, this call is commented out.
+Ask Finance and the biller if the chargeback record should be inserted.
+If this record does need to be inserted, there are 2 ways to go about it:
+Run this job with the line commented out and submit a DBR to submit the record.
+Manually map out the fields from the ChargebackDisputes table in ICGW_Master to how they would be inserted into the shard by following the logic 
+ChargeBackImport
+ logic.
+Example: 
+DBR-429
+Request PIM and run this job with this line uncommented and allow it to be inserted as usual.
+PIM is necessary as this project uses the DatabaseProxy to connect.
+Executing the Program
+Run this program in debug mode and step through the process ensuring the data is correct. After execution, check that the chargeback record has had the FundsRecoveredDate and the RecoveryPaymentID populated.
+This information can be provided to Finance as proof of the work. They can also see it in the CRM under PayPal > Disputes (Chargebacks).
+ URL:/spaces/DS/pages/2817261590/Debiting+a+Biller+for+a+PayPal+Chargeback+Reprocessing

@@ -1,0 +1,60 @@
+This document details the initial problems that led to EBPP-17302’s creation as well as the approach taken in order to allow a partial payment lower than the minimum amount due in the Biller Portal.
+Worked On By:
+Katelyn Espinoza (Assignee)
+Krissi Klein (Reporter)
+Rob Hoerning (Test Engineer)
+Dolly Tyagi (QA)
+Related Items:
+EBPP-17302
+EBPP-18091
+At a Glance:
+Initially, Western National Mutual Insurance (BID: 4038) was under the impression that a customer service representative could make a partial payment of any amount within the Biller Portal. However, when a biller passes in a MinimumAmountDue value within a BIF, then the customer service representative 
+CANNOT
+ make a partial payment lower than that MinimumAmountDue. Hence, Western National Mutual Insurance requested for partial payments to support amounts lower than the MinimumAmountDue sent in the BIF only within the Biller Portal.
+Video illustrating issue by Krissi Klein
+Solution:
+After reviewing the app code, it was found that there were two places within the InvoicePaymentAmountsNew.vb class where two use cases had checks to ensure the inputted amount was not less than the MinimumAmountDue in the invoice. These two cases were payments for a single invoice and payments for multiple invoices. The best approach determined by the 
+We’ll Do It Live
+! team to handle these cases was to create a biller option that would be enabled for billers who wanted partial payments lower than the MinimumAmountDue in the Biller Portal only. 
+Biller Option 151 
+is to be used for billers who want the described functionality of EBBP-17302
+Paying an Invoice with MinimumAmountDue = $20.00 and with Biller Option 151 On
+EBPP-17302’s Testing Effort
+The following are all use cases tested for this item:
+Partial Payment on a Single Invoice with Biller Option 151 ON
+Result:
+ The user can make a partial payment less than the MinimumAmountDue in the BIF
+Using a Credit/Debit Card payment method
+Using an EFT/ACH payment method
+Partial Payment on a Single Invoice with Biller Option 151 OFF
+Result:
+ The user can 
+not 
+make a partial payment less than the MinimumAmountDue in the BIF
+Using a Credit/Debit Card payment method
+Using an EFT/ACH payment method
+Partial Payment on Multiple Invoices with Biller Option 151 ON
+Result:
+ The user can make a partial payment less than the MinimumAmountDue in the BIF
+Using a Credit/Debit Card payment method
+Using an EFT/ACH payment method
+Partial Payment on Multiple Invoices with Biller Option 151 OFF
+Result:
+ The user can 
+not 
+make a partial payment less than the MinimumAmountDue in the BIF
+Using a Credit/Debit Card payment method
+Using an EFT/ACH payment method
+How to Test EBPP-17302
+Upload a BIF file with the MinimumAmountDue field populated.
+This can also be accomplished by using CloudPaymentsV2 API
+Turn on Biller Option 151 in the CRM
+Navigate to the test customer’s profile in the Biller Portal and then to the history tab.
+Select the green box to make a payment on the selected invoice.
+Select the payment method. 
+Input payment method details.
+Select Pay Other Amount and input an amount less than the MinimumAmountDue value populated in the uploaded BIF.
+If Biller Option 151 is off, then the payment amount textbox will automatically populate with the MinimumAmountDue
+With Biller Option 151 OFF
+Click Process Payment 
+ URL:/spaces/PE/pages/3149463563/EBPP-17302+Allow+a+partial+payment+in+the+biller+portal+when+minimum+amount+due+is+sent+in+the+BIF

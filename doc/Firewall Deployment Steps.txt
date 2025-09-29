@@ -1,0 +1,59 @@
+Deploy Firewalls (Terraform)
+Navigate to a code editor and open the PaloAlto_Infrastructure code repo
+Navigate to the environments directory
+Select the appropriate tfvars file and update the following
+Update “paloalto_vm_auth_key” string with the auth key copied from the previous section
+Update “primary_panorama_server_ip” and “secondary_panorama_server_ip”
+Note: secondary_panorama_server_ip can be a blank string “”
+Update template name and device group name for both inbound and outbound firewalls. These values are predefined. 
+Run the Terraform stack and deploy the infrastructure
+Navigate to primary Panorama
+License Firewalls Manually (BYOL Licensing Only)
+Login to firewalls
+Dashboard
+Copy CPU ID and UUID for each Fireawll
+Navigate to Palo Alto services Portal (website)
+Assets > Vm_series-Auth-Codes
+Register VM
+Add UUID and CPU
+Assets > Devices
+Filter by Auth code
+Under the license column, download PA-VM
+On each Firewall
+Device > Licenses
+Manually upload license key
+Choose license file downloaded previously, click “OK”
+Reconnect to the Firewall
+Device > Licenses
+Retrieve License keys from license server
+Import Firewalls into Panorama
+Connect to Firewall
+Device > Dynamic Updates
+Check Now
+Download latest Anti Virus
+Install Latest Ani Virus 
+Dashboard
+Copy serial number 
+Panorama
+ Panorama > Managed devices > Summary > add
+Enter serial number copied from previous step
+Generate auth key
+copy auth key 
+Firewall
+Device > Setup > Panorama Settings
+Click Cog
+Enter Panorama Server IP
+Auth Key from previous step
+Click OK 
+Panorama
+Click OK on the add device window from earlier step 
+On the Device association screen (pop-up after clicking ok in previous step)
+Assign Device group
+Assign Template Stack
+Auto push on 1st connect
+Click “OK”
+Commit > Panorama
+Wait for Panorma commit to complete
+Firewall
+Commit > Firewall 
+ URL:/spaces/icinfradoc/pages/2833612827/Firewall+Deployment+Steps

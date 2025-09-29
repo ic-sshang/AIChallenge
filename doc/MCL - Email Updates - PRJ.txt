@@ -1,0 +1,14 @@
+Identified Technical Problems
+Email update behaviors are inconsistent across software components. There are many endpoints to update emails all with cascading impacts.
+Email updates can retain or expose old payment methods, depending on how unregistering or ownership change is handled
+Invoice imports update emails differently depending on CRM options (e.g., Collier example with Biller Option 108)
+The Customer Import Tool does not respect multi-user rules: (1) Emails are updated without proper validation of account ownership roles (2) There is no easy way to import new email addresses without breaking things (3) Marketing does not have a tool for their Paperless, AutoPay or Adoption campaigns
+Biller Portal email changes can unintentionally reassigning ownership or unlinking accounts
+CRM options can update emails with unintended impacts
+Standard Specification For Updating A Email Address
+TODO
+Standard Specification For Transferring Ownership 
+TODO
+Biller Options related to email update behaviors
+41, 42, 108, 112, 120, 127, 131
+ URL:/spaces/EA/pages/4611768470/MCL+-+Email+Updates+-+PRJ

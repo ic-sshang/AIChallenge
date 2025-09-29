@@ -1,0 +1,103 @@
+Runbook name
+Global Virtual Site Search
+Description
+This feature allows billers to have 2 or more invoice types and have Payers making a search in a single screen
+On this page
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+Summary
+Global Virtual Site Search allows billers to have 2 or more invoice types and have Payers making a search in a single screen
+note
+Resources
+
+
+Resources
+
+
+Guides
+Description
+1
+Presentation PPT
+8-18-22 Global Search Presentation.pptx
+2
+GURU Card 
+https://app.getguru.com/card/TXpyoyKc/Global-Virtual-Site-Search
+3
+Product Guide
+Product Guide - Universal Invoice Search.pptx
+4
+Example
+Example:
+Invoice 1 = Insurance Property & Casualty
+Client uploads an invoice file for P&C with: John Smith - customer number 12345 - amount due $200 - Invoice Number PC123 - Zip 33345
+Insurance 2= Car Insurance:
+Client also uploads a file for car insurance: John Smith - customer number 12345 - amount due $100 - Invoice Number C999- Zip 33345
+When the payer goes to IC, virtual site, they do not have to select which invoice they are paying; they will enter customer # 12345 and Zip 33345. IC will search its Database and will find two invoices for the Payer.
+Payer can add both invoices to the shopping cart. The rest of the payment flow is business as usual.
+5
+Universal Search Demo
+universal search demo.mp4
+Steps
+Steps
+Description
+1
+Add Invoice Type IDs in the CRM
+Add all lines of business/invoice types to the CRM that your client/biller will be utilizing:
+2
+Set up Virtual Site
+Add the items to the virtual site so you can create the group. 
+3
+Creating the Group
+Note, you will need to set up your virtual site and virtual site items, this will need to be completed in order to create the group.
+A new window will open where you can configure your new virtual site group.
+Give the group a name.  This is what will display on the customer landing page.
+Set the group as active/inactive.
+Drag your site items from the available list on the left to the selected items on the right.
+Click Save, and a new group will appear.
+4
+Updating the Virtual Site Settings
+You will want to deactivate the invoice types in the virtual site settings section. 
+5
+Inputs/Outputs Configuration
+Configuring the input/outputs for the group
+A gear icon will appear in your group row to edit the configurations.  Click on the gear icon.
+The settings shown on the next page are identical to the settings available for the Virtual Site Settings.
+The columns used for inputs and outputs must be available for all invoice types within this group.
+1.Enter your settings as preferred.
+2.Click Save.
+6
+Setting up the group
+The Virtual Site Settings Groups section.  Click on the Edit Record icon.
+The settings here are the same as the ones in the Virtual Site Setting section.
+1.Enter your settings as preferred/reviewed with your client/biller.
+2.Click Save.
+7
+Customer Experience 
+The invoice group will display on the virtual site landing page just as if it’s a single invoice type, even though behind the scenes, there are multiple invoice types tied to this one button.
+8
+Locating an Invoice
+Locating your Account/Invoice
+From here forward, the payer experience is identical to the single invoice type experience.
+The inputs configured for the invoice group will be presented to the payer for them to use for searching.
+9
+Set-up IVR when using global search
+When submitting the request to IVR Tech to enable IVR you will only need to add one invoice type ID to the form.
+IVR Tech will make their API calls to us the same way, which always includes InvoiceTypeID. Historically our system would only look for invoices for that specific Invoice Type. However, our system now supports a "Virtual Site Group" that can contain multiple Invoice Types.
+Example scenario:
+- IVR Tech is set up to use InvoiceTypeID 164 (The Bar Plan Mutual Insurance Company).
+- In a group you will now place InvoiceTypeID164 inside a VirtualSiteGroup with InvoiceTypeID 165 (The Bar Plan Surety and Fidelity).
+- The IVR " The Bar Plan Mutual Insurance Company" search will now look for The Bar Plan Mutual Insurance Company invoices AND The Bar Plan Surety and Fidelity invoices!
+This feature is only available for invoice types that share a similar data structure and search criteria, such as two invoice types that both have invoices with unique Account/Policy Numbers.
+10
+NOTE:
+ If you are using a different terminal for IVR, DO NOT check the "Use this terminal 
+exclusively
+ for IVR Transactions" box when you setup the terminal. 
+Supporting Multiple TDs with IVR
+﻿
+ URL:/spaces/Implementa/pages/4230184992/Global+Virtual+Site+Search

@@ -1,0 +1,218 @@
+Runbook name
+Transition to Client Services
+Description
+This document explains to Billers the go-live process. It has two parts, one for Billers who get a Transition Success Manager (TSM) assigned and one for those who do not. 
+This document also explains the transition process when the project uses a phased approach for go-live. 
+On this page
+2
+Change Log
+760
+Date
+Author
+Version
+Description
+ 8/1/24
+MGreer
+1.0
+Brief document to set up expectation with Clients about go-live activities and post go-live support.
+Docuemnt that the Integration Summary page must be completed prior to go-live.
+April 2025
+MGreer
+1.1
+Added section to explain the transition support process for phase approach projects.
+May 2025
+MGreer
+1.2
+Added info about TAM role in CS
+Summary
+It is best practice to introduce the customer to the support process as the project is nearing its go-live. Depending on the size and characteristics of the customer, Invoice Cloud applies a tiered support model.
+The document linked here 
+Go Live Overview_InvoiceCloud
+ is the Go-Live overview that can be shared with the client.  
+It is also best practice to ensure the CRM (Integration Summary) correclty reflects the project and integartion details. Every field of that page should be documented at go-live. 
+Process
+1. Review if your project will get a Technical Support Manager (TSM) / Technical Account Manager (TAM) assigned or not. The Client Services team reviews this list every week to assign a TSM. Whenever the target go-live date is populated the biller shows up on the list, and the CS team decides who should be the TSM/TAM. Usually, Enterprise billers get a TSM assigned by the TSM team. Aside from thresholds, if the IM/PM feels that things are not going so well, CS can certainly take the biller in for TSM, regardless of MRR.  Talk to a CS leader if you have questions.
+This is the list CS follows in Salesforce to review TSM assignments - 
+Pending TS Accounts Upcoming Transition Success Billers for TS
+ 
+2.- 
+Document the project details in the CRM, page “Integration Summary”:
+Every invoice type is listed
+Integration videos: Add relevant videos if available. Testing videos are a good source.
+General Comment: Add here the key info for Customer service:
+Project Notes:
+ Link to the BOX where the word document with project notes are saved.
+RAID log
+. Export the RAID log and save it in the BOX. Put the link to the box.
+Project schedule:
+ Export the schedule and save it in the box. Put the link to it.
+UAT results
+: Export all UAT - SIT results and save on the box. Put a link to it. If you completed a UTA plan, add it to th BOX as well. 
+Scope plan
+: If you completed  scope plan (Solution Design), save it in the box and add the link.
+Ensure the following fields are correct under “General” section: Integrator and Billler Software.
+Ensure that all these areas of the integration summary are cmpletey filled out. If any is missing, ask the IM to complete.  If the item is not applicable, then the field should show N/A.
+Invoices
+BIF Customizations
+Payments
+Adjustments
+Daily balance file
+Change logs
+Rejects
+Conveyance 
+IVR
+Transition Process for projects with a “Phased-Approach” go live: 
+Background
+: Some billers, mostly insurance companies, go live in phases.  The implementation team stays engaged for a period to release new invoice types or products. The CS team oversees supporting the products or invoices that are in production. The challenge is that the client expects IC to have a consolidated front for support.  They expect all IC issues (new implementation or production issues) to be handled by the same group of people.
+To offer excellent service and appear to the client as one department of service, IC will extend the Implementation team to cover support issues. 
+What is a “phased approach” project: 
+A project where some or all this criterion is met:
+Steering Co meetings are still happening on a regular basis
+RAID log is active
+New revenue coming in future phases (new invoice ID or new products like Autopay)
+Likely, a new project was provisioned to handle the new phase.
+The project with the previous phase was archived in SmartSheet
+RACI: The table below explains roles and responsibilities. 
+R: Responsible; A: Accountable; C: Consulted; I: Informed
+*For any new change requests, reference the 
+Change Control Process
+.
+1
+Task
+PM
+IM
+TSM
+CSM
+Notes
+2
+Train client on how to open cases via Salesforce
+I
+I
+R/A
+I
+This is part of the standard TSM kick off meeting
+3
+Create a 
+Salesforce report
+ of all biller’s cases
+I
+I
+R/A
+I
+Share link to report with IM/PM/CSM
+*Copy the linked report and tailor it for your biller. Screenshot of the report:
+4
+Internal Q&A – 
+Triage calls
+. Every Tuesday and Thursday from 10 to 11 am EST.
+I
+C
+R/A
+I
+Prioritize and tackle critical issues first. The purpose of the meeting is to triage/review/and put a definition to resolution. Attendees: IM/PM/TSM and TSM Manager. At least one leader from TSM/CS to attend.  – These meetings are already attended by IM-SMEs.
+5
+Open and follow up JIRAs for issue resolution. (Production issues related to the implemented solution)
+I
+C
+R/A
+I
+These are JIRAs related to imminent production issues but not integration modifications or product changes.
+6
+Keep issue resolution notes updated in the Salesforce case
+I
+C
+R/A
+I
+Salesforce reports and notes will be used by the PM to conduct meetings. Expectation is that the PM drives the call, but the TSM is the SME.
+7
+Client meeting to 
+review 
+production support cases
+R
+C
+A
+I
+PM to dedicate a portion of their current IMP calls to go over open production issues. Meeting frequency to be defined by the client, PM and TSM.
+8
+Escalate production issues
+I
+C
+R/A
+I
+TSM and PM to follow standard escalation process established by their departments.
+9
+Seek technical advice.
+I
+C
+R/A
+I
+If a production issue is difficult to triage and the TSM or anyone cannot wait for a meeting, seek direct help from any of the IC SMEs (e.g., Rushlan, Paul Applegate, Martha Greer, Javier Rangel, Lois Powers, etc.,)
+10
+Closing tickets in Salesforce
+I
+I
+R/A
+I
+ 
+Transition Success Assignment
+:
+Customer Characteristics
+Support Type
+Description
+New integration (First two customers for Utilities; First few customers for Tax, + new states for Tax)
+MRR $0 - $5000
+Transition Success (min 30 days)
+These Billers will receive a TSM for at least 30 days at which point the account is evaluated. If further support is needed, the support period is extended. 
+Set up at least 
+1 meeting
+ with the TSM before the biller goes live
+There is no “Hypercare” period. After 30 days, the Biller will be supported by the regular Client Services team.
+MRR >= $5000
+Transition Success for 90 days
+The customer will receive support from a TSM for 90 days post launch.
+$5,000 - $20,000 MRR: Set up at least 
+2
+ 
+meetings
+ with the TSM before the biller goes live
+$20,000 MRR or more: Set up at least 
+4
+ 
+meetings
+ with the TSM before the biller goes live
+Existing integration
+MRR <$3000
+Client Services Help Desk
+The Biller will open tickets with the helpdesk post-launch. 
+Share the 
+client services welcome leaflet
+Show how to access Customer Support from the Biller Portal
+MRR $3000 - $5000
+Transition Success “Light” for 30 days
+The customer will receive support from a TSM for 30 days post launch.
+Set up at least 
+1 meeting
+ with the TSM before the biller goes live
+There is no “Hypercare” period. After 30 days, the Biller will be supported by the regular Client Services team.
+MRR >= $5000
+Transition Success for 90 days
+The customer will receive support from a TSM for 90 days post launch.
+$5,000 - $20,000 MRR: Set up at least 
+2
+ 
+meetings
+ with the TSM before the biller goes live
+$20,000 MRR or more: Set up at least 
+4
+ 
+meetings
+ with the TSM before the biller goes live
+CS Go-Live Presentation
+Please also visit the go-live presentation meeting hosted by Client Services on Mondays at 9am:
+Attend the Monday morning meeting 
+prior to your go-live
+The meeting takes place at 9 am EST 
+Join the meeting now
+Meeting ID: 236 716 218 228 2
+Passcode: ui2Yb69s
+ URL:/spaces/Implementa/pages/3201925121/Transition+to+Client+Services

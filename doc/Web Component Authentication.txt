@@ -1,0 +1,113 @@
+Objective
+ 
+This document outlines the authentication workflow for embedding the 
+React MFE
+ as a 
+web component
+ on third-party biller websites. It explains how public/private key validation, domain validation, and configuration management are handled securely via the server-side infrastructure. 
+ 
+Web Component Integration Flow
+ 
+Description:
+ 
+To allow billers to embed our 
+Web Component
+, we expose it as a web component which is then hosted on the biller’s website. This component below parameters based on the given condition of the component à 
+ 
+Condition
+ 
+Parameter for web-component
+ 
+Non-authenticated component 
+<public key> 
+Authenticated 
+<public key>, <userId> 
+ 
+Workflow:
+ 
+Embedding (Client-Side):
+ 
+The 
+biller's site
+ embeds the Web component, passing the 
+public key
+ and 
+userId
+(if needed) as an attribute. 
+MFE Handling (Frontend):
+ 
+The 
+MFE
+ (React-based micro frontend) receives the public key, domain (source) & userId(if needed). 
+It then makes an 
+API call
+ to the backend, sending all the values for validation. 
+Server-Side Authentication (IC Service):
+ 
+The 
+Backend Service IC
+: 
+Retrieves the associated 
+private key
+ using the provided public key. 
+Decrypts
+ the public key using the private key. 
+Extracts the 
+biller ID
+ and other relevant metadata. 
+Performs 
+validation
+: 
+Public key validity
+ - Ensures the public key exists and matches a known private key. 
+Biller ID verification
+ - Extracted from the decrypted public key and checked against the system. 
+Domain verification
+ - Ensures the request origin domain is authorized to use the provided public key. 
+Upon successful validation, the system proceeds with the business logic and responds with appropriate user data. 
+ 
+ 
+ 
+Biller Portal: Configuration Management
+ 
+Purpose:
+ 
+The 
+Biller Portal
+ provides an interface for billers to manage their authentication configurations such as 
+public key
+ and their 
+domains
+. 
+Components:
+ 
+Auth Configuration UI:
+ 
+Allows billers to generate their 
+public key
+ and configuring 
+domain
+. 
+Database Storage:
+ 
+Key Settings Table
+: Stores the 
+public/private key pair
+. 
+Domain Settings Table
+: Stores mappings between 
+Biller ID
+ and 
+domains
+. 
+ 
+Conclusion
+ 
+This authentication design ensures that only verified and configured billers can host the 
+Web Component
+ securely. The use of 
+public/private key cryptography
+, coupled with 
+domain-level validation
+, provides a robust and scalable authentication mechanism. 
+ URL:/spaces/PE/pages/4407066711/Web+Component+Authentication

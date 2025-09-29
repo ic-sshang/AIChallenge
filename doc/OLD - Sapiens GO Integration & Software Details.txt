@@ -1,0 +1,151 @@
+Page Navigation:
+Document status
+complete
+Green
+Document owner
+ 
+ 
+Knowledge Transfer
+Gong | Sapiens GO Integration Knowledge Transfer
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+BIF
+IC Web Services
+Sapiens GO uses the SOAP UploadInvoice web service
+Adjustment 
+getBalance Sapiens GO web service
+RTDR
+IC will call Sapiens GO web service
+Payment 
+postback Sapiens GO web service
+Web service
+IC will call Sapiens GO web service
+ACH Reject
+disputeCharges
+Web Services
+IC will call Sapiens GO web service
+Void
+disputeCharges
+Web Services
+IC will call Sapiens GO web service
+AutoPay Enrollment 
+putNotification
+Web Services
+IC will call Sapiens GO web service
+Paperless Enrollment
+putNotification
+Web Services
+IC will call Sapiens GO web service
+Bill Images
+PDF linking - Supported
+Web Services
+IC will call Sapiens GO (getimageForInvoice) web service. Sapiens GO generates PDF image on the fly after the request is made from IC
+Supported Products and Features
+Products
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Supported
+CloudPayV2 is used for the ‘Pay As You Go’ benefit option where no invoice is present in advance of payment.  The payer/employer has to log in and manually take action for any invoice to be generated so there would be no future invoice automatically created on IC.
+CloudPay Web Services
+Not Supported
+CloudStore
+Not Supported
+CSRConnect
+Not Supported
+EMV
+Not Supported
+IVR
+Supported
+Suggested search method: account number
+Kiosk
+Supported
+Product has not been discussed with partner
+Online Bank Direct -OBD
+Supported
+Product has not been discussed with partner
+Outbound IVR
+Not Supported
+Product has not been discussed with partner
+POSConnect
+Not Supported
+Product has not been discussed with partner
+Features
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Standard linking by email address and password
+       Multi-User Log In
+Not Supported
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Not Supported**
+RemoteAuthentication is used for the CloudPayV2 ‘Pay As You Go’ Experience. See 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1293779050/Sapiens+GO+Technical+Design#User-Interaction-and-Design
+ for more details
+AutoPay Collection Date
+Supported
+BIF customization
+Batch Closure
+Custom
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Not Supported
+       Open Item Billing
+Required
+Block Payment
+Supported
+Managed via Biller Portal
+Conveyance
+Supported*
+Conveyance File is used to port down payment made on a quote to a policy
+Data Conversions
+Supported
+Autopay conversion is supported provided data is supplied by the biller
+Email Notification Schedule
+Supported
+BIF customization
+Expire Bill for Payment
+Supported
+in BIF
+Minimum Payment
+Supported
+in BIF
+Paperless
+Supported
+Partial Payments
+Supported
+in BIF
+Past Due
+Not Supported
+Audit Bills
+Supported
+Based on feedback by Sapiens understanding of their customer base they believe since they would reissue the audit bill in installments, the assumption is that we don’t won’t need to provide additional special handling for these invoices regarding AutoPay, Notifications, Etc.
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Not Supported
+Other EMV Devices
+Not Supported
+ URL:/spaces/IM/pages/4089479169/OLD+-+Sapiens+GO+Integration+Software+Details

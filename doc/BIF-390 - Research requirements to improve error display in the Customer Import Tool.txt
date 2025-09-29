@@ -1,0 +1,50 @@
+Description
+This is a spike for 
+BIF-390
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+, the issue at hand with the customer import tool is that it is inconsistent with displaying the error page and whether or not a large refactor is needed for the tool.
+Research
+Removal of 
+data.lstAccountsToRegister.length > 0 ||
+ allows for the error display to always prompt if lists containing “invalid RTE value”, “invalid CC numbers”, “invalid email addresses”, “accounts not found”, “duplicate account numbers for paperless” are populated.
+We’re able to continue forward through the import tool under scenarios where “invalid RTE”, “invalid CC”, “invalid email addresses”, “accounts DNE” are populated. Some issues present with this is that it doesn’t display the account number for RTE/CC. It does so for invalid email addresses.
+We are unable to continue forward under scenarios where “duplicate account numbers for paperless”.
+Even if the file contained a similar scenario where we would’ve been able to move forward:
+I went further into the flow to make sure we wouldn’t encounter issues from having invalid emails/CC/RTE values from attempting to be imported.
+In the backend we have validation logic for RegisterAutopay and RegisterPaperless to continue to the next record if it’s invalid:
+https://dev.azure.com/invoicecloud/Src/_git/RegisterAutoPay?path=/RegisterAutoPay/Business/Processor/RegistrationProcessor.vb&version=GBmain&_a=contents&line=61&lineStyle=plain&lineEnd=77&lineStartColumn=1&lineEndColumn=31
+However, RegisterPaperless will validate the email when it tries to update a login 
+after 
+retrieving an existing login/after creating a new customer record/creating a new owner login.
+https://dev.azure.com/invoicecloud/Src/_git/RegisterPaperless?path=/RegisterPaperless/Module1.vb&version=GBmain&line=104&lineEnd=124&lineStartColumn=1&lineEndColumn=27&lineStyle=plain&_a=contents
+https://dev.azure.com/invoicecloud/Src/_git/RegisterPaperless?path=/RegisterPaperless/Module1.vb&version=GBmain&_a=contents&line=379&lineStyle=plain&lineEnd=379&lineStartColumn=13&lineEndColumn=102
+Research Conclusions
+ICCRM
+This part of the conditional check in registrationApp.js and paperlessApp.js should be removed:
+data.lstAccountsToRegister.length > 0 ||
+https://dev.azure.com/invoicecloud/Src/_git/ICCRM?path=/ICCRM/resources/js/registrationApp.js&version=GBrelease&line=2079&lineEnd=2079&lineStartColumn=41&lineEndColumn=81&lineStyle=plain&_a=contents
+We should look at disabling progression through the tool if there are no valid records at all, as there are instances of white screening occurring if this value is 0, this could be done by adding this conditional check:
+js
+        if ($scope.AccountsAvailableToRegister.length == 0) {
+            retVal = true;
+        }
+As a part of this segment of code at the end:
+https://dev.azure.com/invoicecloud/Src/_git/ICCRM?path=/ICCRM/resources/js/registrationApp.js&version=GBrelease&line=2108&lineEnd=2134&lineStartColumn=1&lineEndColumn=6&lineStyle=plain&_a=contents
+We should consider expanding upon what we display to the front-end for invalid RTE/CC, as presenting the IC Account Number would be helpful identifying which customers are impacted by the invalid data.
+RegisterAutoPay
+We shouldn’t need to adjust anything in here.
+RegisterPaperless
+We should consider updating this to have the email validation first in the loop, to prevent any unnecessary actions being conducted when the email is invalid.
+08/14/2025 Meeting Update
+Per the call for: 
+BIF-413
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+If we want to add support where we’ll skip duplicate records. We’ll need to:
+a) Update the customer import tool validate button logic to allow for the tool to continue forward with the dupes
+https://dev.azure.com/invoicecloud/Src/_git/ICCRM?path=/ICCRM/resources/js/registrationApp.js&version=GBrelease&line=2129&lineEnd=2131&lineStartColumn=1&lineEndColumn=10&lineStyle=plain&_a=contents
+b) Update RegisterPaperless to group and then filter out any instances where the grouping has a count greater than 1.  
+https://dev.azure.com/invoicecloud/Src/_git/RegisterPaperless?path=/RegisterPaperless/Module1.vb&version=GBmain&line=61&lineEnd=62&lineStartColumn=1&lineEndColumn=51&lineStyle=plain&_a=contents
+ URL:/spaces/PE/pages/4575395867/BIF-390+-+Research+requirements+to+improve+error+display+in+the+Customer+Import+Tool

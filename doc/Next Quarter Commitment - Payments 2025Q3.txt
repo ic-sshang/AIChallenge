@@ -1,0 +1,273 @@
+ Overview
+Team announces their next quarter commitments along with a refresh of their 12 month roadmap.
+What initiatives is the team committing to for the next quarter? What does success look like for each?
+What is the new 12-month plan?
+Date
+6/16/2025
+Team
+Wicked Tendies/PACE/Titans
+Participants
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Next Quarter Commits
+List out next quarter commitments, with target date and definition of success for each item. 
+Jira Plans link can also be embedded below, but we want a full record of commitments for comparison at a later date. 
+Item
+Commit Date
+Notes
+Team
+EBPP-28702
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+Detailed Notes
+Discovery 
+Expect add’l discovery based on feedback from PWC/Chase which will be planned for Q4
+https://invoicecloud.atlassian.net/wiki/x/jgA5BgE
+ 
+Tendies
+EBPP-28408
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Detailed Notes
+Discovery
+:
+Finalizing vendor selection
+Defining and aligning on business and technical requirements
+Phased migration strategy being built out  
+Aligning with Chase on integration approach and requirements
+Delivery
+Development expected to begin and conclude within Q3, pending completion of discovery
+Risks & Dependencies
+Vendor Selection:
+ Delays in finalizing the vendor may impact the development start date
+Requirements Definition:
+ Incomplete or late definition of requirements could lead to scope creep or rework
+Note
+: We are in the final stages of selecting vendor. 
+Tendies
+EBPP-28659
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24895
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Additional Discovery for Q4 complete by Mid-Q3
+Detailed Notes
+Delivery
+We plan to complete the following workflows in Q3: 
+credit card sale, void, refund
+ach sale - this is via nacha but we should go through the flow of the API records the payment
+ach void - built in process flow of voiding if it hasn't been in a nacha file
+Support Digital Wallets - ApplePay
+High level Imp. plan for reference: 
+https://invoicecloud.atlassian.net/wiki/x/jgA5BgE
+Discovery
+Expect add’l discovery based on feedback from PWC/Chase which will be planned for Q4 delivery
+Tendies
+EBPP-26854
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+ 
+Delivery in Q4
+Detailed Notes
+Discovery
+Discovery to integrate Salesforce and CRM will be complete in Q3
+Identify vendor for KYC by of qtr.
+Integration with the 3rd party vendor will begin
+Engineering Commitment
+Resource Allocation:
+ Engineering will allocate 
+2 full-time engineers for 4 sprints
+ to support development efforts
+Delivery Stance:
+ No formal delivery commitment at this time due to current unknowns
+Checkpoint:
+ Progress will be reviewed at mid-quarter to assess readiness and adjust plans if needed
+Expect to begin development in late Aug/Sept and completed in Q4.
+considerable amount of development will occur in Q3 but won’t be completed until Q4.
+Pace
+EBPP-28708
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+Delivery in Q4
+Pace
+EBPP-26649
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Detailed Notes
+Descriptor Changes 
+ 
+ Discovery: 
+Completed (We have received a sign-off from CS, implementation team and chase team to add “PMT” as suffix to resolve the item descriptor error codes with least amount of change.    
+     Delivery:
+As part of phase 1, we will add “PMT” as Suffix for Item descriptor for 8 billers (reported by Chase) by end of Q2 and validate the changes with Chase post implementation.
+Once the error codes for 8 billers get resolved and received a sign-off , we will make the change for all other item descriptors in Q3 (August)
+     Risks:
+Incase if the change suggested by Chase (Adding suffix to existing item descriptor values) is implemented and still error code gets reported, we may need to relook at the solution again with Chase.
+Zip code updates
+Discovery:  
+Complete by End of Q2.
+Delivery:
+Potential solutions include:
+Adding front-end validation within payer UI flows
+Implementing server-side validation in web service endpoints
+Enriching missing or invalid ZIP codes via backend middleware or API gateway logic.
+The goal for Q3 is to:
+Deliver a solution that enforces ZIP code validation across all payment entry points
+Minimize impact on existing customers and transaction volume
+Risks:
+Customer disruption due to validation failures, especially since many transactions bypass the UI and flow directly through APIs
+Transaction Amount Validation
+Discovery:  
+Complete by End of Q2.
+Delivery:  
+Complete by End of Q3
+Risks:
+Awaiting clarification from Chase on how transaction amounts and line item totals are calculated and validated. Delays in receiving this information may impact the timeline for finalizing the solution.
+Pace
+EBPP-28607
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+ 
+Delivery in Q4
+Detailed Notes
+Discovery:
+Complete discovery and solution design
+Identify integration and compliance requirements
+Eng/Product to assess alignment and dependencies with Account Validation initiative
+Engineering Commitment
+Resource Allocation:
+ Engineering will allocate 
+2 full-time engineers for 3 sprints
+ to support development efforts
+Delivery Stance:
+ No formal delivery commitment at this time due to current unknowns
+Checkpoint:
+ Progress will be reviewed at mid-quarter to assess readiness and adjust plans if needed
+Risks & Dependencies
+Lack of clarity on the chosen solution may delay development or cause scope drift.
+If requirements are not fully defined post-discovery, it may reduce development efficiency during the allocated sprints.
+Titans
+EBPP-4693
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+ 
+Detailed Notes
+Discovery 
+will be completed by end of Q3.
+Titans
+EBPP-23346
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Detailed Notes
+Discovery
+Vet and select appropriate vendor/product
+Define and scope business and technical requirements
+Delivery
+Development Start:
+ August (post-discovery)
+Expected Completion:
+ End of Q3
+Risks & Dependencies
+Discovery Timeline Alignment:
+ If vendor/product selection extends beyond early August, it will delay development kickoff and impact Q3 delivery targets.
+Integration Complexity:
+ The level of effort required to integrate with the selected vendor is not yet fully known and may affect delivery scope and timelines.
+Evolving Requirements:
+ Shifts or late-stage changes in product requirements during or after discovery may impact development velocity and introduce rework.
+Titans
+TT-17
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Detailed Notes
+Complete Phase 1 to custom batch close in Q3.  
+Migration plan of Billers from Auto batch close to Custom close - Product Engineering - Confluence
+Titans
+TT-20
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Stretch Goal
+Delivery 
+ 
+Detailed Notes
+Delivery
+Build Funding API:
+ Develop the IC Chase Funding API to receive and store funding instructions
+Implement Funding Ledger:
+ Design and implement a new Funding Database to serve as the funding ledger
+Enable Basic Ledger Tracking:
+ Track funding instruction statuses (e.g., pending, processed, failed) with historical logging
+Lay Infrastructure Foundation:
+ Establish core infrastructure to support future funding flows and audit capabilities
+Discovery
+Expect add’l discovery based on feedback from PWC/Chase which will be planned for Q4 delivery
+Titans
+EBPP-24881
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+9/30/25
+Placeholder for escalated items
+Shared
+ New 12 Month Roadmap
+Add a 12 Month view. This should be from Jira Product Discovery. Create a View and just copy/paste the link below, and it should render appropriately. In the table below, list any noteworthy changes.
+JPD Item
+Notes
+ Open Questions
+Provide a list of any discussion questions the team has, especially if there are decisions/actions needed to unblock the next quarter’s roadmap. 
+
+
+
+
+23
+
+
+23
+
+
+incomplete
+
+
+
+
+ URL:/spaces/PE/pages/4377772033/Next+Quarter+Commitment+-+Payments+2025Q3

@@ -1,0 +1,24 @@
+Overview
+Guidewire API integrations used by Invoice Cloud systems ( Data Pump & RDTR Service ) use Basic Authentication.  Basic Authentication has been identified as  insufficient by Texas Mutual.  
+Goal
+Update RDTR and Data Pump to use OAuth authentication
+Guidewire APIs In Scope
+Balance Updates:
+ RTDR via BalanceEnquiry endpoint: 
+http://10.0.26.4:8790/api/gw/getbalanceenquiry
+Payments: 
+DP via PaymentsNotification endpoint: 
+http://10.0.26.4:8790/api/gw/addpaymentnotification
+Void, ACH Rejects, Credit/Refund, Chargeback:
+ DP via PaymentsNotification endpoint: 
+http://10.0.26.4:8790/api/gw/addpaymentnotification
+Paperless:
+ DP via PaperlessPreference endpoint: 
+http://10.0.26.4:8790/api/gw/setpaperlesspref
+AutoPay/Payment Methods: 
+DP via AutoPayNotification endpoint: 
+http://10.0.26.4:8790/api/gw/setautopaynotification
+Bill Presentmen
+t: DP via FetchInvoiceDocument endpoint: 
+http://10.0.26.4:8790/api/gw/fetchinvoicedocument
+ URL:/spaces/EA/pages/3488907279/Data+Pump+RDTR+Guidewire+Integration+Update+-+PRJ

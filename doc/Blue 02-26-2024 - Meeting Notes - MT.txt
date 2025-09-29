@@ -1,0 +1,158 @@
+ Date
+2/26/2024
+ Participants
+Mark Lagunez 
+mlagunez@invoicecloud.com
+; 
+Sean Concannon 
+sconcannon@invoicecloud.com
+; 
+Randy Torres 
+rtorres@invoicecloud.com
+; 
+Byron King 
+BKing@invoicecloud.com
+; 
+Dinesh Subramani 
+DSubramani@invoicecloud.com
+; 
+Miguelito Abagat 
+MAbagat@invoicecloud.com
+; 
+Quinten Marsala 
+QMarsala@invoicecloud.com
+; 
+Adrian Izaguirre 
+aizaguirre@invoicecloud.com
+; 
+Tony Cordova 
+tcordova@invoicecloud.com
+; 
+Kirtan Patel 
+KPatel@invoicecloud.com
+; 
+Jonathan Blackburn 
+JBlackburn@invoicecloud.com
+; 
+Vasant Javle 
+VJavle@invoicecloud.com
+; 
+Michael Griehm 
+MGriehm@invoicecloud.com
+; 
+Rob Chenault 
+rchenault@invoicecloud.com
+; 
+Manuel Hernandez Naya 
+mhernandez@invoicecloud.com
+; 
+Rene Reyes 
+rreyes@invoicecloud.com
+;
+Victor Cavada Valdez 
+vcavada@invoicecloud.com
+ Goals
+List goals for this meeting (e.g., Set design priorities for FY19)
+Decide on how to handle .Net upgrades on applications that have additional complexities that can not be upgraded in a normal production work stream
+ Discussion topics
+Time
+Item
+Presenter
+Notes
+.Net Upgrade Part 2
+Product teams can own the upgrades but what happens when the upgrade is too complicated or there are no tests in place?
+Audit Script:
+https://dev.azure.com/invoicecloud/Src_Miscellaneous/_git/MiscSupportTools?version=GBmaster&path=/repoSearch.ps1
+CRM Web App
+CRM continues to cause engineering TOIL. Spend time to discuss migrating to a web app. 
+Code check-ins can end up preventing other developers from building the solution 
+Does not impact the automated builds
+SDET validates unit tests, can catch local build issues (
+need to start with a clean clone
+) 
+Flow is written team SPAM (work best practice)
+Incorrect hard references for DLLs in BIN, can cause runtime error after deployed
+Lacks good functional test coverage
+Biller Portal was migrated (lessons learned), Manny
+Is observability in New Relic enough to be able to surface activity changes?
+Is the feature branch behind release? 
+Visual Studio builds vs msbuild output test differences
+Next time it occurs investigate further with group
+Pipelines False Positives
+Pipelines show all green but there are issues with deployment.
+Report pipeline false positive to the platform team do not use work arounds unless pipeline issue can not be resolved.  If it can not be resolved document.
+Proxy Services DevTest
+Need to discuss next time
+At times we lose access to DevTest due to proxy services are down. Tends to cause downtime for everyone for an hour or so. 
+ Action items
+Add action items to close the loop on open questions or discussion topics:
+
+
+
+
+10
+
+
+incomplete
+
+
+Re-run the script that provides the inventory of applications that are using EOL .Net runtimes.
+
+
+
+
+
+
+11
+
+
+incomplete
+
+
+Check if mend reporting on .Net runtime EOL
+
+
+
+
+
+
+12
+
+
+incomplete
+
+
+Publish output of the script to confluence for review and management  
+
+
+
+
+
+
+13
+
+
+incomplete
+
+
+Capture a CRM VS build issue and see if we can determine what the RC is?  Try VS vs msbuild.
+
+
+
+
+
+
+14
+
+
+incomplete
+
+
+
+
+ Decisions
+Type /decision to record the decisions you make in this meeting:
+6388a1e3-1c3b-40ed-8b18-2b9b995ec0a0
+c238ebf6-f817-4cb0-8ba9-759d48d3a428
+DECIDED
+ URL:/spaces/EA/pages/3040018514/Blue+02-26-2024+-+Meeting+Notes+-+MT

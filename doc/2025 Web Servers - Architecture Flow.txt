@@ -1,0 +1,63 @@
+1. Pre-Provisioning
+This phase involves preparing the base image (golden image) with all the necessary configurations and tools required for the web server.
+Windows Features
+: Install required Windows features (e.g., IIS, .NET Framework).
+Ciphers
+: Configure security ciphers for secure communication.
+OpenSSH
+: Install and configure OpenSSH for remote access.
+PowerShell
+: Ensure PowerShell is installed and configured for automation.
+Azure CLI
+: Install Azure CLI for managing Azure resources.
+Other Tools
+: Include any additional tools or configurations required for the environment.
+The output of this phase is a 
+Packer Golden Image
+.
+2. Golden Image Creation
+Using 
+Packer
+, a golden image is created with all the pre-provisioned configurations. This image serves as the base for deploying web servers.
+3. Terraform Deployment
+This phase uses 
+Terraform
+ to deploy infrastructure and configure resources.
+Cloudflare
+: Configure DNS records for the web server.
+AppGW TF (Application Gateway Terraform)
+: Deploy and configure Azure Application Gateway for load balancing and secure traffic management.
+Private DNS
+: Set up private DNS zones for internal name resolution.
+4. Post-Provisioning
+After the infrastructure is deployed, 
+AWX
+ (Ansible Tower) is used to automate the post-provisioning tasks on the web server.
+NewRelic
+: Install and configure the New Relic agent for monitoring.
+CrowdStrike
+: Install and configure CrowdStrike for endpoint protection.
+GoDaddy
+: Configure SSL certificates from GoDaddy.
+IIS Config
+: Configure IIS (e.g., bindings, application pools, and sites).
+ADO Agent
+: Install Azure DevOps agent for CI/CD pipelines.
+AlienVault
+: Install and configure AlienVault for security monitoring.
+HostFile
+: Update the 
+hosts
+ file with required entries.
+5. Order 66 Deploy
+This phase involves deploying the web server to the 
+DevTest
+ environment. The deployment includes:
+Web Server Instances
+:
+www-sprk0-dev
+www-prsm0-dev
+www-wt0-dev
+www-wdil0-dev
+And others...
+ URL:/spaces/platform/pages/4272717834/2025+Web+Servers+-+Architecture+Flow

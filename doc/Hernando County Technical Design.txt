@@ -1,0 +1,564 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+ITR
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification:
+Sample File: 
+File Transfer Frequency:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC will need to map to FH
+ 
+ 
+ 
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC will need to map to BillerGUID
+ 
+ 
+ 
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC will need to use current date
+ 
+ 
+ 
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC will need to count invoices
+ 
+ 
+ 
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC will need to total dollar amount of invoices
+ 
+ 
+ 
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC will map to IH
+ 
+ 
+ 
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC will map to IH
+ 
+ 
+ 
+Invoice Header
+9
+InvoiceFormatGuid
+ N
+TRUE
+N/A - IC will map to InvoiceFormatGuid
+ 
+ 
+ 
+Invoice Header
+10
+InvoiceNumber
+ N
+TRUE
+N/A - IC will need to create this value using accountnumber+invoicedate
+N/A - partner does not have an invoice number
+ 
+ 
+Invoice Header
+11
+InvoiceDate
+N
+TRUE
+N/A - IC will need to create from file creation/drop off date?
+N/A partner does not have Invoice Date
+Invoice Header
+12
+InvoiceDueDat
+e
+N
+TRUE
+N/A/- IC To use BIF Customizations
+BIF Customization + 20 Days from Due Date
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+c_bal
+Field 19 Tab delimited
+None
+Invoice Header
+38
+Custom1
+Y
+True
+cust_no
+Field 28 Number
+None used with cust_ser for account number
+Invoice Header
+39
+Custom2
+Y
+FALSE
+cust_ser
+Field 29 Number
+None, Used with cust_no for account number
+Invoice Header
+40
+Custom3
+Y
+FALSE
+b_addr3
+Field 33 Tab Delimited
+None
+Invoice Header
+41
+Custom4
+Y
+FALSE
+s_addr1
+Field 30 tab delimited
+None
+Invoice Header
+93
+BalanceDue
+Y
+TRUE
+totdue
+Field 27 Tab delimited
+None
+Invoice Header
+407
+PastDue
+Y
+FALSE
+delinquent
+NOTE*** Only map if the value is greater or equal to 0. If the amount is negative map 0 instead (negative implies a credit and they have no past due amount). If the field is blank map 0 as well (they have no Past Due balance).
+Field 53 Tab delimited
+None
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+cust_no + cust_ser
+Field 28 + 29 tab delimited
+None
+Customer Record
+60
+CustomerName
+Y
+TRUE
+cust_name
+Field 36 tab delimited
+None
+Customer Record
+61
+Address1
+Y
+True
+b_addr1
+Field 31 tab delimited
+None
+Customer Record
+62
+Address2
+Y
+FALSE
+b_addr2
+Field 32
+None
+Customer Record
+63
+City
+Y
+True
+b_addr3
+Field 33 Tab delimited
+None
+Customer Record
+64
+State
+Y
+FALSE
+part of b_addr3
+Field 33
+None
+Customer Record
+65
+Zip
+Y
+TRUE
+b_zip
+Field 34
+None
+Customer Record
+66
+Phone
+Y
+FALSE
+phone
+Field 71
+None “example # (774) 400-7756”
+Customer Record
+67
+EmailAddress
+Y
+True
+e_email
+Field 114
+Customer Record
+Adjustment/Daily Balance File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+File Transfer Frequency:
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+IC to generate always AH
+Char
+AH
+2
+File Header
+306
+BillerGuid
+N
+TRUE
+IC to generate
+File Header
+308
+FileCreationDate
+N
+TRUE
+IC to generate
+File Header
+309
+AdjustmentCount
+N
+TRUE
+IC to generate
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+IC to generate
+File Header
+311
+RowType
+Y
+TRUE
+AR
+Row header
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+AccountNumber
+7 character with a - and a two digit extension
+AccountNumber
+10
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+AccountBalance
+Currency
+AccountBalance
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+IC to generate always 2
+Balance Differential
+Adjustment Record
+Payment/Lockbox File
+File Extension: CSV
+File Naming Convention: 
+File Delimiter: Comma
+Specification: 
+Sample File:
+File Transfer Frequency: Daily
+note
+All fields are comma delimited
+
+
+All fields are comma delimited
+
+
+Field
+Field #
+Format
+Values
+Record Type
+Comments
+Record Type
+1
+Text
+H
+Header
+First row of file
+payment_date
+2
+Text
+MMDDYYYY
+Header
+Date the file was GENERATED/CREATED
+transmission_date
+3
+Text
+MMDDYYYY
+Header
+Date the file was sent
+transmission_time
+4
+Numeric
+HHMMSS
+Header
+Time the file was sent
+Record Type
+1
+Text
+P
+Header
+Start of detail record
+remittance_id
+2
+Text
+Detail
+Invoice #
+payment_source
+3
+Text
+CC, OBD, ACH, CASH
+Detail
+CC, OBD, ACH, CASH
+Cash should only be used for Kiosk transactions using cash.
+transaction_date
+4
+Text
+MMDDYYYY
+Detail
+Payment Date
+cc_expiration_date
+5
+Text
+MMYY
+Detail
+Credit card expiration date 
+“If not a credit card payment leave this blank”
+payment_amount
+6
+Money
+Detail
+Amount Paid xxxx.xx
+payor_name
+7
+Text
+Detail
+Who paid (may not be account owner)
+first2digits_cc
+8
+Numeric
+Detail
+First Two digits of credit card  
+“If not a credit card payment leave this blank”
+last4digits_cc
+9
+Numeric
+Detail
+Last Four digits of credit card  
+“If not a credit card payment leave this blank”
+cc_type
+10
+Text
+V, MC, Disc, Amex
+Detail
+V for Visa, MC for MC, Disc for Discover, Amex for American Express, 
+“If not a credit card payment leave this blank”
+UB_account
+11
+Text
+Detail
+Customer Account Number
+service_address
+12
+Text
+Detail
+Address where service is provided
+account_name
+12
+Text
+Detail
+Name of Account Holder
+phone_number
+13
+Text
+Detail
+Phone Number of account holder
+Record Type
+1
+Text
+C
+Header
+header type for total fields
+total_transaction_count
+2
+numeric
+Header
+Total Amount of 'P' (payment records)
+total_transaction_pmt_amount
+3
+numeric
+Header
+Total of all payments in the 'P' records
+Change Log File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+Date File is loaded
+InvoiceDueDate
++20 from invoice date
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/562495551/Hernando+County+Technical+Design

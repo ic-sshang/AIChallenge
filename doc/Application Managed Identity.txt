@@ -1,0 +1,8 @@
+Skybot Job Deployment Pipeline
+  
+extends:  
+  template: console-app-deploy.yaml@pipeline-templates  
+  parameters:  
+    managedIdentityAppName: [YOUR_APP_IDENTITY_NAME]
+    
+ URL:/spaces/EA/pages/4164386940/Application+Managed+Identity

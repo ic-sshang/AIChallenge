@@ -1,0 +1,98 @@
+You and your team can have a direct impact on improving the security posture of our software systems today.  We have a published 
+Application Security Roadmap
+ that has multiple items where you can contribute your time and effort to shorten the time to completion for each.  This document describes ways you can help today.
+6
+1
+false
+default
+list
+true
+Use Parameterized SQL Statements and Stored Procedures
+While project 
+SEC-5541
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ focused on building a solution that will dynamically parameterize our SQL statements in code, it is intended to address our historical backlog of non-parameterized SQL statements.  All new SQL  statements should be parameterized.  You can learn more about how to parameterize your SQL statements using the libraries that are already in your projects here (
+https://invoicecloud.atlassian.net/wiki/x/tYB1-Q
+ ).
+Some applications, although sometimes hard to spot, are using raw SQL.  These cases need to be migrated to parameterized stored procedures.  Please work with your database engineers to create stored procedure versions if you run into them.
+When you are converting existing database calls to be parameterized make sure you have a nUnit integration test around the database component and the target calls being refactored.  This way you can verify the execution and results as it relates to the change.   Pay attention to the required parameters.
+Integration Testing
+ 
+Database Integration
+ 
+Use Azure Key Vault for secret storage
+Project 
+SEC-5542
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ will be a large effort that tries to identify all secrets in our code bases, migrates them to Azure Key Vault, and updates the code to reference them.  The automation tools that will be in use to identify secrets in 350+ code repositories are not perfect, and at this moment we know that some just will not be able to be identified using these tools.  The difference maker to finding them all is you.  Automation will help find many of them but you are in your code bases everyday.  If you see one, please do the work to migrate it to Azure Key Vault.  
+Run your apps on supported .NET versions
+Project 
+SEC-428
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ was focused on getting all applications running on unsupported versions of .NET Framework and .NET up to versions that are supported TODAY.  
+Microsoft follows a defined product lifecycle policy for .NET, which includes mainstream support, extended support, and eventually end of support (EoS). This process ensures that developers and organizations have time to plan upgrades while Microsoft focuses resources on maintaining and securing the most current and supported versions.  
+So that app you just updated to a supported version of .NET will eventually be EoS.  Check the EoS schedules and upgrade your apps periodically to stay ahead of those dates.  You can view Microsoft published dates here:
+https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-framework
+ 
+https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
+ 
+Upgrade Vulnerable packages to Safest, or Next Safe, versions
+Projects 
+SEC-5548
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+, 
+SEC-5549
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+, 
+SEC-5550
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ all have something in common.  They are all projects created to get all our applications off vulnerable packages, and unto the Safest versions. Next time you are building one of your team projects, take a look at the Build output.  There is a good chance you will see something like this:
+Visual Studio is automatically looking at the package dependencies and alerting you that some of them have known vulnerabilities.  
+Alternatively, right click on your project and select Manage Nuget Packages.  Click on the Show Only Vulnerable checkbox under the Installed tab.  Ensure Package Source is set to All.
+This shows you the same vulnerabilities shared in the Build output.  We want all our applications to be running on Safe versions of all packages.  If you see this, please upgrade to the highest Safe version you can.  Always test after upgrading packages.
+Use Managed Identities to connect to Database, Azure Key Vault, and other Azure resources
+The main purpose of project 
+SEC-5546
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ is to eliminate an old practice where database authentication from applications was made using service accounts, with passwords.  These service account credentials were stored in source code.  An improved solution to authenticate to the database was developed using Managed Identities, which are provisioned upon creation to access selected resources, like database, as well as key vaults and other resources.  There are no passwords to manage.  
+Thanks to project 
+SEC-5541
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+, and all similar work that came before it, a lot of work has been done updating apps to implement Managed Identity for database authentication, but work remains in this space.  If you have an app using IC.Database there is a good chance it is already using MI.  If you have an app using IC.ServiceProxies, or ICDatabaseService, for database access, there’s a good chance MI has not been implemented.  While the backend service receiving the database requests from the application is using MI, it does also support executing the database calls as the calling app, by accepting a ClientID header.  So next time if you have one of these apps, make the updates so that a ClientID is transformed into your configuration file, and you pass that ClientID as a header into your IC.ServiceProxies or ICDatabaseService call.
+As for Managed Identities to access Key Vault secrets and other resources, there is also outstanding work there.  If you have an app that is using Azure resources like these, and you know it’s using a hard coded secret to authenticate to an app, or simply don’t know how it’s authenticating, ask your yourself if it’s using MI.  If not, maybe it should.  
+Validate external certificates when calling APIs
+The main purpose of project 
+SEC-5545
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ is to develop and implement a solution that addresses the reasons why we use this code in multiple apps:
+System.Net.ServicePointManager.ServerCertificateValidationCallback = (Function(sender, certificate, chain, sslPolicyErrors) True)
+In can be seen in the wild here, and in many other spots:
+Live example of dangerous certification validation
+The gist of the reason is there are many integrations to Biller APIs where the external certificates are self-signed certificates.  These certificates are not from trusted root CAs,  So when our app makes a call out to that service with a self-signed certificate, it will fail with a certificate validation error.  A workaround where we use 
+ServerCertificateValidationCallback
+ to basically override the reason why it’s failing, and return 
+True
+ has been used in the past to get us past this, and probably still in use today.  This is susceptible to “Man in the middle” attacks.  
+There is still much to uncover about this usage, including the ultimate solution, but without giving too much away, we basically just need to accept only certificates from trusted root CAs.  That may be easier said than done but it’s a start.
+Don’t use the old way of redirecting back to the calling page
+Project 
+SEC-5547
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ is focused on finishing off an effort that started a while back but lost focus due to other priorities.  Our past implementation of a “return link” in MyIIS and Biller Portal was one that would enable a caller to that page to pass, via query string, the return url that the “return link” would be bound to.  This made the page flexible enough for any of the other pages in MyIIS/BP to redirect to and provide a path to get back to the calling page.  Unfortunately this pattern is susceptible to open redirect attacks that, when exploited, can enable a hacker to redirect users to a different, potentially harmful website.  An example of this pattern in our code today is below:
+Live example of Open Redirect vulnerability in our code
+As mentioned, we addressed most of these issues but some were left behind, with the example above being one.  The solution we implemented has restricted the input to only a small list of expected integers, with each integer, behind the scenes, tied to some internal generated url.  This ensured the only URLs tied to those “return links” are InvoiceCloud-generated links.  One example of this can be seen here:
+Live example of solution in our code
+So next time you are in MyIIS and/or Biller Portal, and you are working on one of these pages with a “return link”, please take a look at the implementation.  If it’s vulnerable, please address it.
+Use Contrast to find issues locally
+Coming soon…
+ URL:/spaces/ED/pages/4510023698/Contributing+to+Application+Security+Roadmap

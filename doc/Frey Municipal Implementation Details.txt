@@ -1,0 +1,141 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+Done
+Green
+ 
+Document owner
+ 
+Knowledge transfer
+https://us-21061.app.gong.io/call?id=6516424589130894514
+ 
+Integrations will be setup using the Cubic (Frey) redirect to CloudPayV2.  The IC customer portal link should live on the CUBIC site and not the billers homepage. 
+Summary
+Summary
+Details
+Software Partner Name
+Frey Municipal Software
+Software Product Name
+Frey CUBIC
+ 
+Software Cashiering System
+N/A
+Supported Versions
+All
+Integration Requirements and Pre-Requisites
+None
+Vertical
+GUB  
+Sample Biller Implementation
+BID 3540 Town of Brownsburg
+Planning
+Test Portals
+IC Hosted Test Portal - Frey Municipal Software Test BID 3356
+Partner Hosted Test Portal - None
+Biller Test Portal - Biller Test Portal is Required
+Rules of Engagement
+Send the attached implementation guide to Shelly Kelly 
+shelley.kelly@freymunicipalsoftware.com
+Pre-Go Live checklist for biller
+Timeline
+60-80 Days to complete implementation
+Configuration
+Invoice Types
+Invoice Type 
+42 Utility 
+Virtual Site
+Required Options
+Input required integration options below. The one below is an example:
+ID
+Option Description
+Details
+95
+Customer Portal/Virtual Site - Show Display Account Number
+Always set to ON
+105
+Always set to ON.  Use DISPLAY ACCOUNT NUMBER
+129
+Display latest $0 or negative balances in Open Invoices and CloudPayV2
+When enabled, the most recent $0 or negative balances will be displayed in the Open Invoices and CloudPayV2. Note: Invoice Type #15 must be enabled for this feature to work.
+Always set to ON
+Coding Requirements
+Invoice Cloud Coding Requirements
+If any item in the list does not apply, delete the row
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Frey
+Upon request
+ 
+Data is specific to each biller
+Adjustment File
+Frey
+Upon request
+This will be a file containing all accounts
+Payment File
+Invoice Cloud
+Upon request
+Payment file is in Frey format
+Bill Presentment 
+Frey
+Upon request
+PDF linking using Frey API endpoints
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Frey
+Project Assignment 
+BID
+Frey
+Project Assignment 
+Provide detail on where to find this value - CRM
+Invoice Type ID
+Frey
+Project Assignment 
+Always 42
+API Key 
+Frey
+Project Assignment
+Created in biller portal for specific biller.  
+  Once created please give to Frey team to configure for AgentConnect.
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Garrett Frey
+President
+garrett.frey@freymunicipalsoftware.com
+859-441-6566
+Y 
+Shelley Kelly
+shelley.kelly@freymunicipalsoftware.com
+N
+ URL:/spaces/IM/pages/2351398957/Frey+Municipal+Implementation+Details

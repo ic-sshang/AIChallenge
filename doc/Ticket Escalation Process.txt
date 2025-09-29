@@ -1,0 +1,72 @@
+Purpose
+Standardize the DS ticket escalation process, and set clear expectations for Dev Support engineers and escalation stakeholders.
+Escalation Roles
+Initiator: The individual who escalates the issue. This person must be in a manager or lead role within their organization.
+Contact: The individual from the client-facing teams who are appointed to be the available point of contact for the escalation. Usually the Reporter.
+Reporter: The individual who reported the DS ticket.
+Assignee: The Individual responsible for identifying the root cause and feasible mitigation actions.
+Responsibilities
+Before escalation:
+ Initiator:
+The individual escalating the issues 
+must 
+articulate a valid reason as to why the ticket is being escalated
+. 
+Must assign an individual to be the Contact.
+Reporter:
+Must provide sufficient context regarding the issue, and share findings.
+Must articulate reason as to why they cannot further research the issue without Dev Support’s assistance.
+During escalation:
+Contact:
+Must be readily available to join a meeting and assist for the duration of the escalation.
+Responsible for finding a replacement as Contact, if they are not available.
+Assignee:
+Must centralize all communications related to the issue in a 
+single 
+public 
+slack channel
+. See reference material: 
+https://invoicecloud.atlassian.net/wiki/x/GADr7
+ .
+Must add the channel as a comment in the DS ticket.
+Must provide relevant or noteworthy updates when possible. 
+Responsible for assessing the root cause of the issue and taking action accordingly.
+After Escalation:
+Reporter
+The reporter and their team are solely responsible for crafting communications to affected parties. 
+Limits
+General
+No more than 3 escalations per day. 
+No more than 5 active escalations.
+Low-impact issues will not be accepted as escalations (e.g. One payer did not receive a notification).
+Assignee
+Only one escalation per assignee.
+Will not provide completion estimates.
+Communication Policy for Escalations
+Once communications have been centralized in a 
+single 
+public 
+slack channel
+, the expectation for all stakeholders is to only use the centralized channel for communications relating to the issue for the duration of the escalation.
+Process
+The initiator will post the DS ticket with an articulated reason for the escalation in the #sre-escalations slack channel. The post must also include the Contact.
+Someone in Dev Support will acknowledge and review the ticket. Once reviewed, an engineer will be assigned to work on the escalation. 
+The Assignee must take the following clerical actions:
+Add the ESCALATION tag to the DS ticket.
+Move the ticket to the Highest priority.
+Assignee then creates a 
+public 
+slack channel whose name format starts with the DS ticket number, and a brief description of the issue (e.g. 
+ds-####-issue-in-some-service
+). 
+Add all stakeholders from the client-facing teams and product engineering teams to the channel. 
+Include the reporter of the DS-ticket.
+Include the individual who escalated the ticket.
+Always include
+ and 
+ . 
+Always include your crew lead.
+Post the name of the channels in the DS ticket.
+The assignee conducts a preliminary assessment and establishes communications with stakeholders as necessary.
+Once the root cause of the issue has been identified, the Assignee will provide a summary of their finding, including any new items associated with a resolution.
+ URL:/spaces/DS/pages/2461597697/Ticket+Escalation+Process

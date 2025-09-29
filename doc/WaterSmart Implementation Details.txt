@@ -1,0 +1,157 @@
+Page Navigation:
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Knowledge Transfer
+Gong Link
+Summary
+Summary
+Details
+Software Partner Name
+WaterSmart
+The WaterSmart integration has two parts: Customer Portal SSO and a batch EBPP integration. There are instances where IC is integrated to a biller’s WaterSmart customer portal but is not using the WaterSmart batch EBPP integration (see CRM for biller-specific details).
+WaterSmart hosts a customer portal for each biller and serves as the middle-man between the biller's CIS and IC. The biller will give data to WaterSmart and WaterSmart will convert it into the standard integration format to provide data to IC. Similarly, IC will provide a standard file layout for change logs, payments and rejects that WaterSmart will provide to the biller (in the same format or altered by WaterSmart).
+Software Product Name
+Depends on each biller
+Note - WaterSmart hosts a customer portal for each biller and serves as the middle-man between the biller's CIS and IC. The biller will give data to WaterSmart and WaterSmart will convert it into the standard integration format (csv) to provide data to IC. Similarly, IC will provide a standard file layout for change logs, payments and rejects that WaterSmart will provide to the biller (in the same format or altered by WaterSmart)
+Software Cashiering System
+n/a
+Supported Versions
+n/a
+Integration Requirements and Pre-Requisites
+WaterSmart relationship
+Biller must have a relationship with WaterSmart and have provided sample data to be used for the integration (invoice and adjustment)
+Vertical
+GUB
+Sample Biller Implementation
+n/a
+Planning
+Test Portals
+IC Hosted Test Portal - 1216
+Partner Hosted Test Portal - You can log in to the WaterSmart SSO portal (note: this portal does not connect to any specific CIS system for invoice/payment data, only the IC customer portal)
+https://demo-invoicecloud.watersmart.com
+Username: 
+demo@watersmart.com
+ 
+Password 54S7O#j7
+Rules of Engagement
+Ask the biller who their WaterSmart point of contact is and reach out to them to start the IC portion of the integration (The biller will already be working with the WaterSmart team on the customer portal)
+Timeline
+30-60 days
+Configuration 
+Invoice Types
+1 - InvoiceTypeID=1 must be used for WaterSmart integrations. If there is a need for Multiple Invoice Type ID’s, per biller setup 1 and 42. The mapping for multiple invoice type ID’s will need to be provided to WaterSmart so they can properly set the value in the file.
+Discuss the multiple invoice type ID’s with WaterSmart. WaterSmart will include the invoice type ID in the daily invoice file and IC will map accordingly. 
+Virtual Site
+No standard setup. Biller can choose configuration based on values in the invoice file
+Sample:
+Required Options
+No required options
+ - enable/disable for SSO integration and biller preference
+ID
+Option Description 
+Details
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+ETA
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+WaterSmart
+WaterSmart Resource Engagement
+Adjustment File
+WaterSmart
+WaterSmart Resource Engagement
+Bill Images
+Biller
+PDF Linking and PDF Extraction are supported but must be setup between IC and the biller. WaterSmart does not provide bill images. A separate request/track to IT needs to be submitted with the details of the bill presentment.
+SFTP setup (test and prod)
+IC IM
+WaterSmart Resource Engagement
+IM needs to ensure file paths are requested specifically for each implementation (also noted in the 
+Data Structure
+):
+Invoice: /ToInvoiceCloud/Invoices/UB
+Adjustment: /ToInvoiceCloud/Adjustments/UB
+Change Log: /FromInvoiceCloud/ChangeLogs
+Payments: /FromInvoiceCloud/Payments
+Rejects: /FromInvoiceCloud/Rejects
+SSO URL
+WaterSmart
+WaterSmart Resource Engagement
+File Export Timing
+Biller/IC IM
+Once the batch timing is discussed with the biller, determine the best timing for file exports (payment/lockbox, ACH reject and change log) and include time frame in coding ITR
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+WaterSmart
+Project Assignment 
+Invoice Type ID
+WaterSmart
+Project Assignment 
+INVOICE TYPE ID 1 MUST BE CONFIGURED FOR WATERSMART BILLERS. If more than one InvoiceTypeID is needed, configure value 1 and 42. Both will need to be confirmed with WaterSmart.
+SFTP setup
+WaterSmart
+Project Assignment
+BID
+WaterSmart
+Project Assignment
+Biller GUID
+WaterSmart
+Project Assignment
+Biller Web Service Key
+WaterSmart
+Project Assignment
+API Key
+WaterSmart
+Project Assignment
+Contacts
+1500
+300
+ URL:/spaces/IM/pages/428638209/WaterSmart+Implementation+Details

@@ -1,0 +1,1408 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+N/A
+Release Date
+Document status
+DRAFT
+Document owner
+ 
+ 
+Solution engineer
+ 
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+Attaching Local Gov doc here for reference - we need to compare this information to the ‘integrations’ we’ve already coded 
+Bill Presentment (Template Detail)
+Sample Template: 
+Mapping:
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: NA (Fixed length)
+Spec Sheet: 
+Sample File: 
+Straus File Path: 
+File Delimiter: NA (Fixed length)
+File Transfer Frequency: Once a month?
+Note: if the data line contains “999-99999-99“ then skip the line.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Description/Notes
+Partner Field Start Position
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+Always IH
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Always IH
+Invoice Header
+8
+RecordType
+TRUE
+Hardcoded to N
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+InvoiceDate (
+MMddyyyy
+) + UB + AccountNumber (with - chars removed)
+Invoice Header
+11
+InvoiceDate
+TRUE
+From the File Trailer (last line in file)
+24
+10
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+44
+10
+Invoice Header
+13
+TotalAmountDue
+TRUE
+13
+11
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+Invoice Header
+35
+CustomerShipState
+FALSE
+Invoice Header
+36
+CustomerShipZip
+FALSE
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+UBMFIL-DELINQ-DATE
+24
+10
+Invoice Header
+39
+Custom2
+FALSE
+Service Address
+245
+35
+Invoice Header
+40
+Custom3
+FALSE
+Service Address 2
+280
+35
+Invoice Header
+41
+Custom4
+FALSE
+UBMFIL-GROSS-AMT
+34
+11
+Invoice Header
+42
+Custom5
+FALSE
+UBMFIL-PREV-READ-DATE
+225
+10
+Invoice Header
+43
+Custom6
+FALSE
+UBMFIL-CURR-READ-DATE
+235
+10
+Invoice Header
+44
+Custom7
+FALSE
+GS_METER_NO
+315
+10
+Invoice Header
+45
+Custom8
+FALSE
+WA_METER_NO
+325
+10
+Invoice Header
+46
+Custom9
+FALSE
+LATE_NOTICE
+335
+1
+Invoice Header
+47
+Custom10
+FALSE
+ACCT_TYPE
+336
+1
+Invoice Header
+48
+Custom11
+FALSE
+BILL_CODE
+337
+1
+Invoice Header
+49
+Custom12
+FALSE
+MESSAGE_NO
+337
+1
+94
+Custom13
+COPIES
+339
+2
+95
+Custom14
+SQFT
+1693
+14
+96
+Custom15
+ERU
+1707
+14
+97
+Custom16
+RATE_YY
+1720
+14
+98
+Custom17
+UPD_DATE
+1735
+10
+99
+Custom18
+PARCELID
+1745
+30
+100
+Custom19
+EL_METER_NO
+1775
+10
+101
+Custom20
+W2_METER_NO
+3046
+10
+102
+Custom21
+EL_MULT
+3342
+11
+103
+Custom22
+WA_MULT
+3353
+11
+104
+Custom23
+GS_MULT
+3364
+11
+105
+Custom24
+W2_MULT
+3345
+11
+106
+Custom25
+BUDGET_AMT
+3386
+11
+107
+Custom26
+BILL_LITERAL
+3397
+6
+108
+Custom27
+BUDGET_BILL_DIFFERENCE
+3403
+11
+109
+Custom28
+PREV_BAL_AFTER_LAST_BILLING
+2414
+12
+110
+Custom29
+PRIOR_MONTH_PMTS/ADJS
+3425
+11
+111
+Custom30
+1ST_HISTORY_PAYMENT_AMOUNT
+3436
+11
+112
+Custom31
+2ND_HISTORY_PAYMENT_AMOUNT
+3447
+11
+113
+Custom32
+3RD_HISTORY_PAYMENT_AMOUNT
+3458
+11
+114
+Custom33
+4TH_HISTORY_PAYMENT_AMOUNT
+3469
+11
+115
+Custom34
+5TH_HISTORY_PAYMENT_AMOUNT
+3480
+11
+116
+Custom35
+6TH_HISTORY_PAYMENT_AMOUNT
+3491
+11
+117
+Custom36
+1ST_HISTORY_PAYMENT_DATE
+3502
+10
+118
+Custom37
+2ND_HISTORY_PAYMENT_DATE
+3512
+10
+119
+Custom38
+3RD_HISTORY_PAYMENT_DATE
+3522
+10
+120
+Custom39
+4TH_HISTORY_PAYMENT_DATE
+3532
+10
+121
+Custom40
+5TH_HISTORY_PAYMENT_DATE
+3542
+10
+122
+Custom41
+6TH_HISTORY_PAYMENT_DATE
+3552
+10
+123
+Custom42
+YTD_BB_AHEAD_BEHIND
+4562
+6
+124
+Custom43
+YTD_BB_INCLUDING_CURRENT_BILL
+4568
+11
+125
+Custom44
+SERVICE_CHARGES_BREAKDOWN_1
+3562
+50
+126
+Custom45
+SERVICE_CHARGES_BREAKDOWN_2
+3612
+50
+127
+Custom46
+SERVICE_CHARGES_BREAKDOWN_3
+3662
+50
+128
+Custom47
+SERVICE_CHARGES_BREAKDOWN_4
+3712
+50
+129
+Custom48
+SERVICE_CHARGES_BREAKDOWN_5
+3762
+50
+130
+Custom49
+SERVICE_CHARGES_BREAKDOWN_6
+3811
+50
+131
+Custom50
+SERVICE_CHARGES_BREAKDOWN_7
+3862
+50
+132
+Custom51
+SERVICE_CHARGES_BREAKDOWN_8
+3912
+50
+133
+Custom52
+SERVICE_CHARGES_BREAKDOWN_9
+3962
+50
+134
+Custom53
+SERVICE_CHARGES_BREAKDOWN_10
+4012
+50
+135
+Custom54
+SERVICE_CHARGES_BREAKDOWN_11
+4061
+50
+136
+Custom55
+SERVICE_CHARGES_BREAKDOWN_12
+4112
+50
+137
+Custom56
+SERVICE_CHARGES_BREAKDOWN_13
+4161
+50
+138
+Custom57
+SERVICE_CHARGES_BREAKDOWN_14
+4212
+50
+139
+Custom58
+SERVICE_CHARGES_BREAKDOWN_15
+4262
+50
+140
+Custom59
+SERVICE_CHARGES_BREAKDOWN_16
+4312
+50
+141
+Custom60
+SERVICE_CHARGES_BREAKDOWN_17
+4362
+50
+142
+Custom61
+SERVICE_CHARGES_BREAKDOWN_18
+4412
+50
+143
+Custom62
+SERVICE_CHARGES_BREAKDOWN_19
+4462
+50
+144
+Custom63
+SERVICE_CHARGES_BREAKDOWN_20
+4512
+50
+145
+Custom64
+DETAIL_1
+341
+52
+146
+Custom65
+DETAIL_2
+393
+52
+147
+Custom66
+DETAIL_3
+445
+52
+148
+Custom67
+DETAIL_4
+497
+52
+149
+Custom68
+DETAIL_5
+549
+52
+150
+Custom69
+DETAIL_6
+601
+52
+151
+Custom70
+DETAIL_7
+653
+52
+152
+Custom71
+DETAIL_8
+705
+52
+153
+Custom72
+DETAIL_9
+757
+52
+154
+Custom73
+DETAIL_10
+809
+52
+155
+Custom74
+DETAIL_11
+861
+52
+156
+Custom75
+DETAIL_12
+912
+52
+157
+Custom76
+DETAIL_13
+965
+52
+158
+Custom77
+DETAIL_14
+1017
+52
+159
+Custom78
+DETAIL_15
+1069
+52
+160
+Custom79
+DETAIL_16
+1121
+52
+161
+Custom80
+DETAIL_17
+1173
+52
+162
+Custom81
+DETAIL_18
+1225
+52
+163
+Custom82
+DETAIL_19
+1277
+52
+164
+Custom83
+DETAIL_20
+1329
+52
+165
+Custom84
+DETAIL_21
+1381
+52
+166
+Custom85
+DETAIL_22
+1433
+52
+167
+Custom86
+MESSAGE_1
+1485
+52
+168
+Custom87
+MESSAGE_2
+1537
+52
+169
+Custom88
+MESSAGE_3
+1589
+52
+170
+Custom89
+MESSAGE_4
+1641
+52
+93
+BalanceDue
+FALSE
+Same as TotalAmountDue
+13
+11
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+Hardcoded to 42 (Utility)
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+Invoice Header
+346
+BillerBillYear
+FALSE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Always 1
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Always CR
+Customer Record
+59
+AccountNumber
+TRUE
+Prepend “UB” and strip “-” chars
+Ex: 12-345-6 → 
+UB123456
+1
+12
+Customer Record
+60
+CustomerName
+TRUE
+55
+35
+Customer Record
+61
+Address1
+FALSE
+125
+35
+Customer Record
+62
+Address2
+FALSE
+160
+35
+Customer Record
+63
+City
+FALSE
+Parse the City out of the City/State field.
+Split by spaces/commas and return the first element.
+If unable, return the whole City/State.
+195
+20
+Customer Record
+64
+State
+FALSE
+Parse the State out of the City/State field.
+Split by spaces/commas and return the last element.
+195
+20
+Customer Record
+65
+Zip
+FALSE
+215
+10
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+4581
+120
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+90
+35
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Same logic as AccountNumber
+Customer Record
+409
+Active
+FALSE
+Always 1
+Customer Record
+70
+RowType
+TRUE
+Always ID
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+IF PDF Model Use “UB Bill via PDF”
+Else Use “UB Bill via Template”
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+83
+CustomField1
+FALSE
+MM_HIST_X_1
+1785
+9
+Invoice Detail
+84
+CustomField2
+FALSE
+MM_HIST_X_2
+1794
+9
+Invoice Detail
+85
+CustomField3
+FALSE
+MM_HIST_X_3
+1803
+9
+Invoice Detail
+86
+CustomField4
+FALSE
+MM_HIST_X_4
+1812
+9
+Invoice Detail
+87
+CustomField5
+FALSE
+MM_HIST_X_5
+1821
+9
+Invoice Detail
+88
+CustomField6
+FALSE
+MM_HIST_X_6
+1830
+9
+Invoice Detail
+89
+CustomField7
+FALSE
+MM_HIST_X_7
+1839
+9
+Invoice Detail
+90
+CustomField8
+FALSE
+MM_HIST_X_8
+1848
+9
+Invoice Detail
+91
+CustomField9
+FALSE
+MM_HIST_X_9
+1857
+9
+Invoice Detail
+92
+CustomField10
+FALSE
+MM_HIST_X_10
+1866
+9
+Invoice Detail
+93
+CustomField11
+FALSE
+MM_HIST_X_11
+1875
+9
+Invoice Detail
+94
+CustomField12
+FALSE
+MM_HIST_X_12
+1884
+9
+Invoice Detail
+95
+CustomField13
+FALSE
+MM_HIST_X_13
+1893
+9
+Invoice Detail
+96
+CustomField14
+FALSE
+EL_HIST_X_1
+1902
+22
+Invoice Detail
+97
+CustomField15
+FALSE
+EL_HIST_X_2
+1924
+22
+Invoice Detail
+98
+CustomField16
+FALSE
+EL_HIST_X_3
+1946
+22
+Invoice Detail
+99
+CustomField17
+FALSE
+EL_HIST_X_4
+1968
+22
+Invoice Detail
+100
+CustomField18
+FALSE
+EL_HIST_X_5
+1990
+22
+Invoice Detail
+101
+CustomField19
+FALSE
+EL_HIST_X_6
+2012
+22
+Invoice Detail
+102
+CustomField20
+FALSE
+EL_HIST_X_7
+2034
+22
+Invoice Detail
+103
+CustomField21
+FALSE
+EL_HIST_X_8
+2056
+22
+Invoice Detail
+104
+CustomField22
+FALSE
+EL_HIST_X_9
+2078
+22
+Invoice Detail
+105
+CustomField23
+FALSE
+EL_HIST_X_10
+2100
+22
+Invoice Detail
+106
+CustomField24
+FALSE
+EL_HIST_X_11
+2122
+22
+Invoice Detail
+107
+CustomField25
+FALSE
+EL_HIST_X_12
+2144
+22
+Invoice Detail
+108
+CustomField26
+FALSE
+EL_HIST_X_13
+2166
+22
+Invoice Detail
+109
+CustomField27
+FALSE
+WA_HIST_X_1
+2188
+22
+Invoice Detail
+110
+CustomField28
+FALSE
+WA_HIST_X_2
+2210
+22
+Invoice Detail
+111
+CustomField29
+FALSE
+WA_HIST_X_3
+2232
+22
+Invoice Detail
+112
+CustomField30
+FALSE
+WA_HIST_X_4
+2254
+22
+Invoice Detail
+113
+CustomField31
+FALSE
+WA_HIST_X_5
+2276
+22
+Invoice Detail
+114
+CustomField32
+FALSE
+WA_HIST_X_6
+2298
+22
+Invoice Detail
+115
+CustomField33
+FALSE
+WA_HIST_X_7
+2320
+22
+Invoice Detail
+116
+CustomField34
+FALSE
+WA_HIST_X_8
+2342
+22
+Invoice Detail
+117
+CustomField35
+FALSE
+WA_HIST_X_9
+2364
+22
+Invoice Detail
+118
+CustomField36
+FALSE
+WA_HIST_X_10
+2386
+22
+Invoice Detail
+119
+CustomField37
+FALSE
+WA_HIST_X_11
+2408
+22
+Invoice Detail
+120
+CustomField38
+FALSE
+WA_HIST_X_12
+2430
+22
+Invoice Detail
+121
+CustomField39
+FALSE
+WA_HIST_X_13
+2452
+22
+Invoice Detail
+122
+CustomField40
+FALSE
+SW_HIST_X_1
+2474
+22
+Invoice Detail
+123
+CustomField41
+FALSE
+SW_HIST_X_2
+2496
+22
+Invoice Detail
+124
+CustomField42
+FALSE
+SW_HIST_X_3
+2518
+22
+Invoice Detail
+125
+CustomField43
+FALSE
+SW_HIST_X_4
+2540
+22
+Invoice Detail
+126
+CustomField44
+FALSE
+SW_HIST_X_5
+2562
+22
+Invoice Detail
+127
+CustomField45
+FALSE
+SW_HIST_X_6
+2584
+22
+Invoice Detail
+128
+CustomField46
+FALSE
+SW_HIST_X_7
+2606
+22
+Invoice Detail
+129
+CustomField47
+FALSE
+SW_HIST_X_8
+2628
+22
+Invoice Detail
+130
+CustomField48
+FALSE
+SW_HIST_X_9
+2650
+22
+Invoice Detail
+131
+CustomField49
+FALSE
+SW_HIST_X_10
+2672
+22
+Invoice Detail
+132
+CustomField50
+FALSE
+SW_HIST_X_11
+2694
+22
+Invoice Detail
+133
+CustomField51
+FALSE
+SW_HIST_X_12
+2716
+22
+Invoice Detail
+134
+CustomField52
+FALSE
+SW_HIST_X_13
+2738
+22
+Invoice Detail
+135
+CustomField53
+FALSE
+GS_HIST_X_1
+2760
+22
+Invoice Detail
+136
+CustomField54
+FALSE
+GS_HIST_X_2
+2782
+22
+Invoice Detail
+137
+CustomField55
+FALSE
+GS_HIST_X_3
+2804
+22
+Invoice Detail
+138
+CustomField56
+FALSE
+GS_HIST_X_4
+2826
+22
+Invoice Detail
+139
+CustomField57
+FALSE
+GS_HIST_X_5
+2848
+22
+Invoice Detail
+140
+CustomField58
+FALSE
+GS_HIST_X_6
+2870
+22
+Invoice Detail
+141
+CustomField59
+FALSE
+GS_HIST_X_7
+2892
+22
+Invoice Detail
+142
+CustomField60
+FALSE
+GS_HIST_X_8
+2914
+22
+Invoice Detail
+143
+CustomField61
+FALSE
+GS_HIST_X_9
+2936
+22
+Invoice Detail
+144
+CustomField62
+FALSE
+GS_HIST_X_10
+2958
+22
+Invoice Detail
+145
+CustomField63
+FALSE
+GS_HIST_X_11
+2980
+22
+Invoice Detail
+146
+CustomField64
+FALSE
+GS_HIST_X_12
+3002
+22
+Invoice Detail
+147
+CustomField65
+FALSE
+GS_HIST_X_13
+3024
+22
+Invoice Detail
+148
+CustomField66
+FALSE
+W2_HIST_X_1
+3056
+22
+Invoice Detail
+149
+CustomField67
+FALSE
+W2_HIST_X_2
+3078
+22
+Invoice Detail
+150
+CustomField68
+FALSE
+W2_HIST_X_3
+3100
+22
+Invoice Detail
+151
+CustomField69
+FALSE
+W2_HIST_X_4
+3122
+22
+Invoice Detail
+152
+CustomField70
+FALSE
+W2_HIST_X_5
+3144
+22
+Invoice Detail
+153
+CustomField71
+FALSE
+W2_HIST_X_6
+3166
+22
+Invoice Detail
+154
+CustomField72
+FALSE
+W2_HIST_X_7
+3188
+22
+Invoice Detail
+155
+CustomField73
+FALSE
+W2_HIST_X_8
+3210
+22
+Invoice Detail
+156
+CustomField74
+FALSE
+W2_HIST_X_9
+3232
+22
+Invoice Detail
+157
+CustomField75
+FALSE
+W2_HIST_X_10
+3254
+22
+Invoice Detail
+158
+CustomField76
+FALSE
+W2_HIST_X_11
+3276
+22
+Invoice Detail
+159
+CustomField77
+FALSE
+W2_HIST_X_12
+3298
+22
+Invoice Detail
+160
+CustomField78
+FALSE
+W2_HIST_X_13
+3320
+22
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2513141761/Local+Government+UT+MailFile+Technical+Design

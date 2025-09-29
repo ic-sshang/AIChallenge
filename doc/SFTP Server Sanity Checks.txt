@@ -1,0 +1,23 @@
+Pre Requisites: CRM portal account in prod
+Creating CRM credentials
+Login into the CRM portal as shown in the below image URL: 
+https://www.invoicecloud.com/crm
+ 
+Once logged in follow the instructions, click on 2 and then 3 as shown below.
+After clicking 3 something like shown below will pop up on the screen
+click on the NEW FTP USER as show above.
+Once you click on New FTP user follow the arrows as shown above and make sure to use the general use FTP credentials as type
+Save the user and then it will show up the newly created credentials
+copy the credentials and use it in the below steps with file zilla
+Configuring the FileZilla 
+search for the FileZilla in the search menu of your physical desktop
+Once you open click on the number one by one in the image and follow the instructions
+click on the numbers as follows in the image
+on number 3 make sure you use the sftp option
+on arrow 4 select the same 
+sftp.invoicecloud.com
+on arrow 5 click on the port and save as 2022
+on line 6 and 7 enter the credentials given to you that are created on CRM portal.
+Once you authenticate successful and if the server is up, you will see a pane open on the left as shown below
+This shows that the server is up and ready.
+ URL:/spaces/platform/pages/4509466662/SFTP+Server+Sanity+Checks

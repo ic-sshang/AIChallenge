@@ -1,0 +1,64 @@
+Runbook
+Payment Tests
+Description
+Payment testing process in Chase Orbital for new TDs
+Contents
+1
+6
+false
+none
+list
+true
+Change Log
+Changes Made
+Summary
+The Delivery Team processes payment tests to ensure that Invoice Cloud can:
+Deposit funds into the correct Biller’s bank account 
+Debit the bank account (if a reject or chargeback happens) 
+Ensure that the Merchant IDs/Terminals (MID/TD) are set up correctly at Chase
+Steps
+Steps
+Action Item
+Description
+1
+Request Task
+Payment Test Requested
+IMs request payment tests from their Project Schedule in Smartsheet for completion by the DT. 
+2
+Set Up for Task
+Find the MIDs/TDs Numbers
+Navigate to the BID folder in the Box>BOF folder> QA folder>FTI which lists out the BU and TD numbers that were procured by Boarding during the Chase onboarding process.
+3
+Set Up for Task
+Determine the Pricing Model & Pricing 
+To determine the pricing model and pricing structure so that you know the amounts you are payment testing you need to look at the BOF saved in the Box for the Biller.
+4
+Payment Test
+Process Payment Test
+Complete payment test in Chase Orbital. Notify IM test has been completed.
+5
+Request Task
+Refund Test Requested
+IMs request refunds from their Project Schedule in Smartsheet for completion by the DT when the Biller has confirmed receipt of the credit into their bank account. The IM saves the confirmation of credit to the Box for the Biller. 
+6
+Refund
+Process Refund 
+Complete refund test in Chase Orbital. Notify IM test has been completed.
+7
+Request QC
+QC Payment Test Requested
+IM requests QC from their Project Schedule in Smartsheet for completion by the DT when the Biller has confirmed the debit out of their bank account. The IM saves the confirmation of credit to the Box for the Biller. 
+8
+QC 
+Complete QC Payment Test
+DT confirms all aspects of the QC Sheet in Smartsheet and completes QC.  
+note
+Process Payment Test/Refund Test Delivery Task
+
+
+Process Payment Test/Refund Test Delivery Task
+
+
+Debit and Credit Authorization and Payment Test Form
+Invoice Cloud requires that the Biller’s bank allows IC and our payment vendors to credit and/or debit the account in order to deposit payments, Credit Card chargebacks, ACH/EFT returns, or credits issued to customers from within the IC platform. The Company IDs (COIDs) must be allowed to credit and debit accounts and a copy of this Authorization must be saved to the Box before requesting a Payment Test.
+ URL:/spaces/Implementa/pages/3197501441/Payment+Tests

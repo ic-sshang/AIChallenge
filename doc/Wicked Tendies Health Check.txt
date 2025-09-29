@@ -1,0 +1,40 @@
+Repository
+ 
+https://dev.azure.com/invoicecloud/Src_Miscellaneous/_git/WickedTendiesHealthCheck
+How to Run
+Wicked Tendies' (WT) Health Check job runs automatically 3 times per work day at 9 AM, 12 PM, and 4:30 PM. These times are after critical jobs have finished processing.
+Who is responsible of monitoring the job
+Embedded SREs are responsible of monitoring the jobs during workweek, and during the weekend WT personnel on-call will monitor the jobs.
+When HealthCheck Fails
+If the job fails the initial action is to send a message in #wt-health-check slack channel and review the logs. 
+After the log information is reviewed there are the steps:
+Rerun the Health Check
+If the Health Check is successful after the second attempt, no additional steps are required
+If the rerun fails after the second run, create a DS item and inform the Wicked Tendies team that the issue is under review, and share the DS item. Consult and Escalate as per the criticality of the issue.
+Pending Improvements
+Migrate reporting to New Relic
+Implement health checks for additional jobs
+Functions Checked
+The recon methods below are used to check system health by providing information on what work was performed by these jobs. For example, AchRejectsCountByDate_Recon will return the number of rejects imported into biller shards for that day. 
+These functions are critical to the processes managed by Wicked Tendies.
+ICG_BillerBankChangedProcessing_TerminalBanks_Recon
+ICG_CassApplySchedulerLedgerEntries_Recon
+ICG_CassBankActivityImport
+ICG_ChargebacksCountByDate_Recon
+ICG_PayPalDsdrRecordCountsByDate_Recon
+Audit_CassDepositReconciliation_Recon
+AchRejectsCountByDate_Recon
+DigitalWalletPaymentCountByDate_Recon
+PayPalPaymentCountByDate_Recon
+CheckBillerSettledBatches_Report
+EmailQueueProcessor_EmailSentCount_Recon
+ChaseGlobalBin_Recon
+ChasePCL3FileImport_Recon
+PinlessDebitBinFileImport_Recon
+ChaseChargebacks_Recon
+ChaseNocs_Recon
+ChaseRejects_Recon
+ICG_CassFileRecieptProcessing_Recon
+ICG_NachaFileCreation
+ICG_OneBatchFiles_Recon
+ URL:/spaces/DS/pages/2854289463/Wicked+Tendies+Health+Check

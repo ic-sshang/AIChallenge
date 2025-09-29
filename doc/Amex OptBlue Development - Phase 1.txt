@@ -1,0 +1,324 @@
+Epic Link: 
+OptBlue Project
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+Complete
+Green
+ 
+in progress
+Green
+ 
+NOT STARTED
+Red
+ 
+in progress
+Green
+ 
+not STARTED
+Red
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+Date Review Meeting:
+We will cover: 
+The problem and our objective
+Our approach for addressing this objective
+Research to support visibility 
+first draft of project timeline
+ Problem Alignment
+Our American Express contract will expire in June 2024. Amex has notified us that they will no longer be working directly with billers to support Amex processing. Going forward, we will need to either move billers to OptBlue or transition to their aggregator model.  For now, we will be migrating about 500 MIDs to the OptBlue platform. We are working with Amex to understand whether we will move the remaining billers to OptBlue or to the aggregator model thru Chase.   
+In todays environment, Amex pays billers directly. With the OptBlue project, the biggest change is funding. With the transition to OptBlue, Chase will be depositing the Amex funds along with the other card brand funding. We will provide the reporting for chargebacks like we do for the other card brands. The Amex portal will have two years of rolling data in the Amex portal. Optblue transactions will not available in the Amex portal. They will see Optblue transactions in the biller portal. 
+It's imperative that we complete this project because our billers will no longer be able to accept Amex transactions if we do not transition them to another platform. If that occurs, payers will also not be able to use Amex to make a payment.  We would be at a competitive disadvantage if we are not able to support Amex processing. 
+In addition to the competitive disadvantage we would face, we also did some data analysis to understand the impact to billers and the revenue we may lose.  
+Total 
+Amex transactions 
+Processed in 2023: 1.4M transactions.
+Total Annual 
+Amex Sales volume 
+Processed in 2023: $600M in sales volume
+Total 
+Amex net revenue 
+generated in 2023: #4.5M net revenue
+Update: Amex has provided an extension to our contract for moving billers to Optblue. The new date is June 2025. 
+ Objective
+The objective of this project is to build out the ability to support the OptBlue model and migrate billers who be staying on Chase to this platform. We will need to identify which billers should be part of the migration to OptBlue and which billers will be migrating to the aggregator model. There will also be a heavy lift to the DB team. Currently reporting is pulled directly from Amex. Once billers are migrated, their Amex reporting data will be included in the existing Chase reporting. A large part of this project will be reviewing the reporting and ensuring that we extract the same AmEx data that we receive today from the Chase reports. Since this migration is impacting the funding process, we will need to communicate the benefits of this change to our portfolio. This will also simplify the onboarding process. Billers won’t need to apply separately through Amex. 
+We need to make some changes within the CRM to support this change, so everyone has visibility into which Amex platform the biller is on. Reporting for amex transactions will no longer come from Amex so we will need to make changes to ensure we are extracting that same data from the Chase reports to ensure a smooth migration. We will need to manage the migration schedule along with Finance to ensure our reporting is aligned appropriately. 
+Reconciliation is often a primary concern of our billers. This is another step towards improving that issue. Amex transactions will be deposited with the same batch as their other credit card transactions, making reconciliation easier for our billers. We will also be managing the Amex chargebacks in the same way we handle other card brands, again easing the burden off our billers. For new billers, the onboarding experience for accepting Amex transactions will be faster since it will be included with their other cardbrands. 
+Our objectives are: 
+Make necessary changes internally to support the OptBlue platform 
+Update reporting to ensure we are extracting data from the Chase reports to align with what we collect today from Amex
+Define list of billers to be migrated to OptBlue, establish a migration plan and successfully migrate those billers
+Update: Chase/Amex paused our migration from Dec-April due to additional development needed on the Chase side. We will be testing a pilot biller on 4/7/25 to confirm everything is working properly on the Chase side to continue the migration schedule. 
+ Success Metrics
+Goal
+Metric
+Current
+Good
+Great
+Migrating billers 
+Communicate date and migrate billers to optblue platform, confirm billers are receiving Amex funding along with other Chase deposits. 
+100%
+Validate Amex CBs are being processed thru Chase
+Confirm CBs are being captured and reporting accurately through Chase portal
+100%
+Finance Reports
+Successful transition from the Amex reporting to Chase reporting for monthly revenue & expense reporting
+100%
+Reconciliation
+Reconciliation reporting needs to work as planned. 
+100%
+ Target Audience
+Group
+Impact
+Chase Amex Billers who are not migrating to BT 
+Existing Chase billers who accept Amex and (are not on the list to migrate to BT) will be part of this migration. Should be a win since it will bring consolidated funding for Amex transactions. 
+Chase Cost Plus Billers 
+Existing Chase Cost plus billers will have a negative impact - potential higher costs + change in monthly statement but they will have consolidated funding which will be an added benefit. 
+Sales/Customer Success
+We need to loop in Sales/Customer Success to determine cutoff date for new onboarding to Optblue and general awareness. Date TBD. 
+Exclude billers who have their own processors (not using invoicecloud)
+These billers will be out of scope for this project. 
+ User Interaction and Design
+User Research Background 
+We did some extensive research to understand the impact. From a coding perspective, we will need to make some changes in the CRM to update the Amex fields. We will want to include an indicator, so users understand which Amex platform billers are using along with the timeframe. Support/implementations/boarding/sales will need details (on which program they are using) so they can support any questions around Amex transactions.  
+There will also be changes needed on the reporting. Currently we pull transactional data directly from Amex. Going forward, Amex data will be sent from Chase in their standard reporting, and we will extract that data to provide financial reporting. 
+There will be changes needed on the Payment Reconciliation page. Also, on the batch emails that are sent out, changes will need to be made because Amex is broken out separately.  
+ Components Impacted
+Amex OptBlue
+Component
+Impact
+CRM Products Page
+Update Amex Fields
+General Reporting
+Extract data from Chase daily reporting instead of pulling directly from Amex. 
+Biller Portal Reconciliation Updates 
+Changes will need to be made to the Payment Reconciliation page & updating batch emails.
+Finance Monthly Report Updates 
+Need to be able to pull and report on the same data post migration
+ Technical Architecture
+EBPP-15442
+Current State:
+Future State:
+CB Current State:
+CB Future State:
+Reconciliation Current State:
+Reconciliation for Future State:
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+Complete end to end testing for payments to ensure everything is working as expected.
+ Validation of all Amex payment data to confirm reporting is being tracked accurately for monthly financial updates.
+ 
+ 
+ 
+ 
+ Validate chargebacks are being accurately counted and summarized on reporting along with CB fees being assessed to billers 
+ 
+ 
+ 
+ 
+Validate payment reconciliation reports are reporting Amex data as expected
+Validate batch emails are displaying Amex/Discover in same area as other card payments that are being deposited. 
+ Serviceability/Observability
+Internal Visibility:
+ Need to be able to easily identify which Amex plan the biller is currently on by looking at the products page in the CRM. 
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Name
+Company
+Team
+Role
+Angie Paul
+InvoiceCloud
+Product
+Product Manager
+Adrian Izaguirre 
+InvoiceCloud
+Engineering
+Technical Lead
+Randy Torres
+InvoiceCloud
+Engineering
+Payment Owner
+Wicked Tendies Team 
+InvoiceCloud
+Engineering
+Engineers
+Sara Phelps
+InvoiceCloud
+Product 
+Payments Leader
+Vicki Jennings
+InvoiceCloud
+Support
+Reconciliation 
+Allie Priede
+InvoiceCloud
+Marketing
+Biller Communication
+Carly Champine
+InvoiceCloud
+Finance
+Financial Reporting
+Courtney Sprecher & Liana Allen
+InvoiceCloud
+Boarding
+Onboarding 
+Kelsey Tibbs
+InvoiceCloud
+Database
+Database Updates
+ Requirements
+Change to rely on Jira, pull in epic details
+Requirement
+Importance
+Jiras Linked 
+Notes / Outcome
+Update Product Page in CRM
+Add Amex toggle to show which Amex program billers are on along with the start start/end date.  
+ SE number will be blank if biller is on Optblue; must support multi SE numbers if the biller is on aggregator model
+Provides details so support knows which model the biller is on and the dates. This information is critical in helping to research Amex transactions. 
+EBPP-15436
+[EBPP-15436] Config/Architecture Changes for OptBlue - JIRA (atlassian.net)
+Ability for users to clearly see which Amex program biller is using
+Update Terminal Page in CRM
+There will be 3 potential Amex programs a biller would be on. We need the ability to show the program, start/end dates & SE#, Seller ID.
+To manage this, a new tab will be created on the terminals screen in the CRM. 
+This is critical to support all 3 Amex programs. 
+[EBPP-18570] Terminal Page Changes to support optblue - JIRA (atlassian.net)
+Ability to add/update Amex product being used
+Database Reporting Changes
+DB team will use ACT10. FIN11 Chase reporting to pull optblue amex reporting since we will no longer be pulling this information from Amex portal. 
+ The DB team will need to confirm they are pulling the existing Amex reporting details from the ACT10 & FIN11 reports  to ensure we are able to accurately pull and report on Amex processing data. 
+EBPP-15439
+[EBPP-15439] Reporting Changes to support Amex OptBlue - JIRA (atlassian.net)
+ We need to be able to report accurate Amex processing data. 
+Biller Portal Reporting Updates
+Amex should not be displayed separately. It will not be part of the Chase deposit so it should be included in the m/v/d totals.
+We need to add Amex to the filter. 
+We need to include Amex refunds and Amex CBs in the refunds and chargebacks data; right now its only pulling V/MC/D
+Historical data - billers will need to see historical data prior to migration. Amex has said that billers will have access to the old Amex portal to view transactional information for 1 year. The Amex portal will display a rolling 2-year period of data. 
+Add Amex to the report title since it will be included - Please note: 
+ONLY
+ applicable if the biller is under Optblue
+Batch emails need to be updated to include Amex in the same section as other card types since it will be deposited in a single deposit. 
+There are some slight changes that need to be made on the payment reconciliation report to include Amex along with the other card brands so its clear to billers its a combined deposit going forward. 
+EBPP-17547
+[EBPP-17547] Payment Reconcilation Report Changes to support Amex optblue - JIRA (atlassian.net)
+Amex should be included with other payment brands since funding will be consolidated.
+Migration Process - Phase 2 
+ Competitive Analysis
+ Dependencies
+Contract addendum with Chase must be signed prior to migration. 
+ Assumptions
+Assuming this migration process will take 4 months to complete. 
+Billers who have their own processor will be out of scope for this project. 
+Paya are already on Optblue and will be excluded.
+ Timeline
+Event
+Date
+Confidence
+Status/Work 
+Kickoff call
+ 
+Not Started
+Red
+ 
+Design review
+ 
+not started
+Red
+ 
+Milestone 1 
+CRM Page Updates
+ 
+?
+Milestone 2 
+Database Reporting Updates
+ 
+?
+Milestone 3 
+BP Reporting Updates
+ 
+?
+Migrate Test Billers
+ 
+Migrate Early Access Billers
+ 
+Migrate Phase 1 billers 
+ 
+Migrate Cost Plus Billers
+ 
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+Is it possible to have a test FTP site with Chase to complete through testing in prod?
+Sara/Angie
+Can we build out a test plan?
+Venkata/Adrian/Angie
+Yes, we will begin discussions on this one. 
+3/7/24
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+Billers who be moved to Braintree will be part of the Amex Aggregator model. 
+The Aggregator model is out of scope for the Optblue project. This will be worked on by the Braintree project team. Several members of the Optblue project are also part of the BT project so the communication and planning will be aligned.
+Paya processing billers are not in scope for this project. 
+All billers who have their own processor are out of scope. 
+ Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+Early Access Billers
+All Billers
+Partners
+Internal \ Training
+Internal \ Support+CSM+implementation
+Internal \ Sales
+Internal \ Boarding
+Internal \ General
+Results 
+Monitoring of this project will begin immediately after the first biller is migrated to the optblue platform. We anticipate the migration plan will take approx 3-4 months. It is also recommended that biller be migrated at month end to keep reconciliation easier for funding coming from Amex vs from Chase.  
+Anticipated first migration - 6/30/24
+Monitoring to begin 6/30/24
+Success Measurements to be reported on 10/1/24. 
+ URL:/spaces/PRODUCT/pages/3001810945/Amex+OptBlue+Development+-+Phase+1

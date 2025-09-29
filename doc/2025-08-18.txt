@@ -1,0 +1,112 @@
+Legend
+Changes with Numbering indicate mandatory sequential steps
+Changes with bullet points indicate parallel steps
+ Done
+ Not Doing
+ Doing
+Notice to Post
+Today we will be Releasing Changes for 
+2025-08-18
+  per our 
+Weekly Change Window Guidelines
+.
+
+
+
+
+95
+
+
+4497b43b-0b8e-4097-a47a-08d292e32d33
+
+
+complete
+
+
+ #platform-support
+
+
+
+
+
+
+96
+
+
+2e94d8b5-e257-4305-a560-e8b6717f0de8
+
+
+complete
+
+
+#engineering-maintenance
+
+
+
+
+Test Baselining
+Run these tests from Laptop: 
+payer-v3.ps1 - Repos
+ 
+Run these tests from Laptop with XAT 
+envs
+ enabled: 
+tests-biller-nextgen.js - Repos
+ 
+Evidence
+Changes
+ 
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/INFRA/queues/custom/111/INFRA-1598
+ 
+build to run
+ 
+ 
+ 
+PLAT-2547
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipelines - Run kong-azure-apply-2.49.2
+ 
+PLAT-2228
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Manual change to be run by 
+ 
+ 
+ARC-218
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipelines - Run apply-biller-infrastructure-0.29.1
+Test Plan
+Test if 
+awx-web
+ replicas are 2 and CPU resource limits is 3000m (3 cores). Restart the awx-web and task pods 
+ 
+Run these tests from Laptop: 
+payer-v3.ps1 - Repos
+ 
+ Run these tests from Laptop with XAT 
+envs
+ enabled: 
+tests-biller-nextgen.js - Repos
+ 
+Evidence
+Verify 
+mi-MyIIS-web-prv
+ and 
+mi-MyIIS-web-prd
+ (in the 
+rg-global-web-prd
+ RG) are granted the 
+Service Bus Sender/Receiver
+ and Azure Storage 
+Storage Blob Contributor
+ permissions for their specific environment associated resources in 
+rg-glb-resources1-{env}
+.
+XAT
+PRD
+ URL:/spaces/platform/pages/4571136003/2025-08-18

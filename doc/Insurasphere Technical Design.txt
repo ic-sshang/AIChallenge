@@ -1,0 +1,333 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+ITR18188, 
+https://invoicecloud.atlassian.net/browse/INT-1694
+ 
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+base URL for test: 
+http://ntwyusmnet01.idpnet.com
+Authentication: Encoded API key with HTTP Basic Authentication
+API key (testing environment): 88OOMPNBBRGPYQQP9=LZBCRU5OQUXBP3795A7JN+5HL+V3BN1++VE5D6R7V/=5Q=CQV1XQUZYM673T=CMC6ZD6YB5=WA0P=A4L9FIM3LQL94
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+GetCurrentBalance
+Get Current Balance
+URL: /BillingAPI/Invoice/GetCurrentBalance
+Method: GET
+Parameters:
+PolicyNumber 
+ - String (50)
+PolicyEffectiveDate 
+- YYYY-MM-DD - string (10)
+{
+    "m_Initialized": true,
+    "m_IsOk": true,
+    "m_MessageId": null,
+    "m_OkResult": {
+        "PolicyNumber": "HO 0614953",
+        "PolicyEffectiveDate": "2020-05-06T00:00:00",
+        "NetBalance": 160.8000,
+        "CurrentDue": 44.7000,
+        "PastDue": 44.7000
+    },
+    "m_ErrorResult": null
+}
+Net Balance 
+will map to total amount due
+Current Due 
+will map to balance due
+Past due 
+ will map to PastDue amount
+Data Pump: Paperless Enrollment
+UpdatePrintSetting
+Toggle Paperless
+URL: /BillingAPI/Invoice/UpdatePrintSetting
+Method - POST 
+json:
+PolicyNumber 
+ - String
+InvoicePaperless 
+ - Boolean
+{
+    "m_Initialized": true,
+    "m_IsOk": true,
+    "m_MessageId": null,
+    "m_OkResult": true,
+    "m_ErrorResult": null
+}
+File Mapping
+Invoice File
+File Extension: BIF
+File Naming Convention: SMIC_BIF_DATE_ID
+File Delimiter: Pipe
+Specification: Invoice Cloud
+FTP Location: /ToInvoiceCloud/Invoices
+Sample File: 
+File Transfer Frequency: Daily
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+NA - IC Value
+File Header
+2
+BillerGuid
+Y
+TRUE
+NA - IC Value
+File Header
+5
+InvoiceCount
+Y
+TRUE
+NA - Calculated Value
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+NA - Calculated Value
+File Header
+7
+RowType
+Y
+TRUE
+NA - IC Value
+Invoice Header
+8
+RecordType
+Y
+TRUE
+NA - IC Value
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+NA - IC Value
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice Number
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Issue Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Date Due
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Net Balance
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Static value '1'
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Minimum Due
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Policy Number
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Policy Effective Date
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+CurrentDue
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+NA IC Value
+Invoice Header
+58
+RowType
+Y
+TRUE
+NA IC Value
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Policy Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name / DBA
+Customer Record
+61
+Address1
+Y
+FALSE
+Address1
+Customer Record
+62
+Address2
+Y
+FALSE
+Address2
+Customer Record
+63
+City
+Y
+FALSE
+City
+Customer Record
+64
+State
+Y
+FALSE
+State
+Customer Record
+65
+Zip
+Y
+FALSE
+Zip
+Customer Record
+70
+RowType
+Y
+TRUE
+NA IC Requirement
+Invoice Detail
+Payment Export File
+File Extension: TXT
+File Naming Convention: InvoiceCloudPayments_YYYYMMDD
+File Delimiter:  Pipe '|'
+Specification: Partner defined
+Specification File: 
+File Transfer Frequency: Daily
+Partner Field Name
+Data Type
+Values
+PolicyID
+Varchar (50)
+InvoiceNumber from Invoice Import file
+PaymentID
+Varchar (36)
+Unique number for each payment from IC (GUID)
+PolicyNumber
+Varchar (250)
+Policy Number - IC Account Number
+Payment Type
+Varchar (10)
+CC or ACH - Default CC
+Amount
+Money
+Payment Amount
+Date
+Datetime
+Date of Transaction (MM/DD/YYYY)
+Total Row: 
+Number of Payments | Total of Payments
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+In BIF
+AutoPayCollectionDate
+on biller questionnaire 
+BalanceForward
+n/a
+CreditCardServiceFee
+n/a
+FirstNotifyRequestedDate
+on biller questionnaire 
+InvoiceDate
+In BIF
+InvoiceDueDate
+In BIF
+InvoiceFormatGuid
+In BIF
+InvoiceTypeID
+In BIF
+LateFeeDate
+n/a
+LocationReference
+n/a
+MinimumAmountDue
+In BIF
+PaymentExpirationDate
+n/a
+PaymentExpirationMessage
+n/a
+PromptPayExpirationDate
+n/a
+RegistrationValue
+n/a
+SecondNotifyRequestedDate
+on biller questionnaire 
+ThirdNotifyRequestedDate
+on biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/1598586912/Insurasphere+Technical+Design

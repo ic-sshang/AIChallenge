@@ -1,0 +1,45 @@
+Changes made to values in tables are stored in the following tables:
+ChangeLogs
+ChangeLogsByInvoiceType
+Most of the “update” stored procedures (
+upd
+) already support recording changes to these tables.  Below is a screenshot of part of the 
+dbo.updBillers
+ stored procedure displaying some of the code that writes to the 
+ChangeLogs
+ table
+The user type that triggered the change is also recorded in this table.  Changes are made by “Change Requestors” that are listed in 
+tblChangeRequestor
+(see below).  
+The 
+ChangeRequestorID
+is recorded along with the change made in the appropriate change logs table.
+The user that made the change is also stored in this table in the 
+UserFKID
+ column.
+UserFKID
+ was introduced in the last couple years.  Usage of it is not fully implemented to date.  In other words you will notice many of the values as 
+0
+ but you will notice others with values >
+0
+.  
+Details about the user that made the change are stored in different tables, with 
+ChangeRequestorID
+ being a pointer for where to look.
+For example, 
+ChangeRequestorID=3
+ users are stored in table 
+Employees
+.  
+ChangeRequestorID=1
+users are in table 
+Billers
+.  
+In some cases the Change Requestor is a process and there won’t be a list of users.  For example, 
+ChangeRequestorID=4
+(Cloud Process) and 
+ChangeRequestorID=6
+(RTDR) indicate that these background processes triggered the change.  It is normal to have 
+UserFKID=0
+ for changes with these Change Requestors.
+ URL:/spaces/EA/pages/3745316869/Change+Logs

@@ -1,0 +1,124 @@
+Meeting Objectives
+ Share Insights
+:
+Backlog health
+MTTR (by priority)
+Ticket Volume Analysis
+Blockers and Opportunities
+Backlog Health
+The backlog has been averaging around 18.8, which is within the normal range (15–20) for integration tickets.
+MTTR (by priority)
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=28340
+Mean Time to Resolution (MTTR) – August 2025
+Highest Priority:
+ 4.2 days
+High Priority:
+ 11 days
+Medium Priority:
+ 13.2 days
+Low Priority:
+ 17.2 days
+In August, MTTR increased significantly across low, medium, and high priority tickets. This was primarily due to a catch-up effort on older tickets created in mid to late July, which had aged in the queue before being resolved. While a few complex tickets contributed to the overall time, the main factor was the resolution of these older items, which skewed the average upward.
+Example aging tickets resolved soon after being picked up during catch-up:
+DS-10265
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-10358
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-10289
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-10321
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Despite the overall increase, highest priority tickets continued to be resolved within a week, demonstrating that critical issues were still being prioritized effectively. By the end of the month, with additional support onboarded, we were able to reduce the backlog. As of early September, our queue is now under 15 tickets, indicating strong recovery and improved operational efficiency.
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17890
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17891
+Since the beginning of the year, a total of 552 tickets have been reported in the integration space as of August 2025, highlighting various issues across different services:
+Bill Presentment
+ is the most frequently reported service, with 161 tickets. Of these, 
+44 tickets
+ are related to 
+PDF Extraction
+, accounting for 
+27%
+ of all 
+Bill Presentment
+ issues. This high percentage indicates that 
+PDF Extraction
+ is a critical area within 
+Bill Presentment
+ that requires attention.
+About a 
+quarter
+ (
+26%
+) of all integration tickets are classified as 
+additional information
+, which implies that these are mostly research conducted to answer questions.
+Bill Presentment
+ and 
+File Processing
+ are the most critical areas for integrations, representing the primary sources of toil and accounting for just 
+over half
+ of 
+all integration tickets
+.
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17894
+In August, a total of 58 integration-related tickets were resolved. Of these, 15 were specifically related to bill presentment, and 12 to file processing; that would account for 26% and 21% of tickets respectively. This adds to a total of 47%. However, the biggest contributor to tickets was data pump at a 29%. It seems that we had more improvement and new feature request for data pump than usual. Most of the work for this month could be classified as research and data update given the mitigation actions of additional information, database updates, and solutions architecture. Only 3% of tickets were actual defects in our code, and 16% were request for code changes. This is a significant decrease in bug, but and increase in modifications This data indicates that most of the team's time was spent conducting code analysis to help CS navigate integrations for biller’s/SP.
+Blockers and Opportunities
+Status Update
+Blockers
+:
+No blockers have been identified. We are continuing to train the India team to assist with relevant tasks.
+PDF Bursting Tool 
+SR-1419
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ :
+The tool is nearly complete. We are finalizing the product and preparing documentation to support the Customer Support (CS) team.
+ETA: 9/12
+Infer the use based on PDF size issues no longer received by our team.
+AI Agent Opportunities 
+SR-1782
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ Something is in the works. We’ll keep you posted.
+Next Steps
+Once the PDF Bursting Tool is complete, we will begin discovery for the 
+self-serviceable tools
+.
+Here's some context from a previous presentation:
+Problem
+:
+PDF linking has become a bottleneck, consuming time and computing resources. These tickets often require manual intervention from Dev Support (DS), slowing resolution and diverting focus from higher-impact work.
+Solution Strategy
+:
+We're developing tools to streamline PDF-related processes and reduce DS ticket volume by shifting ownership to CS and eventually to billers.
+Bursting Tool
+: Splits large PDFs into smaller, manageable segments.
+Self-Service tools:
+ A collection of comprehensive tool to handle all PDF-related needs for billers, enabling CS to manage requests independently.
+Long-Term Goal
+:
+Shift PDF-related responsibilities from DS → CS → billers to:
+Reduce ticket volume
+Improve turnaround times
+Free up DS for more complex engineering tasks
+Action Items
+Finalize and release the PDF Bursting Tool.
+Continue research into self-service tools and AI opportunities.
+Review new file processing tool in the CRM
+Project Discovery (For 2026):
+Explore self-serviceable. (SR-ITEM)
+Explore potential automation to track repeat tickets. (SR-ITEM) Account for repeat tickets and measure ticket uniqueness.
+Explore ML validation, predict bad files/pdfs [SR-ITEM] . 
+Establish our own SDLC
+ URL:/spaces/DS/pages/4631396353/Integrations+Insights+For+August+2025

@@ -1,0 +1,84 @@
+Runbook
+How to Add/Remove Invoice Types and Invoice Type Options 
+Description
+Configure New CRM, Integrator ID, Invoice Type ID and Invoice Type options in the new CRM Demo and Production. 
+Contents
+2
+Change Log
+Created by/changes made
+Date
+Author
+Version
+Description
+ 03/28/2024
+Lois Powers
+1.0
+1st Draft 
+Summary
+CRM setup of Integrator ID, Invoice Type ID, and Invoice Type settings (options). 
+note
+Process
+
+
+Process
+
+
+Steps
+Description
+Role Responsible
+1
+Integrator ID
+Check and add, if necessary, the Integration Partner ID in 
+CRM > Profile > Integration Partner ID
+ select from dropdown.
+The dropdown if it is an existing partner, it will be on the list. New integrations your Integration Manager will work with their team to get the new partner on the list. 
+ 
+ 
+IM
+2
+Invoice Type ID
+CRM > Invoice Types
+ select ‘Show All Invoice Types’ this will give a list of all invoice type IDs. Check the Software Partner information in Confluence to find if a certain Invoice Type ID is needed for the integration. 
+3
+Invoice Type settings
+ (options)
+Each invoice type set up can have its own settings (options) enabled or disabled. The side arrow will open a list of items that can be turned on or off depending on the Software Partner and or Biller preference. 
+4
+How To Videos
+How to add Invoice Types
+How to add/remove Invoice Types
+Invoice Type 
+ID
+ Creation
+ 
+Delivery Team Invoice Type Settings QC
+In order to complete QC for Invoice Type Settings, once requested by an IM from the project schedule, you will need the following items: Invoice Type QC Sheet (linked in Project Schedule in Smartsheet), Biller Order Form (BOF), Internal Questionnaire (linked in Project Schedule in Smartsheet) and the BID in the CRM.
+Steps
+Description
+Documentation/Example
+1
+Prepare for QC
+The Invoice Type QC sheet should have all the Invoice Types that need to be reviewed for accuracy. The QC sheet will populate the responses from the Internal and Biller Questionnaires in Smartsheet which were completed by the IM during discovery with the Biller.
+Review the BOF to ensure that all Invoice Types requested are listed on the QC sheet.  If any are missing, alert the IM by commenting on the task in Smartsheet.
+If there are Invoice Types present on the QC sheet that are not in the CRM or not on the BOF (ensure you have checked for an Add on BOF), alert the IM by commenting on the task in Smartsheet. 
+2
+Enter Date of Completion on QC Sheet
+ 
+Enter the date you are completing the QC in the Review Date field. 
+3
+Locate the Invoice Type Settings in the CRM
+In the CRM, choose the Invoice Types tab on the left to access the Invoice Types for the BID. Use the carrot (small triangle) to the left of the Invoice Type to expand the Invoice Type settings. 
+Important SAVE information:
+4
+Compare Every Invoice Type Setting Against the QC Sheet Response
+Check each Invoice Type setting in the CRM versus the response in the QC sheet to confirm that they match. If the response on the QC sheet is Yes, the Invoice Type Setting in the CRM should be checked (✅). If the response is No or NA, the box should be unchecked.
+If the response is missing from the QC sheet the Invoice Type Setting item needs to be marked PM Address and add a comment to the QC Comments column to help the Implementation Manager/Project Manager understand why PM Address was selected.
+If the response and setting matches, change the dropdown from Not Started to Pass. If the answers do not match, update the CRM so that they match the expected setting on the QC sheet, then select QC Corrected, signifying that you have updated the CRM according to the QNRs. 
+PM Corrected is only used by the IM/PM once they have addressed the PM Address items.
+Out of Scope is utilized if the Invoice Type setting is Out of Scope (i.e., Cloud Stores and Cloud Pays commonly do not use settings 1-5, and so all remaining items are Out of Scope).
+5
+Finalize Invoice Type QC Sheet and Task
+After Invoice Type settings for each Invoice Type have been reviewed, the QC sheet is complete. 
+If QC Passes or QC Corrected all items, the % Complete section at the top of the QC will show 100%. 
+If any of the dropdowns have PM Address selected, the Task Status will read Blocked, signifying that there are items to be addressed by the IM/PM. The IM/PM will review these items and address them based on Biller/Integration needs and then mark them PM Corrected.  Once all items are corrected the task will move to 100% complete.
+ URL:/spaces/Implementa/pages/3139600408/Integration+Partner+ID+and+Invoice+Type+ID+QC

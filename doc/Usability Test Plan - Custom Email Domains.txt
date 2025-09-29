@@ -1,0 +1,192 @@
+1. Test Overview
+We're testing a new feature that allows billers to configure a custom domain for sending system-generated emails (e.g., payment reminders, confirmations, receipts) instead of using the default 
+@invoicecloud.net
+. This setup involves technical steps and coordination with an IT team. The goal is to understand whether billers can navigate the setup process independently and identify any usability or comprehension issues that could prevent adoption.
+2. Objectives & Research Questions
+Objectives
+Evaluate whether billers can successfully begin the custom domain setup process using the prototype.
+Identify points of confusion in the user interface, especially around technical requirements and collaboration with IT.
+Assess how well the feature communicates the value, steps, and status of domain setup.
+Uncover any blockers that would prevent a biller from initiating or completing the process.
+Research Questions
+Can billers understand the purpose and benefits of setting up a custom sending domain?
+Are the setup steps clear and actionable for a non-technical user?
+Do users understand what information they need to provide to their IT team — and how to access and share it?
+Is terminology (e.g., DNS, SPF, DKIM, domain verification) presented in a way that is understandable or adequately explained?
+Can users recognize what stage of the setup they’re in (e.g., ready to share with IT, pending verification, completed, error)?
+3. Participant Criteria
+Target Users
+InvoiceCloud billers who manage or oversee email communication settings
+Comfortable coordinating with internal IT teams
+Technical or non-technical roles, as long as they’re responsible for initiating setup
+Exclusions
+End users (payers)
+Billers with no involvement in communication or system settings
+4. Methodology & Logistics
+Format:
+ Remote moderated sessions via Zoom or MS Teams
+Prototype:
+ Figma
+Session Length:
+ 45–60 minutes
+Participants:
+ 5–6
+Facilitation Style:
+ Think-aloud, moderator-guided tasks
+Tools:
+ Google Docs/Dovetail for note-taking; recordings with participant consent
+Great Question Study:
+ 
+https://greatquestion.co/studies/63884/pages/landing
+5. Tasks & Scenarios
+Observation Goals & Intents
+Questions
+Screen Needed
+Understand the participant’s role 
+“Would you tell me a bit about your role?”
+“What’s your day-to-day like?”
+N/A
+Understand pain points with current system email
+Can you walk me through how notification emails (like payment reminders or receipts) work today for your organization?
+Who receives these emails, and how important are they in your payment process?
+Have customers ever contacted you about any of these emails?
+Have you or your team ever wanted to send system emails from your own domain (e.g., 
+yourtown.gov
+)?
+Why or why not?
+What do you imagine the benefits would be?
+Are there any concerns you’d have about doing this?
+N/A
+Tee up prototype
+“Thanks — now we’ll walk through a prototype of this new feature. It’s not final, so some things may be rough around the edges. We’d love to hear your thoughts as you go — please think out loud as much as possible.”
+N/A
+Sharing link: 
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=9665-20071&t=34HeWU7eVjJXM34X-8&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=9665%3A20071&hide-ui=1
+ 
+Test discoverability
+“Imagine you wanted to send email from your own domain. Where would you go to do that?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=5543-61244&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure feature is well explained
+“What do you think this feature does?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=8852-3773&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure process is clear
+“What do you think you’ll need to do to complete this process? Can you complete it on your own?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=8765-3888&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure billers understand what email notifications will be impacted
+“What do you think is happening here? What do you need to do?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=9411-3921&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure billers understand what’s being customized
+“What do you think you need to do here?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=6708-65605&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure billers understand DNS settings
+Ensure billers understand who needs to be involved 
+“What do you think it happening here? What steps would you take?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=6708-65899&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+Ensure billers understand the status of their domain
+“What do you think this screen is?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=6708-65857&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+See what billers do next – do they send a test email? do they just go live?
+“What would you do from here?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=6708-65288&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=PltbMD7v9yenwXEP-1
+ 
+See if billers understand the test email
+“Would you send a test email?”
+Does a biller understand what it means to go live?
+“What do you think this is?”
+See if billers understand switching domains
+“Let’s say you no longer want to send email from your custom domain. How would you do that?”
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?node-id=6708-65406&m=dev&scaling=min-zoom&content-scaling=fixed&page-id=5068%3A13911&starting-point-node-id=5543%3A61244&t=BAIBAHaliPgcHbvE-1
+ 
+Get general feedback
+What parts of this setup felt clear or straightforward?
+What parts would you want help with?
+How likely would you be to use this feature, if available?
+If you could change one thing about this experience, what would it be?
+6. Success Metrics & Data Collection
+Quantitative Metrics
+Task success rate
+Time on task
+Error rate
+Confidence rating (1–5)
+Clarity rating (optional)
+Qualitative Insights
+Observed confusion
+Terminology issues
+Verbatim quotes
+Suggested improvements
+Capture & Synthesis
+Video recordings with consent
+Notes tagged in Dovetail or spreadsheet
+Findings summarized and shared with stakeholders
+7. Team & Roles
+Name
+Role
+Responsibilities
+ 
+Moderator
+Facilitate sessions
+(Great Question)
+Notetaker
+Capture observations and quotes
+ 
+Observer & Stakeholder
+(Optional) Attend silently
+ 
+Synthesis Lead
+Analyze data and present findings
+8. Timeline
+Phase
+Date Range
+Details
+Test Plan Finalized
+Aug 26
+Plan approved by team
+Recruitment Begins
+Aug 27
+Outreach and scheduling
+Usability Testing
+Sept 2-12
+5–6 sessions
+Synthesis & Analysis
+Sept 15-16
+Review recordings and findings
+Findings Shared
+Sept 19
+Share report with team
+📩 Recruitment Email
+Subject:
+ Help us test a new feature for customizing your domain for customer facing emails
+Hi [First Name],
+We’re working on a new feature that will allow you to send InvoiceCloud system emails — like payment reminders and receipts — from your own custom domain instead of 
+@invoicecloud.net
+. We’d love your feedback to make sure the setup process is clear and useful.
+We’re looking for a few billers to join a 45-minute remote usability session. You don’t need to be technical — we’ll walk you through the prototype and ask for your honest reactions. As a thank you, you’ll receive a 
+$20 gift card
+ for your time.
+Interested? Just reply to this email and we’ll help you schedule a time.
+Thanks so much,
+[Your Name]
+InvoiceCloud UX Team
+📝 Screener Questions
+What is your role at your organization?
+IT, Communications, Billing/Payments, Customer Service, Other
+Do you currently use InvoiceCloud to manage bill payments or communication settings?
+Yes / No → 
+[Terminate]
+Have you ever updated or configured settings related to email notifications in InvoiceCloud?
+Yes / No / Not sure
+Have you ever needed to work with your IT team to configure something technical (e.g., DNS, domains, system settings)?
+Yes / No / Not sure
+How comfortable are you working with system or communication settings in online platforms?
+Very comfortable / Somewhat comfortable / Not comfortable
+Would you like participate in a 45 minute session to give feedback on a new feature?
+Yes / No → 
+[Terminate]
+ URL:/spaces/PRODUCT/pages/4565041269/Usability+Test+Plan+-+Custom+Email+Domains

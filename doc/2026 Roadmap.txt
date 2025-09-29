@@ -1,0 +1,511 @@
+1
+6
+false
+default
+list
+true
+Objectives
+Complete PCI Audit
+Products: IC, IVRTG, PSN
+Value Propositions
+760
+Market access
+: Enables partnerships with payment processors, banks, and vendors that require PCI compliance.
+Avoids penalties
+: Non-compliance can result in hefty fines, increased transaction fees, or even loss of payment processing privileges.
+Supports legal defensibility
+: Demonstrates due diligence in the event of a security incident or legal inquiry.
+Protects cardholder data
+: Ensures encryption, access controls, and secure storage of sensitive information.
+Key Results
+Pass the 2026 PCI Audits
+PLAT-1056
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Complete SOC Audit
+Products: IC, IVRTG, PSN
+Value Proposition
+760
+Continuous protection of sensitive data:
+ SOC 2 enforces strong controls around access, monitoring, and incident response, lowering the likelihood of breaches.
+Standardized controls across the org:
+ Reduces ad-hoc security practices by aligning teams on a tested, audited control framework.
+Risk visibility:
+ Ongoing audits and evidence collection highlight gaps early, so issues can be fixed before they become breaches or incidents.
+Proof of reliability:
+ A SOC 2 report is an independently verified signal to customers, partners, and prospects that your organization takes security and data protection seriously.
+Competitive differentiator:
+ In SaaS, fintech, and enterprise sales, SOC 2 is often the baseline requirement for doing business. Being compliant expands the customer pool and shortens security reviews.
+Pass the 2026 SOC2 Audits
+Remove NetworkService Identity from Web Apps
+Products: IC
+Value Proposition
+760
+Smaller blast radius:
+ NetworkService uses the 
+computer account
+ on the network; if one site is compromised, an attacker may leverage the machine’s AD identity to access other resources. A per-app identity limits lateral movement.
+Tighter ACLs:
+ With AppPoolIdentity you get a unique SID 
+IIS AppPool\<AppPoolName>
+. You can grant file/registry/cert permissions 
+only
+ to that app, not to every site on the box.
+Better outbound control:
+ Per-app identities let you target firewall, proxy, and secret permissions precisely. NetworkService makes all apps “look the same” off-box.
+Principle of least privilege by default:
+ ApplicationPoolIdentity has fewer local privileges than NetworkService (which can sometimes pick up powerful rights via the machine account in domain contexts).
+Key Results
+100% of IIS applications migrated to unique identities (AppPoolIdentity or gMSA)
+Zero outages during cutover (apps maintain full functionality post-migration)
+All production apps mapped to distinct service principals with documented access permissions
+Clear documentation for onboarding new apps with per-pool identities
+Separate Payment Apps from Non-Payment Apps
+Products: IC
+Value Proposition
+760
+Clear PCI DSS scope boundary:
+ By separating payment systems, only the servers hosting PCI apps fall into PCI audit scope. This reduces the number of systems and controls that must be validated annually.
+Reduced attack surface:
+ Non-PCI apps (often with more frequent code changes, third-party libraries, or broader integrations) won’t provide a stepping stone into highly sensitive payment environments.
+Stronger segmentation:
+ Dedicated infrastructure allows for firewalling, network segmentation, and monitoring tuned specifically to payment apps, making lateral movement far harder for attackers.
+Least privilege enforcement:
+ PCI servers can run with hardened OS baselines, stricter patching schedules, and limited accounts — without burdening non-PCI workloads with unnecessary overhead.
+Isolation of vulnerabilities:
+ A security flaw in a non-PCI app (e.g., CMS, marketing portal) cannot be exploited to gain a foothold in the PCI environment.
+Minimized blast radius:
+ Outages, resource contention, or misconfigurations in non-PCI apps won’t impact critical payment systems.
+Targeted monitoring & alerting:
+ Payment apps often require more rigorous logging, intrusion detection, and SIEM rules — separation prevents false positives from unrelated workloads.
+Key Results
+100% of PCI/Payment applications migrated
+ to dedicated, hardened servers with no non-PCI workloads remaining.
+Zero shared service accounts or file shares
+ between PCI and non-PCI applications.
+Clear documentation for onboarding new apps.
+Migrate IVRTG to Azure (if funded)
+Products: IVRTG
+Value Proposition
+760
+Global redundancy:
+ Azure offers multiple availability zones and regions, eliminating the single point of failure that exists with a single on-premises data center.
+Disaster recovery built-in:
+ Native geo-replication, failover services, and backup solutions reduce downtime risk and RTO/RPO costs.
+Elastic resources:
+ Compute, storage, and networking scale on demand, avoiding over-provisioning and long procurement cycles.
+Faster time to market:
+ Teams can spin up environments in minutes, enabling quicker product launches, pilots, and customer delivery.
+Rightsizing & automation:
+ Auto-scaling and reserved instances enable better cost control than static, over-provisioned servers in a fixed data center.
+Key Results
+All environment scaffolding provisioned using Terraform.
+All system configurations provisioned using Ansible
+Eliminate 
+single-point-of-failure infrastructure
+Migration to MariaDB 12 (if staying on-premise)
+Products: IVRTG
+Value Proposition
+760
+Query optimizations:
+ MariaDB 12 introduces enhancements in the query optimizer, execution plans, and cost-based optimization, resulting in faster queries, especially on complex joins and analytics queries.
+Faster replication:
+ Enhanced parallel replication improves replication lag and reliability in high-throughput environments.
+Improved storage engines:
+ Enhancements in InnoDB, Aria, and ColumnStore improve flexibility for both transactional and analytical workloads.
+Long-term support (LTS):
+ MariaDB 12 is under active support, whereas older 10.x releases are nearing or past end-of-life, meaning fewer security patches and bug fixes if you stay behind.
+Compliance alignment:
+ Staying on supported versions ensures access to ongoing security patches and audit requirements (important for PCI, SOC 2, HIPAA, etc.).
+Key Results
+100% of dev and prod environments running 
+MariaDB 12
+All environments using 
+modern authentication plugins
+ and 
+encrypted connections
+Successful completion of 
+security baseline audit
+ with 
+zero high-severity findings
+ post-upgrade
+IaC Updates for new Installations
+Migrate 2016 Hypervisors to 202x (if staying on-premise)
+Products: PSN
+Value Proposition
+760
+Stronger baseline security:
+ Hyper-V 2025 builds on Windows Server’s 
+secured-core
+ features (e.g., virtualization-based security, Credential Guard, TPM attestation) to harden workloads.
+Up-to-date patching & support:
+ Hyper-V 2016 mainstream support ended in Jan 2022; extended support ends Jan 2027. Upgrading now ensures a long runway of vendor patches and reduces compliance risks.
+Encrypted VM capabilities:
+ Expanded support for shielded VMs and storage encryption protect workloads in regulated environments (PCI, HIPAA, SOC 2, etc.).
+Isolation improvements:
+ Enhanced container/VM boundary protections lower the risk of privilege escalation or lateral movement attacks.
+Higher density:
+ Optimized scheduling and NUMA balancing allow running more VMs per host with less overhead.
+Better storage & networking throughput:
+ Updates to SMB Direct, RDMA, and Storage Spaces Direct provide higher IOPS, lower latency, and faster VM migrations.
+Faster live migration:
+ Improved live migration performance reduces downtime during maintenance or balancing.
+Key Results
+100% of production Hyper-V hosts upgraded to 
+Windows Server 2025 Hyper-V
+Zero critical/high vulnerabilities
+ reported in post-upgrade security scans.
+All shielded VM and encryption features enabled
+ for in-scope regulated workloads.
+Hypervisor Replacements (if staying on-premise)
+Products: IVRTG, PSN
+Value Proposition
+760
+Reduced exposure to hardware failures:
+ Out-of-warranty servers have higher risk of disk, CPU, or memory failure, which can cascade into VM outages.
+Eliminates unsupported firmware/driver stacks:
+ Vendors stop issuing patches for old hardware, leaving potential vulnerabilities unmitigated.
+Strengthened compliance posture:
+ Auditors often flag unsupported infrastructure as a risk; refreshing hardware helps maintain SOC 2, PCI DSS, HIPAA, and ISO 27001 compliance.
+Modern CPU/memory architecture:
+ New servers support more vCPUs, higher RAM density, and better NUMA balancing — enabling higher VM density.
+Key Results
+100% of out-of-warranty hypervisors decommissioned
+ and workloads migrated to new, supported servers.
+Zero unplanned outages
+ caused by hardware failure during or after the refresh project.
+All servers under vendor warranty/support contracts
+.
+Proxmox Upgrade to v9 (if staying on-premise)
+Products: IVRTG
+Value Propositions
+760
+VE 9 is built on 
+Debian 13 “Trixie”
+, with newer Linux kernel (6.14.8-2) which improves hardware compatibility (especially newer CPUs, storage controllers like NVMe, PCIe5) and driver support.
+Enhanced Software-Defined Networking (SDN) features: introduction of “Fabrics”, routing protocols like OSPF/OpenFabric, better network topologies, better handling of complex networking setups.
+Longer support window / more up-to-date security fixes, since newer OS base (Debian 13) and kernel / component versions will continue to receive patches. And VE 8 security maintenance ends August 2026.
+Key Results
+100% of clusters nodes upgraded
+ to Proxmox VE 9.
+Zero high/critical CVEs
+ detected in post-upgrade vulnerability scans.
+Zero unplanned outages
+ during or after migration of workloads.
+Increase our Terraform IAC coverage
+Products: IC, IVRTG (if cloud)
+Value Propositions
+760
+Value propositions
+Faster provisioning
+: Automate the creation of infrastructure, reducing manual steps and human error.
+Repeatability
+: Easily replicate environments (dev, test, prod) with consistent configurations.
+Self-service enablement
+: Empower teams to deploy infrastructure without deep cloud expertise.
+Least privilege
+: Define and enforce access controls programmatically.
+Modular architecture
+: Reuse Terraform modules across teams and projects.
+Governance at scale
+: Enforce naming conventions, tagging policies, and resource limits.
+Key Results
+Migrate from Palo Alto to Azure Firewall and add a Network Lane for DEV, IAT, and QAR
+PLAT-2329
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IAC the 6 Function Apps in the 
+RG-DevApps-ICG
+ Resource Group and deploy to all Environments
+IAC the 24 Function Apps in the 
+RG-IC-SQL-Functions
+ Resource Group and deploy to all Environments
+IAC the 
+icautopay
+ Batch Account and deploy to all Environments
+Reduce our Reliance on Third Party Systems and Licenses
+Products: IC
+Value Propositions
+760
+Minimized attack surface
+: Fewer external integrations reduce exposure to data breaches and supply chain attacks.
+Data sovereignty
+: Ensures sensitive data remains within your controlled environment, aiding compliance with regulations like GDPR, HIPAA, or FedRAMP.
+Stronger access controls
+: Internal systems can be more tightly integrated with enterprise IAM and monitoring tools.
+Lower recurring costs
+: Reduce or eliminate subscription fees, data egress charges, and integration overhead.
+Key Results
+Migrate from Terraform Cloud to Storage Accounts for all of our Remote States by June 2026
+Migrate from Palo Alto to Azure Firewall and add a Network Lane for DEV, IAT, and QAR
+Improve our Disaster Recovery and High Availability Stance
+Products: IC
+Value Propositions
+760
+Minimized downtime
+: Ensures systems remain available or recover quickly during outages, disasters, or cyberattacks.
+Service reliability
+: Maintains customer trust and satisfaction by reducing service interruptions.
+Regulatory compliance
+: Meets industry standards (e.g., ISO 22301, SOC 2, HIPAA) for uptime and data protection.
+Data protection
+: Regular backups and replication strategies safeguard against data loss.
+Failover readiness
+: Automated failover mechanisms reduce manual intervention and human error.
+Incident response
+: Faster recovery times reduce the impact of ransomware, hardware failures, or natural disasters.
+Reduced financial impact
+: Downtime can cost thousands to millions per hour—robust DR/HA minimizes this risk.
+Insurance leverage
+: Strong DR/HA postures can reduce premiums or improve claim outcomes.
+Avoid SLA penalties
+: Meet contractual uptime commitments to avoid fines or lost revenue.
+Key Results
+Disaster Recovery evaluation, what more do we need to do:
+Web Teir Disaster Recover (is this fully done in 2025)
+All UIs and APIs
+VMs
+K8s Clusters
+Kong
+App Gateway
+Proxy Services
+App Tier Disaster Recovery
+Decide if we setup a Failover for App Tier
+Based on the current App Tier Software Architecture, having these Apps running in two or more High Availability regions would be problematic, so for realistic near term roadmap, we need to decide if we put these on standby in our Secondary Region or just not run them if we have an outage in Primary Region.
+Increase our K8s Hosting Posture with Legacy Applications
+Products: IC
+Value Propositions
+760
+Incremental transformation
+: Containerizing legacy apps allows gradual modernization without needing a full refactor or rewrite.
+Bridge to cloud-native
+: Enables legacy workloads to coexist with modern microservices in a unified platform.
+Unified deployment model
+: Standardize deployment, scaling, and monitoring across legacy and modern apps.
+Centralized observability
+: Integrate legacy apps into existing Kubernetes-native logging, metrics, and tracing tools.
+Simplified management
+: Use Helm, GitOps, and CI/CD pipelines for consistent operations.
+Auto-scaling
+: Leverage Kubernetes Horizontal Pod Autoscaler (HPA) to dynamically scale legacy workloads.
+Self-healing
+: Kubernetes automatically restarts failed containers and reschedules them on healthy nodes.
+Key Results
+Migrate EmailQueueProcessing Batch Job to Linux based CRON Job and delete 
+icbatch
+ and 
+icbatchdevtest
+ Batch Accounts
+Migrate the 3 EmailQueueProcessing Skybot Jobs that run on 
+IC-APP-TEST1_DEFAULT
+STAGING-EmailQueueProcessing-1_Single_Invoices
+STAGING-EmailQueueProcessing-1_Single_With_PDF
+STAGING-EmailQueueProcessing-46
+Migrate at least 10 Web Server Applications
+Migrate at least 40 Skybot Server Applications
+Change this Epic to migrate to K8s hosting: 
+PLAT-1447
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-1770
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Production Migration to Clustered Percona for MongoDB  (if staying on-premise)
+Products: IVRTG
+Value Propositions
+760
+Enterprise-grade features without license fees:
+ Percona Server for MongoDB (PSMDB) includes auditing, LDAP/Kerberos authentication, role-based access, and encryption features that MongoDB Community Edition lacks.
+Enhanced auditing:
+ PSMDB adds audit logging, useful for SOC 2, PCI DSS, HIPAA, and GDPR compliance.
+TLS improvements:
+ Enforces stronger defaults for encrypted traffic between nodes and clients.
+Replica set high availability:
+ Eliminates the single point of failure — if one node goes down, others automatically take over, ensuring continuous service.
+Read scalability:
+ Applications can offload reads to secondaries, improving performance under load.
+Advanced monitoring:
+ Native integration with 
+Percona Monitoring and Management (PMM)
+ gives deep insights into queries, replication lag, slow ops, and resource utilization.
+Key Results
+100% of production MongoDB workloads running on Percona Server replica sets
+ (no single instances remaining).
+All client and inter-node connections encrypted
+ with TLS.
+Monitoring integrated with PMM (Percona Monitoring & Management)
+ for all clusters with replication, query, and system dashboards.
+HashiCorp Vault Production Deployment (if staying on-premise)
+Products: IVRTG
+Value Proposition
+760
+No hard-coded secrets:
+ Eliminates risk of developers accidentally committing credentials to source control, CI/CD logs, or containers.
+Short-lived credentials:
+ Vault issues dynamic secrets (for databases, cloud APIs, SSH, etc.) with automatic TTLs and lease revocation, reducing exposure if compromised.
+Centralized rotation:
+ Credentials are automatically rotated or revoked by Vault, eliminating manual key rotation (often overlooked).
+Reduced blast radius:
+ Each app gets unique, time-bound credentials instead of reusing shared, long-lived static credentials.
+Auditability:
+ Every credential issuance, renewal, and revocation is logged centrally, enabling forensics and compliance reporting.
+No redeploys for secret changes:
+ Since apps request credentials at runtime, developers don’t need to push code/config updates when passwords rotate.
+Reduced outages from expired creds:
+ Automatic renewal or re-issuance lowers risk of downtime due to forgotten static credential expirations.
+Meets regulatory requirements:
+ PCI DSS, SOC 2, HIPAA, ISO 27001 all require secure credential management and auditability — Vault provides both.
+Key Results
+100% of static credentials removed from source code, repos, and config files
+.
+All production apps using Vault-issued dynamic credentials
+ for databases, APIs, and cloud services.
+Zero secrets leaked
+ to version control.
+Credential lifetime reduced from 
+months → hours/minutes
+Finish HA Clusters of Web Services (if staying on-premise)
+Products: IVRTG
+Value Propositions
+760
+Eliminates single point of failure:
+ A single server outage or crash no longer brings down the entire app — HAProxy automatically routes traffic to healthy instances.
+Graceful failover:
+ When an instance is unavailable (maintenance, deployment, crash), HAProxy removes it from the pool, ensuring uninterrupted service.
+Higher uptime SLAs:
+ Supports business continuity by reducing downtime risk from hardware, software, or OS failures.
+Improved request throughput:
+ HAProxy spreads load across multiple backends, avoiding bottlenecks.
+Performance under load:
+ Applications remain responsive even under spikes in user traffic.
+Rolling deployments:
+ New versions of the app can be deployed server by server without downtime — HAProxy routes traffic only to healthy instances.
+Key Results
+100% of production traffic routed through HAProxy
+ across at least 2 Django instances.
+Failover tested successfully
+ (HAProxy reroutes traffic within ≤5 seconds when an instance goes down).
+Blue/green or canary deployment tested successfully.
+Improve Platform Team Operational Efficiency
+Products: IC
+Value Propositions
+760
+Automated operations
+: Fewer manual interventions mean fewer errors and more predictable outcomes.
+Standardized environments
+: Reduce configuration drift and environment-specific bugs.
+Value Propositions
+Key Results
+Evaluate usage of ArgoCD for K8s
+Possibly something like Rancher would be more useful for our K8s tooling and understanding K8s ecosystem as it allows for single pane of glass into all K8s Clusters.  
+ opinion is that a Continuous Deployment tool for K8s would not follow our current Release Process and not sure of the value other than automatic deployment to the DEV Environment. 
+Automate the Tagging for all Platform Repos
+Evaluate Internal Developer Portal
+Products: IC, IVRTG, PSN
+Value Proposition
+760
+Centralized access control:
+ Developers get consistent, role-based access to services, environments, and APIs — reducing risk of over-permissioning.
+Policy enforcement:
+ Security and compliance rules (e.g., secret handling, deployment approvals, infrastructure standards) are embedded into the developer workflow.
+Auditability:
+ All deployments, service creations, and resource access requests are logged and traceable.
+Self-service platform:
+ Developers can spin up environments, microservices, or CI/CD pipelines without waiting on ops teams.
+Standardized workflows:
+ Templates and golden paths ensure developers follow best practices for building and deploying apps.
+Fewer bottlenecks:
+ Ops and platform teams spend less time handling manual requests for environments, credentials, or deployments.
+Easier onboarding:
+ New engineers get productive faster with a single portal to learn instead of fragmented tools.
+Key Results
+Prototype or pilot deployed
+ for at least one candidate IDP in a non-production environment.
+Integration tested with core systems
+ (Git, CI/CD, Kubernetes/VMs, secrets management, observability stack).
+Security and compliance assessment performed
+ on shortlisted products (meets SOC 2, PCI, ISO, or regulatory needs).
+Executive recommendation report delivered
+ with clear pros/cons and decision path forward.
+Improve Technical Documentation
+Products: IC, IVRTG, PSN
+Value Propositions
+760
+Faster ramp-up
+: New hires and cross-functional team members can get up to speed quickly.
+Reduced tribal knowledge
+: Captures institutional knowledge that might otherwise be lost.
+Self-service culture
+: Empowers teams to find answers without relying on SMEs.
+Fewer support bottlenecks
+: Reduces repetitive questions and interruptions to senior engineers.
+Faster troubleshooting
+: Clear runbooks and architecture diagrams speed up incident resolution.
+Improved code quality
+: Well-documented APIs, modules, and systems reduce integration errors.
+Audit readiness
+: Documentation of systems, processes, and controls supports regulatory compliance.
+Key Results
+CMDB Continued Content creation and improvement
+Remove old and unused Confluence Spaces related to Infrastructure, DevOps, Platform and consolidate the information into the Platform space’s Knowledge Base
+Voicebot IVR Enhancements
+Products: IVRTG
+Value Propositions
+760
+Natural conversations, not menus:
+ Callers speak naturally instead of navigating rigid “press 1 for X” or keyword-only commands. This reduces frustration and makes interactions more human-like.
+Faster issue resolution:
+ AI understands intent directly, skipping long menu trees. Customers get routed or answered in fewer steps.
+Personalized interactions:
+ AI can use CRM data, customer history, and context to tailor responses and anticipate needs.
+24/7 availability with less friction:
+ Conversational AI can handle complex queries around the clock without overwhelming users with rigid flows.
+Reduced call handle time:
+ By resolving intent quickly, AI-driven IVR reduces average handle time (AHT) and increases first-call resolution (FCR).
+Deflection from live agents:
+ AI can fully resolve common requests (balance inquiries, password resets, order status), reducing agent workload.
+Consistent call handling:
+ Reduces variability in how customer intents are processed, ensuring compliance with scripts and regulations.
+Key Results
+Average handle time (AHT) reduced by X%
+ compared to baseline DTMF system.
+First-call resolution (FCR) improved by Y%
+ through better intent recognition and routing.
+Additional Items on the Radar
+Review and Improve or Redo Alert Policy 
+IC-Infra-P1
+ in NewRelic
+PLAT-1339
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-583
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+FileEncryption Improvements for (
+file.invoicecloud.com
+) 
+PLAT-896
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-1477
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-12
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-13
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-1188
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-1274
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Automate 
+Linux Build Server Disk Cleanup
+ URL:/spaces/platform/pages/4351426743/2026+Roadmap

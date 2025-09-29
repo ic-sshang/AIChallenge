@@ -1,0 +1,47 @@
+Overview
+On 5/3/2024 at 9:30 AM Eastern Time we added a SQL Server Private Endpoint to the NonProd Hub allowing access to the DevTest Biller Shard SQL Server over a Private IP and Private Network Lane in preparation for the SQL Server NonProd and Prod connectivity segmentation required by PCI.  
+Diagram
+1
+0
+0
+3210805262
+3209232561
+1
+NonProd-Hub-With-DevTest-SQL-Private-Endpoints.drawio
+2
+0
+2
+https://invoicecloud.atlassian.net/wiki
+NonProd-Hub-With-DevTest-SQL-Private-Endpoints.drawio
+0
+2F8haLecWd9ihfKOBuCI 1
+1031
+auto
+top
+1
+491
+Deployment Pipeline
+Pipelines - Run hub-infrastructure-apply-2.84.0 (azure.com)
+Testing
+ validated the following Test Cases:
+Access blocked from Laptop due to not allowing access from the WARP IPs.  
+ 
+Access allowed from NonProd AVD in the NonProd Network but in a Spoke VNet that does not yet have the Azure SQL Server Private DNS Zone linked therefore traffic still uses Azure Resource Connection Exception. 
+ 
+Access allowed from NonProd Jumpbox in the NonProd Newtork attached to a Subnet in the NonProd Hub that does have the Azure SQL Server Private DNS Zone linked and Azure SQL Server Private Endpoint added therefore traffic uses the Private Endpoint. 
+ 
+ validated the following Test Cases:
+Verified tests for below portals using the 
+devtest.invoicecloud.com
+ environment:
+CRM -  
+ 
+Biller Portal -  
+ 
+Customer Portal -  
+ 
+Virtual Site -  
+ 
+Cloud Store -  
+ 
+ URL:/spaces/platform/pages/3209232561/NonProd+DevTest+SQL+Server+Private+Endpoint

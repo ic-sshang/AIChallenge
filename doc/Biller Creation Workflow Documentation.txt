@@ -1,0 +1,290 @@
+Biller Creation Workflow Documentation
+This document describes the end-to-end process for creating a new biller in the CRM application. The workflow covers user authentication, form validations, database operations, asynchronous processing via a Skybot job, real-time progress updates using SignalR, and final product/user setup.
+1. Overview
+The biller creation process is initiated by a CRM user who logs in (using Okta authentication) and navigates to the 
+Biller Wizard
+ under the Administration tab. The process consists of the following high-level steps:
+User Input & Validation:
+ The user fills in required details (biller information, integration partner, authentication type, and product options) on the biller creation page.
+Database Insertions:
+ On submitting the form, the system performs several validations and then calls various stored procedures to insert the biller record, addresses, phone numbers, and contact details.
+Finalization & Asynchronous Processing:
+ The page then redirects to a finalization page where a Skybot job is triggered. This job handles background processing (including webhook calls and status monitoring) and integrates with SignalR to provide real-time progress updates.
+Post-Processing:
+ After asynchronous tasks complete, the system finalizes the biller creation by setting up product details, biller user creation, and sending notifications.
+2. Detailed Workflow
+2.1. User Authentication and Navigation
+Authentication:
+The user logs into the CRM using Okta authentication.
+Navigation:
+Once logged in, the user clicks on the 
+Administration
+ tab and selects 
+Biller Wizard
+ from the menu.
+2.2. Biller Creation Page
+Form Input:
+The user fills in various fields including biller DBA, virtual path, integration partner, authentication type, time zone, and product options.
+Validation Logic:
+When the user clicks the 
+Submit
+ button, the 
+btnContinue_Click
+ event is invoked.
+The method performs several validations (e.g., ensuring the virtual path is not empty, valid email addresses are provided, and selections for drop-downs have been made).
+Example validation snippet:
+If txtVirtualPath.Text.Trim.Length = 0 Then
+    ShowMessage("Please enter a valid Virtual Path")
+    txtVirtualPath.Focus()
+    Exit Sub
+End If
+
+If ddlTimeZoneID.SelectedIndex = 0 Then
+    ShowMessage("Please select a Time Zone")
+    ddlTimeZoneID.Focus()
+    Exit Sub
+End If
+
+2.3. Database Operations
+Insert Biller Record:
+The system builds a SQL command that calls the stored procedure 
+insBillers
+ with various parameters (including partner ID, biller GUID, DBA, website URL, etc.).
+The stored procedure returns a new 
+BillerID
+.
+Insert Additional Details:
+Addresses:
+Calls to 
+insAddresses
+ are made twice: one for the corporate address and one for the DBA/location address.
+Phone Numbers:
+Stored procedures 
+insPhoneNumbers
+ are used to insert corporate and location phone numbers.
+Contacts:
+The contact record is inserted using 
+insContacts
+.
+Biller Shard Creation:
+The stored procedure 
+insCreateBillerShard_mcl
+ is called to set up a new shard.
+This returns a 
+Shard ID
+ (billershardid) and a new biller GUID (BillerGuid).
+Redirection:
+After successful database operations, the user is redirected to 
+BillerWizardFinalize.aspx
+ with parameters such as 
+billershardid
+, 
+newbillerid
+, and 
+billerguid
+.
+2.4. Finalization on BillerWizardFinalize.aspx
+Load Event:
+The 
+BillerWizardFinalize_Load
+ method reads the parameters and triggers the next stage of processing.
+Skybot Job Trigger:
+A Skybot job named 
+CreateAzureBiller
+ is started, passing in the billershardid and billerguid.
+SignalR Hub Integration:
+The process subscribes to a SignalR hub (
+createAzureBillerHub
+) using the biller GUID as the hub group name.
+Real-time updates on the creation progress are sent to the CRM page via the hub method 
+sendprogress
+.
+2.5. Skybot Job Processing
+Webhook Invocation:
+Inside the Skybot job, a loop attempts to trigger a webhook (using a helper method like 
+RunAsync()
+) that starts the creation of the new biller.
+The job retries for up to three attempts if necessary.
+Webhook manages biller shard creation.
+Progress Monitoring Loop:
+The job continuously polls the database to check for progress updates:
+Database Creation:
+ Checks if the biller’s database is created.
+Elastic Pool Migration:
+ Monitors the migration progress to the elastic pool.
+Failover Group Creation:
+ Waits for the creation of the biller’s failover group.
+At each stage, a progress indicator is calculated and an update is sent via SignalR:
+Do
+    progressIndicator = getSignalRProgress(BillerSteps, intShardCheckCounter)
+    CreateAzureBillerHub.SendUpdate(BillerSteps.StepDescription, progressIndicator)
+    Threading.Thread.Sleep(8000)
+    ' Fetch shard info
+    dtShardInfo = clsDatabase.GET_DATATABLE(SQL, 1800, 0)
+    intShardCheckCounter += 1
+    ' Condition checks for step completions...
+Loop While (Not BillerSteps.Step3Complete)
+
+Completion and Messaging:
+Once the steps are complete, the job sends the biller ID as a message to a messaging queue.
+It then performs a final check (using the stored procedure 
+selAzureBillers
+) to ensure the shard map is updated (indicated by updating the 
+webdomainid
+).
+2.6. Final Steps: Product Creation and Biller User Setup
+Product Setup:
+The stored procedure 
+spCreateNewBiller
+ is executed to add products to the new biller record.
+An additional procedure (
+insPrdInvoicing_Master
+) finalizes invoicing details.
+Biller User Creation:
+A new biller user is inserted using the stored procedure 
+insBillerUsers
+.
+The initial password is generated, encrypted, and updated with 
+updBillerUsers
+.
+Role permissions are assigned via the 
+BillerUserRolePermissions
+ class.
+Email Notification:
+A final email notification is sent to the biller (if an email address was provided), and a final SignalR update indicates that the process has been successfully completed.
+3. Error Handling and Logging
+Input Validations:
+Each user input is validated in 
+btnContinue_Click
+ to ensure required fields are not empty and values are valid.
+Exception Handling in Skybot Job:
+The webhook triggering and subsequent steps are wrapped in 
+Try-Catch
+ blocks.
+Failures are logged using 
+Serilog
+.
+If a critical error occurs (e.g., webhook not triggering after three attempts), an exception is thrown and, if applicable, an email notification is sent.
+SignalR Error Notifications:
+The SignalR hub (
+createAzureBillerHub
+) is used to notify the CRM page in case of errors during the asynchronous process.
+4. Key Components and Technologies
+CRM Application & Okta Authentication:
+The CRM leverages Okta for secure user authentication and navigational access.
+Database Operations:
+Multiple stored procedures are used for creating biller records, addresses, phone numbers, and user details.
+Key stored procedures include:
+insBillers
+insAddresses
+insPhoneNumbers
+insContacts
+insCreateBillerShard_mcl
+selAzureBillers
+spCreateNewBiller
+insBillerUsers
+updBillerUsers
+Skybot Job:
+An asynchronous process (Skybot job) manages background tasks such as triggering webhooks and monitoring progress.
+SignalR Hub:
+The SignalR hub (
+createAzureBillerHub
+) enables real-time progress updates to the user interface.
+5. Code Snippets and Highlights
+Example: Validation in 
+btnContinue_Click
+If String.IsNullOrWhiteSpace(Me.txtBillerDBA.Text) Then
+    ShowMessage("Please enter a valid Biller DBA")
+    txtBillerDBA.Focus()
+    Exit Sub
+End If
+
+Example: SQL Command for Inserting a Biller
+SQL = "insBillers "
+SQL &= "@PartnerID=" & Me.ddlPartnerID.SelectedItem.Value
+SQL &= ",@Active=1"
+SQL &= ",@BillerGUID='" & BillerGuid & "'"
+SQL &= ",@BillerDBA='" & clsDatabase.SqlSafe(Me.txtBillerDBA.Text) & "'"
+' ... additional parameters ...
+BillerID = Convert.ToInt32(clsDatabase.EXECUTE_COMMAND_SINGLE_RESULT(SQL, 0))
+
+Example: Progress Update via SignalR
+Do
+    progressIndicator = getSignalRProgress(BillerSteps, intShardCheckCounter)
+    CreateAzureBillerHub.SendUpdate(BillerSteps.StepDescription, progressIndicator)
+    Threading.Thread.Sleep(8000)
+    ' Poll for progress details...
+Loop While (Not BillerSteps.Step3Complete)
+
+6. SignalR Scale out with Azure Service Bus
+To support horizontal scaling across multiple servers, the CRM application leverages Azure Service Bus as a backplane for SignalR. This configuration ensures that real-time notifications, such as progress updates during the biller creation process, are reliably propagated to all connected clients regardless of the server instance they are connected to.
+How It Works
+Azure Service Bus Backplane:
+The Azure Service Bus acts as a centralized messaging system for SignalR. When the application is deployed on multiple servers, each instance of the SignalR hub publishes and subscribes to messages through the Service Bus, ensuring all servers are synchronized.
+Horizontal Scaling:
+By using the Service Bus, the application can scale out horizontally. This means that as more servers are added to handle increased load, all instances can seamlessly share SignalR messages, maintaining a consistent real-time communication channel across the entire application.
+Configuration Details:
+The following configuration snippet illustrates how to set up the Service Bus backplane for SignalR using OWIN: (inside startup.vb of ICCRM repo)
+public void Configuration(IAppBuilder app)
+{
+    string connectionString = "Service Bus connection string";
+    GlobalHost.DependencyResolver.UseServiceBus(connectionString, "CRM");
+
+    app.MapSignalR();
+    // ...
+}
+connectionString
+:
+ Replace with your actual Azure Service Bus connection string.
+YourAppName
+:
+ This identifier ensures that messages are scoped to your specific application instance.
+app.MapSignalR()
+:
+ Maps the SignalR hubs to the OWIN pipeline, integrating the real-time communication infrastructure into the application.
+Benefits
+Robust Real-Time Updates:
+Ensures that all clients receive consistent and up-to-date information, regardless of which server handles their connection.
+Improved Scalability:
+Simplifies scaling out the application by decoupling the real-time messaging layer from individual server instances.
+Centralized Message Distribution:
+Facilitates effective management and monitoring of SignalR messages across a distributed environment using Azure's reliable messaging service.
+This setup is a critical component in ensuring that the CRM application maintains high performance and reliable communication as it scales horizontally to meet growing demand.
+7. Conclusion
+This workflow ensures a robust biller creation process by:
+Validating user input,
+Persisting necessary data across multiple database tables,
+Initiating asynchronous processing for resource-intensive tasks,
+Providing real-time feedback via SignalR,
+And handling errors with proper logging and notifications.
+Future improvements could include further modularizing error handling or enhancing the progress update mechanism to support more granular feedback.
+8. Appendix
+List of Key Stored Procedures and Components
+insBillers:
+ Inserts a new biller record and returns the 
+BillerID
+.
+insAddresses:
+ Inserts corporate and DBA (location) addresses.
+insPhoneNumbers:
+ Inserts phone numbers for corporate and location contacts.
+insContacts:
+ Inserts a contact record linked to the biller.
+insCreateBillerShard_mcl:
+ Creates a shard for the biller and returns a 
+Shard ID
+.
+selAzureBillers:
+ Checks if the biller has been updated with the correct shard mapping (webdomainid).
+spCreateNewBiller:
+ Executes product creation logic for the new biller.
+insBillerUsers / updBillerUsers:
+ Handles biller user creation and password updates.
+BillerUserRolePermissions:
+ Manages the assignment of initial role permissions for the new user.
+SignalR Hub (createAzureBillerHub):
+ Enables real-time progress updates.
+SendBillerInfoAsync:
+ API call to send the biller’s information to an external service (In360 API).
+This document should serve as a comprehensive reference for the biller creation flow, outlining the major components, processing steps, and integration points. Feel free to modify and expand sections as the system evolves or additional details are required.
+ URL:/spaces/PE/pages/4091117670/Biller+Creation+Workflow+Documentation

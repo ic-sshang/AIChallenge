@@ -1,0 +1,58 @@
+Overview
+This document intends to serve as a living artifact for common deployment issues and their resolution. Ideally, the issues presented on this page can serve to highlight potential fault-tolerance enhancements in the deployment process, when possible.
+Pipeline Errors
+1. Another Operation is in progress
+Error Message
+Error: UPGRADE FAILED: another operation (install/upgrade/rollback) is in progress
+Error from Azure DevOps pipeline
+Root Cause
+There is likely a Helm release stuck in a pending or failed state on the cluster that must be removed before the deployment can succeed.
+Certain release conditions may cause this issue - if for instance, the deployment is removed via 
+kubectl
+ but certain k8s objects from the Helm chart application still exist. For instance - CRDs created by KEDA or SecretProvider CRDs that leverage the Key Vault CSI driver.
+Solution
+Run 
+kubectl config set-context --current --namespace <target-namespace>
+ to navigate to the deployment target namespace in the cluster - this step is optional, but highly advised.
+Run 
+helm ls -a -n <namespace-name>
+ to list ALL (completed, pending, etc.) Helm releases for the given namespace.
+bash
+wide
+760
+$> helm ls -a -n ns-biller-report-generator-job-main
+
+NAME                           NAMESPACE                               REVISION   UPDATED                                     STATUS              CHART                        APP VERSION
+biller-report-generator-job    ns-biller-report-generator-job-main     6          2025-09-10 09:40:58.346188241-0500-0500     pending-upgrade     keda-scaled-object-1.0.0     1.0.0
+(OPTIONAL) Run 
+kubectl delete deployment <deployment-name> --namespace <namespace-name>
+ - may be necessary in some cases to remove the deployment via 
+kubectl
+ & then rollback the helm release. This happens if items in the Helm release are not present due to manual deletion, etc.
+Run 
+helm rollback <release> <revision> --namespace <namespace-name>
+ 
+wide
+760
+$> helm rollback biller-report-generator-job 6 --namespace ns-biller-report-generator-job-main
+Rollback was a success! Happy Helming!
+Redeploy
+2. Invalid value: “<value>“: field is immutable
+Error Message
+Error: UPGRADE FAILED: cannot patch "biller-report-generator-job" with kind Deployment: Deployment.apps "biller-report-generator-job" is invalid: metadata.uid: Invalid value: "main": field is immutable.
+Root Cause
+This occurs whenever there is an attempt to modify an immutable value in Kubernetes - it can happen to any resource, but has most commonly been observed at the 
+deployment
+ level up to this point.
+Solution
+Run 
+kubectl config set-context --current --namespace <target-namespace>
+ to navigate to the deployment target namespace in the cluster - this step is optional, but highly advised.
+Run 
+kubectl get deployments
+ to view all deployments applied to that namespace.
+Run 
+kubectl delete deployment <deployment-name>
+ 
+Redeploy
+ URL:/spaces/PMK/pages/4645584935/Troubleshooting+Deployments

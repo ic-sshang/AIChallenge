@@ -1,0 +1,46 @@
+Feature Branching
+Feature branching is a strategy where each new feature or bug fix is developed in its own branch. 
+Isolation
+: Each feature branch is isolated from the main codebase, allowing developers to work independently without affecting the main branch.
+Integration
+: Once the feature is complete and tested, the feature branch is merged back into the main branch through a pull request to ensure code review and quality checks.
+Parallel Development
+: Multiple feature branches can be worked on simultaneously by different developers. 
+Note: MyIIS and CRM as different from other applications
+Managing feature-based development can be tricky when multiple pull requests are queued to merge into the main branch.  Long-lived branches can diverge significantly from the main codebase, leading to long, complicated merge conflicts.   
+Keep feature branches short lived focused around smaller units of work to help resolve some of merging issues.
+2
+0
+1
+0
+3442835896
+3376152780
+Untitled Diagram-1722532250584.drawio
+1
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1722532250584.drawio
+0
+593
+155
+Workflow
+Create a new-branch
+Use a separate branch for each feature or Jira issue you work on.  After creating a branch, check it out locally so that any changes you make will be on that branch.  Use a branch naming convention that starts with the Jira number in Kebab case (also known as "dash case"), where words are separated by hyphens (
+-
+), example “EBPP-#####--my-feature”.
+Update, add, commit, and push changes
+On this branch, edit, stage, and commit changes in the usual fashion, building up the feature with as many commits as necessary.  When ready, push your commits, updating the feature branch.
+Push feature branch to remote
+It’s a best practice to push the feature branch up to the central repository.  This serves as a backup and allows collaboration with other developers.   Once pushed, others have access to view commits to the new branch.
+Create the pull request
+This gives others an opportunity to review the changes before they become a part of the main codebase.
+Pull requests are a good way to talk about code and manage the discussion dedicated to a particular branch. If a developer needs help with a particular feature they can create a pull request.  Tagged individuals will be notified automatically, and they’ll be able to see the question right next to the relevant commits.
+Resolve feedback
+Resolve pull requests comments locally, commit, and push the suggested changes.  Your updates appear in the pull request.
+Merge your pull request
+Before you merge, you may have to resolve merge conflicts if others have made changes to the repo.  When your pull request is approved and conflict-free, you can add your code to the 
+main
+ branch.  Merge from the pull request.
+A merge will require at least two approvers on the PR that did not contribute to the PR code.
+ URL:/spaces/ED/pages/3576725552/Branching+Strategy

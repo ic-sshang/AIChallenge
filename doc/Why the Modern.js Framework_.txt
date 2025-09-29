@@ -1,0 +1,49 @@
+none
+Vanilla React vs React + Framework
+The
+ React docs
+: 
+“If you want to build a new app or website with React, we recommend starting with a framework.”
+Previously
+:
+“You can use React without a framework, however we’ve found that most apps and sites eventually build solutions to common problems such as code-splitting, routing, data fetching, and generating HTML. These problems are common to all UI libraries, not just React.
+By starting with a framework, you can get started with React quickly, and avoid essentially building your own framework later.”
+Without a framework we would need to configure a lot from scratch: a bundler, transpiler, typescript support, routing, file-based routing, nested routing, protected routes, route layouts, code splitting, env management, hot module reloading, data-fetching, etc.
+One small example of trying to build a custom framework
+.
+Modern.js
+Knowing that we are set on utilizing 
+module federation
+ and having spent time testing out some of the other frameworks firsthand, we landed on 
+Modern.js
+ because the other frameworks do not support module federation well. Modern.js supports this out of the box in a very easy to use way.
+The creator of module federation, Zack Jackson, also personally recommended it for use with module federation.
+It is remix (react-router) based under the hood and utilizes 
+rspack
+ which is quite a bit faster than webpack.
+Why not Next.js or Remix?
+After testing Next.js we discovered Next.js support for module-federation is deprecated and has an uncertain future
+ Maintenance mode: deprecation notice: 
+https://github.com/module-federation/core/issues/3153
+Potential
+ renewed support from Vercel team (Next.js) and Zack Jackson, MF inventor/main contributor 
+https://x.com/ScriptedAlchemy/status/1866242658680832206
+After testing Remix, which is actually just 
+React Router v7
+ now, it was very painful development process to try to get module federation working and we were not successful. This isn’t to say it couldn’t eventually be done but:
+Modern.js worked with module-federation out of the box very easily and also using RRv7 under the hood.
+React apps in the wild
+While we weren’t able to determine if any of our direct competitors are using a framework to scale and build we found it helpful to look at a few of the major companies:
+Meta uses internal frameworks like Relay alongside sophisticated build systems
+Airbnb, Netflix, and Shopify leverage Next.js for their customer-facing applications
+Microsoft uses various React frameworks for different products
+Amazon utilizes Next.js for many of their customer-facing web applications
+Walmart has adopted Next.js for their e-commerce platform
+TikTok uses Remix and Next.js for various web properties
+The New York Times employs Next.js for their digital publishing platform
+Twitch leverages React frameworks for their streaming interface
+PayPal uses Next.js for their payment systems
+Atlassian uses custom React frameworks
+HBO Max/Max built their streaming platform with Next.js
+Hulu uses React frameworks for their user interface
+ URL:/spaces/PRODUCT/pages/4290248766/Why+the+Modern.js+Framework

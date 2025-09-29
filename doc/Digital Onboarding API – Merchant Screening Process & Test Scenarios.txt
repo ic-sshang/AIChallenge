@@ -1,0 +1,596 @@
+ Merchant Screening Process Using Digital Onboarding API
+🔍 Overview
+As a 
+Payment Facilitator (Payfac)
+, you're required to screen merchants wishing to accept payments through your platform. This is part of J.P. Morgan's 
+Optimization Protection
+ service and complements your 
+KYC and due diligence
+ efforts.
+🔁 End-to-End Process Flow (Summary)
+Step-by-Step Flow
+Create Party (Merchant Organization)
+Submit merchant business information using POST /parties.
+Create Related Party (Individual)
+Submit individual related to the organization using POST /parties with parentPartyId.
+⚠️ 
+At least one INDIVIDUAL is mandatory
+ (either a 
+BENEFICIAL_OWNER
+ or 
+CONTROLLER
+).
+➤ So, 
+individuals are NOT optional
+.
+Trigger Screening
+Submit the screening request via POST /parties/{id}/validations.
+Check Screening Status
+Poll the status using GET /parties/{id}.
+ 
+API Endpoints:
+Onboarding API: 
+https://onboarding.payments.jpmchase.com/commerce/v1
+JPM-PROD Onboarding API Sandbox: 
+https://api-mock.payments.jpmorgan.com/commerce/v1
+Security:
+Example: 
+Authorization: Bearer YOUR TOKEN
+📑 Detailed Documentation
+Operation
+Endpoint
+Purpose
+Create Party (Merchant)
+POST /parties
+Create merchant organization
+Create Party (Individual)
+POST /parties with parentPartyId
+Add beneficial owner/controller
+Submit for Screening
+POST /parties/{id}/validations
+Initiate screening process
+Retrieve Screening Status
+GET /parties/{id}
+Track status using profileStatus field
+ 
+🧾 1. Create Party (Merchant Organization)
+Endpoint
+: POST /parties
+Required Fields
+:
+partyType: "ORGANIZATION"
+externalId à Your own unique identifier for your client.
+organizationDetails
+organizationName, dbaName, mcc, countryOfFormation, addresses, organizationIds
+networkRegistration
+settlementPaymentMethods, visaDebitAcceptance, currencyCode, etc.
+✅ 
+Returns
+: Unique partyId for the merchant.
+🧑‍💼 2. Add Related Individual
+Endpoint
+: POST /parties
+Use
+: Add individual with parentPartyId (from step 1)
+Required Fields
+:
+partyType: "INDIVIDUAL"
+roles: Must include CONTROLLER or BENEFICIAL_OWNER
+individualDetails: name, address, national ID/passport/SSN, etc.
+✅ 
+Returns
+: Individual party ID (used for internal records).
+🧪 3. Submit Screening Request
+Endpoint
+: POST /parties/{id}/validations
+Where
+: {id} = organization partyId
+Request body
+: 
+Empty
+✅ 
+Returns
+: acceptedAt timestamp.
+🔎 4. Check Screening Status
+Endpoint
+: GET /parties/{id}
+Where
+: {id} = organization partyId
+Look for
+:
+profileStatus:
+NEW: Not yet submitted for screening
+REVIEW_IN_PROGRESS: Currently under review
+APPROVED: Approved to join network
+DECLINED: Rejected
+TERMINATED: Manually stopped
+⚠️ Important Notes
+Individual is mandatory
+: You must add at least one related party with role CONTROLLER or BENEFICIAL_OWNER.
+Screening is ongoing
+: Even after approval, J.P. Morgan may continue to monitor the merchant periodically.
+Set settlementPaymentMethodsOptOut = true
+ if no payment methods are specified.
+📂 Example Sequence
+✅ Create Merchant (POST /parties)
+Request Body:                                                                                                        
+ 
+{
+    "partyType": "ORGANIZATION",
+    "roles": [
+        "CLIENT"
+    ],
+    "email": "foremanmedical@example.com",
+    "externalId": "394800000000555",
+    "organizationDetails": {
+        "organizationType": "C_CORPORATION",
+        "organizationName": "Foreman Medical Corporation",
+        "organizationDescription": "Purveyor of heirloom medical and dental instruments.",
+        "dbaName": "FM Corp",
+        "mcc": "5047",
+        "secondaryMccList": ["5065"],
+        "countryOfFormation": "GB",
+        "associatedCountries": ["GB", "US"],
+        "website": "https://foremanmedical.com",
+        "websiteAvailable": true,
+        "yearOfFormation": "2004",
+        "addresses": [
+            {
+                "addressType": "BUSINESS_ADDRESS",
+                "addressLines": [
+                    "82 Alexander Road"
+                ],
+                "city": "CREWE",
+                "state": "Scotland",
+                "postalCode": "CW181NE",
+                "country": "GB"
+            }
+        ],
+        "phone": {
+            "phoneType": "BUSINESS_PHONE",
+            "phoneNumber": "2077221234",
+            "countryCode": "+44"
+        },
+        "organizationIds": [
+            {
+                "idType": "BUSINESS_REGISTRATION_ID",
+                "value": "100100122",
+                "issuer": "GB"
+            }
+        ]
+    },
+    "networkRegistration": {
+        "settlementPaymentMethods": [
+            "VISA",
+            "DISCOVER",
+            "AMEX_OPT_BLUE"
+        ],
+        "visaDebitAcceptance": "DEBIT_ACCEPTED_ALL",
+        "currencyCode": "GBP",
+        "transactionDeviceType": "HOST_BASED_POS_DEVICE",
+        "serviceEstablishmentStatus": "D_CANCELLED",
+        "serviceEstablishmentStatusUpdateDate": "2024-01-25"
+    }
+}
+🔁 Response:
+ Now this ID becomes the Parent Party ID
+.
+ 
+{
+    "id": "2000000555",
+    "partyType": "ORGANIZATION",
+    "roles": [
+        "CLIENT"
+    ],
+    "email": "foremanmedical@example.com",
+    "externalId": "394800000000555",
+    "createdAt": "2022-11-18T12:28:11.232Z",
+    "organizationDetails": {
+        "organizationType": "C_CORPORATION",
+        "organizationName": "Foreman Medical Corporation",
+        "organizationDescription": "Purveyor of heirloom medical and dental instruments.",
+        "dbaName": "FM Corp",
+        "mcc": "5047",
+        "secondaryMccList": ["5065"],
+        "countryOfFormation": "GB",
+        "associatedCountries": ["GB", "US"],
+        "website": "https://foremanmedical.com",
+        "websiteAvailable": true,
+        "yearOfFormation": "2004",
+        "addresses": [
+            {
+                "addressType": "BUSINESS_ADDRESS",
+                "addressLines": [
+                    "82 Alexander Road"
+                ],
+                "city": "CREWE",
+                "state": "Scotland",
+                "postalCode": "CW181NE",
+                "country": "GB"
+            }
+        ],
+        "phone": {
+            "phoneType": "BUSINESS_PHONE",
+            "phoneNumber": "2077221234",
+            "countryCode": "+44"
+        },
+        "organizationIds": [
+            {
+                "idType": "BUSINESS_REGISTRATION_ID",
+                "value": "100100122",
+                "issuer": "GB"
+            }
+        ]
+    },
+    "networkRegistration": {
+        "settlementPaymentMethods": [
+            "VISA",
+            "DISCOVER",
+            "AMEX_OPT_BLUE"
+        ],
+        "visaDebitAcceptance": "DEBIT_ACCEPTED_ALL",
+        "currencyCode": "GBP",
+        "transactionDeviceType": "HOST_BASED_POS_DEVICE",
+        "serviceEstablishmentStatus": "D_CANCELLED",
+        "serviceEstablishmentStatusUpdateDate": "2024-01-25"
+    }
+}
+🧾 
+Field Breakdown & Significance
+ 
+Field
+Description
+partyType
+"ORGANIZATION" — Indicates this party is a company (not an individual).
+roles
+"CLIENT" — The role this party plays in your platform. Typically “CLIENT” for merchants.
+externalId
+Your internal ID for traceability and reconciliation.
+email
+Primary contact email for the merchant.
+ 
+🏢 
+organizationDetails
+Field
+Description
+organizationName
+Legal name of the business (as registered).
+dbaName
+“Doing business as” name. May differ from legal name.
+mcc
+Merchant Category Code — identifies industry (e.g. 5812 = restaurants).
+secondaryMccList
+Optional — if the business spans multiple industries.
+organizationIds
+Contains idType, value, and issuer. E.g., EIN for US businesses.
+countryOfFormation
+Country where the business is registered.
+associatedCountries
+Other countries where the merchant has a presence.
+website
+Business website. Required if websiteAvailable = true.
+websiteAvailable
+Boolean — whether the business operates online.
+addresses
+Business address details (type, lines, city, state, postal code, country).
+phone
+Phone number, type (e.g., BUSINESS_PHONE), and country code.
+ 
+💳 
+networkRegistration
+Field
+Description
+settlementPaymentMethods
+Card networks to be used (e.g., VISA, DISCOVER, AMEX_OPT_BLUE).
+visaDebitAcceptance
+What kind of Visa Debit is accepted. E.g., DEBIT_ACCEPTED_ALL.
+currencyCode
+Required only if AMEX_OPT_BLUE is used. Otherwise optional.
+transactionDeviceType
+Type of POS — e.g., HOST_BASED_POS_DEVICE = online checkout.
+ 
+✅ Add Individual (POST /parties with parentPartyId)
+Request Body:
+                
+{
+    "parentPartyId": "2000000555",
+    "partyType": "INDIVIDUAL",
+    "roles": [
+        "CONTROLLER"
+    ],
+    "individualDetails": {
+        "firstName": "Eric",
+        "lastName": "Foreman",
+        "birthDate": "1973-07-20",
+        "addresses": [
+            {
+                "addressType": "RESIDENTIAL_ADDRESS",
+                "addressLines": [
+                    "1 Upper Littleton",
+                    "Apt 2E"
+                ],
+                "city": "Winford",
+                "state": "Bristol",
+                "postalCode": "BS18 8HF",
+                "country": "GB"
+            }
+        ],
+        "countryOfResidence": "GB",
+        "phone": {
+            "phoneType": "BUSINESS_PHONE",
+            "phoneNumber": "2071234567",
+            "countryCode": "44"
+        },
+        "jobTitle": "Other",
+        "jobTitleDescription": "Top Dog",
+        "individualIds": [
+            {
+                "idType": "NATIONAL_ID",
+                "value": "444331111",
+                "issuer": "GB"
+            }
+        ]
+    }
+}
+                                                                                                                                                                   
+ 🔁 Response:
+ 
+{
+    "id": "2000000556",
+    "createdAt": "2022-11-18T12:28:11.232Z",
+    "partyType": "INDIVIDUAL",
+    "parentPartyId": "2000000555",
+    "profileStatus": "NEW",
+    "roles": [
+        "CONTROLLER"
+    ],
+    "active": true,
+    "individualDetails": {
+        "addresses": [
+            {
+                "addressType": "RESIDENTIAL_ADDRESS",
+                "addressLines": [
+                    "1 Upper Littleton",
+                    "Apt 2E"
+                ],
+                "city": "Winford",
+                "state": "Bristol",
+                "postalCode": "BS18 8HF",
+                "country": "GB"
+            }
+        ],
+        "birthDate": "1973-07-20",
+        "countryOfResidence": "GB",
+        "firstName": "Eric",
+        "lastName": "Foreman",
+        "individualIds": [
+            {
+                "idType": "NATIONAL_ID",
+                "value": "444331111",
+                "issuer": "GB"
+            }
+        ],
+        "jobTitle": "Other",
+        "jobTitleDescription": "CEO"
+    }
+}
+🧍
+ individualDetails
+Field
+Description
+firstName, lastName
+Full name of individual being screened.
+birthDate
+Required for KYC. Format: YYYY-MM-DD
+individualIds
+SSN / PASSPORT / NATIONAL_ID — for identity verification.
+addresses
+Residential address of the individual.
+countryOfResidence
+Country they currently reside in.
+roles
+"CONTROLLER" or "BENEFICIAL_OWNER" — defines relationship to merchant.
+parentPartyId
+Links this person to the merchant organization. Critical for validation.
+ 
+✅ Trigger Screening (POST /parties/{id}/validations)
+// No request body 
+🔁 Response:
+       
+{
+  "acceptedAt": "2024-01-20T14:00:00.000Z"
+}
+✅ Check Screening Result (GET /parties/{id})
+{
+    "id": "2000000555",
+    "createdAt": "`2022-11-18T12:28:11.232Z`",
+    "email": "foremanmedical@example.com",
+    "externalId": "394800000000555",
+    "partyType": "ORGANIZATION",
+    "profileStatus": "APPROVED",
+    "roles": [
+        "CLIENT"
+    ],
+    "active": true,
+    "organizationDetails": {
+        "addresses": [
+            {
+                "addressType": "BUSINESS_ADDRESS",
+                "addressLines": [
+                    "82 Alexander Road"
+                ],
+                "city": "CREWE",
+                "state": "Scotland",
+                "postalCode": "CW181NE",
+                "country": "GB"
+            }
+        ],
+        "associatedCountries": [
+            "GB",
+            "US",
+        ],
+        "countryOfFormation": "GB",
+        "dbaName": "FM Corp",
+        "jurisdiction": "GB",
+        "organizationName": "Foreman Medical Corporation",
+        "organizationDescription": "Purveyor of heirloom medical and dental instruments.",
+        "organizationIds": [
+            {
+                "idType": "BUSINESS_REGISTRATION_ID",
+                "value": "100100122",
+                "issuer": "GB"
+            }
+        ],
+        "phone": {
+            "countryCode": "+44",
+            "phoneType": "BUSINESS_PHONE",
+            "phoneNumber": "2077221234"
+        },
+        "website": "https://foremanmedical.com",
+        "websiteAvailable": true,
+        "mcc": "5047",
+        "secondaryMccList": [
+            "5065"
+        ]
+    },
+    "networkRegistration": {
+        "settlementPaymentMethods": [
+            "VISA",
+            "AMEX_OPT_BLUE",
+            "DISCOVER"
+        ],
+        "settlementPaymentMethodsOptOut": false,
+        "visaDebitAcceptance": "DEBIT_ACCEPTED_ALL",
+        "currencyCode": "GBP",
+        "transactionDeviceType": "HOST_BASED_POS_DEVICE",
+        "serviceEstablishmentStatus": "D_CANCELLED",
+        "serviceEstablishmentStatusUpdateDate": "2024-01-25"
+    }
+}
+📘 
+profileStatus meanings:
+Value
+Meaning
+NEW
+Created but not yet submitted for screening
+REVIEW_IN_PROGRESS
+Screening initiated, decision pending
+APPROVED
+Successfully passed JPMorgan's screening
+DECLINED
+Rejected during screening
+TERMINATED
+Screening manually stopped by you
+ 
+📘 Conclusion
+This process ensures that merchants are compliant with J.P. Morgan's payment policies and screening standards. Always remember:
+Include 
+at least one individual
+.
+Use GET /parties/{id} regularly to 
+track screening results
+.
+Maintain all KYC and due diligence alongside this API-based check.
+ 
+Merchant Screening – API Testing Scenarios & Documentation:
+🧾 Purpose
+To validate the screening functionality for merchant onboarding through J.P. Morgan’s Digital Onboarding API in a sandbox environment.
+✅ 
+Baseline Test Scenarios (From Chase API  Docs)
+Test Case
+Test Input
+Expected Result
+API
+Create a merchant party
+Merchant accepting VISA, AMEX_OPT_BLUE, DISCOVER
+201 Created + New Party ID
+POST /parties
+Add related party
+CONTROLLER for merchant
+201 Created + Related party ID
+POST /parties (with parentPartyId)
+Submit for screening
+Valid parent party ID
+202 Accepted
+POST /parties/{id}/validations
+Check screening status
+Party ID of merchant
+200 OK, profileStatus: APPROVED
+GET /parties/{id}
+ 
+Some Additional Test Scenarios:
+ID
+Test Scenario
+Input Summary
+Expected Result
+API
+Notes
+TC01
+Valid merchant + controller
+All fields correct
+APPROVED
+All
+Positive case
+TC02
+Missing required field
+mcc omitted
+400 Bad Request
+POST /parties
+Field validation
+TC03
+Invalid MCC code
+mcc = 9999
+DECLINED
+GET /parties/{id}
+Business validation
+TC04
+No individual added
+Only org created
+Status stuck at NEW
+POST /validations + GET
+Enforces individual
+TC05
+Unsupported country
+countryOfFormation = IR
+DECLINED
+All
+Jurisdiction check
+TC06
+Duplicate externalId
+Reuse ID
+409 Conflict
+POST /parties
+Uniqueness test
+TC07
+Multiple individuals
+Add CONTROLLER + BENEFICIAL_OWNER
+201 Created x2
+POST /parties
+Multi-individual support
+TC08
+AMEX service = D_CANCELLED
+Service history used
+APPROVED or conditional
+All
+Legacy checks
+TC09
+Opt-out payment methods
+settlementPaymentMethodsOptOut = true
+APPROVED
+All
+Opt-out logic
+TC10
+Invalid ID type
+idType = DRIVER_LICENSE
+400 Bad Request
+POST /parties
+Enum enforcement
+Chase Documentation URL's:
+1.
+Digital Onboarding API
+2.
+Merchant Screening for Payment Facilitators | Payments Developer Portal
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4508155905/Digital+Onboarding+API+Merchant+Screening+Process+Test+Scenarios

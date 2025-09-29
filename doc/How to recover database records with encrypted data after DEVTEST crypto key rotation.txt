@@ -1,0 +1,204 @@
+Summary
+Currently, the ICCryptoService repository utilizes encryption keys across all environments for data encryption and decryption. Encryption keys can be periodically rotated, causing previously encrypted data to be unrecoverable.  Steps can be taken after a key rotation event to recover usage of the database records tied to that encrypted data.  
+It is important to note that this ONLY applies to DEVTEST key rotation events.  While similar steps could be followed in a PRODUCTION key rotation event, we would not ask Billers and Customers to follow these steps.  We would implement an auto-recovery mechanism in a PRODUCTION scenario, which we do not have in place today.
+1
+2
+false
+default
+Summary
+list
+true
+Database Location of Encrypted Data & Recoverability Hints
+For informational purposes, the table below shows the data type, database table location, and columns containing encrypted data. The database table locations in 
+red 
+indicate data that will be lost and cannot be recovered.  Locations in 
+yellow
+ indicate the data is unrecoverable but the database record can be updated to reuse (helpful when specific database records are tied to some automation).  The steps for each are in the next section.
+Data Type
+DB Location
+Encrypted Data Column
+Customer Bank Account Number
+dbo.CustomerBanks
+dbo.Payments
+SecureAccountNumber
+Biller Bank Account Number by Invoice Type
+dbo.BillerBanks
+SecureAccountNumber
+Biller Bank Account Number
+dbo.Banks(dbMaster)
+SecureAccountNumber
+Customer Credit Card Number
+dbo.CustomerCreditCards
+dbo.Payments
+SecureCardnumber
+Employee Password
+dbo.Employees(dbMaster)
+CurrentPassword
+PreviousPassword1
+PreviousPassword2
+PreviousPassword3
+PreviousPassword4
+Login/Customer Password
+mcl.Logins
+CurrentPassword
+PreviousPassword1
+PreviousPassword2
+PreviousPassword3
+PreviousPassword4
+Biller User Password
+dbo.BillerUsers
+dbo.BillerUsers_Master(dbMaster)
+CurrentPassword
+PreviousPassword1
+PreviousPassword2
+PreviousPassword3
+PreviousPassword4
+Customer Bank Account Number used in Payment attempt
+dbo.Payments
+SecureAccountNumber
+Customer Credit Card Number used in Payment attempt
+dbo.Payments
+SecureCardnumber
+Non-Customer tied Credit Card  Number
+ / 
+Bank Account Number
+safe.Data
+Data|DataHash
+Customer Bank Account Number - 
+dbo.CustomerBanks
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Customers with saved bank accounts store their encrypted bank account numbers under the dbo.CustomerBanks table within the database and its primary purpose is to make payments.  While the data is unrecoverable, you may have an automated script that is coded to always use a specific bank account, or you have a favorite bank account you use for testing so you’d like to continue to reuse that database record.
+Steps:
+1. Sign in to the Biller Portal with your biller user for your respective biller and navigate to the Customers Search page.
+Figure 1: Biller Portal Search dropdown showing the search Customers option
+Search for your customer using the search fields.
+Figure 2: Biller Portal search customer page to locate customers 
+Edit the customer profile by selecting the user icon under options.
+Figure 3: Biller Portal search customers page with customer search result showing the Edit Customer option selection
+4. Navigate to the 
+“Bank Accounts“ 
+section and select the edit icon under the options.
+Figure 4: Biller customer profile page under the bank account section showing the bank account with the edit option selection
+Update the Bank Account Number and click Save.
+Figure 5: The Edit Bank window used to edit the bank account number 
+Customer Bank Account Number - dbo.Payments
+This data is unrecoverable.
+The SecureAccountNumber in the Payments table is used to make new payments with previously used payment information.
+  You can use the CRM Purge Data function to clear out old payments
+Biller Bank Account Number by Invoice Type - 
+dbo.BillerBanks
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Biller Bank Account Numbers by Invoice Type are stored in the dbo.BillerBanks table. 
+Steps:
+ 
+1. Navigate to the Banks section in the ICCRM under your biller, and then under the 
+“Banks by Invoice Type”
+ section, click on the edit icon for your respective biller bank. 
+Figure 6: ICCRM Banks page showing “BANKS BY INVOICE TYPE” section with option to edit the biller bank
+Update the Account Number and click Save.
+Figure 7: Option to update account number
+Biller Bank Account Number - 
+dbo.Banks(dbMaster)
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Biller Banks are stored in dbo.Banks table.  
+Steps to remediate:
+ 
+Navigate to CRM Banks and under the 
+“Banks”
+ section click edit for your saved Biller Bank .  
+Figure 8: Biller Banks page showing Banks section and option to edit
+Use the edit form to update the Account Number and click Save.
+Figure 9: Option to update account number
+Customer Credit Card Number - 
+dbo.CustomerCreditCards
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Customers with saved credit cards store their data in dbo.CustomerCreditCards table. 
+Steps:
+ 
+Search for your customer in the Biller Portal, signed in as a biller user from your respective biller.
+Figure 10: Biller Portal Search dropdown showing search Customers option
+Enter your customer fields in order to locate your customer.
+Figure 11: Biller Portal search customer page to locate customers 
+After searching for the customer, edit the customer profile using the options selection.
+Figure 12: Biller Portal search customers page with customer search result showing the Edit Customer option selection
+Navigate to 
+“Card/Debit Cards” 
+section and click on the edit icon for the Credit Card record you want to reuse.
+Figure 13: Biller customer profile page under Credit/Debit Cards section
+Update Credit/Debit Card Number and click Save.
+Figure 14: Edit page to edit Credit/Debit Card number 
+Customer Credit Card Number - dbo.Payments
+This data is unrecoverable.
+The card number is used to make new payments that were previously used for earlier payments.
+  You can use the CRM Purge Data function to clear out old payments.
+Employee Password - dbo.Employees(
+dbMaster
+)
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Employee passwords are used to log into CRM if you are using the legacy login option (not normal) and Skynet.  
+In most cases you are using the DEVTEST Okta instance to sign into CRM so there won’t be any impact.  If you are using Skynet in DEVTEST, or the DEVTEST CRM legacy login option, you can follow these steps to update your password.  
+Steps:
+ 
+Sign into CRM using DEVTEST Okta
+Under Administration, click on the Employees link
+Figure 15: ICCRM - Administration dropdown showing Employees Link
+If you cannot see the Administration or Employees menu item, 
+please have your manager review this document to be granted permissions to this area.
+ 
+Find your Employee record and update your password.
+Login/Customer Password - mcl.Logins
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+Login/Customer passwords are used to log in to the customer portal. 
+There are two ways to reset the password.
+A) Reset the customer password on the customer portal.
+B) Reset by unregistering the customer in the biller portal and then registering them back on the customer portal. 
+Steps:
+A) Reset the customer password on the customer portal.
+Navigate to customer login page on the customer portal for your respective biller and click on “Forgot your password?”.
+Figure 16: Option to reset password via “Forgot your Password” Link on the customer portal
+Enter the email and click on recover my password
+Figure 17: Option to enter email address and reset password on reset password page.
+B) Reset by unregistering the customer in the biller portal and then registering them back on the customer portal. 
+Search for your customer in the Biller Portal, signed in as a biller user from your respective biller.
+Figure 18: Biller Portal Search dropdown showing the search Customers option
+Enter your customer fields in order to locate your customer.
+Figure 19: Biller Portal search customer page to locate customers 
+Edit the customer profile using the option selection.
+Figure 20: Biller Portal search customers page with customer search result showing the Edit Customer option selection
+Click on the “Remove Email and Unregister” Link to remove the customer from the database.
+Figure 21: Biller customer profile page under the customer info section showing the “Remove email and Unregister” option.
+Navigate to the customer portal and register the customer.
+Figure 22: Register customer page in the customer portal
+Biller User Password -dbo.BillerUsers and dbo.BillerUsers_Master(
+dbMaster
+)
+This data is unrecoverable but steps can be taken to be able to reuse the database record. 
+The Biller User password is used to log in to the Biller Portal. Biller User passwords can be reset from the ICCRM.
+Steps:
+Navigate to the Users section in the ICCRM under your biller and then under the 
+“Biller Users”
+ section edit the biller user you’re using.
+Figure 23: Biller Users section and option to edit
+Click on the “Reset Password” to change the password
+Figure 24: Option to reset the biller user password
+Customer Bank Account Number used in Payment attempt - dbo.Payments
+This data is unrecoverable.
+This data is used to process new payments using previously used bank information.
+ You can use the CRM Purge Data function to clear out old payments.
+Customer Credit Card Number used in Payment attempt -dbo.Payments
+This data is unrecoverable.
+This data is used to process new payments using previously used credit card information.
+ You can use the CRM Purge Data function to clear out old payments.
+Non-Customer tied Credit Card  Number / Bank Account Number- safe.Data
+This data is unrecoverable.
+These payment methods are used to process transactions.  These payment methods are not tied tied to Logins/Customers and are typically created through the CloudStorage Web Service using 
+StoreSecureBankAccount
+ or 
+StoreSecureCreditCard
+ web methods and are not commonly created or used.  
+Unexpected Observations Post Key Rotation
+This section lists observations made after key rotation that were unexpected intended to help you past the issue.
+When making a payment through Customer Portal you may experience a white screen as you jump into the payment route from the Open Invoices page.  
+Root Cause:  The Customer you are making a  payment on has saved payment methods that were encrypted before key rotation.  Step 1 of the payment route has a step where all saved payment methods are decrypted to check if they can be used.  This decryption attempt will fail with payment methods encrypted before key rotation, leading to the white screen.
+Solution:  You can choose to recover that payment method by going following the steps above, OR you can delete the payment methods created before key rotation.  Once either of these are followed, you will be able to proceed.
+ URL:/spaces/ED/pages/4304666630/How+to+recover+database+records+with+encrypted+data+after+DEVTEST+crypto+key+rotation

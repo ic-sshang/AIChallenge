@@ -1,0 +1,34 @@
+To import a Remote State Resource, first you need to prep the Repo locally by adding the 
+organization
+ and 
+workspace
+to the 
+cloud{}
+ block as demonstrated below:
+hcl
+terraform {
+  cloud {
+    organization = "InoviceCloud"
+
+    workspaces {
+      name = "avd-workspace-pri-eus-npd-1"
+    }
+  }
+
+  required_providers {
+    azurerm = "~> 3.112.0"
+    azapi = {
+      source  = "azure/azapi"
+      version = "1.13.1"
+    }
+  }
+}
+Also you need to provide values for all of the Variables that do not have defaults in the Terraform Repo you are trying to import against.
+Then run the following commands to log into the Terrasform Cloud Organization and initialize the repo against the Workspace Remote State:
+terraform login
+
+terraform init
+Finally run the Import Remote State Resource command as demonstrated below:
+powershell
+terraform import 'azurerm_virtual_machine_extension.avd_register_to_hostpool["pvd-Vregonda1"]' /subscriptions/630f6476-2a4d-4faf-8e49-99c119eb08df/resourceGroups/rg-pri-eus-avd1/providers/Microsoft.Compute/virtualMachines/vm-pvd-Vregonda1-pri-eus-avd1-prd/extensions/avd-register-pvd-Vregonda1-pri-eus-avd1-prd
+ URL:/spaces/platform/pages/4101734533/Import+a+Resource+into+Remote+State

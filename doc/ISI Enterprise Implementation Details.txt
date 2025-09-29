@@ -1,0 +1,159 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+n/a
+Summary
+Summary
+Details
+Software Partner Name
+ISI Enterprise
+Software Product Name
+ISI Enterprise
+Software Cashiering System
+N/A
+Supported Versions
+N/A
+Integration Requirements and Pre-Requisites
+N/A
+See notes below for PDF Linking web service in 'Invoice Cloud Coding Requirements'
+Vertical
+FS
+Sample Biller Implementation
+Lawyer's Mutual 1160
+Wisconsin Lawyer's Mutual (WILMIC) 1334
+Planning
+Test Portals
+IC Hosted Test Portal - 773
+Biller Test Portal - Required 
+The Biller will use one portal for UAT that will become the production portal. Another UAT portal should be setup ~30 days prior to go-live and will be used for post go-live UAT to introduce any new features/functions. 
+Setup a biller portal login for ISI to use in the test and production biller portals
+Rules of Engagement
+Include ISI on all emails to the biller (ISI handles 95% of the communication regarding testing questions, virtual site updates, portal purge, etc.)
+Timeline
+~30 days because there is little to no work for IC. Generally, the biller is implementing ISI for the first time and IC will go-live in tandem (~6 months or longer depending on when IC is engaged). ISI will be able to provide timeline insight.
+Configuration
+Invoice Types
+164 Insurance Premiums 
+Email / Remind Me Templates
+All email templates should be updated to use ‘Display Account Number’ (configure in CRM - below are a couple examples):
+NOTE: This update should be made to all email templates that have this option.
+Invoice Types
+Ensure to configure the InvoiceTypes grid customizations to use displayaccountnumber:
+Virtual Site
+Although ISI is an insurance biller, they use ‘accounts' and ‘invoices' (not 'policies' and 'statements'). Site verbiage should remain with the IC generic with displayaccountnumber (as the payer never sees the value in the IC 'account number' field). ISI suggests the use of 'displayaccountnumber’ and 'zip’ for the virtual site search criteria. These two inputs should be setup as a standard.
+Required Options
+ID
+Option Description
+Details
+95
+Customer Portal/Virtual Site - Show Display Account Number
+If enabled, we will show the DisplayAccountNumber instead of the AccountNumber for all payer facing pages in the Virtual Site and Customer Portal. Note: This does not apply to fields from customized grids.
+Enable
+This option is important because ISI billers don’t use the ‘accountnumber’ value that ISI is passing. The biller and payer want to see the ‘displayaccountnumber’ value only.
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Invoice Cloud Coding Requirements
+Integration will only need a coding request for PDF Linking and a *BIF Customization for Email Notification Dates (*if applicable - see below)
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+PDF URL
+ISI
+Depends on how far along the biller is in implementing ISI - ISI will provide as soon as they have it
+ISI refers to the web service URL as the "endpoint" and the key/password the "session ID". The 
+production 
+password/session ID will be the same for all billers but you will need to get a specific URL/endpoint to setup the PDF Linking IT request during test (change the URL/endpoint at go-live). These are configured in CRM Advanced Settings:
+Partner Coding Requirements
+Setup a biller portal test login for ISI to use
+Software partner requires a UAT site for all billers they being an implementation with and the test portals require to be up and functional at the beginning of the implementation.
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+ISI
+Project Assignment 
+Include ISI on all emails to the biller (ISI handles 95% of the communication regarding testing questions, virtual site updates, portal purge, etc.)
+Virtual Site URL TEST
+ISI
+Project Assignment 
+Virtual Site URL PROD
+ISI
+Project Assignment 
+Biller GUID TEST
+ISI
+Project Assignment 
+WebService Key TEST
+ISI
+Project Assignment 
+Biller GUID PROD
+ISI
+Project Assignment 
+WebService Key PROD
+ISI
+Project Assignment 
+Invoice Type ID
+ISI
+Project Assignment 
+Always 164 unless otherwise discussed with ISI
+Biller Portal User Credentials 
+ISI
+Project Assignment 
+Contacts
+1200
+300
+ URL:/spaces/IM/pages/2113896593/ISI+Enterprise+Implementation+Details

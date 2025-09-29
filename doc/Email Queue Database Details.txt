@@ -1,0 +1,345 @@
+Database tables used within the EmailQueueProcessing process:
+EmailQueue:
+ stores the records inserted into InvoiceCloud’s email queue for most of the email queue types listed in the Email Queue Types table below.
+EmailTracking: 
+stores invoice notifications' records and corresponding data like CustomerID, InvoiceID, EmailTo, etc.
+EmailQueueLog: 
+stores email queue records' queue/insert date and email queue processing times.
+tblEmailQueueType: 
+stores detailed data about the Email Queue Types like name/description, retention, default email body, etc.
+ 
+tblEmailQueueNotificationType: 
+stores detailed data about the Email Notification Types (
+also shown in the bottom of this documentation page
+).
+tblEmailTemplates: 
+linking table which stores the Email templates' relationships with their corresponding EmailQueueTypeIDs and Email template filenames.
+BillerEmailTemplates: 
+linking table which stores the Biller’s email template configurations.
+EmailQueueProcessing currently makes two significant database calls on each email queue run. The first database call retrieves all the emails eligible to be sent on the process’s particular run or execution date for a particular Email Queue Type. The second database call retrieves all of the emails' specific data - the base data (customer, invoice, login data).
+Note: 
+The table below excludes test and discontinued Email Queue Types. 
+@EmailSent=0
+ is InvoiceCloud’s internal indicator for an email’s sent status (
+if the email has been sent or hasn’t
+).
+Email Queue Types
+EmailQueueTypeID
+EmailQueueTypeDesc
+SP used on the 1st DB call (executed on the Master Shard - BillerID: 0)
+SP used on the 2nd DB call (executed on the Biller’s Shard)
+1
+First Invoice Email Notification
+exec MCL.selInvoicesToEmail {EmailNotificationTypeID}
+exec selInvoiceDataForNotificationEmailV2 @EmailQueueTypeID=1, @InvoiceID={InvoiceID}
+First Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailPDF {EmailNotificationTypeID}
+MultiInvoice First Invoice Email Notification
+exec MCL.selInvoicesToEmailMultiInvoice {EmailNotificationTypeID}
+MultiInvoice First Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF {EmailNotificationTypeID}
+Manual Invoice Notification
+exec selEmailQueue @EmailQueueTypeID=1, @EmailSent=0
+exec selInvoiceDataForNotificationEmailV2 @EmailQueueTypeID=1, @InvoiceID={FKID}
+2
+Late Fee Email Notification
+selemailqueue @emailqueuetypeid=2, @emailsent=0
+selInvoiceDataForNotificationEmailV2 @EmailQueueTypeID=2, @InvoiceID={FKID}
+3
+Declined Auto Pay Transaction
+selemailqueue @emailqueuetypeid=3, @emailsent=0
+selInvoiceDataForAutoPayNotificationEmailV2 @InvoiceID={FKID}
+4
+Declined Scheduled Payment Notification
+selemailqueue @emailqueuetypeid=4, @emailsent=0
+selInvoiceDataForScheduledPaymentNotificationEmailV2 @InvoiceID={FKID}
+5
+Payment Transaction Receipt
+selemailqueue @emailqueuetypeid=5, @emailsent=0
+selDataForPaymentReceiptV2 @PaymentID={FKID}
+7
+Batch Close Notification
+selemailqueue @emailqueuetypeid=7, @emailsent=0
+exec tps.BillerReconSubReportByPaymentSource @BillerID={BillerID}, @NetworkReference='{NetworkReference}'
+8
+New EFT Reject Notifications
+selemailqueue @emailqueuetypeid=8, @emailsent=0
+Only one DB call for this queue.
+9
+Generic Notification for Applications
+selemailqueue @emailqueuetypeid=9, @emailsent=0
+Only one DB call for this queue.
+19
+Registered Customer Welcome Email
+selemailqueue @emailqueuetypeid=19, @emailsent=0
+selDataForWelcomeNotificationEmail @CustomerID={FKID}
+21
+AutoPay Registration Notification
+selemailqueue @emailqueuetypeid=21, @emailsent=0
+selDataForAutoPayRegistrationNotificationEmail @customerid={FKID}
+23
+Paperless Registration Notification
+selemailqueue @emailqueuetypeid=23, @emailsent=0
+selDataForPaperlessRegistrationNotificationEmail @customerid={FKID}, @invoicetypeid={InvoiceTypeID}
+25
+ACH Reject/Chargeback Notices
+selemailqueue @emailqueuetypeid=25, @emailsent=0
+selRejectDataForRejectNoticeV2 @ACHRejectID={FKID}
+27
+Chase Consolidated Batch Close Notification
+selemailqueue @emailqueuetypeid=27, @emailsent=0
+selDataForChaseBatchCloseEmail @BillerID=221, @NetworkReference='{Parameters}'
+28
+Chase Chargeback Notification
+selemailqueue @emailqueuetypeid=28, @emailsent=0
+Only one DB call for this queue.
+30
+Credit/Debit Card Expiration Notification
+MCL.spCustomersWithExpiringCards
+mcl.selDataForCreditCardExpirationNotification @CustomerCreditCardID={CustomerCreditCardID}
+32
+Scheduled Payment Confirmation
+selemailqueue @emailqueuetypeid=32, @emailsent=0
+selDataForScheduledPaymentConfirmationV2 @ScheduledPaymentID={FKID}
+33
+AutoPay Reminder Notification
+selemailqueue @emailqueuetypeid=33, @emailsent=0
+selDataForAutoPayReminderV4 @InvoiceID={FKID}
+36
+Online Bank Direct Deposit Notification
+selEmailQueue @EmailQueueTypeID=36, @EmailSent=0
+selRPPSDepositsByDataSource @BillerID={BillerID}, @StartDate='{Today}', @EndDate='{Today}'
+37
+Second Invoice Email Notification
+exec MCL.selInvoicesToEmail {EmailNotificationTypeID}
+exec selInvoiceDataForNotificationEmailV2 @EmailQueueTypeID=37, @InvoiceID={InvoiceID}
+Second Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailPDF {EmailNotificationTypeID}
+MultiInvoice Second Invoice Email Notification
+exec MCL.selInvoicesToEmailMultiInvoice {EmailNotificationTypeID}
+MultiInvoice Second Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF {EmailNotificationTypeID}
+38
+Second Invoice Email Notification
+exec MCL.selInvoicesToEmail {EmailNotificationTypeID}
+exec selInvoiceDataForNotificationEmailV2 @EmailQueueTypeID=38, @InvoiceID={InvoiceID}
+Second Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailPDF {EmailNotificationTypeID}
+MultiInvoice Second Invoice Email Notification
+exec MCL.selInvoicesToEmailMultiInvoice {EmailNotificationTypeID}
+MultiInvoice Second Invoice Email Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF {EmailNotificationTypeID}
+39
+Paperless Bounce Notification
+exec selcustomerpaperlessbouncerpt @startdate='{YesterdaysDate}', @EndDate='{YesterdaysDate}'
+Only one DB call for this queue.
+40
+Check 21 Deposit Notification
+selEmailQueue @EmailQueueTypeID=40, @EmailSent=0
+selCheck21Deposits @Check21DepositID={FKID}
+41
+Cloud Payment Transaction Receipt
+selemailqueue @emailqueuetypeid=41, @emailsent=0
+selDataForCloudPaymentReceipt @PaymentID={FKID}
+42
+FlexPay Confirmation Notification
+selEmailQueue @EmailQueueTypeID=42, @EmailSent=0
+selDataForFlexPayConfirmation @ScheduledPaymentID={FKID}
+44
+Scheduled Payment Reminder
+selEmailQueue @EmailQueueTypeID=44, @EmailSent=0
+selDataForScheduledPaymentReminder @ScheduledPaymentID={FKID}
+46
+Shopping Cart Payment Receipt
+selemailqueue @emailqueuetypeid=46, @emailsent=0
+selDataForPaymentReceiptV2 @PaymentID={FKID}
+47
+Paperless Off Confirmation
+selEmailQueue @EmailQueueTypeID=47, @EmailSent=0
+selDataForPaperlessOffConfirmationNotification @CustomerPaperlessID={FKID}
+49
+Online Bank Direct Daily Reversals
+selemailqueue @emailqueuetypeid=49, @emailsent=0
+Only one DB call for this queue.
+50
+Online Bank Direct Payment Receipt
+selemailqueue @emailqueuetypeid=50, @emailsent=0
+selDataForOnlineBankDirectPaymentReceipt @PaymentID={FKID}
+52
+Check 21 Payment Receipt
+selemailqueue @emailqueuetypeid=52, @emailsent=0
+selDataForCheck21PaymentReceipt @PaymentID={FKID}
+55
+Linked Accounts / Customer Groups First Invoice Notification
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=1, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=1, @LoginID={LoginID}, @ProcessDate='{Today}'
+Linked Accounts / Customer Groups First Invoice Notification PDF
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=1, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=1, @LoginID={LoginID}, @ProcessDate='{Today}'
+MultiInvoice Linked Accounts / Customer Groups First Invoice Notification
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+MultiInvoice Linked Accounts / Customer Groups First Invoice Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+57
+Linked Accounts / Customer Groups Second Invoice Notification
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=2, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=2, @LoginID={LoginID}, @ProcessDate='{Today}'
+Linked Accounts / Customer Groups Second Invoice Notification PDF
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=2, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=2, @LoginID={LoginID}, @ProcessDate='{Today}'
+MultiInvoice Linked Accounts / Customer Groups Second Invoice Notification
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+ 
+MultiInvoice Linked Accounts / Customer Groups Second Invoice Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+59
+Linked Accounts / Customer Groups Third Invoice Notification
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=3, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmail_CustomerGroups @NotifyNum=3, @LoginID={LoginID}, @ProcessDate='{Today}'
+Linked Accounts / Customer Groups Third Invoice Notification PDF
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=3, @ProcessDate='{Today}'
+exec MCL.selInvoicesToEmailPDF_CustomerGroups @NotifyNum=3, @LoginID={LoginID}, @ProcessDate='{Today}'
+MultiInvoice Linked Accounts / Customer Groups Third Invoice Notification
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoice_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+MultiInvoice Linked Accounts / Customer Groups Third Invoice Notification PDF
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}
+exec MCL.selInvoicesToEmailMultiInvoicePDF_CustomerGroups {EmailNotificationTypeID}, {LoginID}
+61
+AutoPay Off Confirmation
+selEmailQueue @EmailQueueTypeID=61, @EmailSent=0
+selDataForAutoPayOffConfirmationNotification @CustomerAutoPayID={FKID}
+63
+Conveyed Customer Notification
+selEmailQueue @EmailQueueTypeID=63, @EmailSent=0
+selDataForConveyedCustomerNotification @CustomerID={FKID}
+65
+Multiple Registered Customers Welcome Email
+exec selEmailQueue @EmailQueueTypeID=65, @EmailSent=0
+exec spDataForMultipleCustomerRegistrationsNotificationEmail @BillerID={FKID}
+67
+Recurring Scheduled Payment Confirmation
+selEmailQueue @EmailQueueTypeID=67, @EmailSent=0
+selDataForRSPConfirmation @CustomerRecurringScheduledPaymentID={FKID}
+69
+Recurring Scheduled Payment Canceled
+selEmailQueue @EmailQueueTypeID=69, @EmailSent=0
+selDataForRSPCanceledNotification @CustomerID={FKID}, @InvoiceTypeID={InvoiceTypeID}
+71
+Online Bank Direct Upcoming Return in 2 days
+selEmailQueue @EmailQueueTypeID=71, @EmailSent=0
+spBillers @BillerID={BillerID}
+72
+Online Bank Direct Upcoming Return in 1 day
+selEmailQueue @EmailQueueTypeID=72, @EmailSent=0
+spBillers @BillerID={BillerID}
+74
+Payment Plan Confirmation Notification
+selEmailQueue @EmailQueueTypeID=74, @EmailSent=0
+selDataForPaymentPlanConfirmation @ScheduledPaymentID={FKID}
+75
+AutoPay Registration Completed Notification
+selEmailQueue @EmailQueueTypeID=75, @EmailSent=0
+selDataForAutoPayCompletedConfirmation @CustomerAutoPayID={FKID}
+76
+Paperless Registration Completed Notification
+selEmailQueue @EmailQueueTypeID=76, @EmailSent=0
+selDataForPaperlessCompletedConfirmation @CustomerPaperlessID={FKID}
+79
+CCExpiration Resend Notification
+NA
+ - Email is queued and sent via Azure Function.
+80
+New Documents Available
+selEmailQueue @EmailQueueTypeID=80, @EmailSent=0
+selBillerDocuments @BillerID={BillerID}, @BillerDocumentID={FKID}
+81
+Document Paperless Registration
+selemailqueue @emailqueuetypeid=81, @emailsent=0
+selDocumentPaperlessRegistrationEmail @InvoiceTypeID={InvoiceTypeID}, @PaperlessPreferenceID={FKID}
+82
+Document Paperless Registration Completed
+selEmailQueue @EmailQueueTypeID=82, @EmailSent=0
+selDataPPRegCompletedNotification @InvoiceTypeID={InvoiceTypeID}, @PaperlessPreferenceID={FKID}
+84
+Document Paperless Off Confirmation
+selEmailQueue @EmailQueueTypeID=84, @EmailSent=0
+selDataDocPPOffNotification @InvoiceTypeID={InvoiceTypeID}, @PaperlessPreferenceID={FKID}
+88
+ICG Batch Close Notifications
+selemailqueue @emailqueuetypeid=88, @emailsent=0
+selDataForICGBatchCloseEmail @BillerID={FKID}", @NetworkReference='{Parameters}'
+89
+Account Deactivation Notification
+selEmailQueue @EmailQueueTypeID=89, @EmailSent=0
+selDataForCustomerNotificationEmailQueueType @EmailQueueTypeID=89, @CustomerID={FKID}
+91
+Password Reset Notification
+NA
+ - Email is queued and sent via Azure Function.
+97
+Payment Method Block Notification
+selEmailQueue @emailqueuetypeid=97, @emailsent=0
+selDataForPaymentBlockNotification @CustomerID={FKID}, @EmailQueueTypeID=97
+98
+Linked Accounts AutoPay Reminder
+Item wasn’t completed. 
+Reference: 
+EBPP-2368
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+100
+Linked Accounts AutoPay Receipt
+Item wasn’t completed. 
+Reference:
+EBPP-2369
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+102
+AutoPay with Paperless Registration Completed
+selEmailQueue @EmailQueueTypeID=102, @EmailSent=0
+selDataForAutoPayWithPaperlessCompletedConfirmation @CustomerAutoPayID={FKID}
+105
+NCR Jetpay Batch Close Notification
+selemailqueue @emailqueuetypeid=105, @emailsent=0
+selDataForBatchCloseEmail @BillerID={FKID}, @NetworkReference='{Parameters}'
+106
+FlexPay Auto Enrollment
+selEmailQueue @EmailQueueTypeID=106, @EmailSent=0
+selDataForFlexPayConfirmation @ScheduledPaymentID={FKID}
+108
+BlueFin Batch Close Notification
+selemailqueue @emailqueuetypeid=108, @emailsent=0
+selDataForBatchCloseEmail @BillerID={FKID}, @NetworkReference='{Parameters}'
+109
+Biller User Reset Password
+NA
+ - Email is queued and sent via Azure Function.
+111
+Biller User Create Password
+112
+Consolidated Payment Transaction Receipt
+selemailqueue @emailqueuetypeid=112, @emailsent=0
+selDataForMultiInvoiceReceipt @PaymentID={FKID}
+Email Queue Notification Types (tblEmailQueueNotificationType)
+EmailNotificationTypeID	
+EmailNotificationTypeDesc
+0
+N/A
+1
+First Notice
+2
+Second Notice
+3
+Third Notice
+4
+Manual Notice
+5
+Late Fee Notice
+ URL:/spaces/ED/pages/3113910292/Email+Queue+Database+Details

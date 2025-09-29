@@ -1,0 +1,205 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+Knowledge transfer
+https://us-21061.app.gong.io/call?id=8076929543616169918
+ 
+IF YOUR BILLER IS TRUEPOINT ARGICULTURE PLEASE REFERENCE THIS CONFLUNECE PAGE
+BID 3335 Modesto Irrigation District (TruePoint Agriculture) Technical Design
+ 
+Summary
+Summary
+Details
+Software Partner Name
+TruePoint Solutions
+Software Product Name
+TrueBill
+Software Cashiering System
+TrueCIP
+Supported Versions
+All
+Vertical
+GUB 
+Can either be utility billing or agriculture billing
+Sample Biller Implementation
+BID 3543 Sacramento Suburban Water District
+Planning
+Test Portals
+IC Hosted Test Portal - TruePoint Test BID 3381
+Partner Hosted Test Portal - None
+Biller Test Portal - Required 
+Rules of Engagement
+Upon Assignment please contact Don Hunsinger with the below implementation worksheet  and include him on all meetings with biller going forward.   dhunsinger@truepointsolutions.com
+Timeline
+Estimated timeframe to complete implementation - ~70-90 days
+ 
+Configuration
+IMPORTANT- Make sure the customer portal authentication type is USERNAME AND PASSWORD.  
+Invoice Types
+42 Utility 
+Virtual Site
+Required Options
+ID
+Option Description
+Details
+62
+Customer Portal - View Open Invoices - Auto Redirect
+If enabled, and if there is only one open invoice displayed on the grid, we will attempt to redirect into the payment process if all validation succeeds.
+Always set to ON.  This is set to OFF by default
+74
+ENABLE Multiple Customer Login Functionality
+If enabled, the Biller will be able to use the Multiple Customer Login functionality in the Biller Portal as well as the Customer Portal. The Pay By Text and Autopay option will also be hidden through the payment route for non-authenticated sessions, and the use of saved method payments through the IVR will be disabled.
+Always set to ON.  This is set to OFF by default.
+78
+Customer Portal - Allow Co-owners
+If co-owners are allowed, this sets the number of co-owners that can be added to an account.
+The default value for this Option is: 
+"5"
+Always set to ON.  This is set to OFF by default.
+84
+Enable Web Service Request and Response Logging
+If enabled, all web service request payloads to Invoice Cloud APIs will be logged, along with our API responses. Logs are available to be viewed under Tools > Web Service Logs.
+Always set to ON.  This is set to OFF by default.
+129 
+Display latest $0 or negative balances in Open Invoices and CloudPayV2
+When enabled, the most recent $0 or negative balances will be displayed in the Open Invoices and CloudPayV2. Note: Invoice Type #15 must be enabled for this feature to work.
+Always set to ON.  This is set to OFF by default. 
+Coding Requirements
+Implementation Worksheet
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Upon request 
+Data is specific to biller.  
+Adjustment File
+N/A
+RTDR
+Payment File
+N/A
+Data Pump for payments
+Bill Presentment 
+Partner
+Upon request
+PDF Linking - URL and credentials 
+RTDR API (test)
+Partner
+Upon request
+RTDR Passcode (test)
+Partner
+Upon request
+RTDR API (prod)
+Partner
+Upon request
+RTDR Passcode (prod)
+Partner
+Upon request
+DataPump API (test)
+Partner
+Upon request
+DataPump Passcode (test)
+Partner
+Upon request
+DataPump API (prod)
+Partner
+Upon request
+DataPump Passcode (prod)
+Partner
+Upon request
+SSO URL 
+Partner
+Upon request
+Block CC Flag
+Partner
+Provided in RTDR response
+Block ACH Flag 
+Partner
+Provided in RTDR response
+Whitelisting IP Addresses
+Invoice Cloud
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+Project Assignment 
+BID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format GUID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Type ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+SFTP Credentials
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Contacts
+Name
+Title/Role
+Email
+Escalation Contact
+Kevin Lachance
+Manager
+klachance@truepointsolutions.com
+Y
+Paul Montalvo
+pmontalvo@truepointsolutions.com
+Y
+ URL:/spaces/IM/pages/2433646624/TruePoint+Implementation+Details

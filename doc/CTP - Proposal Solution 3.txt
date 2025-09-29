@@ -1,0 +1,56 @@
+Create new Service dedicated to the Commerce Center API
+Service - new service class
+each method correspondence to an endpoint on Commerce Center 
+Rest Client property, should be mockable
+Models
+Create models for defined objects/entities from Commerce Center
+Create models for each request and response
+Full unit test the new service.
+Convert Request  and use new Service. Convert new Response to old Response and return.
+Currently 
+clsPaymenTech 
+methods will:
+ Accept a CTP request object
+Creates a request object from Orbital Gateway
+Populates the properties/fields manually one by one
+Calls Orbital Gateway to process request
+Creates a  CTP response object and the manually populates it with data from the response from API transaction. 
+We can create Extensions for the request and response objects from Orbital Gateway, 
+NewOrderRequestElement 
+and 
+NewOrderResponseElement 
+respectively. 
+These extensions will convert the the requests/responses from Orbital Gateway to one from the new Service we created. 
+IDEA
+c#
+PaymentechGateway.PaymentechGateway oldClient;
+CommerceCenterService newClient;
+
+public CTPResponse SomeMethod(CTPRequest request, bool billerFeatureFlag)
+{
+    //... Created Orbital Request
+    
+    var orbitalResponse = billerFeatureFlag ? 
+                            oldClient(orbitalRequest): 
+                            newClient(orbitalRequest.ConvertToComCenReq()).ConvertToOrbitalResponse();
+    //.. Continue with creating CTPResponse and populating it...
+    
+    return ctpResponse;
+}
+Diagram 
+2
+1
+0
+0
+4015751218
+4016013331
+1
+CommerCenter_CTP_Proposal2
+4
+4
+https://invoicecloud.atlassian.net/wiki
+CommerCenter_CTP_Proposal2
+0
+775.5
+824.5
+ URL:/spaces/EA/pages/4016013331/CTP+-+Proposal+Solution+3

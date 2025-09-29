@@ -1,0 +1,119 @@
+Contents
+2
+Troubleshooting
+This troubleshooting is specific to IMs without access to the Bluefin P2PE and SaasConex portals. If you are not able to resolve the issues you will need to engage the Delivery or Client Services team and setup a separate call with the biller’s network team.
+**If you do have access to the Bluefin portal you can follow the escalated troubleshooting steps here: 
+Bluefin EMV Troubleshooting/Known Bugs | Guru (getguru.com)
+Issue
+Description
+Documentation
+1
+How does a biller manually register the device?
+Have the biller open the Bluefin app and go to the Bluefin App Settings
+Have the app open and tap the 4 corners of the screen clockwise (see photo 1-2-3-4).
+Enter the default password - current date in the following format: MMDDYYYY. 
+**If the date fails have the biller try the next business date. In rare cases the device will temporarily increase a day and reset overnight.
+Select System Settings. Scroll to and select POS Register.
+If the device gets the message “Local IP Registration Success” go back to the app home screen showing “Protected by Bluefin” and retry a test transaction
+If the registration fails continue with the questions
+2
+Device not able to register Local IP in SaasConex
+This can be caused by a few different issues - all related to the network setup. Work through the following with the biller
+Is the device on the network?
+Have the biller close the Bluefin app and open the Device Settings. Confirm that the device has the correct communication method enabled and successfully picked up an IP address and that the IP address is on the expected network.
+If there is no information - the reader is not on the network and the biller needs to put it online
+If there is correct information continue
+Can you manually register the device?
+See 
+above
+Are the required IPs whitelisted? 
+Push back on the biller’s network contact to review and confirm that the Bluefin IPs listed in the 
+Bluefin Authorized IP,Ports and Services.pdf 
+are whitelisted for outgoing communication. Even if they were working previously, security updates can undo these settings
+If the above steps are not successful, you will need to set up a call with a Delivery/Product resource and the biller’s network team.
+Bluefin Authorized IP, Ports and Services
+EMV Implementation Rundown.pdf
+3
+Why did the Biller Portal go to a white screen? or CPv2 return a “www.invoicecloud.com refused to connect”
+This is likely caused by calling an InvoiceID that does not have an EMV MID linked under terminals.
+Biller Portal - when hitting 
+Next
+ to move from 
+How would you like to pay? 
+to 
+How much would you like to pay?
+CloudPay v2 - when hitting 
+Next
+ to move from selecting the device to the next screen
+You will need update the POS Source for that invoice type to point to the appropriate Bluefin EMV terminal
+www.invoicecloud.com
+ refused to connect
+4
+Why am I getting 
+“The selected device  was unable to activate. . .” 
+when trying to activate the reader?
+This error means that the PC is not able to connect to the card reader to activate. This usually points to a network issue, but you should follow the following steps to confirm:
+Is the Bluefin app open? 
+The device must always have the app open to process payments. Make sure it is show the white screen displaying “
+Protected by Bluefin”
+Is the device on the network? 
+Have the biller close the Bluefin app and open the Device Settings. Confirm that the device has the correct communication method enabled and successfully picked up an IP address and that the IP address is on the expected network.
+If there is no information - the reader is not on the network and the biller needs to put it online
+If there is correct information continue
+Is there an IP Conflict?
+ This is more common if the biller is using WiFi for communication. Check the device settings for the IP that the reader is using. Turn off the reader fully and try to ping the IP. If you are still getting  response, there is another device on the network using that same IP. 
+To avoid this possibility we recommend either setting the devices to static IPs or reserving the IPs on the network
+Error:
+5
+Why is the readers showing a HTTP 500 Error?
+This error means that the card reader cannot register their IP in the Bluefin SaasConex portal. 
+This is most frequently reported by a biller is trying to test the readers before they are added in the CRM (which populates the SaasConex). 
+If the error continues after the card reader is showing is SaasConex it is likely an internal network problem. It's the device saying it can't reach SaasConnex. Below are some possible reasons:
+the device IP is not allowed to talk to the internet
+the device has an IP conflict
+the device is connected to both wireless and ethernet (recommend only 1 is set on in the device. if ethernet, then make sure wifi is turned off on the device)
+If there are not clear network issues, call Bluefin and request they review the following:
+Firmware status
+Software status
+Device timezone - this has been an infrequent issue but can cause errors
+6
+Why am I getting an 
+SDK Error
+ trying to activate the reader?
+This error points to an issue in the Biller Portal/CPv2 communicating with SaasConex. 
+Check to confirm that the Bluefin EMV terminal being called is set live.
+*terminals not set live are pointed to CERT SaasConex
+Confirm that the IP on the device matches what is displayed in SaasConex
+If you don’t have access to SaasConex start by having the biller run a manual POS Register in the Bluefin app settings
+If neither resolve the issue you will need to escalate to Delivery/Bluefin
+7
+Why am I getting “
+There was a problem attempting to complete the transaction. We are researching the issue.”
+?
+This error points to one of the merchant IDs failing as part of the transaction. During testing this is most frequently caused by the IC Fee Bluefin MID not set live.
+8
+How can I do a test with an EBPP only biller that does not have data loaded?
+If you have already purged the production BID or cannot load data until go live you will need to set up a “dummy” cloud store that is live only for the test call:
+Confirm your EBPP invoice type is setup with service fees and the Bluefin terminal is linked in the POS source
+In 
+CRM
+-
+Virtual Site 
+add a Cloud Store Item
+Settings Tab:
+ 
+Name the item “EVM Test ONLY”  and set the Invoice Type to the EBPP invoice type
+Set item to 
+Active
+ and 
+Biller Portal Only
+Fields Tab:
+Add only field “Amount” and set Field Type to 
+Price Input
+Enable 
+Required 
+and 
+Active
+The biller can then select the Cloud Store in the Biller Portal to process the $2-3 payment(s) during the test call. 
+At the end of the call ensure the payments are voided and delete the Virtual Site Cloud Store Item.
+ URL:/spaces/Implementa/pages/3963682817/EMV+Troubleshooting+FAQs

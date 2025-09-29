@@ -1,0 +1,38 @@
+BID: 420 
+TEST BID: 545
+Chandler has its own daily report exports repo 
+ChandlerDailyReportExport
+Clone Repo
+First clone the repo by opening visual studios or any other preference you may have
+click on Azure DevOps
+Look for ChandlerDailyReportExport
+click connect then clone
+BEFORE RUNNING!
+Please make sure to change the paths so that the file is not sent to the FTP directory or the backup directory
+ In the picture above I am putting the path where I want the file to be saved. Also, comment out to the “Test” export as it would overwrite the export made from the “Prod” export.
+In the picture above I commented out the lines in the 
+ReadSettings()
+ function, you should too
+In the picture above I am commenting out where we call 
+backupFile()
+ in the 
+CreateCSV()
+ function, so that a back up is not made
+Now in the 
+GetProc()
+ function you can specify the dates you want.
+For the example above, where the start date = 
+02/22/2024
+ and the end date = 
+02/23/2024
+ , you will get records with payment date mostly from 02/21/2024 and a few records at the end with payment date 02/22/2024. This is due to the fact that the stored procedure “spChandlerDailyReport” uses the “StartDate” and “EndDate” for the “SettledBatches”.
+One last thing to keep in mind is the naming convention of these files and what file the Biller is seeking. As you can see by the logic, if the file is being generated on 10/07, the output file name would have “202410
+06
+” in it.
+You should now be able to run it and generate the reports you want 
+Example file: 
+ 
+The following INT is meant to resolve the export issues faced by this Biller: 
+[INT-11626] Automate Maintenance Missed Export Clean Up - JIRA (atlassian.net)
+The issue with the Biller’s exports was identified to be caused by the monthly maintenance windows.
+ URL:/spaces/DS/pages/3133964303/Payment+Exports+-+Chandler+Daily+Report+Export+BID+420

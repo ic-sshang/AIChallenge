@@ -1,0 +1,681 @@
+Setups
+Identification of external dependencies in the code base
+System Message: You are a C# code analyzer. You need to identify code which has external dependencies to systems like database, queue, logging, keyvault. Your task is to analyze code and list all these external dependencies. Dont make any assumptions and ask more information from me if required. Reply me as software architect and would need minimum response only as Dependency Type in csv format. Reply NA if there are no external dependencies. Reply NA if no methods found in the code.
+Example Input Query:
+List external dependencies which connects to systems like database, queue, logging, keyvault etc in the below code: 
+using ICBatchCloseProcessor.Extensions;
+using ICBatchCloseProcessor.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
+
+namespace ICBatchCloseProcessor.Models.Implementations.Misc
+{
+    /// <summary>
+    /// Manages sending an email through the system email queue
+    /// </summary>
+    public class SystemEmail
+    {
+
+        public static bool Send(IC.BatchClose.ILogger log, string emailRecipients, string subject, string body)
+        {
+            if (string.IsNullOrEmpty(emailRecipients)) return false;
+            bool emailSentSuccessfully = false;
+
+            try
+            {
+                subject = subject.ToSqlSafe();
+                body = body.ToSqlSafe();
+
+                IEnumerable<string> recipients = emailRecipients.Split(';')
+                    .Where(recipient => !String.IsNullOrWhiteSpace(recipient));
+
+
+                foreach (var recipient in recipients)
+                {
+                    emailSentSuccessfully = InsertSystemEmailQueue(log, recipient, subject, body) || emailSentSuccessfully;
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = new System.Text.StringBuilder();
+                msg.AppendLine(DateTime.Now.ToString() + " : Error in SystemEmail.Send Method");
+                msg.AppendLine("      Error: " + ex.ToString());
+                msg.AppendLine("      EmailRecipients: " + emailRecipients);
+                msg.AppendLine("      Subject: " + subject);
+                msg.AppendLine("      Body: " + body);
+                log.Write(msg.ToString());
+                return false;
+            }
+
+            return emailSentSuccessfully;
+        }
+
+
+        public static bool InsertSystemEmailQueue(IC.BatchClose.ILogger log, string recipients, string subject, string body)
+        {
+            const int TIMEOUT = 300;
+            try
+            {
+                string systemQueueEmailSql = $"exec insSystemEmailQueue @EmailRecipient='{recipients}', @EmailSubject='{subject}' ,@SystemOutput='{body}', @DomainTypeId=2";
+                Factory.DatabaseInstance.EXECUTE_COMMAND_NONQUERY(0, systemQueueEmailSql);
+            }
+            catch (Exception ex)
+            {
+                var msg = new System.Text.StringBuilder();
+                msg.AppendLine(DateTime.Now.ToString() + " : Error in Email.SendSystemEmail Method");
+                msg.AppendLine("      Error: " + ex.ToString());
+
+                msg.AppendLine("      EmailTo: " + recipients);
+                msg.AppendLine("      Subject: " + subject);
+                msg.AppendLine("      Body: " + body);
+                log.Write(msg.ToString());
+
+                return false;
+            }
+
+            return true;
+        }
+
+    }
+
+}
+
+Example Response:
+Logging, Database 
+Results:
+The setup and prompt were semi successful.
+Scanned files and got this output
+Note- 
+System Message
+: As a .NET code analyzer, your role involves scrutinizing code. You will be provided with .net code to classify code into external dependency and component categories.
+external dependency categories: databases, cryptography, queues, logging, keyvaults, HTTP clients, APIs, filesystems, caching, configurations, networking, monitoring systems, search engines, cloud providers, authentication, authorization, email, payment services.
+databases component categories:
+IC.Database
+IC.ServiceProxies
+cryptography component categories:
+IC.ServiceProxies
+queues component categories:
+ICAzureMessageQueue
+logging component categories:
+IC.Serilog
+Microsoft.Extensions.Logging
+keyvaults component categories:
+IC.Azure.KeyVault.KeyVaultReader
+IC.Database.Authentication.AzureFunctions.EnvironmentVariableReader
+IC.Azure.KeyVault.AzureKeyVaultClient
+Configuration component categories:
+Environment.GetEnvironmentVariable
+ConfigurationManager.Appsettings
+monitoring systems component categories:
+Newrelic
+IC.Serilog.Utility.NewRelicLogger
+email component categories:
+ICFramework.Utilities.Email
+cloud providers component categories:
+Azure
+AWS
+GCP
+Authentication component categories:
+IC.Database.Authentication
+Final output of the above task follow these instructions
+Ignore code comments in the code.
+Never make any assumptions. 
+Return object 'Variables' containing array of objects having keys and their source of values which are being fetched from configuration or environment as key value pairs
+If the external dependency doesnt belong to component Category reply as "Custom"
+If there is no external dependency in the code reply as "NA"
+Response data should be only in output.json format, no extra explanation information is required. The JSON format will have objects that will consist of the, full file path as a property, an object with a property of external dependency category and its respective component categories found in an array.
+Always reverify your answer and make sure you are following all these instructions before sending the output.
+"""output
+{
+    "FilePath": "ProjectDir\Main",
+    "Results":[
+        {
+            "external dependency Category": "database",
+            "component Category": ["IC.Database","IC.ServiceProxies"]
+        },
+        {
+            "external dependency Category": "keyvaults",
+            "component Category": ["IC.Azure.KeyVault.KeyVaultReader","IC.Database.Authentication.AzureFunctions.EnvironmentVariableReader","IC.Azure.KeyVault.AzureKeyVaultClient"]
+        }
+    ],
+    "Variables": [
+            {Key: "IC_LOGS_DIR", Source: "Environment" }
+            {Key: "ClientId", Source: "Settings/Configuration" }
+    ]
+}"""
+Example Input Query:
+Imports System.Net
+Imports System.Net.Http
+Imports System.Web.Http
+Imports System.Web.Http.Cors
+Namespace Controllers
+
+    <RoutePrefix("v1/userbank")>
+    <BillerAuthenticate>
+    <EnableCors("*", "*", "*")>
+    Public Class UserBankController
+        Inherits ApiController
+#Region "Save_User_Bank_Account"
+        Public Class SaveACHRequest
+            Public LoginGUID As String
+            Public BankName As String = ""
+            Public RTE As String = ""
+            Public AccountNumber As String = ""
+            Public AccountType As Integer = 0
+            Public FirstName As String = ""
+            Public LastName As String = ""
+            Public Address As String = ""
+            Public City As String = ""
+            Public State As String = ""
+            Public Zip As String = ""
+            Public IsDefault As Boolean = False
+        End Class
+
+        Public Class SaveACHResponse
+            Public Success As Boolean = False
+            Public Message As String = ""
+            Public UserBankGUID As String = ""
+        End Class
+
+        <HttpPost, Route("add")>
+        Public Function Add(<FromBody> REQ As SaveACHRequest) As HttpResponseMessage
+            Dim RES As New SaveACHResponse
+            Dim Biller As BillerCredential = DirectCast(User, BillerPrincipal).Biller
+            Dim errorCode As String = ""
+            Dim newBankAccountGUID As Guid
+
+            Try
+
+                ApiLogger.LogEventToNewRelic("Triggered by {Event}. Executed By BillerID - {BillerID}", "Add_User_Bank", Biller.BillerID)
+
+                'validate login guid
+                If Utilities.isValidGUID(REQ.LoginGUID) = False Then
+                    Return New InvalidLoginGUIDResponse(Request)
+                End If
+
+                'Validate Account Type
+                If REQ.AccountType.ToString() <> "1" AndAlso REQ.AccountType.ToString() <> "2" AndAlso REQ.AccountType.ToString() <> "3" Then
+                    'Invalid Account Type
+                    RES.Success = False
+                    RES.Message = "INVALID ACCOUNT TYPE"
+                    Return New GenericBadRequestAPIResponse(Request, "0103", RES.Message)
+                End If
+
+                'Validate Routing Number
+                If Utilities.isValidRoutingNumber(REQ.RTE) = False Then
+                    'Invalid RTE
+                    RES.Success = False
+                    RES.Message = "INVALID ROUTING NUMBER"
+                    Return New GenericBadRequestAPIResponse(Request, "0104", RES.Message)
+                End If
+
+                If Utilities.isValidTextEntry(REQ.Address, 1, 50) = False Then
+                    RES.Message = "INVALID ADDRESS"
+                    RES.Success = False
+                    errorCode = "0001"
+                End If
+
+                If Utilities.isValidTextEntry(REQ.City, 1, 50) = False Then
+                    RES.Message = "INVALID CITY"
+                    RES.Success = False
+                    errorCode = "0002"
+                End If
+
+                If Utilities.isStateAbbreviation(REQ.State) = False Then
+                    RES.Message = "INVALID STATE"
+                    RES.Success = False
+                    errorCode = "0003"
+                End If
+
+                If Utilities.isValidTextEntry(REQ.Zip, 1, 10) = False Then
+                    RES.Message = "INVALID ZIP"
+                    RES.Success = False
+                    errorCode = "0008"
+                End If
+
+                If Utilities.isValidTextEntry(REQ.FirstName, 1, 65) = False Then
+                    RES.Message = "INVALID BILLINGNAME"
+                    RES.Success = False
+                    errorCode = "0007"
+                End If
+
+                If Utilities.isValidTextEntry(REQ.LastName, 1, 65) = False Then
+                    RES.Message = "INVALID BILLINGNAME"
+                    RES.Success = False
+                    errorCode = "0007"
+                End If
+
+                If Not String.IsNullOrWhiteSpace(errorCode) Then
+                    Return New GenericBadRequestAPIResponse(Request, errorCode, RES.Message)
+                End If
+
+                'Load LoginID
+                Dim currentLogin As CustomerLogin = CustomerLogin.LoginByLoginGUID(Biller.BillerID, Guid.Parse(REQ.LoginGUID))
+
+                If currentLogin.LoginID > 0 Then
+                    'add bank account
+                    newBankAccountGUID = Guid.NewGuid
+
+                    'if default automatically reset defaults
+                    If REQ.IsDefault Then
+                        'reset current default payment options
+                        Database.EXECUTE_COMMAND_NONQUERY("exec mcl.resetCustomerDefaultPaymentOption @LoginID=" & currentLogin.LoginID, Biller.BillerID)
+                    End If
+
+                    Dim id As Integer = clsCustomerBanks.InsertCustomerBank(currentLogin.LoginID, newBankAccountGUID, REQ.BankName, REQ.RTE,
+                                                                            REQ.AccountNumber, REQ.AccountType, Guid.Parse(REQ.LoginGUID), REQ.FirstName & " " & REQ.LastName,
+                                                                            REQ.Address, REQ.City, REQ.State, REQ.Zip, REQ.IsDefault, Biller.BillerID)
+
+                    RES.Message = "SAVED USER BANK"
+                    RES.Success = True
+                    RES.UserBankGUID = newBankAccountGUID.ToString()
+                Else
+                    Return New UnableToLocateLoginAPIResponse(Request)
+                End If
+
+            Catch ex As Exception
+                NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+                Return New InternalServerErrorAPIResponse(Request)
+            End Try
+
+            Return Request.CreateResponse(HttpStatusCode.OK, RES)
+        End Function
+#End Region
+#Region "Update_User_Bank_Account"
+        Public Class UpdateACHRequest
+            Public LoginGUID As String
+            Public UserBankGUID As String
+            Public BankName As String = ""
+            Public RTE As String = ""
+            Public AccountNumber As String = ""
+            Public AccountType As Integer = 0
+            Public FirstName As String = ""
+            Public LastName As String = ""
+            Public Address As String = ""
+            Public City As String = ""
+            Public State As String = ""
+            Public Zip As String = ""
+            Public IsDefault As Boolean?
+        End Class
+
+        Public Class UpdateACHResponse
+            Public Success As Boolean = False
+            Public Message As String = ""
+        End Class
+        <HttpPost, Route("update")>
+        Public Function Update(<FromBody> REQ As UpdateACHRequest) As HttpResponseMessage
+            Dim RES As New UpdateACHResponse
+            Dim Biller As BillerCredential = DirectCast(User, BillerPrincipal).Biller
+            Dim errorCode As String = ""
+
+            Try
+
+                ApiLogger.LogEventToNewRelic("Triggered by {Event}. Executed By BillerID - {BillerID}", "Update_User_Bank", Biller.BillerID)
+
+                'validate login guid
+                If Utilities.isValidGUID(REQ.LoginGUID) = False Then
+                    Return New InvalidLoginGUIDResponse(Request)
+                End If
+
+                'Validate Bank Account GUID
+                If Utilities.isValidGUID(REQ.UserBankGUID) = False Then
+                    RES.Message = "INVALID USERBANKGUID"
+                    Return New GenericBadRequestAPIResponse(Request, "0095", RES.Message)
+                End If
+
+                'Find Login
+                Dim currentLogin As CustomerLogin = CustomerLogin.LoginByLoginGUID(Biller.BillerID, Guid.Parse(REQ.LoginGUID))
+
+                If currentLogin.LoginID > 0 Then
+                    'Confirm Bank Exists
+                    Dim bankDT As DataTable = clsCustomerBanks.SelectCustomerBankByBankGUID(Guid.Parse(REQ.UserBankGUID), currentLogin.LoginID, Biller.BillerID)
+
+                    If bankDT.Rows.Count > 0 Then
+                        'validate incoming values and use new values
+                        ValidateUpdateBankRequest(REQ, RES, errorCode)
+                        If Not String.IsNullOrWhiteSpace(errorCode) Then
+                            Return New GenericBadRequestAPIResponse(Request, errorCode, RES.Message)
+                        End If
+
+                        'Validate Account Type
+                        If REQ.AccountType.ToString() <> "0" AndAlso REQ.AccountType.ToString() <> "1" AndAlso REQ.AccountType.ToString() <> "2" AndAlso REQ.AccountType.ToString() <> "3" Then
+                            'Invalid Account Type
+                            RES.Success = False
+                            RES.Message = "INVALID ACCOUNT TYPE"
+                            Return New GenericBadRequestAPIResponse(Request, "0103", RES.Message)
+                        End If
+
+                        'Validate Routing Number
+                        If String.IsNullOrEmpty(REQ.RTE).Equals(False) AndAlso Utilities.isValidRoutingNumber(REQ.RTE) = False Then
+                            'Invalid RTE
+                            RES.Success = False
+                            RES.Message = "INVALID ROUTING NUMBER"
+                            Return New GenericBadRequestAPIResponse(Request, "0104", RES.Message)
+                        End If
+
+                        'Valid here
+                        'Update
+                        With bankDT.Rows(0)
+                            Dim bankID As Integer = .Item("CustomerBankID")
+                            Dim bankGUID As Guid = Guid.Parse(REQ.UserBankGUID)
+                            Dim bankName As String = If(String.IsNullOrEmpty(REQ.BankName), .Item("BankName"), REQ.BankName)
+                            Dim bankRouting As String = If(String.IsNullOrEmpty(REQ.RTE), .Item("RTE"), REQ.RTE)
+                            Dim bankAccountNumber As String = ""
+                            Dim changingAccountNumber As Boolean = False
+                            'check against original
+                            Dim originalBankAccountNumber As String = Crypto.DecryptBankAccountNumberStr(Guid.Parse(REQ.UserBankGUID), Biller.BillerID)
+                            If String.IsNullOrEmpty(REQ.AccountNumber).Equals(False) Then
+                                If REQ.AccountNumber <> originalBankAccountNumber Then
+                                    'updating account number
+                                    bankAccountNumber = REQ.AccountNumber
+                                    changingAccountNumber = True
+                                Else
+                                    bankAccountNumber = originalBankAccountNumber
+                                End If
+                            Else
+                                bankAccountNumber = originalBankAccountNumber
+                            End If
+
+                            Dim accountType As Integer = If(REQ.AccountType.ToString() = "0", .Item("BankAccountTypeID").ToString(), REQ.AccountType)
+                            Dim billingName As String
+                            If String.IsNullOrEmpty(REQ.FirstName).Equals(False) AndAlso String.IsNullOrEmpty(REQ.LastName).Equals(False) Then
+                                billingName = REQ.FirstName & REQ.LastName
+                            Else
+                                billingName = .Item("BillingName").ToString()
+                            End If
+
+                            Dim address As String = If(String.IsNullOrEmpty(REQ.Address), .Item("BillingAddress"), REQ.Address)
+                            Dim city As String = If(String.IsNullOrEmpty(REQ.City), .Item("BillingCity"), REQ.City)
+                            Dim state As String = If(String.IsNullOrEmpty(REQ.State), .Item("BillingState"), REQ.State)
+                            Dim zip As String = If(String.IsNullOrEmpty(REQ.Zip), .Item("BillingZip"), REQ.Zip)
+                            Dim isDefault As Boolean = If(REQ.IsDefault.HasValue, REQ.IsDefault, Convert.ToBoolean(Convert.ToInt16(.Item("DefaultOption")))) 'default to incoming request?
+
+
+                            Dim retVal As Boolean = clsCustomerBanks.UpdateCustomerBank(currentLogin.LoginID, Biller.BillerID, currentLogin.LoginGUID, bankID, bankGUID,
+                                                                                        bankName, bankRouting, bankAccountNumber, accountType, billingName,
+                                                                                        address, city, state, zip, isDefault, changingAccountNumber)
+                            If retVal Then
+                                'bank account updated
+                                RES.Success = True
+                                RES.Message = "USER BANK UPDATED"
+                            Else
+                                'Something failed
+                                Return New InternalServerErrorAPIResponse(Request)
+                            End If
+                        End With
+                    Else
+                        Return New GenericBadRequestAPIResponse(Request, "0013", "UNABLE TO LOCATE USER BANK")
+                    End If
+                Else
+                    Return New UnableToLocateLoginAPIResponse(Request)
+                End If
+            Catch ex As Exception
+                NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+                Return New InternalServerErrorAPIResponse(Request)
+            End Try
+            Return Request.CreateResponse(HttpStatusCode.OK, RES)
+        End Function
+
+        Public Sub ValidateUpdateBankRequest(ByVal REQ As UpdateACHRequest, ByRef RES As UpdateACHResponse, ByRef errorCode As String)
+            If String.IsNullOrEmpty(REQ.Address).Equals(False) AndAlso Utilities.isValidTextEntry(REQ.Address, 1, 50) = False Then
+                RES.Message = "INVALID ADDRESS"
+                RES.Success = False
+                errorCode = "0001"
+            End If
+
+            If String.IsNullOrEmpty(REQ.City).Equals(False) AndAlso Utilities.isValidTextEntry(REQ.City, 1, 50) = False Then
+                RES.Message = "INVALID CITY"
+                RES.Success = False
+                errorCode = "0002"
+            End If
+
+            If String.IsNullOrEmpty(REQ.State).Equals(False) AndAlso Utilities.isStateAbbreviation(REQ.State) = False Then
+                RES.Message = "INVALID STATE"
+                RES.Success = False
+                errorCode = "0003"
+            End If
+
+            If String.IsNullOrEmpty(REQ.Zip).Equals(False) AndAlso Utilities.isValidTextEntry(REQ.Zip, 1, 10) = False Then
+                RES.Message = "INVALID ZIP"
+                RES.Success = False
+                errorCode = "0008"
+            End If
+
+            If String.IsNullOrEmpty(REQ.FirstName).Equals(False) AndAlso Utilities.isValidTextEntry(REQ.FirstName, 1, 65) = False Then
+                RES.Message = "INVALID BILLINGNAME"
+                RES.Success = False
+                errorCode = "0007"
+            End If
+
+            If String.IsNullOrEmpty(REQ.LastName).Equals(False) AndAlso Utilities.isValidTextEntry(REQ.LastName, 1, 65) = False Then
+                RES.Message = "INVALID BILLINGNAME"
+                RES.Success = False
+                errorCode = "0007"
+            End If
+        End Sub
+
+#End Region
+#Region "Remove_User_Bank_Account"
+        Public Class RemoveACHRequest
+            Public LoginGUID As String
+            Public UserBankGUID As String
+        End Class
+
+        Public Class RemoveACHResponse
+            Public Success As Boolean = False
+            Public Message As String = ""
+        End Class
+
+        <HttpPost, Route("remove")>
+        Public Function Remove(<FromBody> REQ As RemoveACHRequest) As HttpResponseMessage
+            Dim RES As New RemoveACHResponse
+            Dim Biller As BillerCredential = DirectCast(User, BillerPrincipal).Biller
+
+            Try
+
+                ApiLogger.LogEventToNewRelic("Triggered by {Event}. Executed By BillerID - {BillerID}", "Remove_User_Bank", Biller.BillerID)
+
+                If Utilities.isValidGUID(REQ.LoginGUID).Equals(False) Then
+                    Return New InvalidLoginGUIDResponse(Request)
+                End If
+
+                If Utilities.isValidGUID(REQ.UserBankGUID).Equals(False) Then
+                    Return New GenericBadRequestAPIResponse(Request, "0012", "INVALID USERBANKGUID")
+                End If
+
+                'load login
+                Dim currentLogin As CustomerLogin = CustomerLogin.LoginByLoginGUID(Biller.BillerID, Guid.Parse(REQ.LoginGUID))
+
+                If currentLogin.LoginID = 0 Then
+                    Return New UnableToLocateLoginAPIResponse(Request)
+                End If
+
+                'find bank 
+                Dim bankDT As DataTable = clsCustomerBanks.SelectCustomerBankByBankGUID(Guid.Parse(REQ.UserBankGUID), currentLogin.LoginID, Biller.BillerID)
+
+                If bankDT.Rows.Count > 0 Then
+                    'FOUND IT   
+                    'DELETE IT
+                    Dim retVal As Boolean = clsCustomerBanks.RemoveBankAccount(REQ.UserBankGUID, currentLogin.LoginID, Biller.BillerID)
+                    If retVal.Equals(True) Then
+                        RES.Message = "REMOVED USER BANK"
+                        RES.Success = retVal
+                    Else
+                        'uknown error
+                        Return New InternalServerErrorAPIResponse(Request)
+                    End If
+                Else
+                    Return New GenericBadRequestAPIResponse(Request, "0013", "UNABLE TO LOCATE USER BANK")
+                End If
+            Catch ex As Exception
+                NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+                Return New InternalServerErrorAPIResponse(Request)
+            End Try
+            Return Request.CreateResponse(HttpStatusCode.OK, RES)
+        End Function
+#End Region
+#Region "Retrieve_User_Bank_Account"
+
+        Public Class CustomerLoginBanks
+            Public Property UserBankGUID As String
+            Public Property LoginGUID As String
+            Public Property BillingName As String
+            Public Property BankName As String
+            Public Property Address As String
+            Public Property City As String
+            Public Property State As String
+            Public Property Zip As String
+            Public Property RTE As String
+            Public Property AccountNumber As String
+            Public Property BankAccountTypeID As Integer
+            Public Property DefaultOption As Boolean
+            Public Property DateRecAdded As DateTime
+        End Class
+        <HttpGet, Route("{loginguid}/userbanks/{userbankguid?}")>
+        Public Function Retrieve(ByVal loginGUID As String, Optional ByVal userBankGUID As String = "userBankGUID") As HttpResponseMessage
+            Try
+
+                Dim DT As New DataTable
+                Dim SQl As String = ""
+                Dim Biller As BillerCredential = DirectCast(User, BillerPrincipal).Biller
+                Dim BillerID As Integer = Biller.BillerID
+                Dim getSingleBank As Boolean = False
+
+                ApiLogger.LogEventToNewRelic("Triggered by {Event}. Executed By BillerID - {BillerID}", "Get_User_Bank", Biller.BillerID)
+
+                If Utilities.isValidGUID(loginGUID) = False Then
+                    Return New InvalidLoginGUIDResponse(Request)
+                End If
+
+                'get actual bank account info if valid bankaccountguid
+                If userBankGUID <> "userBankGUID" Then
+                    If Utilities.isValidGUID(userBankGUID) Then
+                        'return specific bank account
+                        getSingleBank = True
+                    Else
+                        Return New GenericBadRequestAPIResponse(Request, "0095", "INVALID USERBANKGUID")
+                    End If
+                End If
+
+                'Get Login Data
+                SQl = "exec mcl.selCustomerLogin @LoginGUID='" & loginGUID & "'"
+                Dim CurrentLoginDT As DataTable = Database.GET_DATASET(SQl, BillerID).Tables(0)
+
+                If IsNothing(CurrentLoginDT) OrElse CurrentLoginDT.Rows.Count = 0 Then
+                    Return New UnableToLocateLoginAPIResponse(Request)
+                End If
+
+                'found login
+                Dim customerLoginBanks As DataTable
+                If getSingleBank = True Then
+                    customerLoginBanks = clsCustomerBanks.SelectCustomerBankByBankGUID(Guid.Parse(userBankGUID), CurrentLoginDT.Rows(0).Item("LoginID"), Biller.BillerID)
+                Else
+                    customerLoginBanks = clsCustomerBanks.SelectCustomerBanksByLogin(CurrentLoginDT.Rows(0).Item("LoginID"), Biller.BillerID)
+                End If
+
+                'create a unified datatable for binding
+                Dim combinedDt As New DataTable()
+
+                combinedDt.Columns.Add(New DataColumn("UserBankGUID", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("LoginGUID", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("BillingName", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("BankName", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("RTE", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("AccountNumber", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("BankAccountTypeID", GetType(System.Int16)))
+                combinedDt.Columns.Add(New DataColumn("DefaultOption", GetType(Boolean)))
+                combinedDt.Columns.Add(New DataColumn("DateRecAdded", GetType(System.DateTime)))
+                combinedDt.Columns.Add(New DataColumn("Address", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("City", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("State", GetType(System.String)))
+                combinedDt.Columns.Add(New DataColumn("Zip", GetType(System.String)))
+
+                'add banks to unified table
+                'masking within for loop
+                For Each bank As DataRow In customerLoginBanks.Rows
+
+                    Dim row As DataRow = combinedDt.NewRow()
+
+                    row("UserBankGUID") = bank("CustomerBankGUID").ToString()
+                    row("LoginGUID") = bank("LoginGUID").ToString()
+                    row("BillingName") = bank("BillingName").ToString()
+                    row("BankName") = bank("BankName").ToString()
+                    row("RTE") = bank("RTE").ToString()
+                    row("AccountNumber") = Utilities.MaskBankAccount(bank("AccountNumber").ToString())
+                    row("BankAccountTypeID") = bank("BankAccountTypeID")
+                    row("DefaultOption") = Convert.ToBoolean(Convert.ToInt16(bank("DefaultOption")))
+                    row("DateRecAdded") = bank("DateRecAdded")
+                    row("Address") = bank("BillingAddress").ToString()
+                    row("City") = bank("BillingCity").ToString()
+                    row("State") = bank("BillingState").ToString()
+                    row("Zip") = bank("BillingZip").ToString()
+
+                    combinedDt.Rows.Add(row)
+                Next
+
+                'finalize
+                combinedDt.AcceptChanges()
+
+                AutoMapper.Mapper.Initialize(Sub(cfg)
+                                                 cfg.CreateMap(Of String, Guid).ReverseMap()
+                                                 cfg.CreateMap(Of Guid, String).ReverseMap()
+                                             End Sub)
+
+                Dim RES As New List(Of CustomerLoginBanks)
+
+                RES = AutoMapper.Mapper.DynamicMap(Of IDataReader, List(Of CustomerLoginBanks))(combinedDt.CreateDataReader())
+
+                Return Request.CreateResponse(HttpStatusCode.OK, RES)
+
+            Catch ex As Exception
+                NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+                Return New InternalServerErrorAPIResponse(Request)
+            End Try
+        End Function
+#End Region
+
+    End Class
+End Namespace
+
+Example Response:
+{"output.json": {  
+    "FilePath": "ProjectDir\\Controllers\\UserBankController",  
+    "Results": [  
+        {  
+            "external dependency Category": "Logging Systems",  
+            "component Category": ["Custom"]  
+        },  
+        {  
+            "external dependency Category": "Databases",  
+            "component Category": ["Custom"]  
+        },  
+        {  
+            "external dependency Category": "HTTP Clients",  
+            "component Category": ["System.Net.Http"]  
+        },  
+        {  
+            "external dependency Category": "APIs",  
+            "component Category": ["System.Web.Http"]  
+        },  
+        {  
+            "external dependency Category": "Monitoring Systems",  
+            "component Category": ["NewRelic"]  
+        }  
+    ],  
+    "Variables": []  
+}}
+Results:
+The setup and prompt were successful to very good extent
+Tool output:
+Identifies below implementation correctly
+Logging - Microsoft_Extensions_Logging
+Database - DatabaseProxy
+Keyvault- EnvironmentVariableReader
+Queue- AzureMessageQueueFactory
+Monitoring system - Newrelic.Api.Agent
+Identifies below implementation incorrectly
+Logging - IC_Serilog (because of dead code used in the namespace)
+Intenral Service - TunnelAPIProxy (uses tunnel api to make http call)
+ URL:/spaces/EN/pages/3031466001/ICBatchCloseProcessor-+OpenAI+Responses

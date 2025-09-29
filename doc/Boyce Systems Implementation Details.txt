@@ -1,0 +1,312 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Knowledge transfer
+N/A
+Summary
+Summary
+Details
+Software Partner Name
+Boyce Systems
+Software Product Name
+Keystone 
+Software Cashiering System
+Keystone
+Supported Versions
+N/A
+Integration Requirements and Pre-Requisites
+N/A
+Vertical
+GUB
+Sample Biller Implementation
+Town of Lapel (BID: 2941)
+Town of Vevay (BID: 2883)
+Town of Sheridan IN (BID: 2857)
+Planning
+Test Portals
+IC Hosted Test Portal: N/A
+Partner Hosted Test Portal: N/A
+Biller Test Portal: N/A
+Rules of Engagement
+Hold standard Project Kick-off call with Biller. 
+After the kick off call email Thomas Curtis at Keystone with the information listed in the Partner Coding Requirements section below. 
+After Kick Off Complete the following: 
+Submit Stratus Install Request
+Once Status is installed notify Keystone with computer or location and paths listed in Status management in CRM (Preferred is to have on billers server. Status has to be on the same location as the Keystone system
+Keystone will turn on Invoice cloud, point paths to Stratus and create Web.txt and Custbal.txt files for testing and connection confirmation.
+ Submit Bill Template Modification (if applicable):
+They have a standard image setup, but we have found they all are not universal with the data. 
+The client may need titles renamed. Example is some cases is changing Hydrant Fee to StormWater or Fire Protection to Trash. 
+Only titles are modified, the client will know what amount should have the appropriate title. 
+Timeline
+Estimated timeframe to complete implementation - ~60-90 days 
+Configuration
+Invoice Types
+Only 42 - Utility
+Virtual Site
+Bill Presentment
+JSON Configuration Options
+Overriding Summary of Service Label Names
+Overriding Summary of Service Label Names
+Can override the following:
+WaterMeter1
+HydrantFee
+TrashCharge
+StormWater
+Electric
+Sewer
+SewerCharge
+FireProtection
+Use the 
+Labels
+ property to select the summary of service label you want to override and assign it with the value to override
+example (overriding the 
+FireProtection
+ label to display as "Trash Service"):
+{
+   "TemplateConfig": {
+        "SummaryOfServiceOverrides": {
+            "Labels": {
+                "FireProtection": "Trash Service"
+            }
+        }
+   }
+}
+Disable Summary of Service
+Disable Summary of Service
+Can disable the summary of service by setting 
+DisableSummaryOfService
+ JSON property to true
+example:
+{
+    "TemplateConfig": {
+         "DisableSummaryOfService": true
+    }
+ }
+Overriding Billing Detail Labels
+Overriding Billing Detail Labels
+Can override the following:
+WaterMeter1
+HydrantFee
+TrashCharge
+StormWater
+Electric
+Sewer
+SewerCharge
+FireProtection
+Use the 
+Labels
+ property to select the billing detail label you want to override and assign it with the value to override
+example (overriding the 
+FireProtection
+ label to display as "Trash Service"):
+{
+   "TemplateConfig": {
+        "BillingDetailOverrides": {
+            "Labels": {
+                "FireProtection": "Trash Service"
+            }
+        }
+   }
+}
+Additional Billing Details
+Additional Billing Details
+Can add additional billing details by including additional custom billing detail records
+example:
+{
+    "TemplateConfig": {
+        "AdditionalBillingDetails": [
+            {
+              "Label": "Water Charge",
+                "FieldSpecs": {
+                  "PreviousReading": ["1000"],
+                  "PresentReading": ["1500"],
+                  "TotalConsumption": ["500"],
+                  "PreviousBalance": ["50"],
+                  "Tax": ["5"],
+                  "Charge": ["55"]
+                }
+            },
+            {
+              "Label": "Electric Charge",
+                "FieldSpecs": {
+                  "PreviousReading": ["2000"],
+                  "PresentReading": ["2500"],
+                  "TotalConsumption": ["500"],
+                  "PreviousBalance": ["100"],
+                  "Tax": ["10"],
+                  "Charge": ["110"]
+                }
+            }
+        ]
+    }
+ }
+Use Billing Details For Summary of Service
+Used in conjunction with 
+AdditionalBillingDetails
+ if you want to have the summary of service labels and service charges be populated by the labels provided in the custom billing detail records
+example:
+{
+    "TemplateConfig": {
+        "AdditionalBillingDetails": [
+            {
+              "Label": "Water Charge",
+                "FieldSpecs": {
+                  "PreviousReading": ["1000"],
+                  "PresentReading": ["1500"],
+                  "TotalConsumption": ["500"],
+                  "PreviousBalance": ["50"],
+                  "Tax": ["5"],
+                  "Charge": ["55"]
+                }
+            },
+            {
+              "Label": "Electric Charge",
+                "FieldSpecs": {
+                  "PreviousReading": ["2000"],
+                  "PresentReading": ["2500"],
+                  "TotalConsumption": ["500"],
+                  "PreviousBalance": ["100"],
+                  "Tax": ["10"],
+                  "Charge": ["110"]
+                }
+            }
+        ],
+        "UseBillingDetailsForSummaryOfService": true
+    }
+ }
+Displaying Trash Charge
+Displaying Trash Charge
+Can enable the display of the Trash Charge, it is set to false (disabled) by default no JSON configuration required
+example: 
+{
+    "TemplateConfig": {
+        "DisplayTrashCharge": true
+    }
+}
+Disable Default Water Charge
+Disable Default Water Charge
+Can disable the default water charge, it is set to false by default no JSON configuration required (default will display the water meter data)
+example:
+{
+    "TemplateConfig": {
+        "DisableDefaultWaterCharge": true
+    }
+}
+Display Empty Charges
+Display Empty Charges
+Removes all empty charges by default (no JSON configuration required), can enable the display of empty charges by setting to true
+example:
+{
+    "TemplateConfig": {
+        "DisplayEmptyCharges": true
+    }
+}
+Required Options
+N/A
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+After Kick Off Call once Stratus is fully setup in Invoice Cloud and Biller 
+Data is unique/specific to each biller
+Adjustment File
+Partner
+After Kick Off Call once Stratus is fully setup in Invoice Cloud and Biller 
+Data is unique/specific to each biller
+Bill Presentment 
+Partner
+After Kick Off Call once Stratus is fully setup in Invoice Cloud and Biller 
+PDF Linking - Not Supported
+PDF Extraction - Not Supported
+Template - Supported
+Sample biller: Town of Lapel (BID: 2941)
+Note: variations may exist between billers based on specific biller request. However all Boyce billers use the same template. Internal code logic will slightly change the visual appearance of the displayed template where applicable.
+Add BIF Customization File Spec: IH - InvoidFormatGuid & Choose Template: Boyce Systems Standard Template
+ (518B6FCB-46B1-4E17-B407-84E129B60838)
+ (if no custom template is indicated on the BOF) See BID 2857
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+After Kick-Off Call
+BID
+Partner
+After Kick-Off Call
+Located within CRM on the Profile Tab
+Invoice Format ID
+Partner
+After Kick-Off Call
+Located within CRM on the Profile Tab
+Biller GUID PROD
+Partner
+After Kick-Off Call
+Located within CRM on the Profile Tab
+WebService Key PROD
+Partner
+After Kick-Off Call
+Located within CRM on the Profile Tab
+Invoice Type ID
+Partner
+After Kick-Off Call
+Located within CRM on the Profile Tab
+Biller Contact Information
+Partner
+After Kick-Off Call
+Stratus GUID
+Partner
+Once Stratus is installed
+Located within CRM on the Stratus Management Tab
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Thomas Curtis
+Sr. Customer Support
+tcurtis@boycesystems.com
+800-875-1553
+N
+Ragan Dalton
+Installer
+rdalton@boycesystems.com
+800-875-1553
+N
+Judy Berry
+jberry@boycesystems.com
+N
+ URL:/spaces/IM/pages/2366668830/Boyce+Systems+Implementation+Details

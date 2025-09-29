@@ -1,0 +1,807 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+INT-4504
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Accessing IMT Insurance API Documentation:
+Account Credentials- 
+Test Credentials- 
+Password can be updated through - 
+https://users-qa.imtins.com/
+ 
+Email:
+IC-SolutionsEngineering@invoicecloud.com
+Password: ICIMTInsurance!6079
+Sample: 
+Account: ICTEST
+Policy: INVOICECLOUDPOLICY 
+Step #1-
+ Login with your user by going to:   
+https://users-qa.imtins.com/
+You will be asked to sign in with your username and password.   You can find both in the Authentication document attached. 
+Note:  These credentials are the same credentials that you will use to authenticate your programs.  If you change your password for any reason you will need to ensure you pass that information onto the developers as the documentation on Authentication will no longer be accurate.
+ 
+Step #2- 
+Once you’ve logged in above go to: 
+https://billing-qa.imtins.com/api/docs/
+Summary: IMT’s APIs will be deployed to 2 environments- 1 production and 1 development (QA).
+Available on Production at 
+https://billing.imtins.com/api/v1/
+Available on QA at 
+https://billing-qa.imtins.com/api/v1/
+Additional Details 
+IC Use
+Partner API Name
+Request
+Response
+Specifications
+Authentication
+JWT
+Request Type:
+ POST
+Request URL:
+Test: 
+https://users-qa.imtins.com/api/v1/tokens/
+Prod: 
+https://users.imtins.com/api/v1/tokens/
+Same Username and Password
+{
+    "data": {
+        "attributes": {
+            "username_or_email": "IC-SolutionsEngineering@invoicecloud.com",
+            "password": "ICIMTInsurance!6079"
+        },
+        "type": "Token"
+    }
+}
+{
+    "data": {
+        "type": "Token",
+        "id": 1,
+        "attributes": {
+            "auth": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNDIwNjIsImlkIjoiODE0MThjOTMtMzg5Zi00NjhmLTg0ZDItOTY4OWEzZjM1OGI0IiwidXNlcm5hbWUiOiJpbnZvaWNlLmNsb3VkIiwiZmlyc3RfbmFtZSI6Ikludm9pY2UiLCJsYXN0X25hbWUiOiJDbG91ZCIsImVtYWlsIjoiaW52b2ljZS5jbG91ZEBpbXRpbnMuY29tIiwidXNlcl90eXBlIjoic3lzdGVtIiwiZXhwIjoxNjg5OTQ3OTA2LCJyZWZyZXNoIjoiZDY1ZjAyOTEtNTc0NC00MWQyLWFkYmEtODI5ZDQ4ZjdlYmY2Iiwic3lzdGVtIjp0cnVlfQ.Hrb09jz54PSet6txHR8R98OWidWrHBq-YQUtgOvMVyA",
+            "two_factor_required": false,
+            "next": "https://users-qa.imtins.com/admin/"
+        }
+    }
+}
+username_or_email: 
+IC email address
+password: 
+IMT Insurance Password
+RTDR: Balance Update
+Account Data Refresh
+Request Type: 
+GET
+Request URL:
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/
+?
+customer_username=
+<username>
+• 
+Production – 
+<
+https://billing.imtins.com/api/v1/accounts/<account_number>/?customer_username=<username>>
+• 
+QA –
+ 
+https://billing-qa.imtins.com/
+api/v1/accounts/<account_number>/?
+customer_username=
+<username>/ 
+Authentication:
+Header Key	Value
+Authorization	Token Value (environment specific)
+Request: 
+account_number
+ - Invoice Cloud Account number
+customer_username 
+- Invoice Cloud email address (data before @) - This will be an optional field. If not provided, we will not send anything.
+New Request: 
+QA - 
+https://billing-qa.imtins.com/api/v2/accounts/<account_number>/?customer_username=<username>/
+Response: 
+{
+  "type": "string",
+  "attributes": {
+    "raw_data": {},
+    "account_number": "string",
+    "payment_method": "string",
+    "balance": 0,
+    "total_due": 0,
+    "past_due": 0,
+    "address_type": "BILLING",
+    "street_line_1": "string",
+    "street_line_2": "string",
+    "city": "string",
+    "state": "string",
+    "zip_code": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "full_name": "string",
+    "due_date": "2019-08-24"
+  }
+}
+
+
+New Response:
+{
+  "type": "string",
+  "attributes": {
+    "account_number": "string", (IC Account Number) 
+    "payment_method": "string",
+    "balance": 0, (IC TOTAL AMOUNT DUE) 
+    “bill_balance”:0, (IC BALANCE DUE)
+    "current_due": 0,
+    "past_due": 0, (IC PAST DUE)
+    "address_type": "BILLING",
+    "street_line_1": "string",
+    "street_line_2": "string",
+    "city": "string",
+    "state": "string",
+    "zip_code": "string",
+    "first_name": "string",
+    "last_name": "string",
+    "full_name": "string",
+    "due_date": "2019-08-24"
+  }
+}
+ 
+"raw_data": 
+Raw format of the data provided in response
+ 
+"account_number":
+ IC account number
+ 
+"payment_method": 
+(ignored)
+ 
+"balance": 
+Total Amount Due
+ 
+ 
+“billBalanceAmount” 
+within 
+“receivableCategoryCode:TOTAL":
+ IC Balance Due
+ 
+"past_due": 
+Past Due Amount
+ 
+"address_type":
+ Billing Address (ignored)
+ 
+ "street_line_1": 
+Street Address 1 (ignored)
+ 
+ "street_line_2": 
+Street Address 2 (ignored)
+ 
+"city": 
+City (ignored)
+ 
+ "state": 
+State (ignored)
+ 
+ "zip_code":
+ Zip Code (ignored)
+ 
+ "first_name":
+ First Name (ignored)
+ 
+"last_name":
+ Last Name (ignored)
+ 
+"full_name":
+ Full Name (ignored)
+ 
+"due_date": 
+(ignored)
+ 
+New Specifications: 
+balance: IC Total Amount Due 
+bill_balance: IC Balance Due 
+account_number: IC Account Number
+past_due: IC Past Due
+Data Pump: Payment
+Payment Data Pump
+Request Type: 
+POST
+Request URL: 
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/payments/{payment_id}/post/
+• 
+Production – 
+<
+https://billing.imtins.com/api/v1/accounts/<account_number>/payments/<payment_id>/post/>
+• 
+QA –
+<
+https://billing-qa.imtins.com/api/v1/accounts/<account_number>/payments/<payment_id>/post/>
+Authentication:
+Header Key	Value
+Authorization	Token Value (environment specific)
+Content Type:
+ application/vnd.api+json
+Request:
+{
+  "data": {
+    "type": "Payment",
+    "attributes": {
+      "invoice_agency": "string",
+      "invoice_number": "string",
+      "payment_amount": 0,
+      "payment_date": "2019-08-24",
+      "payment_username": "string",
+      "payment_method": "CHECK",
+      "policy_number": "string",
+      "payment_channel": "string"
+    }
+  }
+}
+{
+  "type": "string",
+  "attributes": {
+    "payment_id": "string"
+  }
+}
+payment_ID
+ - Payment GUID from Invoice Cloud.
+account_number
+ - IC Account Number
+policy_number
+ - Policy number - Provided in IC field 
+Custom7
+ (optional)
+invoice_number
+ - IC Invoice Number
+invoice_agency
+ - 
+Custom1 
+(Agency Number) from BIF
+payment_date
+ - Date the payment has processed
+payment_amount
+ - Amount being paid
+payment_method
+ - 
+"
+EFT
+"
+ 
+"CREDIT_CARD"
+payment_username
+- IC email address (data before @)
+payment_channel
+ - IC Payment Source Description
+Data Pump: Credit, Void, Refund, Chargeback, ACH Reject
+Payment Credit Data Pump
+Request Type:
+ POST
+Request URL: 
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/payments/{payment_id}/credit/
+• 
+Production – 
+<
+https://billing.imtins.com/api/v1/payments/<payment_id/credit/>
+• 
+QA –
+<
+https://billing-qa.imtins.com/api/v1/accounts/<account_number>/payments/<payment_id>/credit/>
+Authentication: 
+JWT
+Header Key	Value
+Authorization	Token Value (environment specific)
+Content Type:
+ application/vnd.api+json
+Request:
+ 
+{
+  "data": {
+    "type": "PaymentCredit",
+    "attributes": {
+      "credit_reason": "string",
+      "credit_username": "string",
+      "credit_amount": "0"
+    }
+  }
+}
+{
+  "type": "string",
+  "attributes": {
+    "payment_id": "string"
+  }
+}
+ACH Reject Requirements:
+C-Code Rejects included? No
+They will accept the reject codes provided by Invoice Cloud. 
+Include Credits & Chargebacks? 
+Credits?
+Yes - Code provided below in Credit_Reason
+Chargebacks?
+Yes - Code provided below in Credit_Reason
+Sent a Negative value, using dash indicator?
+No - Will just have Refund as the reason to reflect this amount
+No credit payments will occur without an original payment. 
+payment_ID
+: PaymentGUID (Original payment ID being impacted from Invoice Cloud)
+account_number:
+ IC Account Number
+credit_amount:
+ Amount being credited
+credit_username:
+ Invoice Cloud email address (data before @)
+credit_reason:
+ field to provide reject codes provided by Chase Paymentech
+Chargeback Code: CC1
+Void/Credit Code: CC2
+Data Pump: AutoPay and Paperless Enrollment and Autopay Payment Method Changes
+Account Data Pump
+Request Type: 
+POST 
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/
+Authentication:
+Header Key	Value
+Authorization	Token Value (environment specific)
+Content Type:
+ application/vnd.api+json
+Request: 
+{
+  "data": {
+    "type": "Account",
+    "attributes": {
+      "setting_type": "autopay",
+      "new_value": "CHECK",
+      "customer_username": "string"
+    }
+  }
+}
+{
+  "type": "string",
+  "attributes": {
+    "account_number": "string",
+    "autopay": "CHECK",
+    "paperless": false
+  }
+}
+account_number
+ - IC Account number
+setting_type
+ - “autopay” or “paperless”
+customer_username
+ - IC email address (data before @)
+new_value
+: 
+For Autopay: EFT or CREDIT_CARD
+When removing auto pay: CHECK
+For Paperless: True or False
+Bill Presentment
+Bill Presentment API
+Request Type: 
+GET
+Request URL: 
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/invoices/?document_date={billing_document_date}
+Authentication:
+ JWT
+Header Key	Value
+Authorization	Token Value (environment specific)
+Content Type:
+ application/vnd.api+json
+Request: 
+account_number
+ - Inherited from URL
+invoice_date
+ - Invoice date in Invoice Cloud
+document_date = IC Invoice Date
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller. Files are uploaded via Webservice Call 
+File Extension: .BIF 
+File Naming Convention: 3243_MMDDYYYY063838.BIF (incrementing numbers) 
+Specification: Files are uploaded via Webservice Call 
+Sample File: Sample Files uploaded to BID 3243
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+IMT needs to populate this field with static data from the bill. 
+File Header
+4
+FileCreationDate
+Y
+TRUE
+MM/DD/YYYY
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Nightly process will send each invoice type separately 
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Format, TTTAAAAAAAAAADDMONYY
+Example: DIRINV-2024-07-12-A10123433-1
+This is only for their reference. The invoices have no difference between each other. 
+IMT Insurance updated their invoice numbers to include -1 and if the account number is found again increment up 1 for each instance of account number in that file type. On this second invoice we are changing the Balance Forward to be off so balance won’t get overwritten.	
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Date
+This will be the "processed_date" that is within the Majesco file
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+InvoiceDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+PaymentInFull
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Agency Number
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Agency Address Information
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Document Type
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Policy Effective Date
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Policy Expiration Date
+Invoice Header
+43
+Custom6
+Y
+FALSE
+Policy Term
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Policy Number
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Invoice Header
+58
+RowType
+Y
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Record
+61
+Address1
+Y
+FALSE
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Customer Record
+64
+State
+Y
+FALSE
+Customer Record
+65
+Zip
+Y
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+72
+Description
+Y
+False
+Invoice Detail
+93
+BalanceDue
+Y
+False
+194
+BalanceForward
+Y
+False
+248
+AutoPayCollectionDate
+Y
+False
+252
+InvoiceTypeID
+Y
+TRUE
+InvoiceTypeID 164
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+3
+SSO Customer Login URL	
+ 
+https://imtins.com
+ 
+Y
+8
+RTDR EndPoint/WebService URL	
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}?customer_username={username}
+Y
+11
+DataPump Payments EndPoint/WebService URL	
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/payments/{payment_id}/post/
+Y
+12
+DataPump Payments EndPoint/WebService Username	
+IC-SolutionsEngineering@invoicecloud.com
+Y
+14
+DataPump Paperless EndPoint/WebService URL	
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/
+Y
+17
+DataPump AutoPay EndPoint/WebService URL	
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/
+Y
+20
+Remote PDF EndPoint/WebService URL	
+https://billing-qa.imtins.com/api/v1/accounts/{account_number}/invoices/
+Y
+23
+SSO Customer LogOff Url	
+https://imtins.com
+ 
+Y
+36
+SSO - One Time Payment ReturnUrl	
+https://imtins.com
+ 
+Y
+88
+Secondary RTDR EndPoint/WebService URL	
+https://users-qa.imtins.com/api/v1/tokens/
+Y
+89
+Secondary RTDR Username if Applicable	
+IC-SolutionsEngineering@invoicecloud.com
+Y
+90
+Secondary RTDR Key or Password if Applicable	
+ICIMTInsurance!6079
+Y
+131
+JSON Configuration	
+{"PdfConfig":{"tokenConfiguration":{"uri":"
+https://users-qa.imtins.com/api/v1/tokens/","username":"IC-SolutionsEngineering@invoicecloud.com","password":"ICIMTInsurance!6079
+"}}}
+Y
+Site configuration 
+Invoice Types
+Invoice Types
+164
+Virtual Site
+Account Number and Zip 
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+CRM Setting
+AllowPartialPayments
+BIF
+AutoPayCollectionDate
+BIF 
+BalanceForward
+BIF 
+CreditCardServiceFee
+CRM Setting 
+FirstNotifyRequestedDate
+BIF
+InvoiceDate
+BIF
+InvoiceDueDate
+BIF
+InvoiceFormatGuid
+BIF Cust
+InvoiceTypeID
+BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+BIF
+PaymentExpirationDate
+BIF
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF
+ThirdNotifyRequestedDate
+N/A
+User Interaction and Design
+User Experience Flow with screenshots (as of 4/20/23): 
+https://www.figma.com/file/MwkxSY6qqW8Pk9ZamYkYIj/Invoice-Cloud-Integration?node-id=343%3A192&t=17dNXvNPcZso7Oig-1
+ 
+Data Flow - Invoice
+Invoices will be sent in the BIF format via SFTP or Webservice call. 
+Data Flow - Adjustments
+Balance changes will be handled via RTDR
+Data Flow - Customer Update
+Customer changes to the Autopay and Paperless will be sent via Data Pump 
+Data Flow - Payment
+Payments are sent via Data Pump. 
+Data Flow - Void
+Voids are sent via Data Pump. 
+Data Flow - ACH Reject
+ACH Rejects are sent via Data Pump. 
+Data Flow - Change Log
+Changes to autopay and paperless are handled by Data Pump. No changes will be made to Phone Number or Email Address. 
+Data Flow - Bill Presentment
+Bill Presentment is handled via PDF Linking. 
+Payer Experience
+Payers will access Invoice Cloud from the IMT website (URL redirect). Payers will use the IC Virtual Site for One time Payment and use SSOConnect to Invoice Cloud payment processing when signed onto IMT MyPolicy+. One Time Payments for Mortgagee balances will be paid through Cloud Pay v2.
+Agent Experience
+Agents and Agencies will make payments via Agent Connect. Agent Statements will be processed with AgentConnect. 
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+StorePaymentMethod - RetrieveLoginGUID - ProcessACHSalesWithUserBankGUID
+Agency Sweep
+Invoice will be created with a BIF to process payments on via stored payment token.
+Predefined agency payment methods are used from a dummy Agency Account - They may add new payment methods and can have more than 1
+The login GUID and UserBankGUID are saved for each Agency Account to be used as a token to make payments on other Customer Policies/Accounts
+StorePaymentMethod to Retrieve UserBankGUID > LoginGUID for Agency Account > Process ACH Sale with UserBankGUID
+Store Biller Reference as "Agency Sweep" for reporting purposes - Account Number and Invoice Number of Policy Required
+PaymentReportingDataSetFromGMT2
+Retrieve Customer Payment History
+CloudPayv2
+One Time Payments/Deposits/Down Payments/Mortgagee Payments
+SSOConnect
+Logged in Insured Experience 
+AgentConnect
+Agent Experience (Deposits,Agent Sweeps, Agent Statement Payments)
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+INT-7454
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+November 16 2023
+Checked DueDate to confirm if we should refresh the balance due
+DueDate is ignored to update the balance due on the most recent invoice
+INT-8058
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+January 30 2024
+IC Balance Due being retrieved from CurrentBalance  
+IC Balance Due being retrieved from 
+billBalanceAmount
+ within 
+receivableCategoryCode:TOTAL
+ URL:/spaces/IM/pages/2446524525/BID+3401+IMT+Insurance+Company+Technical+Design

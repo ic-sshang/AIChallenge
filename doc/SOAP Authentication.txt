@@ -1,0 +1,20 @@
+Billers are provided a unique Web Service GUID and Web Service KEY which must be passed to authenticate all web services. 
+Sample of one of our Web Services
+https://www.invoicecloud.com/portal/webservices/CloudManagement.asmx?op=ViewCustomerRecord
+ 
+POST /portal/webservices/CloudManagement.asmx HTTP/1.1
+Host: www.invoicecloud.com
+Content-Type: application/soap+xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <ViewCustomerRecord xmlns="https://www.invoicecloud.com/portal/webservices/CloudManagement/">
+      <BillerGUID>string</BillerGUID>
+      <WebServiceKey>string</WebServiceKey>
+      <AccountNumber>string</AccountNumber>
+    </ViewCustomerRecord>
+  </soap12:Body>
+</soap12:Envelope>
+ URL:/spaces/ED/pages/3457155078/SOAP+Authentication

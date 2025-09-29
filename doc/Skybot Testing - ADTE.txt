@@ -1,0 +1,1123 @@
+Overview
+Skybot is a control plane is used to run jobs on agents (App Servers).
+Deployment Checks
+When deploying a Skybot job the deployment pipeline should:
+Run the job’s Health Checks on the target deployment App Server, there can be more than one App Server, by executing the job via command line and passing the “-healthcheck” argument.
+Trigger the job using the Skybot API after all of the target deployments to App Servers have completed successfully.  The trigger should pass the “healthcheck” parameter to the Skybot API which is added to only that trigger’s ENVIRONEMNT VARAIBLEs run.
+Production ENVIRONMENT VARIABLES on App Servers
+2024-07-22T15:50:33.8076235Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:33.9471429Z ==============================================================================
+2024-07-22T15:50:33.9471821Z Task         : PowerShell
+2024-07-22T15:50:33.9472070Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:33.9472235Z Version      : 2.242.1
+2024-07-22T15:50:33.9472444Z Author       : Microsoft Corporation
+2024-07-22T15:50:33.9472708Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:33.9472935Z ==============================================================================
+2024-07-22T15:50:35.1124257Z Generating script.
+2024-07-22T15:50:35.1428847Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:35.1683079Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\47aa4bba-3b17-4c96-ac3f-c2fdb627e16a.ps1'"
+2024-07-22T15:50:35.4730967Z 
+2024-07-22T15:50:35.4734321Z Name                           Value                                           
+2024-07-22T15:50:35.4735974Z ----                           -----                                           
+2024-07-22T15:50:35.4737407Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:35.4740630Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:35.4748760Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:35.4756788Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:35.4759266Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:35.4761664Z AGENT_ID                       140                                             
+2024-07-22T15:50:35.4764046Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:35.4766422Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:35.4768790Z AGENT_MACHINENAME              IC-APP3                                         
+2024-07-22T15:50:35.4771052Z AGENT_NAME                     IC-APP3                                         
+2024-07-22T15:50:35.4773423Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:35.4775802Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:35.4778203Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:35.4780542Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:35.4782892Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:35.4785198Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:35.4793130Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:35.4795546Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:35.4797925Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:35.4800297Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:35.4802647Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:35.4805367Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:35.4817112Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:35.4828901Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:35.4831272Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:35.4833567Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:35.4836016Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:35.4838453Z COMPUTERNAME                   IC-APP3                                         
+2024-07-22T15:50:35.4840844Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:35.4843303Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:35.4845730Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:35.4848098Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:35.4850473Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:35.4852801Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:35.4855279Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:35.4857669Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:35.4860015Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:35.4862435Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:35.4874253Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:35.4876665Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:35.4888648Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:35.4900558Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:35.4903150Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:35.4905544Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:35.4908022Z OS                             Windows_NT                                      
+2024-07-22T15:50:35.4920159Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:35.4932483Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:35.4934950Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:35.4947231Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:35.4949690Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:35.4952095Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:35.4954573Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:35.4956952Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:35.4959459Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:35.4962561Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:35.4965035Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:35.4977568Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:35.4980035Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:35.4982480Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:35.4990996Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:35.4993551Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:35.4996054Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:35.5004299Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:35.5012829Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:35.5021190Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:35.5029482Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.5031935Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:35.5034339Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:35.5036740Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:35.5039123Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:35.5041532Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:35.5049816Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:35.5058280Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:35.5060769Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:35.5063273Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:35.5065663Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:35.5068057Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:35.5070476Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:35.5072885Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:35.5086415Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:35.5089142Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:35.5091334Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:35.5093724Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.5096180Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:35.5104674Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:35.5107207Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.5109700Z SYSTEM                         deployment                                      
+2024-07-22T15:50:35.5112060Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:35.5114652Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:35.5117728Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:35.5119978Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:35.5122497Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:35.5124777Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:35.5127324Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:35.5129737Z SYSTEM_JOBID                   de086ec5-70a9-4aed-a63d-58735428b784            
+2024-07-22T15:50:35.5132171Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:35.5144729Z SYSTEM_OIDCREQUESTURI          https://invoicecloud.vsrm.visualstudio.com/e4...
+2024-07-22T15:50:35.5147017Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:35.5149440Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:35.5151881Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:35.5154473Z SYSTEM_TASKDEFINITIONSURI      https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:35.5156837Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:35.5159220Z SYSTEM_TASKINSTANCEID          b252c527-f8b3-452f-8040-632e284b2016            
+2024-07-22T15:50:35.5161636Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:35.5169931Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:35.5172373Z SYSTEM_TEAMFOUNDATIONSERVERURI https://invoicecloud.vsrm.visualstudio.com/     
+2024-07-22T15:50:35.5174781Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:35.5177428Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:35.5179811Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:35.5182270Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:35.5184671Z SystemDrive                    C:                                              
+2024-07-22T15:50:35.5187080Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:35.5189444Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:35.5219822Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:35.5222296Z TF_BUILD                       True                                            
+2024-07-22T15:50:35.5224635Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:35.5226996Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:35.5229393Z USERNAME                       IC-APP3$                                        
+2024-07-22T15:50:35.5232216Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:35.5235365Z VSTS_PROCESS_LOOKUP_ID         vsts_6a7facd2-cb0e-41f2-ad92-156b3019f88a       
+2024-07-22T15:50:35.5238330Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:35.5241472Z windir                         C:\Windows                                      
+2024-07-22T15:50:35.6131982Z 
+2024-07-22T15:50:35.6132140Z 
+2024-07-22T15:50:35.6759761Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:34.6677927Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:34.8087446Z ==============================================================================
+2024-07-22T15:50:34.8087838Z Task         : PowerShell
+2024-07-22T15:50:34.8088088Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:34.8088234Z Version      : 2.242.1
+2024-07-22T15:50:34.8088436Z Author       : Microsoft Corporation
+2024-07-22T15:50:34.8088696Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:34.8088923Z ==============================================================================
+2024-07-22T15:50:35.9476510Z Generating script.
+2024-07-22T15:50:35.9785854Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:36.0006219Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\e97bb1f3-f051-4f81-872e-38e09957883e.ps1'"
+2024-07-22T15:50:36.2990082Z 
+2024-07-22T15:50:36.2995735Z Name                           Value                                           
+2024-07-22T15:50:36.2996530Z ----                           -----                                           
+2024-07-22T15:50:36.2997399Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:36.3001809Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:36.3010123Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.3018609Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.3021029Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:36.3023514Z AGENT_ID                       159                                             
+2024-07-22T15:50:36.3025955Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:36.3028371Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:36.3030889Z AGENT_MACHINENAME              IC-APP1                                         
+2024-07-22T15:50:36.3033305Z AGENT_NAME                     IC-APP1                                         
+2024-07-22T15:50:36.3035798Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:36.3038492Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:36.3041318Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r132\a                      
+2024-07-22T15:50:36.3044005Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:36.3046498Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:36.3048994Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:36.3057411Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:36.3062785Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:36.3066758Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:36.3070314Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:36.3073008Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:36.3076337Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:36.3091465Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.3105835Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.3109644Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.3113419Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:36.3117694Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.3122558Z COMPUTERNAME                   IC-APP1                                         
+2024-07-22T15:50:36.3126565Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:36.3129824Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:36.3133497Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:36.3137023Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:36.3140960Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:36.3145080Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:36.3150029Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:36.3153904Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:36.3157863Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:36.3162177Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:36.3181844Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:36.3185851Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:36.3202874Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.3218835Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.3222105Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:36.3225635Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:36.3228388Z OS                             Windows_NT                                      
+2024-07-22T15:50:36.3241545Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:36.3254276Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:36.3257300Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:36.3269419Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:36.3271930Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:36.3274408Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:36.3276945Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:36.3279767Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:36.3282330Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:36.3284984Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:36.3288385Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:36.3303206Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:36.3306094Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:36.3308617Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:36.3317121Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:36.3319636Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:36.3322865Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:36.3331216Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:36.3339570Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:36.3348302Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.3357169Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.3359988Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:36.3362437Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:36.3364904Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:36.3367294Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:36.3369746Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:36.3378944Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:36.3429190Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:36.3435348Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:36.3440741Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:36.3446063Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:36.3451210Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:36.3455459Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:36.3458890Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:36.3476320Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:36.3480818Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:36.3484249Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.3487816Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.3491284Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:36.3501790Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:36.3505100Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.3508176Z SYSTEM                         deployment                                      
+2024-07-22T15:50:36.3512116Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r132\a                      
+2024-07-22T15:50:36.3516475Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:36.3520243Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.3523293Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:36.3525907Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r132\a                      
+2024-07-22T15:50:36.3532314Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:36.3535936Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:36.3539331Z SYSTEM_JOBID                   3a270176-0564-49b2-908d-efc04659ecdb            
+2024-07-22T15:50:36.3542828Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:36.3561600Z SYSTEM_OIDCREQUESTURI          https://invoicecloud.vsrm.visualstudio.com/e4...
+2024-07-22T15:50:36.3563634Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:36.3567883Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.3575475Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:36.3576355Z SYSTEM_TASKDEFINITIONSURI      https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:36.3578451Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:36.3581483Z SYSTEM_TASKINSTANCEID          0895a0be-4bb4-42d0-832f-16ec69209ff1            
+2024-07-22T15:50:36.3584456Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:36.3595303Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:36.3599166Z SYSTEM_TEAMFOUNDATIONSERVERURI https://invoicecloud.vsrm.visualstudio.com/     
+2024-07-22T15:50:36.3601696Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:36.3604280Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:36.3607165Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.3610142Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:36.3613067Z SystemDrive                    C:                                              
+2024-07-22T15:50:36.3616615Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:36.3619145Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:36.3621982Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:36.3625091Z TF_BUILD                       True                                            
+2024-07-22T15:50:36.3628657Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:36.3631810Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:36.3634581Z USERNAME                       IC-APP1$                                        
+2024-07-22T15:50:36.3639361Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:36.3643097Z VSTS_PROCESS_LOOKUP_ID         vsts_a28a59fe-a9a3-4ce3-b3f2-cb76085c8b50       
+2024-07-22T15:50:36.3645872Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:36.3649053Z windir                         C:\Windows                                      
+2024-07-22T15:50:36.4538210Z 
+2024-07-22T15:50:36.4538375Z 
+2024-07-22T15:50:36.5118100Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:34.0219950Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:34.1687785Z ==============================================================================
+2024-07-22T15:50:34.1688185Z Task         : PowerShell
+2024-07-22T15:50:34.1688438Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:34.1688585Z Version      : 2.242.1
+2024-07-22T15:50:34.1688786Z Author       : Microsoft Corporation
+2024-07-22T15:50:34.1689043Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:34.1689274Z ==============================================================================
+2024-07-22T15:50:35.4083028Z Generating script.
+2024-07-22T15:50:35.4419130Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:35.4642617Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\209c4723-7bcc-4d5d-80a9-6a3e03ce8794.ps1'"
+2024-07-22T15:50:35.7552152Z 
+2024-07-22T15:50:35.7556148Z Name                           Value                                           
+2024-07-22T15:50:35.7556947Z ----                           -----                                           
+2024-07-22T15:50:35.7557394Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:35.7560953Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:35.7569652Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:35.7579047Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:35.7581639Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:35.7584183Z AGENT_ID                       142                                             
+2024-07-22T15:50:35.7587585Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:35.7591115Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:35.7593578Z AGENT_MACHINENAME              IC-APP2                                         
+2024-07-22T15:50:35.7600004Z AGENT_NAME                     IC-APP2                                         
+2024-07-22T15:50:35.7600425Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:35.7601690Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:35.7604289Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:35.7606672Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:35.7609289Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:35.7611892Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:35.7621053Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:35.7623908Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:35.7626115Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:35.7628556Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:35.7631020Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:35.7633669Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:35.7646243Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:35.7659759Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:35.7662325Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:35.7664696Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:35.7667035Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:35.7669520Z COMPUTERNAME                   IC-APP2                                         
+2024-07-22T15:50:35.7672010Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:35.7676797Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:35.7677952Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:35.7680639Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:35.7683274Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:35.7685576Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:35.7687959Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:35.7690602Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:35.7693044Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:35.7695569Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:35.7707970Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:35.7710386Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:35.7722523Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:35.7734172Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:35.7736453Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:35.7739227Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:35.7741658Z OS                             Windows_NT                                      
+2024-07-22T15:50:35.7758128Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:35.7771071Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:35.7800749Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:35.7801141Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:35.7802017Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:35.7802259Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:35.7802501Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:35.7802769Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:35.7803022Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:35.7803927Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:35.7807795Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:35.7820977Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:35.7824166Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:35.7826307Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:35.7834858Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:35.7837347Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:35.7840155Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:35.7848895Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:35.7858513Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:35.7867132Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:35.7876043Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.7878484Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:35.7880966Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:35.7883477Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:35.7885925Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:35.7888700Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:35.7910827Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:35.7911099Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:35.7911879Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:35.7915871Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:35.7919016Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:35.7924159Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:35.7927862Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:35.7930168Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:35.7947810Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:35.7949860Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:35.7953514Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:35.7957920Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.7960614Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:35.7970615Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:35.7973591Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:35.7975878Z SYSTEM                         deployment                                      
+2024-07-22T15:50:35.7978345Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:35.7980853Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:35.7983302Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:35.7985725Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:35.7988166Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:35.7990706Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:35.7993250Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:35.7995757Z SYSTEM_JOBID                   5ed92596-8ef6-481c-b017-1ed3f164b1c4            
+2024-07-22T15:50:35.7998261Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:35.8010552Z SYSTEM_OIDCREQUESTURI          https://invoicecloud.vsrm.visualstudio.com/e4...
+2024-07-22T15:50:35.8013108Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:35.8015571Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:35.8018104Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:35.8020597Z SYSTEM_TASKDEFINITIONSURI      https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:35.8023046Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:35.8025843Z SYSTEM_TASKINSTANCEID          83c7a1b2-5289-4ded-9377-8c0db0f1d402            
+2024-07-22T15:50:35.8028394Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:35.8037136Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://invoicecloud.visualstudio.com/          
+2024-07-22T15:50:35.8040435Z SYSTEM_TEAMFOUNDATIONSERVERURI https://invoicecloud.vsrm.visualstudio.com/     
+2024-07-22T15:50:35.8043397Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:35.8046905Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:35.8049226Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:35.8052158Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:35.8055197Z SystemDrive                    C:                                              
+2024-07-22T15:50:35.8057488Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:35.8059915Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:35.8062822Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:35.8065113Z TF_BUILD                       True                                            
+2024-07-22T15:50:35.8068082Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:35.8070252Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:35.8072774Z USERNAME                       IC-APP2$                                        
+2024-07-22T15:50:35.8075282Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:35.8077683Z VSTS_PROCESS_LOOKUP_ID         vsts_05f0c487-2bef-441b-8d8f-82789006a7eb       
+2024-07-22T15:50:35.8080472Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:35.8082694Z windir                         C:\Windows                                      
+2024-07-22T15:50:35.8984972Z 
+2024-07-22T15:50:35.8985137Z 
+2024-07-22T15:50:35.9671332Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:34.4737109Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:34.6906418Z ==============================================================================
+2024-07-22T15:50:34.6906814Z Task         : PowerShell
+2024-07-22T15:50:34.6907059Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:34.6907224Z Version      : 2.242.1
+2024-07-22T15:50:34.6907451Z Author       : Microsoft Corporation
+2024-07-22T15:50:34.6907715Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:34.6907939Z ==============================================================================
+2024-07-22T15:50:35.7535003Z Generating script.
+2024-07-22T15:50:35.7835374Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:35.8048459Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\06c6319c-ee07-4ef2-9f6a-d7f723c39245.ps1'"
+2024-07-22T15:50:36.0863381Z 
+2024-07-22T15:50:36.0867256Z Name                           Value                                           
+2024-07-22T15:50:36.0867890Z ----                           -----                                           
+2024-07-22T15:50:36.0868279Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:36.0871692Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:36.0879976Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.0888125Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.0890805Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:36.0893176Z AGENT_ID                       139                                             
+2024-07-22T15:50:36.0895577Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:36.0897942Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:36.0900251Z AGENT_MACHINENAME              IC-APP4                                         
+2024-07-22T15:50:36.0902670Z AGENT_NAME                     IC-APP4                                         
+2024-07-22T15:50:36.0905442Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:36.0907374Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:36.0909778Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:36.0912066Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:36.0914507Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:36.0916820Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:36.0924679Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:36.0927066Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:36.0929361Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:36.0931740Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:36.0934097Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:36.0936468Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:36.0948456Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.0960651Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.0963305Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.0965552Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:36.0967770Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.0970160Z COMPUTERNAME                   IC-APP4                                         
+2024-07-22T15:50:36.0972433Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:36.0974709Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:36.0977048Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:36.0979369Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:36.0981700Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:36.0984024Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:36.0986374Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:36.0988727Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:36.0991143Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:36.0993474Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:36.1004933Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:36.1007298Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:36.1018870Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.1030293Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.1032628Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:36.1034974Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:36.1037356Z OS                             Windows_NT                                      
+2024-07-22T15:50:36.1048771Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:36.1060296Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:36.1062518Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:36.1073929Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:36.1076294Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:36.1078629Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:36.1080967Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:36.1083313Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:36.1085627Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:36.1087973Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:36.1090245Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:36.1101715Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:36.1104131Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:36.1106525Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:36.1116386Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:36.1120253Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:36.1122951Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:36.1131008Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:36.1139058Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:36.1146866Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.1154825Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.1157178Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:36.1159528Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:36.1161969Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:36.1164227Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:36.1166580Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:36.1174363Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:36.1182277Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:36.1184678Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:36.1187002Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:36.1189367Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:36.1191713Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:36.1194051Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:36.1196438Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:36.1208047Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:36.1210334Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:36.1212706Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.1215085Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.1217450Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:36.1225360Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:36.1227736Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.1230111Z SYSTEM                         deployment                                      
+2024-07-22T15:50:36.1232527Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:36.1234906Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:36.1237318Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.1239664Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:36.1242061Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r138\a                      
+2024-07-22T15:50:36.1244378Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:36.1246746Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:36.1249162Z SYSTEM_JOBID                   f2fea581-b7d5-4103-887a-d0130334f108            
+2024-07-22T15:50:36.1251526Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:36.1263773Z SYSTEM_OIDCREQUESTURI          https://vsrm.dev.azure.com/invoicecloud/e4aa9...
+2024-07-22T15:50:36.1266353Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:36.1268674Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.1271251Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:36.1274055Z SYSTEM_TASKDEFINITIONSURI      https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.1276441Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:36.1280232Z SYSTEM_TASKINSTANCEID          f31610c7-13af-4205-b934-af4f273aaa39            
+2024-07-22T15:50:36.1282556Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:36.1290408Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.1292794Z SYSTEM_TEAMFOUNDATIONSERVERURI https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.1295147Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:36.1297567Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:36.1299887Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.1302255Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:36.1304590Z SystemDrive                    C:                                              
+2024-07-22T15:50:36.1307028Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:36.1309374Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:36.1311826Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:36.1314180Z TF_BUILD                       True                                            
+2024-07-22T15:50:36.1316570Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:36.1318897Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:36.1321218Z USERNAME                       IC-APP4$                                        
+2024-07-22T15:50:36.1323703Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:36.1325954Z VSTS_PROCESS_LOOKUP_ID         vsts_fcbfc23f-a6b7-4f7d-aa11-4882c8ab06eb       
+2024-07-22T15:50:36.1328377Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:36.1330653Z windir                         C:\Windows                                      
+2024-07-22T15:50:36.2191393Z 
+2024-07-22T15:50:36.2191572Z 
+2024-07-22T15:50:36.2762866Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:34.8534265Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:34.9965604Z ==============================================================================
+2024-07-22T15:50:34.9966242Z Task         : PowerShell
+2024-07-22T15:50:34.9966656Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:34.9966942Z Version      : 2.242.1
+2024-07-22T15:50:34.9967298Z Author       : Microsoft Corporation
+2024-07-22T15:50:34.9967756Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:34.9968196Z ==============================================================================
+2024-07-22T15:50:36.1896393Z Generating script.
+2024-07-22T15:50:36.2220063Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:36.2445231Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\2442b9bc-28f1-41fd-959a-e261a3dab500.ps1'"
+2024-07-22T15:50:36.5758227Z 
+2024-07-22T15:50:36.5764488Z Name                           Value                                           
+2024-07-22T15:50:36.5765709Z ----                           -----                                           
+2024-07-22T15:50:36.5767281Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:36.5771460Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:36.5782010Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.5793810Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.5797754Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:36.5802626Z AGENT_ID                       79                                              
+2024-07-22T15:50:36.5806409Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:36.5814697Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:36.5815386Z AGENT_MACHINENAME              IC-APP5                                         
+2024-07-22T15:50:36.5818234Z AGENT_NAME                     IC-APP5                                         
+2024-07-22T15:50:36.5822629Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:36.5825943Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:36.5829425Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.5832681Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:36.5835642Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:36.5839510Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:36.5850067Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:36.5853894Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:36.5857706Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:36.5861423Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:36.5864631Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:36.5868172Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:36.5882035Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.5899462Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.5902780Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.5905994Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:36.5909447Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.5913296Z COMPUTERNAME                   IC-APP5                                         
+2024-07-22T15:50:36.5916995Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:36.5920063Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:36.5923703Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:36.5927208Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:36.5930635Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:36.5934015Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:36.5937633Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:36.5940782Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:36.5944154Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:36.5946764Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:36.5959407Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:36.5965767Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:36.5976599Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.5990822Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.5994272Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:36.5997494Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:36.6000459Z OS                             Windows_NT                                      
+2024-07-22T15:50:36.6012333Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:36.6024609Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:36.6027505Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:36.6039829Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:36.6042153Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:36.6044506Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:36.6047149Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:36.6049330Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:36.6051856Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:36.6054415Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:36.6056863Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:36.6069701Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:36.6072945Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:36.6075339Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:36.6083946Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:36.6086611Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:36.6088993Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:36.6097406Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:36.6106255Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:36.6114829Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.6125423Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.6129708Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:36.6133994Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:36.6136625Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:36.6139364Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:36.6142487Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:36.6151417Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:36.6160489Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:36.6163341Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:36.6165830Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:36.6168506Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:36.6170610Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:36.6173018Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:36.6175592Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:36.6188176Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:36.6191010Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:36.6193550Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.6196435Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.6198667Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:36.6207256Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:36.6209463Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.6211922Z SYSTEM                         deployment                                      
+2024-07-22T15:50:36.6214353Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.6217373Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:36.6219910Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.6222040Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:36.6224507Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.6227076Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:36.6229565Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:36.6232161Z SYSTEM_JOBID                   ff01f4d2-ebab-49c1-9922-29f643ffa846            
+2024-07-22T15:50:36.6234807Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:36.6247619Z SYSTEM_OIDCREQUESTURI          https://vsrm.dev.azure.com/invoicecloud/e4aa9...
+2024-07-22T15:50:36.6250159Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:36.6252663Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.6255460Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:36.6258040Z SYSTEM_TASKDEFINITIONSURI      https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.6261589Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:36.6264664Z SYSTEM_TASKINSTANCEID          f1ac58b9-1a9e-4f8b-8e3b-64eeb023ebd3            
+2024-07-22T15:50:36.6267179Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:36.6276571Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.6280833Z SYSTEM_TEAMFOUNDATIONSERVERURI https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.6283968Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:36.6287545Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:36.6290951Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.6294334Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:36.6297498Z SystemDrive                    C:                                              
+2024-07-22T15:50:36.6300474Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:36.6303018Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:36.6305470Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:36.6307992Z TF_BUILD                       True                                            
+2024-07-22T15:50:36.6310551Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:36.6313069Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:36.6315522Z USERNAME                       IC-APP5$                                        
+2024-07-22T15:50:36.6318069Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:36.6320976Z VSTS_PROCESS_LOOKUP_ID         vsts_111b534a-5f45-4635-8210-eae10f04f3a5       
+2024-07-22T15:50:36.6323344Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:36.6325881Z windir                         C:\Windows                                      
+2024-07-22T15:50:36.7318829Z 
+2024-07-22T15:50:36.7318987Z 
+2024-07-22T15:50:36.8101908Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:34.9259773Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:35.0643078Z ==============================================================================
+2024-07-22T15:50:35.0643481Z Task         : PowerShell
+2024-07-22T15:50:35.0643723Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:35.0643884Z Version      : 2.242.1
+2024-07-22T15:50:35.0644101Z Author       : Microsoft Corporation
+2024-07-22T15:50:35.0644354Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:35.0644596Z ==============================================================================
+2024-07-22T15:50:36.1192732Z Generating script.
+2024-07-22T15:50:36.1490600Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:36.1788413Z ##[command]"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\b7a5da57-7b32-4b80-9565-99adec97652c.ps1'"
+2024-07-22T15:50:36.4729140Z 
+2024-07-22T15:50:36.4740375Z Name                           Value                                           
+2024-07-22T15:50:36.4741163Z ----                           -----                                           
+2024-07-22T15:50:36.4741713Z agent.jobstatus                Succeeded                                       
+2024-07-22T15:50:36.4742831Z AGENT_DEPLOYMENTGROUPID        37                                              
+2024-07-22T15:50:36.4752706Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.4762036Z AGENT_DISABLELOGPLUGIN_TEST... true                                            
+2024-07-22T15:50:36.4765514Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                   
+2024-07-22T15:50:36.4769162Z AGENT_ID                       80                                              
+2024-07-22T15:50:36.4771768Z AGENT_JOBNAME                  Release                                         
+2024-07-22T15:50:36.4774598Z AGENT_JOBSTATUS                Succeeded                                       
+2024-07-22T15:50:36.4777509Z AGENT_MACHINENAME              IC-APP6                                         
+2024-07-22T15:50:36.4779855Z AGENT_NAME                     IC-APP6                                         
+2024-07-22T15:50:36.4782769Z AGENT_OS                       Windows_NT                                      
+2024-07-22T15:50:36.4786075Z AGENT_OSARCHITECTURE           X64                                             
+2024-07-22T15:50:36.4789367Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.4792171Z AGENT_RETAINDEFAULTENCODING    false                                           
+2024-07-22T15:50:36.4795100Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                             
+2024-07-22T15:50:36.4797278Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                  
+2024-07-22T15:50:36.4805899Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                         
+2024-07-22T15:50:36.4809441Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                       
+2024-07-22T15:50:36.4813070Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                       
+2024-07-22T15:50:36.4815871Z AGENT_VERSION                  2.193.0                                         
+2024-07-22T15:50:36.4818415Z AGENT_WORKFOLDER               C:\azagent\A1\_work                             
+2024-07-22T15:50:36.4820896Z ALLUSERSPROFILE                C:\ProgramData                                  
+2024-07-22T15:50:36.4833470Z APPDATA                        C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.4845944Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.4848389Z CommonProgramFiles             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.4850823Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files             
+2024-07-22T15:50:36.4853371Z CommonProgramW6432             C:\Program Files\Common Files                   
+2024-07-22T15:50:36.4855655Z COMPUTERNAME                   IC-APP6                                         
+2024-07-22T15:50:36.4858250Z ComSpec                        C:\Windows\system32\cmd.exe                     
+2024-07-22T15:50:36.4860732Z COR_ENABLE_PROFILING           1                                               
+2024-07-22T15:50:36.4863367Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}          
+2024-07-22T15:50:36.4865680Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\            
+2024-07-22T15:50:36.4868089Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}          
+2024-07-22T15:50:36.4870493Z GIT_TERMINAL_PROMPT            0                                               
+2024-07-22T15:50:36.4872953Z IC_APPDATA_DIR                 E:\Data\AppData                                 
+2024-07-22T15:50:36.4875457Z IC_APPS_DIR                    E:\Data\Apps                                    
+2024-07-22T15:50:36.4877777Z IC_ENV_TYPE                    2                                               
+2024-07-22T15:50:36.4880123Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                             
+2024-07-22T15:50:36.4891938Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icft...
+2024-07-22T15:50:36.4894236Z IC_LOGS_DIR                    E:\Data\Logs                                    
+2024-07-22T15:50:36.4905835Z LOCALAPPDATA                   C:\Windows\system32\config\systemprofile\AppD...
+2024-07-22T15:50:36.4917616Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_rel...
+2024-07-22T15:50:36.4920065Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\          
+2024-07-22T15:50:36.4922414Z NUMBER_OF_PROCESSORS           16                                              
+2024-07-22T15:50:36.4924878Z OS                             Windows_NT                                      
+2024-07-22T15:50:36.4936465Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\C...
+2024-07-22T15:50:36.4949280Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;....
+2024-07-22T15:50:36.4952308Z PROCESSOR_ARCHITECTURE         AMD64                                           
+2024-07-22T15:50:36.4964985Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, Genuin...
+2024-07-22T15:50:36.4967356Z PROCESSOR_LEVEL                6                                               
+2024-07-22T15:50:36.4969684Z PROCESSOR_REVISION             6a06                                            
+2024-07-22T15:50:36.4972166Z ProgramData                    C:\ProgramData                                  
+2024-07-22T15:50:36.4974673Z ProgramFiles                   C:\Program Files                                
+2024-07-22T15:50:36.4977180Z ProgramFiles(x86)              C:\Program Files (x86)                          
+2024-07-22T15:50:36.4979618Z ProgramW6432                   C:\Program Files                                
+2024-07-22T15:50:36.4981975Z PSExecutionPolicyPreference    Unrestricted                                    
+2024-07-22T15:50:36.4994596Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:...
+2024-07-22T15:50:36.4996741Z PUBLIC                         C:\Users\Public                                 
+2024-07-22T15:50:36.4999160Z RELEASE_ATTEMPTNUMBER          2                                               
+2024-07-22T15:50:36.5007360Z RELEASE_DEFINITIONENVIRONME... 1429                                            
+2024-07-22T15:50:36.5009688Z RELEASE_DEFINITIONID           830                                             
+2024-07-22T15:50:36.5012188Z RELEASE_DEFINITIONNAME         Get Environment Variables                       
+2024-07-22T15:50:36.5020832Z RELEASE_DEFINITIONSNAPSHOTR...                                                 
+2024-07-22T15:50:36.5029244Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                    
+2024-07-22T15:50:36.5037349Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.5045923Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.5048350Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                            
+2024-07-22T15:50:36.5050740Z RELEASE_DEPLOYMENTID           45477                                           
+2024-07-22T15:50:36.5053229Z RELEASE_DEPLOYPHASEID          56284                                           
+2024-07-22T15:50:36.5055586Z RELEASE_ENVIRONMENTID          116480                                          
+2024-07-22T15:50:36.5058024Z RELEASE_ENVIRONMENTNAME        Stage 1                                         
+2024-07-22T15:50:36.5066338Z RELEASE_ENVIRONMENTPROTECTE...                                                 
+2024-07-22T15:50:36.5074329Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                      
+2024-07-22T15:50:36.5076807Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480   
+2024-07-22T15:50:36.5079208Z RELEASE_REASON                 Manual                                          
+2024-07-22T15:50:36.5081616Z RELEASE_RELEASEDESCRIPTION                                                     
+2024-07-22T15:50:36.5083966Z RELEASE_RELEASEID              31465                                           
+2024-07-22T15:50:36.5086378Z RELEASE_RELEASENAME            Release-1                                       
+2024-07-22T15:50:36.5088827Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465        
+2024-07-22T15:50:36.5100594Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3...
+2024-07-22T15:50:36.5103020Z RELEASE_REQUESTEDFOR           Scott Miller                                    
+2024-07-22T15:50:36.5105422Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                        
+2024-07-22T15:50:36.5107753Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.5110158Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                           
+2024-07-22T15:50:36.5119007Z RELEASE_TRIGGERINGARTIFACT_...                                                 
+2024-07-22T15:50:36.5122723Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25            
+2024-07-22T15:50:36.5125524Z SYSTEM                         deployment                                      
+2024-07-22T15:50:36.5127873Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.5130333Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20            
+2024-07-22T15:50:36.5132789Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.5135161Z SYSTEM_CULTURE                 en-US                                           
+2024-07-22T15:50:36.5137602Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r140\a                      
+2024-07-22T15:50:36.5139948Z SYSTEM_ENABLEACCESSTOKEN       False                                           
+2024-07-22T15:50:36.5142580Z SYSTEM_HOSTTYPE                deployment                                      
+2024-07-22T15:50:36.5144820Z SYSTEM_JOBID                   e1d18341-416d-4e29-b958-7ddf3d3a1b7b            
+2024-07-22T15:50:36.5147437Z SYSTEM_JOBPARALLELISMTAG       Private                                         
+2024-07-22T15:50:36.5159278Z SYSTEM_OIDCREQUESTURI          https://vsrm.dev.azure.com/invoicecloud/e4aa9...
+2024-07-22T15:50:36.5161785Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                       
+2024-07-22T15:50:36.5164061Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.5166495Z SYSTEM_SERVERTYPE              Hosted                                          
+2024-07-22T15:50:36.5168885Z SYSTEM_TASKDEFINITIONSURI      https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.5171473Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                               
+2024-07-22T15:50:36.5174091Z SYSTEM_TASKINSTANCEID          4241bd7a-ee84-4ecc-8746-fc03f58e40f9            
+2024-07-22T15:50:36.5176448Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                
+2024-07-22T15:50:36.5184472Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://dev.azure.com/invoicecloud/             
+2024-07-22T15:50:36.5186968Z SYSTEM_TEAMFOUNDATIONSERVERURI https://vsrm.dev.azure.com/invoicecloud/        
+2024-07-22T15:50:36.5189454Z SYSTEM_TEAMPROJECT             Src                                             
+2024-07-22T15:50:36.5191873Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd            
+2024-07-22T15:50:36.5194696Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5            
+2024-07-22T15:50:36.5197086Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                             
+2024-07-22T15:50:36.5200751Z SystemDrive                    C:                                              
+2024-07-22T15:50:36.5204007Z SystemRoot                     C:\Windows                                      
+2024-07-22T15:50:36.5207155Z TASK_DISPLAYNAME               PowerShell Script                               
+2024-07-22T15:50:36.5210198Z TEMP                           C:\Windows\TEMP                                 
+2024-07-22T15:50:36.5213010Z TF_BUILD                       True                                            
+2024-07-22T15:50:36.5215825Z TMP                            C:\Windows\TEMP                                 
+2024-07-22T15:50:36.5218314Z USERDOMAIN                     INVOICECLOUD                                    
+2024-07-22T15:50:36.5220535Z USERNAME                       IC-APP6$                                        
+2024-07-22T15:50:36.5223263Z USERPROFILE                    C:\Windows\system32\config\systemprofile        
+2024-07-22T15:50:36.5225733Z VSTS_PROCESS_LOOKUP_ID         vsts_39b97ed8-6111-4b46-897a-75bd673a3739       
+2024-07-22T15:50:36.5228263Z VSTS_SECRET_VARIABLES                                                          
+2024-07-22T15:50:36.5230689Z windir                         C:\Windows                                      
+2024-07-22T15:50:36.6109452Z 
+2024-07-22T15:50:36.6109613Z 
+2024-07-22T15:50:36.6699718Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:41.4850796Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:41.6364951Z ==============================================================================
+2024-07-22T15:50:41.6365457Z Task         : PowerShell
+2024-07-22T15:50:41.6365706Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:41.6365875Z Version      : 2.242.1
+2024-07-22T15:50:41.6366089Z Author       : Microsoft Corporation
+2024-07-22T15:50:41.6366354Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:41.6366595Z ==============================================================================
+2024-07-22T15:50:42.9099300Z Generating script.
+2024-07-22T15:50:42.9407103Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:42.9633707Z ##[command]"C:\windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\6af80080-bcef-4bac-bbba-080761498660.ps1'"
+2024-07-22T15:50:43.2989295Z 
+2024-07-22T15:50:43.2995630Z Name                           Value                                                                                   
+2024-07-22T15:50:43.2996773Z ----                           -----                                                                                   
+2024-07-22T15:50:43.2997895Z agent.jobstatus                Succeeded                                                                               
+2024-07-22T15:50:43.3002446Z AGENT_DEPLOYMENTGROUPID        37                                                                                      
+2024-07-22T15:50:43.3014577Z AGENT_DISABLELOGPLUGIN_TEST... true                                                                                    
+2024-07-22T15:50:43.3023415Z AGENT_DISABLELOGPLUGIN_TEST... true                                                                                    
+2024-07-22T15:50:43.3026063Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                                                           
+2024-07-22T15:50:43.3028616Z AGENT_ID                       172                                                                                     
+2024-07-22T15:50:43.3031357Z AGENT_JOBNAME                  Release                                                                                 
+2024-07-22T15:50:43.3033960Z AGENT_JOBSTATUS                Succeeded                                                                               
+2024-07-22T15:50:43.3037005Z AGENT_MACHINENAME              IC-APP8                                                                                 
+2024-07-22T15:50:43.3039357Z AGENT_NAME                     IC-APP8                                                                                 
+2024-07-22T15:50:43.3042026Z AGENT_OS                       Windows_NT                                                                              
+2024-07-22T15:50:43.3044643Z AGENT_OSARCHITECTURE           X64                                                                                     
+2024-07-22T15:50:43.3047328Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r116\a                                                              
+2024-07-22T15:50:43.3050190Z AGENT_RETAINDEFAULTENCODING    false                                                                                   
+2024-07-22T15:50:43.3052494Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.3055079Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                                                          
+2024-07-22T15:50:43.3064850Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                                                                 
+2024-07-22T15:50:43.3068015Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                                                               
+2024-07-22T15:50:43.3070807Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                                                               
+2024-07-22T15:50:43.3073536Z AGENT_VERSION                  2.193.0                                                                                 
+2024-07-22T15:50:43.3076194Z AGENT_WORKFOLDER               C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.3078760Z ALLUSERSPROFILE                C:\ProgramData                                                                          
+2024-07-22T15:50:43.3081328Z APPDATA                        C:\windows\system32\config\systemprofile\AppData\Roaming                                
+2024-07-22T15:50:43.3084269Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_release_830_31465_116480_2                    
+2024-07-22T15:50:43.3088254Z CommonProgramFiles             C:\Program Files\Common Files                                                           
+2024-07-22T15:50:43.3089681Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files                                                     
+2024-07-22T15:50:43.3092185Z CommonProgramW6432             C:\Program Files\Common Files                                                           
+2024-07-22T15:50:43.3094835Z COMPUTERNAME                   IC-APP8                                                                                 
+2024-07-22T15:50:43.3097550Z ComSpec                        C:\windows\system32\cmd.exe                                                             
+2024-07-22T15:50:43.3100092Z COR_ENABLE_PROFILING           1                                                                                       
+2024-07-22T15:50:43.3102658Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}                                                  
+2024-07-22T15:50:43.3105189Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\                                                    
+2024-07-22T15:50:43.3107803Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}                                                  
+2024-07-22T15:50:43.3110390Z DriverData                     C:\Windows\System32\Drivers\DriverData                                                  
+2024-07-22T15:50:43.3112967Z GIT_TERMINAL_PROMPT            0                                                                                       
+2024-07-22T15:50:43.3115486Z IC_APPDATA_DIR                 E:\Data\AppData                                                                         
+2024-07-22T15:50:43.3118042Z IC_APPS_DIR                    E:\Data\Apps                                                                            
+2024-07-22T15:50:43.3120652Z IC_ENV_TYPE                    2                                                                                       
+2024-07-22T15:50:43.3123216Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                                                                     
+2024-07-22T15:50:43.3125796Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icftproot                                      
+2024-07-22T15:50:43.3128461Z IC_LOGS_DIR                    E:\Data\Logs                                                                            
+2024-07-22T15:50:43.3130926Z LOCALAPPDATA                   C:\windows\system32\config\systemprofile\AppData\Local                                  
+2024-07-22T15:50:43.3133513Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_release_830_31465_116480_2                    
+2024-07-22T15:50:43.3136108Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\                                                  
+2024-07-22T15:50:43.3138800Z NUMBER_OF_PROCESSORS           16                                                                                      
+2024-07-22T15:50:43.3141416Z OS                             Windows_NT                                                                              
+2024-07-22T15:50:43.3164165Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin;C:\windows\system32;C:\windows;...
+2024-07-22T15:50:43.3167116Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL                              
+2024-07-22T15:50:43.3169652Z PROCESSOR_ARCHITECTURE         AMD64                                                                                   
+2024-07-22T15:50:43.3172138Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, GenuineIntel                                     
+2024-07-22T15:50:43.3174687Z PROCESSOR_LEVEL                6                                                                                       
+2024-07-22T15:50:43.3177618Z PROCESSOR_REVISION             6a06                                                                                    
+2024-07-22T15:50:43.3179992Z ProgramData                    C:\ProgramData                                                                          
+2024-07-22T15:50:43.3182592Z ProgramFiles                   C:\Program Files                                                                        
+2024-07-22T15:50:43.3185124Z ProgramFiles(x86)              C:\Program Files (x86)                                                                  
+2024-07-22T15:50:43.3187578Z ProgramW6432                   C:\Program Files                                                                        
+2024-07-22T15:50:43.3190042Z PSExecutionPolicyPreference    Unrestricted                                                                            
+2024-07-22T15:50:43.3211263Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:\windows\system32\WindowsPowerShell\v1.0...
+2024-07-22T15:50:43.3213983Z PUBLIC                         C:\Users\Public                                                                         
+2024-07-22T15:50:43.3216588Z RELEASE_ATTEMPTNUMBER          2                                                                                       
+2024-07-22T15:50:43.3225043Z RELEASE_DEFINITIONENVIRONME... 1429                                                                                    
+2024-07-22T15:50:43.3227561Z RELEASE_DEFINITIONID           830                                                                                     
+2024-07-22T15:50:43.3230029Z RELEASE_DEFINITIONNAME         Get Environment Variables                                                               
+2024-07-22T15:50:43.3238298Z RELEASE_DEFINITIONSNAPSHOTR...                                                                                         
+2024-07-22T15:50:43.3246689Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                                                            
+2024-07-22T15:50:43.3255109Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                                                                
+2024-07-22T15:50:43.3264359Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.3267030Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                                                                    
+2024-07-22T15:50:43.3269643Z RELEASE_DEPLOYMENTID           45477                                                                                   
+2024-07-22T15:50:43.3272172Z RELEASE_DEPLOYPHASEID          56284                                                                                   
+2024-07-22T15:50:43.3274644Z RELEASE_ENVIRONMENTID          116480                                                                                  
+2024-07-22T15:50:43.3277115Z RELEASE_ENVIRONMENTNAME        Stage 1                                                                                 
+2024-07-22T15:50:43.3285532Z RELEASE_ENVIRONMENTPROTECTE...                                                                                         
+2024-07-22T15:50:43.3293855Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                                                              
+2024-07-22T15:50:43.3296361Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480                                           
+2024-07-22T15:50:43.3298839Z RELEASE_REASON                 Manual                                                                                  
+2024-07-22T15:50:43.3301311Z RELEASE_RELEASEDESCRIPTION                                                                                             
+2024-07-22T15:50:43.3303885Z RELEASE_RELEASEID              31465                                                                                   
+2024-07-22T15:50:43.3306355Z RELEASE_RELEASENAME            Release-1                                                                               
+2024-07-22T15:50:43.3308931Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465                                                
+2024-07-22T15:50:43.3330036Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3885-41ad-ab2e-df7e4656a0dd/_release?rele...
+2024-07-22T15:50:43.3332547Z RELEASE_REQUESTEDFOR           Scott Miller                                                                            
+2024-07-22T15:50:43.3335027Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                                                                
+2024-07-22T15:50:43.3337516Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.3339940Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                                                                   
+2024-07-22T15:50:43.3348480Z RELEASE_TRIGGERINGARTIFACT_...                                                                                         
+2024-07-22T15:50:43.3351208Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.3353908Z SYSTEM                         deployment                                                                              
+2024-07-22T15:50:43.3356411Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r116\a                                                              
+2024-07-22T15:50:43.3358949Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20                                                    
+2024-07-22T15:50:43.3361874Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/                                                
+2024-07-22T15:50:43.3364471Z SYSTEM_CULTURE                 en-US                                                                                   
+2024-07-22T15:50:43.3367297Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r116\a                                                              
+2024-07-22T15:50:43.3369876Z SYSTEM_ENABLEACCESSTOKEN       False                                                                                   
+2024-07-22T15:50:43.3372652Z SYSTEM_HOSTTYPE                deployment                                                                              
+2024-07-22T15:50:43.3375309Z SYSTEM_JOBID                   18ee6a17-8461-4bf1-b850-e9371e6d8709                                                    
+2024-07-22T15:50:43.3377896Z SYSTEM_JOBPARALLELISMTAG       Private                                                                                 
+2024-07-22T15:50:43.3400825Z SYSTEM_OIDCREQUESTURI          https://vsrm.dev.azure.com/invoicecloud/e4aa9c14-3885-41ad-ab2e-df7e4656a0dd/_apis/di...
+2024-07-22T15:50:43.3403510Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                                                               
+2024-07-22T15:50:43.3406168Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5                                                    
+2024-07-22T15:50:43.3408920Z SYSTEM_SERVERTYPE              Hosted                                                                                  
+2024-07-22T15:50:43.3411549Z SYSTEM_TASKDEFINITIONSURI      https://dev.azure.com/invoicecloud/                                                     
+2024-07-22T15:50:43.3414052Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                                                                       
+2024-07-22T15:50:43.3416493Z SYSTEM_TASKINSTANCEID          ff4ab32d-a69c-4a61-88ec-68227b8452ae                                                    
+2024-07-22T15:50:43.3418974Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                                                        
+2024-07-22T15:50:43.3430205Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://dev.azure.com/invoicecloud/                                                     
+2024-07-22T15:50:43.3433425Z SYSTEM_TEAMFOUNDATIONSERVERURI https://vsrm.dev.azure.com/invoicecloud/                                                
+2024-07-22T15:50:43.3436024Z SYSTEM_TEAMPROJECT             Src                                                                                     
+2024-07-22T15:50:43.3438646Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd                                                    
+2024-07-22T15:50:43.3441161Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5                                                    
+2024-07-22T15:50:43.3443683Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.3446200Z SystemDrive                    C:                                                                                      
+2024-07-22T15:50:43.3448626Z SystemRoot                     C:\windows                                                                              
+2024-07-22T15:50:43.3451170Z TASK_DISPLAYNAME               PowerShell Script                                                                       
+2024-07-22T15:50:43.3453659Z TEMP                           C:\windows\TEMP                                                                         
+2024-07-22T15:50:43.3456115Z TF_BUILD                       True                                                                                    
+2024-07-22T15:50:43.3458609Z TMP                            C:\windows\TEMP                                                                         
+2024-07-22T15:50:43.3461403Z USERDOMAIN                     INVOICECLOUD                                                                            
+2024-07-22T15:50:43.3464162Z USERNAME                       IC-APP8$                                                                                
+2024-07-22T15:50:43.3466678Z USERPROFILE                    C:\windows\system32\config\systemprofile                                                
+2024-07-22T15:50:43.3469141Z VSTS_PROCESS_LOOKUP_ID         vsts_f9826d87-f498-4e5b-b4ea-42b110811146                                               
+2024-07-22T15:50:43.3471641Z VSTS_SECRET_VARIABLES                                                                                                  
+2024-07-22T15:50:43.3474090Z windir                         C:\windows                                                                              
+2024-07-22T15:50:43.4447678Z 
+2024-07-22T15:50:43.4447860Z 
+2024-07-22T15:50:43.4965531Z ##[section]Finishing: PowerShell Script
+2024-07-22T15:50:41.2917491Z ##[section]Starting: PowerShell Script
+2024-07-22T15:50:41.4419601Z ==============================================================================
+2024-07-22T15:50:41.4420016Z Task         : PowerShell
+2024-07-22T15:50:41.4420267Z Description  : Run a PowerShell script on Linux, macOS, or Windows
+2024-07-22T15:50:41.4420431Z Version      : 2.242.1
+2024-07-22T15:50:41.4420646Z Author       : Microsoft Corporation
+2024-07-22T15:50:41.4420905Z Help         : https://docs.microsoft.com/azure/devops/pipelines/tasks/utility/powershell
+2024-07-22T15:50:41.4421133Z ==============================================================================
+2024-07-22T15:50:42.7299768Z Generating script.
+2024-07-22T15:50:42.7613136Z ========================== Starting Command Output ===========================
+2024-07-22T15:50:42.7835385Z ##[command]"C:\windows\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command ". 'C:\azagent\A1\_work\_temp\a9e2adfc-84ac-49bd-b200-72ebac80fb00.ps1'"
+2024-07-22T15:50:43.0928395Z 
+2024-07-22T15:50:43.0933662Z Name                           Value                                                                                   
+2024-07-22T15:50:43.0935829Z ----                           -----                                                                                   
+2024-07-22T15:50:43.0937354Z agent.jobstatus                Succeeded                                                                               
+2024-07-22T15:50:43.0941064Z AGENT_DEPLOYMENTGROUPID        37                                                                                      
+2024-07-22T15:50:43.0950135Z AGENT_DISABLELOGPLUGIN_TEST... true                                                                                    
+2024-07-22T15:50:43.0959864Z AGENT_DISABLELOGPLUGIN_TEST... true                                                                                    
+2024-07-22T15:50:43.0962593Z AGENT_HOMEDIRECTORY            C:\azagent\A1                                                                           
+2024-07-22T15:50:43.0965146Z AGENT_ID                       170                                                                                     
+2024-07-22T15:50:43.0967717Z AGENT_JOBNAME                  Release                                                                                 
+2024-07-22T15:50:43.0970203Z AGENT_JOBSTATUS                Succeeded                                                                               
+2024-07-22T15:50:43.0972842Z AGENT_MACHINENAME              IC-APP7                                                                                 
+2024-07-22T15:50:43.0975300Z AGENT_NAME                     IC-APP7                                                                                 
+2024-07-22T15:50:43.0977752Z AGENT_OS                       Windows_NT                                                                              
+2024-07-22T15:50:43.0980232Z AGENT_OSARCHITECTURE           X64                                                                                     
+2024-07-22T15:50:43.0982779Z AGENT_RELEASEDIRECTORY         C:\azagent\A1\_work\r112\a                                                              
+2024-07-22T15:50:43.0985256Z AGENT_RETAINDEFAULTENCODING    false                                                                                   
+2024-07-22T15:50:43.0987754Z AGENT_ROOTDIRECTORY            C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.0990216Z AGENT_SERVEROMDIRECTORY        C:\azagent\A1\externals\vstsom                                                          
+2024-07-22T15:50:43.0998650Z AGENT_TASKRESTRICTIONSENFOR... Enabled                                                                                 
+2024-07-22T15:50:43.1001218Z AGENT_TEMPDIRECTORY            C:\azagent\A1\_work\_temp                                                               
+2024-07-22T15:50:43.1003681Z AGENT_TOOLSDIRECTORY           C:\azagent\A1\_work\_tool                                                               
+2024-07-22T15:50:43.1006271Z AGENT_VERSION                  2.193.0                                                                                 
+2024-07-22T15:50:43.1008758Z AGENT_WORKFOLDER               C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.1011373Z ALLUSERSPROFILE                C:\ProgramData                                                                          
+2024-07-22T15:50:43.1013895Z APPDATA                        C:\windows\system32\config\systemprofile\AppData\Roaming                                
+2024-07-22T15:50:43.1016457Z AZURE_HTTP_USER_AGENT          VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_release_830_31465_116480_2                    
+2024-07-22T15:50:43.1018919Z CommonProgramFiles             C:\Program Files\Common Files                                                           
+2024-07-22T15:50:43.1021452Z CommonProgramFiles(x86)        C:\Program Files (x86)\Common Files                                                     
+2024-07-22T15:50:43.1024005Z CommonProgramW6432             C:\Program Files\Common Files                                                           
+2024-07-22T15:50:43.1026496Z COMPUTERNAME                   IC-APP7                                                                                 
+2024-07-22T15:50:43.1029028Z ComSpec                        C:\windows\system32\cmd.exe                                                             
+2024-07-22T15:50:43.1031437Z COR_ENABLE_PROFILING           1                                                                                       
+2024-07-22T15:50:43.1033954Z COR_PROFILER                   {71DA0A04-7777-4EC6-9643-7D28B46A8A41}                                                  
+2024-07-22T15:50:43.1036489Z CORECLR_NEWRELIC_HOME          C:\ProgramData\New Relic\.NET Agent\                                                    
+2024-07-22T15:50:43.1038957Z CORECLR_PROFILER               {36032161-FFC0-4B61-B559-F6C5D41BAE5A}                                                  
+2024-07-22T15:50:43.1041493Z DriverData                     C:\Windows\System32\Drivers\DriverData                                                  
+2024-07-22T15:50:43.1044016Z GIT_TERMINAL_PROMPT            0                                                                                       
+2024-07-22T15:50:43.1046602Z IC_APPDATA_DIR                 E:\Data\AppData                                                                         
+2024-07-22T15:50:43.1049182Z IC_APPS_DIR                    E:\Data\Apps                                                                            
+2024-07-22T15:50:43.1052065Z IC_ENV_TYPE                    2                                                                                       
+2024-07-22T15:50:43.1054483Z IC_FTP_Base_DIR                D:\inetpub\ftproot\                                                                     
+2024-07-22T15:50:43.1056946Z IC_FTP_DIR                     \\icwebsftppremium.file.core.windows.net\icftproot                                      
+2024-07-22T15:50:43.1059579Z IC_LOGS_DIR                    E:\Data\Logs                                                                            
+2024-07-22T15:50:43.1062084Z LOCALAPPDATA                   C:\windows\system32\config\systemprofile\AppData\Local                                  
+2024-07-22T15:50:43.1064579Z MSDEPLOY_HTTP_USER_AGENT       VSTS_2fde46e1-bec7-4299-a6b3-ca8f13524c20_release_830_31465_116480_2                    
+2024-07-22T15:50:43.1067232Z NEWRELIC_INSTALL_PATH          C:\Program Files\New Relic\.NET Agent\                                                  
+2024-07-22T15:50:43.1069697Z NUMBER_OF_PROCESSORS           16                                                                                      
+2024-07-22T15:50:43.1072429Z OS                             Windows_NT                                                                              
+2024-07-22T15:50:43.1093841Z Path                           C:\Program Files (x86)\Microsoft SDKs\Azure\CLI2\wbin;C:\windows\system32;C:\windows;...
+2024-07-22T15:50:43.1096339Z PATHEXT                        .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL                              
+2024-07-22T15:50:43.1098862Z PROCESSOR_ARCHITECTURE         AMD64                                                                                   
+2024-07-22T15:50:43.1101359Z PROCESSOR_IDENTIFIER           Intel64 Family 6 Model 106 Stepping 6, GenuineIntel                                     
+2024-07-22T15:50:43.1103859Z PROCESSOR_LEVEL                6                                                                                       
+2024-07-22T15:50:43.1106593Z PROCESSOR_REVISION             6a06                                                                                    
+2024-07-22T15:50:43.1109014Z ProgramData                    C:\ProgramData                                                                          
+2024-07-22T15:50:43.1111543Z ProgramFiles                   C:\Program Files                                                                        
+2024-07-22T15:50:43.1114012Z ProgramFiles(x86)              C:\Program Files (x86)                                                                  
+2024-07-22T15:50:43.1116503Z ProgramW6432                   C:\Program Files                                                                        
+2024-07-22T15:50:43.1119005Z PSExecutionPolicyPreference    Unrestricted                                                                            
+2024-07-22T15:50:43.1139840Z PSModulePath                   C:\Program Files\WindowsPowerShell\Modules;C:\windows\system32\WindowsPowerShell\v1.0...
+2024-07-22T15:50:43.1142463Z PUBLIC                         C:\Users\Public                                                                         
+2024-07-22T15:50:43.1144893Z RELEASE_ATTEMPTNUMBER          2                                                                                       
+2024-07-22T15:50:43.1153217Z RELEASE_DEFINITIONENVIRONME... 1429                                                                                    
+2024-07-22T15:50:43.1156625Z RELEASE_DEFINITIONID           830                                                                                     
+2024-07-22T15:50:43.1160082Z RELEASE_DEFINITIONNAME         Get Environment Variables                                                               
+2024-07-22T15:50:43.1169465Z RELEASE_DEFINITIONSNAPSHOTR...                                                                                         
+2024-07-22T15:50:43.1178360Z RELEASE_DEPLOYMENT_REQUESTE... Scott Miller                                                                            
+2024-07-22T15:50:43.1187198Z RELEASE_DEPLOYMENT_REQUESTE... SMiller@invoicecloud.com                                                                
+2024-07-22T15:50:43.1196042Z RELEASE_DEPLOYMENT_REQUESTE... 860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.1198655Z RELEASE_DEPLOYMENT_STARTTIME   2024-07-22 15:50:27Z                                                                    
+2024-07-22T15:50:43.1201193Z RELEASE_DEPLOYMENTID           45477                                                                                   
+2024-07-22T15:50:43.1203822Z RELEASE_DEPLOYPHASEID          56284                                                                                   
+2024-07-22T15:50:43.1206487Z RELEASE_ENVIRONMENTID          116480                                                                                  
+2024-07-22T15:50:43.1209095Z RELEASE_ENVIRONMENTNAME        Stage 1                                                                                 
+2024-07-22T15:50:43.1217928Z RELEASE_ENVIRONMENTPROTECTE...                                                                                         
+2024-07-22T15:50:43.1226735Z RELEASE_ENVIRONMENTS_STAGE_... InProgress                                                                              
+2024-07-22T15:50:43.1229297Z RELEASE_ENVIRONMENTURI         vstfs:///ReleaseManagement/Environment/116480                                           
+2024-07-22T15:50:43.1231883Z RELEASE_REASON                 Manual                                                                                  
+2024-07-22T15:50:43.1234440Z RELEASE_RELEASEDESCRIPTION                                                                                             
+2024-07-22T15:50:43.1237058Z RELEASE_RELEASEID              31465                                                                                   
+2024-07-22T15:50:43.1239658Z RELEASE_RELEASENAME            Release-1                                                                               
+2024-07-22T15:50:43.1242231Z RELEASE_RELEASEURI             vstfs:///ReleaseManagement/Release/31465                                                
+2024-07-22T15:50:43.1263915Z RELEASE_RELEASEWEBURL          https://dev.azure.com/invoicecloud/e4aa9c14-3885-41ad-ab2e-df7e4656a0dd/_release?rele...
+2024-07-22T15:50:43.1266589Z RELEASE_REQUESTEDFOR           Scott Miller                                                                            
+2024-07-22T15:50:43.1269127Z RELEASE_REQUESTEDFOREMAIL      SMiller@invoicecloud.com                                                                
+2024-07-22T15:50:43.1271627Z RELEASE_REQUESTEDFORID         860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.1274117Z RELEASE_SKIPARTIFACTSDOWNLOAD  False                                                                                   
+2024-07-22T15:50:43.1283041Z RELEASE_TRIGGERINGARTIFACT_...                                                                                         
+2024-07-22T15:50:43.1285587Z REQUESTEDFORID                 860578b4-ccfc-658e-ae63-620074b6cb25                                                    
+2024-07-22T15:50:43.1288130Z SYSTEM                         deployment                                                                              
+2024-07-22T15:50:43.1290659Z SYSTEM_ARTIFACTSDIRECTORY      C:\azagent\A1\_work\r112\a                                                              
+2024-07-22T15:50:43.1293138Z SYSTEM_COLLECTIONID            2fde46e1-bec7-4299-a6b3-ca8f13524c20                                                    
+2024-07-22T15:50:43.1295715Z SYSTEM_COLLECTIONURI           https://vsrm.dev.azure.com/invoicecloud/                                                
+2024-07-22T15:50:43.1298164Z SYSTEM_CULTURE                 en-US                                                                                   
+2024-07-22T15:50:43.1300611Z SYSTEM_DEFAULTWORKINGDIRECTORY C:\azagent\A1\_work\r112\a                                                              
+2024-07-22T15:50:43.1303099Z SYSTEM_ENABLEACCESSTOKEN       False                                                                                   
+2024-07-22T15:50:43.1305580Z SYSTEM_HOSTTYPE                deployment                                                                              
+2024-07-22T15:50:43.1308105Z SYSTEM_JOBID                   1a8ffa0a-3b7b-4897-a143-86da455d879e                                                    
+2024-07-22T15:50:43.1310527Z SYSTEM_JOBPARALLELISMTAG       Private                                                                                 
+2024-07-22T15:50:43.1331359Z SYSTEM_OIDCREQUESTURI          https://vsrm.dev.azure.com/invoicecloud/e4aa9c14-3885-41ad-ab2e-df7e4656a0dd/_apis/di...
+2024-07-22T15:50:43.1334046Z SYSTEM_PIPELINESTARTTIME       2024-07-22 10:50:28-05:00                                                               
+2024-07-22T15:50:43.1336550Z SYSTEM_PLANID                  51defd67-7509-4586-b93c-3a6a26949bf5                                                    
+2024-07-22T15:50:43.1339051Z SYSTEM_SERVERTYPE              Hosted                                                                                  
+2024-07-22T15:50:43.1341493Z SYSTEM_TASKDEFINITIONSURI      https://dev.azure.com/invoicecloud/                                                     
+2024-07-22T15:50:43.1343974Z SYSTEM_TASKDISPLAYNAME         PowerShell Script                                                                       
+2024-07-22T15:50:43.1346463Z SYSTEM_TASKINSTANCEID          4ec36c83-32aa-4d56-abd1-55ff6b1d8b36                                                    
+2024-07-22T15:50:43.1348900Z SYSTEM_TASKINSTANCENAME        c6f65905c6ee4909bd817bace8b43389                                                        
+2024-07-22T15:50:43.1357934Z SYSTEM_TEAMFOUNDATIONCOLLEC... https://dev.azure.com/invoicecloud/                                                     
+2024-07-22T15:50:43.1362556Z SYSTEM_TEAMFOUNDATIONSERVERURI https://vsrm.dev.azure.com/invoicecloud/                                                
+2024-07-22T15:50:43.1364298Z SYSTEM_TEAMPROJECT             Src                                                                                     
+2024-07-22T15:50:43.1366938Z SYSTEM_TEAMPROJECTID           e4aa9c14-3885-41ad-ab2e-df7e4656a0dd                                                    
+2024-07-22T15:50:43.1369654Z SYSTEM_TIMELINEID              51defd67-7509-4586-b93c-3a6a26949bf5                                                    
+2024-07-22T15:50:43.1372006Z SYSTEM_WORKFOLDER              C:\azagent\A1\_work                                                                     
+2024-07-22T15:50:43.1374488Z SystemDrive                    C:                                                                                      
+2024-07-22T15:50:43.1377182Z SystemRoot                     C:\windows                                                                              
+2024-07-22T15:50:43.1379638Z TASK_DISPLAYNAME               PowerShell Script                                                                       
+2024-07-22T15:50:43.1382171Z TEMP                           C:\windows\TEMP                                                                         
+2024-07-22T15:50:43.1384695Z TF_BUILD                       True                                                                                    
+2024-07-22T15:50:43.1387255Z TMP                            C:\windows\TEMP                                                                         
+2024-07-22T15:50:43.1389931Z USERDOMAIN                     INVOICECLOUD                                                                            
+2024-07-22T15:50:43.1392404Z USERNAME                       IC-APP7$                                                                                
+2024-07-22T15:50:43.1394935Z USERPROFILE                    C:\windows\system32\config\systemprofile                                                
+2024-07-22T15:50:43.1397440Z VSTS_PROCESS_LOOKUP_ID         vsts_5f73e2aa-3a49-4875-a1ed-29cc8cd40aa5                                               
+2024-07-22T15:50:43.1399955Z VSTS_SECRET_VARIABLES                                                                                                  
+2024-07-22T15:50:43.1402388Z windir                         C:\windows                                                                              
+2024-07-22T15:50:43.2379075Z 
+2024-07-22T15:50:43.2379241Z 
+2024-07-22T15:50:43.2979843Z ##[section]Finishing: PowerShell Script
+
+ URL:/spaces/EN/pages/3427926017/Skybot+Testing+-+ADTE

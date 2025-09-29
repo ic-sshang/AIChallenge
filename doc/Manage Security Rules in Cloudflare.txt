@@ -1,0 +1,78 @@
+1. Accessing Security Rules
+Log in to the Cloudflare dashboard.
+Select your domain from the list.
+In the left navigation, click 
+Security
+.
+Under Security, select 
+WAF
+ (Web Application Firewall) or 
+Tools
+ (depending on your plan and the type of rule you want to create).
+2. Creating a Security Rule
+In the WAF section, go to the 
+Custom Rules
+ tab.
+Click 
+Create rule
+.
+Enter a 
+Rule name
+ and (optionally) a description.
+Under 
+When incoming requests match...
+, use the 
+Expression Builder
+:
+Click 
+Edit expression
+ to open the builder.
+Use the dropdowns to select fields (e.g., IP, Country, Hostname).
+Combine conditions using AND/OR as needed.
+Example: To block a country, select 
+Country
+, 
+equals
+, and choose the country.
+To manually edit the expression, click 
+Edit expression
+ and type or modify the logic directly in the editor.
+Under 
+Then...
+, select the action (e.g., Block, Challenge, Allow).
+Click 
+Deploy
+ or 
+Save
+ to activate the rule.
+3. Editing an Existing Rule
+In the Custom Rules list, find the rule you want to edit.
+Click the 
+Edit
+ (pencil) icon next to the rule.
+Update the rule name, conditions, or action as needed.
+Use the 
+Expression Builder
+ or 
+Edit expression
+ to modify the logic.
+Click 
+Save
+ to apply changes.
+4. Disabling a Rule
+In the Custom Rules list, locate the rule you want to disable.
+Toggle the 
+Enable/Disable
+ switch to the off position.
+The rule will remain in your list but will not be active.
+5. Deleting a Rule
+In the Custom Rules list, find the rule you want to delete.
+Click the 
+Delete
+ (trash can) icon next to the rule.
+Confirm the deletion when prompted.
+Tips:
+Use the expression builder for simple rules, or the editor for advanced logic.
+Disabled rules can be re-enabled at any time.
+Deleted rules cannot be recovered; consider disabling if you may need the rule later.
+ URL:/spaces/platform/pages/4649975847/Manage+Security+Rules+in+Cloudflare

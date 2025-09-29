@@ -1,0 +1,66 @@
+Overview:
+Repo URL: 
+https://dev.azure.com/invoicecloud/Src/_git/fnICG_ICBatchRecon
+Timer triggered Azure Functions, configured to run at 12 PM everyday
+[TimerTrigger("0 0 12 * * *")]
+Earlier it was coded to skip running on Saturday and Sunday, but this was changed with Story BRAIN-139 to run everyday.
+see: 
+BRAIN-139
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+  for more details.
+Process/functionality/flow:
+(1) By using the SP “selICGRecon_BillersWithSubscriberAndPmtDate”, it(Program) 
+gets the list of billers
+(with @subscriberID=1 and @paymentdate as the past day's date (yesterday))
+and @CompareConvenienceFee=
+0
+(2) It 
+starts writing a new CSV file
+ with below header
+"BillerId, BPSettledDate, ICGFundingBatchID, BatchReference, DepositAmount, Exception\r\n"
+(3) Using the below SPs
+selICDWRecon_SettledBatchSummary
+selICGRecon_FundingBatchWithoutServiceFeeDetails
+it retrieves data for the past day for each biller from step(1)
+and writes it into the file for the following fields
+BillerId, BPSettledDate, ICGFundingBatchID, BatchReference, DepositAmount, Exception
+(4) Program 
+prepares and send an email with the above file as an attachment
+ (tilled as "ICBatchRecon_" + currentDate + ".csv")
+to email addresses (To & CC) which are specified in the appsettings.json
+(5) Program also 
+uploads the file to Azure Blob storage
+ IC.Azure.Blob.AzureBlobService.StoreStorageFile(IC.Azure.Blob.StorageType.ICGateway, "dailyfiles-recon-icbatch", filename, StringToStream(fileContents.ToString()));
+(6) 
+In the end it creates a Task Log Into the table "insFCPTaskLog" in the DB "ICGatewayAudit"	
+Other information:
+Stored Procedures involved:
+Stored Procedure
+Test DB
+Description
+selICGRecon_BillersWithSubscriberAndPmtDate
+Retrieves list of billers with passed @SubscriberID and PaymentDate >= @paymentDate
+selICDWRecon_SettledBatchSummary
+selICGRecon_FundingBatchWithoutServiceFeeDetails
+For BRAIN-139
+, we should verify that this function should execute operation for every day, irrespective of Saturday/Sunday/Bank Holiday.
+Program also has a HTTP Triggered function (for the same functionality) 
+which accepts a date as an argument, this date argument can be used to test the functionality on any day, function will consider the passed date as current date.
+(This was implemented as part of BRAIN-139 to make the functionality testable on any day based on the date argument).
+We have "test.yml" file for the Test pipeline to create a authentication token to execute the Azure Function
+.
+Use the authentication token generated through pipeline to execute function through Azure Portal or Postman application.
+Example URL:
+https://fnicg-icbatchrecondevtest.azurewebsites.net/api/ICBatchRecon?code=LExHLcxtalw3quB8o/pN9L//7DTgBzU4yYxQrqg0Ef/FYWoar1OjFA==
+“
+code=LExHLcxtalw3quB8o/pN9L//7DTgBzU4yYxQrqg0Ef/FYWoar1OjFA==
+”
+ is the authentication token.
+Date can be passed in query string as well as body of the same POST request
+{
+    “date“: “2023-03-16“
+}
+Test Data for BRAIN-139
+For BRAIN-139 we are not required to insert any specific data into the database, we have to verify that it should run everyday as mentioned in the story requirements, it will generate a file every time (even without data but only header) and uploads the file to Azure blob storage, sends an email and make a log in the table "insFCPTaskLog" in the DB "ICGatewayAudit".
+ URL:/spaces/ED/pages/2625732622/fnICG_ICBatchRecon

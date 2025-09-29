@@ -1,0 +1,46 @@
+3
+3
+false
+list
+false
+vnet-east-akstooling-legacyapps
+Peered to both NonProd and Prod NextGen Network Hubs.
+Peering to Prod NextGen Network Hub due to AVD 1.0 being placed into the incorrect Network Lane, should have been put in the NonProd Network Lane.  This will be fixed with AVD 2.0.  
+
+
+
+
+11
+
+
+incomplete
+
+
+ and 
+ break peering to Prod NextGen Network Hub once the India Contractors are on AVD 2.0.
+
+
+
+
+InternalNetwork
+Peered to both NonProd and Prod NextGen Network Hubs.
+InternalNetwork
+ is the Azure VNet that houses the legacy InvoiceCloud workloads for all “Environments”.     The firewall strategy for maintaining isolation of NonProd “Environments” and Prod “Environments” is not defined as far as this author knows, and not sure there is a strategy.  Hence Prod workloads are at increased risk of penetration due to network access from NonProd resources.  Also the Developer Terminal Servers are inside this network and any techniques for isolating them from Production workloads is unknown to this author at this time (even though requests for such documentation and/or IaC artifacts has been made).
+
+
+
+
+12
+
+
+incomplete
+
+
+ 
+ 
+ break peering to Prod NextGen Network Hub once the all the Legacy workloads have been migrated to the NextGen Network topologies and workloads placed in the appropriate Network Lanes.
+
+
+
+
+ URL:/spaces/icinfradoc/pages/2822537230/Known+Security+Vulnerabilities+in+Legacy+Infrastructure

@@ -1,0 +1,173 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+TEMPLATE
+Document owner
+Knowledge transfer
+Input the Gong URL
+Summary
+Summary
+Details
+Software Partner Name
+Name of Partner
+Software Product Name
+Name of Software Product
+Software Cashiering System
+Name of Cashiering System
+Supported Versions
+Input any information related to what versions of the Software Product are support 
+(examples: V1.1 and newer, ALL)
+Integration Requirements and Pre-Requisites
+Any integration requirements that must be complete before the biller can implement the integration. This includes any pre-requisites that are necessary (completed by the partner and/or biller)
+Examples (include who completes the items): 
+Server/environment requirements or pre-requisites setup by Biller
+Module install configured by Partner
+Make endpoint(s) available to IC
+Vertical
+GUB or FS
+Sample Biller Implementation
+BID of live biller
+Planning
+Test Portals
+IC Hosted Test Portal - 
+BID of test portal in IC CRM
+Partner Hosted Test Portal - 
+URL and credentials for partner test portal that IC users can access
+Biller Test Portal - 
+Note if a Biller Test Portal is needed and/or required (some partners require this setup)
+Rules of Engagement
+Explain any specific details the IM should follow when working this integration type. Examples:
+Always include X contact on emails/meetings
+Complete X before Y
+Never contact Z
+Timeline
+Estimated timeframe to complete implementation - ~60-90 days 
+Configuration
+Invoice Types
+List the support invoice types and specify if only one invoice type is supported and what it is
+example: only 42
+Virtual Site
+Input image of suggested virtual site input/output screen. If there’s a required configuration or mapping, note that here.
+Example: Integration will always use displayaccountnumber on the virtual site. Please ensure all grids, settings and options support the use of displayaccountnumber. (See 
+ISI Enterprise Implementation Details
+ for more detail on displayaccountnumber)
+Required Options
+Input required integration options below. The one below is an example:
+ID
+Option Description
+Details
+1
+Allow Adjustments on Closed Invoices
+Enable this option if Payments and Adjustments can be applied to an Invoice that is considered closed. There are cases in which the recommended functionality is to disable this option. One case is Balance Forward, which by definition the balance of the previous Invoice is adjusted out and moved to the new Invoice. No more payments or adjustments should be allowed on that closed Invoice.
+EXAMPLE
+Enabled/Disabled
+Add any additional context as to why the option is required to be enabled/disabled. Include any specific detail was to what will fail/break if this option is not set properly.
+Coding Requirements
+Invoice Cloud Coding Requirements
+If any item in the list does not apply, delete the row
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Biller or Partner
+Upon request, after pre-requisite completion
+Is the data generic or unique/specific to each biller? Note if partner refers to this item by a different name (example: billing file)
+Adjustment File
+Payment File
+Bill Presentment 
+Example: 
+No integration standard - unique to each biller
+PDF Linking - URL and credentials, sample biller
+PDF Extraction - extraction value(s), sample biller
+Template - mapping/layout, sample biller
+RTDR API (test)
+RTDR Passcode (test)
+RTDR API (prod)
+RTDR Passcode (prod)
+DataPump API (test)
+DataPump Passcode (test)
+DataPump API (prod)
+DataPump Passcode (prod)
+SSO URL 
+Payment Codes 
+Some integrations allow billers to specify payment codes (mapped to IC payment sources). Generally will apply to legacy integrations. New integrations are built out with standard codes.
+example: Request payment code mapping from biller for IC configuration.
+Block CC Flag
+Some integrations are configured to a code/value in RTDR to block CC and/or ACH that’s configured by the biller (changes with each biller project). Input details if that applies to the integration. Generally will apply to legacy integrations. New integrations are built out with standard values.
+example: Biller configures block CC flag and will need to provide the ‘alert code’ to IC for configuration.
+Block ACH Flag 
+Some integrations are configured to a code/value in RTDR to block CC and/or ACH that’s configured by the biller (changes with each biller project). Input details if that applies to the integration. Generally will apply to legacy integrations. New integrations are built out with standard values.
+example: Biller configures block ACH flag and will need to provide the ‘alert code’ to IC for configuration.
+Whitelisting IP Addresses
+Invoice Cloud
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Biller or Partner
+Project Assignment 
+BID
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format ID
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format GUID
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID TEST
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key TEST
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID PROD
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Type ID
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller Contact Information
+Project Assignment 
+Located within CRM on the Profile Tab
+SFTP Credentials
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller Portal Support User
+Project Assignment 
+Provide detail on where to find this value - CRM
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Y/N
+ URL:/spaces/IM/pages/4079386666/2024+Enter+Partner+Name+Implementation+Details

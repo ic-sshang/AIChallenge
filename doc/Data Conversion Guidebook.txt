@@ -1,0 +1,54 @@
+none
+Requirements for Conversion
+For a Data Conversion, we have a number of specific requirements individually for the imports themselves, but also for the overall process.
+note
+Make sure to review this information about data conversions:
+General Requirements for a Data Conversion
+
+
+Make sure to review this information about data conversions:
+General Requirements for a Data Conversion
+
+
+Standard Questions
+These are the standard questions to ask if parts of this aren’t made perfectly clear by the request or by any attached files. They should already be answered in the required form when making a Data Conversion request through Jira Service Management. If they aren’t, you can copy and paste these questions within the expandable field to ask the reporter.
+Example Questions
+Will the biller be using multi-user login?
+If we’re doing a conversion for a biller that’s multi-user, will the biller be providing us with information to do a user registration conversion, and to tie any Autopay records to the login?
+What InvoiceType(s) should be selected?
+If you're requesting a conversion for multiple invoice types, should an individual account be registered for all those types?
+Note:
+ Our tools when given those invoice types will enroll an account for all those types. Whether or not the account has an invoice relevant to the type.
+If applicable, will we be creating customers if they do not exist? This only applies to a non-multi-user scenario.
+Should any indicators (e.g. Autopay or Paperless) be pushed through DataPump for the import? If so, which ones?
+If we’re sending these records over DataPump, will we only be sending over records to DataPump for Production? Or are we doing so for the test import as well?
+What is the BID that we'll be doing the test import on?
+Note:
+ If we’re testing on their production BID, then it will need to be purged after the test import has been validated, and before their Go-Live.
+When do they need the test import done by?
+When are we expecting to do the production import?
+Conversion with Live Billers
+Data Conversions for a live biller isn’t common, but this kind of request has been requested before. It’s why we’ll have to make sure to ask:
+If we’re doing a production import after they’ve gone live, does the biller want us to skip any existing Autopay records or overwrite them? How about if there is an existing login registered?
+If we’re doing a production import after they’ve gone live, will the biller schedule a maintenance window for the import?
+Note:
+ There is a risk of a production import overwriting selection data in the case of Autopay, or login emails in the case of a Paperless import.
+File Requirements
+File requirements are listed here: 
+File Requirements for Data Conversions
+Not all billers will provide everything here, or with the headers that we expect, and they’re not always the same.
+File Encryption
+We only require file encryption for Autopay/Payment method and User Login Registration files. There’s the first method of encryption/decryption using the site (
+https://file.invoicecloud.com/
+) that is hosted by the company, and then there’s the second utilizing PGP Encryption.
+You can review on how to generate a PGP encryption key here: 
+PGP Encryption
+ 
+Engineering Guides
+Guidance for Reviewing Data Conversion Files
+ 
+Guidance for Conducting a Data Conversion
+ 
+ Child Pages
+true
+ URL:/spaces/IM/pages/3761831942/Data+Conversion+Guidebook

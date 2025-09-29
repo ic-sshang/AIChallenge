@@ -1,0 +1,98 @@
+Purpose:
+This space is to share the knowledge of going through the process of Salesforce SSO.
+Overview:
+The reason for this logic to make the jump from invoice cloud to salesforce support central in order for our billers/partners to be able to report an issue that they are experiencing.
+Issues / Knowledge
+Identify:
+We find a majority of helpful information in the URL whenever a user lands on a single sign on error page. I'll highlight the URL in the screenshot below to identify where to look inside the URL. Providing the error URL in a Ticket is helpful.
+In the screenshot above, the error description in the URL says " invalid Contact"
+Screenshot indicates “username change is not allowed” referencing an incorrect username related to account.  E.g → unnecessary underscores in username etc…
+Background:
+Before going into to solve a single sign on issue, we have to understand the process that our logic uses to jump into support central for our biller users.
+To begin, we make all these calls to salesforce side to see what their database is stored with.
+Our logic begins by searching for the Biller's
+ Account
+ filtered by their BillerID.
+SELECT Id, AccountNumber, Name FROM Account WHERE AccountNumber = ''
+After we find the biller's account, we search the biller 
+contacts
+ filtered by Last name of the biller user, Email of the biller user, and AccountID that is the ID from the previous call to Account.
+SELECT AccountId, Id, Email, FirstName, LastName, Biller_Portal_User__c FROM Contact WHERE EMAIL = '' AND LASTNAME = '' AND ACCOUNTID = ''
+Then, once the contact call returns us a record, we search for the salesforce
+ user 
+filtered by the Federation Identifier, and ContactID that is the ID of the previous call to Contact.
+SELECT FederationIdentifier, ContactId FROM User WHERE FederationIdentifier = '' AND ContactId = ''
+We make a list of certain values return to us by the previous calls.
+Finally, initiate an SSO Multi Claim with the list made and show the page to the user..
+Error Description
+Error Description
+Error Translated
+Meaning
+Invalid+Contact
+Invalid Contact
+The issue is coming from the contact record
+(Empty error description or no error description show)
+Certificate Issue
+The issue is coming from an expired certificate
+Duplicate Community Nickname
+Duplicate Community Nickname
+Users having similar Community Nicknames
+Workarounds
+Error
+Workaround
+Invalid Contact
+There are times where if we readjust the username to the previous username will fix the connection.
+(Empty error description or no error description show)
+Updating SSO Certificate for Support Central
+Duplicate Community Nickname
+Change the Community nickname.
+*
+Note:
+ Community nickname is a combination of the firstname and lastname and must be unique. Incase of ‘Duplicate Community Nickname’ error, if you change the community nickname make sure to change the firstname and lastname and also the biller user name in the CRM. DS-7489 for reference.
+Possible solutions for 'Duplicate Community Nickname” error:
+Community Nickname
+Firstname
+Lastname
+Result
+Comment
+Lisa Lewis
+Lisa
+Lewis
+Correct
+Lisa P Lewis P
+Lisa P
+Lewis P
+Incorrect. Will give an error.
+There should not be any spaces within names.
+LisaP Lewis
+LisaP
+Lewis
+Incorrect. Will give an error.
+If any two users have the same name, the logic states that no two users must have the same lastname. First name however works. (Bad logic 
+  )
+Lisa LewisP
+Lisa
+LewisP
+Correct
+Additional Debugging tools
+We can view the information on Salesforces side by using 
+Workbench
+Sign into 
+Workbench
+ using your Salesforce Login and move to queries
+Using the following query fill in the name between the %% and Run it
+sql
+SELECT Id, AccountId, IsActive, Username, Name, FirstName, LastName, Email, LastLoginDate FROM User WHERE Name like '%%'
+The username should be equal to the [BillerUsers.Username]+[BillerID]@InvoiceCloud.Com 
+If they don't match then either update the BillerUser’s Username to match the salesforce Username or Contact salesforce at [
+salesforce@invoicecloud.com
+] to update the username  
+Note, the link that is the ID will provide all information in the User Table on the account in question
+Logs
+Logs can be found in this directory → CDataLogs\MyIIS\SalesforceSamlSso
+will need to navigate to the correct IC-Web folder to find the logs (web can be find in biller portal new relic logs)
+Extra Resources
+ 
+https://help.salesforce.com/s/articleView?id=sf.sso_jit_errors.htm&type=5
+Issue screenshots
+ URL:/spaces/DS/pages/2565505130/Salesforce+SSO

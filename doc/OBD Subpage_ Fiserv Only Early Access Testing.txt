@@ -1,0 +1,186 @@
+This page contains all information related to our early access testing for billers who are currently process Fiserv only OBD transactions. 
+Biller ID
+Biller
+Email Sent to Biller
+Biller Response Date
+Overview Mtg
+Originator ID updated
+Penny Test Trans complete
+Date IC requested Fiserv to transition account
+Transition Requested Date
+Transition Effective Date
+Comments
+2237
+City of Susanville CA
+ 
+2254
+City of Harbor Springs MI - Utility
+ 
+1361
+City of Ashtabula
+ 
+9/28/22 TBD - see comments
+ 
+ 
+No blocks or updates needed
+ 
+ 
+ 
+Tentative go live 11/8 at risk due to steps needed by Fiserv. Update: still waiting on Fiserv. Target go-live 11/29. Biller on PTO. Go live confirmed for 12/6/22
+2119
+Jackson County Water Company, Inc
+ 
+1645
+Root Creek Water District
+ 
+2380
+Mutual Insurance Company of Arizona (MICA)
+ 
+ 
+no
+2717
+Routt County Treasurer
+ 
+ 
+ 
+ 
+ 
+ 
+They have 2 cloud store accounts + 1 tax account. Don’t expect tax payments until late Jan. Would like to transition on 1/16/23. 
+3045
+Richfield Township
+ 
+Issue Log:
+ This log will be track any items that come up during early access. 
+Biller
+Issue
+Date Reported
+Resolution
+Date Resolved
+Assigned to:
+Comments
+City of Susanville CA
+City of Harbor Springs MI - Utility
+City of Ashtabula
+City of Ashtabula Go Live Issue Tracker
+Issue
+Date Reported
+Resolution
+Status
+Date Resolved
+Assigned to:
+Comments
+520 & 200 files did not run
+12/6/2022
+Cass to fix
+done
+12/6/2022
+Cass
+Cass will run the files and then fix so next file runs automatically. Cass missed enabling 1 file. 
+Descriptor is different than we expected.
+12/6/2022
+Kelsey to update table
+done
+12/6/2022
+Kelsey
+Descriptor sent is: CITYOFASHT
+Its a different column. We will need to confirm the descriptor IDs before we migrate the next one to avoid the same issue. 
+Batch settlements need to tie to old terminal
+12/6/2022
+done
+Sean
+deployed on 12/6/22
+Payment Exports Process 
+12/6/2022
+done
+12/6/2022
+Sebastian
+Follow up w integration to confirm payment exports work as expected. Confirmed everything is working as expected
+Reporting
+12/6/2022
+Part of tonights release
+done
+12/6/2022
+Adrian
+Reject reporting available; 
+Reporting - settlement channel
+12/6/2022
+done
+12/7/2022
+Adrian
+Cass details will post to Settlement Channel
+Module parameters were blank.
+12/6/2022
+done
+12/6/2022
+Adrian
+DB made the updates. Tonight it should close on its own. 
+Cass balance is intertwined with the Hyperwallet balance
+12/7/2022
+done
+12/7/2022
+Adrian/Kelsey
+Need to make an update to exclude the Cass balance from the hyperwallet 
+Settlement funding update had a failure "Processing failed for INVP900020221207220146.csv receipt file, Funding batch not found."
+12/7/2022
+done
+12/7/2022
+Sebastian
+Akira updated the response file and we updated our info.
+We received an error custom close 
+12/7/2022
+Will be part of tonights fix
+done
+Adrian
+Batch was manually closed last night. We need to put in a fix. 
+Wrong file was sent to FIS.
+12/7/2022
+done
+12/7/2022
+Cass
+Cass sent the wrong file. We received an incorrect response file. Cass resent and we updated
+Biller was not funded for Tuesday's transactions (861.04)
+12/8/2022
+done
+12/8/2022
+Cass
+Bill was paid. Cass confirmed they did not whitelist our account. Should be fixed for tomorrow. 
+We need to start importing 3010's files so TeNeice has access to detailed reporting per biller. 
+12/8/2022
+Modify the activity import job & APIs to display the data. 
+WIP
+Adrian
+We need to start importing 3010's files so TeNeice has access to detailed reporting per biller. Adrian will create an Jira item. 
+Change Post from 2 days to 1 days. 
+12/8/2022
+Expect to deploy tonight
+done
+Adrian
+We need to update our dev to change it to post 1 day later, rather than 2 days.
+Debit was not made to Cass Bank account for $841
+12/9/2022
+done
+Cass
+Sent follow up to Cass. 
+Varience of 861.04 in cass balance in FCR
+12/9/2022
+done
+Adrian/Kelsey
+Adrian and Kelsey worked on the fix. Resolved.
+Need the ability to enter $0.00 in FCP
+12/13/2022
+Update requirements
+not started
+Adrian
+We will need to update the requirements so we can add 0 as the balance. Currently requires the balance be greater than $0.01.
+Do not send notification when no nacha file is sent
+12/14/2022
+modify the current process
+not started
+Martin
+Martin to update the logic to not post/email an error when a NACHA file has not been sent. 
+Root Creek Water District
+Mutual Insurance Company of Arizona (MICA)
+Routt County Treasurer
+Richfield Township
+ URL:/spaces/PRODUCT/pages/2433744910/OBD+Subpage+Fiserv+Only+Early+Access+Testing

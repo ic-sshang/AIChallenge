@@ -1,0 +1,74 @@
+Essentials
+EQP runs as both an Azure Batch job and a Skybot app. The version running in both places should always be the same. It should always be deployed to both; never to only one of the two. 
+EQP in devtest uses the production database, not the test one.
+There 
+is
+ actually a way to make EQP use the test database, but our devtest EQP instances are currently using prod. 
+Running Email Queue Processing - Development Support - Confluence (atlassian.net)
+ 
+we should import the content from that link into this page and get rid of the other page.
+Another useful link regarding email queue: 
+Creating an EmailQueueType - Development Knowledge Base - Confluence (atlassian.net)
+The EQP Azure Batch deployment just publishes new package to batch job. Need to manually select package version to use in the portal once it's deployed.
+Description
+EmailQueueProcessing, or EQP, is one of our most essential applications. It sends emails. We have a database table full of queued emails. EQP checks this table to find emails that have yet to be “processed” (sent). When it finds one, it sends the content pulled from the database object and sends it to its recipient. The email is formatted based on the email template that corresponds to the email queue type of the database object. 
+Invoice notifications (payment reminders) are created on the fly; they do not use email queue records. They do have their own email queue type, and they are still sent by EQP. The email is created and processed at the same time. It doesn’t sit in the queue like other emails.
+Different queues are associated with different deployments. Azure Batch only handles a small subset of queues, while Skybot handles all of them. There is also a subset of queues handled on IC-AppTest1, which does not handle all queue types. IC-App{1-10} do handle all queue types. 
+ 
+will fully document email queue types + where they’re processed.
+List of Email Queue Types
+Email Queue Database Details
+Email Queue Database Details - Engineering Documentation - Confluence (atlassian.net)
+Pipelines
+Azure Batch
+Azure Batch Build
+ and 
+Azure Batch Deploy
+EQP deployment just publishes new package to batch job. Need to manually select package version to use in the Azure Batch portal (
+icbatch
+ account) once it's deployed.
+There is also a hardcoded EQP package version in the powershell script of the startup task that must be updated in the  
+icatchtest
+ and 
+icbatch
+ pools: 
+HighVolumeNotifications
+ and 
+StandardNotifications
+ (see image below) 
+ 
+Skybot
+Skybot Job Build
+ and 
+Skybot Job Deploy
+Notes
+Skybot EQP has a separate job for each email queue type (i.e. type 37, type 112)
+EQP runs in both batch and skybot because Skybot is slow. It's the one that runs on a schedule. Batch runs for invoice notifications to send emails more quickly, as those notifications are high volume.
+Testing 
+GO HERE FOR MORE UP TO DATE DETAILS: 
+Email Queue Processing/Processor for Test Automation
+Testing Azure Batch EQP
+deploy EQC and EQP proper versions
+configure EQC and EQP batch to use proper versions (manual step in Azure portal)
+stage an email to be sent in database
+queue EQC batch job
+validate EQP logs (viewed in Azure storage account) + ensure we receive an email
+Testing Skybot EQP
+deploy EQP proper version
+stage an email to be sent in database
+queue Skybot job for corresponding email type
+validate EQP logs + ensure we receive an email
+Monitoring
+Both deployments should log to New Relic.  
+Note: There is active work in progress to ensure logs are correct from Azure and Skybot. The current APM logging via the NR agent in Azure Batch causes duplicate logs, but a fix should be live by the end of Q1.
+Azure Batch
+slack channel: #daily-invoice-email-notification
+New Relic logs (not currently working correctly)
+iclogstorage storage account
+ (all EQP batch logs get dropped here)
+Skybot
+New Relic dashboards: 
+https://onenr.io/0BR6ZaoZGRO
+New Relic logs
+Skybot logs
+ URL:/spaces/ED/pages/3010363393/EmailQueueProcessing+-+Deployments+Monitoring+and+more

@@ -1,0 +1,152 @@
+The purpose of this story is to carry out research and development efforts to automate the recovery of charge back disputes that were unable to be recovered from the biller because the recovery payment was ACH rejected. The payments that were denied via ACH are listed in the CRM portal's ACH Reject Report. Currently, the sales staff reviews these ach rejected payments for payments made from the biller to recover the disputed amount and manually starts a sale transaction on the biller.
+Once this story is implemented the sales team will be able to filter recovery payments which are ach rejected and they will be able to do recovery operations by clicking the Retry option next to each failed recovery payment.
+A new Transaction status is added to the drop-down list in the ACH Reject Report as part of this story, and when selected, it will only display ACH Rejects for Recovery Payments.
+The result grid for RecoveryFailed Ach Rejects will contain a “Retry” button adjacent to each record through which the user can retry recovery.
+Retry button on recovery failed transactions
+On Successful initiation of the recovery process, the report will show a dialog box which indicates the successful recovery. and the list will be refreshed.
+If the system encounters any issue during the recovery process, a failed dialog box will be visible.
+Demo
+Let's assume that we have a transaction that was carried out by a user to make a payment to a bill. This transaction may have carried out through auto pay feature. which the user may have tried to cancel but it didn’t get cancelled.
+The user raises a dispute on the above transaction through paypal and this dispute is loaded into IC gateway database from DSDR file received from PayPal. We simulate this by manually inserting records into SettelementDetail and ChargeBackDispute table.
+Query to insert DsdrFile record
+INSERT INTO [dbo].[DSDR_Files]
+           ([FileGUID]
+           ,[FileName]
+           ,[ImportDate]
+           ,[RecordCount]
+           ,[MatchCount]
+           ,[FileProcessedDate]
+           ,[DateRecAdded])
+     VALUES
+           (
+            NEWID(),
+            CONCAT('daily_settlement_detail_report_' , CAST( GETDATE() AS Date ),'.csv'),
+	    GETDATE(),
+	   1,
+	   1,
+	   GETDATE(),
+	   GETDATE()
+         )
+Query to Insert SettlementDetail
+INSERT into SettlementDetail(
+      [SubscriberID]
+      ,[FileID]
+      ,[SettlementTypeID]
+      ,[PaymentID]
+      ,[TerminalID]
+      ,[MerchantAccountID]
+      ,[TransactionID]
+      ,[TransactionType]
+      ,[CreatedDatetime]
+      ,[SettlementAmount]
+      ,[PaymentInstrumentType]
+      ,[SettlementCurrency]
+      ,[ImportID]
+      ,[DateRecAdded]
+      ,[ImportTerminalID]
+) VALUES
+(
+	1,					                                                                        --Subscriber ID
+	<FileId>,				                                                                        -- File Id
+	3,					                                                                        --Chargeback
+	168200,				                                                                        --PaymentID
+	<TerminalId>,			                                                                        --TerminalId
+	<MID>,			                                                                                -- Merchant Account ID
+	SUBSTRING(CONVERT(varchar(40), NEWID()),0,9),				--TransactionId
+	'sale',				                                                                        --TransactionType
+	GETDATE(),			                                                                         --[CreatedDatetime]
+	102.98,				                                                                         --[SettlementAmount]
+	'paypal_account',	                                                                                 --[PaymentInstrumentType]
+	'USD',				                                                                          --[SettlementCurrency]
+	108881,				                                                                          -- [ImportID]
+	GETDATE(),			                                                                          --[DateRecAdded]
+	0					                                                                           --[ImportTerminalID]
+)
+Query to Insert ChargebackDispute record
+INSERT INTO dbo.ChargebackDisputes
+	(
+	    TerminalID,
+	    SettlementDetailID,
+	    TransactionType,
+	    PayPalDisputeID,
+	    Amount,
+	    AmountDisputed,
+	    AmountWon,
+	    CreatedAt,
+	    CurrencyIsoCode,
+	    Kind,
+	    MerchantAccountID,
+	    ReceivedDate,
+	    [Status],
+	    UpdatedAt
+	) VALUES
+	(
+		<terminalId>,
+		<SettlementDetailId>,
+		'dispute debit',
+		<PayPalDisputeID>,
+		<amount>,
+		<amount>,
+		<amount>,
+		GETDATE(),
+		'USD',
+		'CHARGEBACK',
+		<merchantAccountId>,
+		GETDATE(),
+		'TEST UPDATE',
+		GETDATE()
+	)
+The Settlement Details table and ChargeBackDispute table imported for the raised dispute will look like this.
+This disputed amount has to be recovered from the biller since the payment amount is already transferred to the biller (through once batch file if the payment is carried out through BrainTree). This recovery is carried out by calling the Reverse Money Movement (RMM) API - pay/RMMDisputes.
+Request URL : 
+https://icg-payments-devtest12.invoicecloud.com/pay/ACH_ChargebackDisputes
+{
+    "MerchantAccountID": "demo_2",
+    "ListOfDisputeID": [
+        "jhptxcmockB556211"
+    ],
+    "AccountNumber": "1234567890123",
+    "RoutingNumber": "011000015",
+    "AccountType": "CHECKING"
+}
+The Account Number and Routing Number passed to this request is the biller’s ChargeBack account details (which is configured in the CRM portal for the biller). 
+This API call will recover the sale amount from the biller (remember that the convenience fee will be recovered from the subscriber). On successful completion, the above API will return the following response message. Notice that the API recovered only the sale amount from the Biller.
+{
+    "Code": 0,
+    "Message": "SaleFundsRecovered",
+    "Data": {
+        "Success": 1,
+        "TotalDisputeAmount": 100.0000,
+        "StatusMessage": "SaleFundsRecovered",
+        "SubscriberTerminalID": 4,
+        "SubscriberMerchantAccountID": "biller1",
+        "IsRefundedMaximumAmountError": false
+    }
+}
+This can be also seen in the PayPal Disputes Chargeback Recovery report also 
+Under the hood, the API is basically making a sale transaction to transfer money from the biller bank account to Invoice Cloud bank account.
+This bank transfer can cause ACH Reject because of the which the recovery operation will get failed. We will be notified of this ACH Reject through DSDR file from the PayPal BrainTree. When this file is imported to IC Gateway database, it will import records into the SettlementDetails and ACHRejects table. We can simulate this ACH Reject on a payment by executing the stored procedure insACHReject passing the legacy id of the payment. and Reversing the rejected payment by executing the stored procedure spReverseRejectedRecovery.
+Query to reverse rejected recovery payment
+exec [dbo].[spReverseRejectedRecovery]  @ChargebackDisputeID = <ChargeBackDisputeId>
+Query to ACH reject the recovery payment
+exec [insACHReject] @TerminalID = 4, @LegacyID = '216p0efc' , @TransactionType = 1, @ACHReturnCode = 'R56', @Amount = 100
+Terminal Id is the internalUse terminal for IC or PSN.
+Legacy Id is the legacyId of the recovery payment, not of the original payment.
+This rejected recovery payment can be seen in the ACH Reject report.
+When the Retry button is clicked, the following messagebox is displayed in the ACH Reject report.
+The recovered recovery payment can be seen in the PayPal Chargeback Dispute report.
+The recovery payment Id can be seen in the ChargeBackDisputes table.
+Troubleshooting
+Search grid is empty.
+This may be the result of one or both of the following factors. -
+a. ReportingAPI is down or unreachable.
+b. Not pointing to the right version of the Reporting API.
+Getting the error message - “Recovery Failed - Chargeback account is not configured for the biller.”
+Make sure that chargeback bank account is configured for the biller in the biller portal. The system will prioritize the chargeback account configured on the biller level than the chargeback account configured for invoice types. 
+Getting the error message - “Recovery Failed for the ACH rejected payment.”
+This may be the result of one or both of the following factors. -
+a. The configured account number, routing number, bank account type is invalid for the biller.
+b. The terminal on which the recovery is being processed is invalid.
+c. The chargeback may have already been recovered. (Misconfiguration of ChargebackDisputes table)
+d. The PaymentProcessing service or PayPal Braintree service is down or unreachable.
+ URL:/spaces/EN/pages/2727739471/BRAIN-556+Support+for+the+ability+to+manually+trigger+an+ACH+sale+on+the+ACH+Reject+Report+page+on+CRM

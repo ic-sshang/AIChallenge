@@ -1,0 +1,748 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+Summary
+AquaHawk
+ and 
+UtilityHawk
+ integrate with 
+InvoiceCloud
+ using 
+SSOconnect
+. This integration allows utility customers to access InvoiceCloud’s payment portal directly within the AquaHawk or UtilityHawk interface via an 
+iframe
+. Users can view and pay their bills seamlessly without needing to log in again, creating a smooth and secure payment experience within the utility’s branded portal.
+Reach out to Aquahawk to setup Test and Production environments.  
+Dan Prescott dan@amcobi.com
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information provided to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Single Sign On
+Purpose/Summary: Cloud SSO Connect is Invoice Cloud’s Implementation of a Single Sign On into the Invoice Cloud portal. This feature allows Billers and/or Partners to create a seamless experience for the Customer between Partner/Biller and Invoice Cloud systems, while keeping the scope of PCI compliance at a minimum for Partners and Billers.
+Aquahawk Login Flow:
+Configuration
+SSOConnect Details
+API Key:  For each new biller, Aquahawk is required to change the API key specific for each biller.
+Field
+Required
+Comments
+Partner Specification
+RemoteAuthenticationToken
+Yes
+Token is provided from Remote Authentication Web Service.
+Token is provided from Remote Authentication Web Service.
+ViewMode
+Yes
+Value is required to identify how the Customer is accessing the Invoice Cloud pages.
+Always 
+1
+ = iFrame
+RedirectID
+Yes
+Value is required to be able to redirect the Customer to the requested page. 
+1
+ = Customer Portal Recent Bill Listing
+2
+ = Customer Portal Paperless Settings
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+6
+ = Customer Portal Payment History
+8
+ = Customer Portal Open Bill Listing
+9
+ = Customer Portal Scheduled Payments Listing
+11
+ = Customer Portal Pay By Text Enrollment
+CSSUrl
+Yes
+AquaHawk displays Invoice Cloud default CSS iFrame and uses an empty value for CSS URL.
+CSSUrl = ““
+ReturnUrl
+No
+When this value is provided, the customer will be redirected to the provided URL after clicking the sign out button.
+N/A
+CustomReturnSiteName
+No
+When a 
+ReturnUrl
+ is provided, the tooltip text of the sign out button will change to “Sign out and Return to 
+<SiteName>
+”. 
+<SiteName>
+ defaults to the Biller DBA but can be customized by providing a value for 
+CustomReturnSiteName
+.
+N/A
+User Stories:
+AquaHawk SSO Connect
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample
+User Access
+User navigates to AquaHawk portal and try to log in the account. 
+Assumptions:
+The user knows their login credentials
+Check to see if login successful:
+If login successfully:
+Authenticate Account(s)
+Acquire Remote Authentication Token
+Retrieve CustomerGUID
+Retrieve User Accounts
+Sync all accounts of Invoice Cloud
+If login failed:
+Register Account(s)
+Authenticate Account(s)
+Acquire Remote Authentication Token
+REST- Remote Authentication- Retrieve Users
+If login successfully: 
+REST- Remote Authentication- Remote Authentication
+REST - Customer Portal-Retrieve CustomerGUID
+REST- Remote Authentication- Retrieve User Accounts
+If login failed:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+Sign In
+User Registration
+User navigates to AquaHawk portal and registers through the member portal. After registration 
+Assumptions:
+AquaHawk does not know if a Payer is registered with InvoiceCloud.
+AquaHawk stores Remote Authentication Token (per session) for use in 
+CloudSSO Redirect User using the pre-defined URL.
+Requirement:
+LoginTypeID (REST- Remote Authentication- Register Accounts) is always = 5
+Check to see if account exists in invoice cloud and if it is registered.
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist:
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+Dashboard
+Registered User Payment 
+A registered user is logged in and makes payments on a account.
+Assumption:
+User is already registered and authenticated
+AquaHawk stores Remote Authentication Token from Remote Authentication web service
+AquaHawk redirects (iFrame) to Customer Portal Recent Bill Listing
+CloudSSOConnect (redirect 1 = Customer Portal Recent Bill Listing)
+Managed Scheduled Payments
+A registered user is logged in to AquaHawk portal and navigates to IC screen to  update or cancel a scheduled payment.
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Scheduled Payments screen
+CloudSSOConnect (redirect 9 = Customer Portal Scheduled Payments Listing)
+Paperless Enrollment
+A registered user is logged in to AquaHawk portal and navigates to IC screen to enroll or unenroll paperless option
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Customer Portal Paperless Settings screen
+CloudSSOConnect (redirect 2 = Customer Portal Paperless Settings
+)
+AutoPay Enrollment
+A registered user is logged in to AquaHawk portal and navigates to IC screen to enroll or unenroll autopay option
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Customer Portal AutoPay Settings screen
+CloudSSOConnect (redirect 3 = Customer Portal AutoPay Settings
+)
+Pay By Text Enrollment
+A registered user is logged in to AquaHawk portal and navigates to IC screen to enroll or unenroll Pay By Text option
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Pay By Text Enrollment screen
+CloudSSOConnect (redirect 11 = Customer Portal Pay By Text Enrollment
+Pay By Text
+Update Email and Password
+Registered user logs into the AquaHawk portal and updates their password.
+Assumptions: 
+AquaHawk has the current email address and password of the user.
+Requirement: 
+IC should not allow user to update password to maintain password information in sync.
+AquaHawk to verify if Email and Password are the same as IC.
+Yes: call IC update password and email API
+No: Send verification email to stored account user email address. Once it’s approved, then call IC updated password and email API.
+REST- Remote Authentication- Update Password
+Update Email Address
+Manage Payment Methods
+A registered user is logged in to AquaHawk portal and navigates to IC screen to store, update or remove payment methods.
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+Saved Payment Methods
+Payment History
+A registered user is logged in to AquaHawk portal and navigates to IC screen to view payment history.
+Assumption:
+User is already registered and authenticated
+AquaHawk redirects (iFrame) to Payment History screen
+CloudSSOConnect (redirect 6 = Customer Portal Payment History
+Manage Accounts
+A registered user is logged in to AquaHawk portal and add/remove an additional account to the current account view.
+Assumption:
+User is already registered and account exists. 
+AquaHawk calls Invoice Cloud Web Service Link Accounts
+AquaHawk calls Invoice Cloud Web Service Unregister Accounts
+Note: IC does not have “Unlink” account. Unregister account will automatically remove linked accounts 
+REST- Remote Authentication-
+Link Accounts
+Unregister Accounts
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+36
+SSO - One Time Payment ReturnUrl
+TBD
+Y
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud
+Advanced Settings
+Setting ID
+Required/Optional/N/A
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Invoice Types
+Invoice Types
+ 42-Utility
+Virtual Site
+ 
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+78
+Customer Portal - Allow Co-owners
+If enabled, we will allow a set number of co-owners to be added to an account.
+This option is 
+Off
+ by default
+Per Biller
+79
+Customer Portal - Maximum Number of Co-owners per Account
+If co-owners are allowed, this sets the number of co-owners that can be added to an account.
+The default value for this Option is: 
+"5"
+Per Biller
+74
+ENABLE Multiple Customer Login Functionality
+If enabled, the Biller will be able to use the Multiple Customer Login functionality in the Biller Portal as well as the Customer Portal. The Pay By Text and Autopay option will also be hidden through the payment route for non-authenticated sessions, and the use of saved method payments through the IVR will be disabled.
+This option is 
+Off
+ by default
+Per Biller
+ 
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+ 
+AutoPayCollectionDate
+ 
+BalanceForward
+ 
+CreditCardServiceFee
+ 
+FirstNotifyRequestedDate
+ 
+InvoiceDate
+ 
+InvoiceDueDate
+ 
+InvoiceFormatGuid
+ 
+InvoiceTypeID
+ 
+LateFeeDate
+ 
+LocationReference
+ 
+MinimumAmountDue
+ 
+PaymentExpirationDate
+ 
+PaymentExpirationMessage
+ 
+PromptPayExpirationDate
+ 
+RegistrationValue
+ 
+SecondNotifyRequestedDate
+ 
+ThirdNotifyRequestedDate
+ 
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Agent Experience
+Biller Experience
+User Stories
+Integration Sizing
+ 
+Total Initial LOE (By Story Points)
+ 
+In Integration?
+Name
+Category
+Component
+Initial LOE (By Story Points)
+
+
+
+
+1
+
+
+b00c5d65-3036-4101-b48e-6c06a3bfa4b0
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments File Split
+Adjustments
+Biller File Split
+5
+
+
+
+
+2
+
+
+0ebfff18-0fae-427b-afc9-10cc1e9c4244
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments
+Adjustments
+Native Web Services
+0
+
+
+
+
+3
+
+
+3807713f-97bd-4076-8b9a-6673ef780b2f
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Balance Refresh
+Adjustments
+Real-Time Data Refresh
+5
+
+
+
+
+4
+
+
+3d10d522-bf74-4b90-b20c-35d619bfbf12
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustment File Conversion
+Adjustments
+File Conversion
+8
+
+
+
+
+5
+
+
+3a5c5e29-9ce1-4b55-9546-a5a57f12ab11
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+HTML Template
+8
+
+
+
+
+6
+
+
+e50cc758-09fd-4dac-b087-ed097ac27e2f
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+Native Web Services
+0
+
+
+
+
+7
+
+
+fad3444e-344b-490e-9cbb-422ba1c99d85
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Extraction
+3
+
+
+
+
+8
+
+
+245f1341-2b5d-4fde-bc15-2717fee6c548
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Remote Linking
+2
+
+
+
+
+9
+
+
+591a4197-2cf0-454c-af82-8cc0e71671d4
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+DataPump
+5
+
+
+
+
+10
+
+
+c4dfc96c-4bc8-44dd-8b2c-fb671711b880
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Status Report
+Change Logs
+File Export
+3
+
+
+
+
+11
+
+
+acdd667e-f6f8-4863-a9c5-a1f09d775eaa
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Change Log
+Change Logs
+File Export
+2
+
+
+
+
+12
+
+
+b9582923-9507-420a-868c-95183f1a17eb
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+Native Web Services
+0
+
+
+
+
+13
+
+
+253d576c-4db3-4ede-a733-83fe18696f98
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+File Size Split
+Invoices
+Biller File Split
+2
+
+
+
+
+14
+
+
+a9866606-a9f2-4087-a130-ad759886c4e2
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update File Split
+Invoices
+Biller File Split
+3
+
+
+
+
+15
+
+
+e1d8c830-9678-444a-81ab-ff896cd9d446
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Pre-Processing
+Invoices
+Biller File Split
+8
+
+
+
+
+16
+
+
+7f80c85d-e9ba-4a8a-ae0b-ee4134024c0e
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Batch Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+17
+
+
+2b15b950-3ec7-480a-ab5f-a0ff19be149e
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Single Invoices
+Invoices
+Native Web Services
+0
+ URL:/spaces/IM/pages/4474798663/AquaHawk+Technical+Design

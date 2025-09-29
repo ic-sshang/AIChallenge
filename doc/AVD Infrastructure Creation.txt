@@ -1,0 +1,102 @@
+Clone the 
+Repo
+Network Terraform Stack
+Navigate to “network” directory and then “environments”
+Create a new tfvars file with the following naming structure 
+${region}-${three_letter_location_abbreviation}-${environment}.tfvars
+Update the 
+location
+ variable to the Azure Region the AVD deployment needs to take place
+Example: 
+"Central India"
+Update the 
+location_abbreviation
+ variable to match the 
+${three_letter_location_abbreviation}
+ chosen in step 3
+Example: 
+"cin"
+ for 
+"Central India"
+Depending on Non-Production or Production AVD spoke deployment. The 
+firewall_private_ip
+ might need to be updated. 
+Update 
+vnet_address_space
+ to a valid and available /22 cidr block.
+Refer to 
+This
+ document and ensure a ticket is generated and is approved by network team
+Update the 
+vnet_subnet_configuration
+ as needed. This should be the first 3 octets depending on the cidr range chose in step 8.
+Update 
+cloudflare_tunnel_count
+ if more than 1 tunnel endpoint is needed. Cloudflare handles load balancing. By default we are setting a count of 1.
+Update 
+global_resources_deployment_version
+ if version 1 is no longer the most recent
+Update 
+tags
+ environment
+Persistence Terraform Stack
+Navigate to “persistence” directory and then “environments”
+Create a new tfvars file with the following naming structure 
+${region}-${three_letter_location_abbreviation}-${environment}.tfvars
+Update the 
+location
+ variable to the Azure Region the AVD deployment needs to take place
+Example: 
+"Central India"
+Update the 
+location_abbreviation
+ variable to match the 
+${three_letter_location_abbreviation}
+ chosen in step 3
+Example: 
+"cin"
+ for 
+"Central India"
+Workspace Terraform Stack
+Navigate to “workspace” directory and then “environments”
+Create a new tfvars file with the following naming structure 
+${region}-${three_letter_location_abbreviation}-${environment}.tfvars
+Update the 
+location
+ variable to the Azure Region the AVD deployment needs to take place
+Example: 
+"Central India"
+Update the 
+location_abbreviation
+ variable to match the 
+${three_letter_location_abbreviation}
+ chosen in step 3
+Example: 
+"cin"
+ for 
+"Central India"
+Update 
+workspaces
+ variable to include a map of workspaces.
+Example: 
+workspaces = {   
+test= {     
+vm_name   = "avd-test"     
+vm_size   = "Standard_D4s_v5"     
+disk_size = 250   
+    }
+}
+Navigate to the AVD Infrastructure 
+Pipeline
+Select Branch/tag
+deploymentVersion / releaseCandidateversion / hotFixVersion (typically for major features i’ll update releaseCandidateVersion. If its an update, I’ll just up the hotFixVersion
+Environment 
+[{target_environment}]
+ ie: npd or prd
+region 
+[{target_region]]
+ ie: pri or sec
+userPopulationLocation 
+[{location_abbreviation}]
+ ie: cin, brz, eus
+ URL:/spaces/icinfradoc/pages/2804383755/AVD+Infrastructure+Creation

@@ -1,0 +1,125 @@
+Intro
+There are several Rounds of Load Testing for the Azure App Gateway Deployment Version 0.
+This set of articles provides the data captured during the Load Tests and an analysis of the data. 
+true
+In this article:
+1
+6
+false
+default
+list
+true
+Load Test Overview
+There are 3 JMeter scripts used for Load Testing that exercise each of the main 3 InvoiceCloud Web Applications:
+CRM
+Biller Portal
+Customer Portal
+Customer Portal
+NonProd: 
+Kenya.Koch@ictest.com
+QA-Regression and Prod: 
+SusannaConroy81@ictest.com
+However, we will not use Username and Password directly in the script, follow the below steps to setup the JMeter Script prior to running.
+In the JMeter script we will capture the User’s ETG from the Biller Portal and embed the ETG Value in the JMeter Script.
+ will see if we can dynamically capture the Session ID, if not, this will need to be captured from the Biller Poral hop to Customer Portal and then embedded into the Script or set as an Environment Variable.
+BillerGUID
+: 
+4851516b-28fa-4194-8b4a-7097ff11c4b8
+2002
+Production Targets need to be updated for Production
+How many 
+VUs
+ for Production Test? 
+2000
+Customer Portal Scenarios
+Login
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/CustomerLogin.aspx?BillerGUID=4851516b-28fa-4194-8b4a-7097ff11c4b8&iti=
+View Invoice
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/customergroupledger.aspx?mode=open
+My Account > Payment History
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/CustomerGroupPaymentHistory.aspx 
+My Profile > Autopay
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/CustomerGroupAutoPay2.aspx
+My Profile > Paperless
+https://devtest.invoicecloud.com/portal/(S(vfkihc1hko4zx3xdqk3njp3w))/2/CustomerGroupPaperInvoices.aspx
+My Profile > Manage Accounts
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/CustomerGroupAccounts.aspx
+My Profile > Saved Payment Methods
+https://devtest.invoicecloud.com/portal/(S(wkn3tnx3b5p0g4bh2peuercg))/2/CustomerGroupPaymentOptions.aspx
+Biller Portal
+username
+: 
+Alaina52
+User must be recreated
+Create User in 2002 Biller ID in CRM. 
+Login As User to Biller Portal
+Reset Password
+Deleted Every Hour
+Regression and Prod use the same DB so this can be setup in QA Regression Environment and used for Production Load Test
+Does the user need to be created for Production run?  
+Yes
+Use whatever user is created for Regression Testing and update the Script
+Production Targets need to be updated for Production
+How many 
+VUs
+ for Production Test? 
+80
+Biller Portal Scenarios
+Search > Invoices
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerInvoices.aspx
+In Customer Name field enter %%%, and click Submit
+On first row click Edit Customer Profile icon. Takes you to this page:
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerCustomerProfile.aspx?RC=3&GUID=2b240935-d682-4a92-8c09-de0abd2f6bb6&Return=9
+Search > Payments
+In Customer Name field enter %%%, and click Submit
+On first row click on Process New Transaction icon. Takes you to this page:
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerManualPaymentEnterInfo.aspx?t=1&PaymentGUID=520618d3-1299-4bd3-a9a9-ff65297a6e44&vt=1
+Reconciliation > Batch > Open Batch Summary
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerBatchInquiry.aspx
+Reconciliation > Batch > Settled Batch History
+Click Submit on this page.
+On first row click on View Batch Details. Goes here:
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerCreditCardBatchDetail.aspx?SettledDate=6/24/2024 4:58:02 AM&SettledBatchID=54192
+Gear Icon > Email Management > Email Management
+https://my-devtest5.invoicecloud.com/portal/(S(x25nb0at0r2x2qktkr4b0l1z))/BillerEmailManagement.aspx
+Gear Icon > User Management > Users
+https://my-devtest5.invoicecloud.com/portal/(S(0gzrnr2ebsfxvaypkgjp1ucn))/BillerUserManagement.aspx
+CRM
+username
+: 
+testQa1User
+This user exists in DevTest, QA-Regression, and Prod.
+Does the user need to be created for Production run?  
+No
+Production Targets need to be updated for Production
+How many 
+VUs
+ for Production Test? 
+20
+CRM Scenarios
+Profile
+https://www.invoicecloud.com/crm/Biller.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Invoice Types
+https://www.invoicecloud.com/crm/BillerInvoiceTypes.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Users
+https://www.invoicecloud.com/crm/BillerUsers.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Options
+https://www.invoicecloud.com/crm/BillerOptions.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Invoicing
+https://www.invoicecloud.com/crm/BillerInvoicing.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Service Fees
+https://www.invoicecloud.com/crm/BillerWizardSubmitterFees.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Terminals
+https://www.invoicecloud.com/crm/BillerWizardTerminals.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Virtual Site / Customer Portal
+https://www.invoicecloud.com/crm/BillerVirtualSite.aspx?bid=2002&bg=4851516b-28fa-4194-8b4a-7097ff11c4b8
+Next Steps
+For Friday 7/5
+ will update the Customer Portal JMeter Scripts.
+ will run load test in DevTest on Friday morning to exercise the updated scripts and ensure they are working as expected in the DevTest environment prior to Friday’s meeting.
+Team will ensure the JMeter Scripts run in Production on Friday’s meeting using a low VU count and shorter timeframe of the test.
+Upload 
+user.properties
+ file with the JMeter Script and the Targets .csv to set 
+httpsampler.ignore_failed_embedded_resources=true
+ URL:/spaces/platform/pages/3327688711/App+Gateway+DV+0+Load+Testing

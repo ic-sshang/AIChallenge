@@ -1,0 +1,276 @@
+Decision Statement:
+ Select the best Vendor/Solution for providing customer identity and access management.:arrow
+Objectives
+Measures
+Weight
+Auth0
+Winner
+ 
+ 
+SecureAuth
+Ability to scale to thousands of tenants
+Has a tenant model that supports thousands of entries
+Performance does not degrade as the number of tenants increases
+Handles concurrent logins, token issuance, and MFA challenges across tenants
+MUST
+Logical isolation via Organizations
+ 
+Logical isolation via Organizations and Sub-Organizations
+Per-tenant IdP configuration and routing
+Different IdPs can be setup under different tenants 
+MUST
+Configurable per organization
+Configurable per Organizations and Sub-Organizations
+Attribute mapping and transformation from IdP to CIAM user profile
+IdP attributes are stored in the user profile
+MUST
+Yes – via Actions, Rules, and connection settings
+JavaScript-based, highly customizable
+Yes – via admin console and workflows
+Scriptable, policy-driven
+Support for SAML
+Solution can act as:
+SAML IdP
+ (for SPs like Salesforce)
+SAML SP
+ (to consume external IdPs like Okta)
+MUST
+Supported
+Supported
+Support for OIDC
+Solution can act as:
+OIDC Provider
+ (for apps)
+OIDC Relying Party
+ (to consume external IdPs)
+MUST
+Full OIDC 1.0 support
+Full OIDC 1.0 support
+Support for LDAP
+Solution can act as:
+LDAP connector
+ (for user sync or auth)
+MUST
+LDAP Connector
+AD, OpenLDAP
+ 
+Native, deep integration
+AD, OpenLDAP
+Per-tenant MFA policies and enforcement
+Platform supports setting up different MFA options for each tenant
+MUST
+Partial, requires Actions or Rules
+Supported via organization chaining
+MFA enrollment and recovery workflows
+Self-enrollment supported
+MUST
+Supported
+Supported
+Support for JWT and opaque tokens
+JWT tokens supported
+MUST
+Supported
+Supported for opaque tokens via API
+Supported
+Supported for opaque tokens via Authorizer
+Token customization (claims, scopes, expiration)
+Additional claims can be configured 
+MUST
+Supported via Actions and Rules
+Supported via realm configurations
+Support for OAuth 2.0 and OpenID Connect standards
+MUST
+Supported
+Supported
+Support for client credentials and other OAuth flows
+MUST
+Supports all but opaque token introspection
+Supports all
+Audit logging and anomaly detection
+MUST
+Logs via dashboard & API
+Built-in for brute force, breached credentials
+Logs
+Advanced – includes behavioral analytics
+Support for custom logic
+MUST
+Actions, Rules
+Workflow engine and scripting
+Sandbox environments for testing
+MUST
+Free-tier tenant for dev/testing
+dev, staging, prod tenants
+Typically provisioned on request
+Requires coordination with support
+Real-time and historical login activity
+MUST
+Dashboard and log streaming
+Accessible via API, limited retention
+Yes – with adaptive responses and alerts
+Detailed, long-term audit trails
+MFA usage and success/failure rates
+Logs for MFA usage
+APIs for pulling usage 
+MUST
+logs and dashboards
+Yes – with risk scoring and anomaly detection
+SLAs and enterprise support options
+Platform has well defined SLAs and support plans
+MUST
+99.99% with tiered service credits
+Basic to Platinum (with TAM at higher tiers)
+99.99% SLAs – typically enterprise-grade
+Custom enterprise support packages
+Documentation and community support
+Documentation is well defined and accessible
+Public forums and community feedback 
+MUST
+Extensive, public, developer-friendly
+Strong – forums, GitHub, Stack Overflow
+Comprehensive but gated
+Limited – enterprise support focused
+Isolate tenant users and configurations
+Each tenant can have their own users and configurations
+H
+Logical isolation via Organizations
+Per-organization settings and metadata
+Logical isolation via Organizations and Sub-Organizations
+Per-organization settings and configurations
+Support for tenant-specific branding, policies, and login flows
+Each tenant can have their own branding, policies, and login flows
+M
+Limited to a single Universal Login customization for the entire tenant.  A single template must have logic for handling org specific customizations based on org meta data variables.
+Requires Actions or Rules + org metadata
+Full HTML/CSS customization per Organization and Sub-Organization.  Each organization can have have their own theme with their own templates to handle organization specific customizations
+Supported via Organization chaining
+Just-in-time (JIT) user provisioning from external IdPs
+User is created when authenticating
+H
+SAML/OIDC assertions
+SAML/OIDC assertions
+Support for multiple MFA methods
+Platform supports a wide range of MFA types
+Each tenant can have  their own MFA requirements
+H
+TOTP (Time Based One Time) Support
+SMS/Email OTP
+Guardian app
+TOTP Support
+SMS/Email OTP
+SecureAuth app
+Per-tenant login, registration, and email templates
+Setup custom login page for each tenant
+M
+Customizable via Universal Login + metadata
+Customizable via Universal Login + Actions
+Customizable via Liquid templating + org metadata
+Full HTML/CSS customization per Organization and Sub-Organization
+Full HTML/CSS customization per Organization and Sub-Organization
+Fully customizable HTML/CSS templates per Organization and Sub-Organization
+Session management and revocation
+Configure session duration and expiration per tenant 
+H
+Supported via token expiration and session settings
+Supported via Management API
+Supported via Organization and Sub-Organization configurations
+Supported via Admin Portal and API
+Log export/streaming
+Review log export functionality
+H
+Supported
+Supported
+Role-based access control (RBAC) and fine-grained permissions
+Configure roles and permissions in platform per tenant
+H
+Yes – role and scope-based
+Yes – via Auth0 FGA (ReBAC model)
+Yes – role and attribute-based
+Yes – via ABAC and policy-based controls
+Physical Data Separation
+Data is physically separated
+L
+Not supported
+ 
+ 
+Not Supported in SaaS offering
+Tenant-specific admin roles and delegated management
+Tenant admins can manage only their own users and settings
+L
+Must be custom-built
+Built-in delegated admin portal
+Support for custom domains
+Use own domain instead of the vendor’s default domain
+Per tenant domains
+M
+Supported via Organizations
+CNAME
+Supported via Organization and Sub-Organization
+Localization and accessibility support
+Platform supports major global languages: English, Spanish
+Per tenant localization
+M
+Supported via Universal Login customization
+Supported, WCAG 2.1 compliant
+Supported via full HTML/CSS customization per Organization and Sub-Organization
+Supported, WCAG 2.1 compliant
+Easy integration with API gateways
+Platform issues access tokens compatible with Kong
+Clear guides or SDKs for integrating with Kong
+H
+Supports OIDC plugin 
+Well-documented
+ 
+Requires SecureAuth-specific setup in Kong
+Installation guide, complex setup
+Token introspection and validation endpoints
+Platform support introspection endpoints 
+Platform supports JWKS endpoint
+L
+Limited – no introspection endpoint
+Yes – local validation supported
+ 
+Full – supports RFC 7662 introspection
+Yes – local validation supported
+SDKs and APIs for major platforms
+Platform has SDKs and documentation for React and .Net
+M
+Web - React 
+Backend - .NET
+Web - API specifications
+Backend - .NET
+Adaptive or risk-based MFA
+IP reputation & geolocation
+Can it displace ReCaptcha and Cloudflare?
+H
+IP reputation & geolocation
+IP reputation & geolocation
+Embedded login or hosted login options
+Platform has SDKs for embedded login
+Create a custom login page in the platform
+ 
+MUST
+Supported via SDKs and APIs
+Universal Login
+Supported via SDKs and APIs
+Realm-based login pages
+Webhooks and event-driven architecture
+Platform sends webhooks for key events
+L
+Pre/post login, registration, etc.
+Workflow triggers
+Tenant-level usage metrics and dashboards
+View metrics like logins, MFA usage, failed attempts, and API calls per tenant.
+APIs to programmatically retrieve usage data per tenant.
+L
+Yes – active users, MFA, API calls
+Yes – via dashboard and APIs
+Yes – auth events, risk scores, policy actions
+Yes – with adaptive auth insights
+Compliance & Security
+Request their latest compliance documentation for confirmation
+MUST
+Compliant with major standards (SOC 2, HIPAA, GDPR, etc.)
+ 
+ 
+Strong compliance (HIPAA, GDPR, etc.), advanced threat detection.
+ URL:/spaces/EA/pages/4334190597/Customer+Identity+and+Access+Management+CIAM

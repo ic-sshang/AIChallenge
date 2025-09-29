@@ -1,0 +1,168 @@
+Page Navigation
+Document Status
+TEMPLATE
+Document Owner
+ 
+Knowledge Transfer
+Gong URL
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+sFTP
+Adjustments/Balances
+RosTech API: GetAccountInformation (Service Version 1)
+RosTech API: GetAccountOverdueBalances (Service Version 2)*
+RTDR
+Block CC and Block ACH are updated by the webservices in addition to Balance Due.
+*All new billers will use GetAccountOverdueBalances (Service Version 2). The purpose of Service Version 2 is to read the TotalOverdueBalance. Service version 2 also uses the AsOfDate parameter passing in Today() 23:59:59.999
+Payments
+RosTech API: CreatePayment
+Data Pump
+ACH Rejects Posting, Void, Chargeback, Credits/Refunds
+IC pipe delimited File 
+sFTP
+Change Log - AutoPay Enrollment
+RosTechAPI: UpdateAutoPay
+Data Pump
+Change Log - Paperless Enrollment
+RosTech API: Update Paperless
+Data Pump
+Change Log - Phone Number
+Not Supported
+N/A
+Change Log - Email Address
+Not Supported
+N/A
+Bill Images 
+PDF Linking - Supported 
+PDF Extraction - Supported
+Template - Not Supported
+Web Services or sFTP
+The integration supports PDF Linking and PDF Extraction. Template is not supported. It is expected that each UMBS client will choose their own print vendor, so Bill Presentment will be handled on a client-by-client basis.  PDF linking via a document retrieval API is Invoice Cloud’s preferred method of presenting bills from the UX.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Supported
+AgentConnect is used through the customer portal in UMBS so that the CSR can impersonate the customer. The CSR can manage the account - redirects included for managing open invoices and autopay. 
+Check Free - FISERV - Cash
+Supported
+Only supported if biller uses our Online Bank Direct Product. 
+This product would be used if municipalities allowed coordinating bill pay with customers banks. A payer will setup a recurring payment or autopay using their bank account and the bank sends over the paper check via FiServ to be applied to the customers account in IC.
+CloudPay
+Supported
+CloudPayV2 is used by the cashier to support in person EMV payments since RosTech does not have a cashiering app. 
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+Not in use, but can be supported
+CSRConnect
+Not Supported
+No longer implemented - applies to legacy integrations only. 
+CloudSSOConnect
+Supported
+CloudSSOConnect is used through the customer portal in UMBS so that the customer can access their account. Redirects included for managing open invoices and autopay. 
+EMV
+Not Supported
+POSPay
+Supported
+In person payments are supported via POSPay using the CloudPayV2 integration since RosTech does not have a cashiering app. 
+A biller can implement the devices via the Biller Portal
+If Biller is utilizing POSPay/CloudPayV2 for in person payments, enable the Allow POS Integration setting in CRM (Go to Products -> Credit/Debit Card -> at the bottom I enabled Allow POS Integration)
+IVR
+Supported
+Recommended search method- Account number
+Kiosk
+Supported
+Not in use, but can be supported
+Online Bank Direct - OBD
+Supported
+ 
+Outbound IVR
+Supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Account Linking is handled by partner
+       Multi-User Log In
+Not Supported
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Required
+UMBS creates usernames and passwords. 
+AutoPay Collection Date
+Supported
+Value is set in BIF Customization
+Batch Closure
+Supported
+Recommend auto batch closure unless biller specifies need for custom. 
+Bill Processor
+Not Supported
+No longer implemented
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Supported in BIF and RTDR
+Conveyance
+Not Supported
+Conveyance will be handled on a biller-by-biller basis when they are being implemented and not as part of the standard integration with RosTech.
+Data Conversions
+Supported
+Biller to provide data for conversion
+Email Notification Schedule
+Supported
+Value is set in BIF Customization
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Supported
+Minimum Payment
+Not Supported
+Paperless
+Supported
+Partial Payments
+Supported
+Value is set in BIF Customization
+Past Due Payments
+Supported
+Supported in BIF
+Scheduled Payments
+Not Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+UMBS does not have a cashiering app. 
+IDTech SRED Key
+Not Supported
+UMBS does not have a cashiering app. 
+PAX EMV
+Supported
+In person payments are supported via POSPay using the CloudPayV2 integration since RosTech does not have a cashiering app. 
+A biller can implement the devices via the Biller Portal
+Other EMV Devices
+Not Supported
+UMBS does not have a cashiering app. 
+ URL:/spaces/IM/pages/2698805325/RosTech+Integration+Software+Details

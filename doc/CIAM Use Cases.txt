@@ -1,0 +1,137 @@
+1
+1
+false
+none
+list
+true
+End User (payer, customer, delegate)
+These are your bill-payers or their delegates logging in to view, pay, or manage accounts.
+Authentication (happy path)
+Log in with username/password and start a session.
+Use corporate SSO (Okta, Azure AD, Ping) to access the portal directly.
+Be redirected from the portal to an external IdP, sign in, then return with a valid session.
+Stay logged in seamlessly when moving between portal apps/subdomains.
+Stay logged in across mobile and web apps without re-entering credentials every time.
+Authentication (exceptions)
+Enter wrong password → see generic error, retry with lockout limits.
+Account temporarily locked after too many failed attempts.
+Get notified of suspicious login (new device, unusual location) and complete extra verification.
+Deal with expired session by re-signing in.
+Be required to reset password if it’s expired, compromised, or disallowed.
+Be challenged for MFA when logging in from a new device or risky location (or always).
+MFA flows
+Enroll in MFA after first login (choose SMS, email, authenticator app, WebAuthn).
+Enter OTP from SMS or email to continue login.
+Use authenticator app (TOTP) to generate a code.
+Approve push notification on mobile or confirm with number matching.
+Use passkeys (biometric device login) for passwordless sign-in.
+Use recovery codes if MFA factor unavailable. (unsure on this one, needs research)
+Switch to a backup factor if the primary one fails (e.g., SMS didn’t arrive).
+Account self-service
+Register a new account (with email verification).
+Complete profile setup (phone, name, consents).
+Change email, phone, or password with re-authentication and verification.
+Reset a forgotten password (via email link or SMS OTP).
+Link accounts if multiple logins exist (e.g., personal + corporate).
+See account login history
+ and revoke active sessions/devices
+.
+Deactivate or delete own account under privacy rules (GDPR/CCPA). (unsure if this is needed, need to review these regulations)
+Branding & UX
+Experience branded login page (logos, styling, vanity domain).
+Use mobile-friendly MFA prompts.
+Receive branded, trustworthy-looking magic link or OTP emails.
+Interact in localized language/format (dates, numbers).
+Use accessible flows (screen reader, large tap targets, CAPTCHA alternatives).
+Biller Admin (internal admins managing users/tenants)
+These are portal administrators, not end users.
+User management
+Create new user accounts (manual 
+or bulk
+).
+Assign, update, or remove user roles/permissions.
+Update user attributes (name, email, phone).
+Deactivate/reactivate or delete users.
+Reset a user’s password or MFA factor.
+Manage user membership across multiple tenants/brands.
+Grant delegated or impersonation access (with consent and audit).
+Security enforcement
+Require MFA enrollment for all admin accounts.
+Force password resets for users after security events. (need more on this before we can determine if it’s required)
+Enforce step-up auth for high-risk actions (adding payment methods, viewing account numbers).
+Define session timeouts, token lifetimes, and “remember device” policies.
+Branding & configuration
+Configure login branding per tenant (logos, colors, messages).
+Set up vanity login domains and ensure proper TLS.
+Manage consent forms and privacy policies shown to users.
+Data cleanup
+Identify duplicate users (same email/phone).
+Merge or resolve conflicting records.
+Enforce unique constraints for identity data.
+Suppress invalid or bouncing emails.
+Customer Support Agent (internal IC)
+These are staff helping end users with login/account issues.
+Support actions
+Search for users by email, phone, or account ID.
+See account status (locked, MFA enrolled, sessions active).
+Assist users with password resets or MFA resets (with identity verification).
+Send secure one-time links for assisted login.
+View audit trails to explain login failures or suspicious activity.
+Impersonate a user account (with consent) for troubleshooting.
+Flag accounts for fraud monitoring or restriction.
+Implementation team (TBD who owns this and how much remains manual)
+These folks build, configure, and maintain the CIAM integration.
+Authentication integration
+Set up federation with Okta, Azure AD, Ping, or other IdPs (SAML/OIDC).
+Map IdP attributes (email, roles, tenant).
+Handle JIT provisioning (auto-create users on first login).
+Manage de-provisioning (via SCIM or scheduled sync).
+Configure multiple IdPs per tenant, with domain discovery.
+Rotate IdP keys/certs with zero downtime.
+API & event handling
+Integrate SecureAuth APIs for auth, user management, token handling.
+Use SCIM for provisioning/deprovisioning automation.
+Consume SecureAuth webhooks for login, MFA, risk events. (is this needed?)
+Enrich tokens with custom attributes for billing apps.
+Ensure webhooks are idempotent and retried safely.
+Risk and fraud integration
+Apply risk scoring (IP reputation, geo, device signals).
+Configure CAPTCHAs or challenges for suspected bots.
+Route anomalies to SIEM/logging for monitoring.
+Session & token management
+Implement PKCE in mobile apps.
+Configure refresh token rotation & detection of reuse.
+Bind tokens to device/browser fingerprints.
+Migration support
+Import legacy users (hashed passwords or reset-on-first-login).
+Run dual login paths during migration (legacy + SecureAuth).
+Implement account linking for conflicting email records.
+Build rollback plan to legacy auth if needed.
+Security / Compliance Team
+They care about risk management, auditing, and compliance.
+Monitoring & auditing (we should validate this is/isn’t available via SecureAuth portal)
+Get real-time dashboards of login success/failure.
+Monitor MFA enrollment rates and risk-based challenges.
+Track fraud events (credential stuffing, brute force).
+Review full audit trails of user/admin activity.
+Monitor token/session anomalies.
+Compliance
+Ensure WCAG accessibility compliance.
+Implement GDPR/CCPA features (deletion, export).
+Control log data retention & pseudonymization.
+Map CIAM operations to SOC2/ISO27001 controls.
+Enforce consent collection & versioning.
+Operational resilience
+Load test auth flows for billing cycles.
+Validate multi-region failover.
+Run pen-tests targeting auth flows.
+Ensure key/cert rotation playbooks are followed.
+End User Devices / Systems (non-human personas)
+These are automated flows that must work seamlessly.
+System interactions
+Browser stores sessions securely (SameSite cookies).
+Mobile app consumes PKCE/OAuth tokens.
+APIs accept valid OIDC tokens from SecureAuth.
+Legacy systems consume identity mappings until migration completes.
+Automated fraud detection receives SecureAuth events via webhooks. (TBD how we’re being notified of fraud)
+ URL:/spaces/PRODUCT/pages/4684480663/CIAM+Use+Cases

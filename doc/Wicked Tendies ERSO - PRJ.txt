@@ -1,0 +1,56 @@
+none
+Overview
+This document aims to identify critical jobs that currently lack retry logic to improve system resilience. The goal is to create a prioritized list for iterative improvements to reduce failures and manual interventions.
+Acceptance Criteria
+Review and document critical jobs missing retry logic.
+Assess the impact of missing retry mechanisms on system reliability.
+Collaborate with the team to determine prioritization criteria.
+Provide a prioritized list of jobs for iterative improvement.
+Recommend potential retry strategies where applicable.
+Critical Jobs
+Critical Process
+Impact
+Risk 
+Recommendations
+AchAutoClose
+Funding, Reconciliation
+Highest
+Short Term: 
+The app has retry logic on multishard calls but needs to be updated to handle the exceptions we receive when a multishard call fails. 
+Verify Job will Alert if it fails on skybot. 
+Long Term:
+Migrate ACH Auto Close billers to Custom Close implementation. This can be done in phases by Module / Processor + Auto Close Hour
+CreditCardAutoClose
+Funding, Reconciliation
+Highest
+Short Term: 
+The app has retry logic on multishard calls but needs to be updated to handle the exceptions we receive when a multishard call fails. 
+Verify Job will Alert if it fails on skybot. 
+Long Term:
+Migrate Credit Card Auto Close billers to Custom Close implementation. This can be done in phases by Module / Processor + Auto Close Hour
+CTP
+Payments
+Highest
+Short Term
+Improve Fraud Detection + Alerting (Team currently working on solutions) 
+Centralize Payment Dashboards in New Relic + Outline SOP for Payment Issues. (Payment Processor down, Declines, Frauds etc) 
+Long Term
+Add an endpoint for searching payment status. Helps solve scenario for AutoPay if they want to check the status of a payment for automated reruns of failed payments. 
+HawaiiBatchClose
+Funding, Reconciliation
+High
+Clean up method CloseOpenBatch to follow best practices for reruns, failed SPs, and unbundle if an exception occurs. We do this type of resiliency on other batch close jobs. 
+MonthlyAccountReport
+Finance / Accounting
+High
+ Fix 
+ExecuteQueryRetry
+ as it does not rerun all type of failed SP calls. Check error logs on recent failures and fix them accordingly. The goal is to have it actually retry the SP calls since it can be a large amount of data. 
+PayerRejectProcessing
+Payer Notifications
+High
+Add retry logic on multishard calls. 
+Add support for duplicate checks in case of “ReRuns”. Example. The job failed while inserting emails into email queue. On a rerun, you want to make sure it doesn’t insert the same email again for that current FKID and Email Address. 
+Reference Example Below: 
+https://dev.azure.com/invoicecloud/Src/_git/AutoPaymentReminders?path=/AutoPaymentReminders/AutoPaymentReminder.vb&version=GBmain&line=69&lineEnd=69&lineStartColumn=22&lineEndColumn=46&lineStyle=plain&_a=contents
+ URL:/spaces/EA/pages/4115562515/Wicked+Tendies+ERSO+-+PRJ

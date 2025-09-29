@@ -1,0 +1,67 @@
+1
+6
+false
+list
+false
+Connecting to Cluster’s Control Plane
+Use the following information to connect to the Cluster’s Control Plane either via the Azure Portal or Kubectl.
+Note, you must be on a Production Jumpbox (
+Windows 
+or 
+Linux
+) to access the Cluster Control Plane for Production and UAT Environments and you must be on a NonProd Jumpbox (
+Windows 
+or 
+Linux
+) to access the Cluster Control Plane for Sandbox and DevTest Environments.
+Proxy Clusters
+Production
+Primary Region
+az aks get-credentials -n aks-pri-proxy1-prd -g rg-pri-proxy-cluster1-sbx --subscription "Enterprise Prod"
+Secondary Region
+az aks get-credentials -n aks-sec-proxy1-prd -g rg-sec-proxy-cluster1-sbx --subscription "Enterprise Prod"
+UAT
+az aks get-credentials -n aks-pri-proxy1-uat -g rg-pri-proxy-cluster1-uat --subscription "Enterprise Prod"
+DevTest
+az aks get-credentials -n aks-pri-proxy1-dev -g rg-pri-proxy-cluster1-dev --subscription "Enterprise Dev/Test"
+Sandbox
+az aks get-credentials -n aks-pri-proxy1-sbx -g rg-pri-proxy-cluster1-sbx --subscription "Sandbox"
+Handling Golden Alerts
+Golden alerts represent the most important metrics of a systems health. Below is how to begin handling an alert for each type.
+We should always inform the app team affected by an alert. They should be aware of issues the application may experience during production. This can help them design better fault tolerance or fix performance issues causing saturation. They cannot do these things if they are unaware.
+Errors
+Experiencing deployment failures, pod restarts, or cluster related error events.
+If a deployment is failing, or a pod is restarting, the app team probably needs to be involved.
+Action
+:
+run a 
+pod describe/pod log
+ if possible and inform the app team of the issue.  
+status based actions:
+ImagePullBackOff or ErrImagePull: Pod could not run because it cannot pull the container image from the registry. We could have an incorrect image tag, or an authentication issues with the registry.
+CreateContainerConfigError: Missing secret or config map, create/correct config issue and redeploy
+CrashLoopBackOff: Cannot schedule a pod on the node, this could be for a few reasons. The node does not have enough resources, a volume needed cannot be mounted, or a port issue.  The output of 
+describe
+ should point you in the right direction to resolve the issue.
+NotReady/Unknown: Worker node likely crashed. Remove failed node from cluster, delete stateful pods with status ‘unknown’.
+Saturation
+Requested Resources vs Used Resources. Helps to identify under or over utilization.
+Action
+:
+scale to resolve the issue
+check autoscaling params for the future
+check overall cluster sizing
+Throughput
+Network bytes in/out. Helpful diagnostic information. An issue usually won’t be an issue just with throughput.
+Action
+:
+look for spikes
+regional balancing
+load balancing
+scaling out
+Latency
+Helpful diagnostic information. An issue usually won’t be an issue just with latency.
+//todo: if we find a good metric note it here.
+Cluster Dashboards
+Proxy
+ URL:/spaces/DS/pages/2907504641/K8s+Cluster

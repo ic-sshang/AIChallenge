@@ -1,0 +1,27 @@
+Invoice Cloud registers billers with online banks to electronically deposit customer payments. OBD eliminates paper checks issued by online banking sites. 
+Invoice Cloud matches electronic payments information with open invoices which greatly reduces the manual effort of matching customer names and bill amounts. Invoice Cloud provides an easy to use interface  to view partial matches.
+The matches are “remembered” by OBD and matched automatically next time.
+MasterCard/Fiserv file location
+\\10.0.6.4\EDataAppData\RPPS\in\fiserv
+For Fiserv file: the file with .remit is the normal file.
+\\10.0.6.4\EDataAppData\RPPS\in\mcrpps
+OBD on Biller Portal
+OBD payments can be viewed under “Products” tab on the biller portal.
+OBD options on CRM
+The options enabled on CRM will indicate how OBD will work for the biller. These options can be located at Biller CRM → Products → Online Bank Direct
+Auto Match Scoring 
+Note: We only use this matching if Auto Prior Match failed and Auto Account Number Match failed, if applicable.
+Auto matching scoring details:
+One can check the OBD auto match score for a payment on Skybot. Filter by payment date and job name as “STAGING-MC_RPPS”. 
+Download the job log and search by RppsEntryID/InvoiceID.
+SQL Queries:
+Data from 
+[dbo].[OBDMatchData]
+ and 
+[dbo].[RPPSLocator]
+ is cleared after 3 days. In case no record found in the tables, check the details on the log on Skybot.
+wide
+select * from [dbo].[OBDMatchData] where customerid=107316 
+select * from [dbo].[RPPSLocator] where customerid=107316
+select * from RPPSEntries where IndividualID='2009544' order by 1 desc --where 'IndividualID' is the customer account number
+ URL:/spaces/DS/pages/2674393105/Online+Bank+Direct+OBD

@@ -1,0 +1,31 @@
+The Customer Import tool is a simple means to import data like Autopay, Paperless, or Customer Registration data depending on the Data Conversion need. 
+This front-facing tool in the CRM’s job is only to map the column header selections, and any customizations for account number (e.g ‘WTR-’), before kicking off a related job depending on the import.
+This tool and the Skybot jobs requires the files to be in a CSV format.
+This tool is also permission based, so if you lack the correct permissions, you will only be permitted to the Paperless import path.
+The Autopay import job will import the records to the owner login record. So, anything like Autopay will have the new payment method record tied to the owner login, or paperless will update the email address of the owner login.
+This can be an issue for MCL billers, or if a Customer Registration is being done alongside Paperless. Any accounts that match there will get updated.
+Visual Guide
+The Customer Import tool is located under Tools > Biller Tools > Biller Customer Imports from within the CRM.
+Once starting up the page, you’ll be shown three options.
+Import
+View In-Progress Imports
+View Completed Imports
+You’ll want to select the Import option to be able to start up the tool and select the biller that you’re trying to import to. Depending on what’s stored in the Secure Upload and what permissions you as a user have, you’ll be thusly prompted with either the full selection of options or a smaller one:
+After this screen you’ll be asked to select a file for the import, and the invoice types if it’s an Autopay or Paperless import. 
+Keep in mind that all selections used for the invoice types will cause a customer to be enrolled with the import for each one of them, even if the customer doesn’t have any invoice for the invoice type.
+Follow through with what the screen prompts you with depending on your selection.
+If you’re doing an Autopay import, you’ll want to be especially careful with the selections.
+All three import paths eventually lead to the IC Account Number page. This is where you can do customizations for account numbers if needed.
+It’ll follow up with a page to put in a custom order for the customizations. You can have the new misc values in any order you might choose.
+After all these selections are done and you continue after this step, you may be prompted with an error page. 
+Some of these errors that might be prompted won’t allow for you to continue forward with the select file, but there are also some errors like “missing account numbers” where you can continue forward with as we do have the ability to create customers through this import tool should it be requested.
+If there are no errors or if it’s a matter of missing account numbers, you’ll be sent to the last step to kick off the conversion. It allows you to review the page, as well as toggle the option to create missing customer records.
+It is always recommended to input your email in the provided field to be directly sent the logs. 
+note
+If you forget to input your email, the reporting of the import can still be found in the relevant registration job from within Skybot. You will need to review the results from the database as well.
+
+
+If you forget to input your email, the reporting of the import can still be found in the relevant registration job from within Skybot. You will need to review the results from the database as well.
+
+
+ URL:/spaces/IM/pages/3879338064/How+to+use+the+Customer+Import+Tool

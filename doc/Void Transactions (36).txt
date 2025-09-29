@@ -1,0 +1,14 @@
+Summary
+This permission allows you to cancel a transaction before it has settled. To determine if a transaction is eligible for cancellation, check the 
+settledBatchId
+ value:
+settledBatchId = 0
+: The batch has not settled, and no charge has been made to the customer, so the transaction can be canceled under this permission.
+settledBatchId > 0
+: The batch has already settled, requiring a refund instead of a cancellation. Refunds are governed by a separate permission (Permission 37).
+BillerPayments
+BillerCustomerProfile
+Open Batch Summary
+Settled Batch History
+BillerPaymentsSemcoCSR
+ URL:/spaces/ED/pages/3953688642/Void+Transactions+36

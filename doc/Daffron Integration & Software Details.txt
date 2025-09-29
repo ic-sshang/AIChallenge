@@ -1,0 +1,191 @@
+Page Navigation:
+Document status
+Complete
+Green
+Document owner
+ 
+ 
+Knowledge Transfer
+Gong URL
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+BIF
+Web Services
+File will be sent in IC BIF format
+Adjustment 
+GetPayableItemsList multi-speak web service
+Web Services
+Multi-Speak APIs are only available for payments and account balance.
+Payment 
+CommitPaymentTransaction multi-speak web service
+Web Services
+Multi-Speak APIs are only available for payments and account balance.
+ACH Reject
+Not Supported
+Void
+Not Supported
+Change Log - AutoPay Enrollment 
+ModifyCBDataForCustomer - Add/Remove Autopay
+Web Services
+Calling Daffron API
+Change Log - Paperless Enrollment
+ModifyCBDataForCustomer - Add/Remove Paperless Billing
+Web Services
+Calling Daffron API
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images
+PDF Linking - Supported
+PDF Extraction - Not Supported
+Template - Not Supported
+Web Services
+Daffron has an API IF they are creating the bill presentment. If Daffron is not providing the bill presentment, we cannot link to Daffron
+If the biller is able to provide PDFs directly to IC, PDF Extraction can be supported
+Configuration 
+Invoice Types
+42
+Virtual Site
+Biller can use any value(s) from the BIF to use as search fields on the virtual site
+Required Options
+ID
+Option Description
+Details
+N/A
+SSO Options - enable/disable customer portal change/update options according to a single-sign on integration
+Invoice Type Option 40
+Block Customers from paying on Invoices with Balance Forward payments
+This option should be enabled for all Daffron/Milsoft billers because this integration only support balance forward. Payments should not be made on any invoice other than the most recent.
+Invoice Type Option 41
+Only allow payments on:	Most Recent Invoice First
+This dropdown should always be set to ‘Most Recent Invoice First’ so that payments cannot be made on previous invoices. Integration is a Balance Forward model.
+53
+Customer Portal - Pre-select Open Invoices
+By default, IC preselects all Open Invoices in the Customer Portal when going to make a payment. Unchecking this option will result in the invoices not being pre-selected.
+Disable - Daffron has main and sub accounts and does not want open invoices pre-selected 
+(If the biller wants this functionality, you can enable it. By default, disable)
+54
+Biller Portal - Allow cart functionality within Search Invoices
+By default, the IC Biller Portal only allows payments of single invoices. This option can be turned on to be able to pay more than 1 invoice at a time within the Biller Portal
+Enable 
+Until a CSRconnect or CloudPayV2 shopping cart across multiple account numbers is available, billers will need to be able to search invoices in the biller portal and add them to a shopping cart for payment
+64
+RTDR - Override 6 Hour Previous RTDR Check
+For Billers with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh.
+Enable
+74
+ENABLE Multiple Customer Login Functionality
+If enabled, the Biller will be able to use the Multiple Customer Login functionality in the Biller Portal as well as the Customer Portal. The Pay By Text and Autopay option will also be hidden through the payment route for non-authenticated sessions, and the use of saved method payments through the IVR will be disabled.
+Enable - required for integration
+78
+Customer Portal - Allow Co-owners
+If enabled, we will allow a set number of co-owners to be added to an account.
+Enable - required for integration
+79
+Customer Portal - Maximum Number of Co-owners per Account
+If co-owners are allowed, this sets the number of co-owners that can be added to an account.
+Set the value to 15
+All Daffron Billers require Customer Portal Authentication Type of USERNAME AND PASSWORD:
+Supported Products and Features
+Products
+Type
+Definitions/Details
+CloudPay
+Supported*
+CloudpayV2 implementation begun 4/2022. Update will be made once complete.
+CloudPay Web Services
+Not Supported
+*May be a phase 2 item - not supported at this time
+CloudStore
+Supported
+Payments will not be posted via data pump
+CSRConnect
+Not Supported
+IVR
+Supported
+Suggested search method by account number
+Kiosk
+Supported
+OBD
+Supported
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Users will create accounts in Daffron only
+       Multi-User Log In
+Supported
+       Co-Owner Registration
+Required
+Users will register in Daffron as owners and co-owners
+ 
+ SSO
+Supported
+Pre-paid is included in Embedded SSO functionality (invoice balance will show negative amount and payer can make a ‘pre-pay’ payment on the open invoice/negative balance)
+One Time Payment Demo
+Paperless/AutoPay/Payment Method Demo
+All Daffron Billers require Customer Portal Authentication Type of USERNAME AND PASSWORD
+AutoPay Collection Date
+Supported
+BIF Customization 
+Batch Closure
+Auto or Custom Supported
+Bill Processor
+Not Supported 
+Billing Options 
+       Balance Forward
+Required
+BIF Customization 
+       Open Item Billing
+Not Supported 
+Block Payment
+Supported
+Through RTDR
+Advanced setting 32 is also configured to ensure the block payments flags are not in set in IC by a biller portal user, and only updated via RTDR.
+Conveyance
+Supported
+Needs to be reviewed with the biller to see if auto-conveyance should be active.  This is on a biller by biller basis.
+Data Conversions
+Supported
+Customer Registration will be custom due to user name requirements
+Email Notification Schedule
+Supported
+BIF Customization 
+Expire Bill for Payment
+Supported
+BIF Customization 
+Minimum Payment
+Not Supported
+Paperless
+Supported
+Updated through Data Pump
+Partial Payments
+Supported
+BIF Customization 
+Past Due
+Supported
+Updated with BIF and RTDR
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported 
+IDTech SRED Key
+Supported
+Biller portal payments
+Ingenico EMV
+Not Supported 
+ URL:/spaces/IM/pages/428605466/Daffron+Integration+Software+Details

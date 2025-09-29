@@ -1,0 +1,77 @@
+Script to Create Identities
+Change the variables defined in the first few lines and fire away
+$name = "mi-UPLDWSRPTS-web-uat"
+$resourceGroup = "rg-global-web-uat"
+$subscription = "Enterprise Dev/Test"
+$entraGroups = @("ICDB-Test-Apps", "IC-KeyVault-DevTest-Apps")
+$virtualMachines = @(
+    @{
+        name = "vm-web-vm1qa8"
+        resourceGroup = "rg-east-infraQA8-dev"
+    }
+)
+
+"Creating identity $name in resource group $resourceGroup in subscription $subscription"
+$identity = az identity create --name "$name" --resource-group "$resourceGroup" --subscription "$subscription" --location "East US" -o json | ConvertFrom-Json
+
+Start-Sleep 15 # wait for the identity to be fully provisioned - throws errors if you jump right in
+
+ForEach ($group in $entraGroups) {
+    "Adding $($identity.name) to Entra group $group"
+    az ad group member add --group "$group" --member-id "$($identity.principalId)"
+}
+
+$virtualMachines | ForEach-Object {
+    "Associating $($identity.name) with VM $($_.name) in resource group $($_.resourceGroup)"
+    az vm identity assign -g $_.resourceGroup -n $_.name --identities "$($identity.id)" --subscription "$subscription"
+}
+Manual Creation
+Navigate to the Azure Portal
+In the search bar, type 
+Managed Identities 
+Click the 
+Create 
+icon in the top left corner
+You will be taken to the MI creation section. Fill out the information corresponding to subscription.
+below is an example 
+Next, we need to add our newly created MI as a 
+reader
+to the corresponding key vault.( ie -
+icappsettingsdevtest
+. 
+externalappsettings-uat
+).
+Do this by adding the MI to the corresponding group (NOT direct assignment)
+IC-KeyVault-DevTest-Apps
+ has access to 
+icappsettingsdevtest
+ and 
+externalappsettings-uat
+IC-KeyVault-Prod-Apps
+ has access to 
+ExternalAppSettings
+We then need to associate the resources (VM’s) to our MI. 
+Search for 
+Virtual Machines 
+in the Azure portal.
+Find the VM by filtering by name
+Once on the VM overview, navigate to the
+ security
+ drop down, then click 
+Identity
+. 
+should look something like this
+Once on the Identity tab, click 
+User Assigned 
+Click the Add button
+Add The MI and click next to assign it.
+Lastly, we will need to set up DB access. 
+There are two groups 
+ICDB-Test-Apps: 
+ICDB-Test-Apps - Microsoft Azure
+uat, dt6 should be added here
+ICDB-Prod-Apps: 
+ICDB-Prod-Apps - Microsoft Azure
+web, prd, prv MI’s should be added here
+Rinse and repeat for each MI.
+ URL:/spaces/platform/pages/4060971012/Managed+Identities+SOP

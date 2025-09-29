@@ -1,0 +1,80 @@
+Overview
+While running the 
+MC_RPPS - Cassrun
+ process, an exception was encountered due to a missing digit in a biller’s ID. This caused a mismatch in the 
+[dbo].[CassDeposit_DetailImport]
+ table in the Gateway database and led to an error when attempting to open the failover group in SQL Server.
+This error can also happen where a Biller is not yet live on Fiserv and there’s no BillerID in the RecipientName
+Example exception in the log:
+Exception: HIGHLANDS RANCH        does not have a dash. Please get with DS to update the RecipientName and the ImportDate to get picked up for tomorrow's run.
+Make sure that the Biller is not yet live in Fiserv.
+Symptoms
+The process fails during 
+MC_RPPS - Cassrun
+ execution.
+An exception appears in the logs referencing the call to 
+DatabaseInstance.GetDataSet - Information:438 - exec selprdRPPS @Active=1
+.
+The error specifically mentions:
+wide
+760
+Triggered By DatabaseInstance.GetDataSet - Information:438 - exec selprdRPPS @Active=1.
+[10:31:31 WRN] SqlConnectionFallback: Fallback occurred for exception, System.Data.SqlClient.SqlException (0x80131904): Cannot open Failover Group "ic-db-fg1.database.windows.net" requested by the login. The login failed.
+   at System.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, DbConnectionPool pool, String accessToken, Boolean applyTransientFaultHandling, SqlAuthenticationProviderManager sqlAuthProviderManager)
+   at System.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at System.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal oldConnection, DbConnectionInternal& connection)
+   at System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   at System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   at System.Data.SqlClient.SqlConnection.Open()
+   at IC.Database.SqlConnectionFallback._Closure$__1-2._Lambda$__5()
+   at IC.Database.Tools.SqlTools.OpenSqlConnectionWithRetry(Func`1 connectionOpenerMethod)
+   at IC.Database.Fallback2`1.Execute(Func`1 func)
+ClientConnectionId:af070ec9-032f-47de-99f9-20e3f676695c
+Error Number:40971,State:1,Class:20
+Root Cause
+A biller was entered incorrectly as 
+438-RANCHLAND
+ instead of 
+4386-RANCHLAND
+.
+Because the biller ID did not exist in Fiserv, the MC_RPPS - Cassrun process did not turn on the Fiserv Cass for the BillerID 4386, and its entries for today were not sent to the gateway.
+This resulted in a database connection attempt to the failover group failing when it encountered the invalid biller record.
+Resolution Steps
+Let the Wicked Tendies team know about what happened
+Validate the Biller ID
+Confirm the correct biller ID. In this case, it should be 
+4386
+ (rather than 438).
+or in the case of there’s no BID, check the name or the IdentificationNumber.
+Enable the Biller for Fiserv Cass
+Pull the 
+MCRPPSRunner
+ project and start the 
+MCRPPSRunner.MCRPPS_Helper (UpdateFiservBillerLiveDatesCommand)
+.
+Insert the correct Biller ID and the OBDSourceDataId = 2 (fiserv) into the helper to set the biller as live for Fiserv Cass.
+The helper script also creates or assigns the appropriate terminal for this biller, if needed.
+Upload Missing Entries to Gateway
+Run 
+MCRPPSRunner.RPPSEntryUploader
+ to add the biller’s entries to the Gateway.
+Verify Logs and File ID
+Check the log output to identify the File ID generated for the entries.
+Confirm that the new entries with the correct Biller ID (
+4386-RANCHLAND
+) are processed successfully.
+Future Prevention
+Update any references or documentation to ensure the correct ID is used going forward.
+Please get with the Database Service Team to edit the RecipientName in the 
+[dbo].[CassDeposit_DetailImport]
+table so it doesn’t fail the next day.
+Contact:
+For questions about the MC_RPPS - Cassrun process or if any similar issues arise, please reach out to the BMS team, Wicked Tendies, or the support group responsible for Online Bank Direct product.
+Video Recording Resolution:
+ URL:/spaces/ED/pages/4201840721/Documentation+Handling+the+Cannot+open+Failover+Group+Error+or+No+BID+in+RecipientName+During+MC_RPPS+-+Cassrun

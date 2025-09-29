@@ -1,0 +1,61 @@
+Worked On By
+Kelsey Tibbs (Reporter/Assignee)
+Katelyn Espinoza (Test Engineer)
+Related Items
+EBPP-2697
+EBPP-14803
+EBPP-14801
+EBPP-4201
+ 
+At A Glance
+This story item was created to house the testing effort for the optimization of the stored procedure mcl.selInvoiceToEmail_CustomerGroups. This stored procedure was created after a biller identified an issue where only the Account Oversight user was receiving the invoice first email notification. The issue was that the Account Oversight was always the first to be picked up by the email queue and would fill out the FirstNotifyProcessedDate before any other Login Types' emails could be sent. The effort to fix this was addressed in the story EBPP-2697.
+ 
+How To Test
+To test this item you will need to create customer groups and link the accounts.
+Create a BIF file with new customers
+Register a customer
+Use either the customer portal or the endpoint 
+remoteauthenticationapi/user/linkaccounts 
+to link another customer with your registered account.
+Next, add users to the accounts using the endpoint:
+ remoteauthenticationapi/customer/AddUsersToAccount
+In devtest, we cannot get emails that would allow us to add users, so we have to use the ICRemoteAuthenticationAPI.
+Login Types
+Account Owner (LoginTypeID = 1)
+Account Oversight (LoginTypeID = 2)
+Account Guest (LoginTypeID = 3)
+Group Oversight (LoginTypeID =  4)
+There is a specific way to test this one. Refer to Group Oversight section
+Account Co-Owner (LoginTypeID = 5)
+Use the following queries to navigate the database and retrieve your LoginID's
+SELECT * FROM mcl.Logins
+Get LoginId, EmailAddress, and see if user opted out of email
+SELECT * FROM mcl.CustomerLogins
+Get LoginID, LoginType, CustomerID related to LoginID
+select c.BillerID, c.CustomerName, c.AccountNumber, i.InvoiceNumber, i.BalanceDue, i.FileID, i.InvoiceFormatID,l.LoginID,l.EmailAddress, lt.LoginType
+
+i.FirstNotifyRequestedDate,i.FirstNotifyProcessedDate,i.SecondNotifyRequestedDate,i.SecondNotifyProcessedDate,i.ThirdNotifyRequestedDate,
+
+i.ThirdNotifyProcessedDate,i.InvoiceDueDate from customers c
+
+inner join invoices i on c.customerid = i.customerid
+
+inner join mcl.customerlogins cl on c.customerid = cl.customerid
+
+inner join mcl.logins l on cl.loginid = l.loginid
+
+inner join mcl.logintypes lt on cl.logintypeid = lt.logintypeid
+
+where l.loginid in (Your LoginID's go here) and i.FirstNotifyProcessedDate is not null
+Run EmailQueueProcessing refer to the documentation 
+here
+You should have gotten emails addressed to different email addresses for your user.
+Group Oversights
+You will not receive an email if the user is a group oversight. That is because when a Group Oversight is first added using the API, the stored procedure mcl.spCreateLogin forces Group Oversights to opt out of Email. For this reason, you must link an account number to the accounts using the link accounts endpoint and setting the LoginTypeID = 4. You can continue testing from here.
+ 
+ Stored Procedures
+false
+false
+*txt
+ 
+ URL:/spaces/PE/pages/3088646195/EBPP-14801+selInvoicesToEmail_CustomerGroups+enhancements

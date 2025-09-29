@@ -1,0 +1,64 @@
+How to verify if a biller is OK to have multithreading enabled.
+ 
+Option -  Split into separate processes? Yes
+ 
+Option - Split into separate processes? No
+ 
+Capacity Planning to enable Datapump Multiprocessing
+ 
+The option to enable multithreading can be found on the the Datapump management tab on the CRM.
+How to verify if a biller is OK to have multithreading enabled.
+Before increasing the number of threads or splitting Datapump posting into separate processes we must first verify if the if the code the biller follows the Datapump repo in question will run into issues if multithreading is enabled.
+If the software partner’s or biller’s logic for Datapump inherits from the clsDatapump_Base, it is 
+NOT 
+recommended to have multithreading enabled. This is because this logic creates a token object before running Datapump payments, so only the first Datapump record in the queue will be authenticated while the subsequent ones won’t. This also means that the token may expire while payments continue to try to post. Additionally, if two threads hit the token creation logic, we won't know if the older token is still ok or expired and it may cause issues when posting on the software partner side.
+Example of integration where enabling multithreading is NOT recommended: 
+TylerMunisDatapump
+https://dev.azure.com/invoicecloud/Src/_git/DataPump?path=/DataPump/Integrations/Software/TylerMunis/clsTylerMunisDataPump.vb
+ 
+Example of integration where enabling multithreading would not have token issues: 
+clsNetsuiteCulligan.vb
+https://dev.azure.com/invoicecloud/Src/_git/DataPump?path=/DataPump/clsNetsuiteCulligan.vb
+No inheriting logic found
+Logic confirming that we authenticate per record
+Split into separate processes? Yes
+Splitting Datapump record posting into separate processes will set scheduled payments and autopayments to be in their own queue.
+Scheduled Payments and Autopayments 
+will be under the 
+System Payments # of Threads
+ category.
+Any other Payments methods
+ posted through Datapump and 
+Datapump record types
+ (Autopay Sync, Paperless Sync, Registrations..) will be under the 
+User Payments  # of Threads
+ Category.
+Note: Enabling split processes will increase the complexity for Datapump issues. 
+Example: If a biller with separate processes enabled is experiencing issues, we will need to verify if datapump is successfully running for records found under the 
+System Payments
+ and 
+User Payments 
+categories.
+Split into separate processes? No
+Enabling multithreading without splitting into separate processes will create more threads to process all datapump records. This is done by increasing the Payments # of Threads from 1 to the necessary value.
+Capacity Planning to enable Datapump Multiprocessing
+Below are the factors that must be researched before and after the change is made:
+No of posting per hour
+Software partner capacity to handle concurrent connections - Look for errors in throttle 
+Past historic data with same/similar software partner and their configuration.
+When enabling/increasing multithreading, it is recommended to increase count by 1. However, the researching points above should be factored into determining the change.
+Useful New Relic Queries:
+wide
+--Queries to verify datapump for successful logs and errors within the last 24 hours
+select * from Log where entity.name like '%datapump%' and Message.Properties.2 = 2495 and Message.Properties.1 like '%clsDaffronMultispeakDoubleV2.vb - postPayment%' and level = 'Information' since 1 day ago limit max
+select * from Log where entity.name like '%datapump%' and Message.Properties.2 = 2495 and Message.Properties.1 like '%clsDaffronMultispeakDoubleV2.vb - postPayment%' and level = 'Error' since 1 day ago limit max
+
+--Queries to find counts for how many datapump records are typically posted
+--This also helps find patterns for high volumes of datapump record postings on week
+select count(*) from Log where entity.name like '%datapump%' and Message.Properties.2 = 2495 and Message.Properties.1 like '%clsDaffronMultispeakDoubleV2.vb - postPayment%' TIMESERIES 1 hour limit max since 1 week ago compare with 2 week ago
+
+--Replace message.properties.2 with the billerID in question.
+--Replace message.properties.1 with integration’s vb page and payment/autopay/paperless method name
+Once the integration has been verified for enabling multithreading. We also have to schedule the multithreading enabling and make sure that the biller or software partner is aware of the upcoming change. Usually the ticket’s reporter will confirm this.
+Once the number of threads has been updated we must monitor the biller’s datapump logs for the next 24 hours to make sure no issues are occurring in our side or the software partner’s side with the queries used in research. If errors are found in the datapump postings due to the increase in threading we should move the threading count back.
+ URL:/spaces/DS/pages/3136487483/Datapump+Multithreading+option+for+Biller

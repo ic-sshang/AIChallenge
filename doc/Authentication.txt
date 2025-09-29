@@ -1,0 +1,87 @@
+We use token-based authentication to handle customer identification, saved payment methods, and additional service enrollments across the entire payment route. This authentication framework enables secure access to customer-specific features while maintaining PCI compliance.
+Remote Authentication Token
+The RemoteAuthenticationToken is a GUID stored in 
+selRemoteAuth_DBMaster
+ that validates customer sessions. Key implementation details:
+// Token validation sequence
+selRemoteAuth_DBMaster @RemoteAuthenticationGUID='token'
+-> Verify LastAccessed timestamp
+-> Map to LoginID and CustomerID
+
+If ValidRemoteAuthToken Then
+    Dim remoteAuthenticationDataFromMaster As DataTable = 
+        clsDatabase.GET_DATATABLE(
+            "exec selRemoteAuth_DBMaster @RemoteAuthenticationGUID='" & 
+            Session("CloudPaymentToken") & "'", 0)
+    If remoteAuthenticationDataFromMaster.Rows.Count > 0 Then
+        isAuthenticated = True
+    End If
+End If
+Token Lifecycle
+Generation
+:
+Created during initial CloudPayV2 API request
+Encrypted using AES with 
+ENCRYPTION_KEY
+Format: 
+requestId|billerId
+Storage
+:
+Master DB record created
+URL token encrypted: 
+clsUtilities.B64_Encode(CloudCrypto.AES.Encrypt())
+Linked to BillerID and CustomerID
+Validation
+:
+Token decrypted and parsed
+Master DB lookup confirms validity
+Session state initialized
+Expiration
+:
+Tokens expire based on LastAccessed
+Failed validation redirects to error page
+Expired tokens require re-authentication
+Security Implementation
+Encryption
+AES encryption for token generation
+Base64 encoding for URL-safe tokens
+Separate encryption keys for token and card data
+Validation Rules
+Token must be valid GUID
+LastAccessed within expiration window
+Customer must exist in biller context
+Token must match master DB record
+Biller Options
+37
+ (RequireEmailExpressPay)
+Controls email requirement for non-authenticated payments
+Affects validation rules in 
+CloudPaymentMethod.aspx.vb
+82
+ (AllowAutoPaySignUpOutsideCP)
+Enables AutoPay enrollment without authentication
+Impacts feature availability in payment route
+125
+ (RequireEmailForEMVPayments)
+Enforces email capture for EMV transactions
+Overrides option 37 for EMV flows
+Validation Flow
+1
+0.9
+3988586539
+3989176325
+token.drawio
+1
+1
+1
+1
+https://invoicecloud.atlassian.net/wiki
+token.drawio
+1
+n7PabebIYKKIiKi59rre 1
+910
+auto
+1
+top
+690
+ URL:/spaces/PE/pages/3988586539/Authentication

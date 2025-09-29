@@ -1,0 +1,342 @@
+Summary
+Company
+Lakehaven
+Industry/Vertical
+GUB
+Website
+https://www.lakehaven.org/
+ 
+Software + Version
+Solutions Engineer
+ 
+Integration Manager
+ 
+Recording
+https://us-21061.app.gong.io/e/c-share/?tkn=1saj6zrk3j0b11n3rwlbv3rfpq
+https://us-21061.app.gong.io/e/c-share/?tkn=1saj6zrk3j0b11n3rwlbv3rfpq
+Payer Experience
+General Questions
+ Notes
+  
+Response/Decision
+Date
+How do your customers make payments today?
+ Can you demo how customers make payments today?
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ 
+ InvoiceCloud Customer Portal
+      If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+N/A
+What part of the user experience will be through your UI and what part of the User experience will be through ours?
+ 
+ N/A
+Do you need multi user login?
+ 
+ Yes 
+     What multi-user scenarios are in place, if any?
+Landlord/tenant, Property Manager/tenant, etc. Take into account that Paperless is only at the Account Owner level.
+Landlord/tenant - paperless only at account owner level
+How will existing users be migrated?
+ 
+ Possible 
+Do you need to link accounts?
+ 
+ Multiple accounts for one user
+ Yes 
+Do you need IVR payments?
+     If so, what is the unique identifier your customers would use?
+ 
+ Yes - Account Number
+Additional Notes
+ 
+ 
+Invoices
+Invoice Types
+Notes
+Response/Decision
+Date
+Invoice Type/Business Type
+Example: Water, Sewer, Utility, Solid Waste, etc.
+Water/Sewer, Street Light Bills
+Are separate bills provided for different utility types?
+Example: Are water and Sewer bills on the same bill, or do they have two separate bills?
+If a customer has both, it is combined. 
+         Is there an indicator in the file for each type of services? How can IC tell what type of bill it is.
+each services has a field in the invoice file with their associated charges 
+Invoice Billing
+Notes
+Response/Decision Date
+How are delinquent and demand bills?
+Do you send a new invoice for delinquent invoices? Do you require a special notice to be sent for delinquent invoices? What if someone is paperless and receives a delinquent notice?
+Delinquent notice is sent but not bills. 30 days after their bill date, they receive a penalty and a notice (including shut off date) updates balance of the latest invoice, but a new invoice does not get created. There is a PDF that is mailed but this will not be shown on InvoiceCloud. 
+IC Biller Invoice File (BIF)
+Review Specs
+N/A
+Integrator File (if not using IC BIF)
+Review Specs
+Total of Pmts?
+Curr Charges?
+Total Due?
+Service address or mailing address? 
+Recurring Pymt Cust Flag?
+Billing group id - do we need to do anything about this since they are being sent in a single envelope
+are any of the misc values required to be shown to customers? 
+Any invoice number available? 
+Should we be using Location Number since it is part of the payment file? 
+Bimonthly invoice files created
+Once a week file is generated based on the cycle that is being billed (5-6 bill files per month) 
+IT adds additional data to the invoice file as needed
+Total of Pmts - how many payments they have made 
+curr charges - current charges for the cycle 
+total due - everything due including adjustments, charges and past due - Field that we would need to use to reflect the balance due that needs to be paid
+Service address will be used 
+recurring pymt cust flag - auto pay flag - this flag is not being used and IC will not need to use it - this was used for old practices when it was being done internally 
+Billing group id will not be used at IC
+Misc values to be itemized and updated on the PDF for them to be available for customers 
+Invoice Number = AccountNumber-BillDate
+Account Number is Location Number plus two digits 10001 when the property is sold, the account number will become 10002. Location Number stays the same
+Location Number can be retrieved from the Bill File
+        How is Integrator File Formatted?
+XML, CSV, Pipe, Print Spool, etc.
+txt file format with no headers
+How are changes made to an existing bill?
+For example, need to modify due date, notification dates, auto-pay date, etc.
+How can IC tell if it is a new invoice Vs a change to an existing invoice.
+Based on the fields that need to be updated, this might require a BIF or IUF.
+Invoice charge changes will be done via adjustment file. Only amount due is changed. 
+Invoice Due Date can be changed. Will need to further discuss on where the date gets changed to be sent to IC. This is a rare situation. 
+Are you able to customize data sent in the files?
+If a change is needed to a custom file, can this be done?
+Fixed file format, changes cannot be made. 
+Invoice Functionality
+Notes
+Response/Decision Date
+Does your system produce unique invoice numbers?
+If yes, are these numbers printed on bills, would customers recognize these numbers? If no, what combination of values can we use to create a unique number per invoice?
+Invoice Number = AccountNumber-BillDate
+How are balances calculated per invoice? (Explain Balance Forward and Open Billing)
+total balance on most recent invoice or balance available on multiple invoices
+If a utility bill is not paid, does it roll over to the next bill, or does the initial bill remain open. Balance forward is the most common model - if open billing is requested, ensure we understand why and what the ramifications are. 
+Misc invoices that are not part of billing. They will be their own invoices. Some are related to service account.
+Need further discussion on how Misc invoices will be handled with IC. Possibly use a different bill file.
+Normal billing will have the most recent balance on the latest invoice. One account will only have one invoice open at a time.  
+Can you provide us a full historical file for go live (everything outstanding) and a file with ONLY NEW bills for "go forward" basis?
+1 year historical data file will be uploaded 
+6 month at the very least 
+Are fees (late fees, penalties, etc.) added to the invoice or the account?
+Fees are added to the invoice amount
+Do you have a field for Past Due balances?
+     What are the requirements around delinquencies?
+Scheduled payments are not allowed past the due date. 
+When a customer is shut off, they cannot use ACH as a payment method. Payment methods can be blocked through biller portal. 
+Are there any Duplicate invoices?
+     If yes, which bill should IC import?
+Landlord receives a copy of the tenants bill each month
+Do they need to be filtered out?
+Bill file can include duplicate invoices. 
+CustomerName will say Occupant for the duplicate invoice. We will use the invoice that says “Occupant” 
+Do you offer payment plan?
+Does the CIS handle payment plans in the data feeds? We expect to receive invoice that balance due each time.
+Custom payment plans - It will not be offered through online portals 
+Do you offer budget billing? (Budget Bill amount must be sent in Balance Due Field)
+Does the CIS handle levelized billing/budget billing in the data feeds? We expect to receive invoice that balance due each time.
+Do not offer budget billing 
+Do you offer Pre-Paid Billing?
+(
+Do you use a vendor for prepaid billing? Do you expect IC to process prepaid billing payments? Is your prepaid vendor willing to work with us? If no, How should invoice cloud receive an invoice record and how should we send payments?
+Can pay over the invoice balance due - Credit is allowed. 
+No prepaid billing with a vendor 
+Account Numbers
+Notes
+Response/Decision Date
+Are Account Numbers unique per person? (Do you have customer numbers?)
+Can we use a combination of Account number and customer number to create unique account numbers per person?
+Account Numbers are unique per service connection number  
+Are account numbers assigned to properties or individuals?
+location number is assigned to property 
+account number is assigned to individual 
+Under what circumstances would Account Numbers change?
+Property ownership change
+Do you supply both mailing address and service address?
+Required. Mailing address will be stored in custom fields and used as needed. Typically service address is displayed.
+Both are being sent in the invoicefile. Which should be used for customer display? 
+Service address will be shown to users 
+Do you expire previous bills so that payments cannot be made after a certain time? In what scenario(s)?
+Bills will not be expired to disallow payments 
+How will you communicate block payments to Invoice Cloud (CC or ACH)?
+Blocked flags can be added to the bill file 
+Separate file would be best
+How are final bills handled? Are they in their own file?
+Final bills are not uploaded to InvoiceCloud 
+Is there a deposit flow needed? Do account numbers get created before the deposit is taken?
+How do you handle the deposit?
+No deposits related to service 
+permitting will have deposits  - CityWorks PLL 
+Is the service stop/start flow accounted for?
+Usual invoicing process continued with new owner of service
+Is the shutoff/turnon flow accounted for?
+Continue to bill bimonthly even after shutoff 
+How are shutoff notices handled?
+(Do you expect customers to pay a shutoff notice through Invoice Cloud?)
+File Transfer
+Notes
+Response/Decision Date
+Is there an automated process to produce the file? 
+Files should be sent to IC any time there is a new billing
+Which method will be used SFTP or Webservice?
+SOAP Web services can only be used when coding to Invoice Cloud BIF specification.
+SFTP
+Additional Notes
+Balance Updates
+Adjustments
+ 
+Notes
+ 
+Response/Decision
+Date
+What is the best way for IC to update balances? An API is preferred to allow IC to connect to your system to obtain the most recent balance.
+ 
+Invoice Cloud prefers using an API to connect to the external system to obtain real time balances. This is referred to as RTDR (real time data refresh)?
+ Adjustment File 
+API
+N/A
+Does the API allow balance to be pulled by invoice or by full account balance?
+N/A
+Will the API reflect the balance including any penalties, fees, etc.
+N/A
+Files Needed
+IC Adjustment File (BAF)
+Review specs
+N/A
+Integrator file (if not using IC BAF)
+Review specs
+Is the most recent invoice the one that will always have the balance updated? 
+csv file with two columns 
+the balance provided is for the most recent invoice 
+Can you customize what is generated in the file?
+Requirement: If a bill is paid outside of Invoice Cloud and the balance is now zero, the adjustment file must include this information.
+No extra values are required.
+If open billing, does the adjustment file contain the necessary information to match invoices on Invoice Cloud?
+If adjustment file is by account, IC cannot use Open Billing.
+Balance Forward
+Will the file contain the adjusted balance or only the adjustments amount for each invoice?
+Balance differential verses fixed adjustment
+Exact balance that needs to be paid on the account will be provided 
+How often can Adjustments be sent?
+ 
+Adjustment File must be sent a minimum of 1x per day
+Adjustment files will be sent once every day - more than one file can be created in a day if fees need to be added 
+Additional Notes
+ 
+ 
+Account Changes
+From Invoice Cloud
+ 
+Notes
+ 
+Response/Decision
+Date
+Invoice Cloud sends Autopay, Paperless, Customer Registrations, Email Address Changes. Is there an API to allow these changes?
+ 
+ Autopay, paperless, email address - file format 
+autopay - account, true/false
+paperless - account, true/false
+email change - account, new email address, old email address 
+What type of email changes are expected?
+Registered customer email address, unregistered customer email address, one time payment email address (payer).
+Only when email address is updated on the account 
+     If no, What format should we send these items to you? (Prompt for sample file)
+ 
+ Text file is requested. 
+From CIS (Customer Information System)
+ 
+ 
+Invoice Cloud updates blocking of ACH/CC (cash only) customers in real time. Can this status be included in your API balance Response (RTDR)?
+ 
+ Account Number, Block Flag CC, Block Flag ACH - txt file
+     If no, IC Customer Update File (CUF) is preferred
+ Review IC CUF Spec
+     If no, Billers must manually update blocked payments via biller portal
+ 
+ 
+Additional Notes
+Would like to further discuss email addresses for accounts/logins - Owner/tenant situation to be discussed - create a demo environment for this user case
+Payments from IC
+Payments from Invoice Cloud
+Notes
+ 
+Response/Decision
+Date
+Would you be able to receive an API call to your system when payments are made in Invoice Cloud (Datapump)?
+Payment File will be used
+         If no, What file format should we send this information to you? (prompt for sample file)
+Payment Export File
+Is Location Number required? 
+Do you need to know the payment source or payment method? 
+Location Number is not a  requirement 
+Payment method and payment source is not required in the payment file - IC reporting will be used to review payment method/payment source 
+the payment file is imported to UMSI 
+Reference number is the check number - use confirmation number that is searchable on IC
+How is reconciliation handled on the CIS?
+Are there separate batches by payment method (Visa, Amex, MC, Disc, PayPal, Venmo?
+Can be included in one payment file - does not have to be separated by payment method
+Is there a separate batch for ACH?
+Can be included in one payment file - does not have to be separated by payment method
+Are there specific Payment/General Ledger codes that must be used?
+No payment/general ledger coes
+Are additional fields available in the API to submit a reference number?
+Reference number would be used to pass a Payment GUID. The payment GUID must be validated in the event a duplicate payment is sent in error. If a payment GUID is on file already, the second payment would be blocked (error).
+Reference number is the check number - use confirmation number that is searchable on IC
+Is a ReceiptGUID required?
+Payment GUIDs are generated for each payment made for each invoice. A ReceiptGUID can contain multiple payments for different invoices and are representative of a transaction.
+ 
+Additional Notes
+ Cloudpayv2 will be used with CityWorks PLL Portal for permit payments
+Bill Presentment
+Bill Presentment
+Notes
+  
+Response/Decision Date
+Date
+Do you produce your own bill images or does your print vendor?
+ Will produce own bill images 
+Could we get a sample of the bill itself?
+Do not have the sample bill image at this time 
+Will have bill images by next week 
+Does the print vendor have a web service we can call to retrieve bills?
+ PDF Extraction 
+      If no, do you (or the print vendor) have the ability to send us bills (PDFS) as individually named files?
+ PDFs must be sent with each new invoice file.
+      If individual files are not provided, are PDFs readable? What information is included on the PDF so they can be linked to a customers bill?
+Single PDF with all bill images 
+How is info exchanged so that paperless customers are not sent bills?
+ Does the paperless flag need to be sent to the print vendor?
+ Will send paperless file 
+Additional Notes
+ 
+CSR/Agent Experience
+General
+Notes
+  
+Response/Decision
+Date
+Do you have a website/application for your CSRs? Is an integration with IC required? 
+ 
+ Biller Portal will be used
+Are card swipers used processing a transaction?
+N/A
+Can CSRs/clerks process payments by using a customer's stored payment method?
+N/A
+Do CSRs/clerks assist customers with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+N/A
+IF YES:
+  
+ Review options in biller portal/agent connect/Cloud Pay V2
+ N/A
+Do you use a separate system/software outside of the CIS for counter payments, if so what software? 
+ 
+ N/A
+Additional Notes
+ 
+ 
+ URL:/spaces/IM/pages/4266622977/LakeHaven+Discovery

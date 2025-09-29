@@ -1,0 +1,63 @@
+Page Navigation:
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+Summary
+The purpose of the ‘Payment Method Exports’ is to provide billers information related to AutoPay enrollments and Recurring Scheduled Payment setups. These reports are split based on the payment method being used for each setup. The breakdown for these reports is as follows:
+AutoPay ACH Data Report
+AutoPay CC Data Report
+Recurring Scheduled PaymentReport (ACH)
+Recurring Scheduled PaymentReport (CC)
+Export Details
+Specifications
+Invoice Cloud will provide all data with an “as of” date.
+Report format: .csv format. 
+All fields will always be surrounded by quotes and the reports will contain a header row with fields specified below:
+AutoPay Reports
+ACH Data 
+Included fields associated with the AutoPay enrollment with ACH: AccountNumber, BillingName, BillingAddress, BillingCity, State, Zip, EmailAddress, BankAccountNumber, RoutingNumber, and AccountType 
+Sample file: 
+CC Data
+Included fields associated with the AutoPay enrollment with a credit card: AccountNumber, BillingName, BillingAddress, BillingCity, State, Zip, EmailAddress, CreditCardNumber, CardType, and ExpirationDate 
+Sample file: 
+Recurring Scheduled Payment Reports
+ACH Data 
+Included fields associated with the Recurring Scheduled Payment setup with ACH: RecurringScheduledPaymentTypeDesc, PaymentDay, PaymentAmount, AccountNumber, BillingName, BillingAddress, BillingCity, State, Zip, EmailAddress, BankAccountNumber, RoutingNumber, and AccountType 
+Sample file: 
+CC Data
+Included fields associated with the Recurring Scheduled Payment setup with a credit card: RecurringScheduledPaymentTypeDesc, PaymentDay, PaymentAmount, AccountNumber, BillingName, BillingAddress, BillingCity, State, Zip, EmailAddress, CreditCardNumber, CardType, and ExpirationDate 
+note
+For Recurring Scheduled Payments, some values will not be applicable. These values are defined below: 
+PaymentDay = 0 when selection to pay on invoice due date or numeric value for selected day. 
+PaymentAmount = 0.00 when selection to pay in full.
+
+
+For Recurring Scheduled Payments, some values will not be applicable. These values are defined below: 
+PaymentDay = 0 when selection to pay on invoice due date or numeric value for selected day. 
+PaymentAmount = 0.00 when selection to pay in full.
+
+
+Sample file: 
+Delivery Method
+Delivery via SFTP (IC will setup FTP general user). Given the sensitivity of the data, none of the customers’ information will be exchanged via email or using any transmission protocol other than SFTP.
+<Biller> will provide a public PGP encryption key via SFTP to InvoiceCloud (user credentials and location will be provided by IC)
+InvoiceCloud will encrypt all reports with the same PGP encryption key
+InvoiceCloud will place the encrypted files on SFTP (user credentials and location will be provided by IC)
+<Biller> will have 48 hours from the time the data is sent to download the data before it is deleted from the SFTP account.
+The SFTP account will be retired after the final transfer is completed. 
+Process Flow
+Additional Detail to be added to specifications/process: 
+Stored procedures:
+RptAutoPayACHDataForSOW
+RptAutoPayCCDataForSOW
+Details on automated PGP encryption
+Details on automated file placement on SFTP
+EBPP-7320
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Sample SOW
+ URL:/spaces/IM/pages/2537881640/Recurring+Payment+Exports+Recurring+Scheduled+Payments+and+AutoPay

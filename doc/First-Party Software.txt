@@ -1,0 +1,18 @@
+non-web apps
+There’s a set of applications that’ll need to be deployed to web servers after they’re deployed. The set includes both web apps and scheduled tasks.
+For a list of web apps needed on the server, see 
+IIS Configuration
+.
+We’ll want to confirm with the app teams that this is the complete list of non-IIS applications required to run on web servers.
+Scheduled Tasks:
+Relevant tasks:
+  - DeleteLogFiles
+  - IC Jobs - NewRelicEventsAgent
+  - ICG Daily Recon
+  - ICJobs - DirectoryCleanUp
+  - ICJobs - ICAzureStratusUploadJob
+  - ICJobs - StratusFileProcessor
+  - ICJobs - StratusFileProcessor - Zip
+  - ICJobs - WebServiceMonitor
+  - ICJobs-UploadWSReportFiles
+ URL:/spaces/platform/pages/3963551754/First-Party+Software

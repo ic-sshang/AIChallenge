@@ -1,0 +1,320 @@
+Scope
+: Define robust, consistent, and safe handling of idempotency and concurrency for core payment operations.
+ 
+Let’s define what is meant by idempotent request and race condition:
+·         Idempotent request: a request that when retried, does not change the system state, but returns the result of the original request.
+·         Race condition: a scenario where multiple requests attempt to modify the same resource simultaneously, potentially leading to inconsistent state.
+1. Sale Flow (POST /v1/sale)
+Risks of not having idempotent requests: 
+multiple sale requests can make multiple payments resulting in taking more money from the Payer (more money to the Biller though), resulting in Payer and Biller complains to IC.
+Risks or racing
+: if multiple identical sale requests are coming with the same IdempotencyKey at approximately the same time, only one of them should insert the payment record and proceed with the rest of the execution, which includes calling Chase API. We should allow for racing requests with different payloads IdempotencyKey and PaymentReferenceID to go their own way (since we are performing the payment and we are not mutating the existing payment record, we should be safe here).
+Suggested path
+Idempotency
+:
+Use IdempotencyKey stored in the Payments table. There will be a unique constraint on IdempotencyKey to ensure there is only one record per key.
+Before inserting, check if a record with the same IdempotencyKey exists. If yes, return the existing PaymentID and define the response object based on that Payment record and do not proceed with the command execution.
+We prevent from calling the Chase API by building out the response object  after the InsertPayment sproc executes and responds with the existing payment record.
+If Chase API times out or fails with network error, we do N retries with exponential backoff (N to be configured later on; we can have 3 as default). On retry Chase should return duplicate record and we should collect the 
+transactionId
+ from the response as well. If retries were not successful, the payment record needs to be marked with the state 
+PendingExternalConfirmation
+. This record should not be used for building a batch for funding. TODO: flush out the details on how to perform the confirmation with having no chaseTransactionId recorded.
+Race Condition Handling
+:
+Have IdempotencyKey on payment record and use a unique constraint on IdempotencyKey
+Insert wrapped in a transaction and catch duplicate key errors.
+Alternatives Considered
+Using a separate IdempotencyRequests table (skipping to achieve simplicity).
+Optimistic locking via UpdatedAt (not needed for insert-only flow).
+2. Void Flow (POST /v1/void)
+Risks of not having idempotent requests:
+·         If the void request is retried we could end up producing a different behavior (if the request was not voided the first time,  we could
+Risks of racing:
+·         Two void requests could race and both update the status and do the call to Chase API
+Suggested path
+Idempotency
+:
+Introduce a VoidRequests table with a unique IdempotencyKey. Prevents duplicate voids for the same request.
+Why do we need VoidRequests? –> both sale and refund produce a new record on Payments table, but void just mutates the existing record. In order to have idempotency defined here, we do need to introduce a lean table containing PaymentID, VoidIdempotencyKey pair at the very least.
+If Chase client times out or otherwise fails due to network issues, we do N retries with exponential backoff (N to be configured later on; we can have 3 as default). If retries were not successful, we do not update the payment record and keep it as 
+PendingVoid
+. We will get the updated state upon the synchronization with Chase.
+Race Condition Handling
+:
+Locks the payment row using SELECT ... FOR UPDATE (aka WITH (UPDLOCK)  in MS SQL Server).
+Ensures only one transition to PendingVoid.
+Alternatives considered
+Storing VoidIdempotencyKey in Payments (rejected for separation of concerns).
+Using UpdatedAt for optimistic locking (less reliable for state transitions).
+3. Refund Flow (POST /v1/refund)
+Risks of not having idempotent requests
+:
+·         If the refund request is retried we could get refunded one more time, or if the original request failed for some reason, we could get completely different outcome for the same retried request.
+Risks of racing
+:
+·         Multiple refunds could be created for the same original payment and the same refund intent.
+·         Refund amount could exceed original payment amount.
+Suggested path
+Idempotency
+:
+Use IdempotencyKey on the refund payment record to ensure that only one refund is created per request.
+Return existing refund if IdempotencyKey already exists.
+If Chase client times our or otherwise fails due to network issues we do N retries with exponential backoff (N to be configured later on; we can have 3 as default). On retry Chase should return duplicate record and we should collect the 
+refundId
+ from the response as well. If retries were not successful, the refund payment record needs to be marked with the state 
+PendingExternalConfirmation
+.
+Race Condition Handling
+:
+Lock the original payment row (aka WITH (UPDLOCK)  in MS SQL Server).
+Validate that the refund amount does not exceed the original.
+Track cumulative refunds using TotalRefundedAmount.
+If the call to Chase fails, we rollback the TotalRefundedAmount.
+Alternatives considered
+Using a boolean IsRefund flag (rejected in favor of RefundForPaymentID – otherwise it would be hard to keep track of all the refund payments for a specific payment ID; also what about the case where we want to void or refund a refund).
+Tracking refunds in a separate table (unnecessary complexity).
+4. UpdateState Flow (PATCH /v1/payments/{paymentId}/state)
+Idempotency case
+: two requests with the same payload must produce the same response
+Racing scenario case: 
+two requests could conflict (e.g. both try to transition to different state)
+ Suggested path:
+Idempotency
+:
+Optional: Use IdempotencyKey or RequestId in the PATCH body.
+Race Condition Handling
+:
+Use SELECT ... FOR UPDATE or compare UpdatedAt for optimistic concurrency.
+Enforce state transitions via a state machine table.
+Alternatives considered:
+Using triggers to enforce transition rules (deferred in favor of simplicity).
+On retrying with Chase payment API
+Until we confirm otherwise, we assume that there’s an inherent risk when we are retrying Chase payments API for sale and partial refund. Retries here can inadvertently lead to either a new sale happening (payer pays more money) or refunding more money than anticipated (billers return more money to the payer).
+For now the assumption is that it is safe to retry void, since it drives the payment to some sort of final state and full refund, since there will be no possibility to refund more money than the original payment was.
+Supplementary SQL Artifacts
+Payments Table
+ 
+sql
+CREATE TABLE Payments (
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    TerminalID VARCHAR(50),
+    Amount DECIMAL(10,2),
+    ConvenienceFee DECIMAL(10,2),
+    PaymentDate DATETIME,
+    PaymentStatusID INT,
+    TransactionTypeID INT,
+    TraceNumber VARCHAR(100) UNIQUE,
+    PaymentReferenceID VARCHAR(100),
+    PaymentTypeID INT,
+    PaymentMessage TEXT,
+    InvoiceNumber VARCHAR(100),
+    CustomerID INT,
+    LocationID INT,
+    CurrencyCode VARCHAR(3),
+    RefundForPaymentID INT,
+    RefundReason TEXT,
+    RefundStatusID INT,
+    IdempotencyKey VARCHAR(100) UNIQUE,
+    UpdatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ChaseTransactionId VARCHAR(100),
+    MerchantID INT,
+    TotalRefundedAmount DECIMAL(10,2) DEFAULT 0,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (LocationID) REFERENCES Locations(LocationID),
+    FOREIGN KEY (CurrencyCode) REFERENCES Currencies(CurrencyCode),
+    FOREIGN KEY (RefundForPaymentID) REFERENCES Payments(PaymentID)
+);
+ 
+VoidRequests Table
+ 
+sql
+CREATE TABLE VoidRequests (
+    VoidRequestID INT IDENTITY PRIMARY KEY,
+    PaymentID INT NOT NULL,
+    IdempotencyKey VARCHAR(100) UNIQUE NOT NULL,
+    RequestedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PaymentID) REFERENCES Payments(PaymentID)
+);
+ 
+ProcessRefund stored procedure 
+sql
+DELIMITER $$
+
+CREATE PROCEDURE ProcessRefund (
+    IN p_OriginalPaymentID INT,
+    IN p_Amount DECIMAL(10,2),
+    IN p_IdempotencyKey VARCHAR(100),
+    IN p_PerformedBy VARCHAR(100)
+)
+BEGIN
+    DECLARE v_OriginalAmount DECIMAL(10,2);
+    DECLARE v_TotalRefunded DECIMAL(10,2);
+    DECLARE v_RefundPaymentID INT;
+
+    START TRANSACTION;
+
+    SELECT Amount INTO v_OriginalAmount
+    FROM Payments
+    WHERE PaymentID = p_OriginalPaymentID
+    FOR UPDATE;
+
+    SELECT IFNULL(SUM(Amount), 0) INTO v_TotalRefunded
+    FROM Payments
+    WHERE RefundForPaymentID = p_OriginalPaymentID;
+
+    IF p_Amount + v_TotalRefunded > v_OriginalAmount THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Refund exceeds original payment amount';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM Payments WHERE IdempotencyKey = p_IdempotencyKey
+    ) THEN
+        SELECT PaymentID AS RefundPaymentID
+        FROM Payments
+        WHERE IdempotencyKey = p_IdempotencyKey;
+        ROLLBACK;
+        LEAVE;
+    END IF;
+
+    INSERT INTO Payments (
+        TerminalID, Amount, PaymentDate, Status, PaymentReferenceID,
+        PaymentTypeID, CustomerID, LocationID, CurrencyCode,
+        RefundForPaymentID, IdempotencyKey
+    )
+    SELECT
+        TerminalID, p_Amount, NOW(), 'PendingRefund', PaymentReferenceID,
+        PaymentTypeID, CustomerID, LocationID, CurrencyCode,
+        p_OriginalPaymentID, p_IdempotencyKey
+    FROM Payments
+    WHERE PaymentID = p_OriginalPaymentID;
+
+    SET v_RefundPaymentID = LAST_INSERT_ID();
+    INSERT INTO AuditLog (
+        EntityType, EntityID, ActionType, ActionTimestamp, PerformedBy, OldValue, NewValue
+    )
+    VALUES (
+        'Payment', v_RefundPaymentID, 'Created', NOW(), p_PerformedBy, NULL,
+        JSON_OBJECT('RefundForPaymentID', p_OriginalPaymentID, 'Amount', p_Amount)
+    );
+
+    COMMIT;
+
+    SELECT v_RefundPaymentID AS RefundPaymentID;
+END$$
+
+DELIMITER ;
+ 
+ProcessVoid sproc
+sql
+DELIMITER $$
+
+CREATE PROCEDURE ProcessVoid (
+    IN p_PaymentID INT,
+    IN p_IdempotencyKey VARCHAR(100),
+    IN p_PerformedBy VARCHAR(100)
+)
+
+BEGIN
+    DECLARE v_ExistingRequestID INT;
+    DECLARE v_CurrentStatus VARCHAR(50);
+    DECLARE v_VoidRequestID INT;
+
+    START TRANSACTION;
+
+    -- Check for existing void request with the same IdempotencyKey
+    SELECT VoidRequestID INTO v_ExistingRequestID
+    FROM VoidRequests
+    WHERE IdempotencyKey = p_IdempotencyKey;
+
+    IF v_ExistingRequestID IS NOT NULL THEN
+        -- Return existing request
+        SELECT v_ExistingRequestID AS VoidRequestID;
+        ROLLBACK;
+        LEAVE;
+    END IF;
+
+    -- Lock the payment row and get current status
+    SELECT Status INTO v_CurrentStatus
+    FROM Payments
+    WHERE PaymentID = p_PaymentID
+    FOR UPDATE;
+
+    -- Check if already voided or in progress
+    IF v_CurrentStatus IN ('Voided', 'PendingVoid') THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Payment already voided or in progress';
+    END IF;
+
+    -- Insert void request
+    INSERT INTO VoidRequests (PaymentID, IdempotencyKey)
+    VALUES (p_PaymentID, p_IdempotencyKey);
+
+    SET v_VoidRequestID = LAST_INSERT_ID();
+
+    -- Update payment status
+    UPDATE Payments
+    SET Status = 'PendingVoid'
+    WHERE PaymentID = p_PaymentID;
+
+    -- Insert audit log
+    INSERT INTO AuditLog (
+        EntityType, EntityID, ActionType, ActionTimestamp, PerformedBy, OldValue, NewValue
+    )
+    VALUES (
+        'VoidRequest', v_VoidRequestID, 'Created', NOW(), p_PerformedBy, NULL,
+        JSON_OBJECT('PaymentID', p_PaymentID, 'Status', 'PendingVoid')
+    );
+
+    COMMIT;
+
+    SELECT v_VoidRequestID AS VoidRequestID;
+END$$
+
+DELIMITER ;
+ UpdatePaymentStatus sproc
+sql
+
+CREATE PROCEDURE UpdatePaymentStatus (
+    IN p_PaymentID INT,
+    IN p_NewStatus VARCHAR(50),
+    IN p_PerformedBy VARCHAR(100)
+)
+BEGIN
+    DECLARE v_OldStatus VARCHAR(50);
+    DECLARE v_UpdatedAt DATETIME;
+
+    START TRANSACTION;
+
+    -- Lock the row and get current status
+    SELECT Status, UpdatedAt INTO v_OldStatus, v_UpdatedAt
+    FROM Payments
+    WHERE PaymentID = p_PaymentID
+    FOR UPDATE;
+
+    -- Update the payment status
+    UPDATE Payments
+    SET Status = p_NewStatus
+    WHERE PaymentID = p_PaymentID;
+
+    -- Insert audit log
+    INSERT INTO AuditLog (
+        EntityType, EntityID, ActionType, ActionTimestamp, PerformedBy, OldValue, NewValue
+    )
+    VALUES (
+        'Payment',
+        p_PaymentID,
+        'Updated',
+        NOW(),
+        p_PerformedBy,
+        JSON_OBJECT('Status', v_OldStatus),
+        JSON_OBJECT('Status', p_NewStatus)
+    );
+
+    COMMIT;
+END$$
+
+DELIMITER ;
+ 
+ URL:/spaces/EA/pages/4509532192/Payments+API+Idempotency+Race+Condition+Handling

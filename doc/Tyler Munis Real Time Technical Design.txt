@@ -1,0 +1,1063 @@
+ 
+Page Navigation:
+Jira ticket 
+ITR
+N/A
+Document status
+DRAFT
+Document owner
+Solution engineer
+ 
+ 
+Salesforce SOW
+Knowledge Transfer
+Billers with Customizations
+BID 2089 City of Bend Technical Design
+ 
+Authentication
+Munis Utility Billing API Toolkit 
+https://tylerwebnp.ci.bend.or.us/test/devportal/portal/home
+ (Bend, Oregon)
+They use oAuth for authentication. The token should last 60 minutes.
+Through dev site go to Authentication → oAuth2_clientCredentials and use ClientID and Client Secret
+Attachments
+API Documentation
+Token URL: 
+https://tylerwebnp.ci.bend.or.us/impl2/tylerid/authtokenserver/connect/token
+URL given is just an example and it will change for each biller
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+RTDR (both balance and blocked status) -
+ Open Billing
+GET /api/UB/v1/bills/billListForCustomer
+GET api/AR/v1/customer/notes
+This endpoint gets a list of bills for the customer
+This endpoint gets any notes for a customer account
+Balance
+https://munisappnp.ci.bend.or.us/impl2/munisopenapi/hosts/UB/api/UB/v1/bills/billListForCustomer?customerId=
+customerID&billCategory=billCategory
+customerID = customerID
+billCategory = 60 
+   *If 
+Advanced Setting
+ # (TBD) is configured, populate the 
+billCategory
+ field with the Category Code corresponding to the respective InvoiceTypeID.
+   2. Blocked Status
+https://munisappnp.ci.bend.or.us/test/munisopenapi/hosts/UB/api/AR/v1/customer/notes?customerID=CUSTOMERID&AccountID=ACCOUNTNUMBER
+Balance -
+Response - list of bills
+each bill is updated with ‘due’
+[
+  {
+    "billCategory": 0,
+    "billYear": 0,
+    "billNumber": 0,
+    "streetNumber": "string",
+    "street": "string",
+    "suffix": "string",
+    "apartment": "string",
+    "primaryName": "string",
+    "secondaryName": "string",
+    "addressLine1": "string",
+    "addressLine2": "string",
+    "city": "string",
+    "state": "string",
+    "zip": "string",
+    "phone": "string",
+    "fax": "string",
+    "email": "string",
+    "billDates": [
+      {
+        "installment": 0,
+        "date": "2022-07-08T18:46:59.364Z"
+      }
+    ],
+    "dueDates": [
+      {
+        "installment": 0,
+        "date": "2022-07-08T18:46:59.364Z"
+      }
+    ],
+    "interestDates": [
+      {
+        "installment": 0,
+        "date": "2022-07-08T18:46:59.364Z"
+      }
+    ],
+    "penaltyDates": [
+      {
+        "installment": 0,
+        "date": "2022-07-08T18:46:59.364Z"
+      }
+    ],
+    "due": 0,
+    "dueNow": 0,
+    "fees": 0,
+    "interest": 0,
+    "penalty": 0,
+    "lastPayment": "2022-07-08T18:46:59.364Z",
+    "lastPaymentAmount": 0,
+    "partialSSN": 0
+  }
+]
+Success
+Code: 200
+Description: Success
+Returns a list of bills - for each bill update using the due field
+PastDue
+dueNow (
+RTDRServiceVersion
+ contains “PASTDUE”)
+Other
+Code 400
+Description: Bad Request
+ Code 401
+Description: Unauthorized
+ Code 403
+Description: Forbidden
+Blocked Status
+Code
+: 200
+Description: Success
+Body:
+{
+     [
+     “date”:2021-02-11T21:55:19.449Z,
+     “user”: string,
+     “text”: string
+ 
+]
+}
+b153f38b-6b4c-4ec1-ab76-bc82e404a265
+b91d6314-9005-4a3c-8487-b9a4aba186ac
+DECIDED
+If text =  “BLOCK  ACH (NOTES SECTION OF SPECIAL CONDITION)” Block ACH
+7f0750b0-3ec9-46aa-9858-98ff2d23c05f
+DECIDED
+If empty - make sure it’s not blocked
+If text =  “BLOCK  ACH (NOTES SECTION OF SPECIAL CONDITION)” Block ACH
+If empty - make sure it’s not blocked
+RTDR - Balance Forward (Past Due)
+GET
+/api/UB/v1/accounts/
+accountListForCustomer
+RTDRServiceVersion
+ contains “PASTDUE”
+This endpoint returns summary of customer account
+CustomerID: CustomerID
+effectiveDate: Set to current date
+billCategory: 60
+ *If 
+Advanced Setting
+ # (TBD) is configured, populate the 
+billCategory
+ field with the Category Code corresponding to the respective InvoiceTypeID. 
+accountID : Account Number
+NOTE* 
+The account number can be in CustomerID-AccountNumber or AccountNumber-CustomerID format
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. 
+The standard format will be Account Number + '-' + Customer Number format. For the standard format Advanced Setting 48 in CRM needs to be turned on for RTDR and Data Pump to work.
+[
+
+    {
+
+        "id": "1051855",
+        "streetNumber": "617",
+        "suffix": "",
+        "streetPreDirectional": "E",
+        "street": "RANDY",
+        "streetType": "ST",
+        "streetPostDirectional": "",
+        "streetUnitType": "",
+        "apartment": "",
+        "status": "past",
+        "isCashOnly": false,
+        "url": null,
+        "customerId": 450168,
+        "customerURL": "https://munistest.avondale.org/test/munis/gas/app/ua/r/mugwc/arcstmnt?Arg=--mutoken&Arg=3OE4P2QByqdyBT7N3Ld1aacaXZTwuOKJghjuMAxjnRBxcfKdeWu78esk3HvVZXu2",
+        "primaryName": "OPENDOOR LABS INC",
+        "secondaryName": "",
+        "addressLine1": "PO  BOX 1057",
+        "addressLine2": "",
+        "city": "PICO RIVERA",
+        "state": "CA",
+        "zip": "90660",
+        "phone": "844-680-2890",
+        "fax": "",
+        "email": "UTILITIES@OPENDOOR.COM",
+        "lastBill": {
+            "billCategory": 60,
+            "billYear": 2022,
+            "billNumber": 149554,
+            "billDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-03-21T00:00:00"
+                }
+            ],
+            "dueDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-04-16T00:00:00"
+                }
+            ],
+            "interestDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-04-17T00:00:00"
+                }
+            ],
+
+            "penaltyDates": [],
+            "amountDue": 0.0,
+            "amountDueNow": 0.0,
+            "fees": 0.0,
+            "interest": 0.0,
+            "penalty": 0.0
+        },
+
+        "totalDue": 0.0,
+        "totalDueNow": 0.0,
+        "totalFees": 0.0,
+        "totalInterest": 0.0,
+        "totalPenalty": 0.0,
+        "totalPastDue": 0.00,
+        "pastDueExceedsThresholdDays": false,
+        "lastPayment": "2022-06-14T00:00:00",
+        "lastPaymentAmount": 63.94,
+        "partialSSN":,
+        "usesPaperlessBilling": false,
+        "isAutoPay": false,
+        "cutoffDate": null
+    }
+  ]
+Check to see if the last bill bill number matches the most current bill number in IC. If it does proceed to update, if not the last bill probably has not yet been uploaded and do not update).
+The following fields will be updated:
+Balance Due - Update balance due with TotalDueNow
+Past Due  (RTDRServiceVersion contains “PASTDUE”)
+If current bill due date is in future set to: TotalDueNow- AmountDueNow
+If it is past the current bill due date (current bill is past due) set to just: TotalDueNow
+Past due will not be set to a negative value, it will instead be set to 0
+IF TotalDueNow is negative - past due will be set to 0
+
+If TotalDueNow- AmountDueNow is <=0, past due will be set to 0
+Custom 16 (Previous Balance) - This will be calculated by taking TotalDueNow (from API) - the static value of TotalAmountDue from the IC bill itself. The totalamountdue is static from creation and will not change as the bill is paid.
+RTDR - Balance Forward (No Past Due)
+GET
+/api/UB/v1/accounts/
+accountListForCustomer
+This endpoint returns summary of customer account
+CustomerID: CustomerID
+effectiveDate: Set to current date
+billCategory: 60
+ *If 
+Advanced Setting
+ # (TBD) is configured, populate the 
+billCategory
+ field with the Category Code corresponding to the respective InvoiceTypeID. 
+accountID : Account Number
+NOTE* 
+The account number can be in CustomerID-AccountNumber or AccountNumber-CustomerID format
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. 
+The standard format will be Account Number + '-' + Customer Number format. For the standard format Advanced Setting 48 in CRM needs to be turned on for RTDR and Data Pump to work.
+[
+
+    {
+
+        "id": "1051855",
+        "streetNumber": "617",
+        "suffix": "",
+        "streetPreDirectional": "E",
+        "street": "RANDY",
+        "streetType": "ST",
+        "streetPostDirectional": "",
+        "streetUnitType": "",
+        "apartment": "",
+        "status": "past",
+        "isCashOnly": false,
+        "url": null,
+        "customerId": 450168,
+        "customerURL": "https://munistest.avondale.org/test/munis/gas/app/ua/r/mugwc/arcstmnt?Arg=--mutoken&Arg=3OE4P2QByqdyBT7N3Ld1aacaXZTwuOKJghjuMAxjnRBxcfKdeWu78esk3HvVZXu2",
+        "primaryName": "OPENDOOR LABS INC",
+        "secondaryName": "",
+        "addressLine1": "PO  BOX 1057",
+        "addressLine2": "",
+        "city": "PICO RIVERA",
+        "state": "CA",
+        "zip": "90660",
+        "phone": "844-680-2890",
+        "fax": "",
+        "email": "UTILITIES@OPENDOOR.COM",
+        "lastBill": {
+            "billCategory": 60,
+            "billYear": 2022,
+            "billNumber": 149554,
+            "billDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-03-21T00:00:00"
+                }
+            ],
+            "dueDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-04-16T00:00:00"
+                }
+            ],
+            "interestDates": [
+                {
+                    "installment": 1,
+                    "date": "2022-04-17T00:00:00"
+                }
+            ],
+
+            "penaltyDates": [],
+            "amountDue": 0.0,
+            "amountDueNow": 0.0,
+            "fees": 0.0,
+            "interest": 0.0,
+            "penalty": 0.0
+        },
+
+        "totalDue": 0.0,
+        "totalDueNow": 0.0,
+        "totalFees": 0.0,
+        "totalInterest": 0.0,
+        "totalPenalty": 0.0,
+        "totalPastDue": 0.00,
+        "pastDueExceedsThresholdDays": false,
+        "lastPayment": "2022-06-14T00:00:00",
+        "lastPaymentAmount": 63.94,
+        "partialSSN":,
+        "usesPaperlessBilling": false,
+        "isAutoPay": false,
+        "cutoffDate": null
+    }
+  ]
+Check to see if the last bill bill number matches the most current bill number in IC. If it does proceed to update, if not the last bill probably has not yet been uploaded and do not update).
+The following fields will be updated:
+Balance Due - Update balance due with TotalDueNow
+Custom 16 (Previous Balance)
+This will be calculated by taking TotalDueNow (from API) - the static value of TotalAmountDue from the IC bill itself. The totalamountdue is static from creation and will not change as the bill is paid.
+Data Pump: Post Payments 
+Open Billing
+POST: /api/AR/v1/payments/byBill
+This endpoint creates a payment by bill.
+{
+  "billCategory": 0,
+  "billYear": 0,
+  "billNumber": 0,
+  "effectiveDate": "2021-02-11T22:02:41.776Z",
+  "paymentReference": "string",
+  "paidBy": "string",
+  "amount": 0,
+  "memo": "string",
+  "paymentMethod": "string"
+}
+Required:
+Bill Category
+: if utility 60
+Bill Year : Bill year
+Bill Number : Bill Number
+Payment Reference
+: if utility 60
+paidBy : CustomerName
+amount : 
+amount paid
+ (Should not include the service fee)
+*If 
+Advanced Setting
+ # (TBD) is configured, utilize the Category Code linked to each InvoiceTypeID to populate both the 
+billCategory
+ and 
+paymentReference
+ fields. 
+Optional
+:
+effectivedate : leave blank
+memo - 
+This can be set to the authorization number
+PaymentMethod
+ is one of the following: CHECK, CREDITCARD, CASH. If not given will default to credit card
+Responses:
+Success
+Code: 200 
+Description: Success
+Body: 
+[
+  {
+    "paymentId": "string",
+    "munisBatchId": "string",
+    "amount": 0
+  }
+]
+Other
+Code 400
+Description: Bad Request
+Code 401
+Description: Unauthorized
+Code 403
+Description: Forbidden
+Data Pump: Payments 
+Balance Forward
+POST
+api/AR/v1/payments/byAccount
+Posts payment to an account
+customerID: CustomerID
+accountNumber: AccountNumber (not IC account number, from CIS system, see note below *)
+effectiveDate: leave blank (optional)
+billCategory: 60 (utility)
+paymentReference: 60 (utility)
+paidBy: customerName
+amount: amount paid (without service fee)
+memo: authorization number
+paymentMethod: is one of the following: CHECK, CREDITCARD, CASH. if not provided will default to Credit Card
+*If 
+Advanced Setting
+ # (TBD) is configured, utilize the Category Code linked to each InvoiceTypeID to populate both the 
+billCategory
+ and 
+paymentReference
+ fields.
+NOTE* 
+The account number can be in CustomerID-AccountNumber or AccountNumber-CustomerID format
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. 
+The standard format will be Account Number + '-' + Customer Number format. For the standard format Advanced Setting 48 in CRM needs to be turned on for RTDR and Data Pump to work.
+[
+  {
+    "paymentId": "string",
+    "munisBatchId": "string",
+    "amount": 0
+  }
+]
+Other
+Code 400
+Description: Bad Request
+Code 401
+Description: Unauthorized
+Code 403
+Description: Forbidden
+Data Pump: Paperless Changes
+POST /api/AR/v1/customers/deliveryMethods
+This endpoint sets customer delivery methods
+{
+  "customerId": 0,
+  "addressNumber": 0,
+  "billCategory": 0,
+  "accountId": "string",
+  "documentType": 0,
+  "deliveryMethod": 0
+}
+Required
+customerID - Cust_No
+billCategory - if utility 60
+deliverymethod - 3 = email, 1 = print 
+(4 print and email but we don’t want to use)
+*If 
+Advanced Setting
+ # (TBD) is configured, use the Category Code tied to each InvoiceTypeID for the 
+billCategory
+ field. 
+Optional
+:
+addressNumber: leave blank
+accountId -H_ACCT_NO
+documentType - leave blank
+Success
+Code: 204 
+Description : Success
+Other
+Code: 400 
+Description: Bad Request
+Code: 401
+Description: Unauthorized
+Code: 403
+Description: Forbidden
+Data Pump: Email Changes
+POST /api/AR/v1/customers/contacts/email
+Endpoint for updating email
+customerID: Cust_No
+Email: New email value
+Success
+:
+Code 204
+Description: Success
+Other
+Code 400
+Description: Bad Request
+Code 401
+Description: Unauthorized
+Code 403
+Description: Forbidden
+File Mapping
+Invoice File
+File Extension: XML
+File Naming Convention: N/A
+File Delimiter: XML
+Specification: N/A
+Sample File: 
+File Transfer Frequency: Daily
+CRM Options: 
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. 
+The standard format will be Account Number + '-' + Customer Number format. For the standard format Advanced Setting 48 in CRM needs to be turned on for RTDR and Data Pump to work.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Record Type
+1
+RowType
+IC
+TRUE
+N/A - IC To generate. Always FH
+File Header
+2
+BillerGuid
+IC
+TRUE
+N/A - IC To generate
+File Header
+4
+FileCreationDate
+IC
+TRUE
+N/A - IC To generate
+File Header
+5
+InvoiceCount
+IC
+TRUE
+N/A - IC To generate
+File Header
+6
+TotalInvoiceAmount
+IC
+TRUE
+N/A - IC To generate
+File Header
+7
+RowType
+IC
+TRUE
+N/A - IC To generate. Always IH
+Invoice Header
+8
+RecordType
+IC
+TRUE
+N/A - IC To generate. Always '
+N
+'
+Invoice Header
+9
+InvoiceFormatGuid
+IC
+TRUE
+N/A - Hardcoded to 42 - Utility
+Invoice Header
+10
+InvoiceNumber
+TRUE
+Bills are always unique - we want to change this to be just BILL_NO
+Header
+Invoice Header
+11
+InvoiceDate
+TRUE
+BILL_DATE_FMT
+Header
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+BILL_DATE_FMT
+Header
+Invoice Header
+13
+TotalAmountDue
+TRUE
+For open billing and balance forward this needs to be:
+ <CURR_CHARGES>
+Header
+Invoice Header
+39
+Custom2
+FALSE
+<LOC_NO>
+Header
+Invoice Header
+40
+Custom3
+FALSE
+<LOC_STR>
+Header
+Invoice Header
+41
+Custom4
+FALSE
+<LOC_CTY>
+Invoice Header
+42
+Custom5
+FALSE
+<LOC_ST>
+Invoice Header
+43
+Custom6
+FALSE
+<LOC_ZIP>
+Invoice Header
+44
+Custom7
+FALSE
+<LOC_FMT>
+Invoice Header
+45
+Custom8
+FALSE
+<PARCEL_ID>
+Invoice Header
+46
+Custom9
+FALSE
+<INT_DUE>
+Invoice Header
+47
+Custom10
+FALSE
+<CURR_CHARGES>
+Invoice Header
+93
+BalanceDue
+FALSE
+<TOT_DUE>
+For open billing this needs to be <CURR_CHARGES>
+Invoice Header
+94
+Custom11
+FALSE
+<TOT_DUE>
+Invoice Header
+95
+Custom12
+FALSE
+<ADJ_SINCE_LAST>
+Invoice Header
+96
+Custom13
+FALSE
+<PMTS_SINCE_LAST>
+Invoice Header
+97
+Custom14
+FALSE
+<TOT_CRED_APPL>
+Invoice Header
+98
+Custom15
+FALSE
+<SUM_ACTVTY_SINCE_LAST>
+Invoice Header
+99
+Custom16
+FALSE
+<PREV_BAL>
+Invoice Header
+100
+Custom17
+FALSE
+<T_COMMIT>
+Invoice Header
+101
+Custom18
+<Int_PD_SINCE_LAST>
+Invoice Header
+102
+Custom19
+FALSE
+<BALANCE_FWD>
+Invoice Header
+103
+Custom20
+FALSE
+<ACCT_NO> + ' - ' + <CUST_NO> (Ex. 12345678 - 12345678)
+Invoice Header
+104
+Custom21
+FALSE
+<SCAN_EXCL_NOTDUE>
+Invoice Header
+105
+Custom22
+FALSE
+<SCAN_EXCL_NOTDUE>
+Invoice Header
+106
+Custom23
+FALSE
+<INT_DATE>
+Invoice Header
+107
+Custom24
+FALSE
+<PENLTY_DATE>
+Invoice Header
+319
+Echo1
+FALSE
+<BILL_MSG1>
+Invoice Header
+320
+Echo2
+FALSE
+<BILL_MSG2>
+Invoice Header
+321
+Echo3
+FALSE
+<BILL_MSG3>
+Invoice Header
+322
+Echo4
+FALSE
+<BILL_MSG4>
+Invoice Header
+346
+BillerBillYear
+FALSE
+If <SCAN_EXCL_NOTDUE> is available use the year that. Otherwise use the year in <BILL_DATE>.
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+BILL_NO
+Invoice Header
+58
+RowType
+TRUE
+NA - IC To generate - Always 'CR”
+Customer Record
+59
+AccountNumber
+TRUE
+<H_ACCTNO> + '-' + <CUST_NO> (11000168-530542) 
+No prefix needed as account number should be unique across type and biller only has one type - if ever an issue will add prefix at end of account number + integration will still work. CRM Advanced Setting 48 needs to be turned on for default format.
+We also have the option to support <CUST_NO>-<H_ACCTNO> format. See section about 
+Option 
+50.
+For Bend values are flipped it should be ‘ <CUST_NO> + '-' + <H_ACCTNO> 
+(no prefix)
+Customer Record
+60
+CustomerName
+TRUE
+<CUST_NAME1>
+Customer Record
+61
+Address1
+FALSE
+<CUST_ADDR1>
+Customer Record
+62
+Address2
+FALSE
+<CUST_ADDR2>
+Customer Record
+63
+City
+FALSE
+<CUST_CTY>
+Customer Record
+64
+State
+FALSE
+<CUST_ST>
+Customer Record
+65
+Zip
+FALSE
+<CUST_ZIP>
+Customer Record
+67
+EmailAddress
+FALSE
+DELIVERY_INFO
+Customer Record
+371
+CustomerName2
+FALSE
+<CUST_NAME2>
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+The displayaccount number should just be the accountnumber without dashes. 
+<H_ACCTNO>+<CUST_NO> (11000168530542) 
+OR 
+<CUST_NO>+<H_ACCTNO>
+This is determined by: 
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. 
+Customer Record
+70
+RowType
+TRUE
+NA - IC To generate - Always ID
+Invoice Detail
+72
+Description
+FALSE
+<CHARGE_DETAIL> / <USAGE_CONS_HISTORY>
+Invoice Detail
+83
+CustomField1
+FALSE
+<SERV_DESC> / <HIST_ACCT_NO>
+Invoice Detail
+84
+CustomField2
+FALSE
+<CURR_READ_DATE> / <HIST_SERV_CODE>
+Invoice Detail
+85
+CustomField3
+FALSE
+<PREV_READ_DATE> / <HIST_READ>
+Invoice Detail
+86
+CustomField4
+FALSE
+<READ_CODE> / <HIST_DATE>
+Invoice Detail
+87
+CustomField5
+FALSE
+<CURR_READ> / <HIST_USAGE>
+Invoice Detail
+88
+CustomField6
+FALSE
+<PREV_READ> / <HIST_FACT_USAGE>
+Invoice Detail
+89
+CustomField7
+FALSE
+<FACT_ACT_USG> / <HIST_READ_CODE>
+Invoice Detail
+90
+CustomField8
+FALSE
+<MTR_NO> / <HIST_DATE_PREV>
+Invoice Detail
+91
+CustomField9
+FALSE
+<NUM_UNITS> / <HIST_USAGE_DAYS>
+Invoice Detail
+92
+CustomField10
+FALSE
+<SERV_CHARGE> / <HIST_RATE_CD>
+Invoice Detail
+208
+CustomField11
+FALSE
+<OLD_ACT_USG> / <HIST_ACT_DMD>
+Invoice Detail
+209
+CustomField12
+FALSE
+<RATE_DESC> / <HIST_BILLED_DMD>
+Invoice Detail
+210
+CustomField13
+FALSE
+<RATE_ADJ_AMT> / <HIST_ACT_KVARH>
+Invoice Detail
+211
+CustomField14
+FALSE
+<CONS_AMT> / <HIST_BILLED_KVARH>
+Invoice Detail
+Change Log
+Autopay 
+File Purpose: They will receive Email / Paperless updates through the API. They need a changelog (CSV) for Autopay accounts though that they will import into Tyler Munis weekly. 
+It will be a list of all accounts that are signed up for AutoPay.
+ The reason for this is because there is no defined field in Tyler Munis for autopay.
+File Extension: XML
+File Naming Convention: 
+File Delimiter: XML
+Specification: 
+Below
+Sample File: 
+File Transfer Frequency:
+ Daily
+Account ID
+Customer ID
+User Defined Data
+int
+int
+Y
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+ TBD
+ TBD
+ Category Code per InvoiceTypeID
+(TBD)
+Example:
+InvoiceTypeID
+=
+billCategory
+ 
+42=60
+ Y
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+BIF Customizations
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Biller Questionnaire - BIF customization
+AutoPayCollectionDate
+Biller Questionnaire - BIF customization
+BalanceForward
+No balance forward
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGUID
+Should probably be whatever the invoice mapping is for Tyler Munis
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+Biller Quesitonnaire - BIF customization
+PaymentExpirationMessage
+Biller Quesitonnaire - BIF customization
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+ThirdNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+User Interaction and Design
+Data Flow - Invoice
+att2064973827
+1236828172
+1
+Diagram1
+IM
+att2065006611
+att2064809987
+0
+Data Flow - Adjustments
+att2065367041
+1236828172
+1
+Diagram2
+IM
+att2065334273
+att2065301505
+0
+Data Flow - Payment
+att2065137676
+1236828172
+1
+Diagram3
+IM
+att2065432577
+att2065039377
+0
+Data Flow - Void
+Biller support will be emailed
+Data Flow - ACH Reject
+Biller support will be emailed
+Data Flow - Change Log
+att2065498113
+1236828172
+1
+Diagram4
+IM
+att2065137681
+att2064515087
+0
+Data Flow - Bill Presentment
+Varies from Biller to Biller depending on print vendor
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller Portal
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ 
+INT-4114
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+DisplayAccountNumber was being set but not used.
+ City of Wilsonville would like to use display account to display account number without ‘-'. 
+ Since the field is not used it’s going to be an integration wide change not a custom one. The displayaccount number will be set to the account number without the '-'. 
+The account number can be in 2 formats (ACCTID-CUSTOMERID or CUSTOMERID-ACCTID) both will be supported in display account number 
+without the dash
+. Which format is used is determined by option 50 like account number.
+ 
+INT-4425
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Existing API updates the balance by bill - even for balance forward billers the most recent bill only contains the one bill balance
+For balance forward billers, an account summary API needs to be used to pull total account balance
+ To support both balance forward and open billing billers.
+Balance forward logic was pulling customer balance at a customerID level (one customerID can have multiple accounts). Whereas IC creates accounts at a customerID-AccountNumber level
+Change logic to pull the balance at the account level instead of the customer level
+standard balance forward version of integration that is being worked through.
+ URL:/spaces/IM/pages/1236828172/Tyler+Munis+Real+Time+Technical+Design

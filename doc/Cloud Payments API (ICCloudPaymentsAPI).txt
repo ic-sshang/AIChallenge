@@ -1,0 +1,564 @@
+Controllers
+BaseApiController
+The BaseApiController.vb and BillerAuthenticateFilter.vb files work together to establish a foundational security and response handling mechanism for this API.
+BaseApiController.vb
+Imports and Attributes:
+The BaseApiController imports namespaces for HTTP and CORS (Cross-Origin Resource Sharing) functionality.
+It is decorated with two attributes: BillerAuthenticateFilter (See filters) and EnableCors. The BillerAuthenticateFilter attribute applies custom authentication logic to all controllers inheriting from BaseApiController, ensuring that requests are authenticated. The EnableCors attribute allows requests from any origin, with any headers, using any method, which is a permissive setting for cross-origin requests.
+Class Definition:
+BaseApiController is an abstract class (MustInherit) that cannot be instantiated on its own and serves as a base class for other API controllers. It inherits from ApiController, which provides basic controller functionalities.
+Protected Fields:
+_response: A field of type ApiResponse used to construct and manage API responses.
+_biller: A field of type Biller, likely representing the authenticated entity making the request.
+Constructor:
+The constructor initializes the _response field with a new instance of ApiResponse, preparing it for use in derived controllers.
+Interaction and Workflow
+When a request is made to an API controller that inherits from BaseApiController, the following occurs:
+Authentication
+: Before the controller action is executed, the BillerAuthenticateFilter is invoked due to its application on the BaseApiController. It checks the request for valid authentication credentials. If the authentication fails, the request is halted, and an error response is generated. If it succeeds, the request continues to the controller action.
+Controller Action Execution
+: Assuming authentication succeeds, the controller action processes the request. The _response and _biller fields are available for use in constructing the response and accessing authenticated biller information, respectively.
+Response Handling
+: After the controller action completes, the response is sent back to the client. If CORS is enabled and properly configured, responses can be received by clients from any origin.
+This setup ensures that all controllers inheriting from BaseApiController benefit from consistent authentication via BillerAuthenticateFilter and have a standard way of constructing responses with _response. Additionally, the permissive CORS settings facilitate the API's consumption from various client applications, though it's important to review these settings for security implications in a production environment.
+AgentConnectIntegrationController
+Class Definition
+AgentConnectIntegrationController inherits from BaseApiController (see above) and provides shared functionalities like error handling, response generation, and common properties.
+Private Field
+agentConnectIntegrationResponse is a private field of type AgentConnectResponse. It's used to store the response generated from processing a request. 
+Constructor
+The constructor Sub New() calls the base class constructor with MyBase.New(). This ensures that any necessary initialization in the base class is performed when an instance of AgentConnectIntegrationController is created.
+PostValue Method
+This is the core functionality of the controller, handling HTTP POST requests to the /AgentConnectIntegration endpoint.
+Decorated with <MaintenanceFilter>, this indicates that the method uses this custom filter (see filters section)
+The method accepts a parameter request of type CloudPaymentRequestV2 from the request body, indicated by <FromBody()>.
+_biller is initialized by casting the User to BillerPrincipal and accessing its Biller property. 
+A new Customer object is created, and its InsertCustomersAndInvoices method is called with request and _biller.BillerID as arguments. 
+A Try block is used to attempt generating a response from the request by creating a new AgentConnectResponse object with request and _biller as arguments. If an exception occurs during this process, the catch block returns an internal server error response using a method _response.InternalServerError(MyBase.Request).
+If no exception occurs, the method concludes by returning a "Created" HTTP response with the generated agentConnectIntegrationResponse. This indicates that the request was processed successfully, and the response payload is delivered back to the caller.
+Summary
+The AgentConnectIntegrationController is designed to handle POST requests for cloud payment integration, involving operations like customer and invoice management based on the request data, and generating a response specific to the payment operation. It demonstrates the use of exception handling, custom user principals, and response generation within an 
+ASP.NET
+ Web API controller.
+BillerController
+Class Definition:
+ BillerController inherits from BaseApiController, which means it automatically includes authentication and response handling functionalities provided by the base class.
+Constructor:
+The constructor simply calls the base class constructor to ensure proper initialization.
+Status Method:
+Decorated with <HttpGet>, this method handles GET requests to check the status of a biller.
+It attempts to cast the built-in User property to BillerPrincipal. This is crucial because it relies on the custom principal setup provided by BillerPrincipal, which includes authenticated biller information.
+The _biller field (inherited from BaseApiController) is assigned the Biller property from the BillerPrincipal. This step effectively retrieves the authenticated biller's information for use in the method.
+The method then checks if the BillerID is greater than 0, which indicates a successfully authenticated biller. If so, it returns an OK response with the biller information.
+If the BillerID is not greater than 0, indicating authentication failure or missing biller information, it returns a BadRequest response with an error message.
+If any exception occurs during this process, an InternalServerError response is returned.
+Workflow
+When a GET request is made to the endpoint associated with the Status method in BillerController, the following occurs:
+Authentication
+: The request is authenticated using the mechanisms provided by BaseApiController and the custom BillerPrincipal. This involves verifying the API key and retrieving the associated biller information.
+Status Check
+: The Status method attempts to retrieve and use the authenticated biller's information. If the biller is successfully authenticated and identified, the method returns an OK response with the biller's details. Otherwise, it returns an error response.
+This setup ensures that only authenticated billers can check their status, providing a secure way to access sensitive biller information.
+CloudPaymentsPageController
+The CloudPaymentsPageController is designed to handle cloud payment page requests. It integrates closely with the BillerPrincipal, Database, and CloudPaymentResponse classes to authenticate the biller, interact with the database, and generate a payment response. Let's break down how this controller works, step by step, using the provided context:
+Step 1: Controller Initialization
+The controller inherits from BaseApiController, which means it automatically includes foundational functionalities like authentication and response handling.
+The constructor (Sub New()) calls the base class constructor to ensure proper initialization.
+Step 2: Handling POST Requests
+The PostValue method is designed to handle POST requests to the /api/CloudPaymentsPage endpoint. It is decorated with the <MaintenanceFilter> attribute, ensuring that the service is available before processing the request.
+The method accepts a CloudPaymentRequest object from the request body, which contains the necessary data for processing a cloud payment.
+Step 3: Authentication and Biller Retrieval
+The _biller field, inherited from BaseApiController, is initialized by casting the built-in User property to BillerPrincipal and accessing its Biller property. This step leverages the BillerPrincipal class to authenticate the biller and retrieve their information based on the API key.
+Step 4: Database Interaction
+The Database class is used to retrieve the customer ID associated with the account number provided in the CloudPaymentRequest. This is done through the GetCustomerIDFromAccountNumber method, which queries the database using the account number and biller ID.
+Step 5: Generating the Payment Response
+A CloudPaymentResponse object is instantiated with the payment request, customer ID, and biller information. This process involves:
+Saving the payment request to the database.
+Generating a token that includes the request ID and biller ID, encrypting it, and then encoding it in base64.
+Constructing the CloudPaymentURL using the biller's domain, virtual application descriptor, and the encrypted token.
+Updating the database with the process URL for the cloud payment request.
+Step 6: Error Handling and Response Generation
+If an exception occurs during the generation of the payment response, an internal server error response is returned using the _response.InternalServerError method inherited from BaseApiController.
+If the payment response is successfully generated, a "Created" HTTP response is returned, including the paymentResponse object as the payload. This response indicates that the cloud payment page request was processed successfully.
+Summary
+The CloudPaymentsPageController effectively integrates various components of the application to process cloud payment page requests. It authenticates the biller using BillerPrincipal, interacts with the database to retrieve customer information and save request data, and generates a secure payment URL using CloudPaymentResponse. This workflow ensures that cloud payment requests are handled securely and efficiently, providing a seamless experience for both billers and customers.
+CloudPaymentsV2PageController
+This controller utilizes the BillerPrincipal for authentication, CloudPaymentRequestV2 for handling the request data, and CloudPaymentResponseV2 for generating the response. Let's break down how this controller works, step by step:
+Step 1: Controller Initialization
+Inherits from BaseApiController, which provides foundational functionalities like authentication and response handling.
+The constructor (Sub New()) calls the base class constructor to ensure proper initialization.
+Step 2: Handling POST Requests
+The PostValue method is designed to handle POST requests to the /api/CloudPaymentsPage/v2 endpoint. It is decorated with the <MaintenanceFilter> attribute, ensuring that the service is available before processing the request.
+The method accepts a CloudPaymentRequestV2 object from the request body, which contains the necessary data for processing a cloud payment.
+Step 3: Authentication and Biller Retrieval
+The _biller field, inherited from BaseApiController, is initialized by casting the built-in User property to BillerPrincipal and accessing its Biller property. This step leverages the BillerPrincipal class to authenticate the biller and retrieve their information based on the API key.
+Step 4: Processing the Payment Request
+A new Customer object is created, and its InsertCustomersAndInvoices method is called with the request and biller ID. This involves updating or inserting customer and invoice data into a database based on the provided request.
+Step 5: Generating the Payment Response
+A CloudPaymentResponseV2 object is instantiated with the payment request and biller information. This involves several key steps:
+Saving the request to the database.
+Generating a token that includes the request ID and biller ID, encrypting it, and then encoding it in base64.
+Constructing the CloudPaymentURL using the biller's domain, virtual application descriptor, and the encrypted token.
+Updating the database with the process URL for the cloud payment request.
+Step 6: Error Handling and Response Generation
+If an exception occurs during the generation of the payment response, an internal server error response is returned.
+If the payment response is successfully generated, a "Created" HTTP response is returned, including the paymentResponse object as the payload. This response indicates that the cloud payment page request was processed successfully.
+Key Components
+BillerPrincipal
+: Authenticates the biller and retrieves their information based on the API key. It ensures that the request is associated with a valid biller.
+CloudPaymentRequestV2
+: Represents the incoming payment request. It includes detailed validation logic to ensure the request data is valid, such as checking for duplicate customers or invoices and validating URLs and GUIDs.
+CloudPaymentResponseV2
+: Responsible for generating the response to the payment request. It saves the request to the database, generates a secure token, constructs the payment URL, and updates the database with this URL.
+Summary
+The CloudPaymentsV2PageController effectively processes cloud payment page requests by authenticating the biller, validating and processing the request data, and generating a secure payment URL. It integrates closely with the BillerPrincipal, CloudPaymentRequestV2, and CloudPaymentResponseV2 classes to ensure that the payment process is secure, efficient, and reliable.
+Monitoring Controller
+The MonitoringController is designed to provide endpoints for monitoring the uptime and health of the application. It inherits from ApiController, which is a base class for creating Web API controllers. Let's break down how this controller works, step by step:
+RoutePrefix Attribute
+The RoutePrefix attribute specifies a common prefix for all routes in the controller. In this case, all routes will start with /monitoring.
+CheckUptime Method
+Decorated with HttpGet and Route("uptime"), this method responds to GET requests at /monitoring/uptime.
+It returns an HttpResponseMessage with the content "Up", indicating that the application is running.
+HealthCheck Method
+Decorated with HttpGet and Route("healthcheck"), this method responds to GET requests at /monitoring/healthcheck.
+It performs several checks to assess the health of different components of the application:
+Database Connectivity Check:
+Executes a stored procedure (selAzureBillers) with a specific BillerID to retrieve data from the database.
+Checks if the returned dataset contains any rows. If it does, the database connectivity is considered healthy.
+If an exception occurs, it logs the error using Serilog, sets result to False, and returns an HttpResponseMessage with the content "False".
+Vault Connectivity Check:
+Attempts to encrypt and then decrypt a test string using a custom encryption utility (CloudCrypto.AES).
+Compares the decrypted string to the original to verify that encryption and decryption are working as expected.
+If an exception occurs, it logs the error, sets result to False, and returns an HttpResponseMessage with the content "False".
+Blob Storage Connectivity Check:
+Tries to retrieve a list of files from Azure Blob Storage using a custom service (AzureBlobService).
+Checks if the retrieved list contains any items, indicating successful connectivity to blob storage.
+If an exception occurs, it logs the error and sets result to False (note that it doesn't return immediately like in the previous checks).
+After performing all checks, it returns an HttpResponseMessage with the content "True" if all checks passed, or "False" if any check failed.
+Summary
+The MonitoringController provides two key functionalities:
+Uptime Check: A simple endpoint to quickly verify that the application is running.
+Health Check: A more comprehensive endpoint that checks the connectivity and functionality of critical components like the database, encryption services, and blob storage. This endpoint is crucial for automated monitoring systems to detect and alert on issues with the application's infrastructure.
+Filters
+BillerAuthenticateFilter.vb
+Class Definition:
+BillerAuthenticateFilter inherits from Attribute and implements the IAuthenticationFilter interface, indicating it's a custom attribute used for authentication in the API.
+AllowMultiple Property:
+This property indicates whether multiple instances of the filter can be applied to a single action or controller. It returns False, meaning only one instance can be applied.
+AuthenticateAsync Method:
+This method is where the authentication logic is implemented. It checks the Authorization header of incoming requests for basic authentication credentials.
+If the Authorization header is missing, uses an unsupported scheme, or has an empty parameter, an InvalidCredentialsResponse is set as the error result, indicating authentication failure.
+If the header is present and correctly formatted, the method attempts to decode the base64-encoded credentials, create a BillerPrincipal object (a custom principal object representing the authenticated entity), and assign it to the request's principal. If any step fails, an InvalidCredentialsResponse is set.
+ChallengeAsync Method:
+This method would be used to add an authentication challenge to the response, but it's not implemented in this case, simply returning a completed task.
+MaintenanceFilter
+Class Definition:
+MaintenanceFilter inherits from ActionFilterAttribute, allowing it to be used as a filter attribute on controller actions.
+OnActionExecuting Method:
+This method executes before the controller action. It attempts to determine if the service is available for the biller making the request.
+It retrieves the ApiController from the actionContext and casts the built-in User to BillerPrincipal to access the biller information.
+The BillerUtilities.PaymentsAvailable method checks if the service is available for the given biller ID. If not, a service unavailable response is set on the actionContext, preventing the controller action from executing.
+If an exception occurs during this check, an internal server error response is set on the actionContext.
+Model Filter
+The ModelFilter class is used as an attribute on controller actions or globally across all actions. Let's break down how this filter works, step by step:
+Step 1: Import Statements
+The code begins with importing necessary namespaces that provide functionalities for handling HTTP requests and responses, as well as working with action filters and controllers.
+Step 2: Class Definition
+ModelFilter is defined as a public class that inherits from ActionFilterAttribute. This inheritance makes ModelFilter a custom action filter attribute that can intercept and process HTTP requests before they reach the controller action.
+Step 3: Overriding OnActionExecuting Method
+The OnActionExecuting method is overridden to execute custom logic before the controller action is invoked. This method receives an HttpActionContext object, which provides access to the request, model state, and other action-related information.
+Step 4: Model State Validation
+The method checks if the model state is valid using actionContext.ModelState.IsValid. If the model state is not valid, it indicates that there are validation errors based on data annotations in the model.
+Step 5: Identifying Unrecognized Fields
+A new list of strings, keyList, is created to store the keys of model properties that are not recognized.
+The code iterates over each key in the model state's keys. For each key, it checks if there are any errors associated with it.If an error is associated with an exception that contains the message "Could not find member '", it indicates that the model contains a field that is not recognized or expected. Such keys are added to keyList.
+Step 6: Updating Error Messages
+For each key in keyList, the code updates the first error message associated with that key in the model state to a more meaningful message: "<key> is not a recognized field." This step ensures that the error messages returned to the client are clear and helpful.
+Step 7: Generating Error Response
+If there are any validation errors (i.e., the model state is not valid), the filter generates an error response. It uses actionContext.Request.CreateErrorResponse to create an HttpResponseMessage with the status code BadRequest (HTTP 400) and includes the model state in the response. This response provides detailed information about the validation errors.
+Summary
+The ModelFilter custom action filter serves as a pre-action processing step that enhances model validation. It specifically targets scenarios where the model contains unrecognized fields, ensuring that such errors are clearly communicated back to the client. By overriding the OnActionExecuting method, it checks the model state for validity, identifies unrecognized fields, updates error messages for clarity, and generates a meaningful error response if necessary. This approach improves the robustness and usability of the API by ensuring that clients receive clear and actionable feedback on validation errors.
+Validation
+NotAllowedIf.vb
+The NotAllowedIf class in Visual Basic is a custom validation attribute designed to enforce conditional validation rules on model properties. It extends ValidationAttribute, allowing it to be used as a data annotation on model properties. Let's break down how this class works, step by step:
+Step 1: Class Definition and Members
+The class is marked as NotInheritable, meaning it cannot be inherited.
+It inherits from ValidationAttribute, making it a custom validation attribute.
+Private members _innerAttribute, _dependentProperty, and _targetValue are defined to store the internal state:
+_innerAttribute is an instance of RequiredAttribute, used to check if the value is provided when it shouldn't be.
+_dependentProperty stores the name of the property that the validation depends on.
+_targetValue is an array of objects representing the values of the dependent property that trigger the validation.
+Step 2: Constructor
+The constructor accepts a DependentProperty name and a variable number of TargetValue objects. These parameters are used to initialize _dependentProperty and _targetValue, respectively.
+Step 3: Condition Property
+The Condition property of type Status allows specifying additional conditions (e.g., whether the dependent property exists or does not exist) for the validation to be triggered.
+Step 4: IsValid Method
+The core of the class is the IsValid method, which overrides the method from ValidationAttribute.
+It first retrieves the type of the object being validated and then uses reflection to get the dependent property by name.
+An error message template is prepared, indicating that the validated property is not allowed under certain conditions.
+Step 5: Checking Conditions
+If the dependent property is found, its value is retrieved.
+The method then checks if the condition for validation (existence or non-existence of the dependent property's value, or specific values of the dependent property) is met:
+If the Condition is set to Status.Exists or Status.DoesNotExist, and the dependent property's value matches the condition, it checks if the value being validated is valid (i.e., not null or empty, since _innerAttribute is a RequiredAttribute). If it is valid, a validation error is returned.
+It iterates through _targetValue to check if the dependent property's value matches any of the specified target values. If a match is found and the value being validated is valid, a validation error is returned.
+Step 6: Returning the Result
+If none of the conditions are met, or the dependent property's value does not match any of the target values, ValidationResult.Success is returned, indicating that the validation passed.
+Summary
+The NotAllowedIf attribute provides a flexible way to enforce conditional validation based on the value of another property in the model. It can be used to prevent a property from being set under specific conditions, enhancing the robustness and integrity of data models in 
+ASP.NET
+ applications.
+RequiredIf.vb
+The RequiredIf class in Visual Basic is a custom validation attribute designed to conditionally require a property based on the value of another property. It uses the Status enum from Status.vb to define the condition under which the validation is applied. Let's break down how this class works, step by step, using Status.vb as a reference:
+Step 1: Class Definition and Members
+RequiredIf inherits from ValidationAttribute, making it a custom validation attribute that can be applied to model properties.
+It defines private members to store the dependent property name (_dependentProperty), the target values (_targetValue), and an instance of RequiredAttribute (_innerAttribute) to perform the actual required validation.
+The Condition property of type Status (from Status.vb) allows specifying the condition under which the property becomes required.
+Step 2: Constructor
+The constructor accepts a DependentProperty name and a variable number of TargetValue objects. These parameters are used to initialize _dependentProperty and _targetValue, respectively.
+Step 3: IsValid Method
+The IsValid method overrides the method from ValidationAttribute and is where the conditional validation logic is implemented.
+It first retrieves the type of the object being validated and then uses reflection to get the dependent property by name.
+The value of the dependent property is then retrieved.
+Step 4: Applying Conditions
+The method checks the Condition property against the Status enum values:
+If Condition is Status.Exists, the property is required if the dependent property's value is not Nothing.
+If Condition is Status.DoesNotExist, the property is required if the dependent property's value is Nothing.
+It also iterates through _targetValue to check if the dependent property's value matches any of the specified target values. If a match is found, the property becomes required.
+Step 5: Validation and Error Message
+If the condition for the property to be required is met, the method checks if the value is valid using _innerAttribute.IsValid(value). If the value is not valid (i.e., it is Nothing or empty for a String), a ValidationResult with an appropriate error message is returned.
+The error message is dynamically constructed based on the condition and the dependent property's value, providing clear feedback about why the validation failed.
+Step 6: Returning the Result
+If none of the conditions are met, or the value is valid when required, ValidationResult.Success is returned, indicating that the validation passed.
+Summary
+The RequiredIf attribute provides a powerful way to enforce conditional validation rules in 
+ASP.NET
+ applications. By leveraging the Status enum, it allows developers to specify complex conditions under which a property becomes required. This can be particularly useful in scenarios where the presence of a value in one property depends on the value or presence of another property, enhancing the robustness and integrity of data models.
+Models
+BillerPrincipal.vb
+Class Definition:
+BillerPrincipal inherits from GenericPrincipal, allowing it to represent a security principal (an entity that can be authenticated and authorized).
+Constructor:
+The constructor accepts an IIdentity object, an array of roles, and an optional Biller object. It calls the base class constructor with the identity and roles.
+If a newBiller object is not provided, it attempts to retrieve the biller information from the database using the API key (represented by identity.Name). This is done through a call to Database.GetBillerFromApiKey.
+The retrieved or provided Biller object is then assigned to the Biller property of the BillerPrincipal.
+Biller Property:
+This property holds the Biller object associated with the principal, containing information like the biller's ID.
+Modules
+CustomRedirectHttpModule.vb
+ Step 1: Class Definition and Interface Implementation
+The CustomRedirectHttpModule class implements the IHttpModule interface, which requires the implementation of two methods: Init and Dispose.
+Step 2: Fields and Properties
+The class may contain fields and properties to store configuration settings or other necessary data for handling redirections. These are typically initialized in the constructor or Init method. Since these are omitted, we'll focus on the core methods.
+Step 3: Init Method
+The Init method is called when the module is initialized. It receives an HttpApplication object, which provides access to the application's events.
+Subscribing to Events: The Init method subscribes to the BeginRequest event of the HttpApplication. This event is triggered at the beginning of each request, allowing the module to inspect and potentially modify the request before it is processed by the application.
+Step 4: BeginRequest Event Handler
+The event handler for the BeginRequest event is where the custom redirection logic is implemented. This method is called for each incoming request.
+Retrieve the Request URL: Access the Request object from the HttpContext to get the URL of the incoming request.
+Determine Redirection Logic: Implement logic to determine whether the request should be redirected. This could involve checking the request URL, headers, or other criteria.
+Perform Redirection: If the redirection criteria are met, modify the Response object to redirect the request to a different URL. This is usually done using the Response.Redirect method.
+Step 5: Custom Redirection Logic
+The ShouldRedirect method contains the logic to determine if a redirection is necessary based on the request URL or other criteria.
+Custom Logic: This method checks if the request URL contains a specific path or meets certain conditions that require redirection.
+Step 6: Dispose Method
+The Dispose method is called when the module is disposed of. This method is used to clean up any resources that the module has allocated. In many cases, this method may be empty if there are no resources to clean up.
+Summary
+The CustomRedirectHttpModule is an HTTP module that handles custom redirection logic for incoming requests. It works as follows:
+Initialization: The Init method subscribes to the BeginRequest event.
+Event Handling: The OnBeginRequest method is called for each request, where it retrieves the request URL and determines if redirection is needed.
+Redirection Logic: The ShouldRedirect method contains the logic to decide if a redirection should occur based on the request URL or other criteria.
+Redirection Execution: If the criteria are met, the request is redirected to a new URL.
+Resource Cleanup: The Dispose method handles any necessary cleanup when the module is disposed.
+Repositories
+Database.vb
+Step 1: Imports
+The file starts by importing necessary namespaces.
+IC.Database.Authentication:  contains classes and methods for database authentication.
+IC.ServiceProxies.Database: contains classes and methods for interacting with the database through a service proxy.
+Step 2: Class Definition
+The Database class is defined as a public class.
+Step 3: Private and Shared Members
+The class contains private and shared members.
+databaseProxy: A shared instance of DatabaseServiceProxy used to interact with the database.
+sendTimeOut: A shared string that holds the send timeout value from the application configuration.
+Step 4: Static Constructor
+The static constructor initializes the databaseProxy with necessary configurations.
+Step 4.1: Initialize DatabaseServiceProxy
+DatabaseServiceProxy is initialized with a DatabaseTokenProvider that uses the ClientId from the application configuration.
+Step 4.2: Set Default Properties
+DefaultApplicationName: Set to the product name of the application.
+DefaultDatabase: Set to DatabaseName.DBLive.
+DefaultCommandTimeout: Set to the SQL timeout period from the application configuration.
+Step 4.3: Configure Binding
+BindingConfiguration: Configures the binding to set the SendTimeout using the sendTimeOut value.
+Step 5: GET_DATASET Method
+This method retrieves a dataset based on the provided SQL query and biller ID.
+Step 5.1: Execute SQL Command
+Calls the GET_DATASET method of databaseProxy with the provided billerID and sql query.
+Returns the resulting dataset.
+Step 6: EXECUTE_COMMAND_SINGLE_RESULT Method
+This method executes a SQL command and returns a single result.
+Step 6.1: Execute SQL Command
+Calls the EXECUTE_COMMAND_SINGLE_RESULT method of databaseProxy with the provided billerID and SQL query.
+Converts the result to an integer and returns it.
+Step 7: EXECUTE_COMMAND_NONQUERY Method
+This method executes a SQL command that does not return any results.
+Step 7.1: Execute SQL Command
+Calls the EXECUTE_COMMAND_NONQUERY method of databaseProxy with the provided BillerID and SQL query.
+Returns the number of rows affected by the command.
+Step 8: SqlSafe Method
+This method sanitizes a SQL string to prevent SQL injection
+Step 8.1: Check for Null
+Checks if the sql string is Nothing. If it is, returns an empty string.
+Step 8.2: Sanitize SQL String
+Replaces single quotes (') with double single quotes ('') to prevent SQL injection.
+Returns the sanitized SQL string.
+Summary
+The Database.vb file defines a Database class that provides methods for interacting with a database using a proxy service. The key methods and their functionalities are:
+GET_DATASET: Retrieves a dataset based on the provided SQL query and biller ID.
+EXECUTE_COMMAND_SINGLE_RESULT: Executes a SQL command and returns a single result.
+EXECUTE_COMMAND_NONQUERY: Executes a SQL command that does not return any results.
+SqlSafe: Sanitizes a SQL string to prevent SQL injection.
+Database.Biller.vb
+Step 1: Class Definition
+The class is defined as a partial class named Database. The Database class is split across multiple files.
+Step 2: GetBillerFromApiKey Method
+This method retrieves a Biller object based on the provided API key. It performs several steps to achieve this.
+Step 2.1: Variable Initialization
+Several variables are initialized to store intermediate data.
+Step 2.2: Check Against Available Keys
+The method checks the provided API key against a set of predefined keys. Depending on the key, it sets the newBillerID and decryptable flag.
+Step 2.3: Decrypt API Key (if applicable)
+If the key is decryptable, it decrypts the API key to retrieve a GUID and uses it to get biller information from an Azure call.
+Step 2.4: Retrieve Application Path
+The method retrieves the application path from the Azure call results.
+Step 2.5: Load Biller Information
+The method loads the biller information using the LoadBillerByBillerID method and sets the VirtualApplicationDesc property.
+Step 2.6: Return the Biller Object
+Finally, the method returns the Biller object.
+Step 3: LoadBillerByBillerID Method
+This method retrieves a Biller object based on the provided BillerID.
+Retrieve Data: It retrieves data from the database using the GET_DATASET method.
+Check Data: It checks if the data is not Nothing and has rows.
+Convert Data: It converts the first row of the data table to a Biller object using the FromBillersDataRow method.
+Return Biller: It returns the Biller object or Nothing if no data is found.
+Step 4: FromBillersDataRow Method
+This method converts a DataRow to a Biller object.
+Create Biller: It creates a new Biller object.
+Populate Properties: It populates the properties of the Biller object from the DataRow.
+Return Biller: It returns the populated Biller object.
+Summary
+The Database.Biller.vb file contains methods to retrieve and process Biller information based on an API key. The GetBillerFromApiKey method is the main method that:
+Checks the API key against predefined keys.
+Decrypts the API key if necessary.
+Retrieves biller information from an Azure call.
+Loads additional biller information using the LoadBillerByBillerID method.
+Returns a Biller object with the retrieved information.
+Database.CloudPayments.vb
+Step 1: Class Definition
+The class is defined as a partial class named Database. This suggests that the Database class might be split across multiple files.
+Step 2: SaveCloudPaymentRequest Method
+This method saves a cloud payment request and its associated invoices.
+Step 2.1: Insert Cloud Payment Request
+Calls InsCloudPaymentRequest to insert the payment request into the database and get the requestID.
+Step 2.2: Insert Invoices
+If the PaymentRequest contains invoices, it iterates through each invoice and calls InsCloudPaymentInvoices to insert them into the database.
+Step 2.3: Return Request ID
+Returns the requestID of the inserted payment request.
+Step 3: InsCloudPaymentRequest Method
+This method inserts a cloud payment request into the database.
+Step 3.1: Build SQL String
+Constructs the SQL command string to insert the cloud payment request.
+Step 3.2: Add Customer Information
+Adds customer information to the SQL string if provided.
+Step 3.3: Add Payment Request Information
+Adds various properties of the PaymentRequest to the SQL string, including account number, customer details, settings, and other values.
+Step 3.4: Execute SQL Command
+Executes the SQL command and returns the result, which is the ID of the inserted payment request.
+Step 4: UpdCloudPaymentRequestProcessURL Method
+This method updates the process URL of a cloud payment request.
+Step 4.1: Build SQL String
+Constructs the SQL command string to update the process URL of the cloud payment request.
+Step 4.2: Execute SQL Command
+Executes the SQL command and returns the result, which indicates the success of the operation.
+Step 5: InsCloudPaymentInvoices Method
+This method inserts invoices associated with a cloud payment request.
+Step 5.1: Build SQL String
+Constructs the SQL command string to insert an invoice associated with the cloud payment request.
+Step 5.2: Add Invoice Information
+Adds various properties of the Invoice to the SQL string, including invoice ID, number, type, dates, and balance due.
+Step 5.3: Execute SQL Command
+Executes the SQL command and returns the result, which indicates the success of the operation.
+Summary
+The Database.CloudPayment.vb file contains methods to handle cloud payment requests and related operations. The key methods are:
+SaveCloudPaymentRequest: Saves a cloud payment request and its associated invoices.
+InsCloudPaymentRequest: Inserts a cloud payment request into the database.
+UpdCloudPaymentRequestProcessURL: Updates the process URL of a cloud payment request.
+InsCloudPaymentInvoices: Inserts invoices associated with a cloud payment request.
+Database.CloudPaymentV2.vb
+Step 1: Class Definition
+The class is defined as a partial class named Database. This suggests that the Database class might be split across multiple files.
+Step 2: SaveCloudPaymentRequestV2 Method
+This method saves a cloud payment request and its associated customers and invoices.
+Step 2.1: Insert Cloud Payment Request
+Calls InsCloudPaymentRequestV2 to insert the payment request into the database and get the requestId.
+Step 2.2: Insert Customers and Invoices
+Iterates through each customer in the paymentRequest.Customers list.
+Calls InsCloudPaymentCustomerV2 to insert each customer into the database.
+If the customer has invoices, it iterates through each invoice and calls InsCloudPaymentInvoiceV2 to insert them into the database.
+Step 2.3: Return Request ID
+Returns the requestId of the inserted payment request.
+Step 3: InsCloudPaymentRequestV2 Method
+This method inserts a cloud payment request into the database.
+Step 3.1: Build SQL String
+Constructs the SQL command string to insert the cloud payment request.
+Step 3.2: Add Payment Request Information
+Adds various properties of the paymentRequest to the SQL string, including settings, values, and page result options.
+Step 3.3: Execute SQL Command
+Executes the SQL command and returns the result, which is the ID of the inserted payment request.
+Step 4: InsCloudPaymentInvoiceV2 Method
+This method inserts invoices associated with a cloud payment request.
+Step 4.1: Build SQL String
+Constructs the SQL command string to insert an invoice associated with the cloud payment request.
+Step 4.2: Add Invoice Information
+Adds various properties of the InvoiceV2 to the SQL string, including invoice ID, number, type, dates, balance due, and other payment-related details.
+Step 4.3: Execute SQL Command
+Executes the SQL command to insert the invoice into the database.
+Step 5: InsCloudPaymentCustomerV2 Method
+This method inserts customers associated with a cloud payment request.
+Step 5.1: Build SQL String
+Constructs the SQL command string to insert a customer associated with the cloud payment request.
+Step 5.2: Add Customer Information
+Adds various properties of the CustomerV2 to the SQL string, including customer ID, account number, name, address, and other contact details.
+Step 5.3: Execute SQL Command
+Executes the SQL command to insert the customer into the database.
+Summary
+The Database.CloudPaymentV2.vb file contains methods to handle cloud payment requests and related operations for version 2 of the cloud payment system. The key methods are:
+SaveCloudPaymentRequestV2: Saves a cloud payment request and its associated customers and invoices.
+InsCloudPaymentRequestV2: Inserts a cloud payment request into the database.
+InsCloudPaymentInvoiceV2: Inserts invoices associated with a cloud payment request.
+InsCloudPaymentCustomerV2: Inserts customers associated with a cloud payment request.
+ Database.Customer.vb
+Step 1: Class Definition
+The class is defined as a partial class named Database. This suggests that the Database class might be split across multiple files.
+Step 2: GetCustomerIDFromAccountNumber Method
+This method retrieves a customer ID based on the provided account number and biller ID.
+Step 2.1: Build SQL String
+Constructs the SQL command string to select customers based on the account number.
+Step 2.2: Execute SQL Command
+Executes the SQL command using the GET_DATASET function, which returns a dataset. The dataset is expected to have a table at index 0.
+Step 2.3: Check for Results
+Checks if the first row of the dataset table is Nothing. If it is, the method returns 0, indicating that no customer was found.
+Step 2.4: Return Customer ID
+If a customer is found, the method returns the CustomerID from the first row of the dataset table.
+Step 3: CreateCustomerRecord Method
+This method creates a new customer record in the database.
+Step 3.1: Initialize Parameter List
+Initializes a list of strings to hold the parameters for the SQL command.
+Step 3.2: Add Parameters to List
+Adds various parameters to the list, including BillerID, Active, AccountNumber, CustomerName, Address1, City, State, Zip, and EmailAddress.
+If displayAccountNumber is not empty or whitespace, it adds the DisplayAccountNumber parameter to the list.
+Step 3.3: Build SQL String
+Constructs the SQL command string to insert a new customer using the parameters in the list.
+Step 3.4: Execute SQL Command
+Executes the SQL command using the EXECUTE_COMMAND_SINGLE_RESULT function, which returns the result of the command. This result is expected to be the newly created CustomerID.
+Step 3.5: Return Customer ID
+Converts the result to an integer and returns it as the newly created CustomerID.
+Summary
+The Database.Customer.vb file contains methods to handle customer-related operations. The key methods are:
+GetCustomerIDFromAccountNumber: Retrieves a customer ID based on the provided account number and biller ID.
+CreateCustomerRecord: Creates a new customer record in the database.
+ Database.Invoice.vb
+Step 1: Class Definition
+The class is defined as a partial class named Database. This suggests that the Database class might be split across multiple files
+Step 2: GetInvoice Method
+This method retrieves an invoice based on the provided invoice number and biller ID.
+Step 2.1: Execute SQL Command
+Calls the SelInvoices method to get a dataset of invoices filtered by BillerID and InvoiceNumber.
+Step 2.2: Check for Results
+Checks if the first row of the dataset table is Nothing. If it is, the method returns Nothing, indicating that no invoice was found.
+Step 2.3: Return Invoice
+If an invoice is found, the method converts the first row of the dataset table to an InvoiceBase object using the FromInvoiceDataRow method and returns it.
+Step 3: GetInvoiceFromCustomerID Method
+This method retrieves an invoice based on the provided customer ID and biller ID.
+Step 3.1: Execute SQL Command
+Calls the SelInvoices method to get a dataset of invoices filtered by BillerID and CustomerID.
+Step 3.2: Check for Results
+Checks if the first row of the dataset table is Nothing. If it is, the method returns Nothing, indicating that no invoice was found.
+Step 3.3: Return Invoice
+If an invoice is found, the method converts the first row of the dataset table to an Invoice object using the FromInvoiceDataRow method and returns it.
+Step 4: SelInvoices Method
+This method retrieves a dataset of invoices based on various optional parameters.
+Step 4.1: Build SQL String
+Constructs the SQL command string to select invoices based on the provided parameters (BillerID, InvoiceID, InvoiceNumber, and CustomerID).
+Step 4.2: Execute SQL Command
+Executes the SQL command using the GET_DATASET function, which returns a dataset.
+Step 5: CreateInvoice Method
+This method creates a new invoice in the database.
+Step 5.1: Retrieve Customizations
+Retrieves customizations for the biller and invoice type using the GET_DATASET function.
+Step 5.2: Check for Customizations
+Checks if there are any customizations. If there are, it processes the customizations; otherwise, it proceeds with standard invoice creation.
+Step 5.3: Customization Logic
+If customizations are found, it processes the customizations and creates the invoice accordingly.
+Step 5.4: Standard Invoice Creation Logic
+If no customizations are found, it constructs the SQL command string to insert a new invoice using the provided parameters and executes the command.
+Step 6: isValidInvoiceTypeID Method
+This method checks if a given invoice type ID is valid for a biller.
+Step 6.1: Execute SQL Command
+Executes the SQL command to select the biller invoice set based on the TypeID.
+Step 6.2: Check for Results
+Checks if any rows are returned. If rows are found, the method returns True, indicating that the invoice type ID is valid; otherwise, it returns False.
+Step 7: GetValueForInvoiceTypeSetting Method
+This method retrieves the value for a specific invoice type setting.
+Step 7.1: Build SQL String
+Constructs the SQL command string to select the invoice type settings based on the provided parameters.
+Step 7.2: Execute SQL Command
+Executes the SQL command using the GET_DATASET function, which returns a dataset.
+Step 7.3: Check for Results
+Checks if any rows are returned. If rows are found, the method returns the value of the setting; otherwise, it returns an empty string.
+Step 8: FromInvoiceDataRow Method
+This method converts a DataRow to an Invoice object.
+Step 8.1: Initialize Invoice Object
+Initializes a new Invoice object.
+Step 8.2: Populate Invoice Object
+Populates the Invoice object with data from the DataRow.
+Step 8.3: Return Invoice Object
+Returns the populated Invoice object.
+Step 9: InsertSingleInvoice Method
+This method inserts a single invoice into the database.
+Step 9.1: Initialize Parameters
+Initializes a list of parameters for the SQL command using the GetBaseInsertInvoiceSQL method.
+Step 9.2: Add Additional Parameters
+Adds additional parameters to the list based on the IH_Record.
+Step 9.3: Execute SQL Command
+Executes the SQL command to insert the invoice and retrieves the newly created InvoiceID.
+Step 9.4: Return Invoice ID
+Returns the InvoiceID if the insertion is successful; otherwise, returns Nothing.
+Step 10: GetBaseInsertInvoiceSQL Method
+This method constructs the base SQL command string for inserting an invoice.
+Step 10.1: Initialize Parameter List
+Initializes a list of parameters for the SQL command.
+Step 10.2: Add Parameters to List
+Adds various parameters to the list, including FileID, InvoiceGUID, BillerID, CustomerID, InvoiceTypeID, RecordType, InvoiceFormatID, InvoiceNumber, InvoiceDate, InvoiceDueDate, AutoPayCollectionDate, TotalAmountDue, TotalTaxAmount, BalanceDue, InitialBalanceDue, and Active.
+Step 10.3: Return Parameter List
+Returns the list of parameters.
+Step 11: ParseOutIHRecord Method
+This method extracts a specific value from the IH_Record string based on the provided index.
+Step 11.1: Find Index
+Finds the index of the specified IHIdx in the IH_Record string.
+Step 11.2: Extract Value
+Extracts the value from the IH_Record string based on the found index and returns it.
+Summary
+The Database.Invoice.vb file contains methods to handle invoice-related operations. The key methods are:
+GetInvoice: Retrieves an invoice based on the provided invoice number and biller ID.
+GetInvoiceFromCustomerID: Retrieves an invoice based on the provided customer ID and biller ID.
+SelInvoices: Retrieves a dataset of invoices based on various optional parameters.
+CreateInvoice: Creates a new invoice in the database.
+isValidInvoiceTypeID: Checks if a given invoice type ID is valid for a biller.
+GetValueForInvoiceTypeSetting: Retrieves the value for a specific invoice type setting.
+FromInvoiceDataRow: Converts a DataRow to an Invoice object.
+InsertSingleInvoice: Inserts a single invoice into the database.
+GetBaseInsertInvoiceSQL: Constructs the base SQL command string for inserting an invoice.
+ParseOutIHRecord: Extracts a specific value from the IH_Record string based on the provided index.
+ URL:/spaces/ED/pages/3283583199/Cloud+Payments+API+ICCloudPaymentsAPI

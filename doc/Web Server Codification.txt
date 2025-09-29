@@ -1,0 +1,52 @@
+Outcome 
+We’re going with 
+Packer Base Image + Ansible
+. 
+Rationale
+We will need to build the base image for any potential solution. We will also need Ansible in place to configure and patch existing servers even if we choose 
+Server-as-a-Container
+ for web servers, as we have >200 apps on our Skybot servers and cannot feasibly containerize all of them as a single package. Completing the 
+Packer Base Image + Ansible
+ option gives us these capabilities. From there, if we want to evolve to use 
+Server-as-a-Container
+, nothing would stop up, although we’d need to reduce our release frequency to be able to manage that effectively. 
+Packer Base Image + Ansible
+ is a great first goal: it’s not 
+too
+ different from what we have today, but still takes a great step forward in the right direction from a platform perspective. 
+Options Considered
+Server-as-a-Container – full buildout with Packer; new image deployed every release cycle
+Build a new VM image each release cycle. We’d tag each web service repo and specify which versions of the apps to include in the final image.
+Most immutable option, but likely to cause issues in testing due to build time required to rebuild full server
+Would need more testing in lower environments, where you could deploy apps directly without an image rebuild
+could work toward this, but would need to decrease release cadence - once a week at most, ideally once every other week aka once per sprint
+There is no differentiation between application release and Sunday maintenance – in both cases, the deployment is a scale set upgrade to use the new image version. We should no longer need to do any web server updates during Sunday maintenance and can reserve those maintenance times for other work, i.e. major network updates
+We would still need to be able to deploy directly to the servers in lower environments to reduce cycle time for testing. In higher environments, we’d only want to deploy complete images.
+Issues to overcome:
+toil time in regression if an issue is found in testing
+C drive will be blown away every deployment. Will need to update a few apps to make this ok
+App Image Build: (build on top of base image from 
+Packer Base Image + Ansible
+ option)
+Use Packer + Powershell to create deployment candidate web server image
+built on top of base image, including all 26 web apps preinstalled in their current iteration
+builds new for each release and/or patch
+updated for maintenance AND for app releases
+Packer Base Server + Ansible
+App deployments don’t work any differently than they do today
+Only for building new servers – once deployed, server is patched and managed with Ansible only. No manual tinkering
+Could do blue/green deployments for big updates where we want to change server image. Would be pretty large effort & risk
+Base Image Build:
+Use Packer + Powershell to create base web server image
+includes enabling IIS and other Windows features, installing dotnet, new relic agent, security agent, etc
+builds new for each patch (updated for maintenance)
+Golden Image from Running Server
+Builds on the 
+Packer Base Image + Ansible
+ option. Once the final images are running, including all the web applications, we could sysprep one and use it to create a new golden image that could be used to quickly spin up new servers.
+Other Notes
+need to move to server 2025 (latest version) as part of this effort (2016 is almost EOL)
+some post-provisioning steps will be required with any solution, i.e.
+ADDS domain join
+setting time zone
+ URL:/spaces/platform/pages/3785195538/Web+Server+Codification

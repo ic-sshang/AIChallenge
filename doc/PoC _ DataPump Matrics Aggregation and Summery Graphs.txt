@@ -1,0 +1,484 @@
+This document provides a detailed explanation of the data aggregation process in the DataPump System. It outlines the structure of the database, the metrics generated, and the aggregation logic. New Enhanced DataPump system that logs API response metrics and visualizes them through aggregated matrices. It features a sharded SQL Server database, a multi-layer .NET Core application, and a Blazor WebAssembly front-end with ChartJS library to visualise the graphs
+🧱 Architecture
+✅ Tech Stack
+Frontend:
+ Blazor WebAssembly + Chart.js
+Backend:
+ .NET Core Web API
+Database:
+ SQL Server with sharded customer databases and a master shard
+Data Access:
+ EF Core Repository Pattern
+🧩 Layered Design
+Layer
+Description
+API
+Hosts all HTTP endpoints via Controllers
+DAL
+Manages database access logic (DbContext + Repositories)
+Models
+Contains shared POCOs used in both API and UI
+UI
+Developed using Blazor WebAssembly; renders charts from aggregated metrics
+🧾 Database Design
+👑Master Shard: 
+MasterShard
+Stores metadata about customer shards.
+Column
+Description
+BillerId
+Unique ID for each customer
+BillerName
+Name of the customer
+ShardId
+Database name (e.g., Shard1,Shard2)
+👨🏻‍💼Customer Shards: 
+Shard1
+ to 
+Shard50
+Each contains the following tables:
+1. 
+DataPumpDetails
+Stores individual API call logs.
+Column
+Type
+Description
+DataPumpID
+INT
+ (PK)
+Unique log entry ID
+Success
+BIT
+1 if success, 0 if failure
+DateRecAdded
+DATETIME
+Time of request
+ResponseTime
+DECIMAL(18,2)
+Response duration in milliseconds
+ResponseCode
+INT
+HTTP status code
+2. 
+TimeThresholds
+Defines time intervals for aggregations (e.g., 15 min, daily, etc.)
+Column
+Type
+Description
+TimeStampTypeID
+INT
+ (PK)
+ID for time interval
+TypeName
+VARCHAR(50)
+Name like 'ASAP', 'Daily' etc.
+IntervalMinutes
+INT
+Interval in minutes
+Description
+VARCHAR(255)
+Human-readable interval info
+Sample Data Inserted:
+ASAP = 15 min
+Hourly = 60 min
+Daily = 1440 min
+Weekly = 10080 min
+3. 
+DataPumpMetrics
+Aggregated API metrics.
+Column
+Type
+Description
+DataPumpMetricsID
+INT
+ (PK)
+Primary Key
+TimeStampTypeID
+INT
+ (FK)
+Linked to 
+TimeThresholds
+StartDate
+DATETIME
+Aggregation period start
+EndDate
+DATETIME
+Aggregation period end
+RequestCount
+INT
+Number of requests
+SuccessCount
+INT
+Number of successful requests
+ErrorCount
+INT
+Number of failed requests
+ErrorRate
+DECIMAL(18,2)
+Failure rate (%)
+TimeoutCount
+INT
+Requests that timed out
+TimeoutRate
+DECIMAL(18,2)
+Timeout rate (%)
+TotalResponseTime
+DECIMAL(18,2)
+Cumulative response time
+AverageResponseTime
+DECIMAL(18,2)
+Avg. response time per request
+CreatedDate
+DATETIME
+Record creation timestamp
+🧮Data Aggregation Process
+Aggregation Pipeline
+•	Interval: Every 15 minutes.
+Metrics:
+•	Total requests (RequestCount).
+•	Successful requests (SuccessCount).
+•	Failed requests (ErrorCount).
+•	Error rate (ErrorRate).
+•	Timeout requests (TimeoutCount).
+•	Timeout rate (TimeoutRate).
+•	Total and average response times.
+ 2. Every 
+15 minutes
+, a batch is inserted with 
+TimeStampTypeID = 1
+.
+At the end of every 
+hour
+, a batch is inserted with 
+TimeStampTypeID = 2
+ that aggregates the last 4 × 15-minute intervals.
+At the end of every 
+day
+, a batch is inserted with 
+TimeStampTypeID = 3
+ based on the 24 hourly aggregates.
+At the end of every 
+week
+, a batch is inserted with 
+TimeStampTypeID = 4
+ based on 7 daily aggregates.
+SQL Job Script
+     This Query should reside in Biller Shard as an StoredProcedure.
+sql
+-- This script should be scheduled to run every 15 minutes
+SET NOCOUNT ON;
+
+-- IMPORTANT: All variables must be declared at the beginning of their batch
+DECLARE @windowEnd   DATETIME = GETDATE();
+DECLARE @windowStart DATETIME = DATEADD(MINUTE, -15, @windowEnd);
+DECLARE @hStart DATETIME;
+DECLARE @hEnd DATETIME;
+DECLARE @dStart DATE;
+DECLARE @dEnd DATETIME;
+DECLARE @wEnd DATE;
+DECLARE @wStart DATETIME;
+DECLARE @recordCount INT;
+
+-- Round down to the nearest 15-minute boundary for clean intervals
+SET @windowStart = DATEADD(MINUTE, DATEDIFF(MINUTE, 0, @windowStart) / 15 * 15, 0);
+SET @windowEnd = DATEADD(MINUTE, 15, @windowStart);
+
+PRINT 'Processing window: ' + CONVERT(VARCHAR, @windowStart, 120) + ' to ' + CONVERT(VARCHAR, @windowEnd, 120);
+
+-- Check if there are any records in the current window
+SELECT @recordCount = COUNT(*) 
+FROM dbo.DataPumpDetails dp
+WHERE dp.DateRecAdded >= @windowStart
+  AND dp.DateRecAdded < @windowEnd;
+
+-- 2) Insert 15-minute aggregate (TypeID = 1)
+INSERT INTO dbo.DataPumpMetrics
+(
+    TimeStampTypeID, StartDate, EndDate,
+    RequestCount, SuccessCount, ErrorCount, ErrorRate,
+    TimeoutCount, TimeoutRate,
+    TotalResponseTime, AverageResponseTime,
+    CreatedDate
+)
+SELECT
+    1,                  -- 15-min batch
+    @windowStart,
+    @windowEnd,
+    CASE WHEN @recordCount = 0 THEN 0 ELSE COUNT(dp.DateRecAdded) END,
+    CASE WHEN @recordCount = 0 THEN 0 ELSE SUM(CASE WHEN dp.Success = 1 THEN 1 ELSE 0 END) END, -- SuccessCount
+    CASE WHEN @recordCount = 0 THEN 0 ELSE SUM(CASE WHEN dp.Success = 0 THEN 1 ELSE 0 END) END,
+    CASE WHEN @recordCount = 0 THEN 0.00
+         WHEN COUNT(dp.DateRecAdded) = 0 THEN 0.00
+         ELSE CAST(SUM(CASE WHEN dp.Success = 0 THEN 1 ELSE 0 END) * 100.0 / COUNT(dp.DateRecAdded) AS DECIMAL(18,2))
+    END,
+    CASE WHEN @recordCount = 0 THEN 0 ELSE SUM(CASE WHEN dp.ResponseCode = 408 THEN 1 ELSE 0 END) END,
+    CASE WHEN @recordCount = 0 THEN 0.00
+         WHEN COUNT(dp.DateRecAdded) = 0 THEN 0.00
+         ELSE CAST(SUM(CASE WHEN dp.ResponseCode = 408 THEN 1 ELSE 0 END) * 100.0 / COUNT(dp.DateRecAdded) AS DECIMAL(18,2))
+    END,
+    CASE WHEN @recordCount = 0 THEN 0 ELSE SUM(CASE WHEN dp.Success = 1 THEN dp.ResponseTime ELSE 0 END) END,
+    CASE WHEN @recordCount = 0 THEN 0.00
+         WHEN SUM(CASE WHEN dp.Success = 1 THEN 1 ELSE 0 END) = 0 THEN 0.00
+         ELSE CAST(
+           SUM(CASE WHEN dp.Success = 1 THEN dp.ResponseTime ELSE 0 END) * 1.0
+           / SUM(CASE WHEN dp.Success = 1 THEN 1 ELSE 0 END)
+           AS DECIMAL(18,2))
+    END,
+    GETDATE()
+FROM dbo.DataPumpDetails dp
+WHERE dp.DateRecAdded >= @windowStart
+  AND dp.DateRecAdded < @windowEnd;
+
+
+-- 3) Check if we're at an hour boundary - if so, insert hourly aggregate (TypeID = 2)
+IF DATEPART(MINUTE, @windowEnd) = 0
+BEGIN
+    SET @hStart = DATEADD(HOUR, DATEDIFF(HOUR, 0, @windowEnd) - 1, 0);
+    SET @hEnd = DATEADD(HOUR, 1, @hStart);
+    
+    PRINT 'Processing hourly window: ' + CONVERT(VARCHAR, @hStart, 120) + ' to ' + CONVERT(VARCHAR, @hEnd, 120);
+    
+    -- Check if there are any records for this hour
+    SELECT @recordCount = COUNT(*) 
+    FROM dbo.DataPumpMetrics
+    WHERE TimeStampTypeID = 1
+      AND StartDate >= @hStart
+      AND EndDate <= @hEnd;
+    
+    IF @recordCount > 0
+    BEGIN
+        INSERT INTO dbo.DataPumpMetrics
+        (
+            TimeStampTypeID, StartDate, EndDate,
+            RequestCount, SuccessCount, ErrorCount, ErrorRate,
+            TimeoutCount, TimeoutRate,
+            TotalResponseTime, AverageResponseTime,
+            CreatedDate
+        )
+        SELECT
+            2, @hStart, @hEnd,
+            SUM(RequestCount),
+            SUM(SuccessCount), -- SuccessCount
+            SUM(ErrorCount),
+            CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                 ELSE CAST(SUM(ErrorCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+            END,
+            SUM(TimeoutCount),
+            CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                 ELSE CAST(SUM(TimeoutCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+            END,
+            SUM(TotalResponseTime),
+            CASE WHEN SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) = 0 THEN 0.00
+                 ELSE CAST(SUM(TotalResponseTime) * 1.0 / SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) AS DECIMAL(18,2))
+            END,
+            GETDATE()
+        FROM dbo.DataPumpMetrics
+        WHERE TimeStampTypeID = 1
+          AND StartDate >= @hStart
+          AND EndDate <= @hEnd;
+    END
+    ELSE
+    BEGIN
+        -- Insert zeros if no records found
+        INSERT INTO dbo.DataPumpMetrics
+        (
+            TimeStampTypeID, StartDate, EndDate,
+            RequestCount, SuccessCount, ErrorCount, ErrorRate,
+            TimeoutCount, TimeoutRate,
+            TotalResponseTime, AverageResponseTime,
+            CreatedDate
+        )
+        VALUES
+        (
+            2, @hStart, @hEnd,
+            0, 0, 0, 0.00,
+            0, 0.00,
+            0, 0.00,
+            GETDATE()
+        );
+    END;
+
+    -- 4) Check if we're at a day boundary - if so, insert daily aggregate (TypeID = 3)
+    IF DATEPART(HOUR, @windowEnd) = 0
+    BEGIN
+        SET @dStart = CAST(DATEADD(DAY, -1, @windowEnd) AS DATE);
+        SET @dEnd = DATEADD(DAY, 1, @dStart);
+        
+        PRINT 'Processing daily window: ' + CONVERT(VARCHAR, @dStart, 120) + ' to ' + CONVERT(VARCHAR, @dEnd, 120);
+        
+        -- Insert daily aggregate
+        INSERT INTO dbo.DataPumpMetrics
+        (
+            TimeStampTypeID, StartDate, EndDate,
+            RequestCount, SuccessCount, ErrorCount, ErrorRate,
+            TimeoutCount, TimeoutRate,
+            TotalResponseTime, AverageResponseTime,
+            CreatedDate
+        )
+        SELECT
+            3, @dStart, @dEnd,
+            SUM(RequestCount),
+            SUM(SuccessCount), -- SuccessCount
+            SUM(ErrorCount),
+            CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                 ELSE CAST(SUM(ErrorCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+            END,
+            SUM(TimeoutCount),
+            CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                 ELSE CAST(SUM(TimeoutCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+            END,
+            SUM(TotalResponseTime),
+            CASE WHEN SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) = 0 THEN 0.00
+                 ELSE CAST(SUM(TotalResponseTime) * 1.0 / SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) AS DECIMAL(18,2))
+            END,
+            GETDATE()
+        FROM dbo.DataPumpMetrics
+        WHERE TimeStampTypeID = 2
+          AND StartDate >= @dStart
+          AND EndDate < @dEnd;
+
+        -- 5) Check if we're at a week boundary - if so, insert weekly aggregate (TypeID = 4)
+        IF DATEPART(WEEKDAY, @windowEnd) = 1  -- Sunday (assuming default DATEFIRST setting)
+        BEGIN
+            SET @wEnd = CAST(@windowEnd AS DATE);
+            SET @wStart = DATEADD(DAY, -7, @wEnd);
+            
+            PRINT 'Processing weekly window: ' + CONVERT(VARCHAR, @wStart, 120) + ' to ' + CONVERT(VARCHAR, @wEnd, 120);
+            
+            -- Insert weekly aggregate
+            INSERT INTO dbo.DataPumpMetrics
+            (
+                TimeStampTypeID, StartDate, EndDate,
+                RequestCount, SuccessCount, ErrorCount, ErrorRate,
+                TimeoutCount, TimeoutRate,
+                TotalResponseTime, AverageResponseTime,
+                CreatedDate
+            )
+            SELECT
+                4, @wStart, @wEnd,
+                SUM(RequestCount),
+                SUM(SuccessCount), -- SuccessCount
+                SUM(ErrorCount),
+                CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                     ELSE CAST(SUM(ErrorCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+                END,
+                SUM(TimeoutCount),
+                CASE WHEN SUM(RequestCount) = 0 THEN 0.00
+                     ELSE CAST(SUM(TimeoutCount) * 100.0 / SUM(RequestCount) AS DECIMAL(18,2))
+                END,
+                SUM(TotalResponseTime),
+                CASE WHEN SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) = 0 THEN 0.00
+                     ELSE CAST(SUM(TotalResponseTime) * 1.0 / SUM(CASE WHEN ErrorCount < RequestCount THEN RequestCount - ErrorCount ELSE 0 END) AS DECIMAL(18,2))
+                END,
+                GETDATE()
+            FROM dbo.DataPumpMetrics
+            WHERE TimeStampTypeID = 3
+              AND StartDate >= @wStart
+              AND EndDate <= @wEnd;
+        END;
+    END;
+END;
+
+🔁 Data Flow
+API Layer
+ reads shard metadata from 
+MasterShard
+.
+DAL Layer
+ dynamically connects to appropriate shard based on the customer ID.
+Aggregation jobs run periodically (via SQL Server Agent Jobs or background service).
+Aggregated data is exposed via API endpoints.
+Blazor UI
+ consumes these APIs and displays metrics using Chart.js.
+🖼️Integration with Blazor Dashboard Frontend
+The Blazor dashboard will use JavaScript functions (e.g., renderCharts) to render charts for each metric.
+Charts will be displayed using Chart.js.
+🗄️Integration with .NET Core Backend
+The backend will expose APIs to fetch aggregated metrics from the DataPumpMetrics table.
+🛠️SQL Job Configuration
+The SQL job will run every 15 minutes to aggregate data.
+Ensure the SQL Server Agent is configured to execute the script.
+📈Graphs and Visualizations
+Average Response Time
+•	Description: Line chart showing the average response time over time.
+Error Rate
+•	Description: Line chart showing the error rate over time.
+Timeout Count
+•	Description: Line chart showing the number of timeouts over time.
+Request Count
+•	Description: Line chart showing the total number of requests over time.
+✅ Step-by-Step: Create SQL Job in SQL Server Management Studio (SSMS)
+Open SSMS and Connect to your SQL Server
+Enable SQL Server Agent (if not already running)
+In Object Explorer, look for 
+SQL Server Agent
+ at the bottom.
+If it’s stopped (red icon), right-click it and select 
+Start
+.
+Create a New Job
+Right-click 
+SQL Server Agent
+ → 
+New Job…
+In the New Job window:
+Name
+: DataPump Aggregation Job
+Description
+ 
+(optional)
+: Aggregates 15-min, hourly, daily, weekly metrics for DataPump.
+Add Job Step
+Go to the 
+Steps
+ tab → Click 
+New…
+In the New Job Step window:
+Step name
+: Run Aggregation
+Type
+: Transact-SQL script (T-SQL)
+Database
+: Select your 
+master
+ or default DB (we are dynamically switching to shards inside the script)
+Command
+: Paste the full script I gave you in the previous message.
+Click 
+OK
+Schedule the Job
+Go to the 
+Schedules
+ tab → Click 
+New…
+In the New Job Schedule window:
+Name
+: Every 15 Minutes
+Schedule type
+: Recurring
+Frequency
+:
+Occurs
+: Daily
+Occurs every
+: 15 minutes
+Start time
+: 00:00:00
+Click 
+OK
+Alerts and Notifications (optional)
+Set up alerts or email notifications if the job fails.
+Save the Job
+Click 
+OK
+ on the Job window to save everything.
+🧪 Test the Job
+Right-click the job in 
+SQL Server Agent → Jobs
+Choose 
+Start Job at Step…
+Verify that it runs and data is inserted into DataPumpResponseTimeAggregation.
+📅 Future Enhancements
+Expand metric types (e.g., error rates)
+Alerting system on threshold breaches
+ URL:/spaces/PE/pages/4294443032/PoC+DataPump+Matrics+Aggregation+and+Summery+Graphs

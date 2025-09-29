@@ -1,0 +1,112 @@
+Settlement details come in from DSDR
++ Payment Amount
+Sales record. Sales and Credit records are both Payment records in our system, therefore when funding we net the volumes out. 
+Ledger Details tied to payment and settlement
+PaymentID
+SettlementDetailID
+- Credit Amount
+Credit Payments are tied to Sale Payments by 
+RefPaymentID
+.
+Ledger Details tied to payment and settlement
+PaymentID
+SettlementDetailID
+- Reject Amount
+Ledger Details tied to payment, settlement, and reject
+PaymentID
+SettlementDetailID
+ACHRejectID
+- Dispute Amount
+Ledger Details tied to payment, settlement, and reject
+PaymentID
+SettlementDetailID
+ChargebackDisputeID
+Funding Batches                         
+- Funding Batch (Principal Amount) 
+FundingAmount = SalesVolume - CreditVolume
+Notes 1
+Green
+ Assuming that the customer got a full refund we net out the full amount on the biller’s funding batch, therefore the fee refund comes from the biller.
+CURRENT ISSUE
+Red
+ According to discussions this doesn’t work with billers that keep the fee, there were talks about this and it seemed to seize.
+Each Sales and Credit record in the ledger will be canceled out by inserting a ledger detail after funding the biller. 
+For each sales/credit record add a ledger detail tying the original payment with its corresponding funding batch and the negation of the original ledger detail amount.
+PaymentID
+FundingBatchID
+- Sale Principal Amount
++ Credit Amount
+Gross - Repay Mode ID 1
+Only 
+FundingAmount = SalesVolume - CreditVolume
+NET - Repay Mode ID 2
+FundingAmount = SalesVolume - CreditVolume - (RejectAmounts + DisputeAmounts)
++ Dispute Amount
++ Reject Amount
+ 
+Notes 2
+Green
+ Same as in  
+Notes 1
+Green
+, assuming that the full payment amount is being reversed,  therefore reversing the fee comes from the biller.
+- Funding Fee Batch (Fee Amount)
+Debit the biller the sum of all fee records for the current funding fee batch.
+Funding Batch is for fees if 
+ServiceFeeBatch = 1
+Ledger Details tied to payment, funding fee batch, and negative amount of the original payments convenience fee
+PaymentID
+FundingBatchID
+Chargeback Dispute Process
+Gross - Repay Mode ID 1
+spMarkDisputeFunding
++Fee Amount
+Only if payment has a convenience fee.
+- Fee Amount 
+(Subscriber's Terminal)
+ 
+Only if payment has a convenience fee.
++ Sum of Principal Amount for all disputes processed
+spVerifyDisputeFunding 
+The when the bit parameter 
+SubtractConvFee
+ is set to 1, the total amount to debit the biller get deducted all fees tied to the dispute’s payments. By default it’s 1, and in code when never set it so we always deduct the fees. 
+This comes from DSDR, during the chargeback process job we made an ACH Sale to debit the biller into our account (Subscriber's Terminal). The payment will be recorded as made to our terminal but when we pick it up from the DSDR, the settlement detail gets recorded as a sales record on the biller's ledger. 
+Failed Recovery Payment
+ 
+The chargeback record should be updated with the latest successful Recovery Payment data. If the Recovery Payment were rejected, the chargeback record would be reset and no longer be tied to it. The ACH Reject record coming in will be tied to the failed Recovery Payment and tied to the Subscriber’s Terminal. 
+ 
+Current Issue
+Red
+ Currently the ACH Rejects from the failed Recovery Payment are not updating to tie the latest ACH Reject to the latest Recovery Payment after retrying to process the dispute. 
+BRAIN-1496
+DS-5293
+Notes
+Green
+ Currently only the sales record coming from the DSDR and tied to some Recovery Payment and internal terminal are being flipped to get recorded on the biller’s ledger. Ross has proposed that when we get a returns record from DSDR and the record is tied to the internal terminal then we should also flip the record to go to the biller’s ledger, this will address the issue of rejects getting recorded on the internal terminal’s ledger instead of the biller’s ledger, and thus would cancel out properly with the next recovery attempt. 
+Also, when we try to recover the dispute payment again, the biller’s ledger gets updated all over again as usual, so we need to stop it from updating the ledger again with fee data when marking the dispute as funded again, 
+spMarkDisputeFunding
+. This is because we’re only debiting the biller for the principal amount, so the reject of the recovery payment will be that of the principal amount. At the same time, we should be able to mark the reject of the recovery payment as recovered, this could happen in 
+spMarkDisputeFunding
+.
+NET - Repay Mode ID 2
+spMarkDisputeFundingByID
+ 
++ Dispute Amount
+This stored proc sets the payment ID to -1 on the ledger detail when netting out the amount from the amount being funded. 
+ 
+Current Issue
+Red
+ 
+Look into
+Yellow
+ By netting out the full dispute amount (principal + convenience fee) the billers end up paying the fee. Currently, the only terminal on repay mode NET is 3445, and the payments do not have fees. Fees are handled differently for Biller 1176.
++Fee Amount
+Only if payment has a convenience fee.
+- Fee Amount 
+(Subscriber's Terminal)
+ 
+Only if payment has a convenience fee.
+Jira items 
+https://invoicecloud.atlassian.net/issues/?jql=text%20~%20%22DS-5293*%22%20or%20summary%20~%20%22DS-5293*%22%20or%20key%20=%20DS-5293%20ORDER%20BY%20created%20DESC
+ URL:/spaces/ED/pages/2960326699/ICG+Ledgers

@@ -1,0 +1,33 @@
+Proposed solution
+Turn off Arlington Website on the MCC Server IIS.
+Add Load Balancer in front of the 2 MCC Servers.
+Ensure Routing to send traffic thru Firewall from IC Web Servers to the MCC Load Balancer from Step 2.
+Change this to only Internal traffic via HOST file entries on the IC Web Servers for Non-Standard Port and go from the IC Web Servers to the MCC Servers thru the Firewall and Load Balancer thereby avoiding the need to support non-standard ports in Cloudflare or Kong.
+Still need to support 
+https://www1.mcc.net/
+ in GoDaddy and route thru Palo and Kong.
+Standard Port Support Diagram
+1
+0
+0
+3200319534
+3162439681
+1
+www1-mcc-net.drawio.svg
+2
+0
+2
+https://invoicecloud.atlassian.net/wiki
+1714060347908-www1-mcc-net.drawio.svg
+0
+1T3whzTfVWzUMpvhP_Y- 1
+602
+auto
+top
+1
+326
+Non-Standard Port Support Diagram
+Notes
+URL:  
+https://www1.mcc.net:4433/ebill/webservices/eBill.asmx
+ URL:/spaces/platform/pages/3162439681/Kong+DV2+-+MCC+Nonstandard+Ports

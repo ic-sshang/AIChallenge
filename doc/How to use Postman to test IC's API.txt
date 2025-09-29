@@ -1,0 +1,119 @@
+Purpose
+:  Detailed article on how to use 
+Postman
+ to send a 
+POST request
+ with a JSON payload, using your provided example for generating an invoice and redirecting to the payment route via the InvoiceCloud API.
+How to Use Postman to Send a POST Request with JSON Data
+Postman is a powerful tool for testing APIs. It allows developers to send requests, inspect responses, and debug APIs with ease. In this guide, we’ll walk through how to send a 
+POST
+ request using Postman with a sample JSON payload to the 
+InvoiceCloud API
+.
+Scenario Overview
+We want to send a POST request to the following endpoint:
+https://www.invoicecloud.com/cloudpaymentsapi/v2
+
+With 
+Basic Authentication
+ 
+and the following JSON body:
+{
+  "CreateCustomerRecord": true,
+  "Customers": [
+    {
+      "AccountNumber": "ACCAPI0000001",
+      "Name": "TEST BUSINESS",
+      "Address": "123 Elm Street",
+      "City": "Hewitt",
+      "State": "TX",
+      "Zip": "76643",
+      "EmailAddress": "john.doe@test.com",
+      "Invoices": [
+        {
+          "InvoiceNumber": "INVAPI00000003",
+          "TypeID": 1,
+          "DueDate": "2030-10-17",
+          "InvoiceDate": "2024-10-17",
+          "BalanceDue": 500.0,
+          "CCServiceFee": 1.5,
+          "AchServiceFee": 1.5
+        }
+      ]
+    }
+  ],
+  "ViewMode": 1,
+  "CssUrl": "https://utilities.txfb.com/InvoiceCloud/InvoiceCloud.css"
+}
+
+Step-by-Step Guide
+1. 
+Open Postman
+Download and install Postman from 
+https://www.postman.com/downloads/
+  if you haven’t already. 
+Note:
+ No need to create an account. 
+Postman can be use without an account.
+2. 
+Create a New Request
+Click 
+"New"
+ > 
+"HTTP Request"
+Set the method to 
+POST
+Enter the URL:
+  https://www.invoicecloud.com/cloudpaymentsapi/v2
+
+3. 
+Set Up Authentication
+Go to the 
+Authorization
+ tab
+Set 
+Type
+ to 
+Basic Auth
+Enter the authorization in the username.
+4. 
+Set Headers
+Go to the 
+Headers
+ tab
+Add the following header:
+  Key: Content-Type
+  Value: application/json
+
+5. 
+Add the JSON Body
+Go to the 
+Body
+ tab
+Select 
+raw
+Choose 
+JSON
+ from the dropdown
+Paste the JSON payload into the text area
+6. 
+Send the Request
+Click 
+Send
+You should see a response from the server in the lower section of Postman
+Example Response
+If everything is set up correctly, you should receive a response like:
+{
+    "Message": "SUCCESS",
+    "Data": {
+        "CloudPaymentURL": "https://www.invoicecloud.com/portal/cloudpayments/T3lDN05CUnVrL0N6OVhqQ3VqN0RHUT09"
+    }
+}
+
+Or an error message if something went wrong (e.g., invalid credentials or malformed JSON).
+Tips
+Always validate your JSON using a linter or Postman’s built-in formatter.
+Check the API documentation for required fields and expected responses. 
+IC API Documentation
+ (this can be also accessed via the Biller Portal).
+ URL:/spaces/DS/pages/4305813749/How+to+use+Postman+to+test+IC+s+API

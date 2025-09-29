@@ -1,0 +1,84 @@
+1
+6
+false
+default
+list
+true
+We have built a 
+Pipeline
+ that runs every day to provide us a report of Service Principal Secrets that are nearing Expiration as shown below:
+Steps to Analyze whether Service Principals are still in use
+Get the 
+Id
+ of the Service Principal by the Service Principal’s 
+ClientId
+ (
+AppId
+) using the 
+az
+ cli command:
+az ad sp show --id ClientId --query id -o tsv
+ Use the 
+Id
+ in the Sign-Ins Log in Entra to see if the Service Principal has any activity in the Last 30 Days.
+Look in Alien Vault for any activity over the Last 90 Days using the 
+ClientId
+ 
+If no activity is found, then the Service Principal is a candidate for deletion, but would need more analysis and confirmation before deletion.  Additional analysis would include identifying where the Service Principal is referenced.
+Steps to Analyze where a Service Principals is referenced
+Check is service principal is an ADO service connection
+Naming convention will look like 
+invoicecloud-Src-f89b91a0-e110-4fbb-b84b-24c02f68cd81
+ following the format 
+invoicecloud-{project name}-{guid (not client id!)}
+If name looks like this, it’s almost certainly an ADO service connection. Go 
+the service connections page
+ (link for Src project) for the project (found in the name) 
+Click on each service connection, then hit the link 
+Manage App registration
+ to view the Azure resource associated with that connection. There must be a way to script this, but I haven’t done it
+Check to see if the variable exists in any ADO variable groups. You can use this script to output a file containing all variables in all groups by running 
+./get-all-variables.ps1 > all-variables.yaml
+# get-all-variables.ps1
+ForEach ($project in $(az devops project list | ConvertFrom-Json).value) {
+    Write-Output "$($project.name):"
+    ForEach ($variableGroup in $(az pipelines variable-group list --project $project.name | ConvertFrom-Json)) {
+        Write-Output "  $($variableGroup.name):"
+        ForEach ($variable in $(az pipelines variable-group show --project $project.name --id $variableGroup.id | ConvertFrom-Json).variables.PSObject.Properties) {
+            $value = $variable.value.value
+            if ($value) {
+                Write-Output "    $($variable.name): '$($variable.value.value.replace("'", '\u0027'))'"
+            } else {
+                Write-Output "    $($variable.name): null"
+            }
+        }
+    }
+}
+Then, you can use the following script to search the resulting file for a specific string:
+Import-Module powershell-yaml
+
+$searchString = 'some string'
+
+$fileContent = Get-Content -Path 'all-variables.yaml' -Raw 
+$variables = ConvertFrom-Yaml -Yaml $fileContent
+
+ForEach ($project in $variables.GetEnumerator()) {
+    If ($project.value) {
+        ForEach ($variableGroup in $project.value.GetEnumerator()) {
+            If ($variableGroup.value) {
+                ForEach ($variable in $variableGroup.value.GetEnumerator()) {
+                    If ($variable.value) {
+                        If ($variable.value.trim() -eq $searchString) {
+                            Write-Output "$($project.name)/$($variableGroup.name)"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+The resulting output will be a line separated list of 
+{project name}/{variable group
+ that contain the value for which you searched.
+todo - search key vaults
+ URL:/spaces/platform/pages/3837591574/Service+Principal+Usage+Analysis

@@ -1,0 +1,47 @@
+3
+4
+false
+disc
+list
+true
+Week of 7/15/2024: PSN ICG 400 Responses
+ICGateway Loggin
+g
+PSN Reporting 400s from ICGateway APIs
+PSN Reporting 400s from ICGateway APIs
+Description
+After the 
+7/14/2024 Maintenance Go-Live 
+PSN Reported that they were receiving 400s from the ICGateway (ICG) Servers.  
+Root Cause
+The PSN 400s were eventually discovered to be due to a bug in their implementation of the 
+IC.Gateway
+ SDK’s 
+IClient
+ Interface, which is a class in PSN codebase named 
+ICRestClient
+.  The bug was that the source code of the 
+ICRestClient
+ added a Request Header 
+accept-encoding: gzip, deflate, br
+ but did not process the Response in a manner to account for a possible encoding provided by the Server serving the Response.  Now that the ICG Traffic is going thru Cloudflare to provide WAF protection to those Requests, Cloudflare honored the 
+accept-encoding: gzip, deflate, br
+ Request Header.  Prior to that move in traffic flow, none of the Network Components (Palo Firewall → Barracuda → IIS) honored the Request Header.  The 400 HTTP Status Codes were not actually served from our APIs, the Response Status Codes that flowed thru our systems and were captured in our Logs at each level of the network topology were 200.
+Solution
+PSN removed the asymmetric implementation of the 
+accept-encoding: gzip, deflate, br
+ Request Header.
+Communications
+We had daily meetings with the PSN team to research the issue until the root cause was identified and remediated.
+Long Term Fix
+The removal of the asymmetric implementation of the 
+accept-encoding: gzip, deflate, br
+ Request Header from the PSN Code base will solve the issue long term.
+Also, now that both of IC’s NonProd and Prod Network Lanes are in parity, issues like this will be easily caught during the normal SDLC lifecycle.  Prior to 7/14/2024, IC did not have Network Component Parity between the NonProd and Prod Network Lanes.
+To be proactive with other Partners, Vendors, and Billers, we should outline in the API Documentation we provide that any 
+accept-encoding:
+ Request Header will be honored by Cloudflare and the consumer should account for this in their Code Base.
+If we ever move from Cloudflare as our edge Network Component, we should be sure to understand if the Component replacing it will still honor the 
+accept-encoding:
+ Request Header or not and publish the information prior to the change.
+ URL:/spaces/platform/pages/3407773719/Post+Mortems

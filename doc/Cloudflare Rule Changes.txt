@@ -1,0 +1,12 @@
+Rule Journal
+Non-Prod
+ORIGINAL
+((lower(http.request.uri.path) contains "cloudstore.aspx") or (lower(http.request.uri.path) contains "customerlocator.aspx") or (lower(http.request.uri.path) contains "cloudpayment.aspx")) and ((not ip.src.country in {"CA" "IN" "MX" "US" "AS" "GU" "MP" "PR" "VI" "UM"}) or (ip.src in $cf.anonymizer))
+4/16/2025:
+(lower(http.request.uri.path) contains "cloudstore.aspx") and ((not ip.src.country in {"CA" "MX" "US"}) and (ip.src in $cf.anonymizer))
+Prod
+ORIGINAL
+((lower(http.request.uri.path) contains "cloudstore.aspx") or (lower(http.request.uri.path) contains "customerlocator.aspx") or (lower(http.request.uri.path) contains "cloudpayment.aspx")) and ((not ip.src.country in {"CA" "IN" "MX" "US" "AS" "GU" "MP" "PR" "VI" "UM"}) or (ip.src in $cf.anonymizer))
+4/16/2025
+(lower(http.request.uri.path) contains "cloudstore.aspx") and ((not ip.src.country in {"CA" "MX" "US"}) and (ip.src in $cf.anonymizer))
+ URL:/spaces/icinfradoc/pages/4224942216/Cloudflare+Rule+Changes

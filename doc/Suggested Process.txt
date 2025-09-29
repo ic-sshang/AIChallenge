@@ -1,0 +1,83 @@
+All blob actions needed are to be done in their respective projects as needed.
+ 
+PDFBlobManager - Nuget
+Project will be in charge of storing, fetching and moving the PDFs between the different blob containers, removing the need for that logic to exist in each of the projects as the PDF is being moved along.
+Move PDFs
+Takes in a PDF name current blob location & blob destination.
+Moves PDFs in blob from one blob container to another.
+StorePDF:
+Takes in PDFBytes, BlobContainerName, Folder.
+Saves PDF into the specified Folder.
+RetrievePDF:
+takes in PDF name, current blob location
+Pulls PDF from blob and returns the bytes in the response.
+DeletePDF:
+takes in PDF name, current blob location.
+Removes the PDF from the specified blob.
+Returns the result of the process (File deleted, not found, etc.)
+BillerFTPPDFProcessing
+Monitor FTP directories (Suggestions are, Timer Trigger or Event trigger whenever FTP user uploads PDF [Review if this is possible])
+Moves PDF out of FTP folder to PendingPDFProcessing.
+Raise an event PDFFoundInFtp.
+This is to be added into the BillerFTPPDFProcessing application.
+PDFArchive
+Subscribes to PDFFoundInFtp.
+Backs up PDF into blob.
+Raises an event for either PDFArchivedForIdentification or PDFArchivedForExtraction based on the CRM configuration.
+Extraction Path:
+Pdf Identification
+ 
+Subscribes to PDFBackedUpForIdentification
+Add “identify“ into the processingstate key in the blob metadata.
+Identifies Invoice Type Configuration of PDFs
+Saves Template ID in blob metadata.
+Determine if the PDF will need to be split, save this information into the blob metadata.
+Raises an event for SplitPDF (PDFIdentifiedForSplitting) or ExtractText (PdfIdentifiedForExtraction)
+ 
+SplitPDFs
+Subscribes to PDFIdentifiedForSplitting
+Add “split“ into the processingstate key in the blob metadata.
+Splits PDFs based on the identified configuration from the blob metadata.
+Copies blob metadata into the split PDFs.
+Uploads split PDFs into blob, Raises an event PDFSplit.
+Deletes Original PDFs from Split PDF blob.
+ 
+Extract Text
+Subscribes to PDFBackedUpForExtraction and PdfIdentifiedForExtraction and PDFSplit
+Add “extract“ into the processingstate key in the blob metadata.
+Extracts LinkingFields from PDFs.
+Saves Linking Fields into blob metadata.
+Raises an event for PDFExtracted.
+ 
+End of Extraction Path
+ 
+Metadata Linking
+Subscribes to PDFExtracted.
+Add “linking“ into the processingstate key in the blob metadata.
+Meant to replace the DB Functions
+Reads the PDF metadata
+Use data to match the invoice in the biller's shard
+Update Invoice PDF Token/Filename to match PDF from icblobstorage
+Blob Trigger:
+Will run on each new PDF.
+If it finds no invoice to link to, will insert a DB record in table PDF.unlinkedPDFs  (similar to  PDF.BillerPendingPDFs)
+ 
+Timer trigger:
+Specifically for the scenario where invoices are loaded after the PDFs are sent.
+Will run every X minutes pulling all the records of PDF.unlinkedPDFs attempting to find a match for the PDFs in wait.
+Same logic as the Queue trigger but based on all the records in the table.
+(Other option is for this process to resubmit Queue messages for the Queue Trigger process)
+Discuss with the owners of the incoming invoice jobs to raise an event whenever an invoice is loaded instead of a timer trigger.
+ 
+Action Item:
+-
+Spike to research how the process to clean PDF.BillerPendingPDFs and icblobstorage works, and if we can adapt that to the PDF.unlinkedPDFs table.
+-Add the PDF move project to the Suggested Process description.
+-Include the deletion of pending PDFs in blob and the pendingPDFQueue to the Containerization Diagram and Suggested Process description.
+-Spike to pull all the pending pdf storeprocs and list what projects use it, will need to consider their logic for the new PDF.unlinkedPDFs.
+-Spike to clean up the Discovery Epic.
+-Spike to test metadata saved on the PDF will not be lost through copying/Saving to blob/Pulling from blob.
+-Spike Testing performance on moving large amounts of pdfs (bursted) and large pdfs (to burst) from one blob to another. 
+-Spike Performance comparison between pulling files from blob vs streaming files from blob. 
+-Create the folder structure of sapripdfextmain0dev based on the diagram.
+ URL:/spaces/IM/pages/4004970520/Suggested+Process

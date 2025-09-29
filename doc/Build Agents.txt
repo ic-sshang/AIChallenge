@@ -1,0 +1,26 @@
+3
+3
+false
+list
+false
+To enable Self Hosted Azure DevOps Build Agents for the Containerization of both Linux and Windows containers, a build Agent for each OS Platform has been deployed to the NonProd Hub in the Primary Region, note the NonProd Network Topology only consists of the 
+Primary Region
+.
+NonProd Build Agents
+There is only the 
+Primary Region
+ Network Lane in the NonProd Network Topology.
+Windows Build Agent: 
+vm-pri-dckrbldwn2rmbj-sbx
+10.152.96.68
+Linux Build Agent: 
+vm-pri-dckrbldlx2cewc-sbx
+10.152.96.69
+Access to NonProd Build Agents
+The following Azure Active Directory Groups allow for access to the NonProd Build Agent VMs.
+Admin Access
+global-cloud-engineers-sbx
+global-aks-admins-sbx
+User Access
+global-aks-developers-sbx
+ URL:/spaces/icinfradoc/pages/2795732995/Build+Agents

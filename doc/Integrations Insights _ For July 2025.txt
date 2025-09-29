@@ -1,0 +1,88 @@
+Meeting Objectives
+ Share Insights
+:
+Backlog health
+MTTR (by priority)
+Ticket Volume Analysis
+Blockers and Opportunities
+Backlog Health
+The backlog has been averaging around 18.6 which is within the normal range (15-20) for integration tickets.
+MTTR (by priority)
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=28340
+Mean Time to Resolution (MTTR) – July 2025
+Highest Priority:
+ 3.8 days
+High Priority:
+ 7.3 days
+Medium Priority:
+ 9.3 days
+Low Priority:
+ 7 days
+In July, MTTR increased across all priority levels compared to YTD averages. This may be attributed to a higher concentration of bill presentment-related tickets, particularly those involving PDF importing and linking, which tend to require a higher time investment. These tickets may have contributed to other tickets aging before resolution, leading to the overall rise in MTTR.
+Additionally, we recently experienced a staffing change in our US and India office, losing 2 team members and currently training another one, who is new to the integrations space. This transition may have impacted overall throughput and contributed to the MTTR increase.
+Although resolution times were above our 5-day target, the increase from June to July did not reflect a major spike, and escalated tickets remained under 5 days—indicating that critical issues continued to be resolved promptly.
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17890
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17891
+Since the beginning of the year, a total of 508 tickets have been reported in the integration’s space, highlighting various issues across different services:
+Bill Presentment
+ is the most frequently reported service, with 145 tickets. Among these, 
+39 tickets
+ are related to 
+PDF Extraction
+, accounting for 
+27%
+ of all Bill Presentment issues. This high percentage indicates that PDF Extraction is a critical area within Bill Presentment that requires attention. 
+About a quarter (
+27%
+), of all integrations tickets are classified as additional information, which implies that these are mostly research conducted to answer questions.
+These insights reflect that Bill Presentment and File Processing are the critical areas for integrations and the ones producing most of the toil.
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17894
+In July, a total of 76 integration-related tickets were resolved. Of these, 27 were specifically related to bill presentment, and 18 to file processing; that would account for 36% and 24% of tickets respectively. 22% of the work for this month could be classified as research given the mitigation actions of additional information. Only 7% of tickets were actual defects in our code, and 9% were request for code changes. This data indicates that most of the team's time was spent conducting code analysis to help CS navigate integrations for biller’s/SP.
+Blockers and Opportunities
+Status Update
+Blockers
+:
+No blockers have been identified. We are continuing to train the India team to assist with relevant tasks.
+PDF Bursting Tool 
+SR-1419
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ :
+The tool is nearly complete. We are finalizing the product and preparing documentation to support the Customer Support (CS) team.
+AI Agent Opportunities 
+SR-1782
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Richard is currently exploring opportunities to leverage AI agents for automation and efficiency improvements.
+Next Steps
+Once the PDF Bursting Tool is complete, we will begin discovery for the 
+PDF Manager
+ (Idea).
+Here's some context from a previous presentation:
+Problem
+:
+PDF linking has become a bottleneck, consuming time and computing resources. These tickets often require manual intervention from Dev Support (DS), slowing resolution and diverting focus from higher-impact work.
+Solution Strategy
+:
+We're developing tools to streamline PDF-related processes and reduce DS ticket volume by shifting ownership to CS and eventually to billers.
+Bursting Tool
+: Splits large PDFs into smaller, manageable segments.
+PDF Manager (Idea)
+: A comprehensive tool to handle all PDF-related needs for billers, enabling CS to manage requests independently.
+Long-Term Goal
+:
+Shift PDF-related responsibilities from DS → CS → billers to:
+Reduce ticket volume
+Improve turnaround times
+Free up DS for more complex engineering tasks
+Action Items
+Finalize and release the PDF Bursting Tool.
+Continue research into PDF Manager and AI Agent opportunities.
+Review new file processing tool in the CRM
+Confirm if there is duplication of effort: 
+https://dev.azure.com/invoicecloud/Biller/_git/PDFSplit?_a=history
+ 
+ URL:/spaces/DS/pages/4565860354/Integrations+Insights+For+July+2025

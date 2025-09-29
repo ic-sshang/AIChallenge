@@ -1,0 +1,88 @@
+ Problem Alignment
+Problem: What is the friction or opportunity?
+Visa implemented tokenization requirements in April 2022. We need to complete the work needed to tokenize transactions at the network level to qualify for the best rate. 
+There is a potential savings of up to $400k per year
+. Depending on the number of new billers we add to chase, or the number or billers we migrate to the Braintree platform, the savings will change. Braintree platform is tokenized therefore there is a cost optimization available as soon as the biller begins process on the BT network. Over time, if the volume on Chase increases, the cost savings opportunity will also grow. We will enjoy the benefit of reduced processing costs on tokenization for billers using BT. In the payment environment, tokenizing payments is becoming an industry norm, therefore, tokenizing on the Chase side is a necessity. We need to tokenize transactions at the network level in order to qualify for the savings.
+The question came up as to whether we are purging the data after we send it and Tony confirmed we plan to keep the data within our system (no changes to how it is being managed today).  The token will be a reference understood by Chase and will serve as pointer within their system to the specific transaction. 
+In Scope for this project: In future state, the token will be provided to us when we make a dedicated call. We do not plan to purge any card data with tokenization, the token would just be an additional value tag from our perspective. We would still retain the card data on our side. 
+Out of Scope: Sara mentioned that initial thoughts on this tokenization project from leadership were to also limit and/or reduce storing card data to reduce PCI compliance risk. Card data is currently being used in a 
+variety of ways
+ including displaying the info on the payer UI, currently use card data to help identify risk/report fraud using card data, and likely other areas as well. Exploring this concept would require indepth research to understand full impact so incorporating this would add significant time and complexity to this project. At this time, purging the card data will be out of scope for this project but may be considered as a Phase 2 project with additional research. 
+Why: How do we know this is a real problem and worth solving?
+Tokenization is becoming an industry norm and expectation. Tokenization helps reduce fraud and limits risk. We can expect the networks to move forward making additional changes which will encourage an increase in tokenized transactions. Another key feature that tokenization will bring is account updater. During the tokenization, the system will be able to identify if the expiration date has changed and automatically modify the payment. This will provide a better experience for the payer - not having to update their card information. It will also reduce the number of declined transactions for expired cards on auto payments. 
+In addition to the cost savings
+, tokenization should help us increase authorization 
+conversion
+ at the time of checkout. Transactions that are tokenized make it easier for the payer to complete the transaction because when the card is tokenization is retains the information. 
+Tokenization also helps reduce fraud. 
+On a separate but somewhat related topic - We are currently experiencing fines from Discover and have recently experienced some generic declines from Visa that Chase has indicated are caused from not passing the cryptogram along with the second transaction. We need to tokenize the payment card number when we pass the first transaction so we can send the token with the second transaction. The declines may continue to increase at any point if we don’t take action. There is a potential that addressing this issue could potentially help minimize the effort of the overall tokenization project. The work that will be done on the apple pay project will be aligned with the visa network tokenization requirements as this is where we will benefit with the cost savings.  
+We need to understand will be saving the token? 
+Audience: Who are we building this for?
+Payers will benefit from tokenization as it makes online payments easier to make. Billers should also expect to see an increase in the completed transactions at checkout. IC as an organization will also benefit from this project as it will bring a sizable cost savings. 
+There is also an upside for IC because tokenized payments will automatically update the expiration date of cards, reducing declines. 
+Success: How do we know if we’ve solved this problem?
+Measure cost savings once transactions are tokenized. We can also pull a report of number of declined autopayments which were declined due to expired cards and compare that to declined post tokenization. 
+Metric
+Current
+Goal
+Compare processing cost for transactions that are now passing a token
+[TBD]
+Can we measure transactions that are not completed at checkout prior to tokenization and post tokenization to confirm an increase in successful checkouts?
+[TBD]
+[TBD]
+[TBD]
+ Solution Alignment
+Work with Adrian to create a scope doc and link here:
+Key Features
+Information
+Process status
+Clear indicators of process success/failure (files, OBD, etc)
+Adoption
+Payments over time: similar to information provided today
+Service adoption over time, including “recent signups”
+Scrolling list of positive feedback received from biller’s payers
+Announcements
+Better integrate biller message banner into homepage
+New or upcoming product releases
+Invoice Cloud updates, similar to Cloud Burst?
+Calls to action
+Setup wizard; account completion
+Alerts, issues to be resolved (files, OBD, etc)
+Commonly used features
+Based on analytics, allow billers to create shortcuts to most used pages
+Personality
+Quote of the day?  Bob’s tidbits?
+ Schedule Structure
+Target Date
+Milestone
+Description
+Success Criteria
+Status
+ Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Sales
+Do you need sales enablement materials?
+Marketing
+Does this impact marketing?
+Training
+Do you need to update support content or training?
+Implementations
+Changes to questionnaire
+Delivery
+Set up and Enablement
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Support
+Biller questions and support
+Legal
+Are there potential legal ramifications?
+Reconciliations
+Questions from billers about charges
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+ URL:/spaces/PRODUCT/pages/2832695297/Network+Chase+Tokenization+One+Pager

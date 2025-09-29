@@ -1,0 +1,28 @@
+Milestone 4 will involve the creation of new components written in .Net6+.  Systems will be comprised of Web APIs and Console Applications hosted in Kubernetes.   
+Motivation is to decouple funding from the gateway (allow for more control over when/what gets funded), provided modularization and extensibility (adding new funding processors), and modernize the deployment and infrastructure models.
+Web APIs
+Authentication
+Web APIs will use a bearer token JWT authentication scheme.   Claims will be used to store who the subscriber is and what APIs the token can be used with.  
+Future: A subscriber can create Client ID and Secrets for use with the OAuth server for issuing tokens.  A subscriber can limit the the API scopes when requesting a token.
+The existing basic authorization will be supported.  scheme and exchange it for a token.  APIs will lookup the subscriber's legacy subscriber key.
+API Documentation
+All APIs will be required to publish their own Open API specifications.  This can be done using Swashbuckle / Swagger .Net SDKs.  This SDK will dynamically generate the API documentation based on the input/output of the API controllers in the project.  Open API specifications will be use to facilitate integrations.  For public facing APIs the documentation will be imported into our API Management system’s developer portal.
+Jobs
+Scheduled Jobs
+Scheduled jobs will be registered as Kubernetes CRON jobs.   CRON jobs can be run with up to the minute precision.  It is recommend that if you need a job to run every minute to instead create a long running service in Kubernetes instead and manage a internal timer.
+Event Driven Jobs
+For event driven jobs KEDA will be used to dynamically run job instances based on a Azure Service Bus message queue backlog metrics.  Jobs will be started/scaled when KEDA identifies the target metric has been tripped for the message queue.  The job will consume the messages off of the target queue, process it, and delete the message from the queue.
+Testing/Rollout
+Once the funding system development has been completed the funding system will be used in a passive mode along side the existing legacy funding system.  
+In this mode, Gateway Batch Close Events will trigger the gateway funding job to create a funding instructions.  The funding job will use the funding processors to create the required outbound files (Hyperwallet OneBatch and Cass NACHAs) WITHOUT delivering the files.  
+A comparison of the new outbound files will be done against the existing legacy generated outbound files to ensure the funding system is operating correctly regarding funding.   The files should be a 1:1 as it relates to the funding entries.
+The funding activity import job will import the Cass and Hyperwallet inbound activity files to ensure that  funding instructions are updated correctly and reporting is accurate.
+The funding deposit import job will import the Cass and Hyperwallet inbound deposit files to ensure that  account balances are updated correctly and reporting is accurate.
+New CRM Reporting
+Funding Held - Lists funding instructions that are scheduled (not yet funded) and funding instructions that have been held.  Users can mark unfunded instructions as held.  User can release held funding instructions.
+Funding Activity - Lists funding batches and their status.
+Funding Balance - Lists funding processors' account balance
+Legacy funding reports in the CRM will be cloned and renamed and updated to use the new Funding System data
+Once the system is confirmed to be operating correctly the existing Hyperwallet and Cass jobs can be disabled and the funding system can be switch from passive to active mode in which outbound files are delivered to Hyperwallet and Cass.  
+Legacy funding reports in the CRM will be deprecated and the new cloned reports put in their place.
+ URL:/spaces/EN/pages/2703097858/Milestone+4+-+BFS

@@ -1,0 +1,196 @@
+1
+6
+false
+default
+list
+true
+Role Scopes
+Roles can be applied at both the ADO 
+project
+ and the ADO 
+organization
+ scope. 
+This allows us, for example, to assign a technical lead for the 
+Payer
+ ADO project the 
+ado-payer-approvers
+ Role and the 
+ado-org-contributor
+ Role at the ADO organization scope to allow access to other ADO projects at a lower Privileged level.
+Roles to Groups Mapping Matrix
+ADO Role
+Organization Group
+Approved IC Roles for Assignment
+Reader
+ado-org-readers
+Solutions Engineer, Product
+Contributor
+ado-org-contributors
+[Associate, Senior, Principle] Software Engineer, Database Engineer, SDET
+Approver
+ado-org-approvers
+Technical Lead (special role for few Sr Software Engineers) - requires approval to be assigned.
+Release Manager
+ado-org-release-managers
+Release Managers (i.e. 
+)
+Overrider
+ado-org-overriders
+Engineering Manager, Director, VP
+Admin
+ado-org-admins
+Platform Team: Cloud Engineer, DevOps Engineer, Platform Reliability Engineer 
+ADO Project-scoped groups follow the same naming pattern as organization-scoped groups, i.e. 
+ado-{project_name}-{role}
+.  
+Example using 
+Src
+ ADO Project and 
+contributor
+ Role: 
+ado-org-contributors
+Approval Requirements
+Application Deployments
+Questions to answer:
+Should app deployments to 
+xat
+ require 1 or 2 approvals?
+Pretty sure it’s just 1 today. Michael’s notes say 2
+Should admins be able to act as approvers? 
+Note that admins can 
+bypass
+ approvals. Doing this shows the check as 
+bypassed
+ rather than 
+passed
+ but otherwise don’t affect the run.
+The original role definitions notes that overriders should be able to do everything that approvers can do and more. 
+We should ensure this is true; I don’t think environment approvals have been configured the same for overriders
+Environment
+Required Approvals
+Notes
+dev
+ (devtest)
+none
+Deploying feature branches to non-main Application Instances is a manual process all can do.
+iat
+ (uat)
+contributor
+ OR 
+approver
+ OR 
+release-manager
+ OR 
+overrider
+We’re ok with anyone approving. The approval is just intended to stop deployments from automatically going to iat after deployments to dev
+qar
+ (regression)
+approver
+ OR 
+release-manager
+ OR 
+overrider
+Entering the higher environments! Privileged users only
+xat
+ (preview)
+approver
+ OR 
+release-manager
+ OR 
+overrider
+Still any privileged user
+prd
+ (production)
+release-manager
+approver
+ OR 
+overrider
+Two approvals required
+Infrastructure Deployments
+Questions to answer:
+really need to audit this list. We never clearly defined that before
+should admins be able to approve things? Or should we assume they’ll be added to the approval group if they should be approving?
+I lean toward the latter. The Platform team gets org admin, but in general, will not be involved in the application release process and won’t generally act as approvers. 
+In projects where Platform does generally act as approvers, i.e. 
+Systems_Src
+, the team should be included as approvers in the group 
+ado-systems-src-approvers
+Environment
+Required Approvals
+Notes
+sbx
+contributor
+ OR 
+approver
+ OR 
+release-manager
+ OR 
+overrider
+We probably should require approvals here
+, as the nonprod hub lives in Sandbox. A sad reality.
+npd
+contributor
+ OR 
+approver
+ OR 
+release-manager
+ OR 
+overrider
+dev
+contributor
+ OR 
+approver
+ OR 
+release-manager
+ OR 
+overrider
+iat
+contributor
+ OR 
+approver
+ OR 
+release-manager
+ OR 
+overrider
+qar
+approver
+ OR 
+release-manager
+ OR 
+overrider
+xat
+ 
+release-manager
+approver
+ OR 
+overrider
+prd
+release-manager
+approver
+ OR 
+overrider
+Permissions
+Reader
+view all repositories, pipelines, and pipeline runs
+cannot push code, run pipelines, or approve PR’s
+Contributor
+create branches, push code, open pull requests, abandon your own pull requests, delete your own branches
+kick off pipelines
+approve PR's as secondary reviewer
+Approver
+approver PR's as primary reviewer
+approve pipeline deployments to high environments (product approval)
++ everything contributor can do
+Approver can be able to delete the feeds 
+Release Manager
+approve pipeline deployments to higher environments (platform approval)
++ everything contributor can do
+Overrider
+can override PR gates
++ everything approver can do
+Admin
+can do anything
+organization admins are assigned to the 
+Project Collection Administrators
+ built-in group
+ URL:/spaces/platform/pages/3759243269/Roles+and+Permissions

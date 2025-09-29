@@ -1,0 +1,32 @@
+This article explains how to grant a DevTest CRM User “Admin” permissions so they can manage their own permissions for various use cases.  
+This does not apply to the production CRM instance which is hosted under 
+www
+.  The proper ticket will need to be submitted to grant those permissions.
+ Instructions
+Sign in to a DevTest CRM instance
+Any instance running under 
+https://devtest*.invoicecloud.com/crm
+ is considered “Devtest CRM”
+The most accessible instance is 
+https://devtest.invoicecloud.com/crm/
+. 
+Go to Administration > Employees
+If you don’t have this menu item then you are not currently set up to be an CRM “Admin”.  Please see your manager to grant you this permission. Your manager can follow these same steps to grant you this permission.
+Locate the CRM User in the Employees page.  All “CRM Users” are basically set up as Employees in CRM.
+Click on the Manage Permissions icon to manage permissions
+Locate PermissionID=2 (Can Manage Employees) and check the Active checkbox.  Click SAVE.
+The CRM User will need to log out of their Devtest CRM session if they have one and log back in.  That will re-pull the permissions.  They’ll now be able to go to the same Employees area and manage their own Permissions.  The permission they need can be identified by reviewing the source code for the area they are trying to access.  
+To make it easier for that CRM User in the future, you can enable all permissions while you’re enabling “Can Manage Employees”.  These permissions only apply to test environments so they are non-impactful to production CRM.
+Stick to 3-5 steps per task to avoid overloading readers
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@89f
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "ED"
+ URL:/spaces/ED/pages/3930161193/How+to+grant+Devtest+CRM+Admin+permissions

@@ -1,0 +1,42 @@
+The AutoPay/ScheduledPay “chain” encompasses the series of console apps that run daily per biller which ultimately process autopayments and scheduled payments. The chain usually begins at 3 AM CST. People may interchangeably use “autopay job” to refer to the individual step in the chain, the full chain for one biller, or the full chain for all billers. Confusing, right? So, if asked, “Did AutoPay run?” you will need to ask for clarification! 
+[
+Sidenote: it’d be great to create ubiquitous business language around these products and how we refer to them within engineering, product, CS, DS, marketing. I emphasize useful terms in bold and would love “chain” to catch on to describe the full end-to-end process for all billers and maybe “automatic payments” or “AP/SP” to refer to both AutoPayments and scheduled payments.
+]
+The 
+ICAutoPayController 
+manages the overarching 
+chain
+ of events. The controller is responsible for creating an 
+Azure batch job
+ at 3 AM CST. The job runs multiple 
+tasks 
+– 1 per biller. Each task runs on a 
+node
+, essentially a virtual machine, which executes the individual applications that comprise the chain.
+These applications are executed in the following order:
+ScheduledPaymentBalanceCheck
+RecurringScheduledPaymentsGenerator
+ScheduledPaymentProcessing
+ScheduledPaymentProcessingMultiInvoice
+AutoPaymentProcessing
+AutoPaymentsProcessingMultiInvoice
+CreateLateFees
+Currently, there is a limit to how many 
+tasks
+ can be run simultaneously (20). Tasks must wait in a queue until the preceding tasks complete their entire execution. Therefore, not every task (biller) will begin their run at exactly 3 AM.
+2
+1
+0
+0
+2642870294
+2732457985
+1
+AutoPay
+2
+2
+https://invoicecloud.atlassian.net/wiki
+AutoPay
+0
+1921.053013392857
+1170
+ URL:/spaces/PE/pages/2642870294/AutoPay+ScheduledPay+Chain

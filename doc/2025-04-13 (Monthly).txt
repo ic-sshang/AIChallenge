@@ -1,0 +1,229 @@
+ done
+ not doing
+ doing
+Change Teams
+Server Patching
+Pipeline Approvers
+Release Manager: 
+Platform Approver: 
+ 
+ 
+Pre work
+All times are in Eastern Time
+Saturday Evening at 7 PM est run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+ 
+ 
+ Saturday Evening at 6:00 PM - 7:30PM est pull web servers IC-Web1 - 5 out of the App Gateway (agw-pri-appgateway0-prd) pool, and kick off updates manually. Turn off alerting for those servers. Notify platform-int channel when putting them back in. Then post a message in engineering-maintenance to have 
+   run tests. 
+ 
+ or 
+Sunday morning 4:30 AM IC-Web6 - 10 - kick off updates manually on servers 
+ 
+ & 
+Sunday Morning at 4:45 AM run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+ 
+ 
+Day of:
+Notify dailyops and maintenance slack channels of maintenance starting 
+ 
+ 
+Put pingdom in maintenance mode (only if putting up the maintenance page) and disable other alerts - coordinate with 
+ for timing 
+ 
+Turn off other notifications 
+ 
+Patching Procedure Current
+ Enable the maintenance page on 
+www
+ and 
+my
+ by replacing 
+pal.invoicecloud.com
+ with 
+icmaintenance.azurewebsites.net
+ in Cloudflare under DNS 
+ 
+Changes
+Kong_Infrastructure
+ 
+ 
+PLAT-1983
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Script to Run
+ 
+ 
+PLAT-2168
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Re-Run
+ 
+ 
+Biller_Infrastructure
+ 
+ 
+PLAT-1983
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Script to Run
+ 
+ 
+PLAT-2168
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Run
+ 
+ 
+Payer_Infrastructure
+ 
+ 
+PLAT-1983
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Script to Run
+ 
+ 
+PLAT-2168
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Re-Run
+ 
+ 
+Server Patching 
+ 
+PLAT-1982
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Production Server Checklist
+Update Tracking 2025-04.xlsx
+web servers 
+ 
+app servers 
+ 
+proxy servers 
+ 
+MCC servers 
+ 
+gateway servers 
+ 
+SFTP servers 
+ 
+PDF extract servers 
+ 
+Skybot controllers 
+APM agent Upgrades on Web Servers 
+ 
+PLAT-1877
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+APM Agent Upgrades on App Servers 
+ 
+PLAT-1878
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+APM Agent Upgrades on Proxy Servers 
+ 
+PLAT-1879
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Whitelist Rule for Palo Alto for CloudFlare IP’s 
+ 
+PLAT-2142
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Install New Relic Infrastructure Agent on SFTP servers 
+ 
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/INFRA/queues/custom/110/INFRA-1193
+ 
+ 
+Proxy LB  
+ done
+ 
+JEDI-52
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Post upgrade testing will be done by 
+ 
+IC_SFTP LB 
+  Deferring this upgrade to the  next maintenance window.
+ 
+ 
+ 
+JEDI-48
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+       Post upgrade testing will be done by 
+ 
+Remove Java from Skybot Servers 
+ 
+PLAT-2190
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ Remove Acrobat From PDFExtract Servers 
+ 
+PLAT-2191
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Test Plan
+Run the Smoke Tests on 
+www.invoicecloud.com
+ @ 10 pm Saturday 
+ 
+Run the Smoke Tests after Web Servers are down patching on 
+www.invoicecloud.com
+ @ 7-9 am (can vary) Sunday 
+ 
+Run full regression tests on 
+www.invoicecloud.com
+ @ 10 - 11 am Sunday
+ 
+Post-Steps:
+ Remove maintenance page and purge the cache on Cloudflare 
+ 
+Remove the maintenance mode in Pingdom (if finishing early) 
+ 
+Patching Procedure Current
+Turn on notifications 
+ 
+Patching Procedure Current
+ 
+Start the Jobs for Product Integrations - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+Start the Jobs for Product Engineering - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+Notify dailyops and maintenance channels of maintenance finished and results 
+ 
+ 
+ URL:/spaces/platform/pages/4167860233/2025-04-13+Monthly

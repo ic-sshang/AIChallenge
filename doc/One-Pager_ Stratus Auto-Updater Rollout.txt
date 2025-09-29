@@ -1,0 +1,276 @@
+ Solution Alignment
+What is this project about?
+Stratus has recently been updated with key enhancements:
+[2.5.0.0] Local Encryption:
+ In response to security issues at biller locations (unrelated to InvoiceCloud or any of it’s systems/services), we updated the Stratus client to encrypt local logs and local configuration elements, and render them unreadable/unusable by bad actors.
+[2.6.0.0] Auto-Compression:
+ The Stratus Client will automatically compress and archive files before sending, to reduce the amount of transfer overhead, particularly when sending many small files.  This has been selectively rolled out to the billers most in need, and has resulted in a reduction of 96% in out of memory exceptions.
+[2.7.0.0] Auto-Updater:
+ The Stratus Client will periodically call home and check for newer versions of itself.  If it finds a newer version, it will download and install it without the biller or CS needing to do anything.  For technical details, see: 
+Stratus Auto Update
+ 
+This rollout one-pager is to outline the process of manually pushing out the latest Stratus version as the last time we’ll need to push out a Stratus update manually.
+Why are we doing it?
+Currently many of our billers are dependent on us for making updates to their local Stratus clients.  They do not have the technical abilities to update/install Stratus.  Not only does it look bad for a SaaS company like InvoiceCloud to be requiring it’s customers to manually update software, but it’s also a major drag on our customer and dev support teams to manage these rollout efforts (so much, in fact, that it typically doesn’t happen (for example: Stratus v2.5.0.0 has been available for over a year and only 11% of billers are using it)).
+What does success look like?
+ Cat/Shaun confirmed they are comfortable with these goals as of 6/7/22
+Metric
+Current
+Goal
+Billers upgraded to Stratus 2.7.0.1 by end of 
+Q4 2022
+0%
+ (0/348)
+70%
+ (244/348)
+Billers upgraded to Stratus 2.7.0.1 by end of 
+Q2 2023
+0%
+ (0/348)
+95%
+ (331/348)
+Achieve upgrades with minimal failure rate
+<2%
+ billers experiencing upgrade-related issues
+Stratus version distribution, May 2022
+ Impacted Stakeholders
+Billers
+There are 348 installed instances of Stratus across 347 billers (Harwich Water Department has two installs).  The full list of billers can be found by running the Stratus Comm Report in the CRM.  As part of ITR 19833, this report has been updated to include the Stratus Version, so we can use this report to track upgrade progress.
+ Schedule Structure
+Milestone
+Description
+Target Date
+Status
+Identify beta billers
+Beta billers should be IC-friendly billers with a history of limited or no issues with the IC platform and Stratus client.  Being technically savvy is a plus.  Also, variety is preferred (workstation vs server, admin vs non-admin user, etc) if possible.  Need assistance from Shaun/CS in identifying these billers.  First potential candidate is Ellensburg (BID 592).  We’d like to get 5 beta billers.
+BID 592 Ellensburg - first! (
+SF case 90404
+)
+BID 2538 City of West Jordan
+BID 1684 Portsmouth OH
+BID 1220 Town of Orleans
+BID 2180 Reading Area Water Authority
+BID 1153 Town of Bridgewater
+BID 2654 Parker Water & Sanitation District
+BID 1152 Arlington (maybe not because of adjustment issues)
+ 
+to let Cat know who to reach out to for tech issues
+Per discussion with Cat, we will use the Service Updates contacts for this communication.
+ 
+COMPLETED
+Green
+ 
+Communicate to beta billers
+Introduction email will be sent by Ryan (Product) to explain to beta biller candidates what Stratus updates are forthcoming, what a beta means, and what we need from them.  Shaun/CS will be copied on all communication.  Ryan will track responses and reach out to more candidates based on declines or non-responses.
+ 
+COMPLETED
+Green
+ 
+Upgrade beta billers
+Shaun to coordinate and assist installs with beta billers over the course of a week.  We will validate the proper version is installed using the Stratus Comm Report.  Once updated, the version should show as 2.7.0.0.
+ Cat/Shaun validated they are comfortable with this timeline
+ 
+COMPLETED
+Green
+ 
+Publish & validate auto-update
+Once all beta installs are complete, Ryan will work with IT to publish a new version of Stratus (no changes, just an updated version file to trigger the auto-update feature to kick in).
+Work to complete:
+Build new 2.7.1 version of client
+Update stratus site with latest html/xml
+Requisition new subdomain 
+stratuspreview.invoicecloud.com
+Update the pipelines with new subdomain, but basically ready
+Manually push client artifacts to preview
+Use pipeline to auto push website artifacts to preview
+When all else is done, push artifacts to prod
+We will validate the new versions are communicating in a timely manner and updating they’re performing the auto-update by Stratus Comm Report.  If there any issues, we will coordinate a troubleshooting call with the biller, CS, and IT.  If no issues, beta is complete.
+ Do we want the biller to validate the version on their side as well
+ No, this isn’t necessary
+ Do we want beta biller(s) to provide a quote/testimonial to include in communication to rest of billers?
+ Yes, we want to get this if possible
+ 
+Not Yet STarted
+Red
+ 
+Send out mass communication
+Once beta is complete, Ryan will work with Marketing to send out information to all remaining billers.
+Communication will contain:
+Overview of benefits of new Stratus
+Instructions on how to upgrade
+Docs is here
+, but may need to be updated, 
+ to validate
+Link to calendar system for if they need assistance
+Calendly
+, 
+Acuity, YouCanBook.Me
+ Shaun, is there a preferred tool/method here?
+ Yes, we’ll use Calendly.  Shaun/Cat will work on getting this set up.
+ Do we feel comfortable that a calendar tool will help smooth the support load, or do we feel it necessary to do this in phases?
+ Yes
+ Is there value in prioritizing problematic billers first in a phase approach?
+ TBD
+ 
+Not Yet STarted
+Red
+ 
+Work through upgrade queue
+Timeline for this is unknown until we see the response rate on the first communication.
+ Are there opportunities to supplement Shaun to expedite the process?
+ Likely not necessary, we’ll address this if it arises
+Not Yet STarted
+Red
+ 
+Possible second phase
+TBD if necessary
+Not Yet STarted
+Red
+ 
+Biller
+Contacts
+Original Version
+Manually Updated
+Auto Updated
+BID 592 Ellensburg
+N/A
+2.4.0.0
+ 
+Updated 10.20.2022 to 2.7.01
+BID 2538 City of West Jordan
+ 
+tyler.aitken@westjordan.utah.gov
+2.4.0.0
+ 
+Rolled back 
+ 
+BID 1684 City of Portsmouth
+ 
+cweghorst@portsmouthoh.org
+2.4.0.0
+ 
+Updated 10.20.2022 to 2.7.01
+BID 1220 Town of Orleans
+ 
+swalker@town.orleans.ma.us
+2.5.0.0
+Declined 
+ 
+BID 2180 Reading Area Water Authority
+ 
+suzanne.ruotolo@readingareawater.com
+2.4.0.0
+Declined 
+ 
+BID 1153 Town of Bridgewater
+ 
+psproule@bridgewaterma.org
+2.5.0.0
+BID 2654 Parker Water & Sanitation District
+ 
+gfittje@pwsd.org
+ 
+billing@pwsd.org
+2.4.0.0
+ 
+Updated 10.20.2022 to 2.7.01
+BID 1152 Arlington
+(maybe not because of adjustment issues)
+mbeck@town.arlington.ma.us
+dsheehan@town.arlington.ma.us
+2.6.0.0
+ Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+No impact on boarding
+Sales
+Do you need sales enablement materials?
+
+
+
+
+1
+
+
+incomplete
+
+
+ will reach out to Sales to see if they think this has any impact on sales materials
+
+
+
+
+Marketing
+Does this impact marketing?
+No impact on marketing
+Training
+Do you need to update support content or training?
+
+
+
+
+2
+
+
+incomplete
+
+
+ will work with Training team
+
+
+
+
+Implementations
+Changes to questionnaire
+
+
+
+
+3
+
+
+incomplete
+
+
+ to check with IMs to see what impact there may be
+
+
+
+
+Delivery
+Set up and Enablement
+No impact on delivery, install remains the same, becomes one-time event
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+This one-pager is the GTM plan
+Support
+Biller questions and support
+
+
+
+
+4
+
+
+incomplete
+
+
+ to work with support team for questions
+
+
+
+
+Legal
+Are there potential legal ramifications?
+No impact on legal
+Reconciliations
+Questions from billers about charges
+No impact on reconciliation
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+One security item being addressed in this rollout
+ URL:/spaces/PRODUCT/pages/2265251841/One-Pager+Stratus+Auto-Updater+Rollout

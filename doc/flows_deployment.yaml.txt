@@ -1,0 +1,31 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+artifact
+n/a
+version
+n/a
+environments
+[{'name': 'dev', 'tags': 'deployToNowhere', 'tests': [{'name': 'test-crm-portal', 'database': 'TEST', 'shard': 2002}]}, {'name': 'regression', 'tags': 'web', 'tests': [{'name': 'test-crm-portal', 'database': 'PROD', 'shard': 2002}]}]
+targetDir
+n/a
+- name: Preview   tags: web - name: Production   tags: web
+projectName
+n/a
+preDeploySteps
+[]
+postDeploySteps
+[]
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../jobs/test.yaml
+../jobs/deploy.yaml
+ URL:/spaces/platform/pages/3635445850/flows+deployment.yaml

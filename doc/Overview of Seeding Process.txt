@@ -1,0 +1,975 @@
+High-Level Analysis of Existing Process
+ 
+ TODO - 
+BillerWizardSubmitterFees
+ + 
+BillerWizardTerminals
+Step-by-Step
+User Enters Biller Information in CRM - 
+BillerWizardStart.aspx.vb
+ 
+Using information entered
+Call 
+insBillers
+ (DBMaster_GoldAzure) 
+Call 
+insAddresses
+ for Corporate Address (DBMaster_GoldAzure) 
+Call 
+insAddresses
+ for DBA/Location Address (DBMaster_GoldAzure) 
+Call 
+insPhoneNumbers
+ for Corporate Phone Number (DBMaster_GoldAzure) 
+Call 
+insPhoneNumbers
+ for Location Phone Number (DBMaster_GoldAzure) 
+Call 
+insContacts
+ for Contact (DBMaster_GoldAzure)  
+Call 
+insCreateBillerShard_mcl
+ (DBMaster_GoldAzure) 
+Navigate to BillerWizardFinalize.aspx?billershardid={biller_shard_id} 
+On Page Load, call 
+selAzureBillers @BillerID={biller_shard_id}
+ (DBMaster_GoldAzure) 
+If the biller is not found, call 
+CreateAzureBiller
+ via Business Service, passing Shard ID + ShardHubName as args. 
+CreateAzureBiller
+ is invoked -> 
+https://dev.azure.com/invoicecloud/Src/_git/CreateAzureBiller
+ 
+The ShardHubName passed in (4.2). is used to connect to a SignalR Hub which provides real-time updates on status.  
+Calls 
+selCreateBillerShard @BillerShardID={biller_shard_id}
+ (DBMaster_GoldAzure) which queries the 
+CreateBillerShard
+ table. 
+CreateAzureBiller
+ calls into a webhook in Azure - 
+NewBillerAutomationWebHook
+ -> NewBillerAutomationWebHookUrl and token are fetched from the devtest Keyvault 
+IC-Automation/EnableNewBillerDB
+ is invoked -> 
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/RG-SQL-Databases/providers/Microsoft.Automation/automationAccounts/IC-Automation/runbooks/EnableNewBillerDB/overview
+ 
+The Runbook calls 
+EXEC selCreateBillerShard
+ (DBMaster_GoldAzure) again.  
+The Runbook uses the Azure PowerShell 
+New-AzSqlDatabaseCopy
+ Cmdlet using the the information returned from 
+selCreateBillerShard
+ - this creates the Shard. i. In all cases - the template database used is 
+NewBillerShard_mcl
+ 
+The Runbook calls 
+EXEC updCreateBillerShard
+ (DBMaster_GoldAzure) and sets the Shard ID + DB_Created = 1 
+The Runbook connects to the newly created Shard and calls 
+EXEC spLoadBiller_Shard
+EXEC spLoadBiller_Shard
+ is invoked (IC-BillerShard) 
+EXTERNAL DATA SOURCE
+ -> The Stored Procedure runs a SQL Query on the dbo.Billers table in DBMaster_GoldAzure 
+The result set of the executed query is used to populate the 'dbo.Billers' table in the Shard. 
+dbo.BillerDomains
+ (IC-BillerShard) is queried locally & a default row is inserted if nothing is present. 
+BACK TO
+ 
+IC-Automation/EnableNewBillerDB
+ 
+The Runbook calls 
+EXEC updCreateBillerShard
+ (DBMaster_GoldAzure) and sets the Shard ID + Pool_Complete = 1 
+The Runbook calls two PowerShell Cmdlets to add the new Shard to the Failover Group
+Get-AzSqlDatabase
+ -> Returns the Shard 
+Add-AzSqlDatabaseToFailoverGroup
+ -> Adds the Shard to the Failover Group 
+The Runbook calls 
+EXEC updCreateBillerShard
+ again, passing 
+@FG_Complete = 1
+ 
+The Runbook connects to the Elastic Pool DB - 
+IC-ElasticJobs
+ and calls 
+EXEC [jobs].[sp_add_target_group_member]
+ with the Shard Database Name as a param 2x. 
+The first call adds the Shard to the 'ic_shard_dbs' target group  
+The second call adds the Shard to the 'ic_DeploymentGroup3' target group
+BACK TO 
+CreateAzureBiller
+When control returns to 
+CreateAzureBiller
+, another update message is pushed out via SignalR to notify on progress.
+A message is placed on an Azure Storage Queue - 
+enablebiller-shard
+ containing the Biller ID + Product & Database information.
+The message placed in the 
+enablebiller-shard
+ queue is picked up by the 
+Biller_CreateShardMapQT
+ Azure function (in the 
+IC-DB-ShardMap
+ project) → 
+Biller_CreateShardMapQT.cs - Repos
+The new shard is added to the Shard Map in 
+IC_ShardMapManagerDb
+.
+The function calls 
+UPDATE Billers SET WebDomainID=2 WHERE BillerID=@BillerID
+ to finally set the Biller’s 
+WebDomainID = 2
+.
+BACK TO 
+CreateAzureBiller
+The job queries the biller record to check for 
+WebDomainID = 2
+.
+selAzureBillers
+ is invoked again to retrieve the Biller Record.
+spCreateNewBiller
+ is invoked and is parameterized based on information provided earlier in the Create Biller Wizard.
+POLYBASE query - updates both DBMaster + Biller Shard
+insPrdInvoicing_Master
+ is invoked to update the 
+prdInvoicing_Master
+ table in DBMaster, inserting an Invoicing ID (scalar result of 
+spCreateNewBiller
+), the Biller ID, and Biller’s Virtual Path.
+updBillers
+ is called to set 
+WebDomainID=2
+ in the shard.
+insBillerUsers
+ is invoked with an empty password to create the first user account.'
+updBillerUsers
+ is invoked to change the password to an encrypted, randomly generated one.
+This step also updates the 
+ChangeLogs
+ table.
+dbo.insNewBillerRolesPermissionsData
+ is invoked to create new Roles + Permissions in the Shard.
+dbo.spInsUpdBillerMultiUserRolePermissions
+ is then invoked twice, once to grant the new user the 
+Admin
+ role and a second time to grant the user the 
+IC Admin
+ role.
+The 
+PartnerID
+ value is retrieved from the 
+dbo.Billers
+ table and used to call SkyNetAPI and apply INT360 settings. 
+ 
+  TODO - Need to understand what this piece is doing.
+Notification is sent that setup is completed.
+1. CRM - BillerWizardStart
+Users access the 
+Biller Wizard
+ Administrative option in the ICCRM.
+The CRM Administrative Option to Access the Biller Wizard
+On Page Load, there are 4 calls to external stored procs that populate each of the dropdown fields with a list of options - Integrators, Sales Reps, Time Zones, and Authentication Types.
+There is one additional stored procedure call to 
+selEmployees
+ which retrieves the current Employee’s record from the 
+dbo.Employees
+ table and populates the user’s email in the notification email text box (
+txtUserEmail
+) on the form.
+Dropdown Fields populated on Page Load
+Time Zone dropdown populated on Page Load
+User email populated on Page Load
+All calls in this context are located in 
+BillerWizardStart.aspx.vb
+ and are targeting 
+DBMaster_GoldAzure
+Stored Procedure
+ASPX
+ 
+VB Method 
+Table(s)
+dbo.selIntegrators
+Page_Load()
+SetUpPage()
+dbo.Integrators
+dbo.lstSalesRep
+Page_Load()
+SetUpPage()
+dbo.SalesReps
+dbo.lstTimeZone
+Page_Load()
+SetUpPage()
+dbo.tblTimeZone
+mcl.lstAuthenticationType
+Page_Load()
+SetUpPage()
+mcl.tblAuthenticationType
+dbo.selEmployees
+Page_Load()
+dbo.Employees
+itg.selIntegratorProfiles
+ddlPartnerID_SelectedIndexChanged()
+itg.IntegratorProfiles
+dbo.insBillers
+btnContinue_Click()
+dbo.Billers
+dbo.BillerDomains
+dbo.insAddresses
+ x2
+btnContinue_Click()
+dbo.Addresses
+dbo.insPhoneNumbers
+ x2
+btnContinue_Click()
+dbo.PhoneNumbers
+dbo.insContacts
+btnContinue_Click()
+dbo.Contacts
+dbo.insCreateBillerShard_mcl
+btnContinue_Click()
+dbo.CreateBillerShard
+Invoke 
+insBillers
+ to create a Biller Row in 
+dbo.Billers
+Invoke 
+insAddresses
+ x2 - to insert records into 
+dbo.Addresses
+Once to insert Biller Corporate Address
+Once to insert DBA/Location Address
+Invoke 
+insPhoneNumbers
+ x2 - to insert records into 
+dbo.PhoneNumbers
+Once to insert Biller Corporate Phone
+Once to insert DBA/Location Phone
+Invoke 
+insContacts
+ to insert record into 
+dbo.Contacts
+ 
+Invoke 
+insCreateBillerShard_mcl
+ to insert a record into 
+dbo.CreateBillerShard
+Note - this record is what will be referenced downstream during the Biller Shard creation process.
+Notes on potential process improvements for this area
+760
+5 outgoing stored proc calls on a single page load is a lot - this can be reduced significantly.
+This process is a critical part of customer onboarding and demoing for sales, and it is one that appears to be easy to isolate.
+First iteration
+Create an API/Microservice
+ that is specific to the 
+Biller Wizard
+ - e.g. 
+BillerWizard
+ API.
+The API should have a single query endpoint that aggregates & returns all of the necessary data to display the page, reducing the # of calls from 5 to 1 (GraphQL?).
+API endpoints should be introduced where necessary for page data changes - for example, changing the 
+Software Integrator Partner
+ field executes an additional stored procedure call 
+itg.selIntegratorProfiles
+ and changes the display based on the result.
+The 
+dbo.selEmployees
+ call should be removed entirely and instead retrieve the active user’s email from an Auth token minted by an API and stored in the browser/session.
+A single endpoint, associated to a command (
+CreateBiller
+, 
+ProvisionBiller
+, 
+RegisterBiller
+, etc.) should be used to initiate the process of creating a Biller Shard & completing the initial seeding.
+Much of the behavior from 
+CreateAzureBiller
+ can be moved into this microservice, especially the SignalR behavior.
+Introduce Redis Cache
+The 
+BillerWizardAPI
+ will leverage Redis cache to store a copy of the data used to display the page - Integrators, Integrator Profiles, Sales Reps, Authentication Types, TimeZones
+TimeZones and Integrator Profiles, specifically, are perfect items to keep in the cache.
+Initially configure the Cache Set with a Sliding + Absolute Expiration. The 
+BillerWizardAPI
+ should ALWAYS own its copy of the data in Redis & handle the invalidation of these items when necessary.
+Redis Data Types
+Integrators → 
+List
+ of objects
+Integrator Profiles → 
+Set
+ - 
+Key: Integrator_ID, Value: Integrator Profile
+Sales Reps → 
+List
+ of objects
+Authentication Types → 
+List
+ of objects
+Timezones → 
+List
+ of objects
+Introduce a SignalR Instance in 
+rg-glb-resources1-{env}
+This instance will replace the one currently in use for legacy infrastructure.
+The 
+BillerWizardAPI
+ will use this SignalR Service in Azure to push real-time updates on the Biller setup process.
+Subsequent iteration(s)
+BillerWizardAPI
+Should issue a command to another API that will begin the integrations process for setting up a new Biller - 
+CreateBillerShard
+ or 
+CreateBillerInfrastructure
+, etc.
+Redis Cache
+Processes that update any of Integrators, Sales Reps, Authentication Types, or TimeZones should be modified to emit events that 
+BillerWizardAPI
+ can subscribe to and use to invalidate the cache on-demand.  
+2. CRM - BillerWizardFinalize
+After the 
+Submit
+ button is clicked on the 
+BillerWizardStart
+ page, form fields are validated, and all procedure calls have finished, the page redirects the user to the 
+BillerWizardFinalize
+ page where another stored procedure is invoked to check for the existence of necessary Biller records in 
+DBMaster_GoldAzure
+.
+Stored Procedure
+ASPX VB Method
+Table(s)
+dbo.selAzureBillers
+BillerWizardFinalize_Load()
+dbo.Billers
+dbo.BillerDomains
+dbo.tblDomainTypes
+dbo.tblDomains
+dbo.tblVirtualApplications
+(Joined in place of 
+dbo.Billers
+ if 
+BillerID == ''
+ or 
+BillerGUID == ''
+)
+If nothing is returned from the 
+dbo.selAzureBillers
+ stored procedure, 
+CreateAzureBiller
+ is invoked through the 
+BusinessService
+ method 
+RunScheduledJob
+.
+3. CreateAzureBiller
+ The request to 
+CreateAzureBiller
+ is proxied through 
+ICBusinessService
+ and the 
+RunScheduledJob
+ method performs the task it indicates. The execution of the job can be found in 
+IC.Business.Scheduler
+.
+Two params are passed to 
+CreateAzureBiller
+ - 
+AzureBillerShardID
+ + 
+ShardHubName
+.
+The 
+AzureBillerShardID
+ reflects the 
+BillerID
+ while 
+ShardHubName
+ is the name of a SignalR hub which status messages are pushed to during the provisioning process.
+If the 
+AzureBillerShardID
+ is valid - the process will invoke 
+selCreateBillerShard
+ which either returns the data contained in 
+dbo.CreateBillerShard
+ or it updates the corresponding Biller Record in the table, setting the 
+ProcessStart
+ col with the current Timestamp, before returning the data.
+The process then invokes the 
+IC-Automation/EnableNewBillerDB
+ webhook contained in Azure - which performs additional downstream work to set up the new Shard database.
+NOTE - The 
+IC-Automation/EnableNewBillerDB
+ Webhook performs work in the background while this process continues along, polling tables until the Webhook finishes running.
+Stored Procedure
+Database
+Table(s)
+dbo.selCreateBillerShard
+DBMaster_GoldAzure
+dbo.CreateBillerShard
+dbo.selAzureBillers
+DBMaster_GoldAzure
+dbo.Billers
+dbo.BillerDomains
+dbo.tblDomainTypes
+dbo.tblDomains
+dbo.tblVirtualApplications
+(Joined in place of 
+dbo.Billers
+ if 
+BillerID == ''
+ or 
+BillerGUID == ''
+)
+4. IC-Automation/EnableNewBillerDB Webhook
+The webhook begins by setting up a call to 
+dbo.selCreateBillerShard
+ - which retrieves the information from the 
+dbo.CreateBillerShard
+ table in 
+DBMaster_GoldAzure
+ and then executes the following process:
+Execute Azure PowerShell Cmdlet 
+New-AzSqlDatabaseCopy
+ to create the new Biller Shard from a Golden Database - 
+NewBillerShard_mcl
+ 
+powershell
+New-AzSqlDatabaseCopy `
+  -ResourceGroupName $ResourceGroupName ` # "RG-SQL-Databases"
+  -ServerName $ServerName `               # "ic-db-east-server1"
+  -DatabaseName $OrigDBName `
+  -ElasticPoolName $poolname `            # "ic-db-elastic-pool-$PoolID"
+  -CopyResourceGroupName $ResourceGroupName  `
+  -CopyServerName $ServerName `
+  -CopyDatabaseName $NewDBName 
+Execute 
+dbo.updCreateBillerShard
+ - set 
+DB_Created = 1
+Execute 
+dbo.spLoadBiller_Shard
+in the newly created Biller Shard.
+This stored procedure makes an external call to 
+DBMaster_GoldenAzure
+ to fetch the Biller row from 
+dbo.Billers
+ - 
+SELECT * FROM Billers WHERE BillerID = @BillerID
+ - and then executes a 
+MERGE
+ to load the row into the Shard’s 
+dbo.Billers
+ table.
+The stored procedure also loads a default row into 
+dbo.BillerDomains
+Execute 
+dbo.updCreateBillerShard
+ again - set 
+Pool_Complete = 2
+Execute PowerShell Cmdlet 
+Add-AzSqlDatabaseToFailoverGroup
+ to add the Shard to the failover group.
+powershell
+$failovergroup = Get-AzSqlDatabase `
+  -ResourceGroupName $primaryresourcegroupname `
+  -ServerName $primaryservername `
+  -DatabaseName $databasename | `
+                    
+Add-AzSqlDatabaseToFailoverGroup `
+  -ResourceGroupName $primaryresourcegroupname ` `
+  -ServerName $primaryservername `
+  -FailoverGroupName $failovergroupname
+  $failovergroup
+Execute 
+dbo.updCreateBillerShard
+ again - set 
+FG_Complete = 1
+Execute 
+jobs.sp_add_target_group_member
+ in 
+IC-ElasticJobs
+ to add the shard to 
+ic_shard_dbs
+ group.
+Execute 
+jobs.sp_add_target_group_member
+ in 
+IC-ElasticJobs
+ to add the shard to 
+ic_DeploymentGroup3
+ group.
+Stored Procedure
+Database
+Table(s)
+dbo.selCreateBillerShard
+DBMaster_GoldAzure
+dbo.CreateBillerShard
+dbo.updCreateBillerShard
+DBMaster_GoldAzure
+dbo.Billers
+dbo.BillerDomains
+dbo.tblDomainTypes
+dbo.tblDomains
+dbo.tblVirtualApplications
+(Joined in place of 
+dbo.Billers
+ if 
+BillerID == ''
+ or 
+BillerGUID == ''
+)
+dbo.spLoadBiller_Shard
+DBMaster_GoldAzure
+dbo.Billers
+jobs.sp_add_target_group_member
+IC-ElasticJobs
+ 
+ TODO - 
+IC-ElasticJobs
+ & stored procedures
+5. CreateAzureBiller
+During the execution of the 
+IC-Automation/EnableNewBillerDB
+ webhook, the 
+CreateAzureBiller
+ job repeatedly invokes the 
+dbo.selAzureBillers
+ stored procedure, around every 8 seconds, up to a maximum of 3 minutes. When the 
+dbo.selAzureBillers
+ stored proc returns a row, it breaks out of the loop and prepares a call to 
+dbo.spCreateNewBiller
+ in the newly provisioned Biller Shard.
+Create a call to 
+spCreateNewBiller
+ - specifically, 
+add parameters to enable default products
+ as a function of new biller creation
+Make a call to 
+dbo.insPrdInvoicing_Master
+Make a call to 
+dbo.updBillers
+ChangeRequestorID=4
+WebDomainID=2
+Make a call to 
+dbo.insBillerUsers
+Make a call to 
+dbo.updBillerUsers
+This call updates the User record with an updated, encrypted password and also updates the record with a Biller User ID.
+The partner ID is retrieved from the completed Biller Row, if it’s available
+If it is not available, 
+SELECT PartnerID FROM dbo.Billers WHERE BillerID = @BillerID
+ is executed and the 
+PartnerID
+ returned here is used in subsequent steps.
+A POST request is made the SkyNet API using the BillerID + PartnerID to finish the INT360 setup for the Biller.
+xml
+wide
+760
+<add key="SkynetUrl" value="http://internal-qa6.invoicecloud.com/apps/skynet" />
+<add key="SkynetInt360ApiEndPoint" value="/api/integration360/config/insert/all" />
+Make a call to 
+itg.selIntegratorProfiles
+If there is an Integrator Profile - 
+ 
+TODO
+Stored Procedure
+Database
+Table(s)
+dbo.spCreateNewBiller
+Shard{BillerID}
+Many - see section below
+dbo.insPrdInvoicing_Master
+DBMaster_GoldAzure
+dbo.prdInvoicing_Master
+dbo.updBillers
+→ 
+dbo.insChangeLogs
+Shard{BillerID}
+dbo.Billers
+dbo.PaymentSchedules
+dbo.ChangeLogs
+dbo.insBillerUsers
+Shard{BillerID}
+DBMaster_GoldAzure
+dbo.BillerUsers
+dbo.BillerUsers_Master
+dbo.updBillerUsers
+→ 
+dbo.insChangeLogs
+Shard{BillerID}
+DBMaster_GoldAzure
+dbo.BillerUsers
+dbo.BillerUsers_Master
+itg.selIntegratorProfiles
+DBMaster_GoldAzure
+itg.IntegratorProfiles
+5a. spCreateNewBiller
+This procedure starts by creating a cursor using the record set ->
+SELECT BillerEmailProcessID FROM tblBillerEmailProcess ORDER BY BillerEmailProcessID ASC
+For each record returned, invoke 
+dbo.insBillerEmailProcessList
+Check for 
+@prdInvoicing = 1
+Invoke 
+insBillerApplication
+ to insert an Invoicing Product row into 
+dbo.BillerApplication
+Invoke 
+insBillerBranding
+ to insert a default row into 
+dbo.BillerBranding
+Invoke 
+spResetBillerBranding
+ to update the row with CSS colors - 
+Seems like this could be combined with the step above.
+Invoke 
+insBillerEmailConfig
+ 
+44 times 
+- once for each default email template
+Insert 
+Email Notice
+Insert 
+Second Notice
+Insert 
+3rd Notice
+Insert 
+Email Receipt
+Insert 
+Failed Autopay
+Insert 
+Failed Scheduled
+Insert 
+Late Fees Applied
+Insert 
+Welcome Templates 
+Insert 
+Autopay Registration Templates
+Insert 
+Paperless Registration Templates
+Insert 
+Reject Notifications Templates
+Insert 
+Credit Card Expiration Templates
+Insert 
+Scheduled Pay Confirmation
+Insert 
+AutoPay Reminders
+Insert 
+Biller Cloud Payment Receipt
+Insert 
+Biller FlexPay Confirmation
+Insert 
+Biller Scheduled Payment Reminder
+Insert 
+Paperless Off Confirmation
+Insert 
+Online Bank Direct Payment Receipt
+Insert 
+Check 21 Payment Receipt
+Insert 
+Invoice First Notification Customer Group
+Insert
+ Invoice Second Notification Customer Group
+Insert 
+Invoice Third Notification Customer Group
+Insert 
+AutoPay Off Confirmation
+Insert 
+Conveyance Notification
+Insert 
+Multiple Customer Registration Notification
+Insert 
+RSP Confirmation
+Insert 
+RSP Cancellation
+Insert 
+New Document Notification
+Insert 
+Document Paperless Registration Information
+Insert 
+Account Change Confirmation - 
+Template 190
+Insert 
+Account Change Confirmation - 
+Template 191
+Insert 
+Paperless Registration Information
+Insert 
+Account Change Confirmation - 
+Template 194
+Insert 
+Account Change Confirmation - 
+Template 186
+Insert 
+Account Change Confirmation - 
+Template 185
+Insert 
+Account Deactivation Notification
+Insert 
+Password Reset Notification
+Insert 
+Auto Payment Reminder
+Insert 
+Auto Pay Payment Confirmation
+Insert 
+AutoPay Enrollment with Paperless Billing Completed Notification
+Insert 
+Payment Method Blocked Notification
+Insert 
+New Invoice Notification
+Insert 
+Payment Confirmation
+Invoke 
+insPrdInvoicing
+ - querying for the value of 
+DemoAccount
+ in 
+dbo.Billers
+ - to create the Invoicing product.
+Check for 
+@prdCreditCard = 1
+Invoke 
+dbo.insBillerApplication
+ again to insert a Credit Card product row into 
+dbo.BillerApplication
+.
+Invoke 
+insprdCreditCard
+ to insert a default row into 
+dbo.PrdCreditCard
+.
+Invoke 
+insBillerPaymentConfig
+ to insert a default row into 
+dbo.BillerPaymentConfig
+Invoke 
+insTerminals
+ to insert a row into 
+dbo.Terminals
+ for the Default Credit Card terminal.
+Invoke 
+insTerminalSettings
+ to insert a row into 
+dbo.TerminalSettings
+ corresponding to the Default Credit Card Terminal from Step 4d. above.
+Check for 
+@prdEFT = 1
+Invoke 
+dbo.insBillerApplication
+ again to insert an EFT/ACH product row into 
+dbo.BillerApplication
+.
+Invoke 
+insprdEFT
+ to insert a default row into 
+prdEFT
+.
+Invoke 
+insTerminals
+ to insert a row into 
+dbo.Terminals
+ for the Default EFT/ACH terminal.
+Invoke 
+insTerminalSettings
+ to insert a row into 
+dbo.TerminalSettings
+ corresponding to the Default EFT/ACH Terminal from Step 5c. above.
+Check for 
+@prdEFT = 1 OR @prdCreditCard = 1
+Create a temp table, 
+#TerminalSettings
+ - by joining 
+dbo.TerminalSettings
+ with System Table 
+tblPaymentSource
+- specifically the 
+PaymentSourceID
+ col.
+Set 
+MaxCreditCard
+, 
+MaxAch
+, 
+MaxCrCreditCard
+, and 
+MaxCrAch
+ cols to 0 for numeric compatibility.
+Insert (directly) into 
+dbo.TerminalSettings
+ values from the 
+#TerminalSettings
+ temp table.
+ I’m assuming this is happening to create rows for the Credit Card + EFT/ACH products for each PaymentSourceID?
+Check for 
+@prdRPPS = 1
+Invoke 
+dbo.insBillerApplication
+ again to insert a an RPPS row into 
+dbo.BillerApplication
+.
+Invoke 
+insprdRpps
+ to insert a default row into 
+prdRPPS
+Check for 
+@prdCloudPay = 1
+Invoke 
+insprdCloudPayments
+ to insert a row into 
+prdCloudPayments
+Check for 
+@prdCloudStore = 1
+Invoke 
+insprdCloudStore
+ to insert a row into 
+prdCloudStore
+Check for 
+@prdPayByText = 1
+Invoke 
+dbo.insBillerApplication
+ again to insert a Pay By Text row into 
+dbo.BillerApplication
+.
+Invoke 
+updPrdInvoicing
+ to update the 
+prdInvoicing
+ table and enable the Pay By Text product.
+Note - the 
+prdInvoicing
+ table is change tracked - for each field that has changed as a result of the execution of the previously mentioned stored procedure, 
+insChangeLogs
+ is invoked, inserting audit logs into the 
+ChangeLogs
+ table. 
+Check for 
+@prdKiosk = 1
+Invoke 
+insPrdKiosk
+ to insert a row into 
+prdKiosk
+Invoke 
+insVirtualSites
+ to create a Virtual Site row in 
+VirtualSites
+ 
+ 
+Order
+Stored Procedure
+Table(s)
+1
+dbo.insBillerEmailProcessList
+dbo.BillerEmailProcessList
+2
+dbo.insBillerApplication
+dbo.BillerApplication
+3
+dbo.insBillerBranding
+dbo.BillerBranding
+4
+dbo.spResetBillerBranding
+dbo.BillerBranding
+5
+dbo.insBillerEmailConfig
+ x44
+dbo.BillerEmailConfig
+6
+dbo.insPrdInvoicing
+dbo.prdInvoicing
+7
+dbo.insBillerApplication
+dbo.BillerApplication
+8
+dbo.insPrdCreditCard
+dbo.PrdCreditCard
+9
+dbo.insBillerPaymentConfig
+dbo.BillerPaymentConfig
+10
+dbo.insTerminals
+dbo.Terminals
+11
+dbo.insTerminalSettings
+dbo.TerminalSettings
+12
+dbo.insBillerApplication
+dbo.BillerApplication
+13
+dbo.insprdEFT
+dbo.prdEFT
+14
+dbo.insTerminals
+dbo.Terminals
+15
+dbo.insTerminalSettings
+dbo.TerminalSettings
+16
+dbo.insBillerApplication
+dbo.BillerApplication
+17
+dbo.insprdRpps
+dbo.prdRPPS
+18
+dbo.insprdCloudPayments
+dbo.prdCloudPayments
+19
+dbo.insprdCloudStore
+dbo.prdCloudStore
+20
+dbo.insBillerApplication
+dbo.BillerApplication
+21
+dbo.upPrdInvoicing
+dbo.prdInvoicing
+22
+dbo.insPrdKiosk
+dbo.prdKiosk
+23
+dbo.insVirtualSites
+dbo.VirtualSites
+DBMaster Tables
+The below tables in 
+DBMaster_GoldAzure
+ are utilized during the Biller Shard creation process.
+2
+1
+0
+0
+4633853991
+4611309636
+1
+dbmaster_tables.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+dbmaster_tables.drawio
+0
+1353
+1468
+Biller Shard Tables
+The below tables in 
+IC-BillerShard
+ are utilized during the Biller Shard creation process.
+2
+1
+0
+0
+4617699525
+4611309636
+1
+Untitled Diagram-1756483935317.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1756483935317.drawio
+0
+1600
+2697
+ URL:/spaces/EA/pages/4611309636/Overview+of+Seeding+Process

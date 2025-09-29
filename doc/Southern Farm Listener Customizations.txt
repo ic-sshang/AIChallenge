@@ -1,0 +1,400 @@
+This document outlines the initial request from Southern Farm that required InvoiceCloud to begin sending different types of data to Southern Farm’s event listeners. It also describes the approach taken to implement these changes and the testing procedures employed.
+Worked On By:
+Victor Cavada (Assignee)
+Bruno Saenz (Assignee/ Test Engineer)
+Katelyn Espinoza (Assignee/ Test Engineer)
+Rob Hoerning (Test Engineer)
+Michael Maldonado (Test Engineer)
+Krissi Klein (Reporter)
+Sarah Woodard (Reporter)
+Sarah Books (Reporter)
+Related Items:
+EBPP-16826
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-17869
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-17706
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-17870
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-17890
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-18947
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-19483
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19484
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25986
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25170
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance:
+Southern Farm (BID: 3898) initially sought help for their iframe sizing issues, which required dynamic resizing based on the payer's current page. The team opted to transmit a message with the page name the payer was on to an event listener, enabling Southern Farm to adjust the iframe size on their side. This led to the realization that listeners could be used for real-time data updates, as DataPump was deemed too slow by Southern Farm. Consequently, they requested messages for various interactions between the payer and InvoiceCloud, leading to the establishment of multiple event listeners for the following: the initial page name message, autopay enrollment, payment confirmation, scheduled payment enrollment, credit card entry, and bank account entry.
+EBPP-17706 ~ Page Name Listener:
+https://invoicecloud.atlassian.net/browse/EBPP-17706
+ 
+Assignee: Bruno Saenz
+Repo Changed: 
+MyIIS
+Listener Event Name
+: 
+PAGE_NAME
+A new file was created called
+ 
+ic-iframe-listener.js
+ 
+that housed the 
+SendPageNameToListener
+ function. With these changes all of these pages will be sent to 
+the biller’s
+ event listeners. A 
+test iframe page
+ was also added for InvoiceCloud developers to use in the future to test these listeners as well as the iframe view mode.
+https://www.invoicecloud.com/portal/(S(ugef044ituznrx3bqutratjy))/TestIframePage.aspx?bg=6b9e7043-1cbd-4728-be90-4ee5c0091324
+ 
+Pull Request Link
+Testing Procedure
+The testing procedure utilized the software SauceLabs so we may test that these listeners worked on each of the following: different browsers, mobile devices, iframe, and non iframe windows. 
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a CloudPaymentV2 API request
+Enter the URL in the TestIframePage.aspx
+As you navigate through the different pages check your browser’s 
+console
+ to verify the page name was sent.
+Below is a video example of this testing effort.
+Sample Listener Code:
+NOTE: This code is for the biller.
+ // LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'PAGE_NAME' && payload?.pageName) {
+				  console.log('The page name is: ' + payload?.pageName);
+			  }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-17870 ~ AutoPay Enrollment Listener:
+https://invoicecloud.atlassian.net/browse/EBPP-17870
+Assignee: Katelyn Espinoza
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+AUTOPAY_COMPLETED
+ A new function was added to the 
+ic-iframe-listener.js
+ file called 
+SendAutoPayRegistrationCompletedToListener
+.  This 
+function
+ will send the CustomerGUID if a payer enrolls in AutoPay and the special character ‘*' 
+when the payer unenrolls in AutoPay
+. The CustomerGUID/special character i
+s sent through a JSON format query string
+ in 
+AutoPay.aspx.vb
+. 
+CustomerGroupAutoPay2.aspx.vb 
+calls 
+SendAutoPayRegistrationCompletedToListener
+ after ensuring that the query string has a value. We also send the page name when a payer lands 
+on
+ the AutoPay.aspx page. A listener was also added to the 
+TestIframePage.aspx
+ to ensure the message was sent properly. Due to this change, 
+EBPP-19483
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ became unnecessary since we notify the biller with '*’ when the payer unenrolls from AutoPay in this item.
+Pull Request Link
+Testing Procedure
+The testing procedure utilized the software SauceLabs so we may test that these listeners worked on each of the following: different browsers, mobile devices, iframe, and non iframe windows. 
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a AgentConnect API request
+Set RedirectMode to 3 (AutoPay Settings)
+Enter the URL in the TestIframePage.aspx
+Enroll/Unenroll the payer with AutoPay
+Open the browser’s console to see the message
+Sample Listener Code
+NOTE: This code is for the biller.
+// LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'AUTOPAY_COMPLETED' && payload?.customerGuidJson) {
+                  console.log('CustomerGuid: ' + payload?.customerGuidJson);
+              }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-17890 ~ Payment Confirmation Page Listener:
+https://invoicecloud.atlassian.net/browse/EBPP-17890
+ 
+Assignee: Victor Cavada
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+PAYMENT_CONFIRMATION
+ Two functions were added to the 
+ic-iframe-listener.js
+ file called 
+SendPagePaymentConfirmationToListener
+ and 
+SetReceiptInformation
+.  
+SendPagePaymentConfirmationToListener
+ posts a message with the ReceiptGUID and payment type in JSON format. 
+SetReceiptInformation
+ retrieves the ReceiptGUID  from the URL and the payment type from a 
+hdnPaymentInformation
+ variable. Then, the function calls the 
+SendPageNameToListener
+ to send the page name and  
+SendPagePaymentConfirmationToListener
+.  If the special character '*' is sent, then something went wrong during the payment process.
+Pull Request Link
+Testing Procedure
+The testing procedure utilized the software SauceLabs so we may test that these listeners worked on each of the following: different browsers, mobile devices, iframe, and non iframe windows. 
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a CloudPaymentV2 request with different request types:
+Non existing customer
+New customer with new invoice
+Existing customer with existing invoice
+Existing customer with latest invoice
+Existing customer with new invoice
+Enter the URL in the TestIframePage.aspx
+Make a payment
+Open 
+the browser’s console
+ to see the message
+Repeat steps for both ACH and CC payment types
+Manual Testing Document Provided by Bruno Saenz
+Sample Listener Code:
+NOTE: This code is for the biller.
+// LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'PAYMENT_CONFIRMATION' && payload?.message) {
+                  console.log('ReceiptGuid: ' + payload?.message);
+
+			  }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-18947 ~ Scheduled Payment Listener:
+https://invoicecloud.atlassian.net/browse/EBPP-18947
+ 
+Assignee: Bruno Saenz
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+SCHEDULED_PAYMENT_CANCELED
+A new function called 
+SendDataAndEventNameToListener
+ was added to the 
+ic-iframe-listener.js
+ file. This 
+function
+ would post the event name and the payload as a message to the user. This function was made to be more dynamic so future items asking for listeners can utilize this function instead of creating a new one. 
+Pull Request Linked
+Testing Procedure
+The testing procedure utilized the software SauceLabs so we may test that these listeners worked on each of the following: different browsers, mobile devices, iframe, and non iframe windows. 
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a AgentConnect API request to a customer with a scheduled payment
+Set RedirectMode to 9 (Customer Portal Scheduled Payments Listing)
+Enter the URL in the TestIframePage.aspx
+Cancel the scheduled payment
+Open
+ the browser’s console
+ to see the message
+Sample Listener Code:
+NOTE: This code is for the biller.
+// LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'SCHEDULED_PAYMENT_CANCELED' && payload?.parameterJson) {
+                  console.log('CustomerGuid: ' + payload?.parameterJson);
+              }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-19484 ~ Additional Listener Page Names:
+https://invoicecloud.atlassian.net/browse/EBPP-19484
+ 
+Assignee: Katelyn Espinoza
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+PAGE_NAME
+This item utilized the previously built function 
+SendPageNameToListener
+ from 
+EBPP-17706
+ to send the page names. The requested page names to be sent to the biller’s listener were the following pages: 
+ChangeScheduledPaymentDate.aspx 
+CustomerGroupPaperInvoices.aspx
+CustomerGroupPayByText.aspx
+CustomerGroupPaymentOptions.aspx
+Pull Request Linked
+Testing Procedure
+The testing procedure utilized the software SauceLabs so we may test that these listeners worked on each of the following: different browsers, mobile devices, iframe, and non iframe windows. 
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make an AgentConnect API request
+Set the RedirectMode in the request to the page being tested
+2
+ (Customer Portal Paperless Settings)
+5
+ (Customer Portal Payment Options)
+9
+ (Customer Portal Scheduled Payments Listing)
+11
+ (Customer Portal Pay By Text Settings)
+Enter the URL in the TestIframePage.aspx
+As you navigate through the different pages check your browser’s 
+console
+ to verify the page name was sent.
+Sample Listener Code:
+NOTE: This code is for the biller.
+ // LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'PAGE_NAME' && payload?.pageName) {
+				  console.log('The page name is: ' + payload?.pageName);
+			  }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-25170 ~ Adding Payment Method ACH versus CC
+https://invoicecloud.atlassian.net/browse/EBPP-25170
+ 
+Assignee: David Moreno
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+PAGE_NAME
+Southern Farm requested that we append ACH or CC to the CloudPaymentMethod page depending on which payment method the payer selects. This item utilized the previously built function 
+SendPageNameToListener
+ from 
+EBPP-17706
+ to send the page names. The requested pages to be sent to the biller’s listener were the following: 
+CloudPaymentMethod-ACH
+CloudPaymentMethod-CC
+Pull Request Link
+Testing Procedure
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a CPV2 API request
+Enter the URL in the TestIframePage.aspx
+Select Proceed to Payment
+Select a new payment method
+Once on the CloudPaymentMethod.aspx page check your browser’s 
+console
+ to verify the page name was sent.
+ACH
+CC
+Sample Listener Code:
+NOTE: This code is for the biller.
+ // LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'PAGE_NAME' && payload?.pageName) {
+				  console.log('The page name is: ' + payload?.pageName);
+			  }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+EBPP-25986~ Page Name for New CPV2 Payment Flow
+https://invoicecloud.atlassian.net/browse/EBPP-25986
+ 
+Assignee: David Moreno
+Repo Changed: 
+MyIIS
+Listener Event Name: 
+PAGE_NAME
+After the work for EBPP-25170 was released, SPAM added a new workflow to CPV2 where the payer can sign up for AutoPay before making a payment. This use case needed to be covered for CC and ACH as well. This item utilized the previously built function 
+SendPageNameToListener
+ from 
+EBPP-17706
+ to send the page names. The requested pages to be sent to the biller’s listener were the following: 
+CloudPaymentAutoPayEnroll-CC
+CloudPaymentAutoPayEnroll-ACH
+Pull Request Link
+Testing Procedure
+Ensure that a 
+listener
+ exists on the test iframe page
+Navigate to the TestIframePage.aspx
+Make a CPV2 API request using the “RequireAutopayEnroll” field
+Enter the URL in the TestIframePage.aspx
+Select a payment method
+Once the page loads check your browser’s 
+console
+ to verify the page name was sent.
+CC
+ACH
+Sample Listener Code:
+NOTE: This code is for the biller.
+ // LISTENER CODE
+          const handleReceiveMessage = (event) => {
+              const eventName = event?.data?.eventName;
+              const payload = event?.data?.payload;
+
+              if (eventName === 'PAGE_NAME' && payload?.pageName) {
+				  console.log('The page name is: ' + payload?.pageName);
+			  }
+          };
+
+          window.addEventListener('message', handleReceiveMessage);
+// END LISTENER CODE
+ URL:/spaces/PE/pages/3414032434/Southern+Farm+Listener+Customizations

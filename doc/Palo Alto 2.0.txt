@@ -1,0 +1,48 @@
+Keith Recommended Terraform Updates:
+Decouple Bootstrap Module and Private Link - 2
+Constant issues with private link going active before storage share can populate with data and getting a 403. After some research, this seems to be working as intended according to Azure Terraform Provider maintainer.
+Create SA, populate with bootstrap files, cut off network access in that order. Need to maybe add the network access lockdown in a later step to ensure race conditions don't pop up?
+Blast Radius is huge, everything deploys in one step and its prone to issues - 2
+Destroy often takes a few runs because there are pieces like the NICs that are waiting for VM to be deleted etc which causes the whole stack to break
+Any simple change potentially can cause unintended issues due to everything being run at once
+Changing from private to public Storage Account causes the data source ID to change for "existing" storage account and this causes the outbound firewalls to recreate for example.
+Init_Cfg is static, and not dynamic - 2
+templatefile is an option here potentially
+Need to understand how the palo vms ingest this data and if we can override the path so we can generate the configs in a loop and ensure each firewall can access their respective file
+This currently works the only issue being the naming is the same across inbound or outbound firewalls, its a pretty easy exercise in renaming them, but it would be ideal if it was done by bootstrap.
+Currently storing binary for content etc which is used for bootstrapping the firewalls in source control - 2
+These should be moved to a bucket,  it makes the pipeline runtime take a long time and I think its generally bad practice
+Modules are repeated between Palo and Panorama (VM and Bootstrap) and should be their own repos. Ive had to spend a lot of time ensuring parity between them -1
+Load Balancer Module could be broken down, and load balancer rules could be defined outside of the module for a more maintainable, and more control over the rules source/destination, currently that is not the case. - 1
+Passwords are randomly generated in the state file, it would be nice to have them dumped somewhere like a key vault - 2
+I didn't make this a priority due to the nature of the current setup which overwrites those passwords when we setup Panorama and push the config
+only required on first login and then not used
+Would like to have a self hosted runner in West, currently have to manually disable private link
+Syslog / AlienVault regionalized - 2 || 3
+single point of failure, currently going to our legacy vnet
+Keith Wish List:
+Replicate the Firewall config with Terraform and create a Terraform stack that applies it to Panorama after Panorama deployment is completed - 2
+We could use ansible as well
+We lose our need for the xml that becomes our lifeline
+We can scale better, and have all rules in source control, easier to roll back if required
+Depending on how we approach firewall rules in the future, we also have the ability to use the provider in other stacks and write rules required for those services (not a huge fan of this, I like having the control centralized in this case)
+Auto Backup XML Configuration - 1
+Decoupling modules and stacks to reduce blast radius (mentioned above) -1
+Duplicated work and snowballing issues that arise running everything at once
+Once on flex licenses, look to setup Scale Sets so our firewalls can scale out and in depending on load - 2
+this is supported, and there are serious cost savings here
+Palo Restructure Objectives per Vasant:
+Flex License Conversion - 1
+New Alien Vault agents for next gen - 2
+Private inbound tunnel - 3
+Nat Gateway - 3
+Capacity Planning (hence reducing East footprint) - 1
+Config automation - Ansible - 2
+Sandbox - license conversion and move to devtest - 3
+Timing this with Barracuda phase out - 1
+West side config - 1
+Palo FW update (Firmware) - 2
+Additional Possible Objectives:
+Infrastructure Observability && Alerting - 1
+Threat Observability && Alerting - 2
+ URL:/spaces/icinfradoc/pages/2843901998/Palo+Alto+2.0

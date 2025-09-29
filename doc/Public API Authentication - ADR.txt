@@ -1,0 +1,30 @@
+Status
+Accepted
+Context
+We are designing the authentication for our public facing web APIs. We need to decide on a authentication model for managing integrations.  Currently we are using various implementations of Basic Authentication which in some cases is not sufficient for enterprise integrations. 
+Functional and Non Functional Requirements
+Open Standard
+Widely used in the industry
+Support different persona scenarios
+Support granular permissions
+Secure
+Options
+Basic Authentication (refactored on a standard implementation)
+OAuth 2.0
+Decision
+OAuth 2.0
+Justification
+OAuth 2.0 supports a safe exchange for clients without the need to share the actual credentials.
+Basic authentication permissions are fixed at the credential.  Auth 2.0 allows for scopes to be provided at the time of issuing tokens to limit the use of the token with APIs.
+OAuth 2.0 provides a expiry of tokens helping with life time management.
+OAuth 2.0 is used and accepted by enterprise customers who will be integrating to Invoice Cloud.
+Kong supports centralization of OAuth 2.0 via a enterprise plugin removing the need to implement OAuth authentication in each API.
+Consequences
+A grant flow must be used to get a access token to use a resource API.
+Refresh tokens must be maintained by the client to allow for grant persistence.
+Access tokens expire and new ones must be obtained by the client.
+Kong OAuth 2.0 plugin configuration must be tested and operationalized.
+Kong consumers must be created for each client.
+Authentication must be handled over HTTPS.
+Related Articles
+ URL:/spaces/EA/pages/3394371993/Public+API+Authentication+-+ADR

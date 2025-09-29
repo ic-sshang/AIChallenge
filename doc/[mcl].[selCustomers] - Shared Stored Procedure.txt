@@ -1,0 +1,65 @@
+Procedure Name
+: [mcl].[selCustomers]
+Description
+: Dynamically constructs and executes a SQL query to retrieve customer information from the database based on various input parameters
+Purpose
+Objective
+: Retrieve customer information from the database
+Parameters
+Input Parameters
+:
+@CustomerID int = NULL
+	,@BillerID int = NULL
+	,@CustomerGUID varchar(36) = ''
+	,@Active bit = NULL
+	,@AccountNumber nvarchar(50) = NULL
+	,@CustomerName nvarchar(65) = NULL
+	,@CustomerName2 varchar(65) = NULL
+	,@Address1 nvarchar(50) = NULL
+	,@Address2 nvarchar(50) = NULL
+	,@City nvarchar(50) = NULL
+	,@State varchar(2) = NULL
+	,@Zip nvarchar(50) = NULL
+	,@Phone varchar(15) = NULL
+	,@EmailAddress nvarchar(100) = NULL
+	,@EmailAddressCC nvarchar(100) = NULL
+	,@EmailOptOut bit = NULL
+	,@CustomerVATNumber varchar(9) = NULL
+	,@CurrentPassword nvarchar(300) = NULL
+	,@PreviousPassword1 nvarchar(300) = NULL
+	,@PreviousPassword2 nvarchar(300) = NULL
+	,@PreviousPassword3 nvarchar(300) = NULL
+	,@PreviousPassword4 nvarchar(300) = NULL
+	,@LastPasswordChangeDate datetime = ''
+	,@RegistrationValue varchar(50) = NULL
+	,@Pin varchar(15) = NULL
+	,@Registered bit = NULL
+	,@RegistrationDate datetime = ''
+	,@RegistrationIP varchar(20) = NULL
+	,@AutoPay bit = NULL
+	,@PaperInvoices bit = NULL
+	,@BlockPayments bit = NULL
+	,@BlockPaymentsCC bit = NULL
+	,@BlockPaymentsEFT bit = NULL
+	,@AutoPayRegDate datetime = ''
+	,@PaperlessRegDate datetime = ''
+	,@LoginName varchar(25) = NULL
+	,@DisplayAccountNumber nvarchar(50) = NULL
+	,@DateRecAdded datetime = ''
+Return Values
+Return Type
+: Joined tables
+Description
+: A list of customers
+Dependencies
+Tables
+: mcl.Customers, mcl.CustomerLogins, mcl.Logins
+Example Usage
+Sample Call
+: [Example of how to call the stored procedure]
+SQL
+EXEC [mcl].[selCustomers] @BillerID = 3019
+
+Expected Output
+: A list of customers
+ URL:/spaces/ED/pages/3511910427/mcl+.+selCustomers+-+Shared+Stored+Procedure

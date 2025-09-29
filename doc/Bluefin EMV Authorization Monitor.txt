@@ -1,0 +1,44 @@
+Purpose
+The Bluefin EMV Authorization Monitor was created to monitor and reverse any hanging authorizations left within the Payconex Payment Gateway. A Hanging Authorization can occur if the POS transaction process is interrupted during the AUTH phase of the transaction. This interruption can occur during both the CloudPayV2 and Biller Portal POS Payment Process. When this occurs, the cashier’s only option is to begin the process again. Which results in a new AUTH on the payers credit card. Since a new transaction process has begun the previous AUTH never gets converted to a SALE and is left “Hanging”/”Open”. 
+Overview
+The Bluefin EMV Authorization Monitor is an azure function - timer trigger solution. By default the function is set to run every 15 minutes. Using the report functionality of the Payconex API, the monitor will retrieve 30 minutes worth of “AUTHORIZATION-ONLY” transactions. Due to the nature of the Payconex Report API, even though we request “AUTHORIZATION-ONLY“ transactions, we happen to also get “AUTHORIZATION-ONLY/DECLINED” Transactions. Nevertheless the number of transactions returned are far less than just returning all transactions and then parsing them out in code. Given the extra transactions, we pass the data into a method that verifies and returns valid hanging authorizations. The validation criteria is as follows:
+A Valid Hanging Authorization Must Have:
+A Transaction Type = “AUTHORIZATION-ONLY“
+An Authorization Date > Time Limit (Default: 5 Minutes)
+The Authorization Date plays an important role. It is normal for an Authorization to exist for a short period of time as the transaction is completed and the AUTH is converted to a SALE. The time limit ensures we are only reversing Hanging AUTHs and not legitimate AUTHs pending the transactions completion.
+After validating, we check if there are any valid hanging AUTHs. If there are none, then we are done. If there are hanging AUTHs, we check an appsetting variable called “EnableBluefinReversals”. This variable (Default: Disabled), was created to let us monitor that we are picking up Hanging AUTHs correctly. Once we are confident then we can enable the setting and begin reversing the Hanging AUTHs.
+Important Appsetting Variables
+IsLive 
+- Controls whether to connect to Cert/Prod Payconex Environments
+Determined by the Target Environment in Deploy Pipeline.
+EnableBluefinReversals 
+- Controls if we want to Reverse Hanging Auths or just monitor
+Default: Disabled - Enabled Manually.
+RecordRetrievalMinuteSpan 
+- The span of time (minutes) before the current time (now) which the report will return “AUTHORIZATION-ONLY“ transactions.
+AuthHangingMinuteSpan 
+- The span of time (minutes) which determines the cut off time limit for a valid/non-valid Hanging AUTH.
+Technical Specifications
+Repo: 
+BluefinEMVAuthorizationMonitor
+Language: C#
+Framework: .NET 8
+Solution: Azure Function - Isolated Worker Model
+Flowchart
+2
+1
+0
+0
+3389784136
+3374874633
+1
+BluefinEMVAuthMonitor.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+BluefinEMVAuthMonitor.drawio
+1
+C5RBs43oDa-KdzZeNtuy WIyWlLk6GJQsqaUBKTNV-1
+451
+650.5
+ URL:/spaces/ED/pages/3374874633/Bluefin+EMV+Authorization+Monitor

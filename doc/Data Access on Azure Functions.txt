@@ -1,0 +1,124 @@
+Overview
+This document will provide samples of how to connect to the database with Azure Functions (Az Functions). 
+Prerequisites
+Please read the following documents to gain a better understanding of the architecture:
+Data-Access-On-Applications - Overview
+ 
+Secret Management - Overview
+ 
+Secret Management - Retrieving Secrets On Azure Resources
+ 
+What makes Azure Functions different than the other types of applications?
+For all of our other applications, we use a newer version of the Azure Active Directory (AAD) authorization NuGet package, Azure.Identity, to authenticate with AAD.
+This is not compatible with Azure Functions V1 due to the tight coupling of a Json Nuget package the Azure Function SDK is using. 
+Managed Identities
+For Az Functions, we do not need to create a user-managed identity since we can leverage the resource's system-managed identity.
+Today, this is a physical toggle on the portal, but there may be plans to automate this in the future. 
+Code Samples:
+c#
+
+    // This object is available from the IC.Database.Authentication.AzureFunctions NuGet package. 
+    var keyVaultClient = new IC.Database.Authentication.AzureFunctions.EnvironmentVariableReader(); 
+    var secret = keyVaultClient.GetSecret("MySuperSecretKey")
+    
+    //TODO:...
+
+Database Access
+Overview
+Similar to the IC.Azure.KeyVault issues, the IC.Database.Authentication NuGet package will not work on the Az Functions.
+Solution
+The solution is to leverage the IC.Database.Authentication.AzureFunctions NuGet package.
+This package leverages the Microsoft.Azure.Services.AppAuthentication NuGet package which is what was used to authenticate in the past.
+The NuGet package is not deprecated, but it is also not recommended to be used with the newer SDKs. 
+Documentation
+App Authentication client library for .NET - version 1.6.0
+Code Samples:
+c#
+
+using IC.Database;
+using System;
+
+namespace MyCoolApplication
+{
+    public static class DataAccessManager
+    {
+        static DataAccessManager()
+        {
+            DataAccessManager.KeyVaultClient = new IC.Database.Authentication.AzureFunctions.EnvironmentVariableReader();
+            DataAccessManager.InternalSettingService = SettingService.Instance;
+        }
+   
+        private static Lazy<IC.Interfaces.Database.IDatabase> DatabaseLazy = null;
+        public static  IC.Interfaces.Database.IDatabase DatabaseInstance { 
+            get
+            {
+                if(DatabaseLazy == null)
+                    DatabaseLazy = new Lazy<IC.Interfaces.Database.IDatabase>(() =>
+                    {
+                        DatabaseOptions dbOptions = new DatabaseOptions()
+                        {
+                            AzureSqlAuthTokenService = new IC.Database.Authentication.AzureFunctions.DatabaseTokenProvider(String.Empty),
+                            KeyvaultClient = DataAccessManager.KeyVaultClient ,
+                            SettingsService = DataAccessManager.InternalSettingService
+                        };
+                        var _proxy = new DatabaseProxy(dbOptions);
+                        _proxy.DefaultDatabase = IC.Interfaces.Database.Enums.DatabaseName.DBLive;
+                        _proxy.ApplicationName = "MyCoolApplication";
+                        return _proxy;
+                    });
+                return DatabaseLazy.Value;
+            } 
+        } 
+ 
+
+        internal static IC.Interfaces.IKeyVaultReader KeyVaultClient;
+        internal static IC.Database.ISettingsService InternalSettingService;
+        public static void Initialize(IC.Interfaces.IKeyVaultReader keyVaultReader, IC.Database.ISettingsService settingService)
+        {
+            KeyVaultClient = keyVaultReader;
+            InternalSettingService = settingService;
+            DatabaseLazy = null;
+        } 
+    }
+
+    public class SettingService : IC.Database.ISettingsService
+    {
+        private static Lazy<SettingService> _instance = new Lazy<SettingService>(() =>
+        {
+            return new SettingService();
+        });
+        public static SettingService Instance
+        {
+            get
+            {
+                return _instance.Value;
+            }
+        } 
+        public bool UseManagedIdentity()
+        {
+            var myBool = false; 
+            try{
+                myBool = GetSetting("UseManagedIdentity").ToLower().Equals("true");
+            }
+            catch(Exception x){
+
+            }
+            return myBool;
+        }
+        public string GetConnectionString(string name)
+        {
+            return DataAccessManager.KeyVaultClient.GetSecret(name);
+        }
+        public string GetSetting(string key)
+        {
+            return DataAccessManager.KeyVaultClient.GetSecret(key);
+        }
+    }
+}
+     
+
+Troubleshooting
+Access Issues?
+Please refer to this guide: 
+Authentication-Troubleshooting.md
+ URL:/spaces/ED/pages/2806022323/Data+Access+on+Azure+Functions

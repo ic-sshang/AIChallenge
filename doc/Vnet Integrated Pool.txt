@@ -1,0 +1,12 @@
+Non-Production / Testing Batch Account
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/rg-azbatch-test/providers/Microsoft.Batch/batchAccounts/icbatchtest/accountOverview
+Working Vnet Integrated Pool:
+https://portal.azure.com/#view/Microsoft_Azure_Batch/PoolMenuBlade/~/overview/batchAccountId/%2Fsubscriptions%2Fc1e3635c-98d4-47f5-96e0-926717b6f0c4%2FresourceGroups%2Frg-azbatch-test%2Fproviders%2FMicrosoft.Batch%2FbatchAccounts%2Ficbatchtest/poolId/vnet-int-5
+Points of interest:
+We will need to make application changes to point applications to new pool ID after discussing with 
+ .
+Example: 
+https://dev.azure.com/invoicecloud/Src/_git/ICAutoPayController?path=/ICAutoPayController/Program.Pools.cs
+Current Blockers:
+Non-Production jobs are getting the Production Database connection string instead of Non-Production. This will require potentially a dll update for IC.Database.
+ URL:/spaces/platform/pages/3261366345/Vnet+Integrated+Pool

@@ -1,0 +1,7 @@
+The funding system is comprised of a API, several scheduled jobs, and event-driven jobs.
+Invoice Cloud will use the Gateway Bach Close Subscriber job to fund payments processed on the Gateway
+Braintree payments will disburse from Hyperwallet
+OBD payments will disburse from CASS
+PSN will call the Funding API directly to control when and / what funds to disburse from Hyperwallet.
+Hyperwallet and CASS will be adapted to funding processors.  Funding processors process funding instructions, import account deposit information, import funding activity.
+ URL:/spaces/EN/pages/2702934118/Funding+System+-+BFS

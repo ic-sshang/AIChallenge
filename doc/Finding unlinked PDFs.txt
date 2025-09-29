@@ -1,0 +1,22 @@
+Finding PDF files
+For PDF Linking tickets, you will first need to find the PDFs that the biller uploaded. They can be found on the PDFExtract servers 1 and 2. They should be in the shortcuts folder.
+To find all the PDFs you will need to check both servers since half of the PDFs will go to one server and the other half to the other server.
+In either of the servers, PDFs will be found in the path below:
+Finding PDFs files that have not been bursted
+These files are the ones the biller uploaded. They contain a large amount of PDFs in one file. 
+(
+To split up/burst the PDFs
+, the file can be dropped in the 1 folder and ran through PDFQueueByExtraction)
+Make sure the folder Path is Data/AppData/Files/FTPFilesBackup/PDFs
+In the search bar type in the Biller’s ID. The unbursted files for the biller should load
+Finding Individual, Unlinked PDF files
+These files are already bursted. Each PDF will have the invoice information for one customer.
+These files can be found on the Paths below:
+Data\AppData\Pdfs\InvoicesByExtraction\Errors
+PDFs that have not linked can be in the errors folder for multiple reasons. However, they will usually be in the ExtractionFailure or TempleteNotFound Folders.
+In the search bar, type in the BillerID to find the PDFs for the biller that needs their PDFs linked.
+If you cannot find the files you can go back into the InvoiceByExtraction folder and also type in the Biller’s ID. More files will show up, but relevant PDFs may show up.
+Moving the found PDFs
+Once you have found the PDFs that need to be linked, copy the files and place them in your backup folder. Having a backup of the PDFs that need to be linked will help in avoiding additional search in the PDFExtract servers.
+Additionally, it is not recommended to move the files from your backup folder into the 1 folder. Instead, copy the PDFs from your backup folder into the 1 folder. This is because the files will go into different folders depending on if they error out or not.
+ URL:/spaces/DS/pages/2714763286/Finding+unlinked+PDFs

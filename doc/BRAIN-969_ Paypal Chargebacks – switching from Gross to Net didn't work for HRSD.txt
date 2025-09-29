@@ -1,0 +1,42 @@
+When a user pays a biller through InvoiceCloud, the billed amount is initially moved from the user account to the InvoiceCloud PayPal account. When the terminal's batch is closed, these payment amounts are sent to the biller in batches. In some scenario, the user's selling amount is transferred to the biller, but the user later disputes the payment, and the money must be returned to the user. In these scenarios InvoiceCloud refunds the disputed amount to the user, now the amount has to recovered from the biller. Invoice cloud includes two settlement ways for recovering money from the biller. This settlement mode is configured at the terminal level for a biller.
+Gross Settlement Mode 
+Net Refund Mode 
+Gross Settlement Mode
+: When a biller terminal is set to Gross Settlement, the disputed user payment transferred to the biller is recovered from the biller using the RMM (Reverse Money Movement) REST method - RMMDisputes and RMMFullAmountDisputes. The PayPalChargeBackProcessing job, which runs daily, uses these REST methods to recover the disputed amount from the biller.
+Net Refund Mode
+: When the biller terminal is configured to use NetRefund settlement mode, InvoiceCloud recovers user disputed amount and ach rejected amount from the biller by deducting them from the batch payment to the biller. The HyperwalletFileProcessing Job performs these deductions while producing the OneBatch file for Braintree.  The oneBatch files act as payment instructions to the BrainTree, instructing it to transfer money from the InvoiceCloud paypal account to the biller's Hyperwallet account.
+An issue was discovered in the production environment when a Biller (HRSD) tried to switch the settlement mode associated with the PayPal terminals from Gross to Net Refund, this change in the settlement mode was not reflecting while preparing batches for those terminals.
+As part of this story, code changes are made so that the settlement associated with PayPal terminals can be changed from the CRM portal. 
+The following components are modified to address this req -
+CRM portal - Code changes are made to pass user changed settlement mode from the CRM portal to the OnBoarding API.
+OnBoarding API - Changes are made to update the settlement mode received in the request object to the ICGW database.
+Ic.Gatway library - Changes are made to pass the settlement mode from the CRM portal to the Onboarding API.
+PayPalChargebackProcessing - Changes are made to address the issue where terminals configured as NetRefund were calling RMM refund to make the recovery. This should happen for terminals for which Gross settlement mode is configured.
+HyperwalletFIleProcessing - Changes are made to fix two existing defects in the defects which was causing the application to crash while making some sp calls.
+Scenario
+Create new terminal in CRM with MID - demo_3 and GROSS settlement mode.
+On board the new created terminal into ICGW database using the ICGOnBoarding Job.
+Configure Real estate taxes to use the newly created terminal.
+Configure to use biller1 terminal as IC Service Fees.
+Configure Real estate taxes invoice type to use the newly created terminal.
+I made a payment for invoice amount of 100$ and 90$ with which a convenience fee of 95 cents will be added along with each invoice payment.
+Make two real estate invoice payments from the Biller portal.
+Close the batch for the terminal with MID demo-3, this will create funding batches in the ICGW database.
+Run HyperwalletFileProcessing Job from the skybot.
+This will send a OneBatch file to the BrainTree with the funding instruction to move 190$ to the biller and 1.9$ to the Subscriber.
+Simulate dispute on the payment of 90.95$.
+Run PayPalChargebackProcessing job from the SkyBot.
+This will recover the disputed amount from the biller as part of which it will create a recovery payment record in the IC gateway database.
+Simulate ACH reject on the recovery payment record created in the previous step.
+Now the biller changes the settlement mode of the terminal to NetRefund from the CRM portal.
+Make one or two payments from the biller portal on real estate invoice types.
+I made a payment for invoice amount of 100$ and 100$ with which a convenience fee of 95 cents will be added along with each invoice payment.
+Simulate dispute on one of the 100$ payment made earlier.
+Run PayPalChargebackProcessing Job from the SkyBot.
+This will not recover any disputed payments (because the terminal on which payment is disputed has NetRefund settlement mode)
+Run PayPalAchRejectProcessing Job the SkyBot.
+This will not recover any disputed payments (because the terminal on which the recovery payment was ach rejected has now NetRefund settlement mode)
+Close the batch for the terminal with MID demo-3, this will create funding batches in the ICGW database.
+Run HyperwalletFileProcessing Job from the skybot.
+This will send a OneBatch file to the BrainTree with the funding instruction to move $9.05 (200 - 100 - 90.95) to the biller and 1.9$ to the Subscriber. This deduction is due to the NetRefund settlement mode.
+ URL:/spaces/EN/pages/2909274294/BRAIN-969+Paypal+Chargebacks+switching+from+Gross+to+Net+didn+t+work+for+HRSD

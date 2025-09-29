@@ -1,0 +1,10 @@
+Today we manually update the public TLS web certificate for *.invoicecloud.com on Cloudflare, Barracuda WAFs, and the individual web servers.
+Only the Cloudflare certificate is accessed by the public, and is a more risky change than the others.
+Cloudflare provides a public certificate that can be a wildcard cert or specific URL.
+The steps to move to CF managed certs:
+Set the date of the migration
+Notify the customers and include link to root/intermediate certificates (test domain for them?)
+Run through the migration on 
+ic-rob.com
+ domain and document each step
+ URL:/spaces/icinfradoc/pages/3027632211/Plan+to+move+.invoicecloud.com+to+Cloudflare+managed+certificate

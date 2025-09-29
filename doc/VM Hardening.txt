@@ -1,0 +1,41 @@
+This article contains the requirements for the hardening of non-AVD Virtual Machines within the InvoiceCloud Azure Infrastructure.
+2
+4
+false
+list
+false
+CrowdStrike Agent Installation
+The following article describes how to install the CrowdStrike Falcon Sensor:
+https://www.crowdstrike.com/blog/tech-center/install-falcon-sensor/
+ 
+The CID can be found in 
+this KeyVault Secret
+.
+Linux CrowdStrike Agent Installation
+IP=<IP of VM>
+USERNAME=<Name of User>
+CID=<Get From KeyVault>
+
+az ssh config --ip $IP --file ./azure-sshconfig --keys-destination-folder ./azure-keys
+
+scp -F ./azure-sshconfig falcon-sensor_6.54.0-15110_amd64.deb $USERNAME@invoicecloud.com@$IP:/home/$USERNAME
+
+sudo dpkg -i falcon-sensor_6.54.0-15110_amd64.deb
+
+sudo apt --fix-broken install
+
+sudo /opt/CrowdStrike/falconctl -s --cid=$CID
+
+sudo service falcon-sensor start
+
+sudo systemctl start falcon-sensor
+
+ps -e | grep falcon-sensor
+Windows CrowdStrike Agent Installation
+Download the installation .exe to target computer (found below).
+Run installation .exe.
+Enter CID when prompted.
+The CID can be found in 
+this KeyVault Secret
+.
+ URL:/spaces/icinfradoc/pages/2769158162/VM+Hardening

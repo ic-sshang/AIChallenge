@@ -1,0 +1,19 @@
+file shares
+Pre-Provisioning
+We’ve got a number of directories exposed as file shares. Some are used by applications, others are there to let engineers peek into the servers without granting login access.
+The below list details all shares on our current production servers. We should match these. We’ll need to create these directories and register them as shares. I believe this can be done in the image build, but may need to shift to post provisioning. 
+C:\                                        # default (no need to configure)
+C:\Data\WWW                                # web application files
+C:\Temp                                    # why would we need this?
+C:\Windows                                 # default (no need to configure)
+D:\                                        # default (no need to configure)
+E:\                                        # default (no need to configure)
+E:\Data\AppData                            # this is 'IC_APPDATA_DIR'
+E:\Data\AppData\Data\Files\Processed       # used by several Stratus-related apps
+E:\Data\AppData\Files\Processed            # used by several Stratus-related apps
+E:\Data\AppData\Files\StratusDump          # used by several Stratus-related apps
+E:\Data\AppData\Files\StratusExportDump    # used by several Stratus-related apps
+E:\Data\Apps                               # scheduled task app files - 'IC_APPS_DIR'
+E:\Data\Logs                               # 'IC_LOGS_DIR'
+E:\inetpub\logs\logfiles                   # lets our engineers view IIS logs without logging in
+ URL:/spaces/platform/pages/3962863719/File+Shares+Directories

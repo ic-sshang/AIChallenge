@@ -1,0 +1,143 @@
+1
+3
+false
+list
+false
+CIT/MIT Framework / Chase Split Transactions/Auto Pays
+What is the problem that needs solving?
+We need this to meet network requirements - 
+Will address fines of $1k per MID
+; experiencing sporadic declines; experiencing fees not being voided on split transactions when payment is declined.
+Note: Fines have been waived thru Feb 24. Fines will begin in March. 
+1042 Town of Walpole
+483 City of Richmond
+388 City of Boston Credit Excise
+1131 City of Marlborough
+Moved 1368 Clayton County Water Authority to a single transaction
+What is the preferred solution to this problem?
+We need to update CIT/MIT framework to send networks required data to be compliant. 
+Who is the target audience for this solution?
+All billers; will also improve the payer experience to avoid unnecessary declines. 
+What are the 
+costs
+ associated with this solution?
+Current Discover Card Fines of $1k per mid per month. Est impact $4k per MID. (MIDS above)
+What are the primary features of this solution?
+Passing CIT/MIT data thru Chase to the networks. 
+Are there revenue or cost savings opportunities for this?
+YES - There is a small savings. We will be in compliance and fines will be terminated.  
+Does this solution alter our competitive positioning?
+NO - This is a network requirement, so all processes are expected to be in compliance. 
+How do we measure success on this project?
+Fines no longer occur. 
+No longer experience sporadic (generic) declines
+. Split pay transactions process as expected for apple payments. (fee is voided if payment is declined) 
+Batch Queue Messaging
+What is the problem that needs solving?
+We only have 2 items remaining on this project to complete (currently in TL review). We experience batch failures, and we often miss the notification to address it right away. 
+What is the preferred solution to this problem?
+We are adding a queuing system to improve the way batch closures are processed. We are adding alerts and notifications to help quickly identify when there is a real issue. 
+Phase 2 of this project (scheduled in 25) will bring a more robust custom closed batch process and billers on auto close will be migrated to that updated platform. 
+Who is the target audience for this solution?
+All 
+billers on custom close batch
+ processes. A little more than half of our billers are currently on the custom batch close process compared to standard close. 
+What are the costs associated with this solution?
+Several hours every week is spent researching alerts which are often false positives. This will 
+help reduce manual time spent
+ on this process. Currently the engineers spend approx. 14 hours per week combing through the alerts.  With Phase 2 (which is scheduled in 25, manual time spent should be very minimal.)
+What are the primary features of this solution?
+Queueing system to provide better alerting, allowing engineers to quickly identify billers whose batch did not close and take appropriate action to close it prior to the biller being aware of the issue. 
+Are there revenue or cost savings opportunities for this?
+YES - There is a savings of developer's time spent on this process. 
+Does this solution alter our competitive positioning?
+NO
+How do we measure success on this project?
+Custom batches will close successfully. In the event of an issue, alerts will be easier and quicker to identify so they can be resolved before the biller is aware. 
+Amex OptBlue
+What is the problem that needs solving?
+Amex contract will expire in June 24. Billers will no longer be able to accept Amex if we don’t do this project. 
+What is the preferred solution to this problem?
+Plan to move about 50% of processing volume billers to Optblue program. The remainder will migrate to the agrigator model thru BT. Chase will facilitate Amex payments in the same manner they process V/MC/D. 
+Who is the target audience for this solution?
+Defined list of billers who are moving to OptBlue. 
+What are the costs associated with this solution?
+Contract will expire; if we don’t take action billers won’t be able to process Amex. Potential increase to billers - est 3% for optblue billers 
+What are the primary features of this solution?
+Amex funding will be included in Chase deposit, Amex data will be in same format as V/MC/D. Increased support for CB process. 
+Are there revenue or cost savings opportunities for this?
+NO - no savings and cost plus billers will likely see an increase in costs. 
+Does this solution alter our competitive positioning?
+YES - billers have been asking for consolidated funding for a while. This will be improving the reconciliation process too. 
+How do we measure success on this project?
+Successfully migrating and processing Amex thru Chase. 
+Visa Network Tokenization
+What is the problem that needs solving?
+We are not qualifying for the best interchange rate; Easier for payers to complete payments; also addresses expired cards
+What is the preferred solution to this problem?
+We will be tokenizing transactions with the network level.  
+Who is the target audience for this solution?
+All billers would benefit from our tokenization project
+What are the costs associated with this solution?
+Potential cost savings of up to $400k per year. (Would be about $250k once billers are migrated to BT)
+What are the primary features of this solution?
+Meets network recommendations; stores information so its easier for payers to complete payments, Updates the expiration date of expired cards. 
+Are there revenue or cost savings opportunities for this?
+YES - est $250k-$400k per year
+Does this solution alter our competitive positioning?
+MAYBE - Its becoming an industry norm and not doing this project would put us at a competitive disadvantage. 
+How do we measure success on this project?
+We will see a cost savings in interchange the following month. 
+--- CUT LINE --- --- ---
+Chase Batch Sync (NFG)
+What is the problem that needs solving?
+There are a couple of transactions each day that are processed during the time NFG’s batch is closed. This causes a reconciliation issue for the biller. 
+What is the preferred solution to this problem?
+When the batch is closed, we need to sync the number of transactions that we send and match those to the number of transactions Chase has in their batch, so the total matches each day. 
+Who is the target audience for this solution?
+NFG is the primary biller impacted, but there are others who are experiencing this as well. We expect this to grow as we continue to add large biller (esp those whose batch closes during business hours). 
+What are the costs associated with this solution?
+Its very inconvenient and a painpoint for billers. They often spend a lot of time researching and reconciling. 
+What are the primary features of this solution?
+The number of transactions and total amount should in our batch should match with what Chase processes in their batch each day. 
+Are there revenue or cost savings opportunities for this?
+NO
+Does this solution alter our competitive positioning?
+YES - reconciliation is a pain point for billers; if we can improve our process, it gives us a competitive advantage. 
+How do we measure success on this project?
+Once solution is in place, confirm our batch and Chase’s batch are in sync. 
+Standard Batch Close (Phase 2)
+What is the problem that needs solving?
+We are currently supporting 2 batch close processes. We would like to streamline this to move all auto close billers over to our custom batch close platform. Its time consuming and redundant to manage this process on two platforms. 
+What is the preferred solution to this problem?
+Improve the custom batch close process and then migrate all auto close billers to the custom batch close platform. 
+Who is the target audience for this solution?
+Existing billers who are set up for auto close. 
+What are the costs associated with this solution?
+Manual hours spent by developers researching and making updates to 2 platforms. 
+What are the primary features of this solution?
+Managing 1 system makes the process more streamlined. 
+Are there revenue or cost savings opportunities for this?
+YES - manual development hours
+Does this solution alter our competitive positioning?
+NO - this is a backend process 
+How do we measure success on this project?
+Reduced hours spent on managing 2 batch close platforms. 
+ACH Reject Rearchitecture
+What is the problem that needs solving?
+Each new ACH provider needs to be set up separately; any changes to ACH have to be made to each ACH provider. This is not scale able and if there are issues, changes need to be made across the board. 
+What is the preferred solution to this problem?
+We would like to have 1 ach platform where changes that need to be made could be made across that platform, instead of making 7-8 individual changes. This also leaves room for mistakes since its a manual process. 
+Who is the target audience for this solution?
+Engineering
+What are the costs associated with this solution?
+Time and effort 
+What are the primary features of this solution?
+A consolidated, robust system which can support adding new ACH providers and making changes easily across the board. 
+Are there revenue or cost savings opportunities for this?
+YES - there would be a small savings. We don’t make many changes, but when we do, we have to make them in 7-8 places since we have many ACH providers. 
+Does this solution alter our competitive positioning?
+NO
+How do we measure success on this project?
+When changes are brought to us, the time and effort to make those updates would be improved. 
+ URL:/spaces/PRODUCT/pages/3021766706/WT+2024+Roadmap+Candidates

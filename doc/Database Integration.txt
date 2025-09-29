@@ -1,0 +1,48 @@
+Database integration tests verify that data is correctly stored, retrieved, and manipulated within the database, ensuring that the application interacts with the database as expected.
+NUnit Example
+c#
+[TestFixture]
+[Category("IntegrationTests")]
+public class ProductRepositoryIntegrationTests
+{
+    private IDatabase _db;
+
+    [SetUp]
+    public void Setup()
+    {
+        // get environment database settings 
+        // like a Managed Identity connection string to the dev database
+        var connectionStringProvider = new ExampleConnectionStringProdiver();
+        var connectionString = connectionStringProvider.GetConnectionString();
+        
+        // Create a real instance of the database component
+        // Infrastructure components like this should be accessed through a interface
+        // for mocking in unit tests
+        _db = new ExampleDatabase(connectionString);
+    }
+
+    [Test]
+    public void GivenANewProduct_WhenAddedToRepository_ThenItCanBeRetrievedByIdAndDeleted()
+    {
+        // Arrange
+        var productId = Guid.NewGuid();
+        var product = new Product{
+          Id = productId,
+          Name = "My product"
+        };
+        var repository = new ProductRepository( _db );
+        
+        // Act
+        repository.AddProduct( product );
+        var savedProduct = repository.GetProductById( product.Id );
+        repository.DeleteProduct( product.id );
+        var deletedProduct = repository.GetProductById( product.Id );
+        
+        // Assert
+        Assert.IsNotNull(savedProduct);
+        Assert.AreEqual(product.Id, savedProduct.Id);
+        Assert.AreEqual(product.Name, savedProduct.Name);
+        Assert.IsNull(deletedProduct);
+    }
+}
+ URL:/spaces/ED/pages/3517644841/Database+Integration

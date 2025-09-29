@@ -1,0 +1,81 @@
+Release Notes 2025-07-10
+
+
+Update Processes for Bank Holidays - CASS Jobs
+
+
+
+
+Added validation to check for bank holidays before exiting.
+
+
+Benefit: This enhancement ensures transactions aren't processed inadvertently on bank holidays, thereby improving accuracy and compliance. 
+
+
+
+
+Thank you for your continued support! Enjoy the smoother experience with our latest updates!
+
+
+PayPalChargebackProcessing Release Notes
+
+
+
+
+Enhanced SLA Webhook Declaration:
+ The updated processing file improves the efficiency of notifications, ensuring quicker and more reliable alerts for users.
+
+
+Improved Slack Integration Tests:
+ Modifications prevent unnecessary Slack alerts in production during non-production activity, keeping your notifications relevant and organized.
+
+
+Active Master Bank Filtering:
+ Added conditions to filter for only active master banks, ensuring users interact solely with current and relevant banking data.
+
+
+
+
+Change Existing Dynamic SQL Query to Parameterized SQL
+
+
+
+
+Enhanced Security: Transitioned from dynamic SQL queries to parameterized queries, improving data protection and minimizing SQL injection risks.
+
+
+Optimized Performance: Replaced outdated call methods with more efficient EXECUTE_COMMAND_SINGLE_RESULT_ADVANCED, enhancing query speed and responsiveness.
+
+
+Streamlined Code: Removed duplicate and commented parameters in SaleProcessor, resulting in cleaner and more maintainable code.
+
+
+Improved Logging: Increased error logging context for better troubleshooting, making it easier to identify and resolve issues.
+
+
+Refined Unit Tests: Updated and corrected unit tests to ensure better accuracy and reliability in testing, leading to fewer disruptions in service.
+
+
+General Code Enhancements: Numerous updates to database records insertion functions for better accuracy and efficiency in processing transactions.
+
+
+
+
+These updates are designed to provide you with a more secure and efficient experience!
+
+
+Bug Fix - CASSFileReceiptProcessing Files Not Getting Picked Up
+
+
+
+
+Improved processing logic by refactoring code to break instead of return from loops, enhancing reliability in file handling.
+
+
+Increased test coverage in the integration tests, ensuring more robust verification of the receipt processing functionality. 
+
+
+
+
+These updates help in ensuring that CASS files are consistently picked up and processed, leading to smoother operations for our users!
+ URL:/spaces/PE/pages/4490854472/Release+Notes+-+PACE+-+2025-07-10

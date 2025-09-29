@@ -1,0 +1,99 @@
+1
+6
+false
+default
+list
+true
+Step 1: Create an Application Information Page in Confluence
+Use the Application Information Template
+Navigate to the 
+Platform Modernization - Kubernetes space
+ designated for application documentation.
+Click 
+“Create from Template”
+ and select 
+“
+Template - Application Information
+”
+.
+Fill in the following sections:
+Application Overview
+Development Team Contact Information
+Technical Details
+Deployment Information
+Web Ingress (optional, only for Web and API workloads) 
+Store your copy of the application form under the 
+Systems
+ in a new page named after your Code Repository.
+Step 2: Create an Application Architecture Overview Page in Confluence
+The overview should have:
+Overview section briefly describing the application
+High level diagram illustrating the primary components and how they interact
+Store under the application information page in 
+Systems
+ 
+Step 3: Schedule a Platform Review Meeting
+Schedule a 30-minute onboarding meeting with the platform team (
+#kubernetes-support
+) along with your team's architect to review the above pages and deliverables.  
+Outcomes of the Platform Review Meeting
+A Repo will be created for the Application
+Note, we specifically limit the creation Repos to certain Personas as a Governance measure, so this process is followed
+An Item will be backlogged and scheduled to add the Application Service to a Kubernetes Cluster
+If a different Azure PaaS Resource is to be used then an Item will be Backlogged for the creation of that those Resources.
+If needed, Jira Item(s) for the creation or configuration of any Azure Resources outside of the Kubernetes Cluster such as Service Bus Queues/Topics, Storage Accounts, Database Servers, etc…
+An Item will be backlogged and scheduled to add the Build pipeline
+An Item will be backlogged and scheduled to add the Deploy Pipeline and Helm Chart Value files for Each Environment
+If needed, an Item will be backlogged and scheduled to add support for Kong Routing which will be Terraformed
+If needed, an Item will be backlogged and scheduled to add support for NewRelic Dashboards which will be Terraformed
+If needed, an Item will be backlogged and scheduled to add support for NewRelic Alerts which will be Terraformed
+Reason for the Process
+Enforcing an 
+application onboarding process
+ is a key governance practice that ensures consistency, security, and operational reliability across an organization’s technology landscape. Here's a breakdown of the governance reasoning behind it:
+🛡️ 1. 
+Security and Compliance
+Ensures that applications meet 
+security standards
+ before going live.
+Validates that sensitive data is handled according to 
+regulatory requirements
+ (e.g., HIPAA, GDPR).
+Confirms that secrets, credentials, and access controls are properly managed.
+⚙️ 2. 
+Operational Readiness
+Verifies that monitoring, logging, and alerting are in place.
+Confirms that the application integrates with incident response and support workflows.
+Ensures that scaling and resource limits are defined to prevent outages.
+📦 3. 
+Standardization and Consistency
+Promotes use of 
+approved patterns and tools
+ (e.g., CI/CD pipelines, container images).
+Reduces technical debt by enforcing architectural standards.
+Makes it easier to maintain and troubleshoot applications across teams.
+📊 4. 
+Auditability and Traceability
+Creates a documented trail of decisions, configurations, and approvals.
+Supports internal and external audits by showing that governance controls are applied.
+Helps track ownership, lifecycle status, and dependencies.
+🚀 5. 
+Faster, Safer Deployments
+Reduces risk of production issues by catching misconfigurations early.
+Enables smoother handoffs between development, operations, and security teams.
+Encourages automation and repeatability in deployment processes.
+✅ Summary
+Governance Goal
+Onboarding Benefit
+Security & Compliance
+Validates controls and data handling
+Operational Reliability
+Ensures readiness and observability
+Standardization
+Promotes consistent architecture and tools
+Auditability
+Tracks decisions and ownership
+Deployment Safety
+Reduces risk and improves confidence
+Would you like a checklist or template for an application onboarding process that aligns with these governance goals?
+ URL:/spaces/PMK/pages/4330258623/Application+Onboarding+Process

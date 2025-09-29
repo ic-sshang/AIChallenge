@@ -1,0 +1,114 @@
+Description
+Things to Know for the Conversion Team transitioning a biller’s invoice presentment method from template-based display to PDF extraction.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+This document outlines the process for converting a biller from using a template-based invoice format to PDF extraction. The process includes coordination with the biller or print vendor, setting up FTP access, collecting sample files, and updating CRM configurations to support searchable PDF presentment.
+ Process
+Definitions
+BID
+: Biller ID used to identify the biller in InvoiceCloud.
+CRM
+: Customer Relationship Management system used to manage biller configurations.
+FTP
+: File Transfer Protocol, used for transferring files to InvoiceCloud.
+GUID
+: Globally Unique Identifier used to identify invoice formats.
+PDF Extraction
+: A method of extracting invoice data directly from searchable PDF files.
+Template
+: A predefined layout used to display invoice data in the customer portal.
+Track #30
+: Internal project tracking code for PDF Extraction setup.
+Key Responsibilities
+Biller / Print Vendor
+:
+Provide sample PDF and invoice file.
+Ensure PDFs are searchable (not scanned/faxed).
+Install FileZilla and send PDFs in .zip format via FTP.
+Confirm next billing cycle for validation.
+IT / Integration Team
+:
+Code PDF extraction logic based on sample files.
+Update invoice display settings in CRM.
+Project Manager (InvoiceCloud)
+:
+Schedule and lead kickoff call.
+Submit ITR to create FTP credentials.
+Verify FTP access and sample file upload.
+Upload samples to Box and initiate Track #30.
+Update CRM with new invoice GUID and FTP settings.
+Monitor post-conversion billing cycle for success.
+Quality Assurance
+Biller
+:
+Confirm that invoice data is accurately displayed in the customer portal.
+Project Manager
+:
+Confirm PDF extraction is displaying correctly after next billing cycle.
+Verify CRM reflects updated GUIDs and invoice display settings.
+Roles
+·        
+Project Manager:
+o   Confirm PDF extraction is displaying correctly after next billing cycle.
+o   Verify CRM reflects updated GUIDs and invoice display settings.
+·        
+Biller:
+o   Confirm that invoice data is accurately displayed in the customer portal.
+Procedure
+Kickoff Coordination
+Who:
+ Project Manager
+Schedule a call with the biller and/or print vendor.
+Request a sample PDF and invoice file.
+Explain naming convention:
+o   BID_accountnumber_invoicedate.pdf
+Emphasize that scanned/faxed PDFs are not supported.
+FTP Setup
+Who:
+ Project Manager
+Instruct vendor to install FileZilla.
+Submit ITR to create FTP credentials.
+Confirm FTP access and request a sample PDF upload.
+Sample Review & Coding Prep
+Who:
+ Project Manager
+Upload all sample files to Box.
+Initiate Track #30: PDF Extraction.
+Include Box link in the track notes.
+PDF Extraction Coding
+Who:
+ Integration/IT Team
+Use sample PDF and invoice file to code extraction logic.
+Coordinate with PM if additional samples or clarification are needed.
+CRM Configuration
+Who:
+ Project Manager
+Update invoice display from template to PDF or PDF remote linking.
+Update invoice GUID in CRM.
+Configure FTP Management settings.
+Post-Conversion Validation
+Who:
+ Project Manager & Biller
+Keep ticket open.
+Ask biller for next billing cycle date.
+Confirm PDF extraction is working correctly.
+Recheck CRM for correct GUIDs and display settings.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4474372223/PDF+Template+to+PDF+Extraction+Conversion+Team+Details

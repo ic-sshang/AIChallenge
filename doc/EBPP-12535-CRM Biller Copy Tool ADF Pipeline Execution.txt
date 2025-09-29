@@ -1,0 +1,82 @@
+This document provides an overview of the Copy Biller Tool workflow. Additionally, implementation details for ADF pipeline automation and testing procedures are included.
+Worked on by:
+Michael Maldonado (Developer)
+Michael Thorpe (DB Engineer)
+David Moreno (QA Engineer)
+Jesus Garcia (Reporter)
+Related Items:
+EBPP-12535
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INFRA-964
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-26369
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-26032
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance
+The Copy Biller Tool is internal to Invoice Cloud and is designed to help reproduce behavior caused by a particular biller configuration by copying a subset of settings from a source biller to a target biller. Changes from this item resulted in the automation of the queuing process.
+Problem
+Developers were required to manually run the Azure Data Factory (ADF) pipeline to copy settings from one biller to another. This goal of this work was to automate the ADF pipeline run, freeing development resources and providing a more seamless user experience.
+Solution
+The stored procedure 
+spCopyBiller
+ responsible for setting up the settings to copy returns a 
+CopyBillerQueueID
+. This id must be provided as an argument to the ADF pipeline. The .NET SDK provides an interface for using data factories. A wrapper was created around the SDK that was responsible for triggering the appropriate ADF pipeline. When successfully triggered, the ADF pipeline run will return a run id. This will be utilized for future improvements focusing on monitoring the status of the pipeline run.
+PR Link
+Biller Copy Tool ADF Pipeline Workflow
+Managed identities were used to control permissions to run the appropriate ADF pipeline. The following CRM managed identities were given the permissions below:
+mi-ICCRM-web-dt6
+ (run test pipeline)
+mi-ICCRM-web-uat
+ (run test pipeline)
+mi-ICCRM-web-reg
+ (run production pipeline)
+mi-ICCRM-web-prv
+ (run production pipeline)
+mi-ICCRM-web-prd
+ (run production pipeline)
+To achieve PCI compliance, different ADF pipelines were created for test and production environments, and each pipeline was placed in a different data factory. 
+ic-serverSync-DataFactory
+ is the test data factory and 
+ic-serverSyncTest-DataFactory
+ is the production data factory.
+The pipeline configuration, then, varies depending on the current environment. To separate application code from environment-related concerns, all necessary settings or configuration details are added to the ICCRM 
+web.config
+ file during the deployment step. More details can be found in the linked infrastructure ticket.
+Production ADF portal: 
+https://adf.azure.com/en/authoring?factory=%2Fsubscriptions%2Fc1e3635c-98d4-47f5-96e0-926717b6f0c4%2FresourceGroups%2FRG-IC-SQL-Functions%2Fproviders%2FMicrosoft.DataFactory%2Ffactories%2Fic-ServerSyncTest-DataFactory
+Test ADF portal: 
+https://adf.azure.com/en/authoring?factory=%2Fsubscriptions%2Fc1e3635c-98d4-47f5-96e0-926717b6f0c4%2FresourceGroups%2FRG-IC-SQL-Functions%2Fproviders%2FMicrosoft.DataFactory%2Ffactories%2Fic-ServerSync-DataFactory
+Testing
+In the devtest environments, the 
+CopyBillerToolAll
+ pipeline from the 
+ic-serverSync-DataFactory
+ should be used. In other environments, the 
+CopyBillerToolAll_Prod
+ pipeline from the 
+ic-serverSyncTest-DataFactory
+ should be used. Pipeline runs can be monitored from the Azure Data Factory portal.
+Monitor (3rd button down) → Pipeline runs → Filter by pipeline name
+ADF portal monitoring screen 
+The pipeline run should complete without errors and the selected biller configuration should be copied from the source biller to the target biller.
+Testing Locally
+Local testing will require changing the connection string used in 
+AdfPipelineManager.vb
+ to use developer credentials instead of a managed identity 
+and
+ the user associated with those credentials will need permission to run the ADF pipeline. More information about using connection strings for Azure Data Factory can be found 
+here
+.
+Example connection string: 
+"RunAs=Developer;DeveloperTool=VisualStudio"
+ URL:/spaces/PE/pages/4112056430/EBPP-12535-CRM+Biller+Copy+Tool+ADF+Pipeline+Execution

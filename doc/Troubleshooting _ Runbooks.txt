@@ -1,0 +1,27 @@
+Mass Decline
+Scenario
+: processors decline a large number of transactions across multiple billers, e.g., all pinless debit trx
+Mitigation Steps
+: 
+if caught quickly enough, hold the AP/SP decline notice email queues (types 3, 4) in skybot – these are set to run after 11am CST – remove any decline notices tied to those payments (decline message should be in the 
+EmailBody)
+ from the queues
+reach out to data services; Ross has scripts available – 
+if the rerun is not on the same day, then these scripts are necessary for recurring scheduled payment generation, avoiding overpayments, etc. 
+modify the stored procedures 
+[tps].[selAutoPayProcessingListV4]
+and 
+[dbo].[selAutoPayProcessingListV3ForMultiInvoice]
+ to retrieve declines based on the payment message or relevant criteria (declines are ignored by default when re-running)
+any scheduled payments marked as processed will need the 
+PaymentID
+ cleared out and to be "unmarked" based on the payment message etc.
+rerun by setting the environment variables in Azure Batch for the job schedule: start from the scheduled payment step (
+startindex=3
+) with a 
+billeridlist
+ and 
+rerun=1
+release the held email queues in skybot
+revert stored proc changes once the rerun is complete
+ URL:/spaces/ED/pages/3085336583/Troubleshooting+Runbooks

@@ -1,0 +1,135 @@
+Hybrid Fuzzy Search Implementation using Chunking, SQL %LIKE%, and Jaro-Winkler Similarity
+ 
+ Purpose
+The fuzzy search system is designed to improve 
+search accuracy
+ for textual fields like 
+names
+ and 
+addresses
+, especially when users enter incomplete, rearranged, or misspelled inputs. This is critical in real-world data scenarios where exact matches are rare due to:
+Typing errors
+Variations in naming conventions
+Extra/missing words
+Overall Approach
+The implementation uses a 
+hybrid model
+ combining:
+SQL-based filtering
+: Quickly narrows down potential results using space-separated chunks of the search term and SQL’s %LIKE% operator.
+VB.NET-based similarity ranking
+: Refines the results using 
+Jaro-Winkler similarity
+ to rank candidates based on how closely they resemble the original input.
+This layered approach balances 
+speed (via SQL)
+ and 
+intelligent scoring (via application logic)
+.
+How It Works: Conceptual Steps
+Step 1: User Input
+A user enters an input such as:
+" 6605 BANDERS AVE "
+This input may not exactly match any database record but could be 
+partially contained
+ within many fields (e.g., "6605 BANDERS STREET", "BANDERS AVE ", etc.).
+ 
+Step 2: SQL-Side Chunking & Matching
+The input string is split into 
+space-separated words
+ — called 
+chunks
+. In this case:
+["6605", "BANDERS", "AVE"]
+These chunks are used inside a 
+SQL stored procedure
+ to search for any record that contains 
+any of these chunks
+ in relevant fields (e.g., Name or Address).
+The SQL query performs a %LIKE% search for each chunk — meaning it's looking for 
+partial containment
+, not exact matches.
+This step results in a 
+coarse filter
+ — a set of candidate records that 
+contain one or more chunks
+ of the original input.
+ 
+Step 3: VB.NET-Side Final Ranking
+The candidate results from SQL may contain records that:
+Have only weak partial matches (e.g., just one chunk matched)
+Are irrelevant or appear due to generic matches (e.g., "AVE" is common)
+To refine this, the full original user input is compared against the candidate field values (like Name or Address) using the 
+Jaro-Winkler similarity algorithm
+.
+This algorithm measures how similar two strings are by considering:
+Character alignment
+Transpositions
+Common prefix
+It produces a score between 0 and 1:
+1.0
+ = exact match
+0.9+
+ = highly similar (e.g., typo or word order variation)
+< 0.5
+ = weak or unrelated match
+This scoring allows for intelligent sorting of results based on 
+semantic closeness
+, not just presence of keywords.
+ 
+ Example Scenario
+Let’s walk through an example:
+Input
+: "BANDERS AVE"
+SQL Chunking
+: ["BANDERS", "AVE"]
+SQL Results
+:
+"BANDERS AVE"
+"18  BANDERS AVE"
+"BANDERS AVE Extension"
+These are valid 
+candidates
+ but not necessarily the best matches.
+Now the system applies 
+Jaro-Winkler
+ comparison between "BANDERS AVE" and each candidate:
+Candidate
+Jaro-Winkler Score
+BANDERS AVE
+1.0 (Exact match)
+18 BANDERS AVE
+0.92
+BANDERS AVE Extension
+0.87
+The system sorts these in descending order of score and displays the most relevant results at the top.
+ 
+Advantages of This Approach
+Feature
+Description
+Performance-efficient
+SQL handles initial filtering using indexes and native operators
+Resilient to user error
+Typing mistakes or word order changes are handled gracefully
+Scalable
+Chunking allows fast filtering even on large datasets
+Flexible
+Works with any text fields — names, addresses, account names, etc.
+ 
+ 
+ 
+ 
+Implementation Summary
+Layer
+Responsibility
+SQL Server
+Performs chunking and returns candidate matches using %LIKE%
+http://VB.NET
+ 
+Applies Jaro-Winkler similarity on final results to rank by closeness
+ 
+ 
+Demo Screenshots
+ 
+ 
+ URL:/spaces/PE/pages/4396580919/Partial+Match+-+Fuzzy+Search

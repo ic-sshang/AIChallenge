@@ -1,0 +1,79 @@
+Useful Links
+EBPP-24911
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24974
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Status
+Approved
+ 
+Context
+TFB (Texas Farm Bureau) is receiving “data pumped” records from our system but with some fields sporadically being empty.  Research reveals that we are data pumping records before all data is ready to be data pumped.  In the case of the donation details being empty, the stored procedure sequence goes like this:
+insPayments
+spDataPumpEligible
+insDonationDetails
+The Donation Details are empty in the cases SFB has surfaced.  This happens because we are queuing a request to data pump, the request is fulfilled before the insDonationDetails is executed, and then the insDonationDetails executes.  The sporadic nature of this comes from the timing of the DataPump job run.  If you queue a record right before a run of DataPump, the job could pump out the record before the insDonationDetails occurs.
+Decision
+Use a new pattern recently introduced to address a similar problem.  The stored procedure call sequence is mostly the same, with some modifications and an addition.
+insPayments - Update to support an optional @DataPumpTypeID parameter
+spDataPumpEligible - Insert the data pump record with the passed in @DataPumpTypeID value.  DataPumpTypeID=12 is a Pending status that makes it ineligible to get picked up.
+insDonationDetails 
+<update data pump stored procedure> - Update the earlier inserted data pump record to be the proper status to make it eligible to get picked up.
+From the software code perspective, we would need to:
+update CTP payload classes to support a new DataPumpTypeID that can be tunneled through to the insPayments calls within CTP.  
+update MyIIS call to CTP to pass in DataPumpTypeID where applicable
+update MyIIS to call the update data pump stored procedure to change the DataPumpTypeID  to the proper one.  
+Locate the record using the PaymentID
+This pattern is applicable to both Jira issues with slight differences in implementation.
+Considerations
+Other options considered:
+Option 1 
+- Update insPayments to also insert insDonationDetails and insCSRPaymentActivity
+Problem - Unnecessary increase of complexity in a critical and highly used stored procedure
+Update inspayments
+call insDonationDetails before spDataPumpEligible
+call insCSRPaymentActivity before spDataPumpEligible
+insPayments will need to support new params
+@DonatorName, @DonatorAddress, @DonatorCity, @DonatorState, @DonatorZip, @PaymentAgreement
+@ExternalUserName, @ExternalUserTypeID
+Update insPayments calls (where applicable) to pass in new params
+Update CTP to take in
+@DonatorName, @DonatorAddress, @DonatorCity, @DonatorState, @DonatorZip, @PaymentAgreement
+@ExternalUserName, @ExternalUserTypeID
+Option 2
+ - Call insDonationDetails before insPayment, and wrap donationDetail record inside insPayments
+Problem - Simplifies option 1 but would still require enhancing insPayments to support a param with very specific domain need
+Update insPayments to support @DonationDetailID parameter
+Update CloudPaymentReview.aspx to call insDonationDetails,without PaymentID
+Pass @DonationDetailID to insPayments
+Update insPayments
+get donation Details record using @DonationDetailID, and update the paymentid on it
+Option 3 
+- Pass @InsertToDataPump=0 when calling insPayments and instead data pump it when doing the donation insert
+Problem - Better than 1-2 and closer to Z.  Late comer but might resurface to improve on the selected solution
+Update CTP payload objects to support InsertToDataPump property to tunnel in that value to the insPayments call downstream
+Update MyIIS to set this value for the applicable scenario
+Update MyIIS to insert into DP after donation is inserted
+temporarily selected
+Red
+ 
+Option 4
+ - Update DP to not pick up the payment if tie to donation isn’t there yet
+Problem
+ - Very biller specific but also the fastest temporary solution.  
+Due to it being the fastest option and it being a compliance problem for Biller, we are working on solution temporarily, and the Decision being implemented after this one.
+Update TFB specific code to confirm a donation record exists for the donation payment.  If it doesn’t then skip it.  It should get picked up on the next run
+Option Z
+- Option Z - Decouple DataPump insert from insPayments
+Problem - Time constraint. 
+Remove spDataPumpEligible from insPayments
+Add call to spDataPumpEligible to all areas that require datapump after a payment
+12 repos according to ADO search
+Where applicable, do the insDonationDetails/insCSRPaymentActivity before the datapump insert
+Consequences
+We are leveraging a pattern recently put together to solve a similar problem with Pay by Text.  Reusability of this pattern is high.
+It solves the problem here and will for other cases but we are punting the ultimate solution that has been discussed before, which is breaking out the data pump insert from insPayments.  They should be decoupled but still sequenced as needed. 
+ URL:/spaces/EA/pages/3823304705/TFB+-+Empty+fields+on+Datapump+posts+-+ADR

@@ -1,0 +1,159 @@
+Application Discovery
+It has two configurations
+appsettings.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.AspNetCore": "Information",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "IC.CommandHandlerLogger": "Debug",
+      "IC.MicroService.DAL.EntityFramework.ISimpleStoredProcedureContext": "Debug"
+    },
+    "Console": {
+      "FormatterName": "systemd",
+      "FormatterOptions": {
+        "SingleLine": true,
+        "IncludeScopes": true,
+        "TimestampFormat": "HH:mm:ss ",
+        "UseUtcTimestamp": true
+      }
+    }
+  },
+  "AllowedHosts": "*",
+  "IC": {
+    "SqlDatabase": {
+      "MasterConnectionString": "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433;Initial Catalog=DbMaster_GoldAzure;Application Name=PayerPayByTextService;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;",
+      "BillerConnectionStringTemplate": "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433;Initial Catalog={BillerShard};Application Name=PayerPayByTextService;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;",
+      "BillerConnectionStringStrategy": "ShardPerBiller",
+      "UseManagedIdentityToken": true
+    },
+    "ManagedIdentity": {
+      "UseLocalCredentials": true,
+      "TokenExpirationBufferInMinutes": 10,
+      "ForceExpirationAfterMinutes": 30,
+      "MaxRetries": 1,
+      "RetryIntervals": [ "0:0:1" ]
+    }
+  },
+  "Jwt": {
+    "Issuer": "https://www.invoicecloud.com",
+    "Audience": "https://www.invoicecloud.com",
+    "ExpirationInMinutes": "30",
+    "SigningCertificate": ""
+    "EncryptionCertificate": ""
+  }
+}
+appsettings.AzueDb.json
+{
+    "Logging:LogLevel:IC.CommandHandlerLogger": "Trace",
+    "Logging:Console": {
+        "FormatterName": "simple",
+        "FormatterOptions": {
+            "SingleLine": false,
+            "IncludeScopes": true,
+            "TimestampFormat": "HH:mm:ss ",
+            "UseUtcTimestamp": false
+        }
+    },
+    "IC": {
+        "SqlDatabase": {
+            "MasterConnectionString": "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433;Initial Catalog=DbMaster_GoldAzure;Application Name=PayerPayByTextService;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;",
+            "BillerConnectionStringTemplate": "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433;Initial Catalog={BillerShard};Application Name=PayerPayByTextService;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;",
+            "BillerConnectionStringStrategy": "ShardPerBiller",
+            "UseManagedIdentityToken": true
+        },
+        "ManagedIdentity": {
+            "UseLocalCredentials": true,
+            "TokenExpirationBufferInMinutes": 10,
+            "ForceExpirationAfterMinutes": 30,
+            "MaxRetries": 1,
+            "RetryIntervals": [ "0:0:1" ]
+        }
+    }
+}
+
+UseManagedIdentity
+Usage: Used by IC.Database.Authentication to enable or disable managed identity. 
+Environment Variables
+IC_LOGS_DIR
+IC__ManagedIdentity__ClientID
+IC__ManagedIdentity__UseLocalCredentials
+IC__ManagedIdentity__TokenExpirationBufferInMinutes
+Dependencies
+IC.MicroService.RunTime
+<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="IC.Hmac" Version="1.0.4" />
+    <PackageReference Include="IC.MicroService.Model" Version="0.3.17" />
+    <PackageReference Include="IC.Serilog" Version="2.1.0-EBPP-5757-NetStandard2-0.36" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.*" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+IC.MicroService.Runtime.EntityFramework
+<ItemGroup>
+    <PackageReference Include="GitVersion.MsBuild" Version="5.12.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="IC.Database.Authentication" Version="2.1.0-EBPP-5757-Standard2-0.18" />
+    <PackageReference Include="IC.MicroService.DAL.EntityFramework" Version="0.1.1" />
+    <PackageReference Include="IC.MicroService.Runtime" Version="0.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+  </ItemGroup>
+Databases
+Database connectivity is done using the IC.MicroServices.Runtime.EntityFramework library and the implementation is in 
+DbConnectionProvider.cs
+ 
+IC.MicroServices.Runtime.EntityFramework library uses IC.Database.Authentication library to get the token with ManagedIdentity and  Microsoft.Data.SqlClient to create the connection.
+Connection string template is fetched from the appsettings.json
+These connection string values are populated at the deployment time in the pipeline from the Key Vault.
+DefaultDatabase used: DBLIVE
+External Services
+Identified Components
+The following are components that have been identified as a necessary configuration, service, or dependency that should be health checked against.
+Application Settings
+Azure Key Vault Access
+Database Connectivity
+Logging functionality
+Logging
+IC.Serilog, Serilog and Microsoft.Extensions.Logging
+Key Vault
+Dev: kv-glb-crypto1-sbx
+Application Versioning
+using semver in the deployemnt pipeline
+verify assembly versioning
+Health Checks
+Health check is implemented to validate 200 response.
+Service:
+Ic.MicroServices.Runtime library has 
+app.MapGet("/health") returns service name, Version, build date and uptime. 
+ 
+Logging:
+Ic.MicroServices.Runtime library has 
+app.MapGet("/health") route logs the information
+ “
+$"{nameof(ApiHost)}.{nameof(Run)}: Starting {config.ApiName}.
+", and hence, 
+logging health check is also covered
+.
+message:<6>13:45:24 Microsoft.AspNetCore.Hosting.Diagnostics[1] => SpanId:f22e067c0cf1905c, TraceId:db68399fc54c9db93bc39a9c612e3dd7, ParentId:0000000000000000 => ConnectionId:0HN0HTFIKU0SV => RequestPath:/health RequestId:0HN0HTFIKU0SV:00000002 Request starting HTTP/1.1 GET 
+http://apibeta.dev.invoicecloud.com/health
+ - -
+Regression Tests
+Regression test specflow project has been added.
+Deployment
+Deployment Pipeline Configuration
+sbx
+dev
+prd_pri
+prd_sec
+Health Check Enhancements
+DB connection successul ?
+Can Jwt token be created ?
+ URL:/spaces/EN/pages/3015475238/PayerPayByTextService+-+ADTE

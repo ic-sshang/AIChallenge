@@ -1,0 +1,249 @@
+none
+Jira - Epics (Commitments)
+https://invoicecloud.atlassian.net/issues/?jql=project%20in%20(ARC)%20and%20type%20in%20(Epic)%20and%20%22Scrum%20Team%5BDropdown%5D%22%20%3D%20%22Shared%20Services%22%20ORDER%20BY%20created%20ASC
+ICCryptoService K8 Migration
+https://invoicecloud.atlassian.net/issues/?jql=project%20in%20(ARC)%20and%20parent%20%3D%20ARC-59%20and%20type%20not%20in%20(Test)%20ORDER%20BY%20created%20ASC
+ICDatabaseService K8 Migration
+https://invoicecloud.atlassian.net/issues/?jql=project%20in%20(ARC)%20and%20parent%20%3D%20ARC-57%20and%20type%20not%20in%20(Test)%20ORDER%20BY%20created%20ASC
+ICBusinessService K8 Migration
+https://invoicecloud.atlassian.net/issues/?jql=project%20in%20(ARC)%20and%20parent%20%3D%20ARC-58%20and%20type%20not%20in%20(Test)%20ORDER%20BY%20created%20ASC
+Misc. Items
+https://invoicecloud.atlassian.net/issues/?jql=project%20in%20(ARC)%20and%20parent%20%3D%20EMPTY%20and%20labels%20IN%20(SharedServices)%20AND%20type%20not%20in%20(Test)%20AND%20status%20in%20(%22Ready%20for%20Dev%22%2C%20%22In%20Progress%22%2C%20%22Blocked%22%2C%20%22Code%20Review%22%2C%22Ready%20for%20Testing%22%2C%20%22In%20Testing%22%2C%20%22Final%20Review%22%2C%20%22Deployment%20Queue%22)%20ORDER%20BY%20created%20ASC
+📊 Team Standup History
+This page is for tracking our daily accomplishments. At the end of each day, please fill in your name and what you worked on. This helps us maintain a historical record of standup discussions and provides future reference.
+Instructions
+At the end of your workday, add your name and a brief summary of what you accomplished.
+Add a new row for each workday.
+For previous dates, feel free to review and update your entries if needed.
+Standup History
+Wednesday, August 6th, 2025
+ 
+Troubleshooted ICCryptoService AI HealthCheck issue with key vault secrets
+Did not find a solution. Proposed testing GetSecret in the WCF project to validate if it's a preexisting issue at a project level.
+Troubleshooting the ICDatabaseService graceful  shutdown issue
+I believe Windows shutdown is forcefully closing the applications and ignoring the graceful shutdown. Actively looking for solutions and reached out to PLAT.
+SIGTERM, SIGKILL, and SIGINT did not work.
+CTRL_SHUTDOWN did not work.
+Looking into EQP Controller duplicate emails.
+Skybot jobs are failing to be killed, causing duplicate emailing.
+Skybot kill job is an internal API leading to no logging or information being readily present.
+Will make enhancements to include notice message as part of the response for troubleshooting. (HTML parsing)
+Coordinated EQP release with Team SPAM.
+Will be doing a rerun with a bileridlist of 1423 and 2401
+Team SPAM will be monitoring the EQP runs.
+ 
+Added Details for MI related log failures on confluence.
+Started Working on ICCrypto K8 Containerization checklist 1 to document details 
+Thursday, August 7th, 2025
+ 
+Troubleshooting the ICDatabaseService graceful  shutdown issue
+SIGTERM, SIGKILL, SIGINT, and CTRL_SHUTDOWN did not work. 
+Going to leverage preStop hook to invoke a shutdown and wait for the application to close.
+Blocked until platform implements it
+Looking into EQP Controller duplicate emails.
+EQP Controller kills all jobs regardless whether or not its running.
+Reached out to team to confirm issues duplicate email issue is with the skybot jobs.
+Prepped for EQP release
+Tested ICDatabase K8 alerting through transaction error
+Created Shared Service Jira team and set up on-call schedule in preparation for K8 migration
+Worked on ICCryptoService IC.Crypto nugetization
+Added Bin files to ICCryptoService and merged as part of IC.Crypto nugetize work
+Removing dependencies from IC.Crypto and leveraging DI to prevent dependency mismatch issues.
+ 
+Worked on EmailQueueProcessing MI related issue- read documentation to find out possible reasons for the error. Will be working on to replicate the issue in devtest environment.
+Worked on Application Checklist Requirements for Containerization of ICCryptoService.
+Friday, August 8th, 2025
+ 
+ICCryptoService IC.Crypto nugetization
+Decoupled dependencies and wrapped up code changes.
+Missing pipeline work and testing.
+ 
+1. Tested AI Health Check on QA server and identified issue only on Proxy Test server.
+2. Worked on 2nd Application Checklist Requirements for Containerization of ICCryptoService.
+Monday, August 11th, 2025
+ 
+ICCryptoService IC.Crypto nugetization
+Worked on SIEM logging for Alien Vault
+Missing pipeline work and testing.
+ICDatabaseService
+Got graceful shutdown to work with help of platform team
+IC.Wcf.Helpers needs updates in order to respects the graceful shutdown.
+ 
+1. Send Crypto AI Health check for code review
+2. Worked on 3nd Application Checklist Requirements for Containerization of ICCryptoService.
+3. Looked at EmailQueueController code to troubleshoot MI issue.
+Tuesday, August 12th, 2025
+ 
+Integrations and platform reached out for help with ICRTDRService
+Their IC.Wcf.Helpers had gotten updated to modify host url from ICSERVICES through constructor that is available in nuget version.
+Had to revert this since it would require windows service updates ended up implementing a workaround where we have ICSERVICES-K8 host alias pointed at cluster for dependencies and ICSERVICES pointed at 127.0.0.1 for hosting the service.
+ICDatabaseService
+Graceful shutdown is working but data at end of long running calls 5 minutes or over is not received.
+Is there something causing issues in lower environments?
+This works in production 
+EQP Dupe Email Issue
+Reached out and looked into the issue
+Skybot job failed to be killed on 7/23 asking Rodlin if the behavior is still going on after package updates.
+Will proceed with changes
+Performed audit of IC.Slack usage and changes needed
+Proposing ChannelIDs added to key vault
+At time of migration we will just update ChannelIDs and AuthToken in key vault.
+The sooner we make the change the more time devs will have to update it
+ 
+1. Took New Relic Session with Daniel
+2. Worked on EmailQueueController code to troubleshoot MI issue, yet to deploy and test the same.
+Tuesday, August 14th, 2025
+ 
+ 
+1. Worked on running EQP on azure batch to replicate MI issue. Needed information from Jose to understand how settings are done in order to connect.
+2. Resolved Crypto AI health check code review comments
+Tuesday, August 15th, 2025
+ 
+ 
+Holiday
+Monday, August 18th, 2025
+ 
+Assisted platform team with network connectivity issues on WCF calls exceeding 5 minutes
+Issue was observed in K8 production
+Assisted platform team with graceful shutdown on RTDR
+ 
+1. Worked on running EQP on azure batch to replicate MI issue.
+2. Working on graceful shutdown user story for ICBusinessService
+Tuesday, August 19th, 2025
+ 
+Worked on nugetizing IC.Crypto
+Assisted platform team with graceful shutdown
+ 
+1. Worked on running EQP on azure batch to replicate MI issue, facing issues to trigger EQP right artifact version. As of now it is running some different version.
+2. Working on graceful shutdown user story for ICBusinessService, PR in code review
+3. ICBusinessService promotion to higher non prod environments PR complete.
+Wednesday, August 20th, 2025
+ 
+Worked on nugetizing IC.Crypto
+Assisted platform team with graceful shutdown
+ 
+1. Worked on running EQP on azure batch to replicate MI issue. Unable to replicate prod issue but was able to replicate request throttle issue. Create confluence document for the same.
+Thursday, August 21th, 2025
+ 
+Finished ICDatabaseService graceful shutdown work
+Finished IC.Crypto nugetize
+Assisted SRE with MI issues on Azure 
+ 
+1. Worked on Adding start task command in azure batch to check MI is working fine before node actually picks up the task. 
+Friday, August 22nd, 2025
+ 
+Started ICCryptoService containerization
+ 
+1. Completed code to add start task command in azure batch to check MI is working fine before node actually picks up the task.  Code in review
+Monday, August 25th, 2025
+ 
+Completed ICCryptoService containerization
+ 
+1. Created confluence document for code to add start task command in azure batch to check MI is working fine before node actually picks up the task.
+2. Updated MI related failings apps for 1 month time span.
+Tuesday, August 26th, 2025
+ 
+ 
+1. Worked on upgrading IC.Scheduling with new method to return full response for end job method.
+Wednesday, August 27th, 2025
+ 
+ 
+1. Holiday
+Thursday, August 28th, 2025
+ 
+ 
+1. Worked on upgrading IC.Scheduling with new method to return full response for end job method. Also made changes to ICEmailQueueController repo to consume end job method.
+Friday, August 29th, 2025
+ 
+ 
+1. Code changes done and PRs under review for ICEmailQueueController repo to consume end job method from IC.Scheduling repo.
+Monday, Sept 1, 2025
+ 
+ 
+1. Created confluence document for Skybot webservice credentials audit in repositories- in progress.
+2. Created Document on Core Libraries Best Practices
+Tuesday, Sept 2, 2025
+ 
+ 
+1. Completed confluence document for Skybot webservice credentials audit in repositories.
+Wednesday, Sept 3, 2025
+ 
+ 
+1. Worked on looking at best practices to implement removal of hardcoded skybot credentials.
+Thursday, Sept 4, 2025
+ 
+ 
+1. Worked on Code comments for IC.Scheduling PR
+2. Worked on inspecting >5 mins long running queries for ICBusinessService
+Friday, Sept 5, 2025
+ 
+ 
+1. Worked on new Code comments for IC.Scheduling PR
+2. Worked on inspecting >5 mins long running queries for ICBusinessService
+Monday, Sept 8, 2025
+ 
+ 
+1. Rewrote IC.Scheduling PR changes as per Tony Comments, PR in review.
+2. BusinessServiceTransactions arent reporting total duration parameter correctly, need to work on the same to fix it.
+Tuesday, Sept 9, 2025
+ 
+ 
+1. Analysed and documented reason for Long Running operations in ICBusinessService repo.
+2. Fixed bug to address to total process time value for custom business service transactions.
+Wednesday, Sept 10, 2025
+ 
+ 
+1. Waiting for multiple PRs review via Tony and long running operations next steps.
+2. Attended multiple sessions - marketing+ MCP session
+3. Fixed IC.Scheduling code review comments.
+Thursday, Sept 11, 2025
+ 
+ 
+1. Waiting for multiple PRs review via Tony and information on next steps for long running operations documentation.
+2. Made code changes for graceful shutdown implementation and tested the same.
+3. Shared and documented more analysis for Long Running Transaction(ICBusinessService).
+Friday, Sept 12, 2025
+ 
+ 
+1. Waiting for multiple PRs review -Tony 
+2. Long running operations analysis shared and nothing to be done for now.
+3. Tested K8 till XAT with no issues
+4. Working on ICCrypto integration tests.
+Monday, Sept 15, 2025
+ 
+ 
+1. Working on ICCrypto integration tests.
+Tuesday, Sept 16, 2025
+ 
+ 
+1. Working on ICCrypto integration tests.
+2. Graceful shutdown for ICBusinessService - PR completed
+3. Promotion of build till prod work item resolved
+4. Fix total process time for ICBusiness Service
+5. Upgrade IC.Scheduling repo work item completed
+Wednesday, Sept 17, 2025
+ 
+ 
+1. Worked on ICCrypto integration tests, waiting for k8 containerization PR to complete to proceed next. 
+2. Upgraded ICEmailQueueController with IC.Scheduling version. PR under code review.
+Thursday, Sept 18, 2025
+ 
+ 
+1. Completed work items for MC_RPPS_Import and DemoPortals to point ICBusinessServiceUrl to K8 instance.
+2. Completed leftover code changes to reuse skybot url key for ICEmailQueueController repo.
+Friday, Sept 19, 2025
+ 
+ 
+1. Completed integration/smoke tests for ICCrypto Service
+2. Worked on items for ICCRM, MyIIS and UploadWSReportFiles to point ICBusinessServiceUrl to K8 instance.
+Monday, Sept 22, 2025
+ 
+ 
+1. Recreated PR for ICEmailQueueController to add logs while killing skybot jobs
+2. Worked on items for ICCRM, MyIIS and UploadWSReportFiles to point ICBusinessServiceUrl to K8 instance.
+Tuesday, Sept 23, 2025
+ 
+ 
+1. Update helm time out for ICBusiness Service - PR raised
+2. Downgrade Restsharp library for ICFramework.Utilies library
+ URL:/spaces/EA/pages/4559077377/Shared+Services+-+Q3+-+Meeting+Notes

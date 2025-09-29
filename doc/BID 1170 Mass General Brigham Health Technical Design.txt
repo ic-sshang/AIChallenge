@@ -1,0 +1,63 @@
+note
+This integration includes Payments Exports.
+
+
+This integration includes Payments Exports.
+
+
+Page Navigation
+Jira ticket 
+ITR
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Payment Export File
+File Summary/Purpose: The purpose of this file is to transfer payment data from IC to the biller
+File Extension: .txt
+Current Filetypes and export filenames for 2 used in production below
+File Naming Convention for File Type ID 239 (
+IF_NHP CloudStore LockBox
+): NHP_ICLockboxCloudStore_{YYYYMMDD.txt}
+File Naming Convention for File Type ID 478 (
+IF_NHP Payment Export - Settled Only
+): NHP_ICLockbox_{YYYYMMDD.txt}
+File Types and Logic for 4 file types and payment export files (2 modified, and 2 newly created in August 2025)
+FileType
+Logic
+Payment Export Filename
+IF_NHP CloudStore LockBox
+Payment export file will EXCLUDE AMEX payments
+NHP_ICLockboxCloudStore_{YYYYMMDD.txt}
+IF_NHP CloudStore Lockbox AMEX
+Payment export file will only contain AMEX payments
+NHP_
+ICLockboxCloudStore
+_AMEX_{YYYYMMDD.txt}
+IF_NHP Payment Export - Settled Only
+Payment export file will exclude settled AMEX payments
+NHP_ICLockbox_{YYYYMMDD.txt}
+IF_NHP Payment Export - Settled Only AMEX
+Payment export file will only contain settled AMEX payments
+NHP_ICLockbox_AMEX_{YYYYMMDD.txt}
+Because AMEX funding usually occurs the day before all other payment types, each File Type has logic to create 2 payment files:
+Payment file one for each file type will contain AMEX PAYMENTS ONLY
+Payment file two for each file type will contain ALL OTHER Payment types
+SUMMARY:
+Total of 4 payment export files (two that exclude AMEX, and two that contain ONLY AMEX)
+File Delimiter: fixed-width
+Specification: 
+Sample File: 
+ 
+SFTP File Path: /FromInvoiceCloud/Payments
+File Transfer Frequency: Daily
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/4533911555/BID+1170+Mass+General+Brigham+Health+Technical+Design

@@ -1,0 +1,1082 @@
+Setups
+Identification of health check components returned as CSV given guided criteria and existing CSV file.
+System Message: You are a QA engineer who is analyzing VB/C# code for any components that will need to be included in a health check to a CSV file. These components will only be included if they fit under the following categories, configurations used in code (environment settings, application settings from config file), logging functionality (a simple write log without triggering an exception will suffice), external services (a simple test for connectivity or of the service), and connectivity to databases used (we are not testing stored procedures a simple select 1 query will suffice). Do not treat this as a unit test but instead test that the components will work with simple sanity tests. In your responses make sure to only return a CSV dataset with the list of components to be health-checked and what of the component needs to be tested (be descriptive so that context of what is being tested is available). Do not include anything any other information, descriptions, or explanations I just want the raw CSV as a response. Do not make any assumptions, if there is not enough information to fill in the gaps then omit it. If you are given a CSV file, return the existing CSV and append any components found as well as make any corrections necessary. If you are not given a CSV file create your own.
+Example Input Query:
+using System;  
+&nbsp;  
+namespace BillerReportGenerator.Models  
+{  
+    class Business  
+    {  
+        public static TResult CallService<TResult>(Func<svcBusinessService.BusinessServiceClient, TResult> methodToCall)  
+        {  
+            svcBusinessService.BusinessServiceClient client = null;  
+            TResult result = default(TResult);  
+            try  
+            {  
+                client = new svcBusinessService.BusinessServiceClient();  
+                result = methodToCall(client);  
+                client.Close();  
+            }  
+            catch (Exception ex)  
+            {  
+                client.Abort();  
+                Serilog.Log.Error(ex, "Triggered by: {Event}","CallService");  
+               throw;  
+            }  
+            return result;  
+        }  
+    }  
+}  
+Example Response:
+"Component,Test Description
+svcBusinessService.BusinessServiceClient,Test connectivity to the service
+Serilog.Log,Test logging functionality by writing a simple log"
+Results:
+The setup and prompt were unsuccessful. The AI would not append to the CSV file provided in the prompt causing a loss of data. Will attempt to store the responses and compile a final CSV file.
+Identification of health check components returned as a CSV.
+System Message: You are a QA engineer who is analyzing VB/C# code for any components that will need to be included in a health check to a CSV file. These components will only be included if they fit under the following categories, configurations used in code (environment settings, application settings from config file), logging functionality (a simple write log without triggering an exception will suffice), external services (a simple test for connectivity or of the service), and connectivity to databases used (we are not testing stored procedures a simple select 1 query will suffice). Do not treat this as a unit test but instead test that the components will work with simple sanity tests. In your responses make sure to only return a CSV dataset with the list of components to be health-checked and what of the component needs to be tested (be descriptive so that context of what is being tested is available). Do not include anything any other information, descriptions, or explanations I just want the raw CSV as a response. Do not make any assumptions, if there is not enough information to fill in the gaps then omit it.
+Input Query: The input query was the file contents of individual vb or cs files in BillerReportGenerator.
+Results:
+The setup and prompt were partially successful. The AI was able to identify some components that needed to be health checked but it was overcategorizing components as needing to be health checked. Due to this, there is too much noise and a proper health check can not be reproduced from the identified components.
+Compiled responses of BillerReportGenerator analysis against all vb/cs file excluding the test project.
+"Component,Test Description
+Environment Variable IC_LOGS_DIR,Check if the environment variable IC_LOGS_DIR is defined and accessible
+Environment Variable IC_FTP_DIR,Check if the environment variable IC_FTP_DIR is defined and accessible
+Serilog Logger Configuration,Check if the logger configuration can be initialized and written to without throwing any exceptions
+ICFramework.Utilities.Email.SetVault,Check if the SetVault method can be called without throwing any exceptions
+HealthServices.HealthCheck.HealthTest,Check if the HealthTest method can be called without throwing any exceptions
+BillerReportProcessor,Check if the BillerReportProcessor can be initialized and started without throwing any exceptions
+ReportGeneratorQueue,Check if the ReportGeneratorQueue can be initialized and reports can be added to it without throwing any exceptions
+AddBillerCustomizeBillerReport,Check if the AddBillerCustomizeBillerReport method can be called and reports can be added to it without throwing any exceptions"
+"Component,Test Description"
+"BillerReport.ReportSql,Check if SQL connection string is valid and test simple SELECT 1 query"
+"BillerReport.ReportFormat,Test if the report format setting from the config file is valid"
+"BillerReport.ReportFilename,Test if the report filename setting from the config file is valid"
+"BillerReport.ReportDestination,Test if the report destination setting from the config file is valid"
+"BillerReport.EmailRecipients,Test if the email recipients setting from the config file is valid"
+"BillerReport.EmailSubject,Test if the email subject setting from the config file is valid"
+"BillerReport.ReportOutputDirectory,Check if the FTP connection using the directory path from the config file is successful"
+"BillerReport.ReportSent,Test if the logging functionality works by triggering a simple write log without causing an exception"
+No components found for health check.
+There is not enough information in the provided code snippet to determine any components that need to be health-checked.
+There is not enough information to determine components that need to be health-checked in the provided code snippet.
+"BillerReportProcessor.StartBillerReportProcessor,Test if method can process reports and dispatch them without exceptions"
+"BillerReportProcessor.HandleExceptionAndContinueProcessing,Test if method can handle exceptions and continue processing"
+"Serilog.Log.Information,Test if logging functionality is working properly"
+"Serilog.Log.Error,Test if logging functionality is working properly"
+"DB.Tools.Slack.PostEmailErrorsInSlack,Test connectivity to external Slack service"
+"Models.ReportActions.EmailErrorMessage.ExecuteAction,Test if method can execute action without exceptions"
+"Helpers.GetEmailReportInformation,Test if method can retrieve email report information without exceptions"
+"Helpers.MarkReportAsProcessed,Test if method can mark report as processed without exceptions"
+"Component,Test
+svcBusinessService.BusinessServiceClient,Test for connectivity to the external service
+Serilog.Log,Test a simple write log without triggering an exception"
+"Component,Test"
+"DispatchResult,Check if DispatchResult model can be instantiated and properties can be set"
+"Component,Test Description
+Database Connectivity,Check if a simple select 1 query can be executed on the database.
+Serilog Logging,Check if a simple log can be written without triggering an exception.
+Database Functionality,Test the execution of stored procedure 'selAzureBillers' to check if the Biller is on Azure.
+Database Functionality,Test the execution of stored procedure 'RPT.spMarkQueueReportProcessed' to mark a report as processed.
+External Service,Check the connectivity and sending capability of the SMTP server.
+File System,Check if a file can be written and read from the file system."
+"Component,Test Description
+Database.Instance(),Test if singleton instance of database is created successfully
+Utilities,Test if Utilities is created with valid Database instance
+Database.GET_DATASET,Test if GET_DATASET function successfully retrieves data from database
+Utilities.SQLParser,Test if SQLParser function parses SQL queries correctly
+Utilities.GetDataSetFromReporting,Test if GetDataSetFromReporting function retrieves data from reporting database
+ReportFormatters.CSVReportFormatter,Test if CSVReportFormatter formats report correctly
+ReportFormatters.TabDelimitedReportFormatter,Test if TabDelimitedReportFormatter formats report correctly
+ReportFormatters.ZIPCSVFormatter,Test if ZIPCSVFormatter formats report correctly
+ReportFormatters.ZIPTABFormatter,Test if ZIPTABFormatter formats report correctly
+ReportFormatters.CSVNoHeaderReportFormatter,Test if CSVNoHeaderReportFormatter formats report correctly
+ReportActions.EmailReportAction,Test if EmailReportAction sends report correctly
+ReportActions.LocalFTPReportAction,Test if LocalFTPReportAction uploads report correctly
+ReportActions.EmailDownloadReportAction,Test if EmailDownloadReportAction sends report download link correctly"
+"Component,Test Description
+System.Configuration.ConfigurationManager.AppSettings,Check if application settings from config file are accessible and not null.
+Database.Instance(),Test connectivity to the database instance.
+database.GET_DATATABLE_MULTISHARD,Test connectivity and execution of a simple query on the database.
+Serilog.Log.Information,Test logging functionality by logging an informational message.
+Serilog.Log.Error,Test logging functionality by logging an error message.
+database.GET_DATASET,Test connectivity and execution of a simple query on the database.
+database.EXECUTE_COMMAND_NONQUERY,Test connectivity and execution of a simple query on the database."
+"BillerReport.ReportOutputDirectory,Check if directory exists and is accessible"
+"BillerReport.ReportFilename,Check if file can be created with this name"
+"BillerReport.EmailRecipients,Check if email can be sent to these recipients"
+Component,Test
+"ReportDestinations Enum","Check if the Enum is able to return the correct string values"
+No components found for health check in provided code snippet.
+"Component,Test Description
+System.Net.Mail.MailMessage,Test the creation of a new MailMessage object and its properties (From, To, Body, IsBodyHtml, Subject)
+System.IO.File.ReadAllText,Test reading the email template from the file system
+AppDomain.CurrentDomain.BaseDirectory,Test retrieval of the base directory of the application
+System.IO.Path.Combine,Test the combination of the base directory with the email template file path
+System.IO.Path.GetFileName,Test the retrieval of the filename from the reportFile object
+System.IO.Path.GetFileNameWithoutExtension,Test the retrieval of the filename without the extension from the reportFile object
+Email.SendEmailWithMailGun,Test the sending of the email via MailGun
+Helpers.ExecuteActionWithRetry,Test the execution of the email sending action with retry functionality"
+"Component,Test Description
+ICFramework.Utilities.SettingsService,Test if the application can access the 'VaultName' setting from the configuration file.
+BillerReportGenerator.Models.ReportActions.EmailErrorMessage,Test the logging functionality by checking if an email can be sent without triggering an exception.
+BillerReportGenerator.Models.ReportActions.EmailErrorMessage,Test the connectivity to the external MailGun service by sending a simple email.
+System.Net.Mail.MailMessage,Test the creation of a new MailMessage object and setting its properties."
+"Component,Test Description
+EmailReportAction.ExecuteAction,Test if the method can execute without exceptions and if the email is sent successfully
+EmailReportAction.ExecuteAction,Test if the MailMessage object is properly initialized and the email is properly formatted
+EmailReportAction.ExecuteAction,Test if the email addresses are properly added to the email recipients
+EmailReportAction.ExecuteAction,Test if the email body, subject and attachment are properly added to the MailMessage object
+Email.SendEmailWithMailGun,Test if the method can send an email using MailGun service successfully
+Helpers.ExecuteActionWithRetry,Test if the method can execute an action with retry successfully"
+"Component,Test Description
+LocalFTPReportAction.ExecuteAction,Test if the method can copy a file to the specified directory"
+"Component,Test Description
+Environment.GetEnvironmentVariable,Check if it can get the IC_APPDATA_DIR environment variable
+Properties.Settings.Default.BillerReportBackupDirectory,Check if it can get the BillerReportBackupDirectory from the application settings
+System.IO.File.WriteAllText,Check if it can write the CSV file to the specified backupFileName"
+
+"Component,Test Description
+Environment Variable IC_APPDATA_DIR,Test if the environment variable 'IC_APPDATA_DIR' is available and accessible
+Application Settings BillerReportBackupDirectory,Test if the application setting 'BillerReportBackupDirectory' is available and accessible
+CSVReportFormatter FormatReport Method,Test if the method 'FormatReport' is able to create and write to a CSV file
+System.IO.File.WriteAllText,Test if 'System.IO.File.WriteAllText' method is able to write to a file"
+"Component,Test Description
+Environment.GetEnvironmentVariable,Check the functionality of retrieving environment variables
+System.IO.Path.Combine,Test the path combination functionality
+Properties.Settings.Default.BillerReportBackupDirectory,Test the retrieval of application settings from config file
+System.IO.File.WriteAllText,Test the functionality of writing into a file
+System.IO.FileInfo,Test the file information retrieval functionality"
+"Component,Test Description
+Environment.GetEnvironmentVariable('IC_APPDATA_DIR', EnvironmentVariableTarget.Machine),Check if environment variable 'IC_APPDATA_DIR' is accessible and has a valid value
+Properties.Settings.Default.BillerReportBackupDirectory,Check if application setting 'BillerReportBackupDirectory' is accessible and has a valid value
+System.IO.File.WriteAllText,Test if a simple write operation to a file is successful
+Ionic.Zip.ZipFile,Test if a zip file can be successfully created
+Business.CallService,Test connectivity and response of the external service
+System.IO.File.Delete,Test if a file can be successfully deleted"
+"Component,Test Description
+Environment.GetEnvironmentVariable('IC_APPDATA_DIR'),Test if the environment variable 'IC_APPDATA_DIR' is available and can be retrieved
+Properties.Settings.Default.BillerReportBackupDirectory,Test if the application setting 'BillerReportBackupDirectory' is available and can be retrieved
+System.IO.Path.Combine,Test if the system can successfully combine paths
+System.IO.File.WriteAllText,Test if the system can write to a file successfully
+Ionic.Zip.ZipFile,Test if the system can create a new zip file successfully
+zip.AddFiles,Test if the system can add files to a zip file successfully
+zip.Save,Test if the system can save a zip file successfully
+Business.CallService,Test if the system can successfully call and connect to the external service
+File.Delete,Test if the system can delete a file successfully
+System.IO.FileInfo,Test if the system can successfully retrieve file information"
+No components found to be included in health check.
+"Component,Test Description
+Settings,Check if the application settings from config file are accessible and readable.
+BillerReportBackupDirectory,Check if the directory path is valid and accessible."
+"Component,Test
+UpdateLoginEmailAddressRequest,Check if the request is successfully updated and returned without exceptions
+UpdateLoginPasswordRequest,Check if the password update request is successful and returned without exceptions
+InsertLoginRequest,Check if the login insertion request is successful and returned without exceptions
+BusinessService.GetServiceVersion,Check if the service version is successfully retrieved
+BusinessService.UpdateLoginEmailAddress,Check if the email address is successfully updated and returned without exceptions
+BusinessService.UpdateLoginPassword,Check if the password is successfully updated and returned without exceptions
+BusinessService.InsertLogin,Check if the login is successfully inserted and returned without exceptions
+BusinessService.StoreBillerPDF,Check if the PDF is successfully stored and returned without exceptions
+BusinessService.RetrieveBillerPDF,Check if the PDF is successfully retrieved and returned without exceptions
+BusinessService.StoreBillerImage,Check if the image is successfully stored and returned without exceptions
+BusinessService.RetrieveBillerImage,Check if the image is successfully retrieved and returned without exceptions
+BusinessService.StoreZip,Check if the zip file is successfully stored and returned without exceptions
+BusinessService.RetrieveZip,Check if the zip file is successfully retrieved and returned without exceptions"
+"Component,Test"
+"DatabaseProxy,Check if the DatabaseProxy instance can be created successfully"
+"SettingsService,Check if the SettingsService instance can retrieve settings"
+"DatabaseTokenProvider,Check if the DatabaseTokenProvider instance can be created successfully"
+"KeyVaultClient,Check if the KeyVaultClient instance can retrieve the keyvault"
+"GET_DATASET,Check if a simple SELECT 1 SQL query can be executed"
+"GET_DATATABLE,Check if a simple SELECT 1 SQL query can be executed"
+"EXECUTE_COMMAND_NONQUERY,Check if a simple UPDATE/INSERT SQL command can be executed"
+"GET_DATATABLE_MULTISHARD,Check if a simple SELECT 1 SQL query can be executed on multiple shards"
+"EXECUTE_COMMAND_SINGLE_RESULT,Check if a simple SELECT 1 SQL query can be executed and return a single result"
+"Component,Test Description
+IDatabaseWrapper.GET_DATASET,Test connectivity to the database and ability to retrieve a dataset
+IDatabaseWrapper.GET_DATATABLE,Test connectivity to the database and ability to retrieve a datatable
+IDatabaseWrapper.EXECUTE_COMMAND_NONQUERY,Test connectivity to the database and ability to execute a non-query command
+IDatabaseWrapper.GET_DATATABLE_MULTISHARD,Test connectivity to the database and ability to retrieve a datatable from multiple shards
+IDatabaseWrapper.EXECUTE_COMMAND_SINGLE_RESULT,Test connectivity to the database and ability to execute a command with a single result"
+Component,Test Description
+IUtilities.ExecuteMultishardCallWithRetry,Test if a simple SQL query can be executed without triggering an exception
+IUtilities.GetDataSetFromReporting,Test if a dataset can be retrieved from the reporting database without triggering an exception
+IUtilities.SQLParser,Test if a simple SQL statement can be parsed without triggering an exception
+"Component,Test Description
+IDatabaseWrapper,Test connectivity to the database by executing a simple SELECT 1 query
+System.Configuration.ConfigurationManager.AppSettings['retryAttempts'],Test if the application setting 'retryAttempts' is available and can be parsed to an integer
+Serilog.Log,Test if the logger is able to write a simple log message without throwing an exception
+Utilities.ExecuteMultishardCallWithRetry,Test if the method can execute a simple SQL query without throwing an exception
+Utilities.GetDataSetFromReporting,Test if the method can execute a simple SQL query and return a DataSet without throwing an exception
+Utilities.SQLParser,Test if the method can parse a simple SQL query without throwing an exception"
+"Component,Test Description
+Database,Check if GET_DATATABLE method is working properly by executing a simple select query
+Database,Check if GET_DATATABLE_MULTISHARD method is working properly by executing a simple select query
+Serilog,Check if logging is working properly by writing an information log
+Email,Check if SendEmailWithMailGun method is working properly by sending a simple email"
+"Component,Test Description
+SettingsService.Instance.GetSetting,Check if application settings 'ClientId' and 'VaultName' can be retrieved from the config file.
+KeyVaultReader.CreateFromDefaultIdentity,Test connectivity to the Azure Key Vault using DefaultIdentity.
+KeyVaultReader.CreateFromManagedIdentity,Test connectivity to the Azure Key Vault using ManagedIdentity.
+KeyVaultClient.Instance,Check the singleton instance creation of KeyVaultClient.
+KeyVaultClient.GetKeyVaultValue,Test retrieval of a secret value from the Azure Key Vault using an accessKey.
+KeyVaultClient.GetKeyVault,Test retrieval of the Azure KeyVaultClient instance."
+"Component,Test
+SettingsService,Test if 'UseManagedIdentity' returns a valid boolean from AppSettings
+SettingsService,Test if 'GetConnectionString' returns a valid connection string from ConnectionStrings using a provided name
+SettingsService,Test if 'GetSetting' returns a valid setting value from AppSettings using a provided key"
+"Component,Test Description"
+"Assembly Information,Check assembly information for 'BillerReportGenerator.DB' such as AssemblyTitle, AssemblyProduct, and AssemblyVersion"
+"Component,Test
+Retry.Do method,Test with a dummy action and check if the retry mechanism works as expected
+Serilog.Log.Error,Test if logs are generated properly on exception"
+"Component,Test Description
+IC.Database.Databases,Test connectivity to the database
+System.Configuration,Check if the application settings from config file are being read correctly
+IC.Slack,Test the connectivity to the Slack service
+IC.Slack.Models.Enums.SlackApplication.BMSSlackBot,Test if the specific Slack bot is available
+System.Text.Json,Test if the JSON serialization and deserialization works correctly
+SettingsService.Instance.GetSetting('VaultName'),Check if the setting 'VaultName' is being retrieved correctly from the configuration"
+
+Combined CSV done through AI:
+"Component,Test Description
+Environment Variable IC_LOGS_DIR,Check if the environment variable IC_LOGS_DIR is defined and accessible
+Environment Variable IC_FTP_DIR,Check if the environment variable IC_FTP_DIR is defined and accessible
+Serilog Logger Configuration,Check if the logger configuration can be initialized and written to without throwing any exceptions
+ICFramework.Utilities.Email.SetVault,Check if the SetVault method can be called without throwing any exceptions
+HealthServices.HealthCheck.HealthTest,Check if the HealthTest method can be called without throwing any exceptions
+BillerReportProcessor,Check if the BillerReportProcessor can be initialized and started without throwing any exceptions
+ReportGeneratorQueue,Check if the ReportGeneratorQueue can be initialized and reports can be added to it without throwing any exceptions
+AddBillerCustomizeBillerReport,Check if the AddBillerCustomizeBillerReport method can be called and reports can be added to it without throwing any exceptions
+BillerReport.ReportSql,Check if SQL connection string is valid and test simple SELECT 1 query
+BillerReport.ReportFormat,Test if the report format setting from the config file is valid
+BillerReport.ReportFilename,Test if the report filename setting from the config file is valid
+BillerReport.ReportDestination,Test if the report destination setting from the config file is valid
+BillerReport.EmailRecipients,Test if the email recipients setting from the config file is valid
+BillerReport.EmailSubject,Test if the email subject setting from the config file is valid
+BillerReport.ReportOutputDirectory,Check if the FTP connection using the directory path from the config file is successful
+BillerReport.ReportSent,Test if the logging functionality works by triggering a simple write log without causing an exception
+BillerReportProcessor.StartBillerReportProcessor,Test if method can process reports and dispatch them without exceptions
+BillerReportProcessor.HandleExceptionAndContinueProcessing,Test if method can handle exceptions and continue processing
+Serilog.Log.Information,Test if logging functionality is working properly
+Serilog.Log.Error,Test if logging functionality is working properly
+DB.Tools.Slack.PostEmailErrorsInSlack,Test connectivity to external Slack service
+Models.ReportActions.EmailErrorMessage.ExecuteAction,Test if method can execute action without exceptions
+Helpers.GetEmailReportInformation,Test if method can retrieve email report information without exceptions
+Helpers.MarkReportAsProcessed,Test if method can mark report as processed without exceptions
+svcBusinessService.BusinessServiceClient,Test for connectivity to the external service
+Serilog.Log,Test a simple write log without triggering an exception
+DispatchResult,Check if DispatchResult model can be instantiated and properties can be set
+Database Connectivity,Check if a simple select 1 query can be executed on the database.
+Serilog Logging,Check if a simple log can be written without triggering an exception.
+Database Functionality,Test the execution of stored procedure 'selAzureBillers' to check if the Biller is on Azure.
+Database Functionality,Test the execution of stored procedure 'RPT.spMarkQueueReportProcessed' to mark a report as processed.
+External Service,Check the connectivity and sending capability of the SMTP server.
+File System,Check if a file can be written and read from the file system.
+Database.Instance(),Test if singleton instance of database is created successfully
+Utilities,Test if Utilities is created with valid Database instance
+Database.GET_DATASET,Test if GET_DATASET function successfully retrieves data from database
+Utilities.SQLParser,Test if SQLParser function parses SQL queries correctly
+Utilities.GetDataSetFromReporting,Test if GetDataSetFromReporting function retrieves data from reporting database
+ReportFormatters.CSVReportFormatter,Test if CSVReportFormatter formats report correctly
+ReportFormatters.TabDelimitedReportFormatter,Test if TabDelimitedReportFormatter formats report correctly
+ReportFormatters.ZIPCSVFormatter,Test if ZIPCSVFormatter formats report correctly
+ReportFormatters.ZIPTABFormatter,Test if ZIPTABFormatter formats report correctly
+ReportFormatters.CSVNoHeaderReportFormatter,Test if CSVNoHeaderReportFormatter formats report correctly
+ReportActions.EmailReportAction,Test if EmailReportAction sends report correctly
+ReportActions.LocalFTPReportAction,Test if LocalFTPReportAction uploads report correctly
+ReportActions.EmailDownloadReportAction,Test if EmailDownloadReportAction sends report download link correctly
+System.Configuration.ConfigurationManager.AppSettings,Check if application settings from config file are accessible and not null.
+Database.Instance(),Test connectivity to the database instance.
+database.GET_DATATABLE_MULTISHARD,Test connectivity and execution of a simple query on the database.
+Serilog.Log.Information,Test logging functionality by logging an informational message.
+Serilog.Log.Error,Test logging functionality by logging an error message.
+database.GET_DATASET,Test connectivity and execution of a simple query on the database.
+database.EXECUTE_COMMAND_NONQUERY,Test connectivity and execution of a simple query on the database.
+BillerReport.ReportOutputDirectory,Check if directory exists and is accessible
+BillerReport.ReportFilename,Check if file can be created with this name
+BillerReport.EmailRecipients,Check if email can be sent to these recipients
+ReportDestinations Enum,Check if the Enum is able to return the correct string values
+System.Net.Mail.MailMessage,Test the creation of a new MailMessage object and its properties (From, To, Body, IsBodyHtml, Subject)
+System.IO.File.ReadAllText,Test reading the email template from the file system
+AppDomain.CurrentDomain.BaseDirectory,Test retrieval of the base directory of the application
+System.IO.Path.Combine,Test the combination of the base directory with the email template file path
+System.IO.Path.GetFileName,Test the retrieval of the filename from the reportFile object
+System.IO.Path.GetFileNameWithoutExtension,Test the retrieval of the filename without the extension from the reportFile object
+Email.SendEmailWithMailGun,Test the sending of the email via MailGun
+Helpers.ExecuteActionWithRetry,Test the execution of the email sending action with retry functionality
+ICFramework.Utilities.SettingsService,Test if the application can access the 'VaultName' setting from the configuration file.
+BillerReportGenerator.Models.ReportActions.EmailErrorMessage,Test the logging functionality by checking if an email can be sent without triggering an exception.
+BillerReportGenerator.Models.ReportActions.EmailErrorMessage,Test the connectivity to the external MailGun service by sending a simple email.
+System.Net.Mail.MailMessage,Test the creation of a new MailMessage object and setting its properties.
+EmailReportAction.ExecuteAction,Test if the method can execute without exceptions and if the email is sent successfully
+EmailReportAction.ExecuteAction,Test if the MailMessage object is properly initialized and the email is properly formatted
+EmailReportAction.ExecuteAction,Test if the email addresses are properly added to the email recipients
+EmailReportAction.ExecuteAction,Test if the email body, subject and attachment are properly added to the MailMessage object
+Email.SendEmailWithMailGun,Test if the method can send an email using MailGun service successfully
+Helpers.ExecuteActionWithRetry,Test if the method can execute an action with retry successfully
+LocalFTPReportAction.ExecuteAction,Test if the method can copy a file to the specified directory
+Environment.GetEnvironmentVariable,Check if it can get the IC_APPDATA_DIR environment variable
+Properties.Settings.Default.BillerReportBackupDirectory,Check if it can get the BillerReportBackupDirectory from the application settings
+System.IO.File.WriteAllText,Check if it can write the CSV file to the specified backupFileName
+Environment Variable IC_APPDATA_DIR,Test if the environment variable 'IC_APPDATA_DIR' is available and accessible
+Application Settings BillerReportBackupDirectory,Test if the application setting 'BillerReportBackupDirectory' is available and accessible
+CSVReportFormatter FormatReport Method,Test if the method 'FormatReport' is able to create and write to a CSV file
+System.IO.File.WriteAllText,Test if 'System.IO.File.WriteAllText' method is able to write to a file
+Environment.GetEnvironmentVariable,Check the functionality of retrieving environment variables
+System.IO.Path.Combine,Test the path combination functionality
+Properties.Settings.Default.BillerReportBackupDirectory,Test the retrieval of application settings from config file
+System.IO.File.WriteAllText,Test the functionality of writing into a file
+System.IO.FileInfo,Test the file information retrieval functionality
+Environment.GetEnvironmentVariable('IC_APPDATA_DIR', EnvironmentVariableTarget.Machine),Check if environment variable 'IC_APPDATA_DIR' is accessible and has a valid value
+Properties.Settings.Default.BillerReportBackupDirectory,Check if application setting 'BillerReportBackupDirectory' is accessible and has a valid value
+System.IO.File.WriteAllText,Test if a simple write operation to a file is successful
+Ionic.Zip.ZipFile,Test if a zip file can be successfully created
+Business.CallService,Test connectivity and response of the external service
+System.IO.File.Delete,Test if a file can be successfully deleted
+Environment.GetEnvironmentVariable('IC_APPDATA_DIR'),Test if the environment variable 'IC_APPDATA_DIR' is available and can be retrieved
+Properties.Settings.Default.BillerReportBackupDirectory,Test if the application setting 'BillerReportBackupDirectory' is available and can be retrieved
+System.IO.Path.Combine,Test if the system can successfully combine paths
+System.IO.File.WriteAllText,Test if the system can write to a file successfully
+Ionic.Zip.ZipFile,Test if the system can create a new zip file successfully
+zip.AddFiles,Test if the system can add files to a zip file successfully
+zip.Save,Test if the system can save a zip file successfully
+Business.CallService,Test if the system can successfully call and connect to the external service
+File.Delete,Test if the system can delete a file successfully
+System.IO.FileInfo,Test if the system can successfully retrieve file information
+Settings,Check if the application settings from config file are accessible and readable.
+BillerReportBackupDirectory,Check if the directory path is valid and accessible.
+UpdateLoginEmailAddressRequest,Check if the request is successfully updated and returned without exceptions
+UpdateLoginPasswordRequest,Check if the password update request is successful and returned without exceptions
+InsertLoginRequest,Check if the login insertion request is successful and returned without exceptions
+BusinessService.GetServiceVersion,Check if the service version is successfully retrieved
+BusinessService.UpdateLoginEmailAddress,Check if the email address is successfully updated and returned without exceptions
+BusinessService.UpdateLoginPassword,Check if the password is successfully updated and returned without exceptions
+BusinessService.InsertLogin,Check if the login is successfully inserted and returned without exceptions
+BusinessService.StoreBillerPDF,Check if the PDF is successfully stored and returned without exceptions
+BusinessService.RetrieveBillerPDF,Check if the PDF is successfully retrieved and returned without exceptions
+BusinessService.StoreBillerImage,Check if the image is successfully stored and returned without exceptions
+BusinessService.RetrieveBillerImage,Check if the image is successfully retrieved and returned without exceptions
+BusinessService.StoreZip,Check if the zip file is successfully stored and returned without exceptions
+BusinessService.RetrieveZip,Check if the zip file is successfully retrieved and returned without exceptions
+DatabaseProxy,Check if the DatabaseProxy instance can be created successfully
+SettingsService,Check if the SettingsService instance can retrieve settings
+DatabaseTokenProvider,Check if the DatabaseTokenProvider instance can be created successfully
+KeyVaultClient,Check if the KeyVaultClient instance can retrieve the keyvault
+GET_DATASET,Check if a simple SELECT 1 SQL query can be executed
+GET_DATATABLE,Check if a simple SELECT 1 SQL query can be executed
+EXECUTE_COMMAND_NONQUERY,Check if a simple UPDATE/INSERT SQL command can be executed
+GET_DATATABLE_MULTISHARD,Check if a simple SELECT 1 SQL query can be executed on multiple shards
+EXECUTE_COMMAND_SINGLE_RESULT,Check if a simple SELECT 1 SQL query can be executed and return a single result
+IDatabaseWrapper.GET_DATASET,Test connectivity to the database and ability to retrieve a dataset
+IDatabaseWrapper.GET_DATATABLE,Test connectivity to the database and ability to retrieve a datatable
+IDatabaseWrapper.EXECUTE_COMMAND_NONQUERY,Test connectivity to the database and ability to execute a non-query command
+IDatabaseWrapper.GET_DATATABLE_MULTISHARD,Test connectivity to the database and ability to retrieve a datatable from multiple shards
+IDatabaseWrapper.EXECUTE_COMMAND_SINGLE_RESULT,Test connectivity to the database and ability to execute a command with a single result
+IUtilities.ExecuteMultishardCallWithRetry,Test if a simple SQL query can be executed without triggering an exception
+IUtilities.GetDataSetFromReporting,Test if a dataset can be retrieved from the reporting database without triggering an exception
+IUtilities.SQLParser,Test if a simple SQL statement can be parsed without triggering an exception
+IDatabaseWrapper,Test connectivity to the database by executing a simple SELECT 1 query
+System.Configuration.ConfigurationManager.AppSettings['retryAttempts'],Test if the application setting 'retryAttempts' is available and can be parsed to an integer
+Serilog.Log,Test if the logger is able to write a simple log message without throwing an exception
+Utilities.ExecuteMultishardCallWithRetry,Test if the method can execute a simple SQL query without throwing an exception
+Utilities.GetDataSetFromReporting,Test if the method can execute a simple SQL query and return a DataSet without throwing an exception
+Utilities.SQLParser,Test if the method can parse a simple SQL query without throwing an exception
+Database,Check if GET_DATATABLE method is working properly by executing a simple select query
+Database,Check if GET_DATATABLE_MULTISHARD method is working properly by executing a simple select query
+Serilog,Check if logging is working properly by writing an information log
+Email,Check if SendEmailWithMailGun method is working properly by sending a simple email
+SettingsService.Instance.GetSetting,Check if application settings 'ClientId' and 'VaultName' can be retrieved from the config file.
+KeyVaultReader.CreateFromDefaultIdentity,Test connectivity to the Azure Key Vault using DefaultIdentity.
+KeyVaultReader.CreateFromManagedIdentity,Test connectivity to the Azure Key Vault using ManagedIdentity.
+KeyVaultClient.Instance,Check the singleton instance creation of KeyVaultClient.
+KeyVaultClient.GetKeyVaultValue,Test retrieval of a secret value from the Azure Key Vault using an accessKey.
+KeyVaultClient.GetKeyVault,Test retrieval of the Azure KeyVaultClient instance.
+SettingsService,Test if 'UseManagedIdentity' returns a valid boolean from AppSettings
+SettingsService,Test if 'GetConnectionString' returns a valid connection string from ConnectionStrings using a provided name
+SettingsService,Test if 'GetSetting' returns a valid setting value from AppSettings using a provided key
+Assembly Information,Check assembly information for 'BillerReportGenerator.DB' such as AssemblyTitle, AssemblyProduct, and AssemblyVersion
+Retry.Do method,Test with a dummy action and check if the retry mechanism works as expected
+Serilog.Log.Error,Test if logs are generated properly on exception
+IC.Database.Databases,Test connectivity to the database
+System.Configuration,Check if the application settings from config file are being read correctly
+IC.Slack,Test the connectivity to the Slack service
+IC.Slack.Models.Enums.SlackApplication.BMSSlackBot,Test if the specific Slack bot is available
+System.Text.Json,Test if the JSON serialization and deserialization works correctly
+SettingsService.Instance.GetSetting('VaultName'),Check if the setting 'VaultName' is being retrieved correctly from the configuration"
+Identification of health check components given what components to look for returned as a CSV.
+System Message: You are a QA engineer who is analyzing VB/C# code to see if there are any of the components listed below. These components will be used to develop a health check. Your job is to scan the code for use of these components and return them in a CSV file. The CSV file will have three columns, one is component name, the second one is how its being used, and third is file name. You will only return the CSV file and you will not provide any other information, descriptions, or explanations. You will not make any assumptions or answer anything if you do not have enough information from the given code to answer. If you do not identify any of the components return only ""No components identified"".\n\nThe following is the list of components:\n1. Use of email through ICFramework.Utilities.Email\n2. Use of email not through ICFramework.Utilities.Email\n3. Use of IC.Database\n4. Use of ICDatabaseService\n5. Use of IC.ServiceProxies for a Database proxy.\n6. Use of ICBusinessService\n7. Use of ICRTDRService\n8. Use of CloudCrypto\n9. Use of ICCryptoService\n10. Use of ICAzureMessageQueue\n11. Use of logging through IC.Serilog\n12. Use of logging not through IC.Serilog\n13. Use of FTP\n14. Use of external HTTP API service\n15. Use of Azure Key Vault through IC.Azure.KeyVault\n16. Use of Azure Key Vault not through IC.Azure.KeyVault\n17. Use of Database Access Token provider through IC.Database.Authentication\n18. Use of Database Access Token provider not through IC.Database.Authentication\n19. Use of Azure Blob Service through IC.Azure.Blob\n20. Use of Azure Blob service not through IC.Azure.Blob\n21. Use of Azure Storage through IC.Azure.Storage\n22. Use of Azure Storage not through IC.Azure.Storage\n23. Use of configuration file Application Settings.\n24. Use of environment variables
+Input Query: The input query was the file name and file contents of individual vb or cs files in BillerReportGenerator.
+Results:
+The setup and prompt were mostly successful. The AI was able to identify components that needed to be health-checked. To make the data more useful, the next steps might be to consolidate the data returned through Prompt Engineering to give a more condensed version of the CSV file.
+Results against all cs/vb files. (Filtered out no component found responses)
+"Use of email through ICFramework.Utilities.Email,ICFramework.Utilities.Email.SetVault(KeyVaultClient.Instance.GetKeyVault()),Program.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable('IC_LOGS_DIR'),Program.cs"
+"Use of logging through IC.Serilog,IC.Serilog.Utility.NewRelicLogger(loggerConfiguration, 'BillerReportGenerator', Environment.GetEnvironmentVariable('IC_LOGS_DIR')),Program.cs"
+"Use of logging not through IC.Serilog,Serilog.Log.Error(ex, 'Triggered by {Event}. Exception in Main(): {exception}','BillerReportGenerator.Main', ex.ToString()),Program.cs"
+"Use of FTP,ReportDestination = ReportDestinations.LocalFTP,Program.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable('IC_FTP_DIR', EnvironmentVariableTarget.Machine),Program.cs"
+"Use of email not through ICFramework.Utilities.Email,EmailRecipients and EmailSubject are used to send emails,IBillerReport.cs"
+"Use of FTP,ReportOutputDirectory is used for FTP action,IBillerReport.cs"
+"Use of logging through IC.Serilog,Serilog.Log.Information and Serilog.Log.Error are used to log information and errors,BillerReportProcessor.cs"
+"Use of email not through ICFramework.Utilities.Email,Email is being used to send error messages through the ExecuteAction method of the IReportAction interface,BillerReportProcessor.cs"
+"ICBusinessService,Used to call BusinessServiceClient,Business.cs"
+"IC.Serilog,Used for logging errors,Business.cs"
+"Use of IC.Database,Database.Instance(),Helpers.cs"
+"Use of logging through IC.Serilog,Serilog.Log.Error,Helpers.cs"
+"Use of email not through ICFramework.Utilities.Email,System.Net.Mail.SmtpException,Helpers.cs"
+"Use of IC.Database","Database instance is used to fetch data","ReportDispatcher.cs"
+"Use of email not through ICFramework.Utilities.Email","Email is used as a report destination","ReportDispatcher.cs"
+"Use of FTP","FTP is used as a report destination","ReportDispatcher.cs"
+"Use of IC.Database","Database instance is used to execute SQL commands and retrieve data","ReportGeneratorQueue.cs"
+"Use of logging through IC.Serilog","Serilog is used for logging information and errors","ReportGeneratorQueue.cs"
+"Use of configuration file Application Settings.","Application settings are used to get the max number of retries","ReportGeneratorQueue.cs"
+"Use of Azure Blob service not through IC.Azure.Blob","Azure Blob Storage is used to store the report and generate a download link","ReportGeneratorQueue.cs"
+"Use of email not through ICFramework.Utilities.Email,Email,ReportDestinations.cs"
+"Use of FTP,LocalFTP,ReportDestinations.cs"
+"Use of email not through ICFramework.Utilities.Email,Email is being used to send reports,EmailDownloadReportAction.cs"
+"Use of Azure Blob service not through IC.Azure.Blob,Azure Blob Storage is being used to store reports,EmailDownloadReportAction.cs"
+"Use of email not through ICFramework.Utilities.Email,SendEmailWithMailGun method is used,EmailErrorMessage.cs"
+"Use of configuration file Application Settings,SettingsService.Instance.GetSetting method is used,EmailErrorMessage.cs"
+"Use of email not through ICFramework.Utilities.Email","System.Net.Mail is used to compose the email and ICFramework.Utilities.Email.SendEmailWithMailGun is used to send the email","EmailReportAction.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable,CSVNoHeaderReportFormatter.cs"
+"Use of configuration file Application Settings,Properties.Settings.Default.BillerReportBackupDirectory,CSVNoHeaderReportFormatter.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable,CSVReportFormatter.cs"
+"Use of configuration file Application Settings,Properties.Settings.Default,CSVReportFormatter.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable('IC_APPDATA_DIR', EnvironmentVariableTarget.Machine),TabDelimitedReportFormatter.cs"
+"Use of Azure Storage through IC.Azure.Storage","Business.CallService method is used to store zip file on Azure","ZIPCSVFormatter.cs"
+"Use of environment variables","Environment.GetEnvironmentVariable method is used to get the value of IC_APPDATA_DIR environment variable","ZIPCSVFormatter.cs"
+"Use of configuration file Application Settings.","Properties.Settings.Default.BillerReportBackupDirectory is used to get the directory for the BillerReportBackup","ZIPCSVFormatter.cs"
+"Use of environment variables,Environment.GetEnvironmentVariable, ZIPTABFormatter.cs"
+"Use of configuration file Application Settings,Properties.Settings.Default.BillerReportBackupDirectory,ZIPTABFormatter.cs"
+"Use of configuration file Application Settings.,Reading the BillerReportBackupDirectory setting,Settings.Designer.cs"
+"ICBusinessService,Used for various business operations like updating login email address, updating login password, inserting login, storing and retrieving biller PDF, storing and retrieving biller image, storing and retrieving zip files,Reference.cs"
+"Use of IC.Database","Creating and executing database operations","Database.cs"
+"Use of Database Access Token provider through IC.Database.Authentication","Creating a token provider for database authentication","Database.cs"
+"Use of configuration file Application Settings.","Fetching settings from application configuration file","Database.cs"
+"Use of IC.Database,Database Wrapper,Utilities.cs"
+"Use of logging through IC.Serilog,Logging Errors and Information,Utilities.cs"
+"Use of configuration file Application Settings,Max Retry Attempts Configuration,Utilities.cs"
+"Use of email not through ICFramework.Utilities.Email","MailMessage class is used to send email","HealthCheck.cs"
+"Use of IC.Database","Database class from IC.Database is used to fetch data","HealthCheck.cs"
+"Use of logging through IC.Serilog","Serilog is used for logging information and errors","HealthCheck.cs"
+"Use of Azure Key Vault through IC.Azure.KeyVault","KeyVaultReader.CreateFromDefaultIdentity and KeyVaultReader.CreateFromManagedIdentity are being used to create instances of Azure Key Vault","KeyVaultClient.cs"
+"Use of configuration file Application Settings.","SettingsService.Instance.GetSetting is being used to get settings from app.config","KeyVaultClient.cs"
+"IC.Database","UseManagedIdentity, GetConnectionString, GetSetting methods are being used","SettingsService.cs"
+"configuration file Application Settings","ConfigurationManager.AppSettings is being used","SettingsService.cs"
+"IC.Serilog,Logging error details,Retry.cs"
+"IC.Database","Used for database operations in the Slack class","Slack.cs"
+"Use of configuration file Application Settings.","ConfigurationManager.AppSettings used to retrieve App Settings","Slack.cs"
+
+21/57 Incorrect Rows
+"Use of logging not through IC.Serilog,Serilog.Log.Error(ex, 'Triggered by {Event}. Exception in Main(): {exception}','BillerReportGenerator.Main', ex.ToString()),Program.cs"
+"Use of FTP,ReportDestination = ReportDestinations.LocalFTP,Program.cs"
+"Use of email not through ICFramework.Utilities.Email,EmailRecipients and EmailSubject are used to send emails,IBillerReport.cs"
+"Use of FTP,ReportOutputDirectory is used for FTP action,IBillerReport.cs"
+"Use of email not through ICFramework.Utilities.Email,Email is being used to send error messages through the ExecuteAction method of the IReportAction interface,BillerReportProcessor.cs"
+"Use of email not through ICFramework.Utilities.Email,System.Net.Mail.SmtpException,Helpers.cs"
+"Use of IC.Database","Database instance is used to fetch data","ReportDispatcher.cs"
+"Use of email not through ICFramework.Utilities.Email","Email is used as a report destination","ReportDispatcher.cs"
+"Use of FTP","FTP is used as a report destination","ReportDispatcher.cs"
+"Use of IC.Database","Database instance is used to execute SQL commands and retrieve data","ReportGeneratorQueue.cs"
+"Use of Azure Blob service not through IC.Azure.Blob","Azure Blob Storage is used to store the report and generate a download link","ReportGeneratorQueue.cs"
+"Use of email not through ICFramework.Utilities.Email,Email,ReportDestinations.cs"
+"Use of FTP,LocalFTP,ReportDestinations.cs"
+"Use of email not through ICFramework.Utilities.Email,Email is being used to send reports,EmailDownloadReportAction.cs"
+"Use of Azure Blob service not through IC.Azure.Blob,Azure Blob Storage is being used to store reports,EmailDownloadReportAction.cs"
+"Use of email not through ICFramework.Utilities.Email,SendEmailWithMailGun method is used,EmailErrorMessage.cs"
+"Use of email not through ICFramework.Utilities.Email","System.Net.Mail is used to compose the email and ICFramework.Utilities.Email.SendEmailWithMailGun is used to send the email","EmailReportAction.cs"
+"Use of IC.Database,Database Wrapper,Utilities.cs"
+"Use of email not through ICFramework.Utilities.Email","MailMessage class is used to send email","HealthCheck.cs"
+"Use of IC.Database","Database class from IC.Database is used to fetch data","HealthCheck.cs"
+"IC.Database","Used for database operations in the Slack class","Slack.cs"
+The following rows were deemed as incorrect because the AI made incorrect assumptions. Some rows were included in the list even though the assumption was right because it was a guess by the AI and the source code did not have enough information to provide the answer.
+Identification of health check components (Taruns enhanced prompt)
+System Message: As a .NET code analyzer, your role involves scrutinizing code to identify external dependencies. These dependencies are generalized as the following, databases, queues, logging systems, key vaults, HTTP clients, APIs, file systems, caching, configurations, networking, monitoring systems, search engines, cloud providers, and services such as authentication, authorization, email, and payment services, etc. You will be tasked with identifying the generalization of the dependencies given some code. Additionally, you will also be given a list of components to tie to the identified dependencies. Each dependency will have a single component tied to it but if you cannot tie a component to a dependency do not make assumptions and mark the component for that dependency as "Custom". You will record this data in a CSV format. The CSV format must have 4 columns which are, full file path, pipe delimited generalized dependencies identified, and their respective components identified also pipe delimited. In instances where you do not find any dependencies, you must indicate this by entering "NA" for the dependency and also indicate "NA" for the respective component. You will only return the CSV file and you will not provide any other information, descriptions, or explanations. You will not make any assumptions or answer anything if you do not have enough information from the given code to answer.
+The following is the list of components:
+ICFramework.Utilities.Email
+IC.Database
+ICDatabaseService
+IC.ServiceProxies for a Database proxy.
+ICBusinessService
+ICRTDRService
+CloudCrypto
+ICCryptoService
+ICAzureMessageQueue
+IC.Serilog
+Chilkat
+IC.Azure.KeyVault
+IC.Database.Authentication
+IC.Azure.Blob
+IC.Azure.Storage
+System.Configuration
+System.Environment
+Here is an example of a row in the CSV data.
+"ProjectDir\Main.cs","Configuration|Logging Systems","System.Environment|IC.Serilog"
+Input Query: The input contains “File Path:” follow by the relative path of the code and “Code:” followed by the source code of the file.
+Results: The results were very promising and it was able to categorize dependencies and assign components from the given list.
+Results against all cs/vb files.
+"Test\BillerReportGenerator\Program.cs","Email|Key Vault|Logging System|File System|Configuration","ICFramework.Utilities.Email|IC.Azure.KeyVault|IC.Serilog|System.Environment|System.Environment"
+"Test\BillerReportGenerator\Interfaces\IBillerReport.cs","Email|Database","ICFramework.Utilities.Email|IC.Database"
+"Test\BillerReportGenerator\Interfaces\IReportAction.cs", "File Systems", "System.IO"
+"Test\BillerReportGenerator\Interfaces\IReportDispatcher.cs", "NA", "NA"
+"Test\BillerReportGenerator\Interfaces\IReportFormatter.cs","File Systems|Databases","Custom|IC.Database"
+"Test\BillerReportGenerator\Models\BillerReportProcessor.cs","Databases|Logging Systems|Email Services","IC.Database|IC.Serilog|ICFramework.Utilities.Email"
+"Test\BillerReportGenerator\Models\Business.cs", "Services|Logging Systems", "ICBusinessService|IC.Serilog"
+"Test\BillerReportGenerator\Models\DispatchResult.cs","File Systems","System.IO"
+"Test\BillerReportGenerator\Models\Helpers.cs","Databases|Logging Systems|Email Services","IC.Database|IC.Serilog|System.Net.Mail"
+"Test\BillerReportGenerator\Models\ReportDispatcher.cs","Databases|Email Services|File Systems","IC.Database|ICFramework.Utilities.Email|System.IO"
+"Test\BillerReportGenerator\Models\ReportGeneratorQueue.cs","Databases|Logging Systems|Configurations|HTTP Clients","IC.Database|IC.Serilog|System.Configuration|Custom"
+"Test\BillerReportGenerator\Models\BillerReports\BillerReport.cs","NA","NA"
+"Test\BillerReportGenerator\Models\Enums\ReportDestinations.cs","NA","NA"
+"Test\BillerReportGenerator\Models\Enums\ReportFormats.cs", "NA", "NA"
+"Test\BillerReportGenerator\Models\ReportActions\EmailDownloadReportAction.cs","Email Service|File System|Cloud Provider","ICFramework.Utilities.Email|System.IO|IC.Azure.Blob"
+"Test\BillerReportGenerator\Models\ReportActions\EmailErrorMessage.cs","Email Service|Configurations","ICFramework.Utilities.Email|System.Configuration"
+"Test\BillerReportGenerator\Models\ReportActions\EmailReportAction.cs","Email Services|File Systems","ICFramework.Utilities.Email|Custom"
+"Test\BillerReportGenerator\Models\ReportActions\LocalFTPReportAction.cs","File Systems","System.IO"
+"Test\BillerReportGenerator\Models\ReportFormatters\CSVNoHeaderReportFormatter.cs","File Systems|Configurations","System.IO|System.Environment"
+"Test\BillerReportGenerator\Models\ReportFormatters\CSVReportFormatter.cs","File Systems|Configurations","System.IO|System.Environment"
+"Test\BillerReportGenerator\Models\ReportFormatters\TabDelimitedReportFormatter.cs", "File Systems|Configurations", "Custom|System.Environment"
+"Test\BillerReportGenerator\Models\ReportFormatters\ZIPCSVFormatter.cs","File Systems|Configurations|Cloud Providers","System.IO|System.Environment|ICBusinessService"
+"Test\BillerReportGenerator\Models\ReportFormatters\ZIPTABFormatter.cs","File System|Configuration|Services","System.IO|System.Environment|ICBusinessService"
+"Test\BillerReportGenerator\Properties\AssemblyInfo.cs", "NA", "NA"
+"Test\BillerReportGenerator\Properties\Settings.Designer.cs","Configurations","System.Configuration"
+"Test\BillerReportGenerator\Service References\svcBusinessService\Reference.cs","Services|HTTP Clients","ICBusinessService|System.ServiceModel"
+"Test\BillerReportGenerator.DB\Database\Database.cs","Databases|Authentication|Configurations","IC.Database|IC.Database.Authentication|Custom"
+"Test\BillerReportGenerator.DB\Database\IDatabaseWrapper.cs", "Databases", "IC.Database"
+"Test\BillerReportGenerator.DB\Database\IUtilities.cs","Databases","IC.Database"
+"Test\BillerReportGenerator.DB\Database\Utilities.cs","Databases|Configurations|Logging Systems","IC.Database|System.Configuration|IC.Serilog"
+"Test\BillerReportGenerator.DB\HealthServices\HealthCheck.cs","Database|Email|Logging","IC.Database|ICFramework.Utilities.Email|IC.Serilog"
+"Test\BillerReportGenerator.DB\KeyVault\KeyVaultClient.cs","Key Vaults|Configurations","IC.Azure.KeyVault|System.Configuration"
+"Test\BillerReportGenerator.DB\Object\SettingsService.cs", "Configurations", "System.Configuration"
+"Test\BillerReportGenerator.DB\Properties\AssemblyInfo.cs", "NA", "NA"
+"Test\BillerReportGenerator.DB\Tools\Retry.cs","Logging systems","IC.Serilog"
+"Test\BillerReportGenerator.DB\Tools\Slack.cs","Databases|HTTP clients|Configurations","IC.Database|Custom|System.Configuration"
+
+Enhanced Identification of Health Check Components as JSON
+System Message:
+As a .NET code analyzer, your role involves scrutinizing code to identify external dependencies. These dependencies are generalized as the following, databases, queues, logging systems, key vaults, HTTP clients, APIs, file systems, caching, configurations, networking, monitoring systems, search engines, cloud providers, and services such as authentication, authorization, email, and payment services, etc. You will be tasked with identifying the generalization of the dependencies given some code. Additionally, you will also be given a list of components to tie to the identified dependencies. Each dependency will have a single component tied to it but if you cannot tie a component to a dependency do not make assumptions and mark the component for that dependency as "Custom". You will record this data in a JSON format. The JSON format will have objects that will consist of the, full file path as a property, an object with a property of a generalized depedency and its respective components found in an array. In instances where you do not find any dependencies, you must indicate this by entering "NA" for the dependency and also indicate "NA" for the respective component. You will only return the JSON file and you will not provide any other information, descriptions, or explanations. You will not make any assumptions or answer anything if you do not have enough information from the given code to answer.
+The following is the list of components:
+ICFramework.Utilities.Email
+IC.Database
+ICDatabaseService
+IC.ServiceProxies for a Database proxy.
+ICBusinessService
+ICRTDRService
+CloudCrypto
+ICCryptoService
+ICAzureMessageQueue
+IC.Serilog
+Chilkat
+IC.Azure.KeyVault
+IC.Database.Authentication
+IC.Azure.Blob
+IC.Azure.Storage
+System.Configuration.ConfigurationManager
+System.Environment.GetEnvironmentVariable
+IC.Slack
+Here is an example of the JSON output.
+{
+	"FilePath": "ProjectDir\Main",
+	“Dependencies”: [
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment","System.Configuration"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		}
+	]
+}
+Input Query: The input contains “File Path:” followed by the relative path of the code and “Code:” followed by the source code of the file.
+Results: The results were very promising and it was able to categorize dependencies and assign components from the given list in a JSON format.
+Combined results of analysis of CS/VB files of BillerReportGenerator
+{
+	"FilePath": "Test\\BillerReportGenerator\\Program.cs",
+	[
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		},
+		{
+			"Dependency": "Queues",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Interfaces\\IBillerReport.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Interfaces\\IReportAction.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Interfaces\\IReportDispatcher.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Interfaces\\IReportFormatter.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\BillerReportGenerator\Models\BillerReportProcessor.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Email",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\Business.cs",
+	[
+		{
+			"Dependency": "Services",
+			"Component": ["ICBusinessService"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\DispatchResult.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\BillerReportGenerator\Models\Helpers.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Email",
+			"Component": ["System.Net.Mail.SmtpException"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportDispatcher.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Email Services",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportGeneratorQueue.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\BillerReports\\BillerReport.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\Enums\\ReportDestinations.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\Enums\\ReportFormats.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportActions\\EmailDownloadReportAction.cs",
+	[
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+        {
+            "Dependency": "File Systems",
+            "Component": ["System.IO"]
+        },
+        {
+            "Dependency": "Cloud Providers",
+            "Component": ["Custom"]
+        }
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportActions\\EmailErrorMessage.cs",
+	[
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportActions\\EmailReportAction.cs",
+	[
+		{
+			"Dependency": "Email Service",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "File System",
+			"Component": ["System.IO"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportActions\\LocalFTPReportAction.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportFormatters\\CSVNoHeaderReportFormatter.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportFormatters\\CSVReportFormatter.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportFormatters\\TabDelimitedReportFormatter.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO.FileInfo", "System.IO.Path", "System.IO.File"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportFormatters\\ZIPCSVFormatter.cs",
+	[
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		},
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Models\\ReportFormatters\\ZIPTABFormatter.cs",
+	[
+		{
+			"Dependency": "File Systems",
+			"Component": ["System.IO"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment.GetEnvironmentVariable"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Properties\\AssemblyInfo.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Properties\\Settings.Designer.cs",
+	[
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator\\Service References\\svcBusinessService\\Reference.cs",
+	[
+		{
+			"Dependency": "Services",
+			"Component": ["ICBusinessService"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Database\\Database.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database", "IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Database\\IDatabaseWrapper.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Database\\IUtilities.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Database\\Utilities.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\HealthServices\\HealthCheck.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\KeyVault\\KeyVaultClient.cs",
+	[
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["IC.Azure.KeyVault"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Object\\SettingsService.cs",
+	[
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Properties\\AssemblyInfo.cs",
+	[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Tools\\Retry.cs",
+	[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		}
+	]
+}
+{
+	"FilePath": "Test\\BillerReportGenerator.DB\\Tools\\Slack.cs",
+	[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.Slack"]
+		}
+	]
+}
+
+ URL:/spaces/EN/pages/3027599420/Health+Check+Component+Identification+using+OpenAI

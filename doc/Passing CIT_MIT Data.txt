@@ -1,0 +1,79 @@
+ Problem Alignment
+Problem: What is the friction or opportunity?
+In 2018, the networks began requiring CIT/MIT data be included when passing transactional data for specific transactions. In 2022 we were notified from Chase that we were in violation for Discover transactions that are being processed through ApplePay. Through several discussions, we learned that split transactions (1 transaction for the service fee, 2nd transaction for the payment amount) were being flagged because the CIT/MIT data was being sent over. Starting in mid 2023, Discover began assessing a violation ($1000 per BID in violation each month.) Some of our larger billers (City of Boston) also are receiving some declines on these transactions. Chase has confirmed this is NOT a token - but a TX ID. 
+We will be working on this project to pass along CIT/MIT data on the first transaction. Chase will then send back a TX ID which we will save and then use on subsequent transactions. (2nd transaction for payment amount - as well as any future payments that are made using that same card.) This will put us in compliance with the networks and should resolve the violation penalties assessed by Discover. 
+Why: How do we know this is a real problem and worth solving?
+We have worked closely with Chase over the past year to track specific transaction data and confirm what was sent on our end vs what they received. Discover has also accessed a violation penalty because they have identified this information is missing as the TX ID is not being passed thru the network. 
+It's critical that we are in compliance with the network rules and requirements so its a project that needs to be done. 
+We are also experiencing sporadic declines on Visa transactions. This creates an issue for billers who are using the split payment method. When applepay transactions are processed and it declines, the service fee payment is approved. The payer does not understand what is going and makes multiple attempts to make payments. Billers call in because they see the service fees listed and need support to fix this reconciliation issue. If the payment is declined thru applepay, the service payment should be voided in these scenarios. As a work around at this time, support is disabling applepay when billers call in complaining of the reconciliation issue. 
+Audience: Who are we building this for?
+Its a network requirement so InvoiceCloud as an organization needs to be in compliance. The required updates must be in place by end of February 2024 to meet the updated Network requirements. 
+Success: How do we know if we’ve solved this problem?
+We will review the monthly reports to confirm there were no penalties accessed for Discover ApplePay transactions once the development has been completed. 
+Metric
+Current
+Goal
+Review the monthly reports to understand if there were any Discover transactions that were access a violation penalty
+4 billers each month
+0 penalty’s
+[TBD]
+[TBD]
+ Solution Alignment
+In the split scenarios where we process 2 payments (1 for the service fee, 2nd transaction for the payment amount) we will include “cgen” in the first transaction. Chase will then send back a TX ID which we will save and pass to Chase in the second transaction for the payment amount. This will address the issue of passing CIT/MIT data. 
+For any subsequent payments made on that card, we will need to pass the TX id over on any future payments. We will need to store the TX ID and then do a look up on every transaction that is processed to understand if that card has been used in the past and we have a TX ID on file. If we have the TX ID on file, we need to pass this information along in that transaction. 
+We are exploring the use of Chase Profiles. Based on our conversation with Chase, they mentioned that if we were to use the Chase Profile options, they would store the TX ID and would do the look up on their end and pass the TX ID along to the networks. 
+Epic: 
+[EBPP-14107] Applepay/Discover Violation - JIRA (atlassian.net)
+Key Features
+Information
+Process status
+Clear indicators of process success/failure (files, OBD, etc)
+Adoption
+Payments over time: similar to information provided today
+Service adoption over time, including “recent signups”
+Scrolling list of positive feedback received from biller’s payers
+Announcements
+Better integrate biller message banner into homepage
+New or upcoming product releases
+Invoice Cloud updates, similar to Cloud Burst?
+Calls to action
+Setup wizard; account completion
+Alerts, issues to be resolved (files, OBD, etc)
+Commonly used features
+Based on analytics, allow billers to create shortcuts to most used pages
+Personality
+Quote of the day?  Bob’s tidbits?
+ Schedule Structure
+Target Date
+Milestone
+Description
+Success Criteria
+Status
+ Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Sales
+Do you need sales enablement materials?
+Marketing
+Does this impact marketing?
+Training
+Do you need to update support content or training?
+Implementations
+Changes to questionnaire
+Delivery
+Set up and Enablement
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Support
+Biller questions and support
+Legal
+Are there potential legal ramifications?
+Reconciliations
+Questions from billers about charges
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+ URL:/spaces/PRODUCT/pages/2896068609/Passing+CIT+MIT+Data

@@ -1,0 +1,474 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+INT-6158
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Release Date
+6/22/23
+Document status
+Complete
+Green
+Document owner
+ 
+ 
+Solution engineer
+ 
+Knowledge Transfer
+https://us-21061.app.gong.io/call?id=6997662194481179031
+ 
+Currently Bi-Tek has separate/disconnected data bases, one for internal – one for external/web
+Bi-Tek uses SFTP between their internal and web databases every 30 seconds to match balances
+Data Pump/RTDR will send payments and updates between IC and Bi-Tek Web DataBase while Cloud Pay v2 with their Clerks will upload payments to Bi-Tek Internal DataBase. 
+One billing is done once a year on July. Billers request 9 years worth of invoices uploaded before go live. 
+API Documentation
+API Authentication Method: UserKey and UserToken sent in Request
+UserKey: 71f9f117-f653-44b6-ba6c-7929cd74529a
+UserToken: d8d9e6aa-4ffa-4727-b91b-53200b3e9f81
+This will be different per Biller. No changes will be made on the UserKey and UserToken after provided.
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+RTDRInfo
+API used to update the balance on each invoice as they are doing Open Billing.
+POST 
+http://bttaxpayerportal.com/itspublicsu/API/PaymentService/InvoiceCloudRTDR/
+Request:
+{
+    "AccountNumber": "10010473", 
+    "UserKey": "71f9f117-f653-44b6-ba6c-7929cd74529a", 
+    "UserToken": "d8d9e6aa-4ffa-4727-b91b-53200b3e9f81"
+}
+Response: 
+    {
+        "TaxYear": 2013,
+        "BillNumber": 37282,
+        "PastDue": true,
+        "CurrentInvoiceAmount": 179.4,
+        "TotalAmountDue": 179.4,
+        "BalanceDue": 341.49,
+        "PaymentRestrictions": true
+    },
+   {
+        "TaxYear": 2014,
+        "BillNumber": 612,
+        "PastDue": true,
+        "CurrentInvoiceAmount": 179.4,
+        "TotalAmountDue": 179.4,
+        "BalanceDue": 324.93,
+        "PaymentRestrictions": true
+    }
+BalanceDue (Double): Invoice Cloud Balance Due
+PaymentRestriction(Boolean): Payment Block on Invoice Cloud. If sent as 1, both payment types will be blocked
+TotalAmountDue(Double): Invoice Cloud Amount Due
+IC is combining 
+TaxYear
+ - 
+BillNumber
+ to match the IC InvoiceNumber
+If any of the endpoints encounter an exception, the return object will contain one parameter, “Message” with the exception message.
+Data Pump: Payment
+InvoiceCloudPayment
+API used to post payments to Bi-Tek Web. 
+POST 
+http://bttaxpayerportal.com/itspublicsu/API/PaymentService/InvoiceCloudPostPayment/
+*Typo has been corrected 
+Response: 
+{“Message” : “Success”}
+If any of the endpoints encounter an exception, the return object will contain one parameter, “Message” with the exception message.
+Included Payment Types:
+ACH Rejects - Handled manually by the biller 
+Credits - Handled manually by the biller 
+Chargebacks - Handled manually by the biller 
+BillNumber: Invoice Cloud Invoice Number
+PaymentMethod: Invoice Cloud Payment Method
+ConfirmationNumber: Invoice Cloud Payment - ig. Message:	APPROVED 221548
+Data Pump: Paperless Enrollment
+AccountUpdateInfo
+API used to update Account Paperless setting. 
+POST 
+http://bttaxpayerportal.com/itspublicsu/API/PaymentService/InvoiceCloudAccountUpdate/
+The account update endpoint will return { “Message” : “Success”} if it is successful and { “Message” : <exception message> } if an error occurs
+SettingType: AutoPay or Paperless
+SettingValue: true (cannot make payments) or false (can make payments) (string value.
+Data Pump: AutoPay Enrollment
+AccountUpdateInfo
+API used to update Account AutoPay setting. 
+POST 
+http://bttaxpayerportal.com/itspublicsu/API/PaymentService/InvoiceCloudAccountUpdate/
+{
+    "AccountNumber": "100013353", 
+    "SettingType": "AutoPay", 
+    "SettingValue": "true",
+    "UserKey": "71f9f117-f653-44b6-ba6c-7929cd74529a", 
+    "UserToken": "d8d9e6aa-4ffa-4727-b91b-53200b3e9f81"
+}
+The account update endpoint will return { “Message” : “Success”} if it is successful and { “Message” : <exception message> } if an error occurs
+SettingType: AutoPay or Paperless
+SettingValue: true or false (string value.
+File Mapping
+Invoice File
+Using Standard Invoice Cloud BIF format
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: TXT
+File Naming Convention:  BIF”DATE””BILLER”
+Sample File: 
+Biller SFTP File Path: 
+File Transfer Frequency: The upload of the BIF files will be a daily process (at least). These sites will be creating “Discovery” bills on a daily basis.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Two InvoiceFormatGuids will be provided to BiTek per biller. One for Annual, one for gap bills. BiTek will send appropriate InvoiceFormatGuid based on the bill image that IC needs to display. These will need to be requested to be generated by implementations to integrations prior to kicking off the project.
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+TaxYear, plus a dash, plus the BillNumber. Example:2023-123456
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+This is the day before interest starts. Most bills will be 1/5/TaxYear. This is not the 9/1/TaxYear due date.
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+This is the original amount of the bill.
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Parcel Number
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Property address street. (This is not the mailing address.)
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Property address city.
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Property address state.
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Property address zip code.
+Invoice Header
+43
+Custom6
+Y
+FALSE
+Account Mailing Address line 3. This is the 3rd line of the mailing address placed here because the Cutomer Record holds only Address1 and Address2.
+Invoice Header
+58
+RowType
+Y
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+This is the BI-Tek Account Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+BI-Tek Account Name1
+Customer Record
+61
+Address1
+Y
+FALSE
+BI-Tek Account Address1 (This is the mailing address.)
+Customer Record
+62
+Address2
+Y
+FALSE
+BI-Tek Account Address2
+Customer Record
+63
+City
+Y
+FALSE
+BI-Tek Account City
+Customer Record
+64
+State
+Y
+FALSE
+BI-Tek Account State
+Customer Record
+65
+Zip
+Y
+FALSE
+BI-Tek Account Zip Code. 
+When a Zip+4 exists, a dash and the Zip+4 will be concatenated to the end.
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+14
+TotalTaxAmount	
+Y
+FALSE
+This is the current amount due on the bill.
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+This is the current amount due on the bill.
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+7 when the tax bill includes real estate, otherwise 8. Only RE and PP invoices will be used. Everything will be categorized into one of the invoice types. 
+Invoice Header
+371
+CustomerName2
+Y
+FALSE
+BI-Tek Account Name2
+Customer Record
+346
+BillerBillYear	
+Y
+FALSE
+Tax Year
+Invoice Header
+Invoice Update File
+Using Standard Invoice Cloud IUF format
+File Summary/Purpose: The purpose of this file is update invoice data on IC from the biller
+File Extension: TXT
+File Naming Convention:  BillerBlockedBills
+Biller SFTP File Path: D:\\inetpub\\ftproot\\DavidsonCountyTEST\\ToInvoiceCloud\\IUF 
+Sample File: 
+BIF Field ID
+Field Name
+Data Type
+Required?
+59
+AccountNumber
+varchar(30)
+10
+InvoiceNumber
+varchar(50)
+317
+PaymentExpirationDate
+date
+318
+PaymentExpirationMessage
+varchar(250)
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL	
+Y
+9
+RTDR Username if Applicable	
+UserToken
+Y
+10
+RTDR Key or Password if Applicable	
+UserKey
+Y
+11
+DataPump Payments EndPoint/WebService URL	
+Y
+12
+DataPump Payments EndPoint/WebService Username	
+UserToken
+Y
+13
+DataPump Payments EndPoint/WebService Password	
+UserKey
+Y
+14
+DataPump Paperless EndPoint/WebService URL	
+Y
+15
+DataPump Paperless EndPoint/WebService Username	
+UserToken
+Y
+16
+DataPump Paperless EndPoint/WebService Password	
+UserKey
+Y
+17
+DataPump AutoPay EndPoint/WebService URL	
+Y
+18
+DataPump AutoPay EndPoint/WebService Username	
+UserToken
+Y
+19
+DataPump AutoPay EndPoint/WebService Password	
+UserKey
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+CRM
+AllowPartialPayments
+BIF Customization
+AutoPayCollectionDate
+BIF Customization
+BalanceForward
+N/A
+CreditCardServiceFee
+BIF Customization
+FirstNotifyRequestedDate
+BIF Customization
+InvoiceDate
+BIF
+InvoiceDueDate
+BIF
+InvoiceFormatGuid
+BIF Customization
+InvoiceTypeID
+BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+BIF Customization
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization
+ThirdNotifyRequestedDate
+BIF Customization
+User Interaction and Design
+Data Flow - Invoice
+Invoice Files will be uploaded automatically for the biller via SFTP. The upload of the BIF files will be a daily process (at least). These sites will be creating “Discovery” bills on a daily basis.
+Data Flow - Adjustments
+Adjustments are handled with RTDR.
+Data Flow - Customer Update
+Customer Updates (Autopay and Paperless) are handled with Data Pump.
+Data Flow - Conveyance
+Auto Conveyance will be used once the Jira request is completed to allow the request. 
+Data Flow - Payment
+https://www.figma.com/proto/CwA8Owdf4aI7hzGw5jLzP1/OTP-Through-Bi-Tek?node-id=0-1&scaling=min-zoom&starting-point-node-id=1%3A6&show-proto-sidebar=1
+ 
+https://www.figma.com/proto/iBQXkk1kFRBqrm8ddNFxWd/CSR-OTP?node-id=0-1&scaling=min-zoom&starting-point-node-id=408%3A26&show-proto-sidebar=1
+ 
+att2636251172
+2636808193
+1
+Bi-Tek Customer Payments
+IM
+att2636283916
+att2636283910
+0
+Data Flow - Void
+Manually completed by the Biller. They will enter the changes to Bi-Tek whenever a Void, Reject, Chargeback occurs. 
+Data Flow - ACH Reject
+Manually completed by the Biller. They will enter the changes to Bi-Tek whenever a Void, Reject, Chargeback occurs. 
+Data Flow - Change Log
+A standard changelog file may need to be sent to their Bill Print vendor, if this information is not being provided by Bi-Tek. This will depend on what Bill Print vendor is being used and this is not related to Bi-Tek.
+Data Flow - Bill Presentment
+Bill Presentment is dependent on the Bill Print Vendor
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller will used the Bi-Tek software for any payments and changes. The payments will be processed with Cloud Pay v2 on their Internal Bi-Tek System. Over the counter payments have a Biller Reference field provided. This is the Collection Transaction Id on Bi-Tek.
+https://www.figma.com/proto/iBQXkk1kFRBqrm8ddNFxWd/CSR---OTP?node-id=1-6&p=f&t=sYpaelKZb6s7lE9D-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=1%3A6&show-proto-sidebar=1
+ 
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2636808193/Bi-Tek+Technical+Design+Standard

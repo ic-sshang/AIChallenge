@@ -1,0 +1,663 @@
+1) Current State (as-is)
+SaleController
+ (
+ICChasePaymentProcessingAPI.WebApi/Controllers/SaleController.cs
+) accepts 
+SaleRequest
+ with 
+PaymentType
+ (
+"cc"
+ or 
+"ach"
+), maps to 
+Sale
+ and routes to handler via 
+IPaymentHandlerFactory
+:
+CreditCardSaleHandler
+ (CC) → calls 
+IChaseClient.AuthorizePaymentAsync(...)
+.
+AchSaleHandler
+ (ACH) → separate flow.
+DTOs are created in 
+PaymentDtoFactory
+.
+Persistence via 
+PaymentRepository
+ → stored procs use 
+PaymentTypeID
+ (1 = CC, 2 = ACH).
+Validators only allow 
+"cc"
+ or 
+"ach"
+ (
+SaleRequestValidator
+).
+What changes
+We’ll add 
+Apple Pay
+ and 
+Google Pay
+ as wallet options in 
+Sale
+, build JPM payloads under 
+paymentMethodType.applepay
+ / 
+paymentMethodType.googlepay
+, and keep ACH unchanged.
+2) JPM Online Payments differences: Wallets vs Credit Card
+Topic
+Credit Card (existing)
+Wallets (Apple Pay / Google Pay)
+Payment method object
+paymentMethodType.card
+paymentMethodType.applepay
+ 
+or
+ 
+paymentMethodType.googlepay
+Sensitive data in request
+PAN/CVV (possibly page-encrypted)
+Encrypted wallet bundle
+ (Apple: EC_v1 / RSA_v1 token fields; Google: tokenization data)
+Required extras
+—
+latLong
+ (string 
+"lat,lon"
+) and 
+encryptedPaymentBundle
+ (per wallet) for Apple Pay; Google Pay uses wallet tokenization payload
+3DS / cryptogram
+Driven by our stack
+Encapsulated in wallet token; ECI/cryptogram derived by processor
+Refund / Void
+Allowed
+Same mechanics
+ (reference original 
+transactionId
+), but 
+standalone refund is for cards only
+ (not wallet).
+Endpoint to void
+PATCH /payments/{id}
+ with 
+{ "isVoid": true }
+Same
+Endpoint to refund
+POST /refunds
+ referencing 
+transactionId
+ (or 
+captureId
+) in 
+paymentMethodType.transactionReference.transactionReferenceId
+Same
+Apple Pay required fields
+N/A
+latLong
+ + 
+encryptedPaymentBundle{ encryptedPayload, encryptedPaymentHeader{ephemeralPublicKey, publicKeyHash, walletTransactionId, walletApplicationData}, signature, protocolVersion }
+JPM docs for Apple Pay explicitly list the required fields and show the 
+/payments
+ example; use those field names verbatim.
+3) API Contract Changes (our 
+POST /api/v1/sale
+)
+Request (new)
+Extend 
+PaymentType
+ to accept 
+"applepay"
+ and 
+"googlepay"
+.
+Add wallet-specific objects:
+applePay
+: includes 
+latLong
+ and 
+encryptedPaymentBundle
+ with Apple token fields.
+googlePay
+: includes 
+latLong
+ and Google’s 
+paymentData
+ blob (supports both 
+signedMessage
+ and legacy 
+encryptedMessage
+).
+C# — Web API models
+ICChasePaymentProcessingAPI.WebApi/Models/SaleRequest.cs
+wide
+760
+public class SaleRequest
+{
+    public string? IdempotencyKey { get; set; }
+    [Required] public string PaymentReference { get; set; } = string.Empty;
+    [Required, Range(0.01, double.MaxValue)] public decimal Amount { get; set; }
+    [Required] public string Currency { get; set; } = "USD";
+    [Required] public string PaymentType { get; set; } = string.Empty; // "cc" | "ach" | "applepay" | "googlepay"
+
+    public CardInfo? CardInfo { get; set; }
+    public AchInfo? AchInfo { get; set; }
+
+    // NEW
+    public ApplePayInfo? ApplePay { get; set; }
+    public GooglePayInfo? GooglePay { get; set; }
+}
+
+public sealed class ApplePayInfo
+{
+    [Required] public string LatLong { get; set; } = string.Empty; // "lat,lon"
+    [Required] public ApplePayToken EncryptedPaymentBundle { get; set; } = new();
+}
+
+public sealed class ApplePayToken
+{
+    [Required] public string EncryptedPayload { get; set; } = string.Empty;
+    [Required] public ApplePayHeader EncryptedPaymentHeader { get; set; } = new();
+    [Required] public string Signature { get; set; } = string.Empty;
+    [Required] public string ProtocolVersion { get; set; } = string.Empty; // e.g., "EC_v1"
+}
+
+public sealed class ApplePayHeader
+{
+    [Required] public string EphemeralPublicKey { get; set; } = string.Empty;
+    [Required] public string PublicKeyHash { get; set; } = string.Empty;
+    [Required] public string WalletTransactionId { get; set; } = string.Empty;
+    public string? WalletApplicationData { get; set; } // optional per Apple
+}
+
+public sealed class GooglePayInfo
+{
+    [Required] public string LatLong { get; set; } = string.Empty;
+
+    // Raw paymentData from GPay button (stringified JSON). We’ll parse in the handler.
+    [Required] public string PaymentDataJson { get; set; } = string.Empty;
+}
+
+Validator
+ — 
+ICChasePaymentProcessingAPI.WebApi/Validators/SaleRequestValidator.cs
+wide
+760
+private static readonly string[] ValidPaymentTypes = { "cc", "ach", "applepay", "googlepay" };
+
+RuleFor(x => x.PaymentType)
+    .Must(t => ValidPaymentTypes.Contains(t, StringComparer.OrdinalIgnoreCase))
+    .WithMessage("PaymentType must be one of: cc, ach, applepay, googlepay");
+
+// Conditionally require wallet objects
+When(x => x.PaymentType.Equals("applepay", StringComparison.OrdinalIgnoreCase), () =>
+{
+    RuleFor(x => x.ApplePay).NotNull();
+    RuleFor(x => x.ApplePay!.LatLong).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle).NotNull();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.EncryptedPayload).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.EncryptedPaymentHeader.EphemeralPublicKey).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.EncryptedPaymentHeader.PublicKeyHash).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.EncryptedPaymentHeader.WalletTransactionId).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.ProtocolVersion).NotEmpty();
+    RuleFor(x => x.ApplePay!.EncryptedPaymentBundle.Signature).NotEmpty();
+});
+
+When(x => x.PaymentType.Equals("googlepay", StringComparison.OrdinalIgnoreCase), () =>
+{
+    RuleFor(x => x.GooglePay).NotNull();
+    RuleFor(x => x.GooglePay!.LatLong).NotEmpty();
+    RuleFor(x => x.GooglePay!.PaymentDataJson).NotEmpty();
+});
+
+Example JSON (Apple Pay)
+wide
+760
+{
+  "paymentReference": "INV-123",
+  "idempotencyKey": "d7c3f7f0-0b0a-4f5f-9a0c-111111111111",
+  "amount": 12.34,
+  "currency": "USD",
+  "paymentType": "applepay",
+  "applePay": {
+    "latLong": "42.3601,-71.0589",
+    "encryptedPaymentBundle": {
+      "encryptedPayload": "<token.data>",
+      "encryptedPaymentHeader": {
+        "ephemeralPublicKey": "<token.header.ephemeralPublicKey>",
+        "publicKeyHash": "<token.header.publicKeyHash>",
+        "walletTransactionId": "<token.header.transactionId>",
+        "walletApplicationData": "<token.header.applicationData>"
+      },
+      "signature": "<token.signature>",
+      "protocolVersion": "<token.version>"
+    }
+  }
+}
+
+Apple Pay required fields (
+latLong
+, and all encrypted bundle parts) come straight from JPM’s Apple Pay doc.
+4) Domain Model & Mapping Changes
+4.1 Add wallet types
+ICChasePaymentProcessingAPI.Core/Models/PaymentType.cs
+wide
+760
+public enum PaymentType
+{
+    CC = 1,
+    Ach = 2,
+    ApplePay = 3,
+    GooglePay = 4
+}
+
+4.2 Add wallet 
+PaymentInfo
+ICChasePaymentProcessingAPI.Core/Models/PaymentInfo.cs
+wide
+760
+public sealed class ApplePayPaymentInfo : PaymentInfo
+{
+    public string LatLong { get; set; } = string.Empty;
+    public ApplePayToken Token { get; set; } = new();
+}
+
+public sealed class GooglePayPaymentInfo : PaymentInfo
+{
+    public string LatLong { get; set; } = string.Empty;
+    public string PaymentDataJson { get; set; } = string.Empty; // raw Google payload
+}
+
+4.3 Map request → domain in 
+SaleController
+Update 
+MapPaymentType(...)
+ and 
+MapPaymentInfo(...)
+.
+wide
+760
+static PaymentType MapPaymentType(string paymentType) => paymentType.ToLowerInvariant() switch
+{
+    "cc"        => PaymentType.CC,
+    "ach"       => PaymentType.Ach,
+    "applepay"  => PaymentType.ApplePay,
+    "googlepay" => PaymentType.GooglePay,
+    _ => throw new ArgumentException($"Invalid payment type: {paymentType}")
+};
+
+static PaymentInfo MapPaymentInfo(SaleRequest request, PaymentType paymentType) => paymentType switch
+{
+    PaymentType.CC => /* existing */,
+    PaymentType.Ach => /* existing */,
+
+    PaymentType.ApplePay => request.ApplePay is not null
+        ? new ApplePayPaymentInfo {
+            LatLong = request.ApplePay.LatLong,
+            Token = new ApplePayToken {
+              EncryptedPayload = request.ApplePay.EncryptedPaymentBundle.EncryptedPayload,
+              EncryptedPaymentHeader = new ApplePayHeader {
+                EphemeralPublicKey = request.ApplePay.EncryptedPaymentBundle.EncryptedPaymentHeader.EphemeralPublicKey,
+                PublicKeyHash = request.ApplePay.EncryptedPaymentBundle.EncryptedPaymentHeader.PublicKeyHash,
+                WalletTransactionId = request.ApplePay.EncryptedPaymentBundle.EncryptedPaymentHeader.WalletTransactionId,
+                WalletApplicationData = request.ApplePay.EncryptedPaymentBundle.EncryptedPaymentHeader.WalletApplicationData
+              },
+              Signature = request.ApplePay.EncryptedPaymentBundle.Signature,
+              ProtocolVersion = request.ApplePay.EncryptedPaymentBundle.ProtocolVersion
+            }
+          }
+        : throw new ArgumentException("ApplePay info is required for applepay payments"),
+
+    PaymentType.GooglePay => request.GooglePay is not null
+        ? new GooglePayPaymentInfo {
+            LatLong = request.GooglePay.LatLong,
+            PaymentDataJson = request.GooglePay.PaymentDataJson
+          }
+        : throw new ArgumentException("GooglePay info is required for googlepay payments"),
+
+    _ => throw new ArgumentException($"Unsupported payment type: {paymentType}")
+};
+
+4.4 Persisted 
+PaymentTypeID
+ mapping
+PaymentDtoFactory
+ (
+GetPaymentTypeId
+ and 
+GetPaymentTypeFromId
+) must include wallet IDs:
+wide
+760
+private static int GetPaymentTypeId(PaymentType t) => t switch
+{
+    PaymentType.CC        => 1,
+    PaymentType.Ach       => 2,
+    PaymentType.ApplePay  => 3,
+    PaymentType.GooglePay => 4,
+    _ => 0
+};
+
+public PaymentType GetPaymentTypeFromId(int id) => id switch
+{
+    1 => PaymentType.CC,
+    2 => PaymentType.Ach,
+    3 => PaymentType.ApplePay,
+    4 => PaymentType.GooglePay,
+    _ => throw new InvalidOperationException($"Unknown payment type ID: {id}")
+};
+
+DB note:
+ ensure 
+PaymentTypeID
+ domain/table supports values 3 and 4.
+5) JPM Request Models (add wallet objects)
+Extend 
+ICChasePaymentProcessingAPI.Core/Models/ChaseApiModels.cs
+ to support wallet requests:
+wide
+760
+public class ChasePaymentsRequest
+{
+    // existing fields...
+    public string? CaptureMethod { get; set; } // "NOW" | "DELAYED" | "MANUAL"
+    public decimal? Amount { get; set; }
+    public string? Currency { get; set; }
+    public MerchantRequest? Merchant { get; set; }
+    public PaymentMethodTypeRequest? PaymentMethodType { get; set; }
+}
+
+public class PaymentMethodTypeRequest
+{
+    public CardRequest? Card { get; set; } // existing (for CC)
+    public ApplePayRequest? ApplePay { get; set; }      // NEW
+    public GooglePayRequest? GooglePay { get; set; }    // NEW
+}
+
+public sealed class ApplePayRequest
+{
+    public string LatLong { get; set; } = string.Empty;
+    public ApplePayToken EncryptedPaymentBundle { get; set; } = new();
+}
+
+public sealed class GooglePayRequest
+{
+    public string LatLong { get; set; } = string.Empty;
+    // We pass through the decoded data we need for JPM (e.g., signedMessage details or parsed fields)
+    public string PaymentDataJson { get; set; } = string.Empty;
+}
+
+Apple fields must align exactly with JPM’s Apple Pay spec under 
+paymentMethodType.applepay
+.
+6) New 
+WalletSaleHandler
+Create 
+ICChasePaymentProcessingAPI.Core/Handlers/WalletSaleHandler.cs
+:
+wide
+760
+public sealed class WalletSaleHandler : IPaymentHandler
+{
+    private readonly IPaymentRepository _repo;
+    private readonly IPaymentDtoFactory _dtoFactory;
+    private readonly IChaseClient _chaseClient;
+    private readonly ILogger<WalletSaleHandler> _logger;
+
+    public WalletSaleHandler(IPaymentRepository repo, IPaymentDtoFactory dtoFactory, IChaseClient chaseClient, ILogger<WalletSaleHandler> logger)
+    {
+        _repo = repo; _dtoFactory = dtoFactory; _chaseClient = chaseClient; _logger = logger;
+    }
+
+    public PaymentType SupportedPaymentType => PaymentType.ApplePay; // we’ll register two instances (ApplePay & GooglePay)
+
+    public async Task<Sale> ProcessPaymentAsync(Sale sale, CancellationToken ct = default)
+    {
+        // Create & insert DTO (idempotency same as CC path)
+        var dto = _dtoFactory.CreateFromSale(sale);
+        var inserted = await _repo.InsertPaymentAsync(dto, sale.IsShadowMode, ct) ?? throw new InvalidOperationException("Insert failed");
+
+        string txId;
+        if (sale.PaymentType == PaymentType.ApplePay)
+        {
+            var ap = (ApplePayPaymentInfo)sale.PaymentInfo;
+            var request = new ChasePaymentsRequest {
+                CaptureMethod = ((CardPaymentInfo?)null)?.CaptureMethod.ToString() ?? "NOW", // decide capture policy as needed
+                Amount = sale.Amount,
+                Currency = sale.Currency,
+                Merchant = new MerchantRequest { MerchantSoftware = new MerchantSoftwareRequest { CompanyName = "IC", ProductName = "ICChasePaymentProcessingAPI" } },
+                PaymentMethodType = new PaymentMethodTypeRequest {
+                    ApplePay = new ApplePayRequest {
+                        LatLong = ap.LatLong,
+                        EncryptedPaymentBundle = ap.Token
+                    }
+                }
+            };
+
+            txId = sale.IsShadowMode ? $"SHADOW_{Guid.NewGuid():N}" :
+                   await _chaseClient.AuthorizeWalletPaymentAsync(request, dto.MerchantOrderNumber!, ct);
+        }
+        else // Google Pay
+        {
+            var gp = (GooglePayPaymentInfo)sale.PaymentInfo;
+
+            var request = new ChasePaymentsRequest {
+                CaptureMethod = "NOW",
+                Amount = sale.Amount,
+                Currency = sale.Currency,
+                Merchant = new MerchantRequest { MerchantSoftware = new MerchantSoftwareRequest { CompanyName = "IC", ProductName = "ICChasePaymentProcessingAPI" } },
+                PaymentMethodType = new PaymentMethodTypeRequest {
+                    GooglePay = new GooglePayRequest {
+                        LatLong = gp.LatLong,
+                        PaymentDataJson = gp.PaymentDataJson
+                    }
+                }
+            };
+
+            txId = sale.IsShadowMode ? $"SHADOW_{Guid.NewGuid():N}" :
+                   await _chaseClient.AuthorizeWalletPaymentAsync(request, dto.MerchantOrderNumber!, ct);
+        }
+
+        inserted.PaymentStatusID = (int)PaymentStatus.Captured; // or Authorized if DELAYED/MANUAL
+        inserted.ProcessorTransactionId = txId;
+        var ok = await _repo.UpdatePaymentAsync(inserted, ct);
+        sale.Status = ok ? SaleStatus.Succeeded : SaleStatus.Failed;
+        sale.ProcessedAt = DateTime.UtcNow;
+        return sale;
+    }
+}
+
+Register handlers
+: in DI (
+Program.cs
+), register two instances with distinct 
+SupportedPaymentType
+ via small constructor tweak (or create 
+ApplePaySaleHandler
+ and 
+GooglePaySaleHandler
+ inheriting 
+WalletSaleHandler
+).
+Factory wiring
+: 
+PaymentHandlerFactory
+ requires handlers for both 
+ApplePay
+ and 
+GooglePay
+.
+7) 
+IChaseClient
+ additions
+Add a wallet authorization method:
+ICChasePaymentProcessingAPI.Core/Interfaces/IChaseClient.cs
+wide
+760
+Task<string> AuthorizeWalletPaymentAsync(
+    ChasePaymentsRequest request,
+    string requestId, // idempotency key for JPM "request-id"
+    CancellationToken cancellationToken = default);
+
+Mock implementation
+ (
+Infrastructure/Services/MockedChaseClient.cs
+) — build the JPM payload with 
+paymentMethodType.applepay
+ or 
+paymentMethodType.googlepay
+ similar to CC path and return a fake 
+transactionId
+. The real implementation will:
+Use OAuth (8h token) per JPM guidance.
+Send 
+merchant-id
+ and 
+request-id
+ headers; sign per environment config (as in existing client).
+POST to 
+/payments
+ with our wallet payload (Apple: fields per doc).
+8) Controller Changes (minimal)
+SaleController
+ only needs mapping updates; handler resolution via 
+IPaymentHandlerFactory
+ will pick the new wallet handlers.
+9) Refunds & Voids (wallet impact)
+Void
+: same endpoint as cards → 
+PATCH /payments/{id}
+ with 
+{ "isVoid": true }
+. No wallet-specific fields.
+Refund
+: 
+POST /refunds
+ referencing original 
+transactionId
+ (or 
+captureId
+) via 
+paymentMethodType.transactionReference.transactionReferenceId
+. 
+Standalone refunds are card-only
+; for wallet, always reference the original transaction.
+Factory tweak
+: route wallet payment types to the existing CC void/refund handlers so we don’t duplicate logic.
+VoidHandlerFactory.cs
+wide
+760
+public IVoidHandler GetVoidHandler(PaymentType paymentType)
+{
+    var effective = (paymentType is PaymentType.ApplePay or PaymentType.GooglePay) ? PaymentType.CC : paymentType;
+    var handler = _handlers.FirstOrDefault(h => h.SupportedPaymentType == effective)
+                  ?? throw new NotSupportedException("No void handler is available");
+    return handler;
+}
+
+RefundHandlerFactory.cs
+wide
+760
+public IRefundHandler GetHandler(PaymentType paymentType)
+{
+    var effective = (paymentType is PaymentType.ApplePay or PaymentType.GooglePay) ? PaymentType.CC : paymentType;
+    var handler = _handlers.FirstOrDefault(h => h.SupportedPaymentType == effective)
+                  ?? throw new NotSupportedException($"Refund for payment type {paymentType} is not supported");
+    return handler;
+}
+
+Because JPM’s void/refund flows are 
+method-agnostic
+ (they key off the original transaction), reusing the CC handlers is safe and reduces code.
+10) Security, Compliance, and Ops
+Do not log
+ wallet tokens, signatures, or headers (
+ephemeralPublicKey
+, 
+signature
+, etc.). Mask 
+request.PaymentType == "applepay"|"googlepay"
+ and redact sensitive fields.
+Idempotency:
+ continue to supply our 
+IdempotencyKey
+ as JPM 
+request-id
+ header when calling 
+/payments
+, 
+/refunds
+, etc.
+OAuth
+: obtain and cache access tokens (8 hours validity). Rotate per env.
+PCI scope
+: wallets reduce direct PAN handling; keep existing HMAC auth for our endpoint; page encryption remains for CC flows.
+Testing
+: use JPM test data for Online Payments; simulate outcomes.
+11) Summary of Code Changes
+Enums & Models
+Add 
+PaymentType.ApplePay
+, 
+PaymentType.GooglePay
+.
+Add 
+ApplePayInfo
+, 
+GooglePayInfo
+ to 
+SaleRequest
+.
+Add 
+ApplePayPaymentInfo
+, 
+GooglePayPaymentInfo
+ to domain.
+Extend 
+ChaseApiModels
+ with 
+ApplePayRequest
+, 
+GooglePayRequest
+ under 
+PaymentMethodTypeRequest
+.
+Mapping & Validation
+Update 
+MapPaymentType
+, 
+MapPaymentInfo
+ in 
+SaleController
+.
+Update 
+SaleRequestValidator
+ with wallet rules.
+Handlers
+Add 
+WalletSaleHandler
+ (and register Apple/Google).
+Route wallet types to CC void/refund handlers via factories (small code change above).
+Client
+Add 
+AuthorizeWalletPaymentAsync(...)
+ to 
+IChaseClient
+ with mocked implementation.
+Real client: POST 
+/payments
+ with 
+paymentMethodType.applepay/googlepay
+ payload and required headers.
+Persistence
+Update 
+PaymentDtoFactory.GetPaymentTypeId/GetPaymentTypeFromId
+ to include 3,4.
+Ensure DB supports new 
+PaymentTypeID
+ values.
+ URL:/spaces/EA/pages/4629954639/Handling+of+ApplePay+GooglePay+via+CommerceCenter+API+s+sale+endpoint

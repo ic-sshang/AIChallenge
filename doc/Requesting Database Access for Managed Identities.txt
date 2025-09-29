@@ -1,0 +1,13 @@
+Sign in to Service Desk via the OKTA apps. 
+Make a new request 
+CC: Optional. Recommendation is to CC your manager.
+Request Type: Access Request
+System: Azure SQL
+Description: Custom verbiage. Specify what your application is and what environment it needs access to. 
+Example: Enable database access for the mi-MYIIS-web-dt6 managed identity on DevTest.
+Example: Enable database access for the mi-MYIIS-web-reg managed identity on Production.
+Priority: Medium. 
+Submit the item. 
+What happens behind the scenes?
+The Data Services team has enabled access to the database server and databases via Azure Active Directory groups. When the team member is working on the ticket, they’ll add the managed identity to the specified group for that environment. 
+ URL:/spaces/PE/pages/2419458104/Requesting+Database+Access+for+Managed+Identities

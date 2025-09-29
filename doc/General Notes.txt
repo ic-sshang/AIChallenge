@@ -1,0 +1,76 @@
+Project Phases
+Phase 1: Migrate to SecureAuth as our authentication engine
+Scope
+Functionality
+Users should be able to sign in into the Biller Portal through SecureAuth if the respective Biller is migrated to SecureAuth, if not the users should be able to continue to sign in through our Legacy IC authentication.
+Process
+All billers/users should be migrated to SecureAuth without loss of functionality
+Migration should be transparent to users, no testing needed, no major change in process
+System should support some billers on SecureAuth and some on legacy IC authentication so we can migrate in phases.
+Status of biller authentication engine should be visible to IC employees within the CRM, with relevant dates.
+For the Migrated Billers, IC employees will no longer be allowed impersonating the Biller users, and instead will get the capability to sign in with their own IC SSO.
+Notable items
+Email address needs to be unique 
+within a Biller.
+ 
+Assumption
+: We can make this happen, need to check with stakeholders
+The ability to impersonate biller users will go away, IC employees will authenticate on Okta and transfer into biller portal
+ 
+Assumption
+: We can make this happen, need to check with stakeholders
+The concept of a “master account” and “support users“ will go away, each user will need to have a dedicated account
+ 
+Assumption
+: We can make this happen, need to check with stakeholders
+Migration of existing users
+Data cleanup
+There are 1208 accounts with 
+no email address
+Many of these are “master account” and can be excluded (see above)
+For the non-master accounts, we will need to contact billers to have them provide email address
+TODO
+: How many billers does this represent? 
+ has a list.
+There are 11677 
+inactive accounts
+ 
+Assumption
+: We can exclude inactive accounts from migration
+There are 2436 accounts who have 
+not authenticated in over a year
+ 
+Assumption
+: We can exclude stale accounts from migration
+There are 7870 accounts who have 
+never authenticated
+Out of these there are X users who were created before an year. 
+ 
+Assumption
+: We can exclude unused accounts from migration
+Note: Some of these may be brand new users who haven’t had a chance to authenticate yet
+TODO
+: Need to get updated user data which includes user creation date and exclude any created in the past year
+There are 
+118
+ billers with redundant email addresses (after excluding the groups above)
+TODO
+: How many billers does this represent?
+TODO
+: Need to coordinate with these billers to update users with unique email addresses
+ 
+Assumption
+: We can make this happen, need to check with stakeholders
+Process
+Phase 2:
+ Add MFA as an option for billers to use
+Support for which factors?
+Phase 3:
+ Add SSO support using external IdP
+Support for which IdPs?
+Phase 4:
+ Add additional features
+Support single user account across multiple billers (includes use-cases of demo vs live billers, and multi-dept billers)
+Support duplicate usernames (unique within a biller identity pool), so users can have their preferred username
+Or possibly migrate to email as our unique identifiers, and discontinue the user of usernames?
+ URL:/spaces/PRODUCT/pages/4553375870/General+Notes

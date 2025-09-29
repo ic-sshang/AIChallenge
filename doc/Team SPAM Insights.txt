@@ -1,0 +1,155 @@
+Meeting Objectives
+Share Insights 
+January - March 2025 Insights 
+Collaboration 
+Opportunity Identification
+Development Efforts 
+January 2024 and January 2025 Comparison
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25150
+ 
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25153
+ 
+There was a significant decrease in submitted tickets with reported service “reCAPTCHA” in January 2025, 
+1 ticket 
+submitted compared to 
+18
+ 
+tickets 
+submitted in January 2024. 
+The most common biller/customer concern with reCAPTCHA is that individuals get stuck in a repetitive reCAPTCHA challenge loop, stopping customers from proceeding to payment. 
+EBPP-13121
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ was released April 2nd, 2024, alleviating much of the reCAPTCHA issues for IP addresses.
+Occasionally, there is a spike in IP addresses that need to be added via the Biller Support Tool. Although IP addresses can be added to the whitelist, the CS agent must have the necessary permissions enabled to save to the list, which they may not yet have.
+Tickets are also submitted when the Biller or Customer experiences multiple issues with reCAPTCHA. In this case, EBPP items are necessary to completely remove reCAPTCHA from occurring for the entire BID.
+Example items:
+EBPP-26207
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Related items for reCAPTCHA issues created by the Product team:
+EBPP-26725
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-26824
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+February 2024 and February 2025 Comparison
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25157
+ 
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25158
+ 
+There was almost a 50% increase in Autopay tickets submitted in February 2025, with 
+13
+ 
+tickets
+ as opposed to 
+7
+ 
+tickets
+ in 2024.
+The most common issues with Autopay in February were related to Autopay payment method change history (5), Autopay not processing (4), and additional information for Autopay features (3). 
+Autopay payment method change history: 
+Issue: When the Biller Users/Customers remove the default payment method of the Autopay setup and do not change the payment method when prompted, the Autopay setup is now in a bad state, where “Attention Required” is shown in the Biller/Customer portal.
+Action Item: 
+EBPP-18549
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+  created. 
+A potential solution could be a reminder email sent to the customer that their Autopay setup requires attention, or a report/graph in the Biller portal to show the number of customers that have this warning to Biller users. 
+March 2025 Insights 
+ 
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25161
+ 
+ 
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25160
+ 
+Top trending Biller/Customer concerns 
+Virtual Site 
+Issues due to mishaps during CRM setups or lack of knowledge of CRM settings for certain product features
+Solutions available via Confluence, Guru, and past DS items
+Mitigation to add some polling/item field to quantify CS prior research before creating DS item
+Items
+DS-9328
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-9382
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-9248
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Customer Portal 
+Invoices are being shown in the customer portal that have already been paid
+Action item: 
+EBPP-26449
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Autopay 
+Autopay Payment method changes from what was saved on the account, see 
+Escalations
+. 
+Issues tied to users being unable to update their autopay information because logins were not tied to their autopay records Leaving it in a bad state.
+Ds Item
+https://invoicecloud.atlassian.net/browse/DS-9371)
+ 
+Mitigation/Resolution
+EBPP-27148
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Additional Issues came from the generic message of "There was an unknown problem processing your AutoPay payment. Please contact us." where certain exceptions do not undergo retries.
+Ds item
+DS-9279
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Epic item
+EBPP-26514
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Escalations
+DS-9306
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Issue: 
+A customer's autopay payment method was changed to a different saved payment method than what Autopay was set up to use. We were unable to determine the root cause of how the saved payment method was changed due to the lack of sufficient logging for the autopay payment method changes.
+The following were action items that were created to better our system for these types of issues: 
+EBPP-27147
+: Prevent invalid payment records from being used for autopay and scheduled payments.
+DBR-6467
+: Set up a daily alert through an automated daily report to identify any new records that are in the invalid data state for all billers facing this issue.
+EBPP-27148
+: Add logs to track changes in specific processes that handle payment methods for customers.
+EBPP-27149
+: Review and improve the logs that track changes in various tables related to customer login and payment information.
+EBPP-27150
+: Investigate and discuss the best way to centralize and standardize all login and linking functionality.
+SR-1332
+: Add new logs to the centralized login system to make it more useful for our Client Services team.
+All March 2025 Linked Issues
+ - 
+https://invoicecloud.atlassian.net/jira/dashboards/10908?maximized=25171
+ 
+Opportunity Identification 
+We believe that we can assist with the following item to reduce toil/ bring up customer satisfaction: 
+EBPP-26449
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ was added on 2/24/2025  to the 
+https://invoicecloud.atlassian.net/wiki/x/AQBrs
+  and is #24 priority. 
+Could potentially be a quick win for the SRE SPAM team since it requires a change to the 
+bcg.selCustomerGroupInvoiceLedgerFilteredIndCustomer
+ so that invoices that are inactive are not picked up, and testing in MYIIS and ICRestAPI to verify that the inactive invoices are not listed. 
+Feedback
+ URL:/spaces/DS/pages/4225761282/Team+SPAM+Insights

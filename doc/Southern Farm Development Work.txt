@@ -1,0 +1,75 @@
+Background:
+ The Southern Farm Bureau ($86k MRR) is a strategic insurance customer helping IC break into the Guidewire market. They cover six states: Arkansas, Colorado, Florida, Louisiana, Mississippi, and South Carolina. The Farm Bureau manages the insurance policies, and each state has a federation that manages the membership payments. The project aims to move all federations and insurance payments to Invoice Cloud. 
+Integration Design Documentation: 
+BID 3898 Southern Farm Bureau Technical Design
+ 
+Phase 1:
+ 
+As of 1/2/24, Southern Farm Bureau (SFB) is limiting the phase one scope to: 
+Insurance for all states  
+Membership/PAC contributions for AK and LA.
+The proposed payment flow is below. Screens 1, 2, 3 will be on Southern Farm. Screens 4 & 5 will be IC. 
+A.  Product Requests: 
+As a requirement for go-live, Southern Farm: 
+The ability to restrict federations and insurance administrators from seeing other parties data/payments. (We have had similar requests in GUB)
+https://invoicecloud360-my.sharepoint.com/:x:/g/personal/swoodard_invoicecloud_com/EQRciG3BA31KoJEucXAXtyQBgcSuwKEHhS687t3ma5RxJw?e=4%3AZ2U2rz&fromShare=true&at=9&CID=81C686CC-5DD6-4D6E-A76F-E3273AEF66AB&wdLOR=c33C2F0EE-BB26-491B-A452-CB55930A3D73
+ 
+Southern Farm Bureau - Biller Portal Pages and Reports
+ 
+Payers need the ability to pay membership and insurance separately or together via the shopping cart. 
+Payers need the ability to add in a contribution while paying their Membership fee via the shopping cart.
+Some executives at Southern Farm will need the ability see all data. 
+On 1/2/24 Joey Brown said they did not need insurance permissions broken out by state, however, he said they may revisit that once they get into testing
+https://www.figma.com/proto/w3QSuNSEPToLaluLBPRZAZ/SFB-Insured-Experience?type=design&node-id=22-228&t=mPbeqQRPxGoorBfs-1&scaling=min-zoom&page-id=0%3A1
+ 
+Requests
+Team
+Sizing
+EBPP-16952
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL
+M
+EBPP-15495
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Team SPAM
+Still in discovery as new iFrame listener option has been introduced
+XL
+EBPP-4229
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+WDIL
+XL
+EBPP-16446
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+WDIL
+L
+EBPP-16791
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM
+S
+EBPP-16395
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Southern Farm Bureau - Biller Portal Pages and Reports
+ 
+BMS
+XL* 
+BMS to confirm, initial estimate was 2 months, but needed to reevaluate depending on the granularity of the permissions. 
+ 
+Pay By Text/Phone number sync flow 
+EBPP-16496
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Billing by Invoice Type 
+EBPP-16947
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ URL:/spaces/PRODUCT/pages/2957246478/Southern+Farm+Development+Work

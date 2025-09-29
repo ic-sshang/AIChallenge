@@ -1,0 +1,168 @@
+Summary
+Company
+Texas Mutual Insurance (TxM)
+Industry/Vertical
+Insurance
+LOB
+Workers Compensation
+Website
+https://secure.texasmutual.com/payments/paymentHomePage.do
+ 
+https://txmonline.texasmutual.com/oauth2/default/v1/authorize?client_id=0oak7rfn9gv6RQXdA357&redirect_uri=https%3A%2F%2Fapp.texasmutual.com%2Foauth2%2Fidpresponse&response_type=code&scope=openid%20profile%20email%20resource.read&state=dBuoymQcNm8Mo7inTBwDCvysmySP4P9HinB4Wkt9c2a%2FjDHxxBC1AZgIXe5CrHyANqDdfgWyFinJP3NT2wSMJG5zVKfy2fvT7rbT23ajmqmIvNTjys%2FlilTv0WZUnM2Zvv2XppgnxmFFbx2%2BA4aruoOaWzvyjIBvoeDjfZYxZsoIh3A1FHrq%2BqW1QV7mQKwIrry%2BFiNU%2FeHFVSZzaYih6qsH7GlQ3UWg94Z%2B6BOJKFvDASXcqVkKww%3D%3D
+ 
+Software + Version
+GW Cloud Native Billing Center and Policy Center
+Texas Mutual Online ( TMO )
+INBOUND PREMIUMS ( IQ ) 
+Principal Solutions Architect
+ 
+Project Manager
+ 
+ Agent Experience
+General
+Internal Notes
+  
+Response/Decision
+Date
+How do Agents access and use the system today? 
+TXM IQ workflow discussion
+  
+  ( past discussion
+https://app.texasmutual.com/createaccount/agency-info
+Agents emails are they accurately stored in the system ?
+Do you communicate with the agents via email ?
+https://app.texasmutual.com/createaccount/agency-info
+What is the functionality on the TX online DB2 table ? 
+Do you need direct posting into GW BC, where is the webhook is hosted ? ( part of the accelerator)
+<March 2025> DB2 will not be part of the integration landscape
+GW BC will be using OOBT GW Accelerator
+Can agents process payments by using a policy holders stored payment method?
+One-time Payment URL from Agent Connect does not show stored payments unless you are using CPV2 with Auth Token. 
+ <March 2025>Yes
+GW BC does the business utilize Direct Bill or Agency Bill ?
+ <March 2025>Direct Bill
+Do  agents assist policy Holders with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+ 
+ <March 2025>Yes through their current TMO portal
+Do some agents need different permissions than others? (please explain)
+ 
+ <March 2025> TMO portal has these variation accommodated and will be running the necessary rules.
+Do agents accept payments at the counter (in-person)? 
+ 
+ <March 2025> No
+When accepting credit card payments, is a card reader used?  EMV or Swipe?
+ 
+ <March 2025> No
+Does the agency pay with their own agency payment method (using the Agents bank to pay a policy of an insured customer)? 
+If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  
+Remote Authentication API must be used to register the agency in a specified user role.
+In order to prevent long lists of linked accounts (register), it is recommended to link the account to the user and unlink (unregister) after the transaction is complete.  
+<March 2025> No
+Injured Worker ( Policy holder ) Experience
+Billing
+Internal Notes
+Response/Decision Date
+Date
+How do your injured workers access the payment system today?
+ 
+<March 2025> TMO Payments portal
+What are all the payment methods accepted by your system today?
+ 
+<March 2025> All payments signed up per the BOF
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ 
+ <March 2025> Yes
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+<March 2025> OKTA
+Is multi-user needed?  
+Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.  The Remote Authentication can be used to register these accounts.
+<March 2025> Yes
+What part of the user experience will be through your UI and what part of the User experience will be through Invoice Cloud?
+ 
+ <March 2025> Payment methods being added will be through IC workflows
+How will existing users be migrated?
+ 
+ <March 2025> Migration for ACH accounts
+Do you need to link accounts?
+ 
+ Multiple accounts for one user
+ <March 2025> No
+Do you need IVR payments? 
+     If so, what is the unique identifier your customers would use?
+ 
+ <March 2025> Yes
+Do you want to offer 'Pay By Text'? 
+ 
+ <March 2025> Yes
+Installment Payments for Injured Workers
+Invoice Types
+Internal Notes
+Response/Decision
+Date
+Billing
+Internal Notes
+Response/Decision Date
+Date
+IC Biller Invoice File (BIF)
+Review/Discuss Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+<March 2025> GW BC OOBT Accelerator RTDR DATA pump will be utilized
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision
+Date
+How Balance Updates are handles with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+<March 2025>GW BC OOBT Accelerator RTDR DATA pump will be utilized
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision
+Date
+IC Biller Invoice File (BIF)
+Review/Discuss Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ <March 2025>GW BC OOBT BIF integration
+Account/Policy Numbers
+Internal Notes
+Response/Decision Date
+What is the unique identifier in your system? Are Account Numbers or Policy Numbers unique per person?
+ 
+ <March 2025>  Account Number
+Payments from IC
+Payments from Invoice Cloud
+Internal Notes
+ 
+Response/Decision
+Date
+How Payments are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+<March 2025>GW BC OOBT Accelerator
+ 
+How Non Approved Payments (Rejects, Chargebacks, Voids, Credits) are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+The Verbiage/Code sent by IC is customizable via Advanced Setting
+ <March 2025>GW BC OOBT Accelerator
+Bill Presentment
+Bill Presentment
+Internal Notes
+ 
+Response/Decision
+Date
+Bill Presentment with PDF Linking
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+<March 2025>GW BC OOBT Accelerator
+ URL:/spaces/IM/pages/4061724684/BID+4351+Texas+Mutual+Insurance+Discovery

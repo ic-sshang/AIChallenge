@@ -1,0 +1,60 @@
+path
+contains
+/bin
+System Binaries (i.e. system32)                                                                    
+/boot
+Linux kernel - 
+vmlinuz
+ 
+/dev
+Device Nodes                                                                               
+/etc
+System-wide config files + Startup shell scripts                                           
+/home (~)
+User-specific area - this is generally all that should be exposed to end users in enterprise Linux systems. (i.e. Your user directory containing Documents, Downloads, Pictures, etc.)
+/lib
+Shared library files - like DLLs                                                           
+/lost+found
+filesystem corruption recovery                                                             
+/media
+Mount points for external media - CDs, USB Drives, etc.                                    
+/mnt
+Legacy - Mount points for external media mounted manually.                                 
+/opt
+"Optional" software - apps - browsers, terminals, IDEs, media players, etc.                
+/proc
+Virtual filesystem maintained by Linux kernel - how the kernel interacts with the system.  
+/root
+Home directory for user 
+root
+ 
+/sbin
+System binaries - Superuser/Sysadmin tools - 
+ca-certificates
+ for example.                
+/tmp
+Temp files                                                                                 
+/usr
+Where system-wide applications & configurations are installed. 
+apt-get
+, landing zone.     
+/usr/bin
+All executables installed by Linux distro.                                                 
+/usr/lib
+The shared libs for executables in 
+/usr/bin
+/usr/local
+System-wide installs                                                                       
+/usr/sbin
+Contains more sysadmin programs.                                                           
+/usr/share
+All shared data for executables in 
+/usr/bin
+ - config files, icons, sound files, etc.
+/usr/share/doc
+Landing zone for documentation files.                                                      
+/var
+Volatile data storage - databases, cache, etc.                                             
+/var/log
+System log files.                                                                          
+ URL:/spaces/PMK/pages/4329799919/Linux+Drive+Structure+Cheat+Sheet

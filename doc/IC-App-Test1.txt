@@ -1,0 +1,77 @@
+Update 2025-07-22
+I have discovered there are a bunch of old App on the App Test 1.  We need to get those deleted off of App Test 1 as well as define a plan to move EQP off of the App Test 1 and get rid of it so we can avoid confusion and other risks (such as Environment disparity) this atypical hosting model poses.  
+Queue ID 1 == 
+first notifications on single invoices
+Topics:
+Removing old apps from the server
+Need to confirm that EQP queue 1 is the only job running on this server before removing anything
+We confirmed that EQP queue 1 is not the only job running on the server.
+ We need to stop any Skybot jobs other than EQP queue 1 ASAP.
+Migrating EQP off of the server
+If we can do this quickly, it wouldn’t be worth removing old apps - just decommission
+May be able to get the 
+first notifications on single invoices
+ queue running in Azure Batch. It’s already running in Batch - can we just stop the agent?
+Confirmed that EQP queue 1 is configured to run on only this server. We’ll need to either decide to allow Azure Batch to run 100% of the load and kill this job or update the pool to use the 8 app servers. 
+Each email queue gets its own Skybot job. One specific queue (
+first notifications on single invoices
+) is configured to run on all the servers. The server was repurposed from being a test server in order to account for capacity issues processing this specific queue on the 8 other Skybot servers, which also run a bunch of other queue types and jobs.
+The Azure Batch job does currently process the 
+first notifications on single invoices 
+queue.
+Action Items:
+Move the 3 active jobs targeting this server to run using the Staging Agents pool (the 8 app servers without test in the name)
+EQP 46
+EQP 1
+EQP 1 with PDF
+Delete any held/test jobs targeting IC-AppTest1 (excluding the 3 we want to migrate)
+Remove IC-AppTest1 from Skybot
+Launch a separate Skybot cleanup initiative including the following and more:
+Delete any held jobs that haven’t run in X time
+Delete any jobs that have Dev or Test in the name
+Remove any empty or unused agent groups
+This VM is here to stay – until the Email Queue system is redesigned. 
+It’s a production Skybot agent. Unlike the other 8 production Skybot agents (IC-App1-8), this VM only runs one job: EmailQueueProcessing. Our deployment pipelines have been updated to ensure that only EQP gets deployed to this server; any other app skips it.
+Its only purpose is to provide more bandwidth for EQP. More specifically, it only runs a single email queue: 
+first notifications on single invoices
+. 
+This server was updated to run production jobs in January of 2021 following an incident caused by lack of production app server compute resources. Here is the notification, posted by Jesus Garcia in the Slack channel #
+engineering-all-hands
+ on Jan 15 2021.
+Hi everyone,
+We had an issue yesterday that affected 
+DataPump
+.
+A server had low resources due to a high number of applications running on it.
+We are currently in the process of 
+patching 
+our servers due to the recent Microsoft server updates.
+To update an app server, we need to get the server out of an agent group. An agent group is a group of agents that a job can run on.
+On a regular day, the agent group has 
+five 
+out of the 
+six 
+available app servers.
+After we remove one to perform patching, the agent group has 
+four 
+out of the available six app servers.
+Why are we using five servers instead of six?
+Some time ago, we had decided to make 
+IC-App5
+ the 
+dedicated 
+app server to run the email queue processing (EQP) job that handles the first invoice notifications on single invoices.
+Our solution is to bring back 
+IC-App5
+ into the Skybot agent groups and offload the EQP tasks to another server.
+We have done the work to convert the 
+IC-App-Test1
+ server into a production server and be the 
+dedicated 
+server for EQP jobs for first notifications on single invoices.
+Soon, we will be getting 
+two 
+new production app servers to assist with the workload.
+Please let me know if you have any questions.
+Thank you
+ URL:/spaces/platform/pages/3620995084/IC-App-Test1

@@ -1,0 +1,79 @@
+ClassicWeb_Infrastructure Repo:
+This repository accomplishes the following tasks:
+Configures Redis instances with specified settings (e.g., billerportal, myiis, etc.).
+Creates network resources such as VNets, subnets, and network ACLs.
+Manages Azure Active Directory (AAD) groups for permissions.
+Configures Azure Key Vault with private endpoints and role assignments.
+Stores configuration data securely in Key Vault secrets.
+Generates Web Server Identifiers for securing web-facing components (i.e., server names).
+Implements Managed Identities for multiple services across components.
+Configures data disks (Premium_LRS, 128 GB) for VM configuration.
+Creates Cloudflare DNS records.
+Add your name of the server as shown in below PR.
+Pull Request Ex:
+ 
+ClassicWebClassicWeb_Infra
+Hub_Infrastructure Repo:
+This repository defines and creates CNAME DNS records for subdomains, such as 
+www-ss0-dev
+ for external and 
+my-ss0-dev
+ for internal. It automates the creation of these DNS records, mapping them to Cloudflare CDN endpoints within specified regions.
+Pull Request Ex:
+ 
+Hub_Infra
+AppGateway_Infrastructure Repo:
+This repository configures the application gateway by defining routes, HTTPS settings, health probes, listeners, and backend pools. Environment-specific configurations should be added to the corresponding variable files:
+npd-pri.tfvars
+ for the non-production environment
+prd-pri.tfvars
+ for the production environment
+The 
+App_Gateway repo
+ is configured to pass the VM IP directly to the backend pool by consuming from the ClassicWeb infrastructure.
+Pull Request Ex: 
+AppGateway
+Ansible Playbooks:
+The following components are installed and configured on Windows web servers by running   through  this Ansible playbooks:
+Common Windows settings (
+wincommon
+)
+Environment variables and system configurations (
+winenv
+)
+Host file entries (
+winhosts
+)
+New Relic monitoring agent (
+newrelic
+)
+CrowdStrike Falcon sensor (
+falcon
+)
+Azure DevOps agent (
+az-ado-agent
+)
+SSL certificates (
+import_cert
+)
+IIS web server (
+winiis
+).       
+Repolink :
+ 
+Ansibleplaybook
+Website Deployment Triggered Through Order 66 Pipelines:
+The deployment is triggered using the following pipeline:
+Pipeline Link:
+ 
+Order 66
+OKTA Integration:
+To integrate OKTA, raise a ticket to the IT team.
+ 
+Example Ticket: 
+OktaTicket
+SPOC:
+ [ 
+ / 
+ ]
+ URL:/spaces/platform/pages/4297129997/Guide+to+Provisioning+a+New+Environment+Dev-Test

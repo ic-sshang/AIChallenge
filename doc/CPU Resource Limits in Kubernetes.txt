@@ -1,0 +1,14 @@
+1
+6
+false
+default
+list
+true
+Decisions
+2 CPU Core Limit as the lowest Limit for CPU to allow for parallel processing.
+We will enhance our helm charts to ensure that client provides values for CPU and memory requests and limits
+We will move toward making all container filesystems read-only and requiring a special exemption for any local writes (this applies to the container filesystem, not volume mounts)
+Related ADR
+Standardizing k8s CPU Limits for .NET Applications - ADR
+ 
+ URL:/spaces/platform/pages/4515856416/CPU+Resource+Limits+in+Kubernetes

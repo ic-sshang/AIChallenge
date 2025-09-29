@@ -1,0 +1,40 @@
+Transcard has the capability to support using a biller’s email domain for sending email notifications to payees, the 2 options are listed below. Please keep in mind that for both options, Transcard development is required. There will be an SOW between IC and the biller as well as one between IC and TC and additional costs may be incurred.
+ 
+Option 1: SMTP - Client
+Option 2: SMTP - Transcard
+Option Description
+Domain is owned by client (Client incurs cost per email)
+TC adds the client domain to Transcard infrastructure. Their domain becomes part of our email domain and then we're sending through clients domain but using our connection
+TC Actions
+TC to authenticate to client's SMTP as provided by client
+Add client's domain in TC sender filter in SMTP 
+Provide to client TC public SMTP IP
+Client Actions
+Provide email server and credentials
+Client server must use SMTP over port 587 (secure)
+Register TC public SMTP IP's within their public DNS SPF records
+Email Controls 
+(i.e. size / email per connections)
+On Client
+No tracking visibility for TC
+On TC
+Access to email tracking (sent/delivered)
+Cost
+TC - set up  
+Client - ongoing for each email
+TC - set up  
+TC - ongoing for each email
+Initial  Set Up Effort in hours
+Dev Hours: 6 hours
+Dev Hours: 8
+ 
+Project Coordination 1 hours
+Project Coordination 2 hours
+ 
+QA 2 hours
+QA 3 hours
+Maintenance Dev Effort in hours per month
+4 hours
+7 hours
+Cost per hour = $150
+ URL:/spaces/Implementa/pages/4686249986/Options+for+Using+Biller+s+Email+Domain+for+Outbound+Disbursements

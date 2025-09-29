@@ -1,0 +1,255 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+Completed
+Green
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information provided to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+This UTIL360 portal was created for City of Casselberry BID 4234 based on this biller’s requirements.
+Cloud Payments V2
+Purpose/Summary:  Used by Util360 portal to take a guest payment for accounts that already exist on Invoice Cloud.
+Sample Request
+{
+  "Customers": [
+    {
+      "AccountNumber": "13275-9960"
+    }
+  ],
+  "ViewMode": 1,
+  "CssUrl": "
+https://casselberry-uat.util360.com/assets/panel/css/invoice-cloud.css
+",
+  "PageResultOptions": {
+    "AllowRegisterAccount": false,
+    "InvoiceOptions": {
+      "AllowViewStatement": true,
+      "AllowRemove": false,
+      "AllowViewRelated": false,
+      "AllowRemindMe": false
+    }
+  }
+}
+Additional Details
+Biller Parameters:
+Parameter
+Required
+In Call
+Partner Field Description
+ViewMode
+Y
+Yes
+1 - Iframe
+CssUrl
+Y
+Yes
+https://casselberry-uat.util360.com/assets/panel/css/invoice-cloud.css
+Customer Data Object:
+Parameter
+Required
+In Call
+Partner Field Description
+AccountNumber
+Y
+Yes
+Customer AccountNumber
+Optional Invoice UI Options
+Parameter
+Required
+In Call
+Partner Value
+AllowViewStatement
+N
+Yes
+true
+AllowRemove
+N
+Yes
+false
+AllowViewRelated
+N
+Yes
+false
+AllowRemindMe
+N
+Yes
+false
+User Stories:
+Util360 Portal Guest One-Time Pay
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample 
+User One-time Pay
+User navigates to Util360 portal and clicks “Pay My Bill” to make a one-time payment. 
+Requirement:
+Customer invoice number must exist on Invoice Cloud.
+User navigates to Util360 portal and clicks “Pay My Bill”
+User enters Account Number and clicks “Find My Account”
+If Account exists, CPV2 is called with accountNumber and the Invoice Cloud “Please review your selection” screen displays,
+REST- CloudPayV2
+If account does exist,  CPV2 URL is returned and displayed within an iFrame with a custom CssUrl.
+Single Sign On
+Purpose/Summary: Cloud SSO Connect is Invoice Cloud’s Implementation of a Single Sign On into the Invoice Cloud portal. This feature allows Billers and/or Partners to create a seamless experience for the Customer between Partner/Biller and Invoice Cloud systems, while keeping the scope of PCI compliance at a minimum for Partners and Billers.
+Configuration
+SSOConnect Details
+API Key:  For each new biller, UTIL360 is required to change the API key specific for each biller.
+Field
+Required
+Comments
+Partner Specification
+RemoteAuthenticationToken
+Yes
+Token is provided from Remote Authentication Web Service.
+Token is provided from Remote Authentication Web Service.
+ViewMode
+Yes
+Value is required to identify how the Customer is accessing the Invoice Cloud pages.
+Always 
+1
+ = iFrame
+RedirectID
+Yes
+Value is required to be able to redirect the Customer to the requested page. 
+1
+ = Customer Portal Recent Bill Listing
+2
+ = Customer Portal Paperless Settings
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+11 = Customer Portal Pay By Text Enrollment
+CSSUrl
+No
+Util360 displays Invoice Cloud in an iFrame and has created a custom CSS URL.
+https://casselberry-uat.util360.com/assets/panel/css/invoice-cloud.css
+ReturnUrl
+No
+When this value is provided, the customer will be redirected to the provided URL after clicking the sign out button.
+N/A
+CustomReturnSiteName
+No
+When a 
+ReturnUrl
+ is provided, the tooltip text of the sign out button will change to “Sign out and Return to 
+<SiteName>
+”. 
+<SiteName>
+ defaults to the Biller DBA but can be customized by providing a value for 
+CustomReturnSiteName
+.
+N/A
+User Stories:
+Util360 Portal + InvoiceCloud Single Sign-On (SSO)
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample 
+User Registration
+User navigates to Util360 portal and registers through the member portal. 
+Assumptions:
+Util360 does not know if a Payer is registered with InvoiceCloud.
+Util360 stores Remote Authentication Token (per session) for use in 
+CloudSSO Redirect User using the pre-defined URL.
+Requirement:
+LoginTypeID (REST- Remote Authentication- Register Accounts) is always = 1
+Check to see if account exists in invoice cloud and if it is registered.
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist:
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+Util360 Portal
+Util360 Portal - Registration Page
+Util360 Portal - Registration Complete
+Customer receives an email to confirm email address prior to login.
+Util360 Portal - Login
+Registered User Payment 
+A registered user is logged in and makes payments on a account.
+Assumption:
+User is already registered and authenticated
+Util360 stores Remote Authentication Token from Remote Authentication web service
+From the Util360 dashboard, customer clicks “Pay Now” to redirects (iFrame) to Customer Portal Recent Bill Listing
+CloudSSOConnect (redirect 1 = Customer Portal Recent Bill Listing)
+InvoiceCloud - Recent Bill Listing
+AutoPay Enrollment
+A registered user is logged in to Util360 portal and clicks on the “Manage Autopay” button.  This opens IC screen to enroll or unenroll autopay option
+Assumption:
+User is already registered and authenticated
+Util360 redirects (iFrame) to Customer Portal AutoPay Settings screen
+CloudSSOConnect (redirect 3 = Customer Portal AutoPay Settings
+)
+Manage AutoPay
+AutoPay Settings
+Paperless Enrollment
+A registered user is logged in to Util360 portal and clicks “My Settings” to navigate to the paperless enrollment button. 
+Assumption:
+User is already registered and authenticated
+Registered user clicks on “My Settings”
+User clicks on “Paperless Billing”
+Util360 redirects (iFrame) to Customer Portal Paperless Settings screen
+CloudSSOConnect (redirect 2 = Customer Portal Paperless Settings
+)
+My Settings button
+Paperless Settings
+Invoice Cloud - Paperless
+Manage Payment Methods
+A registered user is logged in to Util360 portal and navigates to IC screen to store, update or remove payment methods.
+Assumption:
+User is already registered and authenticated
+Registered user clicks on “My Settings”
+User clicks on “Paperless Billing”
+Util360 redirects (iFrame) to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+My Settings button
+Payment Method
+Invoice Cloud - Saved Payment Methods
+Manage Pay By Text
+A registered user is logged in to Util360 portal and navigates to IC screen to manage pay by text settings.
+Assumption:
+User is already registered and authenticated
+Registered user clicks on “My Settings”
+User clicks on “Pay By Text ”
+Util360 redirects (iFrame) to Payment Methods screen
+CloudSSOConnect (redirect 11 = Customer Portal Pay By Text Enrollment)
+My Settings button
+Pay By Text
+Invoice Cloud  - Pay By Text
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3502440471/Util360+Portal+Technical+Design

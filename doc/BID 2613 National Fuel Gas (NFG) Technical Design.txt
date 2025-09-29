@@ -1,0 +1,1597 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+INT-1671
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+INT-2437
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-1947
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-1899
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+File Mapping
+Invoice File
+New Records
+File Summary/Purpose: IC will combine TWO NFG files to create new invoices. IC uses the following import processes:
+New Invoice Import
+Adjustment Import
+New Invoice Import (Zero balance - new accounts)
+Customer Update File 
+File Extension: .txt
+File Naming Conventions: 
+NFG Zip file name: BILL_MAM_YYYYMMDD.ZIP / Bill Print file name - BILLYYYYMMDD.txt
+IC invoice file name (new bills): INV_YYYYMMDDHHMMSS_MAMYYYYMMDD_COUNT.txt
+IC invoice file name (zero balance/new accounts): ZB_YYYYMMDDHHMMSS_MAMYYYYMMDD_COUNT.txt
+SFTP File Paths: 
+NFG puts files in zip folder here: ToInvoiceCloud/DailyFiles
+IC creates invoice files for import and puts files here for new invoices: ToInvoiceCloud/NewInvoices
+IC creates invoice files for import and puts files here for zero balance invoices/new accounts: ToInvoiceCloud/ZeroBalance
+File Delimiter: Fixed Length
+Specifications: 
+Sample Files: 
+File Transfer Frequency: Daily (Bill Print - Daily, as accounts are billed)
+File Monitoring:
+IC IT has reporting on failures for BillerFileSplit when a process fails. The run for Biller file split is unique and sends an alert to trigger a call to IC IT if the process fails.
+Whenever the files are being converted to a BIF, IC IT has the regular monitoring that we have for stratus.
+IC has logging for file import timing and has added logging for file export timing. The export logging will also trigger an alert as well if IC encounters a failure.
+See 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1386447140/BID+2613+National+Fuel+Gas+NFG+Technical+Design#Integration-Modifications
+ below for details on a change in 12/2023 to implement checks for duplicate file processing.
+Invoices with invoicedate <=8/16/2021 were loaded using a different file mapping than what’s below. Please see 
+INT-1747
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ and 
+INT-1965
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ for mapping on invoice imports.
+As of 9/15/2021, custom4 has been updated via ITR 18682 (data services update request)
+Notes:
+If 1074 = N, Skip record
+Only Import if Bill Print Record is 100. Skip all others.
+These files will be very very large and will need to be split through FTP processing. The split process will include a step to store the raw MAM and Bill Print files on blob storage (CRM biller file search) 
+Location of raw files (MAM and bill print) 
+- CRM > Tools > Biller File Search
+TYPE Incoming
+FILE NAME 2613_YYYYMMDDHHMMSS_2613_BILL_MAM_YYMMDD.ZIP
+If two records exist in the Bill Print file with the same due date, IC will match the MAM to the 
+first 
+bill print record and ignore any following records (with the same account number/due date match).
+note
+IC will combine TWO NFG files to create new invoices and update existing invoices. IC uses the following import processes: New Invoice Import, Update Invoice Import and Adjustment Import .
+IC will receive the ‘Bill Print File’ and the ‘MAM File’
+:
+The ‘Bill Print File’ contains the majority of the data for the invoice record.
+The ‘MAM File’ contains the accurate balance data to update existing records.
+If the invoice exists in the ‘Bill Print’ File, IC checks to see if the ‘Billed-To-Date’ is valid:
+If the ‘Billed-To-Date’ is valid, IC will add the record to a file to come ‘Bill Print’ data and ‘MAM’ data to import 
+Invoice File-New Bill
+ 
+as a ‘type R’ invoice record.
+If the ‘Billed-To-Date’ is invalid, IC will add the record to the file for 
+Adjustment File - Update Existing Bills
+ (same process as #3 below).
+If invoice does not exist in the ‘Bill Print File’, IC adds the record to the file for 
+Adjustment File - Update Existing Bills:
+IC will compare the ‘update’ records from the ‘MAM’ with the ‘IC Daily File’ (see details below) that’s generated each day. IC will check:
+If the block EFT status matches:
+If the block EFT status matches, IC will do nothing and ignore the record.
+If the block EFT status does not match, IC will add the record to the file for 
+Customer Update File - Block EFT.
+If the account number exists in IC:
+If the account number exists, IC will check if the balance matches:
+If the balance matches, IC will do nothing and ignore the record.
+If the balance does not match, IC will add the record to file to create balance adjustments.
+If the account number does not exist in IC, IC will check if the account has a new account indicator in the ‘MAM’:
+If the record does not have a new account indicator in the ‘MAM File', IC will ignore the record and do nothing.
+If the record has the new account indicator in the ‘MAM File’, IC will add the record to create a $0.00 balance invoice to import 
+Invoice File-New Account
+ 
+(if the ‘MAM File' has a balance other than $0.00, IC will load that balance to the invoice record).
+
+
+IC will combine TWO NFG files to create new invoices and update existing invoices. IC uses the following import processes: New Invoice Import, Update Invoice Import and Adjustment Import .
+IC will receive the ‘Bill Print File’ and the ‘MAM File’
+:
+The ‘Bill Print File’ contains the majority of the data for the invoice record.
+The ‘MAM File’ contains the accurate balance data to update existing records.
+If the invoice exists in the ‘Bill Print’ File, IC checks to see if the ‘Billed-To-Date’ is valid:
+If the ‘Billed-To-Date’ is valid, IC will add the record to a file to come ‘Bill Print’ data and ‘MAM’ data to import 
+Invoice File-New Bill
+ 
+as a ‘type R’ invoice record.
+If the ‘Billed-To-Date’ is invalid, IC will add the record to the file for 
+Adjustment File - Update Existing Bills
+ (same process as #3 below).
+If invoice does not exist in the ‘Bill Print File’, IC adds the record to the file for 
+Adjustment File - Update Existing Bills:
+IC will compare the ‘update’ records from the ‘MAM’ with the ‘IC Daily File’ (see details below) that’s generated each day. IC will check:
+If the block EFT status matches:
+If the block EFT status matches, IC will do nothing and ignore the record.
+If the block EFT status does not match, IC will add the record to the file for 
+Customer Update File - Block EFT.
+If the account number exists in IC:
+If the account number exists, IC will check if the balance matches:
+If the balance matches, IC will do nothing and ignore the record.
+If the balance does not match, IC will add the record to file to create balance adjustments.
+If the account number does not exist in IC, IC will check if the account has a new account indicator in the ‘MAM’:
+If the record does not have a new account indicator in the ‘MAM File', IC will ignore the record and do nothing.
+If the record has the new account indicator in the ‘MAM File’, IC will add the record to create a $0.00 balance invoice to import 
+Invoice File-New Account
+ 
+(if the ‘MAM File' has a balance other than $0.00, IC will load that balance to the invoice record).
+
+
+Details on the
+ ‘IC Daily File’
+: Daily Active Invoices Report
+Stored Procedure: RPT.selActiveInvoiceByCustomer
+Fields in Report: account number, invoice number, invoice date, total amount due, balance due, block EFT 
+6228033-03,6228033-03-20211017,2021-09-21 00:00:00.0000000,18.8400,18.8400,False
+File Location: Currently unable to see in CRM file search. Reach out to 
+ for assistance. 
+Report creation logic: Pull most recent invoice for each active account (most recent is defined by the most recent invoice ID - not invoice date)
+BILL PRESENTMENT:
+ IC will run the following processes upon receipt of the Index File (from Matrix)
+IC will compare the BILLED-TO-DATE and ContractAccount from the Index File to the Bill Print File
+If the invoice date and account number combination match, IC will map the Master ID from the Index File to the Invoice Cloud database in fieldname PDFFileName 
+For 'R' records that re-write an existing record, IC will update the PDFFileName with the new Master ID from Matrix (if in bill index file)
+If the invoice date and account number combination do not match, IC will ignore the record. This will create an error in the Biller Portal – see details below in error handling. 
+When a user clicks an option in IC to ‘View Invoice’ (Biller Portal, One-Time Pay and Customer Portal), IC will call the Matrix web services to render the PDF image. IC calls two services: 
+One to pass the unique ClientID and MasterID to retrieve a session ID and  
+The second web service will be called to retrieve the pdf image 
+Invoice File-New Bill File Mapping
+'BillerSplitFile_Custom - NFG' Runs in skybot
+Class in BillerFileSplit: /Integrations/Billers/NFG_Split.vb
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Biller Field Name
+Biller File Name
+Biller Field Format
+BillerField Description
+Biller Field Character Limit
+Biller Field Start Position
+Biller Field End Position
+Record Type
+1
+RowType
+N
+TRUE
+N/A- IC to Generate: Always FH
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A- IC to Generate 
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A- IC to Generate: Today’s Date
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A- IC to Generate
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A- IC to Generate
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A- IC to Generate: Always IH
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A- IC to Generate: Always N
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A- IC to Generate
+N/A
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A-IC to Generate: AccountNumber-DueDate 
+N/A
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+#BILLED-TO-DATE
+Bill Print
+Numeric YYYYMMDD
+#BILLED-TO-DATE
+8
+497
+504
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+#NET-PAYMT-PERIOD-EXPIR-DATE
+Bill Print
+Numeric YYYYMMDD
+#NET-PAYMT-PERIOD-EXPIR-DATE
+8
+1066
+1073
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+#TO-DATE-BALANCE
+MAM
+Currency
+To Date Balance
+11
+159
+169
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Contract Account W/O Check Digit
+Bill Print
+Contract Account W/O Check Digit
+7
+4
+10
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Check Digit
+Bill Print
+Check Digit
+2
+11
+12
+Invoice Header
+40
+Custom3
+N
+FALSE
+IC To Generate: Contract Account W/O Check Digit - Check Digit
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Service Address
+Bill Print
+VarChar
+#RTPYR-SERVICE-ADDRESS
+40
+170
+209
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Premise-Zip-Code
+MAM
+Numeric
+Service Zip Code
+9
+79
+87
+Invoice Header
+43
+Custom6
+Y
+FALSE
+#CURR-MTH-TOTAL-CHARGE-AMT
+Bill Print
+11
+3824
+3834
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Past Due Amount 
+*Biller does not want Past Due functionality, but IC will store value for future use
+MAM
+Currency
+Past Due Amount
+11
+135
+145
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+#TO-DATE-BALANCE
+MAM
+Currency
+To Date Balance
+11
+159
+169
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+State-Code
+(IC Logic: If State-Code is PA= 158, If State-Code is NY= 42)
+Bill Print
+Alpha
+State-Code
+(IC Logic: If State-Code is PA= 158, If State-Code is NY= 42)
+2
+33
+34
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A- IC to Generate: Always CR
+N/A
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+N/A- IC to Generate: Contract account w/o check digit-check digit
+N/A
+Contract Account-Check Digit
+7
+4
+10
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Account First Name Account Last Name
+MAM
+Alpha
+Two fields concatenated 
+32
+12
+43
+Customer Record
+61
+Address1
+Y
+FALSE
+Mailing-Address-1
+Bill Print
+Varchar
+Mailing-Address-1
+40
+214
+253
+Customer Record
+63
+City
+Y
+FALSE
+Mailing-Address-2
+Bill Print
+Varchar
+Mailing-Address-2
+40
+254
+293
+Customer Record
+64
+State
+Y
+FALSE
+Mailing-Address-2
+Bill Print
+Varchar
+Mailing-Address-2
+40
+254
+293
+Customer Record
+65
+Zip
+Y
+FALSE
+Mailing-Zip-Code
+Bill Print
+Numeric
+Mailing-Zip-Code
+9
+294
+302
+Customer Record
+69
+RegistrationValue
+Y
+FALSE
+Service Address
+Bill Print
+VarChar
+#RTPYR-SERVICE-ADDRESS
+40
+170
+209
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+Bad-Check-Indic
+MAM
+Y/N
+Bad Check
+1
+117
+117
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Contract Account Check Digit
+N/A
+Contract Account Check Digit (no dashes or spaces)
+9
+4
+10
+Customer Record
+70
+RowType
+N
+TRUE
+N/A- IC to Generate: Always ID
+N/A
+Invoice Detail
+Invoice File-Zero Balance (New Account) File Mapping
+Note: The Bill Print File is not used in the creation of zero balance/new account records.
+If the record has the new account indicator in the ‘MAM File’, position 185 = X, IC will add the record to create a $0.00 balance invoice to import 
+Invoice File-New Account
+ 
+(if the ‘MAM File' has a balance other than $0.00, IC will load that balance to the invoice record.
+B880391906ATYRONE      WOODS               247 AMHERST ST 1UPRR               14207    BUFFALO                  NYNNNN                00000000000 00000000000 00000000000 00000000000 NYX
+'BillerSplitFile_Custom - NFG' Runs in skybot
+Class in BillerFileSplit:  /Integrations/Billers/NFG_Split_Update.vb
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Biller Field Name
+Biller File Name
+Biller Field Format
+BillerField Description
+Biller Field Character Limit
+Biller Field Start Position
+Biller Field End Position
+Record Type
+1
+RowType
+N
+TRUE
+N/A- IC to Generate: Always FH
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A- IC to Generate 
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A- IC to Generate: Today’s Date
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A- IC to Generate
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A- IC to Generate
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A- IC to Generate: Always IH
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A- IC to Generate: Always N
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A- IC to Generate
+N/A
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A-IC to Generate: AccountNumber-N
+N/A
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+N/A- IC to Generate CurrentDate
+N/A
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+N/A- IC to Generate CurrentDate
+N/A
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+#TO-DATE-BALANCE
+*If this value is blank, IC to Generate $0.00
+MAM
+Currency
+To Date Balance
+11
+159
+169
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Contract Account W/O Check Digit
+MAM
+Contract Account W/O Check Digit
+7
+4
+10
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Check Digit
+MAM
+Check Digit
+2
+11
+12
+Invoice Header
+40
+Custom3
+N
+FALSE
+IC To Generate: Contract Account W/O Check Digit - Check Digit
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Premise Address
+MAM
+VarChar
+Premise Address
+35
+44
+78
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Premise-Zip-Code
+MAM
+Numeric
+Service Zip Code
+9
+79
+87
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Past Due Amount 
+*Biller does not want Past Due functionality, but IC will store value for future use
+MAM
+Currency
+Past Due Amount
+11
+135
+145
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+#TO-DATE-BALANCE
+*If this value is blank, IC to Generate $0.00
+MAM
+Currency
+To Date Balance
+11
+159
+169
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+State-Code
+(IC Logic: If State-Code is PA= 158, If State-Code is NY= 42)
+MAM
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A- IC to Generate: Always CR
+N/A
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+N/A- IC to Generate: Billing-Account-Num-Acct-Check-Digit
+N/A
+7
+4
+10
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Account First Name Account Last Name
+MAM
+Alpha
+Two fields concatenated 
+32
+12
+43
+Customer Record
+69
+RegistrationValue
+Y
+FALSE
+Premise-Zip-Code if in file. If no value, IC to populate- 99999
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+Bad-Check-Indic
+MAM
+Y/N
+Bad Check
+1
+117
+117
+Customer Record
+70
+RowType
+N
+TRUE
+N/A- IC to Generate: Always ID
+N/A
+Invoice Detail
+Unused Fields*
+The following fields are 
+unused
+ by IC and ignored during file import:
+File Origination
+Field Name
+Details
+MAM
+EBPP-Status-Code
+Active/Inactive - All Accounts in Invoice Cloud will have the ability to register, sign in, and make payments. This field was previously used to identify accounts that could not access the ACI system.
+MAM
+Premise Address*
+Address is used from the bill print file, not the MAM file. If the account and invoice is created for Zero Balance (New Account) process, IC will use this field to populate Custom4 (see above file mapping)
+MAM
+Premise Town
+Town is used from the Bill print file, not the MAM file.
+MAM
+Choice-Indic
+We will not display any information regarding the Choice program. This was previously used to determine that a customer received Gas from a third party in which NFG supplied the gas to the third party.
+MAM
+Direct Pay Indic
+All customers will be enrolled in Invoice Cloud Autopay. Direct Pay will no longer be utilized.
+MAM
+Neighbor-For-Neighbor Indic
+IC will not display NFN enrollment in the portal. This was previously used to determine if a customer is enrolled in NFG’s direct donation program.
+MAM
+Inactive Override Indic
+Adjustment File
+File Summary/Purpose: The purpose of this file is to update balances for existing invoices. This file is NOT provided by NFG. This file is created by IC to update balances from the NFG MAM file when they’ve changed.
+File Extension: .TXT
+File Naming Convention: ADJ_YYYYMMDDHHMMSS_MAMYYYYMMDD_COUNT
+SFTP File Path: ToInvoiceCloud
+/
+DailyFiles/Adjustments
+File Delimiter: pipe
+File Mapping
+'BillerSplitFile_Custom - NFG' Runs in skybot
+Class in BillerFileSplit:  /Integrations/Billers/NFG_Split_Update.vb
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+305
+RowType
+Y
+TRUE
+N/A - Generated by IC - AH
+306
+BillerGuid
+Y
+TRUE
+N/A - Generated by IC - Biller GUID
+308
+FileCreationDate
+Y
+TRUE
+N/A - Generated by IC - Today's Date
+309
+AdjustmentCount
+Y
+TRUE
+N/A - Generated by IC - Total Adjustment Count
+310
+TotalAdjustmentAmount
+Y
+TRUE
+N/A - Generated by IC - Total Adjustment Amount
+311
+RowType
+Y
+TRUE
+N/A - Generated by IC - AR
+312
+InvoiceNumber
+Y
+FALSE
+N/A - Generated by IC - AccountNumber-DueDate 
+313
+AccountNumber
+Y
+TRUE
+N/A - Generated by IC - Account Number
+314
+AdjustmentAmount
+Y
+TRUE
+N/A - Generated by IC - #TO-DATE-BALANCE
+316
+AdjustmentTypeID
+Y
+TRUE
+N/A - Generated by IC - Balance Differential
+370
+InvoiceTypeID
+Y
+FALSE
+N/A - Generated by IC - State-Code
+(IC Logic: If State-Code is PA= 158, If State-Code is NY= 42)
+Customer Update File
+File Summary/Purpose: The purpose of this file is to update block EFT indicators. This file is NOT provided by NFG. This file is created by IC to update block EFT indicators from the NFG MAM file when they’ve changed.
+File Extension: .TXT
+File Naming Convention: 
+CUF_YYYYMMDDHHMMSS_MAMYYYYMMDD_COUNT
+SFTP File Path: ToInvoiceCloud
+/
+DailyFiles/CustomerUpdate
+File Delimiter: pipe
+INT MOD submitted 9/28 to include changes/updates to CustomerName: 
+INT-2442
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+File Mapping
+'BillerSplitFile_Custom - NFG' Runs in skybot
+Class in BillerFileSplit:  /Integrations/Billers/NFG_Split_Update.vb
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+58
+RowType
+Y
+TRUE
+N/A - Generated by IC - CR
+59
+AccountNumber
+Y
+TRUE
+N/A - Generated by IC - Account Number
+60*
+CustomerName
+Y
+FALSE
+N/A - Generated by IC - 
+Account First Name Account Last Name
+357
+BlockPaymentsEFT
+Y
+FALSE
+N/A - Generated by IC - Bad-Check-Indic
+*See 
+INT-2442
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+  for details on when this field will be included for updates in the CUF
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is to provide NFG payments and returns that occur on IC. There will be two files sent each day: File 1 will contain payments from 16:00-04:00 (next day) and File 2 will contain payments from 04:00-16:00. File 2 will contain returns. The payment exports are independent of the settled batches. Transactions can be settled or not settled and the export will still be generated because the export is based on a timeframe.
+File Extension: .txt
+File Naming Convention: BID_
+AM
+PAY_YYYYMMDD.txt and BID_
+PM
+PAY_YYYYMMDD.txt
+SFTP File Path: FromInvoiceCloud
+/
+Payments
+File Delimiter: Fixed Length
+Specification: 
+Sample File:
+File Transfer Frequency: Twice Daily, 4:30, 16:30 (Eastern Time)
+Notes:
+ EFT/ACH Rejects should be sent in the payment file after all payments are listed. Credits and Chargebacks will not be included in this file.
+File Mapping
+PaymentExport AM: selBillerPaymentsFromDateRangeGMT_v2
+Stratus payment export: IF_NationalFuelGas_Payments = 360
+PaymentExport PM: selBillerPaymentsFromDateRangeGMT_v2 and selBillerACHRejectsGeneric
+Stratus payment export: IF_NationalFuelGas_PaymentswReturns = 361
+Record Type
+Field Length
+Start Position
+End Position
+Value
+IC Mapping
+Header Record:
+Record Type Code
+Header
+1
+01
+01
+1
+Hardcode to 1
+File Creation Date
+Header
+6
+24
+29
+Date
+YYMMDD
+Intermediate Destination Name
+Header
+23
+41
+63
+NATIONAL FUEL GAS
+Hardcode to “NATIONAL FUEL GAS”
+Immediate Origin Name
+Header
+23
+64
+86
+INVOICE CLOUD
+Hardcode to “INVOICE CLOUD”
+Record 5
+Record Type Code
+Batch Header
+1
+01
+01
+5
+Hardcode to “5”
+Company Descriptive Date
+Batch Header
+6
+64
+69
+DateTime
+YYMMDDhhmm
+Record 6
+Record Type Code
+Payment Record
+1
+01
+01
+6
+Hardcode to “6”
+Transaction Code
+Payment Record
+2
+02
+03
+22, 27
+22- Payment
+27-Return
+DFI Account Number
+Payment Record
+9
+16
+25
+Account Number
+AccountNumber without the dash (ex: XXXXXXXXX)
+Total Amount
+Payment Record
+10
+30
+39
+$$$$$$$$cc
+Transaction Total
+Record 7
+Record Type Code
+Addenda Record 
+1
+01
+01
+7
+Hardcode to “7”
+Payment Related Information
+Addenda Record 
+80
+04
+83
+Alpha-Numeric
+ACH, CC, DC, or Reject Code ( R01, R02 etc) followed by ACH with no space (R01ACH)
+Record 8
+Record Type Code
+Batch Control Record
+1
+01
+01
+8
+Hardcode to “8”
+Entry Addenda Count
+Batch Control Record
+6
+05
+10
+Numeric
+Number of records
+Total Debit Entry Dollar Amount
+Batch Control Record
+12
+21
+32
+$$$$$$$$cc
+Total Debits
+Total Credit Entry Dollar Amount
+Batch Control Record
+12
+33
+44
+$$$$$$$$cc
+Total Credits
+Record 9
+Record Type COde
+File Control Record
+1
+01
+01
+9
+Hardcode to “9”
+Batch Count
+File Control Record
+6
+02
+07
+Numeric
+Number of Batches in file (each payment type ACH, CC/DC, Return will have a batch)
+Block Count
+File Control Record
+6
+08
+13
+Numeric
+Total number of lines in the file
+Entry/Addenda Count
+File Control Record
+8
+14
+21
+Numeric
+Number of “6” and “7” records
+Total Debit Entry Dollar Amount in File
+File Control Record
+12
+32
+43
+$$$$$$$$cc
+Total Debit Amount
+Total Credit Entry Dollar Amount in File
+File Control Record
+12
+44
+55
+$$$$$$$$cc
+Total Credit Amount
+Change Log Files
+AutoPay Enrollment
+File Summary/Purpose: The purpose of this file is to provide NFG with details of payer AutoPay enrollment. This file will have records whenever autopay payment methods are updated, as well as when new accounts are enrolled in autopay.
+File Extension: .csv
+File Naming Convention: BID_A_YYYYMMDD.txt
+SFTP File Path: FromInvoiceCloud/
+A
+utoPay
+File Delimiter: comma
+Specification: See below
+Sample File: 
+File Transfer Frequency
+: Once per day, 16:30 ET
+File Mapping
+Stored Procedure: selBillerChangeLogsNFG
+Stratus Change Log: IF_NationalFuelGas_AutoPayPaperlessExports = 38
+Field
+Length
+Format
+Values
+Account Number
+9 char
+#########
+DisplayAccountNumber (9 digit account number made up of 7 digit identifier + 2 check digits with no dash)
+Enrolled Status
+1 char
+Y or N
+Y for new enrollment, N for unenrollment 
+Change Date
+8 char
+YYYYMMDD
+Date customer made AutoPay enrollment change
+Payment Method
+3 char
+ACH or CC or DC
+Type of payment method used for enrollment
+*When a payer unenrolls from autopay, this field will be empty
+Checking Type
+1 char
+C or S
+C for checking account, S for savings account
+*When a payer unenrolls from autopay, this field will be empty
+Biller Notification File
+File Summary/Purpose: The purpose of this file is to provide NFG data for accounts with bad emails. NFG uses this to update the email, paper bill on / off, bad email flag and enrolled and de-enrolled customers in their system.
+File Extension: .txt
+File Naming Convention: 
+ BID_BN_YYYYMMDD.txt
+SFTP File Path: FromInvoiceCloud/BNotification
+File Delimiter: Fixed Length
+Specification: 
+Sample File:
+File Transfer Frequency: Once per day, 16:30 ET
+File Mapping
+Stored Procedure: selBillerChangeLogsNFG
+Stratus Change Log: IF_NationalFuelGas_AutoPayPaperlessExports = 38
+Level
+Field
+Data Type
+Character Limits
+From
+To
+Format
+Values
+1
+Record Type
+Varchar
+1
+1
+1
+H-Header
+B-Batch
+T-Trailer
+2
+Redefine Rest of Data
+Varchar
+2
+150
+Below is for the “H records”
+2
+Biller Code
+Varchar
+4
+2
+5
+NATF (only displayed for H Records-- See sample)
+2
+Filler
+Blank
+4
+6
+9
+2
+Creation Date
+Datetime
+8
+10
+17
+CCYYMMDD
+3
+Redefine Rest of Data
+Varchar
+2
+150
+Below is for the “B records”
+3
+RBANUM
+Numeric
+7
+2
+8
+AccountNumber no check digit (DisplayAccountNumber minus last two digits due to the need for this to come from the customer record, not the invoice record)
+3
+EBPP Action Indic
+Alpha
+1
+9
+9
+E* = enroll in customer portal, updates email for customer
+D = de-enrolls customer’s internet role, updates print status
+C = change email – updates email for customer
+P = change print status – updates print status based off file (#EBPP-CUST-NO-PRT-INDIC decides whether it will still print hard copy or not)
+*As long as the ‘E’ record contains their email and current paperless enrollment status (0 is paperless or 1 is not paperless) then that is okay. Even if the customer is not actually enrolled in the portal NFG is okay to receive an ‘E’ record and their system will still have the account enrolled in paperless as if they were enrolled in the portal.  
+2
+EBPP Cust No Prt Indic
+Alpha
+1
+10
+10
+0,1
+0= No Print
+1= Print
+3
+Email addr
+Alpha
+50
+11
+60
+Email Address
+(Set the bad email flag field to blank when a “C” record is received)
+1
+Date Time Stamp
+Datetime
+12
+61
+72
+1
+Redefine Date Time Stamp
+DateTime
+61
+72
+2
+Transaction Date
+Datetime
+8
+61
+68
+YYYYMMDD
+Transaction Time
+DateTime
+4
+69
+72
+HHMM
+Filler-1
+78
+73
+150
+Redefine Rest of Data
+2
+15
+149
+Below is for T record
+Record Count
+Numeric
+10
+02
+11
+Number of “b” records in the file. Validation check must be done on this number.
+Use Cases for 'EBPP Action Indic' and 'EBPP Cust No Prt Indic' Values
+Customer Change
+Record Type
+Email
+Paperless Indicator (#EBPP-CUST-NO-PRT-INDIC)
+Customer Enrolls in portal, but not paperless
+E
+Yes
+1
+Customer Enrolls in portal, and in paperless
+E
+Yes
+0
+Customer does not enroll in the portal, but enrolls in paperless
+E
+Yes
+0
+Customer Changes Email Address
+C
+Yes
+N/A
+Customer Enrolls in Paperless after already being enrolled in portal
+P
+N/A
+0
+Customer de-Enrolls in Paperless after already being enrolled in portal
+P
+N/A
+1
+Customer de-enrolls from the portal (right now de-enrolls paperless as well)
+D
+N/A
+1
+Invalid Email
+File Summary/Purpose: The purpose of this file is to alert NFG of an 
+undelivered email so NFG
+ can send a corresponding letter to Matrix. Matrix will then mail the corresponding letter to the BP. In addition to a letter being generated, NFG will update their system to reflect that the email address on file is invalid, as well as potentially updating the email address. IC will only be sending notices for email type ‘First Email Notification’ bounces that occur. 
+The details on IC Email Template Mapping and NFG letters can be found here.
+File Extension: .txt
+File Naming Convention: 
+BID_IE_YYYYMMDD.txt
+SFTP File Path: FromInvoiceCloud/InvalidEmail
+File Delimiter: Fixed Length
+Specification: 
+Sample File:
+File Transfer Frequency: Once per day, 16:30 ET
+File Mapping
+BouncedEmailExport: selBillerBouncedEmailsV2
+Stratus misc export: IF_NationalFuelGas_BouncedEmailReport = 41
+Level
+Field
+Data Type
+Character Limits
+From
+To
+Values
+1
+Bad Email File
+200
+1
+200
+1
+Redefine Bad Email File
+1
+200
+2
+Rec Type
+Alpha
+1
+1
+1
+H-Header
+B-Batch
+T-Trailer
+2
+Rest Of Data
+199
+2
+200
+2
+Redefine Rest of Data
+2
+200
+3
+Header Data
+Alpha
+16
+2
+17
+3
+Redefine Header Data
+16
+2
+17
+Below is for H Records
+4
+Biller Code
+Alpha
+4
+2
+5
+NATF
+4
+H-Filler
+A
+4
+6
+9
+4
+Creation Date
+DateTIme
+8
+10
+17
+CCYYMMDD
+2
+REdefine Rest of Data
+2
+200
+3
+Detail Data
+Alpha
+199
+2
+200
+Below are for B records
+3
+Redefine Detail Data
+2
+200
+4
+RBA-Num
+Numeric
+7
+2
+8
+Account Number without check digit (Custom 1)
+4
+Email Action Code
+Alpha
+1
+9
+9
+4
+Email Address
+Alpha
+50
+10
+59
+Email Address
+4
+Confirmation Number
+Numeric
+20
+60
+79
+4
+Redefine Confirmation Number
+60
+79
+5
+Confirm-Num-A
+Alpha
+20
+60
+79
+4
+Trans-Date
+DateTime
+8
+80
+87
+YYYYMMDD
+4
+Trans-Time
+DateTime
+4
+88
+91
+Military Time, must be converted HHMM
+4
+Effect-Date
+DateTime
+8
+92
+99
+Effective Date (Date of Reject)
+4
+Trans-Amt
+Currency
+9.2
+100
+110
+Transaction Amount
+SSO Design (External Links)
+Design Summary: Invoice Cloud will have external links built into the Customer Portal Home page. Each link will redirect to and NFG hosted site. IC passes a portion of the account number and the customerGUID to NFG. NFG then validates the account is associated with the customerGUID (RetrieveCustomerAccounts API) to render the page. Details on the screens is in the user experience section below.
+Form Post Names:
+"RBA" for NFG Account number (IC field AccountNumber - first 7 digits only)
+"GUID" for Customer GUID
+Display field/label:
+IC field AccountNumber with label ‘Account Number’
+IC field Custom4 with label ‘Service Address’
+Stage: 
+https://acctsvcsstage.nationalfuelgas.com/
+Prod: 
+https://acctsvcs.nationalfuelgas.com/
+ 
+Page Name
+URLs
+Notes
+Submit Meter Reading 
+https://acctsvcs.nationalfuelgas.com/MeterReadRBAEntryForm.aspx
+Only customers with 4 and 5 dials on their meters are eligible for the Submit Meter Reading link in the Customer Portal. Customers with 6 dial meters are not eligible.
+Account Balance Activity
+https://acctsvcs.nationalfuelgas.com/AccountBalanceActivity.aspx
+ 
+Billing Activity
+https://acctsvcs.nationalfuelgas.com/BillingActivity.aspx
+ 
+Budget Billing
+https://acctsvcs.nationalfuelgas.com/BudgetPlanMainMenu.aspx
+ 
+Customer Contact Information
+https://acctsvcs.nationalfuelgas.com/CustomerContactInformation.aspx
+ 
+Neighbor For Neighbor Pledge
+https://acctsvcs.nationalfuelgas.com/N4N.aspx
+ 
+Historical Rate Comparison
+https://acctsvcs.nationalfuelgas.com/HistRateCompUnauth.aspx
+ 
+Invoice Cloud Web Services
+Name
+Purpose
+Remote authentication- Rest
+NFG uses this web service to allow customers to login to the IC Customer Portal directly from the NFG site
+https://www.nationalfuel.com/
+ 
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A 
+AllowPartialPayments
+BIF customization - see 
+Questionnaire
+AutoPayCollectionDate
+BIF customization - see 
+Questionnaire
+BalanceForward
+BIF customization - see 
+Questionnaire
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - see 
+Questionnaire
+InvoiceDate
+N/A - In invoice file
+InvoiceDueDate
+N/A - In invoice file
+InvoiceFormatGuid
+N/A
+InvoiceTypeID
+N/A - In invoice file
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF customization - see 
+Questionnaire
+ThirdNotifyRequestedDate
+BIF customization - see 
+Questionnaire
+User Interaction and Design
+Data Flow - Invoices
+Details on the ‘IC Daily File’: Daily Active Invoices Report
+Stored Procedure: RPT.selActiveInvoiceByCustomer
+Fields in Report: account number, invoice number, invoice date, total amount due, balance due, block EFT 
+6228033-03,6228033-03-20211017,2021-09-21 00:00:00.0000000,18.8400,18.8400,False
+File Location: Currently unable to see in CRM file search. Reach out to 
+ for assistance. 
+Report creation logic: Pull most recent invoice for each active account (most recent is defined by the most recent invoice ID - not invoice date)
+Data Flow - Payment & ACH Reject
+Data Flow - AutoPay Enrollment
+Data Flow - Biller Notification File
+Note: IC sends customer portal registration as well as paperless status in this file. See ‘Biller Notification File’ above for more details on use cases
+Data Flow - Invalid Email
+Data Flow - Bill Presentment
+Payer Experience - NFG Website Redirects
+Payers will access Invoice Cloud from the 
+Biller website
+ (URL redirect). Payers will use the IC Virtual Site and Customer Portal. 
+Log in credentials will be passed to Invoice Cloud and open the Customer Portal Home Page (See Web Services below for more details)
+Payer Experience - IC Customer Portal Redirects (NFG External Links)
+IC Customer Portal Home Screen with links:
+If the user has multiple linked accounts, IC will display a box for account selection - user can search by account number or service address:
+DESKTOP
+MOBILE
+Biller Experience
+Biller will use standard IC Biller Portal.
+Live Agent Payment
+PSN Search Screen:
+IC Payment Route (with Live Agent Fee)
+Invoice Cloud Web Services
+API
+Purpose
+RetrieveCustomerAccounts
+External Links/Reverse SSO: IC passes a portion of the account number (first 7 digits) and the customerGUID to NFG. NFG then validates the account is associated with the customerGUID to render the page.
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+Technical Specifications
+EBPP-15539
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Est. 12/2023
+No duplicate file checks in place for handling NFG files.
+Implement duplicate file checks based on file content (checksum), file name and file date.
+NFG had an issue where they needed to load a previous bill index file to correct PDF Linking. As a result of loading a previous MAM file, balances were reverted based on the import of the historic file. Having a duplicate file check in place would’ve prevented IC from loading the ‘old’ balance file and applying balance adjustments that NFG did not intend.
+Modify BillerFileSplit process to detect and reject previously imported files. Process should do a lookup against a table that holds previously processed files, if process finds that a file has been previously imported, the process should reject the file. We should have the ability to compare a file by its contents, its filename or both. If a file is not found in the previously imported files, an entry should be created in the lookup table for future events.
+ URL:/spaces/IM/pages/1386447140/BID+2613+National+Fuel+Gas+NFG+Technical+Design

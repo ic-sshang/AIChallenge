@@ -1,0 +1,30 @@
+2
+1
+0
+0
+4092002347
+4087971897
+1
+Untitled Diagram-1741191347727.drawio
+10
+10
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1741191347727.drawio
+0
+1891
+1391
+IC Chase Screening API
+:  Handles sending biller profile data to Chase for the purposes of validating a biller profile (sub merchant) for use on the Chase platform.  A data store will be used for the screening records.
+IC Chase Payment Processing API
+:  Handles sending payments to Chase for authorization.   A data store will be used for the payment request/response data.
+Biller Funding Job
+:  Handles creating the debit/credit funding instructions for a given biller.  The biller shard will be the source of funding data for payment, reject, fees, and refunds. 
+IC Chase Funding API
+:  Handles the management of funding instructions waiting to be sent to Chase.   A data store will be used for funding instruction records.
+Chase Funding Job
+:  Handles creating the ACH Credit, Debit, and Wire files based on the funding instructions marked for delivery.
+Chase Reporting Import Jobs
+:  Handles importing reporting data for billers and accounting.  Need to get a list of the import data sets to further define the individual jobs requirements.  
+APIs - RESTful k8s containerized .Net 8 API applications 
+Jobs - k8s containerized CRON .Net 8 console applications based on defined schedules to adhere to Chase cutoffs
+ URL:/spaces/EA/pages/4087971897/Chase+Integration+-+C1+Draft

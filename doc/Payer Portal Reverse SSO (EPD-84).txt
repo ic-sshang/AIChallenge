@@ -1,0 +1,113 @@
+Discovery Ticket
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/4884449?selectedIssue=EPD-84&issueViewSection=deliver
+ 
+Delivery Ticket
+SPAM-1
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document Status
+IN PROGRESS
+Yellow
+ 
+Problem Statement
+Currently, when users are redirected from the InvoiceCloud customer portal to an external platform (e.g., AquaHawk to review usage data) they are required to authenticate 
+again. 
+This:
+Requires payers have 2 different logins to view their invoice and see meter usage data by account
+Creates a disjointed experience
+Increases friction, especially for non-technical users
+Causes confusion or cart abandonment
+Disallows Billers with AMI products to integrate
+Business Context & Goals
+Goals
+Provide customers ability to seamlessly access their usage data without requiring multiple logins
+Ensure customers pay their bill
+Win deals with Billers that have AMI products or want this feature
+Better Customer Experience
+Solving this problem adds value to the InvoiceCloud platform:
+Offers a better customer experience
+Reduce friction when accessing external services from the customer portal
+Fostering a deep integration between InvoiceCloud and Partners
+Revenue Impact
+Win deals
+AMI (Neptune, Sensus, Itron, My360, Badger EyeOnWater) companies have their own usage portals which can be a blocker for deals
+Enable Billers that buy AMI products to integrate them with InvoiceCloud
+Billers asking for Reverse SSO
+San Jose Water $62k MRR
+Padre Dam $11k MRR
+Columbus Water Works $48k MRR
+Palm Beach County $50-100k MRR
+National Fuel Gas $ MRR
+ 
+Requirements
+Description
+Modify SSO product to allow authentication FROM an IC authenticated session TO an external authenticated session
+Features
+Choose Protocol (OIDC 1.0, SAML, etc)
+Configure IDP settings
+Configure Claim(s) for authentication requests
+Configure Link(s) on IC Customer Portal
+Assign Link to Claim
+Assign Link to Callback URI (this is the redirect URL to send the user to)
+Example Usage Portals
+AquaHawk
+Integrated Energy Data Resource (New York State)
+User Journey (High-Level)
+ Current State
+Payer needs 2 logins to view their invoice and view their usage data
+Customer Portal
+Payer logs into InvoiceCloud Customer Portal
+Payer clicks link to AquaHawk from sidebar to view their meter usage data
+Payer logs into AquaHawk in new tab or new browser window
+Payer views usage data in AquaHawk
+Payer must navigate back to pay their invoice OR Payer must log back into InvoiceCloud to pay their invoice
+Email Notification
+Payer opens invoice notification email from InvoiceCloud
+Payer clicks link to AquaHawk to view their meter usage data
+Payer must go back to their email to click link to pay their invoice
+Payer logs into InvoiceCloud Customer Portal
+Payer makes a payment to their invoice
+  Ideal Future State
+Payer can SSO into usage data portal from the Customer Portal
+Payer logs into InvoiceCloud Customer Portal
+Payer is logged into AquaHawk
+Discovery Questions
+Ask questions to define the unknowns.
+ 
+Competitive Research
+InfoSend
+AquaHawk
+Technical Feasibility
+What is our estimated effort to build this product feature? What (if any) are our dependencies with Integrations?
+ 
+Proposed Scope
+What is our proposed solution, what is out of scope, what does the feature look & feel like?
+ 
+Risks & Assumptions
+Risk
+Mitigation
+Status
+ 
+ 
+ 
+ 
+ 
+ 
+Next Steps
+Task
+Owner
+Due Date
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4445077621/Payer+Portal+Reverse+SSO+EPD-84

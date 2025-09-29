@@ -1,0 +1,67 @@
+Playbook
+Cloud Store Setup
+Description
+Cloud Store setup and configuration. 
+Contents
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+Summary
+Create new Cloud Store Items or modify existing ones. Go to "Virtual Site / Customer Portal" and in the Cloud Store section, either press edit in an existing Cloud Store Item or use the "New Item" button located above the table. 
+note
+Process
+
+
+Process
+
+
+Steps
+Action
+Description 
+1
+Review BOF
+Look at the BOF to determine the Cloud Store Invoice Type to add to the CRM > Invoice Types.
+3 Invoice Types for Cloud Store Items: 
+CloudStore - Misc Tax Item
+CloudStore - Misc Utility Item
+CloudStore - Misc Generic Item
+2
+Product
+In the CRM under Products the Cloud Payments / Cloud Store Tab, Cloud Store must be enabled to be able to see it in the Virtual Site / Customer Portal settings in the CRM. 
+3
+New Item
+Click on New Item to add the Cloud Store.
+4
+Settings
+In this view the user can modify values such as Item Label, Invoice Type, Texts, Options, and more.
+IMPORTANT: 
+When selecting Invoice Type if there are multiple cloud stores to setup make sure to select the correct Invoice Type. 
+If this is an addon in the production portal for the Biller, you will want to make sure that you publish the Cloud Store only in the Biller Portal initially until you are ready to go live with the Cloud Store.
+5
+Fields
+There is a variety of types of fields that can be used to ask the Customer for information needed to complete the transaction.
+By clicking on the "New Field" button an edit form will be displayed, which grants the user the ability to add a new field to the Cloud Store Item form, using a variety of options and validations for customizing that field. The Field Type drop down list contains the different types of inputs that the field will allow, for example:
+Text Input
+Phone Number input
+Email Address input
+Price Input
+Numeric Input
+Zip Code input
+Date Input
+6
+Items
+The view has two different modes, according to the needs of the Customer.
+OPTION 1
+This is the mode that will be used by most Users; here the User can modify the price of the Cloud Store Item, as well as the number of items sold per transaction.
+OPTION 2
+The second mode allows the User to add multiple items to be sold in the same transaction inside the Cloud Store Item. Each item will have a minimum amount that can be sold and a maximum amount (if max amount is zero then there is no limit to the number of items that can be sold per transaction).
+The items may have multiple prices depending on the number of units being purchased in the transaction.
+7
+FAQ
+•	Most Cloud Stores do NOT need the Credit/Debit Card & PayPal OR ACH Service Fees added in the Virtual Site item. These are added at the pricing level. The only known exception at this time is TaxServ, Inc., BID 692 where you do need to add pricing at the Virtual Site item level.
+•	If the Biller is using a Custom URL for their Cloud Store page -you will add it on the Virtual Site item. This is common for BS&A Billers and TaxServ, Inc. Follow normal processes for obtaining the Custom Page URL for the integration.
+ URL:/spaces/Implementa/pages/3209068546/Cloud+Store+Playbook

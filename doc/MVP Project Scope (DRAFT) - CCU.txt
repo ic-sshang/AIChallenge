@@ -1,0 +1,103 @@
+This document will be used to capture the MVP requirements for the project to meet the existing contract and its deadline.   Additional enhancements can be made after delivering MVP.
+Terms:
+CIS = Customer Information System
+CRM = Customer Relationship Management
+Cayenta = Third party software vendor
+System
+Story
+CRM
+As a IC employee, I want to be able to set the “Contact Us” ticketing provider, so I can support Billers with different CIS systems.
+**There is currently only one provider “Cayenta CIS”
+CRM
+As a IC employee, I want to be able to manage the “Contact Us” feature for a Biller who uses a supported ticket CIS system, so that I can better serve Billers.
+CRM
+As a IC employee, I want to configure the URL and API credentials for a Cayenta CIS ticketing system, so I can provide the flexibility for a Biller’s Cayenta CIS installation.
+1.5 Payer Portal
+As a Payer, I want to login into the Payer Portal and submit a support ticket, so that my Biller can manage my ticket in their CIS system.
+1.5 Payer Portal
+As a Payer, I want create a Cayenta support ticket with my name, phone number, email, and issue description, so that my Biller can easily assist me.
+1.5 Payer Portal
+As a Payer, I want to see the Cayenta CIS ticket number after it is created, so that I can record it for reference later.
+1.5 Payer Portal
+As a Payer, I want to see an error message if a Cayenta ticket can not be submitted, so that I can retry or use a different method to get support.
+Configuration
+What drives showing the new support page / menu option?
+“Biller Options”
+“Platform Features”
+Per Environment Settings
+API URL Per Biller 
+API Key Per Biller
+IC Environment IP Address
+The below can be provided to third parties for the purposes of white listing IC systems.
+Production:
+20.75.169.55
+20.75.169.116
+20.75.169.54
+Dev/SBX:
+20.246.162.85
+20.246.162.241
+API Request Body
+<Request>
+  <AddIssueContact>
+    <Params>
+      <ISSUE_TP>CU</ISSUE_TP>
+      <CONTACT_TP>WEB</CONTACT_TP>
+      
+<EFFECTIVE_DT>20231215</EFFECTIVE_DT> (generate the timestamp at the time of the call)
+      
+<ACCOUNT_NO>2086971</ACCOUNT_NO> (on file, pulled from database)
+      <LOCATION_NO />
+      <ATTACH_PARAMETERS />
+      <UPLOAD_YN>N</UPLOAD_YN>
+      <ACCOUNT_CUSTOM />
+      <ISSUE_CMTS />
+      
+<CONTACT_DESC>Contact: LISA G  BLAIR, 816-868-7787, 
+dean.uhlman@jocogov.org</CONTACT_DESC
+> (individual form fields on the UI for Name, Phone Number, and Email will be concatenated CONTECT_DESC )
+      <ISSUE_QUESTIONS>
+        <SEQ>1</SEQ>
+        <VERSION>5</VERSION>
+        <RESPONSE_TP>STRNG</RESPONSE_TP>
+        
+<ANSWER>BILL</ANSWER>
+           
+Start with BILL hardcoded (possible use OTHR later)
+      </ISSUE_QUESTIONS>
+      <ISSUE_QUESTIONS>
+        <SEQ>2</SEQ>
+        <VERSION>15</VERSION>
+        <RESPONSE_TP>LGCOM</RESPONSE_TP>
+        
+<ANSWER>TEST for IC</ANSWER>        free form entry box in CSS textarea
+      </ISSUE_QUESTIONS>
+    </Params>
+  </AddIssueContact>
+</Request>
+API Response Body
+<REPLY>
+  <Reply transNo="5052" pid="9128">
+    <AddIssueContact version="1.1">
+      <Params>
+        <CONTACT_NO>3693750</CONTACT_NO>
+        
+<ISSUE_NO>300630</ISSUE_NO> (display on the UI)
+        <TASK>
+          <SEQ>1</SEQ>
+          <TASK_CD>WRKNG</TASK_CD>
+          <TASK_CMTS />
+          <TASK_USER_ID>SFG</TASK_USER_ID>
+          <ASSIGN_STATUS />
+          <REQUIRED_BY>Dec-15-2023</REQUIRED_BY>
+          <COMPLETION_DT />
+        </TASK>
+        
+<STATUS>0</STATUS> (non zero display error message in UI)
+        <STATUS_DESC>Issue 300630 created.</STATUS_DESC>
+      </Params>
+      
+<STATUS>0</STATUS> (non zero display error message in UI)
+    </AddIssueContact>
+  </Reply>
+</REPLY>
+ URL:/spaces/EN/pages/2947809294/MVP+Project+Scope+DRAFT+-+CCU

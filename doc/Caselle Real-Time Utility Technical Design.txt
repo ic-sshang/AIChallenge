@@ -1,0 +1,1929 @@
+Page Navigation
+7
+1
+Jira ticket 
+n/a
+ITR
+15588 (Real Time Full Integration)
+15446 (Cloud Store Lockbox file)
+Document status
+complete
+Green
+Document owner
+ 
+ 
+Solution engineer
+ 
+API Documentation
+Link to Caselle API Documentation
+Endpoint/Webservice URL’s
+RTDR Endpoint : 
+https://ranchero1.caselleconnect.com/tp/api/um0/graphql
+DataPump Payment Endpoint : 
+https://ranchero1.caselleconnect.com/tp/api/cr0/graphql
+Paperless Entrollment Endpoint : 
+https://ranchero1.caselleconnect.com/tp/api/um0/graphql
+Caselle Sandbox Access Credentials
+API URL:
+ 
+https://xpress.caselleranch.com/tp/api/um0/graphql
+Subdomain: 
+psndemo
+Client ID: 
+e6b2efd0-974d-4861-8906-3040ebcff9cf
+Client Secret: 
+Xt3REcuLEK6y0r58ayQbuZO.K9fYpFdtUfv
+OAuth Token 
+(Expires 10/22/2021): Ufe7ls0M9IFtAdKJ5NNlMcGx/g+87nyF6XZ94Fy0mxLXyGgXg7bfNw== 
+When this expires, see attached steps below on how to access the sandbox and create a new OAuth token:
+Update 2025.02 version (ReceiptNumber/Workspace Changes)
+Field Mapping
+1800
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+customer
+Method used to return a CustomerDetail object for Account Balance update
+Must retrieve balanceDue and equalPayBalance properties from CustomerDetail object. Must have a conditional which uses equalPayActive to determine if we should pull equalPayBalance. 
+If status is set to “No” do not pull equalpay amount. If status is set to “Yes” pull equalpay amount.
+Invoice Cloud will pass the following parameters to the customer method:
+customerNumber 
+- this is the IC account number.
+Properties:
+balanceDue 
+- balance of account for non-equal pay customers
+equalPayBalance 
+- balance of account for equal pay customers
+equalPayActive - 
+Status of Equal Pay.
+ 
+query Q {
+  customer(customerNumber: 110501) {
+    balanceDue, 
+    equalPayBalance,
+    }
+  }
+}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?path=%2FUtilityManagementGraphQLInterface.md&version=GBmaster&_a=preview&anchor=%3Ca-name%3D%22customer%22%3E%3C%2Fa%3Ecustomer
+Data Pump: Payment
+create_receipt
+The 
+create_receipt
+ mutation can be used to create a receipt. You can send objects to the 
+create_receipt
+ mutation.
+Invoice Cloud will pass the following parameters to the create_receipt functions:
+receiptDate - this is the transaction date
+distributionCode - the code that ties to their Utility module. 
+This is an advance setting within IC for cases that the code varies by biller
+. This indicated what type of payment it is and where to distribute. This translates to the invoice types in IC.
+paymentCode - These code tell client if it was a check or credit card payment. 
+This must become an advance setting within IC for cases that the code varies by biller.
+ The most common is 98 & 99. If biller is accepting OBD payments, we will use the ACH payment code unless a specific one is provided.
+ 
+Request to make this value configurable per biller
+amount - principle transaction amount
+accountNumber - AccountNumber
+accountName - CustomerName 
+glActivityNumber - end 0 as the default
+allocateTo - send NullString
+allocateTo - set to InvoiceNumber (since a post is made for each bill that is paid if someone pays multiple bills only one will send for each)
+confirmationNumber - PaymentGUID
+receiptNumber - this will be required to execute the void_receipt (create_receipt) method (refunds, reject, etc.)
+As of the 2025.02 version, the formattedReceiptNumber should be used to get the complete receipt number in the response.
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=create_receipt
+InvoiceTypeID=188 (Inline donation) will be supported and treated just like a regular payment. Make sure each payment that IC created has the distribution code(different between billers) assigned to it instead of the utility distribution code. In addition, Option 160 needs to be enabled in CRM.
+Data Pump: Void
+void_receipt
+The 
+void_receipt
+ mutation can be used to void an existing receipt. You can send objects to the 
+void_receipt
+ mutation.
+parameters:
+receiptNumber - this value will be stored in the IC payment record 
+date - Current Date
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=void_receipt
+Data Pump: 
+ACH Reject (No ACHRejectSettings: PaymentCode)
+void_receipt
+The 
+void_receipt
+ mutation can be used to void an existing receipt. You can send objects to the 
+void_receipt
+ mutation.
+parameters:
+receiptNumber - this value will be stored in the IC payment record 
+date - Current Date
+achRejection - Boolean 
+query Schema {
+  void_receipt(
+    receiptNumber: 1003579,
+    date:"4/26/2018",
+    achRejection: true
+  ), { receiptNumber }}"
+}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_wiki/wikis/Connect API Docs/51428/CashReceiptingGraphQLInterface?anchor=void_receipt
+(
+Advanced Setting 131 must be set, and exclude ACHRejectSettings)
+Data Pump: 
+ACH Reject (with ACHRejectSettings: PaymentCode configured per biller)
+create_receipt
+The 
+create_receipt
+ mutation can be also used to void an existing receipt with a specific payment code. You can send objects to the 
+create_receipt
+ mutation.
+Invoice Cloud will pass the following parameters to the create_receipt functions:
+receiptDate - this is the transaction date
+distributionCode - the code that ties to their Utility module. 
+This is an advance setting within IC for cases that the code varies by biller
+. This indicated what type of payment it is and where to distribute. This translates to the invoice types in IC.
+paymentCode - These code tell client if it was a check or credit card payment. This is configured as an Advanced Settings that the code varies by biller.
+amount - 
+Negative sign indicates a void principle transaction amount
+accountNumber - AccountNumber
+accountName - CustomerName 
+glActivityNumber - end 0 as the default
+allocateTo - send NullString
+allocateTo - set to InvoiceNumber (since a post is made for each bill that is paid if someone pays multiple bills only one will send for each)
+confirmationNumber - PaymentGUID
+query Schema {
+  create_receipt(
+    receipt: {
+      amount:-220.00(Void),
+      receiptDate:\"2024/04/30\",
+      distributionCode: 1913,
+      distributionDescription: \"Reversed Online Payment\",
+      paymentCode: 1(Set by Caselle),
+      accountNumber:\"\",
+      accountName: \"Fred Flintstone\",
+      glActivityNumber: 0,
+      allocateTo: \"\",
+      confirmationNumber: \"\",
+      checkNumber: \"\"
+    }),
+     { formattedReceiptNumber}}"
+}
+receiptNumber - this will be required to execute the void_receipt method (refunds, reject, etc.)
+As of the 2025.02 version, the formattedReceiptNumber should be used to get the complete receipt number in the response.
+When creates a voiding/reversing entry it actually creates a new receipt on the Caselle side and that is why we are seeing a new receipt number in the response. Currently, there is no response like “void payment successfully“, instead of a new formattedReceiptNumber. It will take a bit when Caselle add it. 
+Use distributionDescription: \"Reversed Online Payment\" to indicate a void with passing a paymentCode.
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=create_receipt
+(
+Advanced Setting 131 must be set, and include ACHRejectSettings: PaymentCode)
+Data Pump: Paperless Enrollment
+update_customer
+Use to update customer record for paperless enrollment
+parameters:
+customerNumber - AccountNumber
+sendPaperStatement - this is a boolean value (True=Paper,False=Paperless)
+searchCustomer: {customerNumber: 110101}, 
+      updateCustomer: {sendPaperStatement: true}
+mutation M { 
+    update_customer( 
+      searchCustomer: {customerNumber: 110101}, 
+      updateCustomer: {sendPaperStatement: true}
+    ),{ 
+      sendPaperStatement,
+    }}
+Data Pump: 
+AutoPay Enrollment
+set_direct_pay_status
+Use to update Direct Pay Status for customers
+parameters:
+customerNumber - AccountNumber
+active - this is a boolean value (True=active,False=inactive)
+mutation M {
+  set_direct_pay_status(active: false, customerNumber: 214500) {
+    success,
+    error
+  }
+}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?path=%2FUtilityManagementGraphQLInterface.md&version=GBmaster&_a=preview&anchor=set_direct_pay_status
+Customer Registration Changes
+update_customer
+Use to update customer record email address and phone number.
+parameters:
+customerNumber - AccountNumber
+telephone1 - PhoneNumber 
+telephone2 - not required, ignore or send blank value. 
+email - EmailAddress (Only send updates for the Owner of the account)
+ mutation M { 
+    update_customer( 
+      searchCustomer: {customerNumber: 110101}, 
+      updateCustomer: {sendPaperStatement: true, city:\"Provo\"}
+    ),{ 
+      name, 
+      customerNumber, 
+      sendPaperStatement,
+      contactInfo{address1,city,state,zip,telephone1,telephone2,email}
+    }}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?path=%2FUtilityManagementGraphQLInterface.md&version=GBmaster&_a=preview&anchor=update_customer
+Modifications (Releases on February 11th 2025)
+Note: According to Caselle, they can update the test instance to version 2025.02 soon, so IC can test earlier. Our current integration will still work once the new version is released, it just won’t show the receiptGroup number. Caselle clients have the option when to update their programs. The timing isn't exact for every biller we won't run into any huge errors.
+Updates on 01/07/2025 
+(Sandbox Access Only)
+:
+Client ID: 
+42485f75-b17a-490c-b027-4a60995b252a
+Client Secret
+: v6X4Ngd07tW34DikePjLYUduKgh-p_PAYlB
+OAuth Token: 
+NyPqpBk/bFpXC0NW1nEJI6x7vDksNiI0FJ6kZT0Um6MZLuZJT8wERw== (
+All tokens created have a 6-months time frame, this will expire on 03/30/2025
+)
+Callback URL: 
+https://icoauthtokenprocessor.azurewebsites.net/api/ICOAuthTokenProcessor?BK=(APIKey)
+Caselle sandbox is on 2025.02 version.
+Invoice Cloud had coded to PaymentCode and set to Advanced Settings 131 for Caselle integration.
+Data Pump - ACH Reject can use two mutations.
+void_receipt (current ACH Reject): it will only use for billers that are not using ACHRejectSettings: PaymentCode.
+create_receipt (new): it will only use for billers that are configured ACHRejectSettings: PaymentCode in Advanced Settings 131
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Data Pump: Payment
+create_receipt
+The 
+create_receipt
+ mutation can be used to create a receipt. You can send objects to the 
+create_receipt
+ mutation.
+Invoice Cloud will pass the following parameters to the create_receipt functions:
+formattedReceiptNumber - it combines the receipt number (9 ch, left filler 0) and receipt group to provide a 10-11 character value. 
+Ex, receiptGroup=20, receiptNumber=1234567, formattedReceiptNumber = 20.001234567
+CheckNumber and OriginalSource are just additional fields, no need to store the value unless we want to. 
+No changes on other fields.
+{
+  "client_id": "{client_id}",
+  "oauth_token": "{oauth_token}",
+  "graphql_query": "mutation M {
+    create_receipt(
+    receipt:
+			{
+				amount: 220,
+				receiptDate: \"2024/04/30\",
+				distributionCode: 1913,
+				paymentCode: 1,
+				accountNumber: \"\",
+				accountName: \"Fred Flintstone\",
+				glActivityNumber: 0,
+				allocateTo: \"\",
+				confirmationNumber: \"\",
+				checkNumber: \"\",
+                OriginalSource: \"\"
+			}),
+			{ formattedReceiptNumber }}"
+}
+As of the 2025.02 version, the formattedReceiptNumber should be used to get the complete receipt number in the response.
+{
+    "user_warnings": [],
+    "user_errors": [],
+    "status": 200,
+    "server_error": "",
+    "headers": {
+        "connect_version": "2025.2.82"
+    },
+    "body": {
+        "create_receipt": {
+            "formattedReceiptNumber": "99.000000005"
+        }
+    }
+}
+It’s recommended pulling the formattedReceiptNumber after new version releases.
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=create_receipt
+InvoiceTypeID=188 (Inline donation) will be supported and treated just like a regular payment. Make sure each payment that IC created has the distribution code(different between billers) assigned to it instead of the utility distribution code. In addition, Option 160 needs to be enabled in CRM.
+Data Pump: Void
+void_receipt
+The 
+void_receipt
+ mutation can be used to void an existing receipt. You can send objects to the 
+void_receipt
+ mutation.
+The query will still utilize both the receiptNumber and formattedReceiptNumber fields. Once a customer updates to 2025.02 version they'll immediately start using those bigger receipt numbers, so if they need to void one of those out then the query will need to use that field at that point.
+parameters:
+formattedReceiptNumber - this value will be stored in the IC payment record 
+date - Current Date
+{
+	"client_id": "42485f75-b17a-490c-b027-4a60995b252a",
+    "oauth_token": "NyPqpBk/bFpXC0NW1nEJI6x7vDksNiI0FJ6kZT0Um6MZLuZJT8wERw==",
+	"graphql_query": "mutation M {
+		void_receipt(
+			formattedReceiptNumber: \"99.000000008\",
+			date: \"5/30/2024\"), 
+        { formattedReceiptNumber }}"
+}
+{
+    "user_warnings": [],
+    "user_errors": [],
+    "status": 200,
+    "server_error": "",
+    "headers": {
+        "connect_version": "2025.2.82"
+    },
+    "body": {
+        "void_receipt": {
+            "formattedReceiptNumber": "99.000000012"
+        }
+    }
+}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=void_receipt
+Data Pump: 
+ACH Reject (No ACHRejectSettings: PaymentCode)
+void_receipt
+The 
+void_receipt
+ mutation can be used to void an existing receipt. You can send objects to the 
+void_receipt
+ mutation.
+parameters:
+formattedReceiptNumber - this value will be stored in the IC payment record 
+date - Current Date
+achRejection - Boolean
+{
+	"client_id": "42485f75-b17a-490c-b027-4a60995b252a",
+    "oauth_token": "NyPqpBk/bFpXC0NW1nEJI6x7vDksNiI0FJ6kZT0Um6MZLuZJT8wERw==",
+	"graphql_query": "mutation M {
+		void_receipt(
+			formattedReceiptNumber: \"99.000000008\",
+			date: \"5/30/2024\"),
+			achRejection: \"true\", 
+        { formattedReceiptNumber }}"
+}
+{
+    "user_warnings": [],
+    "user_errors": [],
+    "status": 200,
+    "server_error": "",
+    "headers": {
+        "connect_version": "2025.2.82"
+    },
+    "body": {
+        "void_receipt": {
+            "formattedReceiptNumber": "99.000000012"
+        }
+    }
+}
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_wiki/wikis/Connect API Docs/51428/CashReceiptingGraphQLInterface?anchor=void_receipt
+(
+Advanced Setting 131 must be set, and exclude ACHRejectSettings)
+Data Pump: 
+ACH Reject (with ACHRejectSettings: PaymentCode configured per biller)
+create_receipt
+The 
+create_receipt
+ mutation can be also used to void an existing receipt with a specific payment code. You can send objects to the 
+create_receipt
+ mutation.
+parameters(same as 
+create_receipt
+ except negative amount):
+formattedReceiptNumber - this value will be stored in the IC payment record 
+amount - 
+Negative sign indicates a void principle transaction amount
+paymentCode - These code tell client if it was a check or credit card payment. This is configured as an Advanced Settings that the code varies by biller.
+No changes on other fields.
+{
+  "client_id": "{client_id}",
+  "oauth_token": "{oauth_token}",
+  "graphql_query": "mutation M {
+    create_receipt(
+    receipt:
+			{
+				amount: -220,
+				receiptDate: \"2024/04/30\",
+				distributionCode: 1913,
+				distributionDescription: \"Reversed Online Payment\",
+				paymentCode: 1,
+				accountNumber: \"\",
+				accountName: \"Fred Flintstone\",
+				glActivityNumber: 0,
+				allocateTo: \"\",
+				confirmationNumber: \"\",
+				checkNumber: \"\",
+                OriginalSource: \"\"
+			}),
+			{ formattedReceiptNumber }}"
+}
+As of the 2025.02 version, the formattedReceiptNumber should be used to get the complete receipt number in the response.
+When creates a voiding/reversing entry it actually creates a new receipt on the Caselle side and that is why we are seeing a new receipt number in the response. Currently, there is no response like “void payment successfully“, instead of a new formattedReceiptNumber. It will take a bit when Caselle add it. 
+Use distributionDescription: \"Reversed Online Payment\" to indicate a void with passing a paymentCode.
+https://dev.azure.com/Caselle-Development/ConnectAPIDocs/_git/ConnectAPIDocs?version=GBmaster&path=%2FCashReceiptingGraphQLInterface.md&_a=preview&anchor=create_receipt
+(
+Advanced Setting 131 must be set, and include ACHRejectSettings: PaymentCode)
+Note:
+"amount" must be a NEGATIVE number and PaymentCode must be assigned by Caselle per biller(ex. 97 for Farmington).
+If Advanced Settings 131 is configured, and ACHRejectSettings: PaymentCode includes, we will process ACH Reject with create_receipt mutations, otherwise, use void_receipt.
+File Mapping
+Invoice File
+File Extension: .TXT
+File Naming Convention: INVCLD_CSLSTMT101_{Date}{Time}.txt
+File Delimiter: Pipe Delimited, Value enclosed in quotation marks 
+File Format: Caselle Pipe Delimited
+Specification: 
+Sample File: 
+File Frequency:
+ When billing is completed. Monthly, Bi-Monthly, Quarterly
+Field Mapping
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - Always “FH”
+File Header
+2
+BillerGUID
+N
+TRUE
+N/A - BillerGuid
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - Not Used
+File Header
+4
+FileCreationDate
+Y
+TRUE
+System Date
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - Invoice Count on File
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - total invoice amount in file
+File Header
+7
+RowType
+N
+TRUE
+N/A - Always “IH”
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - Map to “R”
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - field generated by IC
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A - field generated by IC
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Mailing Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+MM/DD/YYYY
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Account Balance of Equal Pay Amount
+#,###,###.00
+#,###,###.00CR
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Service Address
+Text
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Final Bill Title
+Text
+This field can be used to determine Final Bill status
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Equal Payment Title
+Text
+This field can be used to determine Budget Bill status
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Direct Pay Message
+Text
+This field can be used to determine Auto Pay enrollment
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Current Cycle End / Final Bill Date
+MM/DD/YYYY
+43
+Custom6
+Y
+FALSE
+Number of Days in the Current Cycle
+Number
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Forfeiture Balance or Equal Pay Amount
+Currency
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Last Payment Amount
+Currency
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Last Payment Date
+MM/DD/YYYY
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Prior Period Balance
+Currency
+Invoice Header
+93
+Y
+FALSE
+Account Balance or Equal Pay Amount
+BalanceDue
+Currency
+94
+Custom11
+Y
+FALSE
+Current Period Payments
+Currency
+Invoice Header
+95
+Custom12
+Y
+FALSE
+Current Period Billings
+Currency
+Invoice Header
+96
+Custom13
+Y
+FALSE
+Current Period Billing Adjustments
+Currency
+Invoice Header
+97
+Custom14
+Y
+FALSE
+Shutoff Date
+Invoice Header
+98
+Custom15
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Invoice Header
+99
+Custom16
+Y
+FALSE
+Current Cycle Begin / Connect Date
+MM/DD/YYYY
+Invoice Header
+100
+Custom17
+Y
+FALSE
+General Message
+Invoice Header
+101
+Custom18
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom17 field size limit is met
+Invoice Header
+102
+Custom19
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom18 field size limit is met
+Invoice Header
+103
+Custom20
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom19 field size limit is met
+Invoice Header
+104
+Custom21
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom20 field size limit is met
+Invoice Header
+105
+Custom22
+Y
+FALSE
+Shutoff Message
+Invoice Header
+106
+Custom23
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom22 field size limit is met
+Invoice Header
+107
+Custom24
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom23 field size limit is met
+Invoice Header
+108
+Custom25
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom24 field size limit is met
+Invoice Header
+109
+Custom26
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom25 field size limit is met
+Invoice Header
+110
+Custom27
+Y
+FALSE
+Sup Table Amount
+Amount
+Invoice Header
+111
+Custom28
+Y
+FALSE
+Service User-defined field
+Invoice Header
+112
+Custom29
+Y
+FALSE
+Billing User-defined Field
+Invoice Header
+113
+Custom30
+Y
+FALSE
+Customer User-defined Field
+Invoice Header
+114
+Custom31
+Y
+FALSE
+Location User-defined Field
+Invoice Header
+115
+Custom32
+Y
+FALSE
+Meter User-defined Field
+Invoice Header
+116
+Custom33
+Y
+FALSE
+Rate User-defined field
+Invoice Header
+407
+PastDue
+Y
+FALSE
+Arrears Balance
+Currency
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - Always “CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer Number
+Number
+Strip out any special characters (Periods, hyphens, spaces - letters and numbers only)
+If customer number is duplicated, load first record and skip the others.
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+AlphaNumeric
+Customer Record
+61
+Address1
+Y
+FALSE
+Mailing Line 1
+AlphaNumeric
+Customer Record
+62
+Address2
+Y
+FALSE
+Mailing Line 2
+AlphaNumeric
+Customer Record
+63
+City
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+64
+State
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+65
+Zip
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+66
+Phone
+Y
+FALSE
+Telephone Number 1
+Numeric
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Customer Email
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Customer Number
+Please strip out any special characters (Periods, hyphens, spaces - letters and numbers only)
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - Always “ID”
+Invoice Detail
+71
+ProductID
+Y
+FALSE
+Meter Meter ID
+Number
+Invoice Detail
+72
+Description
+Y
+FALSE
+Meter Service Description
+Service  Description
+Text
+Invoice Detail
+73
+Quantity
+Y
+FALSE
+Meter Current Usage
+Service Usage
+Number
+Invoice Detail
+79
+LineItemTotal
+Y
+FALSE
+Service Net Amount
+Currency
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+Meter Service Title (3 characters)
+Text
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Meter Multiplier
+Number
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+Meter Previous Reading
+Number
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+Meter Current Reading
+Number
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Meter Current Demand Reading
+Number
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+Meter Current Reading Date
+MM/DD/YYYY
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+Meter Previous Reading Date
+MM/DD/YYYY
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+Current Contract Billings
+Amount
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+Contract Amount to be Billed
+Amount
+Contract Balance
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+Shutoff Amount
+Amount
+Invoice Detail
+Invoice File for Multiple Distribution Codes 
+Field Mapping
+1800
+File Extension: .TXT
+File Naming Convention: INVCLD_CSLSTMT101_{Date}{Time}.txt
+File Delimiter: Pipe Delimited, Value enclosed in quotation marks 
+File Format: TBD
+Specification:
+Sample File: 
+File Frequency:
+ When billing is completed. Daily, Weekly, Monthly, Bi-Monthly, Quarterly
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - Always “FH”
+File Header
+2
+BillerGUID
+N
+TRUE
+N/A - BillerGuid
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - Not Used
+File Header
+4
+FileCreationDate
+Y
+TRUE
+System Date
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - Invoice Count on File
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - total invoice amount in file
+File Header
+7
+RowType
+N
+TRUE
+N/A - Always “IH”
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - Map to “R”
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - field generated by IC
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A - field generated by IC
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Mailing Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+MM/DD/YYYY
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Account Balance of Equal Pay Amount
+#,###,###.00
+#,###,###.00CR
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Service Address
+Text
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Final Bill Title
+Text
+This field can be used to determine Final Bill status
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Equal Payment Title
+Text
+This field can be used to determine Budget Bill status
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Direct Pay Message
+Text
+This field can be used to determine Auto Pay enrollment
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Current Cycle End / Final Bill Date
+MM/DD/YYYY
+43
+Custom6
+Y
+FALSE
+Number of Days in the Current Cycle
+Number
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Forfeiture Balance or Equal Pay Amount
+Currency
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Last Payment Amount
+Currency
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Last Payment Date
+MM/DD/YYYY
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Prior Period Balance
+Currency
+Invoice Header
+93
+Y
+FALSE
+Account Balance or Equal Pay Amount
+BalanceDue
+Currency
+94
+Custom11
+Y
+FALSE
+Current Period Payments
+Currency
+Invoice Header
+95
+Custom12
+Y
+FALSE
+Current Period Billings
+Currency
+Invoice Header
+96
+Custom13
+Y
+FALSE
+Current Period Billing Adjustments
+Currency
+Invoice Header
+97
+Custom14
+Y
+FALSE
+Shutoff Date
+Invoice Header
+98
+Custom15
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Invoice Header
+99
+Custom16
+Y
+FALSE
+Current Cycle Begin / Connect Date
+MM/DD/YYYY
+Invoice Header
+100
+Custom17
+Y
+FALSE
+General Message
+Invoice Header
+101
+Custom18
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom17 field size limit is met
+Invoice Header
+102
+Custom19
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom18 field size limit is met
+Invoice Header
+103
+Custom20
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom19 field size limit is met
+Invoice Header
+104
+Custom21
+Y
+FALSE
+General Message
+(continued-extra space)
+Extra space if Custom20 field size limit is met
+Invoice Header
+105
+Custom22
+Y
+FALSE
+Shutoff Message
+Invoice Header
+106
+Custom23
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom22 field size limit is met
+Invoice Header
+107
+Custom24
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom23 field size limit is met
+Invoice Header
+108
+Custom25
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom24 field size limit is met
+Invoice Header
+109
+Custom26
+Y
+FALSE
+Shutoff Message
+(continued-extra space)
+Extra space if Custom25 field size limit is met
+Invoice Header
+110
+Custom27
+Y
+FALSE
+Sup Table Amount
+Amount
+Invoice Header
+111
+Custom28
+Y
+FALSE
+Service User-defined field
+Invoice Header
+112
+Custom29
+Y
+FALSE
+Billing User-defined Field
+Invoice Header
+113
+Custom30
+Y
+FALSE
+Customer User-defined Field
+Invoice Header
+114
+Custom31
+Y
+FALSE
+Location User-defined Field
+Invoice Header
+115
+Custom32
+Y
+FALSE
+Meter User-defined Field
+Invoice Header
+116
+Custom33
+Y
+FALSE
+Rate User-defined field
+Invoice Header
+131
+Custom48
+Y
+FALSE
+Customer Type - Controls distribution and payment codes tied to each customer type.
+NOTE: refer to Customer Type value sent in IF to determine what commercial or residential distribution code should be data pumped for approved AND non approved payments.
+Invoice Header
+407
+PastDue
+Y
+FALSE
+Arrears Balance
+Currency
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - Always “CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer Number
+Number
+Strip out any special characters (Periods, hyphens, spaces - letters and numbers only)
+If customer number is duplicated, load first record and skip the others.
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+AlphaNumeric
+Customer Record
+61
+Address1
+Y
+FALSE
+Mailing Line 1
+AlphaNumeric
+Customer Record
+62
+Address2
+Y
+FALSE
+Mailing Line 2
+AlphaNumeric
+Customer Record
+63
+City
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+64
+State
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+65
+Zip
+Y
+FALSE
+Mailing Line 3
+AlphaNumeric
+Customer Record
+66
+Phone
+Y
+FALSE
+Telephone Number 1
+Numeric
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Customer Email
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Customer Number
+Please strip out any special characters (Periods, hyphens, spaces - letters and numbers only)
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - Always “ID”
+Invoice Detail
+71
+ProductID
+Y
+FALSE
+Meter Meter ID
+Number
+Invoice Detail
+72
+Description
+Y
+FALSE
+Meter Service Description
+Service  Description
+Text
+Invoice Detail
+73
+Quantity
+Y
+FALSE
+Meter Current Usage
+Service Usage
+Number
+Invoice Detail
+79
+LineItemTotal
+Y
+FALSE
+Service Net Amount
+Currency
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+Meter Service Title (3 characters)
+Text
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Meter Multiplier
+Number
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+Meter Previous Reading
+Number
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+Meter Current Reading
+Number
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Meter Current Demand Reading
+Number
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+Meter Current Reading Date
+MM/DD/YYYY
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+Meter Previous Reading Date
+MM/DD/YYYY
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+Current Contract Billings
+Amount
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+Contract Amount to be Billed
+Amount
+Contract Balance
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+Shutoff Amount
+Amount
+Invoice Detail
+Payment/Lockbox File (Cloud Store Misc AR)
+File Extension: CSV
+File Naming Convention: DC#_PYMT_YYYYMMDD.TXT (DC# = Distribution Code)
+File Delimiter: Comma Delimited - Data containing commas must be enclosed in quotes
+Specification:
+Sample File:
+File Frequency:
+ Daily, if payments are made
+Note: 
+If a Biller has more than one Cloud Store that we are producing a payment file for, we can create one file which contains the payments across all Cloud Stores. I.e. The Caselle file can support multiple combinations of Distribution Code and Payment Code in a single file, as seen in the Sample File above.
+Field Mapping
+1800
+Field
+Data Type
+Character Limits
+Format
+Comments
+Date
+Date
+10
+mm/dd/yyyy
+Required
+Distribution Code
+Numeric
+4
+9999
+Required. This value will be provided to IC Integrations team as part of the ITR submitted by Implementations
+Payment Code
+Numeric
+2
+99
+Required. This value will be provided to IC Integrations team as part of the ITR submitted by Implementations
+Amount
+Currency
+14
+999,999,999.99
+Required. Enclosed in quotes if commas are present
+Customer No
+Alpha-numeric
+15
+15 characters
+This is the Customer Account Number. Enclosed in quotes if commas are present
+Customer Name
+Alpha-numeric
+30
+30 characters
+JSON Configurations for Payment Codes
+Overview
+1800
+Advanced Setting 131 set to a valid 
+Caselle Json Format
+ is required
+Summary
+: Use a JSON string to set payment codes based on payment type and invoice type.
+Structure of Caselle JSON Format:
+The JSON string contains a main property for payment codes:
+PaymentSettings
+ (contains inner properties for codes to be set)
+PaymentTypeID
+ 
+ 
+Required in JSON
+PayPal
+ = 
+15
+ 
+It will NOT default all PayPal brands(credit/venmo) when only 
+15
+ is provided.
+PayPal Credit
+ = 
+16
+Venmo 
+= 
+17
+CC 
+= 
+1
+ACH 
+= 
+2
+OBD 
+= 
+11
+CardVender
+ 
+CardVender is required for PaymentTypeID 
+ 
+1
+ 
+ and it will not default to all when not provided.
+VISA
+ 
+DISCOVER
+ 
+MASTERCARD
+AMEX
+Default to all when not provided.
+PaymentCode
+ 
+Default to 
+advanced setting 64/65
+ when not provided.
+OBDVender
+ 
+Removed for not using it
+PostingMethod
+ 
+Removed for not using it
+InvoiceTypeID
+ 
+InvoiceTypeID is required and it will not default to all when not provided
+DistributionCode
+ 
+Default to 
+advanced setting 64/65
+ when not provided.
+Sample Structure
+:
+VISA Payment Code 
+(InvoiceType 42)
+PaymentCode: 4
+DistributionCode: 111
+Default CC Code 
+(InvoiceType 42)
+PaymentCode: 4
+DistributionCode: 444
+OBD Code 
+(InvoiceType 42)
+PaymentCode: 777
+DistributionCode: 555
+Paypal/Default Code 
+(InvoiceType 42)
+PaymentCode: 777
+DistributionCode: 555
+ACH Code 
+(InvoiceType 42)
+PaymentCode: 777
+DistributionCode: 555
+Default CC Code 
+(all other invoice types/ all other card vendors)
+PaymentCode: 123
+DistributionCode: 456
+json
+{
+    "PaymentSettings": [
+        {
+            "PaymentTypeID": 1,
+            "PaymentCode": 4,
+            "InvoiceTypeID": 42,
+            "CardVender": ["VISA"],
+            "DistributionCode":"111"
+        }, 
+        {
+            "PaymentTypeID": 1,
+            "PaymentCode": 7,
+            "InvoiceTypeID": 42,
+            "DistributionCode":"444"
+        },
+        {
+            "PaymentTypeID": 11,
+            "PaymentCode": 777,
+            "InvoiceTypeID": 42,
+            "DistributionCode":"555"
+         },
+         {
+            "PaymentTypeID": 15,
+            "PaymentCode": 777,
+            "InvoiceTypeID": 42,
+            "DistributionCode":"555"
+         },
+         {
+            "PaymentTypeID": 2,
+            "PaymentCode": 777,
+            "InvoiceTypeID": 42,
+            "DistributionCode":"555"
+         },
+         {
+            "PaymentTypeID": 1,
+            "PaymentCode": 123,
+            "DistributionCode":"456"
+         }
+    ]
+}
+Distribution Code is currently dependent on the payment code in JSON. If there is no distribution code, it will default into advanced settings 64/65, otherwise it will get the payment code to match with its distributionCode.
+Card vender can be grouped by omitting CardVender or separated into different PaymentSettings
+Paypal can be grouped by only setting Payment Type ID 15 or into separate PaymentSettings.
+Invalid JSON or missing codes defaults into advanced setting 64/65
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+9
+RTDR Username 
+10
+RTDR Key or Password
+11
+DataPump Payments EndPoint/WebService URL
+12
+DataPump Payments EndPoint/WebService Username
+13
+DataPump Payments EndPoint/WebService Password
+14
+DataPump Paperless EndPoint/WebService URL
+15
+DataPump Paperless EndPoint/WebService Username
+16
+DataPump Paperless EndPoint/WebService Password
+17
+DataPump AutoPay EndPoint/WebService URL
+18
+DataPump AutoPay EndPoint/WebService Username
+19
+DataPump AutoPay EndPoint/WebService Password
+35
+Service Version
+Billers need this set so that the allocateto field is set to the invoice number for Data Pump Payments. This is so that they know which bill to apply the payment to.
+ALLOCATEAR
+N
+64
+DataPump Payments CC Code
+ex: 101|99|0
+65
+DataPump Payments ACH Code
+ex: 101|98|99
+88
+Secondary RTDR EndPoint/WebService URL
+101
+DataPump ACH Rejects EndPoint/WebService URL
+102
+DataPump ACH Rejects EndPoint/WebService Username
+103
+DataPump ACH Rejects EndPoint/WebService Password
+111
+Secondary DP Paperless EndPoint URL
+112
+Secondary DP Paperless EndPoint Username
+113
+Secondary DP Paperless EndPoint Password
+126
+OAuth Refresh URL
+127
+OAuth Refresh Password
+128
+OAuth Token Expiration Date
+131
+JSON Configuraiton
+Valid JSON String based on format - 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/183042217/Caselle+Real-Time+Utility+Technical+Design#JSON-Configurations-for-Payment-Codes
+ 
+Go-forward payment code configuration should be the following:
+95:  ACH/EFT
+96:  OBD
+97:  Visa/MC/Discover
+98:  Amex
+99:  PayPal Brands  (Please note - In CRM, PayPal brands Alias must be changed from "Credit Card" to "None")
+NOTE:  On the Caselle side, each payment code should be assigned a unique "Combined GL deposit" letter, shown below.
+This will allow payment type totals to import to the Caselle separately and assist billers to more quickly identify discrepancies and improve the reconciliation process.
+If needed, IMs may ask the biller to verify payment codes/GL letters in Caselle by asking them to navigate to CR > Org > Payment Types > binoculars icon and select each payment type
+11/01/2024 Updates:
+PaymentTypeID 15 will 
+not 
+default to all PayPal brands when only 15 is provided
+CardVender is 
+required
+ for PaymentTypeID 1 and it will 
+not 
+default to all when not provided
+OBDVendor and PostingMethod were not used so I removed both of them
+InvoiceTypeID is 
+required
+ and it will 
+not
+ default to all when not provided
+1/15/2025 Updates:
+Invoice Cloud had coded to PaymentCode and set to Advanced Settings 131 for Caselle integration. This will determine which endpoint Invoice Cloud will be using to send ACH Reject.
+4/2/2025 Updates: Invoice Cloud add an additional parameter for Caselle billers who updated to Feb. version.
+7.17.25 NOTE: refer to Customer Type value sent in IF to determine what commercial or residential distribution code should be data pumped for approved AND non approved payments.
+json
+{
+    "PaymentSettings": [
+        {
+            "PaymentTypeID": 1,
+            "PaymentCode": 4,
+            "InvoiceTypeID": 42,
+            "CardVender": ["VISA"],
+            "DistributionCode":"111"
+        } 
+    ]
+}
+For billers on Feb version, add an additional parameter formattedReceiptNumber.
+{ "UseFormattedReceiptNumber": true ... }
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF Customization
+AutoPayCollectionDate
+Default = Due date unless otherwise specified by BIF Customization
+BalanceForward
+Required, BIF Customization
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF Customization
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGuid
+BIF customization
+InvoiceTypeID
+BIF customization
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+BIF customization
+PaymentExpirationMessage
+BIF customization
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization
+ThirdNotifyRequestedDate
+BIF Customization
+User Interaction and Design
+Data Flow - Invoice
+1800
+att1791885397
+716406819
+1
+INVOICES
+IM
+att1792245899
+att1792245894
+0
+Data Flow - Adjustments
+1800
+att1792245904
+716406819
+1
+adj
+IM
+att1791787098
+att1791787093
+0
+Data Flow - Payment
+1800
+att1791787108
+716406819
+1
+pymt
+IM
+att1791885404
+att1791787103
+0
+Data Flow - Paperless Change Log
+1800
+att1791787113
+716406819
+1
+paperless
+IM
+att1791852602
+att1792245909
+0
+Payer Experience
+1800
+Payer uses standard IC virtual site and customer portal. Users are redirected to the IC site from the billers website.
+Biller Experience
+1800
+Billers use the standard IC biller portal.
+Invoice Cloud Web Services
+API Name
+API Use/ Purpose
+N/A
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5243
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+02/22/2023
+Payment posting only split the ‘paymentCode' or payment type by CC and ACH.
+Payment posting to be split by all IC payment types (OBD Fiserv, OBD RPPS, Amex, Paypal, etc.)
+Caselle billers have the ability to configure multiple payment codes and use them for reconciliation. They’d like to align the payment code with the batches the payments in IC.
+ITG-3071
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/31/2024
+Donation doesn’t support InvoiceTypeID other than 42 and 6 through data pump.
+Support inline donation on InvoiceTypeID 188 through data pump.
+Make code change to add InvoiceTypeID 188, and enable Option 160 to data pump donation payment. 
+ITG-3297
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+IC don’t have data pump to send Payment Codes or Distribution Codes in the request of ACH Reject.
+Sent Payment Code and Distribution Code in the request of ACH Reject.
+Check Advanced Settings 131. If ACHRejectSettings is configured and PaymentCode includes, we send ACH Reject through create_void mutation; otherwise, send through void_receipt. 
+ITG-3298
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+4/01/2025
+Current version
+New upcoming version 2025.02
+Code and test the new version, uutilizing the Advanced Settings to toggle it. Prepare for for Billers that have been updated to the new version. 
+ITG-3542
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+IC don’t store phone number in invoice.
+Store and map Telephone number 1 in invoice.
+Map the Telephone Number 1 to Customer Phone. Update current file type instead of creating a new type.
+ URL:/spaces/IM/pages/183042217/Caselle+Real-Time+Utility+Technical+Design

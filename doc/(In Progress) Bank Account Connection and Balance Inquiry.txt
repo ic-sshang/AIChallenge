@@ -1,0 +1,99 @@
+Problem Alignment
+Project 
+-
+Objective 
+-
+Status 
+In Concept
+Jira
+TBC
+Target Release Date 
+TBD
+Team 
+TBD
+The Problem
+There are two main problems we are tackling here; likely these will be broken out into two different projects.
+Payers attempting to make a first time or one-time payment via their bank account often don’t know their Routing Number or Account Number. As a consequence, we introduce 1) friction into the payment process, 2) the opportunity to enter an incorrect routing/account number, and 3) the opportunity for errors in payment. 
+Payers who use their bank account as their AutoPay payment method occasionally have insufficient funds available, resulting in ACH rejects. 
+Why: How do we know this is a real problem and worth solving?
+For payers needing to enter routing/account number, we know through customer interviews 
+[DO WE HAVE A SOURCE]
+ that this step can result in either abandoning the process entirely or moving to credit card as a payment method. Because fees are often higher in a submitter model, payers are unhappy about this. 
+Approximately 5% 
+[SOURCE THIS DATA]
+ of ACH AutoPays are rejected. Part of those rejects 
+[WHAT PART]
+ are due to insufficient funds. 
+Audience: Who are we building for?
+We are building for 
+payers
+ who are:
+Making a one-time payment via ACH
+Setting up an AutoPay with ACH as payment method
+We are also building for 
+billers
+ who are looking to reduce their ACH rejects.
+We may be building for 
+InvoiceCloud
+ as well:
+This could result in a feature we could charge for
+We might be able to shift the balance of Credit Card vs. ACH payments, resulting in more profitable transactions for InvoiceCloud.
+Supporting Resources and Research
+[We need details here around bank account information failures, AP rejects] 
+High-level Approach
+Success
+How do we know if we’ve solved this problem?
+We will know if we solved this problem …
+Solution Alignment
+Key Features
+1
+2
+3
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+ N
+Sales
+Do you need sales enablement materials?
+N
+Marketing
+Does this impact marketing?
+N
+Training
+Do you need to update support content or training?
+N
+ 
+Implementations
+Changes to questionnaire
+N
+ 
+Delivery
+Set up and Enablement
+N
+ 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+N
+Support
+Biller questions and support
+N
+Legal
+Are there potential legal ramifications?
+N
+ 
+Reconciliations
+Questions from billers about charges
+N
+ 
+Trustly
+At a certain time, need to look at Pay By Bank
+PSD2-like open banking regime expected - banks incentivized to drive revenue
+ For Results on Global Sweepstakes go to: 
+Global Sweepstakes Results
+ Page instead. 
+false
+ URL:/spaces/PRODUCT/pages/2494136345/In+Progress+Bank+Account+Connection+and+Balance+Inquiry

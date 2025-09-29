@@ -1,0 +1,17 @@
+Problem: A biller’s OBD is not activated but MC and Fiserv sent over payment data. 
+Solution:
+Make sure the biller’s OBD is activated 
+Research for how long OBD was not activated and gather all the payment data.
+Create a new payment file
+With notepad, copy over the payment data for that biller(s) and include the header (green) and footer (blue).
+ex. fiserv
+ex. mc
+Change the file names to have tomorrow’s date, so it can get picked up during tomorrow’s run. Also remove any extension it may have. For instance, “.processed” or “.txt” and add “111111” to the file name so it won’t run into the issue of the file existing.
+ex. fiserv
+ex. mc
+Once, the file is created and ready, place the file in the server so it gets picked up during tomorrow’s run. This will be done in the bastion server and
+ex. fiserv \\10.0.6.4\EDataAppDataRPPS\in\fiserv
+ex. mc  \\10.0.6.4\EDataAppDataRPPS\in\mcrpps
+IMPORTANT:
+ insRPPSEntries checks for duplications by TraceNumber and FileName. If inserting multiple records for the same biller check to see if the tracenumbers are the same.
+ URL:/spaces/ED/pages/2894397530/How+to+Import+Missing+Payment+Files+MC+Fiserv

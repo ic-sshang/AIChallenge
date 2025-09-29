@@ -1,0 +1,118 @@
+The 
+Repository Pattern
+ acts as a mediator between the domain and data mapping layers. It abstracts the logic required to access data sources, making your application more modular and testable.
+Benefits:
+Decouples business logic from data access logic
+Centralizes data access logic
+Makes unit testing easier by mocking repositories
+Encourages adherence to the 
+Single Responsibility Principle
+Defining the Domain Entity
+The domain entity is structured around the business concept
+c#
+public class Order
+{
+    public Guid OrderId { get; set; }
+    public List<OrderItem> Items { get; }
+
+    public decimal Total => Items.Sum(i => i.Price * i.Quantity);
+
+    public void AddItem(OrderItem item) => Items.Add(item);
+}
+
+public class OrderItem
+{
+    public Guid OrderItemId { get; set; }
+    public decimal Price { get; set; }
+    public decimal Quantity { get; set; }
+}
+
+Creating the Repository Interface
+c#
+
+public interface IOrderRepository
+{
+    Task AddAsync(Order order, CancellationToken cancellationToken);
+}
+
+Defining the Database Entity
+The database entity matches the database structure.
+c#
+public class OrderEntity
+{
+    public Guid Id { get; set; }
+    public DateTime DateRecAdded { get; set; }
+}
+
+public class OrderItemEntity
+{
+    public Guid OrderId { get; set; }
+    public Guid OrderItemId { get; set; }
+    public decimal Price { get; set; }
+    public decimal Quantity { get; set; }
+    public DateTime DateRecAdded { get; set; }
+}
+Implementing the Repository
+The repository handles the data persistence.   This example uses the IC.Net.DataAccess.MsSql library but this pattern can be used with other data access components.
+c#
+
+public class OrderRepository : IOrderRepository
+{
+    private readonly IDatabase _database;
+    
+    public OrderRepository(IDatabase database)
+    {
+        _database = database;
+    }
+    
+    public async Task AddAsync(Order order, CancellationToken cancellationToken )
+    {
+        // cancelled, to not attempt to persist data
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        // map domain entity to database entity
+        
+        var orderEntity = new OrderEntity
+        {
+            OrderId = order.OrderId,
+            DateRecAdded = DateTime.UtcNow
+        };
+
+        var orderItemEntities = order.Items.Select(
+          (item) => 
+          {
+            return new OrderItemEntity
+            {
+                OrderId = orderEntity.OrderId,
+                OrderItemId = item.OrderItemId,
+                Price = item.Price,
+                Quantity = item.Quantity,
+                DateRecAdded = DateTime.UtcNow
+            };
+          }
+        );
+
+        // IC.Net.DataAccess.MsSql library uses the database entity properties
+        // as stored procedure parameters 
+                
+        // insOrder @OrderId, @DateRecAdded
+        await _database.ExecuteNonQueryAsync<OrderEntity>(
+				"insOrder",
+				orderEntity,
+				CancellationToken.None
+				);
+				
+		foreach( var orderItemEntity in orderItemEntities )
+		{
+			// insOrder @OrderId, @OrderItemId, @Price, @Quantity, @DateRecAdded		
+			await _database.ExecuteNonQueryAsync<OrderItemEntity>(
+					"insOrderItem",
+					orderItemEntity,
+					CancellationToken.None
+					);
+		}
+    }
+    
+}
+
+ URL:/spaces/EA/pages/4341334017/Repository+Pattern

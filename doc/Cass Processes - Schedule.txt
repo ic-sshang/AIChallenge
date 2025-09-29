@@ -1,0 +1,39 @@
+Listed below are the Cass Processes that run through the week. 
+Name
+Schedule
+Purpose
+Additional Details
+CassMigration
+N/A
+Not ran on Skybot, ran locally for migrations
+CassDepositReconciliation
+N/A
+No longer used
+CassBankActivityImport
+Daily - 10:15am CST
+Imports bank activity files. 500 files
+Runs daily but could possibly have it run on just the weekdays. This job does need to run successfully before the MC_RPPS Cass run at 10:30am CST
+CassApplyScheduledLedgerEntries
+Daily - 8am CST
+Applys ledger work from previous day
+CassNachaFileCreation - Step 1 
+Weekdays - 4pm CST
+Creates Nacha File
+CassNachaFileCreation - Step 2 
+Weekdays - 5pm CST
+Uploads Nacha File to Cass (if approved)
+Does rely on step 1 being sucessful and also an approval of the Nacha file from Finance team. 
+CassFileReceiptProcessing
+Weekdays - 5:30pm CST
+Imports Receipt files from Cass
+Does rely on CassNachaFileCreation - Step 2 running successfully and on time. 
+Regular MC_RPPS Job
+Daily - 5:30am CST
+Imports RPPS Payments
+MC_RPPS -CASSRUN
+Daily - 10:30am CST
+Sends RPPS Payments to Gateway. Handles Return/Reversal Files
+Related Confluence Pages
+https://invoicecloud.atlassian.net/wiki/x/XYANAwE
+ 
+ URL:/spaces/ED/pages/2801467439/Cass+Processes+-+Schedule

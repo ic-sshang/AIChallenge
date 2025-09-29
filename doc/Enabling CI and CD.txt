@@ -1,0 +1,50 @@
+Ensure that the property “default branch for manual and scheduled builds” is set to the main branch for both the build and deploy pipelines. If the pipeline was created when the repository’s default branch was different than it currently is, this value may not have been updated. See 
+this guide
+.
+Ensure that your app’s build and deploy pipelines have no parameters without default values.
+You can use 
+''
+ for the default if you want to force users to provide a value when manually triggering your pipeline
+Configure CI triggers for your build pipeline. We only want these to run for release candidates, as we don’t have enough agents to build every app on every commit.
+# build.yaml
+trigger:  
+  batch: true  
+  branches:  
+    include:  
+    - main 
+Configure your build pipeline as a resource trigger in your deployment pipeline.
+# deploy.yaml
+resources:
+  pipelines:
+    - pipeline: build # this is an alias that we'll use in a bit
+      source: /2.0/ICCRM/Build ICCRM # this is the full path to your build pipeline
+      trigger:
+        branches:
+          include:
+            - main # should match branch name configured as a CI trigger in your build pipeline
+Update the 
+default values
+ of the parameters for the version and the DevTest parameter only if they are present in the template.
+parameters:
+  - name: devtest
+    displayName: DevTest Environment
+    type: string
+    default: none #Only in place to enable CD triggers. Not actually used. When triggering the pipeline manually, the user must provide a real value (e.g., 'devtest6') or the pipeline will throw an error
+  - name: version
+    displayName: Artifact Version
+    type: string
+    default: '' #Only in place to enable CD triggers. Not actually used. When triggering the pipeline manually, the user must provide a value for 'version' parameter to specify the version that needs to be used.
+Add a conditional to your deployment pipeline that provides 
+$(resources.pipeline.build.runName)
+ as the app version to deploy if the pipeline was triggered because the build pipeline completed a run. This works because our build pipelines update the run name to be the artifact version published during that build.
+# deploy.yaml
+${{ if eq(variables['Build.Reason'], 'ResourceTrigger') }}:
+  version: $(resources.pipeline.build.runName) # 'build' here is the alias established in the pipeline resource trigger
+${{ else }}:
+  version: ${{ parameters.version }}
+Definitions
+Continuous Integration (CI) is a software development practice where developers regularly merge their code changes into a central repository, after which automated builds and tests are run.
+Continuous Delivery (CD) is a software development practice where code changes are automatically built, tested, and prepared for a release to production.
+Continuous Deployment (CD) is a software development practice where code changes are automatically built, tested, and deployed to production.
+We try to implement continuous delivery and have no current plans of making the entire production release process automated.
+ URL:/spaces/platform/pages/3188097084/Enabling+CI+and+CD

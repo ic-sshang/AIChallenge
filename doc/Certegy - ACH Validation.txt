@@ -1,0 +1,52 @@
+ACH Validation
+During the payment process, our CTP performs additional ACH validation for specific payment sources.
+Validated Payment Sources:
+Web services
+Jobs and Processes
+Payment File Upload
+Online Bank Direct
+POS
+Check21
+IVR
+Auto Pay
+Scheduled Payment
+Kiosk
+Other Payment Sources:
+ The remaining payment sources are validated in the payment route within the UI, such as Shopping Cart and Express Payments.
+Biller Options
+MonitorACHRejects (81)
+Description
+: Monitor ACH Rejects (81)
+Function
+: If enabled, IC will decline subsequent transactions made with payment methods (RTE/DDA/TYPE) that last resulted in a qualifying ACH Reject.
+Qualifying ACH Reject Codes
+: R02, R03, R04, R12, R13, R14, R15, R16, R20.
+Impact
+: Payment details will not be sent to the Payment Processors.
+ScreenACHPmtMethod (77)
+Description
+: Screen ACH Payment Methods
+Default Setting
+: Enabled
+Function
+: ACH transactions will be validated against Certegy to determine whether payments should be allowed with the provided account information.
+Process Flow
+Validation
+: If the above options are enabled and the biller isn’t in demo mode, MICR data will be validated. If there is no MICR data then we continue to make the API call to Certegy (if applicable) 
+API Call
+: An API call will be made to Certegy. 
+Response Handling
+: Based on the response from Certegy, payments will be allowed or rejected.
+Certegy Response Messages
+07
+: "Based on information obtained from Certegy Payment Solutions, an authentication and risk management service provider, payments made with this bank account will not be accepted."
+09
+: "Banking information provided could not be validated. Please re-enter or resubmit with a different payment method."
+22
+: "Banking information provided is restricted (unable to process as an ACH/EFT payment). Please resubmit with a different payment method or contact your Financial Institution to confirm ACH/EFT eligibility."
+Post-API Call Actions
+Record MICR Result
+: The MICR result will be recorded.
+Audit Tracking
+: An audit of the API call will be recorded for tracking purposes.
+ URL:/spaces/ED/pages/4245258268/Certegy+-+ACH+Validation

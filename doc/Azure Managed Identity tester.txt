@@ -1,0 +1,233 @@
+Summary
+This project helps to validate access of 
+Managed Identities
+ for IC Applications to different Azure Resources like KeyVault, SQL Server Database, etc.
+These validations can be performed by executing an
+ 
+Inline PowerShell Script
+ 
+which is called from a 
+YAML
+ file through an 
+ADO Pipeline
+ that allows to specify parameters like:
+Managed Identity App Name
+Server Type
+Environment Name
+Description
+In order to ensure proper application access and to confirm a communication between an application and Azure Resources, it is essential to use Azure commands to perform testing. 
+These commands can be executed in a specific order using a 
+PowerShell Script
+ to get needed data for obtaining adequate Azure Managed Identity object and finally use that MI object to:
+Get access token
+Read an Azure Key Vault value, and
+Connect to Azure SQL Server Database
+YAML files were created to execute above steps via an ADO Pipeline so the user can provide needed parameters which are going to be used by the Azure Client commands.
+Project Structure
+Repo Name
+: 
+scripts
+Repo URL
+: 
+https://dev.azure.com/invoicecloud/Src/_git/scripts
+Repo content:
+YAML files 
+environments.yaml
+ and 
+Full-Mi-Tester.yaml
+ are contained inside 
+.devops
+ folder
+environments.yaml
+ file sets proper values based on the environment where the validation needs to be performed. It requires a few parameters which are also going to be used by 
+Full-MI-Tester.yaml 
+file.
+Note: This yaml file uses Full-MI-Tester.yaml as a template so the testing can be executed on different environments.
+Full-MI-Tester.yaml
+ file is
+ 
+basically 
+the pipeline
+ that will request user to provide needed values like:
+         -  Server Type
+         -  Flag to indicate to Deploy to UAT if available
+         -  Managed Identity App Name Alias
+parameters:  
+  - name: serverTypes
+    displayName: Server Type  
+    type: object  
+    default: {}
+  - name: serverType
+    displayName: Server Type  
+    type: string  
+    values:
+      - web
+      - app
+      - proxy
+  - name: uat  
+    displayName: 'Deploy to UAT if available?'
+    type: boolean  
+    default: false   
+  - name: miAppName  
+    displayName: 'Managed Identity App Name Alias'
+    type: string  
+Pipeline URL: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2390&_a=summary
+Also, this YAML file contains the Azure Client commands to perform following tasks:
+Validate Access to Azure Key Vault by reading KeyVault secrets:
+        -
+ Enter Needed Azure client values
+ like 
+Managed Identity (MI) Alias, Resource Group Name, Subscription Name, Key Vault Name.
+$miAlias = "mi-${{ parameters.miAppName }}-${{ server.miServerType }}-${{ server.miEnvironment }}"
+$resourceGroupName = "rg-global-${{ server.miServerType }}-${{ server.miEnvironment }}"
+$subscriptionName = "${{ server.subscriptionName }}"
+$keyVaultName = "${{ server.keyVaultName }}"
+
+Write-Host "Client ID: $(MITESTER_CLIENTID)"
+Write-Host "Client Secret: $(MITESTER_CLIENT_SECRET)"
+Write-Host "MI Alias: $miAlias"
+Write-Host "Resource Group Name: $resourceGroupName"
+Write-Host "Key Vault Name: $keyVaultName"
+        - 
+Logs into Azure portal
+.
+try
+{
+        Write-Host "`nLogging in to Azure . . ."
+        $azLoginResult = az login --service-principal -u $(MITESTER_CLIENTID) -p $(MITESTER_CLIENT_SECRET) -t 6ee1d96e-4c90-42a8-be8a-f94078515d91
+        if ($azLoginResult -contains "ERROR") {
+            throw "`nFailed to login to Azure."
+        }
+        Write-Host "`nSuccessfully logged in to Azure."
+}
+catch
+{
+        throw "`nFailed to login to Azure."
+}
+        - 
+Fetch ClientID 
+using User Managed Identity object.
+try
+{
+        # Fetch a Client ID using the User Managed Identity:
+        Write-Host "`nFetching a Client ID using the User Managed Identity . . ."
+        $clientID = az identity show --name $miAlias --resource-group $resourceGroupName --subscription $subscriptionName --query clientId --output tsv
+        if (-not $clientID) {
+            throw "`nFailed to fetch the Client ID using the az identity show command."
+        }
+        Write-Host "`nSuccessfully fetched the Client ID."     
+}
+catch
+{
+        throw "`nFailed to fetch the Client ID using the az identity show command."
+}
+        - 
+Invoke GET request
+ obtain 
+Access Token
+.
+$baseUri = 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net&client_id='
+Write-Host "ClientId: $clientID"                          
+$uri = $baseUri + $clientID
+Write-Host "Uri: $uri"
+               
+try
+{
+    # Invoke GET to query the Azure Instance Metadata Service (IMDS) to obtain the access token:
+    Write-Host "`nObtaining Access Token . . ."
+    $response = Invoke-RestMethod -Uri $uri -Method GET -Headers @{Metadata="true"}
+    $keyVaultToken = $response.access_token                 
+    Write-Host "The KeyVault access token is: $keyVaultToken"
+    Write-Host "`nSuccessfully obtained the KeyVault Access Token."
+}
+catch
+{
+    throw "`nFailed to obtain the KeyVault Access Token."
+ }
+        - 
+Fetch secrets from Key Vault using acquired Access Token
+.
+try
+{
+   # Finally, use the acquired token to fetch secrets from the Key Vault:
+   Write-Host "`nUsing Access Token to connect to the KeyVault . . ."
+   $secretName = 'TestSecret'
+   $apiVersion = "2016-10-01"
+   $baseUri = "https://$keyVaultName.vault.azure.net/secrets/"
+
+   $uri = $baseUri + $secretName + "?api-version=" + $apiVersion
+   Write-Host "The URI to connect to KeyVault is: $uri"
+
+   Invoke-RestMethod -Uri $uri -Method GET -Headers @{Authorization="Bearer $keyVaultToken"}
+   Write-Host "`nSuccessfully connected to the Key Vault."
+}
+catch
+{
+    throw "`nFailed to connect to the Key Vault."
+}
+Connect to an Azure SQL Database:
+        -
+ Invoke GET request 
+to obtain 
+Access Token
+.
+$serverName = "${{ server.sqlServerUrl }}" 
+$databaseName = "DBMaster_GoldAzure" 
+
+$azDBbaseUri = 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://database.windows.net&client_id='
+
+$uri = $azDBbaseUri + $clientID
+Write-Host "DB Token URI: $uri"
+
+try
+{
+  # Invoke GET to query the Azure Instance Metadata Service (IMDS) to obtain the access token:
+  Write-Host "`nObtaining Database Access Token . . ."
+  $response = Invoke-RestMethod -Uri $uri -Method GET -Headers @{Metadata="true"}
+  Write-Host "`nSuccessfully obtained the Database Access Token."
+}
+catch
+{
+  throw "`nFailed to obtain the Database Access Token."
+}
+ -
+ Connect 
+to Azure SQL Server Database using acquired 
+Access Token
+.
+try
+{
+    Write-Host "`nConnecting to the database . . ."
+    $connectionString = "Server=tcp:$serverName;Initial Catalog=$databaseName;Persist Security Info=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+    $connection = New-Object System.Data.SqlClient.SqlConnection
+    $connection.ConnectionString = $connectionString
+    $connection.AccessToken = $response.access_token
+
+    $connection.Open()
+    $sqlStatement = "Select Count(*) As 'BillerCount' from Billers"
+    Write-Host "`nExecuting Query..."
+    Write-Host "`nSql statement: $sqlStatement"
+
+    $command = $connection.CreateCommand()
+    $command.CommandText = $sqlStatement
+    $reader = $command.ExecuteReader()
+    while ($reader.Read())
+    {
+        Write-Output("ReturnedValue: ", $reader["BillerCount"])
+    }
+    
+    Write-Output "`nSuccessfully executed the query."
+}
+catch
+{
+    throw "Failed to connect to the database or execute the query."
+}
+finally
+{
+    $connection.Close()
+}
+If all process were executed correctly then a successful message will be displayed in the Azure Devops Pipeline log window.
+If MI is not setup properly and does not have access to the Azure Resource, we are checking in the script, like KeyVault or SQL Database, then it will display an error message saying “MI does not have access.”
+ URL:/spaces/ED/pages/3756621828/Azure+Managed+Identity+tester

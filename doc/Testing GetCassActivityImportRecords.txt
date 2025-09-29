@@ -1,0 +1,7 @@
+Instead of running the CassBankActivityImport to insert the field in the gateway, we can set the data in the devtest ICGW_TEST so CassActivityImportRecords can pick up the biller.
+Steps:
+update [dbo].[CassDeposit_DetailImport] set RecipientName='3437-CITYOFASHTA' where ImportID=119
+update [dbo].[CassDeposit_Files] set DepositFileTypeID=1 where FileID=43
+update [dbo].[CassDeposit_Files] set ImportDate=DATEADD(day, -3, GETDATE()) where FileID=43
+Run these SPs so the CassActivityImportRecords can pick up the biller.
+ URL:/spaces/ED/pages/3933995130/Testing+GetCassActivityImportRecords

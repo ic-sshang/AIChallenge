@@ -1,0 +1,141 @@
+Page Navigation:
+Document status
+COMPLETE
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+Gong URL
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+IC BIF
+SFTP
+BIF values may vary per client. See technical details page for specific field usage for US Auto and AmeriFirst.
+Note: US Auto and AmeriFirst will not have service fees configured in CRM - they will be passed from GoldPoint in the BIF
+Adjustment 
+GoldPoint ValidateAccount web services
+RTDR
+Payment 
+GoldPoint SubmitExternalPayment Web Services and Daily Reconciliation File
+Data Pump and FTP
+IC will pass payments via the GP webservices in near real-time. A Daily Reconciliation File will also be sent to ensure no payments were 'missed' via web services. If they were missed, the Daily Reconciliation File will be used to post the payment in GP.
+ACH Reject
+Not Supported
+Void
+Supported
+Data Pump
+Change Log - AutoPay Enrollment
+GoldPoint AddExternalRecurring Indicator (On) and DeleteExternalRecurringIndicator (Off) Web Services 
+Data Pump
+Change Log - Paperless Enrollment
+GoldPoint UpdatePaperlessSetting Web Services 
+Data Pump
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images
+PDF Linking - Supported - see details
+PDF Extraction	- Supported - see details
+Template - Supported - see details
+IC can use PDF Linking or PDF Extraction with the biller's print vendor or the biller directly
+IC can use the values from the BIF to populate a basic template (no standard layout for the integration). Template implemented for US Auto - see the biller portal for a sample.
+Configuration 
+Invoice Types
+Configurable 
+GoldPoint will pass the Invoice Type ID in the invoice file (using the Invoice Cloud BIF format)
+Virtual Site
+See US Auto for an example. There is no standard configuration per biller. The biller can choose what search fields they would like to map.
+Supported Products and Features
+Products
+Type
+Definitions/Details
+CloudPay
+Not Supported
+CloudPay Web Services
+Supported
+CSR's use GoldPoint's EZPay (integrated with IC CloudPay Web Services for Debit Cards) to take payments on behalf of borrowers (ACH is not included)
+CloudStore
+Supported
+Not implemented for US Auto of AmeriFirst
+CSRConnect
+Not Supported
+IVR
+Supported
+Kiosk
+Not Supported
+OBD
+Not Supported
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+       Multi-User Log In
+Supported
+Biller preference
+       Co-Owner Registration
+Supported
+Biller preference
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported
+BIF Customization
+Batch Closure
+Auto or Custom
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Managed in the IC biller portal
+Conveyance
+Not Supported
+Data Conversions
+Supported - See Details
+If the biller can provide conversion data for paperless and/or autopay, the conversion for each is supported.
+Email Notification Schedule
+Supported
+BIF Customization
+Expire Bill for Payment
+Not Supported
+Minimum Payment
+Supported
+in BIF 
+Paperless
+Supported - See Details
+Some Consumer Finance organizations (ex: US Auto) do not mail bills/statements each time a payment is due. In this case, paperless must be turned off so that customers are not mislead to think that if they are not enrolled in paperless, they will receive a paper bill/statement. This detail should be discussed with the biller.
+Partial Payments
+Supported
+in BIF 
+Past Due
+Not Supported
+Note: The Past Due field is not supported but accounts that are considered ‘past due’ do exist and IC does receive the past due balance. See the BIF file mapping for how the ‘past due’ balance is calculated and passed to IC in the balance field(s)
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Not Supported
+ URL:/spaces/IM/pages/274235417/GoldPoint+Integration+Software+Details

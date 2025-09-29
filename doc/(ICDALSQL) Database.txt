@@ -1,0 +1,363 @@
+Database Class
+Overview
+The 
+Database
+ class is the main class to interact with the database. It provides methods to execute queries and non-queries asynchronously. The 
+Database
+ class encapsulates the database technology, allowing you to interact with the database without needing to know the underlying implementation details. 
+This class implements the 
+IDatabase
+ and 
+IDisposable
+ interfaces.
+ 
+Namespace
+namespace IC.Net.DataAccess.MsSql
+ 
+Dependencies
+Microsoft.Extensions.Logging.Abstractions
+Microsft.Data.SqlClient
+ 
+Constructors
+Database(IConnectionStringProvider connectionStringProvider)
+Initializes a new instance of the 
+Database
+ class using the specified connection string provider.
+Parameters
+connectionStringProvider
+ (
+IConnectionStringProvider
+): The connection string provider.
+ 
+Database(IConnectionStringProvider connectionStringProvider, ILogger logger)
+Initializes a new instance of the 
+Database
+ class using the specified connection string provider and logger.
+Parameters
+connectionStringProvider
+ (
+IConnectionStringProvider
+): The connection string provider.
+logger
+ ( 
+ILogger
+ ): The logger
+ 
+Methods
+Task<int> ExecuteNonQueryAsync(string commandText, QueryParameter[] queryParameters, CancellationToken cancellationToken, TimeSpan? timeout)
+Executes a non-query command asynchronously.
+Parameters
+commandText
+ (
+string
+): The command text.
+queryParameters
+ (
+QueryParameter[]
+): The query parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<int>
+: The number of rows affected.
+Example
+c#
+var result = await database.ExecuteNonQueryAsync("UPDATE Users SET Name = @Name WHERE Id = @Id", new QueryParameter [] { new QueryParameter("Name", "John Doe"), new QueryParameter("Id", 1)}, CancellationToken.None);
+ 
+Task<int> ExecuteNonQueryAsync<T>(string commandText, T parameters, CancellationToken cancellationToken, TimeSpan? timeout)
+Executes a non-query command asynchronously with parameters of type 
+T
+.  The public properties of 
+T
+ will be used to generate the 
+QueryParameter
+array.
+Parameters
+commandText
+ (
+string
+): The command text.
+parameters
+ (
+T
+): The parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<int>
+: The number of rows affected.
+Example
+c#
+var parameters = new MyParameters { Name = "John Doe", Id = 1 };
+var result = await database.ExecuteNonQueryAsync<MyParameters>("UPDATE Users SET Name = @Name WHERE Id = @Id", parameters, CancellationToken.None);
+ 
+Task<IEnumerable<T>> ExecuteQueryAsync<T>( string commandText, QueryParameter[] queryParameters, CancellationToken cancellationToken, TimeSpan? timeout) where T : new()
+Executes a query command asynchronously and returns the result as a collection of 
+T
+.
+Parameters
+commandText
+ (
+string
+): The command text.
+queryParameters
+ (
+QueryParameter[]
+): The query parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<IEnumerable<T>>
+: The result of the query.
+Example
+c#
+var users = await database.ExecuteQueryAsync<User>("SELECT * FROM Users WHERE Id = @Id", new QueryParameter [] { new QueryParameter("Id", 1) }, CancellationToken.None);
+ 
+Task<IEnumerable<O>> ExecuteQueryAsync<I, O>(string commandText, I parameters, CancellationToken cancellationToken, TimeSpan? timeout) where O : new()
+Executes a query command asynchronously with input parameters of type 
+I
+ and returns the result as a collection of 
+O
+.  The public properties of 
+I
+ will be used to generate the 
+QueryParameter
+array.
+Parameters
+commandText
+ (
+string
+): The command text.
+parameters
+ (
+I
+): The input parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<IEnumerable<O>>
+: The result of the query.
+Example
+c#
+var parameters = new MyParameters { Id = 1 };
+var users = await database.ExecuteQueryAsync<MyParameters, User>("SELECT * FROM Users WHERE Id = @Id", parameters, CancellationToken.None);
+ 
+ 
+ExecuteQueryDataTableAsync(string commandText, QueryParameter[] queryParameters, CancellationToken cancellationToken, TimeSpan? timeout)
+Executes a query command asynchronously and returns the result as a 
+DataTable
+.
+Parameters
+commandText
+ (
+string
+): The command text.
+queryParameters
+ (
+QueryParameter[]
+): The query parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<DataTable>
+: The query result.
+ 
+ExecuteQueryDataSetAsync(string commandText, QueryParameter[] queryParameters, CancellationToken cancellationToken, TimeSpan? timeout)
+Executes a query command asynchronously and returns the result as a 
+DataSet
+.
+Parameters
+commandText
+ (
+string
+): The command text.
+queryParameters
+ (
+QueryParameter[]
+): The query parameters.
+cancellationToken
+ (
+CancellationToken
+): The cancellation token.
+timeout
+ ( 
+TimeSpan
+ ): The optional command timeout in seconds.
+Returns
+Task<DataSet>
+: The query result.
+ExecuteBulkCopyAsync(string destinationTableName, DataTable dataTable, CopyBulkOptions options)
+Executes a bulk copy operation asynchronously and returns the result as a 
+int
+.
+Parameters
+destinationTable
+(
+string
+): The destination table.
+dataTable
+ (
+DataTable
+): The data to copy to the table.
+options
+ (
+BulkCopyOptions
+): The bulk copy options.
+Returns
+Task<int>
+: The copy result.
+Example
+c#
+var dataTable = new DataTable();
+dataTable.Columns.Add("BillerPendingPdfID", typeof(int));
+dataTable.Columns.Add("BillerPendingPdfGUID", typeof(Guid));
+dataTable.Columns.Add("BillerID", typeof(int));
+dataTable.Columns.Add("Filename", typeof(string));
+dataTable.Columns.Add("AccountNumber", typeof(string));
+dataTable.Columns.Add("InvoiceNumber", typeof(string));
+dataTable.Columns.Add("BillerPdf", typeof(byte[]));
+dataTable.Columns.Add("PDFSearchMethodID", typeof(int));
+dataTable.Columns.Add("GroupID", typeof(int));
+dataTable.Columns.Add("FlagForDelete", typeof(bool));
+dataTable.Columns.Add("DateRecAdded", typeof(DateTime));
+
+var result = await database.ExecuteBulkCopyAsync("pdf.BillerPendingPdfs", dataTable);
+ 
+Command CreateCommand(string commandText)
+Creates a new Command object with the specified command text.
+Parameters
+commandText
+ (String): The command text to execute.
+Returns
+Command
+: The created Command object.
+Events
+CommandExecuting
+Occurs when a command is about to be executed.
+Event Type
+EventHandler<DatabaseCommandEventArgs>
+CommandExecuted
+Occurs when a command has been executed.
+Event Type
+EventHandler<DatabaseCommandEventArgs>
+CommandError
+Occurs when an error happens during command execution.
+Event Type
+EventHandler<DatabaseCommandErrorEventArgs>
+StateChange
+Occurs when the state of the database changes.
+Event Type
+EventHandler<DatabaseStateChangeEventArgs>
+IDisposable Implementation
+void Dispose()
+Disposes the 
+Database
+ instance and releases any resources.
+Example
+c#
+database.Dispose();
+Disposes the 
+Database
+ instance and releases any resources.
+Example Fluent Asynchronous Usage
+c#
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+	new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure; ")
+);
+
+using (var database = new Database(connectionStringProvider, logger.Object))
+{
+	var billers = (await database.CreateCommand("dbo.selAzureBillers")
+		.Parameter("@Active", true)
+		.QueryAsync<Biller>())
+		.ToArray();
+
+}
+ 
+Example Synchronous Usage
+c#
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+	new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure;")
+);
+
+using (var database = new IC.Net.DataAccess.MsSql.Database(connectionStringProvider))
+{
+	var billers =
+		database.ExecuteQueryAsync<Biller>("dbo.selAzureBillers", new QueryParameter[] { new QueryParameter("Active", true) }, CancellationToken.None)
+		.GetAwaiter()
+		.GetResult()
+		.ToArray();
+
+	foreach (var biller in billers)
+	{
+		Console.WriteLine($"BillerId: {biller.BillerId}");
+	}
+}
+ 
+ Example Asynchronous Usage
+c#
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+	new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure;")
+);
+
+using (var database = new IC.Net.DataAccess.MsSql.Database(connectionStringProvider))
+{
+	var billers =
+		( await database.ExecuteQueryAsync<Biller>("dbo.selAzureBillers", new QueryParameter[] { new QueryParameter("Active", true) }, CancellationToken.None) )
+		.ToArray();
+
+	foreach (var biller in billers)
+	{
+		Console.WriteLine($"BillerId: {biller.BillerId}");
+	}
+}
+ 
+ 
+Logging
+The 
+Database
+ class supports Microsoft’s 
+ILogger
+ for logging.
+The following log levels are used:
+LogDebug
+: For logging connection state changes and the start and successful completion of commands.
+LogError
+: For logging exceptions that occur during command execution.
+Example Usage
+c#
+var connectionStringProvider = new DefaultConnectionStringProvider("YourConnectionString");
+var logger = new LoggerFactory().CreateLogger<Database>();
+var database = new Database(connectionStringProvider, logger);
+ 
+ URL:/spaces/ED/pages/3874881658/ICDALSQL+Database

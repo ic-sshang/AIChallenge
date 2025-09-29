@@ -1,0 +1,356 @@
+1
+7
+Introduction 
+https://docs.newrelic.com/docs/data-apis/understand-data/new-relic-data-types/
+ 
+Metrics
+Metrics is an aggregation of events of interest, New Relic offers a way to send aggregate metrics. 
+New Relic offers a primary metric collected by APM agents 
+Dimensional metrics
+To query data with attributes ('dimensions')
+sql
+FROM Metric SELECT function(metric_name) WHERE attribute=value FACET attribute TIMESERIES
+Metrics timeslice data
+To query APM timeslice
+sql
+FROM Metric SELECT function(metric_name) WHERE attribute=value FACET attribute TIMESERIES
+Metrics attached to events
+In APM the transaction event has several metrics
+SELECT * FROM Transaction where appName='ICRTDRService'
+Metrics as a computation of events
+You can use computational logic to generate metrics from the Transaction event
+Select count(*) from Transaction since 30 minutes ago
+https://docs.newrelic.com/docs/data-apis/understand-data/metric-data/metric-data-type/
+ 
+https://docs.newrelic.com/docs/data-apis/understand-data/metric-data/query-metric-data-type/
+ 
+Metric type
+Supported functions
+Summary
+count, sum, min, max, and average
+Count
+sum
+Gauge
+count, sum, min, max, average, and latest
+New Relic also offers functionality for events to metrics - 
+https://docs.newrelic.com/docs/data-apis/convert-to-metrics/analyze-monitor-data-trends-metrics/
+ 
+Today Metrics there are no custom metrics reported from our application. We have some barebone code with respect to pushing metric data via agents 
+https://invoicecloud.visualstudio.com/Src/_git/IC.NewRelic?path=/IC.NewRelic/ICMetricNewRelic.cs
+c#
+namespace IC.NewRelic
+{
+    class ICAgent : Agent
+    {
+        public string Name { get; set; } 
+
+        private string _guid = "com.invoicecloud.ICGenericPlugin";
+        public override string Guid
+        {
+            get {
+                return _guid;
+            }
+        }
+
+        private string _version = "1.0.0";
+        public string MetricName { get; set; }
+        public string Units { get; set; }
+        public float Value { get; set; }
+
+        public override string Version { get { return _version; } }
+
+        /// <summary>
+        ///  Initialize a new Agent that would hold configuration properties.
+        /// </summary>  
+        public ICAgent(string name, string guid, string version, string metricName, string units, float value)
+        {
+            this.Name = name;
+            this._guid = guid;
+            this._version = version;
+            this.MetricName = metricName;
+            this.Units = units;
+            this.Value = value;
+        }
+         
+       public override string GetAgentName()
+       {
+            return this.Name;
+       }
+
+        public override void PollCycle()
+        {
+            ReportMetric(this.MetricName, this.Units, this.Value);
+        }
+
+    }
+}
+We can record metrics like events, not sure why this approach was not adopted in IC
+https://docs.newrelic.com/docs/data-apis/ingest-apis/metric-api/report-metrics-metric-api/
+ 
+livescript
+curl -vvv -k -H "Content-Type: application/json" \
+-H "Api-Key: NEW_RELIC_LICENSE_KEY" \
+-X POST https://metric-api.newrelic.com/metric/v1 \
+--data '[{ 
+        "metrics":[{ 
+           "name":"memory.heap", 
+           "type":"gauge", 
+           "value":2.3, 
+           "timestamp":CURRENT_TIME, 
+           "attributes":{"host.name":"dev.server.com"} 
+           }] 
+    }]'
+New Relic Query
+sql
+select uniques(metricName)  from Metric where appName ='ICRTDRService'
+
+Metric Name
+apm.service.request.queuing
+apm.service.transaction.other.datastore.duration
+apm.service.external.duration
+apm.service.transaction.web.external.duration
+apm.service.external.host.duration
+apm.service.external.transaction.duration
+apm.service.instance.count
+newrelic.goldenmetrics.apm.application.errorRate
+apm.service.transaction.overview
+newrelic.timeslice.value
+apm.service.transaction.error.count
+apm.service.memory.physical
+newrelic.goldenmetrics.apm.application.responseTimeMs
+apm.service.transaction.other.external.duration
+newrelic.goldenmetrics.apm.application.throughput
+apm.service.memory.heap.committed
+apm.service.datastore.operation.duration
+apm.service.apdex
+apm.service.external.total.duration
+newrelic.goldenmetrics.apm.application.errorCount
+apm.service.logging.lines
+apm.service.transaction.duration
+newrelic.goldenmetrics.ext.key_transaction.responseTimeMs
+apm.service.memory.heap.used
+apm.service.transaction.apdex
+apm.service.cpu.usertime.utilization
+apm.service.overview.other
+apm.service.transaction.web.datastore.duration
+apm.service.datastore.duration
+apm.service.overview.web
+apm.service.datastore.total.duration
+apm.service.metrics.reported
+newrelic.goldenmetrics.ext.key_transaction.errorRate
+apm.service.error.count
+newrelic.goldenmetrics.ext.key_transaction.throughput
+apm.service.user
+newrelic.goldenmetrics.apm.application.httpResponseTimeMsMetric
+apm.service.transaction.external.duration
+apm.service.java.memory.pool
+apm.service.apdex.user
+apm.service.memory.heap.max
+Events
+Code snippet from - 
+https://invoicecloud.visualstudio.com/Src/_git/ICRTDRService?path=%2FIC.RTDR%2FTools%2FclsUtils.vb&_a=contents&version=GBmain
+sql
+'Post to NewRelic
+Dim client As New NewRelic.Native.ICEventNewRelic("RealTimeDataRefresh", collection, TimeSpan.FromSeconds(5))
+client.SendEventData()
+The logs can be accessed in New Relic in the Metrics & events or via NQRL
+sql
+select * from RTDRTransactions
+Logs
+Log Level
+Log Level
+Importance
+Fatal
+One or more key business functionalities are not working and the whole system doesn’t fulfill the business functionalities.
+Error
+One or more functionalities are not working, preventing some functionalities from working correctly.
+Warn
+Unexpected behavior happened inside the application, but it is continuing its work and the key business features are operating as expected.
+Info
+An event happened, the event is purely informative and can be ignored during normal operations.
+Debug
+A log level used for events considered to be useful during software debugging when more granular information is needed.
+Trace
+A log level describing events showing step by step execution of your code that can be ignored during the standard operation, but may be useful during extended debugging sessions.
+https://sematext.com/blog/logging-levels/
+ 
+In IC we use SeriLog to log data to New Relic and we do info and error the levels of logging
+https://invoicecloud.visualstudio.com/Src/_git/IC.Serilog?path=/IC.Serilog/Utility.cs
+Datapump
+vbnet
+Serilog.Log.Information("MachineName: {0} - CurrentMethod: {1} - BillerID: {2} - LogMessage: {3}",
+                Environment.MachineName, currentFilenameAndMethod, BillerID, writeLineMessage)
+
+Serilog.Log.Error(exception, String.Join(" - ", messageTemplateItems), propertyValueItems.ToArray)
+https://invoicecloud.visualstudio.com/Src/_git/DataPump?path=/DataPump/clsLogging.vb
+ - datapump
+https://invoicecloud.visualstudio.com/Src/_git/DataPump?path=/DataPump/Tools/SerilogLogging.vb
+ - Setting the configuration
+https://invoicecloud.visualstudio.com/Src/_git/IC.Serilog?path=/IC.Serilog/Utility.cs
+ - Serlog Congifurtaion 
+RTDR
+https://invoicecloud.visualstudio.com/Src/_git/ICRTDRService?path=/IC.RTDR/Models/Metrics/ProcessMetric.vb
+vbnet
+Public Sub WriteLogToNewRelic()
+   Dim logFormat As String = "{0}. [RTDRRequestLogID: {1}]  Source: {6}. BillerID: {2}. CustomerID: {3}. InvoiceID: {4}. AccountNumber: {7}. InvoiceNumber: {8}. Message: {5}."
+     If My.Settings.LogICSerilog = True Then
+            If Success IsNot Nothing AndAlso Success = False Then
+                SL.Log.Error(logFormat,
+                                   MethodName,
+                                   RTDRRequestLogID,
+                                   BillerID,
+                                   InitialCustomerID,
+                                   InitialInvoiceID,
+                                   ProcessLog.ToString,
+                                   getRequestSourceName,
+                                   AccountNumber,
+                                   InvoiceNumber)
+            Else
+                SL.Log.Information(logFormat,
+                             MethodName,
+                             RTDRRequestLogID,
+                             BillerID,
+                             InitialCustomerID,
+                             InitialInvoiceID,
+                             ProcessLog.ToString,
+                             getRequestSourceName,
+                             AccountNumber,
+                             InvoiceNumber)
+          End If
+      End If
+    End Sub
+ICKioskAPI
+https://invoicecloud.visualstudio.com/Src/_git/ICKioskAPI?path=/ICKioskAPI/Models/Transaction/KisSwipeCardReader.vb
+https://invoicecloud.visualstudio.com/Src/_git/ICKioskAPI?path=/ICKioskAPI/Models/Business/HttpContextExtensions.vb
+https://invoicecloud.visualstudio.com/Src/_git/ICKioskAPI?path=/ICKioskAPI/Global.asax.vb
+vbnet
+Public Shared Sub LogRequestDataToNewRelic(requestID As String, billerID As Integer, eventName As String, requestData As String)
+https://docs.newrelic.com/docs/apm/agents/net-agent/net-agent-api/noticeerror-net-agent-api/
+ 
+vbnet
+NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+NQRL query
+sql
+SELECT * FROM Log
+The level determines whether it is an Error or an Informational
+https://dev.azure.com/invoicecloud/Src/_wiki/wikis/Invoice Cloud Wiki/26/Logging-Standards
+Errors
+New Relic Errors
+https://learn.microsoft.com/en-us/dotnet/api/system.servicemodel.faultexception
+ 
+vbnet
+ Public Function RefreshCustomerByCustomerID(BillerID As Integer, CustomerID As Integer, ForceRefresh As Boolean, Optional SourceID As ClientSources = ClientSources.All) 
+ As Boolean Implements IRealTimeDataRefresh.RefreshCustomerByCustomerID
+        Dim ProcessMetric As New IC.RTDR.ProcessMetric(BillerID) With {.MethodName = "RefreshCustomerByCustomerID", .ProcessStartTime = Now,
+         .IPAddress = GetClientIP(), .RequestSource = SourceID, .InitialCustomerID = CustomerID}
+
+        Try
+
+            If BillerID = 0 Then
+                Throw New FaultException(Of InvalidParameterSetFault)(New InvalidParameterSetFault(), "BillerID parameter must be greater than zero")
+            End If
+
+            If CustomerID = 0 Then
+                Throw New FaultException(Of InvalidParameterSetFault)(New InvalidParameterSetFault(), "CustomerID parameter must be greater than zero")
+            End If
+
+            Try
+
+                Return IC.RTDR.RealTimeDataRefresh.RefreshCustomerByCustomerID(BillerID, CustomerID, ProcessMetric, ForceRefresh)
+
+            Catch ex As Exception
+
+                Throw New FaultException(Of LibraryLevelFault)(New LibraryLevelFault(), ex.ToString)
+
+            End Try
+        Finally
+            ProcessMetric.ProcessEndTime = Now
+            IC.RTDR.clsUtils.PostPerformanceMetrics(ProcessMetric)
+        End Try
+    End Function
+NewRelic agents collect these FaultException and send it to NewRelic - Errors 
+NewRelic.Api.Agent.NewRelic.NoticeError(ex)
+The other way to send an Error is to use .NET agent API
+https://docs.newrelic.com/docs/apm/agents/net-agent/net-agent-api/noticeerror-net-agent-api/
+ 
+Transaction
+A transaction is one logical unit of work or task this follows from a request to a response sent and these are reported by APM
+https://docs.newrelic.com/docs/data-apis/understand-data/event-data/events-reported-apm/
+ 
+Event
+Description
+Transaction
+A transaction is a logical unit of work in a software application. The 
+Transaction
+ event includes information about the app, database calls, the duration of the transaction, and any errors that may occur.
+TransactionError
+Transaction errors occur when a request throws an exception in the code path that was taken to fill that request. The number of transaction errors does not equal the number of transactions, because you can specify whether you want to 
+collect, ignore, or mark errors as expected
+.
+Span
+Span events are created when New Relic agents, or other tracing instrumentation tools, instrument operations that are part of a distributed trace. See the 
+definition of span
+.
+Transactions Type
+web 
+non-web
+Sub-type in .Net
+Sub-type
+Description
+Action
+The invocation of the named framework action. Used when the agent is able to identify a framework-specific action name.
+ASP
+The invocation of an 
+ASP.NET
+ request.
+Custom
+The execution of the named custom transaction. Usually recorded via manual instrumentation APIs.
+MonoRail
+The invocation of a MonoRail request.
+MVC
+The invocation of a MVC request.
+OpenRasta
+The invocation of an OpenRasta request.
+StatusCode
+The HTTP status code returned for the transaction. Often used when a more specific transaction sub-type is unavailable.
+WCF
+The invocation of a WCF request.
+WebAPI
+The invocation of a WebAPI request.
+WebService
+The invocation of a WebService request.
+sql
+select uniques(name) FROM Transaction
+The output of the unique WebTransaction -  
+WebTransaction List
+ 
+https://docs.newrelic.com/docs/apm/transactions/intro-transactions/transactions-new-relic-apm/
+Custom Attribute
+Once you add a custom attribute, you can query it in New Relic and create custom charts from that data. For example, if you used the .Net API agen to add a 
+userId
+ attribute to your 
+Transaction
+ and 
+TransactionError
+ events, 
+Custom attribute collection is enabled by default in .NET. To collect custom attributes, call the relevant API methods:
+For each method for which you want to record an attribute, call 
+AddCustomAttribute
+.
+Optional: Include or exclude attributes with the 
+include
+ and 
+exclude
+ configuration options.
+For example, to record attributes for a coupon code (string) and an item ID code (number), you could include this code in the parent method:
+cs
+IAgent agent = NewRelic.Api.Agent.NewRelic.GetAgent();ITransaction transaction = agent.CurrentTransaction;
+transaction    .AddCustomAttribute("Discount Code", "Summer Super Sale")    .AddCustomAttribute("Item Code", 31456);
+One could then create a NRQL query using that attribute, like:
+sql
+SELECT count(*) FROM TransactionError   WHERE userId = '1401961100' FACET dateOf(timestamp), `error.message`   SINCE 1 week ago
+https://docs.newrelic.com/docs/data-apis/custom-data/custom-events/collect-custom-attributes/
+ 
+Traces
+We are not doing any traces in IC in the application space. Something that needs to be researched further.
+ URL:/spaces/DS/pages/2536276055/Metrics+Events+Logs+Errors+Transaction+and+Traces

@@ -1,0 +1,145 @@
+Steps to Take if the AVD has never been logged into
+
+
+
+
+22
+
+
+22
+
+
+incomplete
+
+
+Modern Desktop Team
+ Delete the device from Microsoft Autopilot (Used for zero-touch provisioning)
+
+
+
+
+
+
+23
+
+
+23
+
+
+incomplete
+
+
+Modern Desktop Team
+ Delete the device from Intune (system that handles all the zero-touch provisioning)
+
+
+
+
+
+
+24
+
+
+24
+
+
+incomplete
+
+
+Modern Desktop Team
+ Delete the device from Entra ID (which we can’t do until it’s removed from Intune)
+
+
+
+
+
+
+29
+
+
+d7dbab30-c8f8-48de-9894-8181fb9d7848
+
+
+incomplete
+
+
+Modern Desktop Team
+ Delete the User’s Session Host from the AVD Configuration Blade in Azure Portal
+
+
+
+
+
+
+25
+
+
+25
+
+
+incomplete
+
+
+Modern Desktop Team
+ will remove User from Entra Group 
+ic-iac-avd-users-{npd|prd}
+
+
+
+
+
+
+26
+
+
+26
+
+
+incomplete
+
+
+Platform Team
+ will run pipeline to destroy User's AVD Resources
+
+
+
+
+
+
+27
+
+
+27
+
+
+incomplete
+
+
+Modern Desktop Team
+ will add User back to Group 
+ic-iac-avd-users-{npd|prd}
+
+
+
+
+
+
+28
+
+
+28
+
+
+incomplete
+
+
+Platform Team
+ will run pipeline to recreate the User’s AVD Resources
+
+
+
+
+Fixing the AVD Agents for AVDs that have been used and are no longer able to be logged into
+https://learn.microsoft.com/en-us/azure/virtual-desktop/add-session-hosts-host-pool?tabs=portal%2Cgui&pivots=host-pool-standard#register-session-hosts-to-a-host-pool
+ 
+ URL:/spaces/platform/pages/4327112706/Recreate+AVD+When+Issues+Arise

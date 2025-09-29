@@ -1,0 +1,25 @@
+Azure Functions will need similar settings to the below configurations in order to connect to the test databases.
+local.settings.json
+{
+  "IsEncrypted": false,
+  "Values": {
+
+    "DBLIVE-NAME": "ic-dbtest-east-server1.database.windows.net",
+    "DBLIVE-CATALOG": "dbmaster_GoldAzure",
+
+    "DBDATAWAREHOUSE-NAME": "",
+    "DBDATAWAREHOUSE-CATALOG": "",
+
+    "ICGATEWAY-NAME": "ic-gateway-east.database.windows.net",
+    "ICGATEWAY-CATALOG": "ICGW_Test",
+
+    "ICGATEWAYAUDIT-NAME": "ic-dbtest-east-server1.database.windows.net",
+    "ICGATEWAYAUDIT-CATALOG": "ICGW_Audit",
+    
+    "UseManagedIdentity": "true",
+
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true"
+  }
+}
+ URL:/spaces/EN/pages/2596634625/Azure+Functions+-+Local+Test+Configuration

@@ -1,0 +1,145 @@
+This document describes the development approach for 
+SPAM-17
+.  The work will divided among three developers.
+Info to developers.  Be aware that AutoPaymentProcessing is a multi-threaded application
+Preliminary Work
+Branching  Strategy
+We will have a “root branch”.  This branch will act as the “main” branch for the purposes of this feature.  No one works directly in this branch.  Instead, developers will branch off this branch and merge their code back and forth to/from the root branch.
+Branches:
+SPAM-17_AutoPayForDocPac_RootBranch - this is the root branch
+Branch 1 - interfaces + implementation stubs
+ICtp
+IEmailHelper (existing class and interface) - can rename IEmailService
+IAccountOwnerLogin (adds interface to an existing class)
+IDonationRepository
+IServiceFeeCalculator
+Branch 2 - implement ICtp
+Branch 3 - implement IEmailService
+Branch 4 - implement IDonationRepository
+Branch 5 - implement IServiceFeeCalculator
+Branch 6 - add the calls in sequence for E2E run (see psuedocode)
+note
+The below items should be completed before actual development begins.
+
+
+The below items should be completed before actual development begins.
+
+
+create branches
+create interfaces in feature Branch 1
+merge interfaces into root branch 
+SPAM-17_AutoPayForDocPac_RootBranch
+Interfaces
+ICtpService
+vb
+Public Enum PaymentType
+    None = 0
+    <Description("Credit Card")>
+    CreditCard = 1
+    <Description("EFT/ACH")>
+    EftAch = 2
+
+    'We don't use these in AutoPayProcessing, but they are included for completeness
+    <Description("Credit Adjustment")>
+    CreditAdjustment = 3
+    EasyPay = 4
+    Check = 5
+    Cash = 6
+    PaymentDiscount = 7
+    DebitAdjustment = 8
+    CheckTwentyOne = 9
+    BalanceForward = 10
+    <Description("Online Bank Direct")>
+    OnlineBankDirect = 11
+    Payment = 12
+    AutoConveyance = 13
+    PayNearMe = 14
+    <Description("PayPal")>
+    PayPal = 15
+    <Description("PayPal Credit")>
+    PayPalCredit = 16
+    <Description("Venmo")>
+    Venmo = 17
+    SubmitterIcConvFee = 99
+End Enum
+vb
+Public Class AutoPayDonationPaymentRequest
+    Public Property PaymentType As PaymentType
+    Public Property PaymentMethodGuid As Guid
+    Public Property ConvenienceFeeAmount As Decimal
+    Public Property CustomerAddress As String
+    Public Property CustomerCity As String
+    Public Property CustomerName As String
+    Public Property CustomerState As String
+    Public Property CustomerZip As String
+    Public Property InvoiceNumber As String
+    Public ReadOnly Property EmailPaymentReceipt As Boolean = False
+    Public Property PayerId As Integer
+    Public Property InvoiceTypeId As Integer
+    Public ReadOnly Property PromptPaymentDiscountAmount As Decimal = 0D
+    Public Property Submitter As Boolean
+    Public ReadOnly Property EasyPay As Boolean = False          ' used only in ACH
+    Public Property TotalAmount As Decimal
+    Public Property TotalTax As Decimal
+    Public ReadOnly Property Recurring As Boolean = False
+End Class
+
+Sample initialization from a DataRow:
+vb
+AutoPayRequest
+{
+	PaymentMethodGuid (payer's CC or ACH)
+    .ConvenienceFeeAmount = convenienceFeeAmount
+    .CustomerAddress = paymentMethod.Item("BillingAddress").ToString().Replace("--", "-")
+    .CustomerCity = paymentMethod.Item("BillingCity").ToString().Replace("--", "-")
+    .CustomerName = paymentMethod.Item("BillingName").ToString().Replace("--", "-")
+    .CustomerState = paymentMethod.Item("BillingState").ToString().Replace("--", "-")
+    .CustomerZip = paymentMethod.Item("BillingZip").ToString().Substring(0, 5).Replace("--", "-")
+    .InvoiceNumber = autoPayPayment.InvoiceNumber.Replace("--", "-")
+    .EmailPaymentReceipt = False
+    .IC_CustomerID = autoPayPayment.CustomerID
+    .InvoiceTypeID = autoPayPayment.InvoiceTypeID
+    .PromptPaymentDiscountAmount = promptPayDiscountAmount
+    .Submitter = autoPayPayment.SubmitterProgram
+    .EasyPay = False	// only for ach
+    .TotalAmount = paymentAmount
+    .TotalTax = Convert.ToDouble(autoPayPayment.TotalTaxAmount)
+    .Recurring = True
+}
+Note:  GenerateAutoPayRequest also calculates the service fee.  The class will need to have IServiceFeeCalculator injected as a dependency
+vb
+Public Interface ICtpService
+	Function GenerateAutoPayRequest(autoPayPayment As AutoPayPaymentDetail, paymentMethod As DataRow, invoice As clsInvoices, appLog As StringBuilder, isMitigated As Boolean, miscLog As StringBuilder, miscWatch As Stopwatch) As AutoPayRequest
+	Function ProcessDonationPayment(AutoPayRequest) As Boolean
+End Interface
+IEmailHelper 
+- existing class and interface
+rename to EmailService
+clone method SendEmail from module1 to the EmailService interface and class and rename it and change its signature to:
+vb
+Sub InsertDonationPaymentReceiptEmail(billerId As Integer, payerId As Integer, invoiceId As Integer, loginId As Integer, totalAmount As Decimal, isApproved As Boolean, paymentId As Integer, responseMessage As String, logger As StringBuilder)
+Note: EmailService will need to have IAccountOwnerLogic injected as a dependency
+IAccountOwnerLogin 
+to existing class AccountOwnerLogin
+IServiceFeeCalculator
+Add interface IServiceFeeCalculator to existing class ServiceFeeCalculator 
+Add method 
+vb
+Function CalculateDonationServiceFee(invoice As clsInvoices, paymentType As PaymentType, paymentMethodGuid As String, ByRef logger As StringBuilder) As Decimal
+IDonationRepository
+vb
+Public Interface IDonationRepository
+  Function InsertDonationInvoice(invoice As clsInvoices, entityType? As EntityType, changeRequestor As ChangeRequestor) As Boolean
+End Interface
+Pseudo-code
+(put this block/method after the email is sent for the main autopay transaction)
+vb
+If ICResponse.ApprovalIndicator AndAlso donationAmount > 0 then
+  InsertDonationInvoice(...) 'IDonationRepository
+  CalculateDonationServiceFee(...) 'IServiceFeeCalculator
+  isApproved = ProcessDonationPayment(...) 'ICtpService
+  If isApproved then
+    InsertDonationPaymentReceipt(...) 'IEmailService
+  End If
+End If
+ URL:/spaces/PE/pages/4549738594/Technical+Design+Approach+Document+for+AutoPay+DOCPAC+add-on+for+AutoPaymentProcessing

@@ -1,0 +1,63 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+projectName
+$(Build.Repository.Name)
+The name of the project.
+solution
+**/*.sln
+The solution file(s) to build.
+configuration
+release
+The configuration to use when building the project.
+platform
+Any CPU
+The target platform for the build.
+publishprofile
+TFSPublish
+The publish profile to use.
+targetFeed
+ReleaseArtifacts
+The target feed for the release artifacts.
+sonarscan
+True
+Whether to enable SonarQube scanning.
+vsTestVersionSelector
+specificVersion
+Version selector for VS Test runtime
+vsTestVersion
+16.8.3
+Version selector for VS Test runtime
+ignoreTestErrors
+False
+Whether to allow the build to continue even if there are test errors.
+publishDir
+" "
+The directory where the build artifacts will be published.
+testFilter
+Category!=localRunsOnly&TestCategory!=localRunsOnly
+A filter to select which tests to run.
+nugetConfigPath
+./nuget.config
+The path to the NuGet configuration file.
+testFilterExtension
+" "
+An extension for the test filter.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+tasks/dotnet-framework/test.yaml
+tasks/git/get-pr-description.yaml
+tasks/dotnet-framework/build.yaml
+tasks\sonarqube\analyze-and-publish.yaml
+tasks/git/create-tag.yaml
+tasks/sonarqube/prepare-dotnet.yaml
+tasks/publish-universal-package.yaml
+ URL:/spaces/platform/pages/3633512949/azure-batch-build.yaml

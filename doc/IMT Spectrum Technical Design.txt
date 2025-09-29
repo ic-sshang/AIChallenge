@@ -1,0 +1,663 @@
+Page Navigation:
+square
+Jira ticket 
+EBPP-1811
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-1698
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ITR
+17397
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+ 
+Knowledge Transfer
+Gong URL
+API Documentation
+Unique biller values: token, username, password
+UAT System URL: 
+https://uat.pdspectrum.com/wsSpectrumAPICore
+Production URL: 
+https://www.pdspectrum.com/wsSpectrumAPICore
+Additional Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Web service Authorization
+token
+retrieve an authorization token
+<based URL>
+/api/Token
+ - POST
+Each biller will have disinct values for:
+token
+username
+password
+uat details:
+token = 81c987d6-3476-47c5-a5ab-5f5a6d9b7534
+username = InvCloud
+password =  Test@cc0unt"
+Example:
+{"token":"81c987d6-3476-47c5-a5ab-5f5a6d9b7534", "username":"InvCloud", "password":"Test@cc0unt"}
+token
+example:
+{
+    "data": {
+        "id": "58",
+        "type": "jwtToken",
+        "attributes": {
+            "token": "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJjYXJyaWVyIjoiQ2FtcFBvaW50IiwicG9ydGFsVHlwZSI6IlBEUyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTgiLCJqdGkiOiI2MTYzZTcxZi0wYTM4LTQ0NjQtYWU4NC0yMDc2YjI3NTRhN2UiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9ubWV0aG9kIjoiVGhpcmRQYXJ0eSIsImV4cCI6MTYxNDAzNTM1MSwiaXNzIjoiaHR0cHM6Ly91YXQyMDEyLnBkc3BlY3RydW0uY29tL3dzU3BlY3RydW1BUElDb3JlIiwiYXVkIjoiaHR0cHM6Ly91YXQyMDEyLnBkc3BlY3RydW0uY29tL3dzU3BlY3RydW1BUElDb3JlIn0.fRQ1LLxq-BeNW_A6keTm64v4Y7X4cr4Fx0sTv3XOQf8"
+        }
+    }
+}
+ 
+Attached vendor provided code example
+RTDR: Balance Update
+InvoiceBalanceDue
+    
+Provides Balance Due on requesting 
+<base URL>
+/api/Invoice/InvoiceBalanceDue
+ 
+Method: GET
+Pre-request: Invoice Cloud has a valid Token for authorization from the method provided above.
+Parameter: InvoiceNumber
+Example:
+https://uat.pdspectrum.com/wsSpectrumAPICore/api/Invoice/InvoiceBalanceDue?invoiceNumber=30254
+balanceDue
+{
+    "data": {
+        "id": "30254",
+        "type": "invoiceNumber",
+        "attributes": {
+            "balanceDue": "731.3700"
+        }
+    }
+}
+Data Pump: Payments
+INT-1698
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+OnlineReceipt 
+Allows Invoice Cloud to report a payment/ receipts in near real-time
+<base URL> - /api/OnlineReceipt 
+Method: POST
+Pre-request: Invoice Cloud has a valid JWT Token for authorization from the method provided above.
+json data:
+invoiceNumber (IMT Spectrum)
+InvoiceNumber (IC)
+policyNumber
+AccountNumber
+fullName
+CutomerName
+datePaid
+PaymentDate
+referenceNumber
+PaymentGUID
+amount
+PaymentAmount
+fee
+ConvenieneceFee
+transactionID
+PaymentReference (varchar 50)
+ 
+transactionMessage
+PaymentMessage 
+paymentType
+CreditCard/ACH (default to Credit Card)
+approved
+Approved
+onlineVendor
+InvoiceCloud (static string)
+Will Return your original JSON plus “receiptID” that was created to apply payment to the policy. 
+okay:  Receipt Can Be Obtained By Scheduled Service or maybe already was
+Sucess, but no data:  Receipt was not applied to the Policy Number 
+(Error)
+Authentication Method for Paperless and Autopay Enrollment
+sessions
+Creates a session with an IC username and password. returns a cookie used for the other requests.
+Endpoint: 
+https://auth.imtapps.com/<<id>>/api/sessions/
+Method: POST
+ContentType = "application/vnd.api+json"
+{
+    "data": {
+        "id": "string",
+        "type": "sessions",
+        "attributes": {
+            "password": "<<password>>",
+            "username": "<<username>>"
+        }
+    }
+
+Response: json object. We do not parse the response, instead we search the cookies returned for the authorization, which is used on all other requests.
+This is the same integration as IMT MIPS/APPS
+ 
+Data Pump: Paperless Enrollment
+Settings
+Change Paperless setting
+A different authentication method is used for Paperless enrollment.
+DataPump Paperless:
+EndPoint: 
+../settings/{AccountNumber}/
+Method: POST
+Content-Type: application/vnd.api+json
+Request: We include the accountnumber in the endpoint, and we build a json object as follows
+	data{
+		type = policy-settings (Hardcoded)
+		id = AccountNumber
+		attributes{
+			paperless = True/False
+		}
+ 
+Response:
+Fail DP if the API call returns an exception.
+paperless: Boolean (True/False)
+id: account number
+This is the same integration as IMT MIPS/APPS
+ 
+Data Pump: AutoPay Enrollment
+ Settings
+Change Autopay Settings
+Authentication
+A different authentication method is used for Autopay enrollment.
+DataPump AutoPay:
+EndPoint: 
+../settings/{AccountNumber}/
+Method: PATCH
+Content-Type: application/vnd.api+json
+Request: We include the accountnumber in the endpoint, and we build a json object as follows
+	data{
+		type = policy-settings (Hardcoded)
+		id = AccountNumber
+		attributes{
+			bill_mode = autopay/direct
+		}
+	}
+ 
+Response:
+Fail DP if the API call returns an exception.
+bill_mode:
+autopay (on autopay)
+direct (off autopay)
+id: account number
+This is the same integration as IMT MIPS/APPS
+ 
+File Mapping
+Invoice File
+File Extension: .BIF (sent via SOAP)
+File Delimiter: pipe
+Specification:  Invoice Cloud Specification
+Sample File: This file can be used to submit for coding for new customers. For conversions from MIPS/APPS, request a BIF with the billers data.
+File Transfer Frequency: Hourly
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+N/A - IC Value
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A - IC Value
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+N/A - IC Value
+File Header
+4
+FileCreationDate
+Y
+TRUE
+N/A - IC Value
+File Header
+5
+InvoiceCount
+Y
+TRUE
+N/A - IC Value
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+N/A - IC Value
+File Header
+7
+RowType
+Y
+TRUE
+N/A - IC Value
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N/A - IC Value - Always sending R records
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A - IC Value
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+InvoiceNumber
+INT
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+InvoiceDate
+mm/dd/yyy
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+InvoiceDueDate
+mm/dd/yyy
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+BalanceDue
+decimal
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Static Value - '0'
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+BalanceDue
+decimal
+Invoice Header
+183
+LocationReference
+Y
+FALSE
+Static Value - ‘Spectrum’
+Invoice Header
+248
+AutoPayCollectionDate
+Y
+FALSE
+AutoPay Date
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+IC Value - '1'
+Invoice Header
+375
+Active
+Y
+FALSE
+IC Value - '1'
+Invoice Header
+58
+RowType
+Y
+TRUE
+IC Value - ‘CR’
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Policy Number
+INT
+Customer Record
+60
+CustomerName
+Y
+TRUE
+OrganizationName or FirstName + LastName
+string
+Customer Record
+61
+Address1
+Y
+FALSE
+Address1
+Customer Record
+62
+Address2
+Y
+FALSE
+Address2
+Customer Record
+63
+City
+Y
+FALSE
+City
+Customer Record
+64
+State
+Y
+FALSE
+State
+Customer Record
+65
+Zip
+Y
+FALSE
+ZIP
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+This field may not be available for many records
+Customer Record
+356
+BlockPaymentsCC
+Y
+FALSE
+Static Value - '0'
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+Static Value - '0'
+Customer Record
+409
+Active
+Y
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+IC Value
+Invoice Detail
+72
+Description
+Y
+FALSE
+Policy Number
+Invoice Detail
+79
+Amount
+Y
+FALSE
+Policy Amount Due
+Invoice Detail
+Adjustment/Daily Balance File
+The integration uses hourly BIF file transmission in place of adjustments.
+Payment/Lockbox File
+This integration uses 
+SOAP web services
+ called from the IMT system to reconcile payment information.
+Change Log File
+This integration uses 
+SOAP web services
+ called from the IMT system to Gather Changes for AP and Paperless.
+Site configuration 
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+IMT Spectrum can integrate with Invoice Cloud with Customer Portal/Virtual Site or newly added functionality of SSOConnect.
+SSO Integration
+Purpose/Summary: Cloud SSO Connect is Invoice Cloud’s Implementation of a Single Sign On into the Invoice Cloud portal. This feature allows Billers and/or Partners to create a seamless experience for the Customer between Partner/Biller and Invoice Cloud systems, while keeping the scope of PCI compliance at a minimum for Partners and Billers.
+Multiuser is available to be used and preferred by IMT Spectrum however, if a biller is not interested in using .Multiuser functionality, it is not a requirement to have this turned on.  
+SSOConnect is handling registration and login setup with tokenized passwords. IMT will update passwords when the user first logs in by matching the email address. If they cannot match the email address, IMT will be create a different/new login. In this case, all settings autopay/paperless/pay by text will have to be re-entered.
+IMT confirms policy owner information ahead of creating any registrations to make sure the correct person is accessing the policy and login.
+SSOConnect Values
+Field
+Required
+Comments
+Partner Specification
+RemoteAuthenticationToken
+Yes
+Token is provided from Remote Authentication Web Service.
+Token is provided from Remote Authentication Web Service.
+ViewMode
+Yes
+Value is required to identify how the Customer is accessing the Invoice Cloud pages.
+Always 
+0
+ = Redirect
+RedirectID
+Yes
+Value is required to be able to redirect the Customer to the requested page. See full list: 
+How to setup Cloud SSO Connect (REST) | Field Definitions
+1
+ = Customer Portal Recent Bill Listing
+2
+ = Customer Portal Paperless Settings
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+11
+ = Customer Portal Pay by Text Enrollment
+9
+ = Customer Portal Scheduled Payments Listing
+10
+ = Customer Portal Recurring Scheduled Payments Listing
+CSSUrl
+No
+ReturnUrl
+No
+When this value is provided, the customer will be redirected to the provided url after clicking the sign out button.
+N/A
+Workflow
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample 
+User Registration
+User navigates to IMT portal and registers through the IMT portal. After registration, logged in user makes a payment. 
+Assumptions:
+SSOConnect is handling registration and login setup with tokenized passwords. IMT will update passwords when the user first logs in by matching the email address. If they cannot match the email address, IMT will be create a different/new login. In this case, all settings autopay/paperless/pay by text will have to be re-entered.
+IMT confirms policy owner information ahead of creating any registrations to make sure the correct person is accessing the policy and login.
+Requirement:
+LogintypeID (REST- Remote Authentication- Register Accounts) is always = 1
+Check to see if account exists in invoice cloud and if it is registered.
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist:
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+Managed Scheduled Payments
+A registered user is logged in to IMT portal and navigates to IC screen to  update or cancel a scheduled payment.
+Assumption:
+User is already registered and authenticated
+IMT redirects to Scheduled Payments screen
+CloudSSOConnect (redirect 9 = Customer Portal Scheduled Payments Listing)
+Paperless Enrollment
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll paperless option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Customer Portal Paperless Settings screen
+CloudSSOConnect (redirect 2 = Customer Portal Paperless Settings
+)
+AutoPay Enrollment
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll autopay option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Customer Portal AutoPay Settings screen
+CloudSSOConnect (redirect 3 = Customer Portal AutoPay Settings
+)
+Manage Payment Methods
+A registered user is logged in to IMT portal and navigates to IC screen to store, update or remove payment methods.
+Assumption:
+User is already registered and authenticated
+IMT redirects to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+Pay by Text
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll pay by text option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Payment Methods screen
+CloudSSOConnect (redirect 11 = Customer Portal Pay by Text Enrollment)
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+Provided by IMT
+Y
+9
+RTDR Username if Applicable
+Provided by IMT
+Y
+10
+RTDR Key or Password if Applicable
+Provided by IMT
+Advanced Settings 10 and 13 are comprised of the IMT Private Key and Password, separated by a pipe (example: 9w!tbbKa!xxx|99A9999F-DCBC-9F9A-B999-999AD99999F9
+Y
+11
+DataPump Payments EndPoint/WebService URL
+Provided by IMT
+Y
+12
+DataPump Payments EndPoint/WebService Username
+Provided by IMT
+Y
+13
+DataPump Payments EndPoint/WebService Password
+Provided by IMT
+Advanced Settings 10 and 13 are comprised of the IMT Private Key and Password, separated by a pipe (example: 9w!tbbKa!xxx|99A9999F-DCBC-9F9A-B999-999AD99999F9
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF customization - on biller questionnaire
+AutoPayCollectionDate
+in BIF
+BalanceForward
+N/A
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - on biller questionnaire
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+in BIF
+MinimumAmountDue
+in BIF
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF customization - on biller questionnaire
+ThirdNotifyRequestedDate
+BIF customization - on biller questionnaire
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Integration can also be setup to use SSOConnect with IMT. This will depend on the Biller’s preference. 
+Binding policy - Spectrum noted that all policies are invoiced and a payment is not needed to bind the policy
+Biller Experience
+The Biller will use the standard Invoice Cloud Biller Portal.
+Binding policy - Spectrum noted that all policies are invoiced and a payment is not needed to bind the policy
+Agent Experience
+Screen shot of Agent’s view of “Pay Now” button in Spectrum policy admin system. This button launches IC AgentConnect:
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+PaymentReportingSOAP
+PaymentReportingDataSetFromGMT
+Polling payments every 
+two hours*
+ to validate payments made on IC and posted via data pump 
+ACHRejectReportingSOAP
+ACHRejectReportingDataSetFromGMT
+Polling every 3 hours for ACH Rejects
+BillerSettledBatchDetailSOAP
+BillerSettledBatchDetailDataSet
+Polling batch settlement details every four hours for payment settlement from Chase/Processor. Product enhancement to support IMT needs: 
+EBPP-1811
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+BillerAutoPayCustomerReportSOAP
+BillerPaperlessCustomerReportDataSet
+Polling every 3 hours for paperless and autopay
+UploadInvoiceFile
+Hourly BIF file sent
+ URL:/spaces/IM/pages/1263010275/IMT+Spectrum+Technical+Design

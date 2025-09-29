@@ -1,0 +1,635 @@
+This is only for Invoice Type ID 0. Sewer Invoice Types are using the 
+Blue Heron Integration
+.
+Page Navigation:
+Jira tickets
+INT-9339
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-1475
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Solution engineer
+ 
+ 
+ 
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .BIF
+File Naming Convention: 
+File Delimiter: Pipe
+Specification: Invoice Cloud BIF
+SFTP File Path: 
+File Transfer Frequency: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+Oracle Table Name
+Notes
+1
+RowType
+Y
+TRUE
+N/A
+VARCHAR2
+'FH'
+2
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A
+VARCHAR2
+'cb02d647-d777-4357-96e6-e7ea48846ff7'
+50
+File Header
+4
+FileCreationDate
+Y
+TRUE
+SYSDATE
+VARCHAR2
+System Date at time of extract
+N/A
+File Header
+'MM/DD/YYYY'
+5
+InvoiceCount
+Y
+TRUE
+N/A
+NUMBER
+Actual count of invoices at time of extract
+N/A
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+AMOUNT_DUE_ORIGINAL
+NUMBER
+Actual sum of all invoices at time of extract
+N/A
+File Header
+AR_PAYMENT_SCHEDULES_ALL
+7
+RowType
+Y
+TRUE
+N/A
+VARCHAR2
+'IH'
+2
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N/A
+VARCHAR2
+'N','R','D'
+1
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A
+VARCHAR2
+'C8FA9D12-3495-481C-98F9-65F5275781ED'
+50
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+10
+InvoiceNumber
+Y
+TRUE
+TRX_NUMBER
+VARCHAR2
+Transaction Number
+20
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+11
+InvoiceDate
+Y
+TRUE
+TRX_DATE
+DATE
+Transaction Date
+N/A
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+'MM/DD/YYYY'
+12
+InvoiceDueDate
+Y
+TRUE
+DUE_DATE
+DATE
+Transaction Due Date
+N/A
+Invoice Header
+AR_PAYMENT_SCHEDULES_ALL
+'MM/DD/YYYY'
+13
+TotalAmountDue
+Y
+TRUE
+AMOUNT_DUE_REMAINING
+NUMBER
+Current Amount Due on the transaction
+N/A
+Invoice Header
+AR_PAYMENT_SCHEDULES_ALL
+15
+TotalDiscountAmount
+N
+FALSE
+<Not Used>
+ 
+ 
+ 
+Invoice Header
+22
+Terms
+Y
+FALSE
+N/A
+VARCHAR2
+'IMMEDIATE'
+9
+Invoice Header
+40
+Custom3
+Y
+FALSE
+NAME
+VARCHAR2
+Transaction Type Name
+20
+Invoice Header
+RA_CUST_TRX_TYPES_ALL
+41
+Custom4
+Y
+FALSE
+ATTRIBUTE1
+VARCHAR2
+Invoice Header DFF/UDF: Collections Flag 
+150
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+42
+Custom5
+Y
+FALSE
+ATTRIBUTE2
+VARCHAR2
+Invoice Header DFF/UDF: Collections Date 
+150
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+43
+Custom6
+Y
+FALSE
+DUE_DATE
+NUMBER
+Calculation of Days Past Due from DUE_DATE 'Y' if past 'N' if not
+N/A
+Invoice Header
+AR_PAYMENT_SCHEDULES_ALL
+44
+Custom7
+Y
+FALSE
+NAME
+VARCHAR2
+Batch Source Name
+50
+Invoice Header
+RA_BATCH_SOURCES_ALL
+45
+Custom8
+Y
+FALSE
+CUSTOMER_TRX_ID
+NUMBER
+Unique transaction ID
+15
+Invoice Header
+RA_CUSTOMER_TRX_ALL
+46
+Custom9
+Y
+FALSE
+DEPT
+VARCHAR2
+Value Set created between Transaction Type and Department
+240
+Invoice Header
+Value Set: CLV_AR_ISSUING_DEPT
+DB View: CLV_AR_DEPT_V
+47
+Custom10
+Y
+FALSE
+CONTACT
+VARCHAR2
+Value Set created between Transaction Type and Contact
+240
+Invoice Header
+Value Set: CLV_AR_DEPT_CONTACT
+DB View: CLV_AR_CONTACT_V
+93
+BalanceDue
+Y
+FALSE
+AMOUNT_DUE_REMAINING
+NUMBER
+Current Amount Due on the transaction
+N/A
+Invoice Header
+AR_PAYMENT_SCHEDULES_ALL
+194
+BalanceForward
+N
+FALSE
+<Not Used>
+ 
+ 
+ 
+Invoice Header
+345
+BillerInstallmentNumber
+Y
+FALSE
+TERMS_SEQUENCE_NUMBER
+NUMBER
+Transaction Installment Number
+N/A
+Invoice Header
+AR_PAYMENT_SCHEDULES_ALL
+Currently should always be 1 
+since installment terms are not used.
+58
+RowType
+Y
+TRUE
+N/A
+VARCHAR2
+'CR'
+2
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+ACCOUNT_NUMBER
+VARCHAR2
+Customer's Account Number
+30
+Customer Record
+HZ_CUST_ACCOUNTS
+60
+CustomerName
+Y
+TRUE
+PARTY_NAME
+VARCHAR2
+Customer's Name
+360
+Customer Record
+HZ_PARTIES
+As of 5/23/2024 there are not customer names longer than 60
+61
+Address1
+Y
+FALSE
+ADDRESS1
+VARCHAR2
+Customer Address Line 1
+240
+Customer Record
+HZ_LOCATIONS
+62
+Address2
+Y
+FALSE
+ADDRESS2
+VARCHAR2
+Customer Address Line 2
+240
+Customer Record
+HZ_LOCATIONS
+63
+City
+Y
+FALSE
+CITY
+VARCHAR2
+City
+240
+Customer Record
+HZ_LOCATIONS
+64
+State
+Y
+FALSE
+STATE
+VARCHAR2
+State
+240
+Customer Record
+HZ_LOCATIONS
+65
+Zip
+Y
+FALSE
+POSTAL CODE
+VARCHAR2
+Postal Code
+240
+Customer Record
+HZ_LOCATIONS
+67
+EmailAddress
+Y
+FALSE
+EMAIL_ADDRESS
+VARCHAR2
+Email Address
+2000
+Customer Record
+HZ_CONTACT_POINTS
+371
+CustomerName2
+Y
+FALSE
+ADDRESS3
+VARCHAR2
+Customer Address Line 3
+240
+Customer Record
+HZ_LOCATIONS
+409
+Active
+N
+FALSE
+<Not Used>
+ 
+ 
+ 
+Customer Record
+70
+RowType
+Y
+TRUE
+N/A
+VARCHAR2
+'ID'
+2
+Invoice Detail
+72
+Description
+Y
+FALSE
+DESCRIPTION
+NAME
+VARCHAR2
+Transaction Line Description
+Adjustment Name
+240
+50
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+AR_RECEIVABLES_TRX_ALL
+Invoice Lines followed by
+Adjustment Lines
+Invoice desciption 0 to 100
+79
+LineItemTotal
+Y
+FALSE
+EXTENDED_AMOUNT
+AMOUNT
+NUMBER
+Transaction Line Amount
+Adjustment Amount
+N/A
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+AR_RECEIVABLES_TRX_ALL
+Invoice Lines followed by
+Adjustment Lines
+83
+CustomField1
+Y
+FALSE
+DESCRIPTION
+VARCHAR2
+Transaction Line Description
+240
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+Invoice Description 101-199
+84
+CustomField2
+Y
+FALSE
+LINE_NUMBER
+NUMBER
+Transaction Line Number
+Adjustment Line Number
+N/A
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+Use actual invoice Line Number.
+Adjustment Lines sequentially
+numbered after invoice lines
+85
+CustomField3
+Y
+FALSE
+TRX_DATE
+APPLY_DATE
+DATE
+Transaction Header Date used for all lines
+Adjustment Apply Date used for each adjustment
+N/A
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+AR_ADJUSTMENTS_ALL
+There is no date at the line level so the transaction header date is used for invoice lines.  Each adjustment does have an apply date
+86
+CustomField4
+Y
+FALSE
+DESCRIPTION
+VARCHAR2
+Transaction Line Description
+240
+Invoice Detail
+RA_CUSTOMER_TRX_ALL
+Invoice Description 201-240
+Payment/Lockbox File
+IF_City Of Las Vegas - BlueHeron Payment Export (FileID: 355)
+This is only for Invoice Type ID 0. Sewer Invoice Types are using the 
+Blue Heron Integration
+.
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: NA
+File Naming Convention: NA
+File Delimiter: NA
+Class/FileName: CityOfLasVegas_BlueHeron_PaymentExport_base.vb
+Code Repository: StratusWebServices
+Specification: NA
+Sample File: 
+https://invoicecloud.app.box.com/folder/146946243302
+ 
+SFTP File Path: NA
+File Transfer Frequency: NA
+Additional Notes
+: The following billers listed are users of Blue Heron software and have the following Payment file types in use:
+Clark County Water Reclamation District - BID 1815
+FileName: PaymentExport_CloudStore_ClarkCounty.vb
+FileType ID: 341
+Code Repo: StratusWebServices
+Field Mapping
+IC FileSpecID
+IC Field Name
+Partner Field Description
+Creation Logic/Conditions
+Data Type
+Character Limits
+Format
+Values
+Custom8
+String
+e.g : 14743266
+InvoiceNumber
+Invoice Number
+String
+e.g : 930281
+Custom7
+String
+e.g : "IWS"
+Custom3
+String
+e.g : "IWS"
+AccountNumber
+Account Number
+String
+e.g : 107880
+PaymentDate
+Payment Date
+Date
+e.g : 7/21/2021 10:48:45 AM
+PaymentAmount
+Payment Amount
+Double
+e.g : 100.00
+PaymentTypeID
+Payment Type
+If
+= "1"
+Then 
+"Credit Card"
+If
+= "2"
+Then 
+"EFT"
+If=
+ 
+"3"
+Then 
+"Credit Adj"
+If=
+ 
+"5"
+Then 
+"Check"
+If
+= "6"
+Then 
+"Cash"
+If
+="8"
+Then 
+"Debit Adj"
+Integer
+e.g : "EFT"
+PaymentTypeID
+Payment Reference
+If
+ PaymentTypeID=1
+Then CardNumber
+- Last 4 Characters
+If
+ PaymentTypeID=2
+Then 
+Bankaccountnumber 
+-Last 4 Characters
+Integer
+e.g : 1234
+NA
+WS Report ID
+Integer
+e.g : 28
+NA
+Day Payment Export File generated
+Date
+e.g : 09/01/2021
+NA
+Settled Batch ID
+Integer
+e.g : 1771042
+NA
+Total Payments
+Integer
+e.g : 4
+NA
+Total Payment Amount
+Double
+e.g : 226.89
+Line Example:
+14742753,"930033","IWS","IWS",103571,7/21/2021 10:46:54 AM,52.52,"Credit Card",1117,28,09/01/2021,1771041,4,226.89
+Bill Presentment (Template Detail)
+HTML Template using BIF fields for Bill Presentment.  Sample image and mapping below.
+Sample Template: 
+Mapping:
+Jira: 
+INT-9339
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-1475
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3175055361/BID+1094+City+of+Las+Vegas+Sewer+Technical+Design

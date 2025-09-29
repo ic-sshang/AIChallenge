@@ -1,0 +1,984 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+X
+X
+TEST BASE URL (for all integrations): 
+PROD BASE URL (for all integrations): 
+API Authentication Method: Basic / OAuth (1/2) / API Key / Web service key
+Renewal process: URL for renewal token, etc.
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Impact:
+ Any biller using the GUTS RTDR integration with the {{
+CheckRecentPaymentsOnAccount
+ }}RTDR configuration.
+Expect:
+ RTDR should look back for payments for the specified "look back period", and only run if no payments are found. (
+Marion County is the only biller using the 
+CheckRecentPaymentsOnAccount
+ 
+logic.
+ 
+Need to check every payment type except for Balance Forward (10))
+Data Pump: Payment
+Include Credits & Chargebacks?
+Credits?
+Yes/No
+Chargebacks?
+Yes/No
+Sent a Negative value, using dash indicator?
+Yes/No
+Alt. credit indicatator :
+Data Pump: Void
+Data Pump: ACH Reject 
+ACH Reject Requirements:
+C-Code Rejects included? Yes or No
+Data Pump: Paperless Enrollment
+Data Pump: AutoPay Enrollment
+Data Pump: Customer Changes
+Bill Presentment
+Bill Presentment (Template Detail)
+Sample Template: 
+Mapping:
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: 
+XML
+Sample File: 
+File Transfer Frequency: 1-3 times per year
+InvoiceTypeID Mapping
+Biller
+Mapping
+212 - Marion County
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 44
+    }
+  ]
+}
+186 - Elkhart County
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 44
+    }
+  ]
+}
+339 - Montgomery County
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    }
+  ]
+}
+614 - Bartholomew County
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 44
+    },
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    }
+  ]
+}
+1617 - Boone County Government
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 44
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 7
+    }
+  ]
+}
+486 - Brown County Government
+{
+  "InvTypeMappings": [
+    {
+      "BillerBillType": "MH",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "RE",
+      "InvoiceTypeID": 8
+    },
+    {
+      "BillerBillType": "PP",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "UT",
+      "InvoiceTypeID": 7
+    },
+    {
+      "BillerBillType": "BPP",
+      "InvoiceTypeID": 7
+    }
+  ]
+}
+Field Mapping
+IC FileSpecID
+IC Field
+Installment 1 - 1 Cent Bills
+Prelims (Marion County)
+Installment 1 Replacements
+Installment 2 True Ups
+Installment 2 True Ups Replacements
+Record Type
+7
+RowType
+IH
+IH
+IH
+IH
+IH
+Invoice Header
+8
+RecordType
+N
+N
+R
+N
+R
+Invoice Header
+9
+InvoiceFormatGuid
+81A88F26-E6B8-4D49-AC3C-DC0A51A9BA8B
+62AA0D8E-A257-4C60-812A-8D8AE80E9068
+81A88F26-E6B8-4D49-AC3C-DC0A51A9BA8B
+81A88F26-E6B8-4D49-AC3C-DC0A51A9BA8B
+81A88F26-E6B8-4D49-AC3C-DC0A51A9BA8B
+Invoice Header
+10
+InvoiceNumber
+{<TaxYear>+1}-{<BillTypeCode>}-{<ParcelNumber>}-1
+PreLim-{<TaxYear>+1}-{<BillTypeCode>}-{<ParcelNumber>}-0
+{<TaxYear>}-{<BillTypeCode>}-{<ParcelNumber>}-1
+{<TaxYear>}-{<BillTypeCode>}-{<ParcelNumber>}-2
+{<TaxYear>}-{<BillTypeCode>}-{<ParcelNumber>}-2
+Invoice Header
+11
+InvoiceDate
+Today (or custom if set)
+Today (or custom if set)
+Today (or custom if set)
+Today (or custom if set)
+Today (or custom if set)
+Invoice Header
+12
+InvoiceDueDate
+<SpringDueDate> + 1 year (or custom if set)
+<SpringDueDate> + 1 year (or custom if set)
+<SpringDueDate> (or custom if set)
+<FallDueDate> (or custom if set)
+<FallDueDate> (or custom if set)
+Invoice Header
+13
+TotalAmountDue
+.01
+<NetTaxInstall>
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and for each charge where the <Description> is “STORM WATER” or “SOLID WASTE” or “CONSERVANCY”, add <FallCharge> to the total amount due
+<TotalSpringDue>
+<TotalFallDue>
+<TotalFallDue>
+Invoice Header
+38
+Custom1
+<BillID>
+BLANK
+<BillID>
+<BillID>
+<BillID>
+Invoice Header
+39
+Custom2
+<Period>
+<Period>
+<Period>
+<Period>
+<Period>
+Invoice Header
+40
+Custom3
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+Invoice Header
+41
+Custom4
+<StateNumber>
+<StateNumber>
+<StateNumber>
+<StateNumber>
+<StateNumber>
+Invoice Header
+42
+Custom5
+<TaxYear> + 1
+<TaxYear> + 1
+<TaxYear>
+<TaxYear>
+<TaxYear>
+Invoice Header
+43
+Custom6
+<PropertyLocation> without parentheses
+<PropertyLocation> without parentheses
+<PropertyLocation> without parentheses
+<PropertyLocation> without parentheses
+<PropertyLocation> without parentheses
+Invoice Header
+44
+Custom7
+<BillCode>
+<BillCode>
+<BillCode>
+<BillCode>
+<BillCode>
+Invoice Header
+47
+Custom10
+<CountyID> from the first CountyInfo record in the file
+<CountyID> from the first CountyInfo record in the file
+<CountyID> from the first CountyInfo record in the file
+<CountyID> from the first CountyInfo record in the file
+<CountyID> from the first CountyInfo record in the file
+Invoice Header
+93
+BalanceDue
+Same as TotalAmountDue
+Same as TotalAmountDue
+Same as TotalAmountDue
+Same as TotalAmountDue
+Same as TotalAmountDue
+Invoice Header
+103
+Custom20
+BLANK
+“P”
+BLANK
+BLANK
+BLANK
+Invoice Header
+133
+Custom50
+BLANK
+BLANK
+BLANK
+BLANK
+<NetTaxInstall>
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and for each charge where the <Description> is “STORM WATER” or “SOLID WASTE” or “CONSERVANCY”, add <FallCharge> to the total amount due
+(this field is specific to Marion County - we will use it to generate the prelims)
+134
+Custom51
+BLANK
+BLANK
+BLANK
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “CONSERVANCY” and add <FallCharge> to this value
+(this field is specific to Marion County - we will use it to generate the prelims)
+135
+Custom52
+BLANK
+BLANK
+BLANK
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “SOLID WASTE” and add <FallCharge> to this value
+(this field is specific to Marion County - we will use it to generate the prelims)
+136
+Custom53
+BLANK
+BLANK
+BLANK
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “STORM WATER” and add <FallCharge> to this value
+(this field is specific to Marion County - we will use it to generate the prelims)
+137
+Custom54
+BLANK
+BLANK
+BLANK
+BLANK
+<NetTaxInstall> 
+(this field is specific to Marion County - we will use it to generate the prelims)
+179
+Custom96
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “CONSERVANCY” and add <FallCharge> to this value
+BLANK
+BLANK
+BLANK
+Invoice Header
+180
+Custom97
+BLANK
+<NetTaxInstall>
+BLANK
+BLANK
+BLANK
+Invoice Header
+181
+Custom98
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “SOLID WASTE” and add <FallCharge> to this value
+BLANK
+BLANK
+BLANK
+Invoice Header
+182
+Custom99
+BLANK
+0
+Note: if <BillTypeCode> is BPP, PP, RE, MH, or UT, loop through all the Charges where BillID = <BillID> and take the last charge where the <Description> is “STORM WATER” and add <FallCharge> to this value
+BLANK
+BLANK
+BLANK
+Invoice Header
+194
+BalanceForward
+BIF Customizaton
+BIF Customization
+BIF Customization
+BIF Customization
+BIF Customization
+Invoice Header
+248
+AutoPayCollectionDate
+BIF Customization
+BIF Customization
+BIF Customization
+BIF Customization
+BIF Customization
+Invoice Header
+252
+InvoiceTypeID
+Varies per biller, see InvoiceType Mappings section above
+Varies per biller, see InvoiceType Mappings section above
+Varies per biller, see InvoiceType Mappings section above
+Varies per biller, see InvoiceType Mappings section above
+Varies per biller, see InvoiceType Mappings section above
+345
+BillerInstallmentNumber
+1
+0
+1
+2
+2
+Invoice Header
+346
+BillerBillYear
+<TaxYear> + 1
+<TaxYear> + 1
+<TaxYear>
+<TaxYear>
+<TaxYear>
+Invoice Header
+347
+BillerInvoiceNumber
+<BillID>
+<BillID>
+<BillID>
+<BillID>
+<BillID>
+Invoice Header
+375
+Active
+1
+1
+1
+1
+1
+Invoice Header
+407
+PastDue
+0
+0
+0
+0
+0
+Invoice Header
+58
+RowType
+CR
+CR
+CR
+CR
+CR
+Customer Record
+59
+AccountNumber
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+<ParcelNumber>
+Customer Record
+60
+CustomerName
+Pull from existing customer record
+Pull from existing customer record
+NameFromFile: First 50 characters of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}, trimmed
+BillerID 339: use NameFromFile
+Other billers: compare to CustomerName in db, and if either contains the other, use the name from the db
+NameFromFile: First 50 characters of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}, trimmed
+BillerID 339: use NameFromFile
+Other billers: compare to CustomerName in db, and if either contains the other, use the name from the db
+NameFromFile: First 50 characters of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}, trimmed
+Customer Record
+61
+Address1
+Pull from existing customer record
+Pull from existing customer record
+<OwnerAddress1>
+<OwnerAddress1>
+<OwnerAddress1>
+Customer Record
+62
+Address2
+Pull from existing customer record
+Pull from existing customer record
+<OwnerAddress2>
+<OwnerAddress2>
+<OwnerAddress2>
+Customer Record
+63
+City
+Pull from existing customer record
+Pull from existing customer record
+<OwnerCity>
+<OwnerCity>
+<OwnerCity>
+Customer Record
+64
+State
+Pull from existing customer record
+Pull from existing customer record
+<OwnerState>
+<OwnerState>
+<OwnerState>
+Customer Record
+65
+Zip
+Pull from existing customer record
+Pull from existing customer record
+<OwnerZip>
+<OwnerZip>
+<OwnerZip>
+Customer Record
+67
+EmailAddress
+BLANK
+BLANK
+<EBPEmail>
+<EBPEmail>
+BLANK
+Customer Record
+69
+RegistrationValue
+<StateNumber>
+<StateNumber>
+<StateNumber>
+<StateNumber>
+<StateNumber>
+Customer Record
+356
+BlockPaymentsCC
+0
+0
+0
+If <BillCode> starts with 87, 88, or 89 then 1, else not included in file
+0
+Customer Record
+357
+BlockPaymentsEFT
+0
+0
+0
+If <BillCode> starts with 87, 88, or 89 then 1, else not included in file
+0
+Customer Record
+371
+CustomerName2
+BLANK
+BLANK
+Any remaining characters after the first 50 of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}
+Any remaining characters after the first 50 of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}
+Any remaining characters after the first 50 of {<OwnerName> + <OwnerName2> + <OwnerName3> + <OwnerName4>}
+Customer Record
+373
+DisplayAccountNumber
+BLANK
+BLANK
+BLANK
+BLANK
+BLANK
+Customer Record
+409
+Active
+1
+1
+1
+1
+1
+Customer Record
+70
+RowType
+ID
+ID
+ID
+ID
+ID
+Invoice Detail
+72
+Description
+“PDF Display”
+“PDF Display”
+“PDF Display”
+“PDF Display”
+“PDF Display”
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Invoice Update File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+Field Mapping
+Customer Update File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+Field Mapping
+Conveyance File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+Field Mapping
+IC File Spec ID
+IC Field
+Required (T/F)
+Biller Field Name
+Biller Field Description
+Record Type
+358
+RowType
+TRUE
+N/A - Always ‘CH’
+N/A
+Conveyance File Header (CH)
+359
+BillerGUID
+TRUE
+N/A - IC generated value
+N/A
+Conveyance File Header (CH)
+360
+ThirdPartyFileReference
+FALSE
+Conveyance File Header (CH)
+361
+FileCreationDate
+TRUE
+N/A - IC generated using current date
+N/A
+Conveyance File Header (CH)
+362
+ConveyanceCount
+TRUE
+N/A - IC generated using Record Count in file
+N/A
+Conveyance File Header (CH)
+363
+RowType
+TRUE
+N/A - Always ‘CC’
+N/A
+Conveyance Record (CC)
+364
+CurrentAccountNumber
+TRUE
+ 
+Conveyance Record (CC)
+365
+NewAccountNumber
+FALSE
+ 
+Conveyance Record (CC)
+411
+LinkNewAccount
+FALSE
+N/A
+Conveyance Record (CC)
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+GUTS cannot run the batch process with a negative amount in the payment export for refund. Invoice Cloud will exclude the refund/credit in payment file.
+ACH Reject Requirements:
+C-Code Rejects included?
+Yes/No
+Include Credits & Chargebacks?
+Credits?
+Yes/No   
+No
+Chargebacks?
+Yes/No
+Sent a Negative value, using dash indicator?
+Yes/No    
+No
+Alternative credit indication:
+Sample File:
+SFTP File Path:
+File Transfer Frequency: (Add note if DLS needs to be accounted for)
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: (Add note if DLS needs to be accounted for)
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-2580
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+06/20/2024
+RTDR does not run for invoices if the invoice in question has had a payment within 5 days of the refresh trigger
+RTDR does not run for invoices if the payer has made a payment within 5 days of the refresh trigger
+The spGutsRecentPastPaymentCountOnInvoice stored procedure may need to be updated to return all payments for the customer. If we find a payment that has been made within 5 days of the RTDR attempt, we should break out of the loop and end the RTDR process
+INT-12663
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+02/25/2025
+Refund displayed as a negative number in payment export file.
+GUTS cannot accept negative number. IC should not include it in export.
+Remove refund in payment export.
+BIF-179
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+RTDR looks back for payments for the specified "look back period", retrieves them and then filters by 
+PaymentTypeID
+ 1, 2, and 4. Payments of a different PaymentTypeId are excluded, resulting in RTDR running.
+RTDR should look back for payments for the specified "look back period", and only run if no payments are found.
+Remove filtering logic. Check every payment type except for Balance Forward (10), rather than only checking 1, 2, and 4.
+ URL:/spaces/IM/pages/2492661761/GUTS+PVD+Technical+Design+Standard

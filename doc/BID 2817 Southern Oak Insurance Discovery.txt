@@ -1,0 +1,302 @@
+Summary
+Company
+Southern Oak Insurance 
+Industry/Vertical
+Insurance
+Website
+Software + Version
+Duckcreek  - version 8.0.4 - cloud base
+Solutions Engineer
+ 
+Integration Manager
+ 
+Software Integrator
+Agnee
+Discovery Recordings
+Session 1: 
+https://us-21061.app.gong.io/call?id=3505243096580110599
+ 
+Session 2: 
+https://us-21061.app.gong.io/call?id=7294960863525316012
+ 
+CSR/Agent Experience
+General
+Internal Notes
+  
+Response/Decision
+How do CSRs / Agents access and use the system today?
+ How will this functionality be done on Invoice Cloud:  (Biller Portal, AgentConnect, CPV2)?
+agent and underwriter
+Down payments/Quote payments and Premium payments. 
+Down payments are captured with AgentConnect
+Can clerks/agents process payments by using a customer's stored payment method?
+One-time Payment URL from AgentConnect does not show stored payments unless you are using CPV2 with Auth Token. 
+No, this will not be allowed
+Agents will only be able to make one time payments
+Do clerks/agents assist customers with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+ 
+Agents will not be allowed to make changes for paperless, autopay,paperless and pay by text. they will only be able to process payments. 
+Do some clerks/agents need different permissions than others? (please explain)
+ 
+Agents all have the same permissions  - under writers and CSR have the same permissions and make payments the same way 
+Do clerks/agents accept payments at the counter (in-person)? 
+ 
+ Yes
+IF YES:
+Review options in biller portal/agent connect/Cloud Pay V2
+ 
+Do you use a separate system/software for counter payments and if so what software? 
+ 
+ N/A
+When accepting credit card payments, is a card reader used?  EMV or Swipe?
+ 
+ N/A
+Do agents need to act on the behalf of the policyholder for payments? 
+ If yes, consider using Agent Connect without a LoginGUID.
+Agents will take payments on behalf of insured 
+Does the agency pay with their own agency payment method (using the Agents bank to pay a policy of an insured customer)? 
+If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  
+Remote Authentication API must be used to register the agency in a specified user role.
+In order to prevent long lists of linked accounts (register), it is recommended to link the account to the user and unlink (unregister) after the transaction is complete.  
+No, if an agent takes a payment for the insured they get the insured’s payment info.
+Additional Notes
+ 
+ 
+Payer/ Insured Experience
+General Questions
+ Internal Notes
+  
+Response/Decision
+How do your customers make payments today?
+Can you demo how customers make payments today?  
+logged in payments only 
+mail in check or call in to make a payment 
+they want to be able to make guest payments 
+How do your customers access the payment system today?
+ 
+Insured Portal 
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ 
+Will be using SSO - IC iFrames within DuckCreek portal - for agents/underwriter/producers 
+SSO for Insured Portal and IC 
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+Identity Provider - AzureAD - agent 
+SSOConnect with Insured Portal 
+Is multi-user needed?  
+Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.  The Remote Authentication can be used to register these accounts.
+Yes
+How will existing users be migrated for paperless or autopay?
+ 
+ Paperless Billing 
+Do you need to link accounts?
+ 
+ Multiple accounts for one user
+ Yes
+Do you need IVR payments? 
+     If so, what is the unique identifier your customers would use?
+ 
+ Yes
+Do you want to offer 'Pay By Text'? 
+ 
+ Yes
+Additional Notes
+ 
+ 
+Invoices
+Invoice Types
+Internal Notes
+Response/Decision
+Invoice Type/Business Type
+Examples:  Premium (monthly policy payment), Membership (some insurance companies require a membership fee to get a policy with them - charged annually).  
+Insurance Premium
+If Multiple types, can services be billed separately?
+Do customers receive one invoice with multiple policies or separate invoices?  If not on the same invoice, separate invoice types are needed
+N/A
+Invoice Functionality
+Internal Notes
+Response/Decision
+How often are bills produced?
+Daily, Weekly, Monthly, Quarterly, Semi-Annually, Annually etc.
+IC Biller Invoice File (BIF) 
+preferred method
+Review Specs
+Integrator File (if not using IC BIF)
+Review Specs
+Is there an indicator in the file for each service type?
+These will be separate invoice types in IC
+How is Integrator File Formatted?
+XML, CSV, Pipe, Print Spool, etc.
+Duckcreek has an invoice file format already. IC will review and confirm if all data points needed are available and compare to BIF.  Will send an example file and sample postman collection for both Upload Invoice and Upload Invoice File
+How are changes made to an existing bill?  Is there a separate file for updates to an existing bill?
+For example, need to modify due date, notification dates, auto-pay date, etc.
+How can IC tell if it is a new invoice Vs a change to an existing invoice.
+Based on the fields that need to be updated, this might require a BIF or IUF.
+If there is a change in the policy, a new invoice will be created. No changes are made to an existing invoice
+Are you able to customize data sent in the files?
+If a change is needed to a custom file, can this be done?
+Tell us about how your quote system works and the issuance process of quotes/policies
+Tell us about how you handle your cancellation and rewrite process? Does a new Policy/Account/Invoice gets created for the insured? 
+Policy cancel, new policy number/invoice/account will be generated. Payment may be transferred to the new account, if available. If money is due, a new invoice will be created. 
+How are quote payments captured?  Is the billing account number or policy number known at this time? 
+If yes, consider creating the account before a BIF arrives or creating one on the fly.  If no, consider using the Customer Renewal function later to move the Quote Number over to the actual billing/policy number.
+Policy Number available before payment is taken. No payment is taken on a quote number. Policy Number and Account Number are the same. 
+How are renewals handled - will the billing system call our Customer Renewal API? (i.e., does the policy/account number change every policy term? If so, call the API)
+Most of our book is bill to mortgagee but for those that are not, insured’s receive an invoice 52 days ahead of the renewal. The risk id for renewals – the main risk id stays the same but the mod will change.  As an example, NB risk id would be HP000001665-01-0000 but RB would be HP000001665-02-0000.
+Renewals can be done for policy billing as well. Same policy number will continue to be used. First part of the account number will not change. 
+Invoice Functionality
+Internal Notes
+Response/Decision
+Does your system produce unique invoice numbers?
+If yes, are these numbers printed on bills, would customers recognize these numbers? If no, what combination of values can we use to create a unique number per invoice?
+Has unique invoice number 
+How are balances calculated per invoice? (Explain Balance Forward and Open Billing)
+total balance on most recent invoice or balance available on multiple invoices
+Balance Forward - Total amount due will be on the latest invoice - past due will show the previous invoice's balance due
+Are fees (late fees, penalties, interest, etc.) added to the invoice or the account?
+Fees generated and added to the monthly premium 
+Do you have a field for Past Due balances?
+Past due value is available and will show the balance that was not paid previously
+Are there any Duplicate invoices?
+     If yes, which bill should IC import?
+Duplicate only is done for mailing - the address is the only change. Additional recipient. Primary insured will need to make the payment. Insured and Agent receive mailing
+Is there a minimum required payment amount different than the current monthly balance?
+This is typically the balance due and not used in Insurance.
+No min due, there is a current due + past due that will need to be paid. 
+Account/Policy Numbers
+Internal Notes
+Response/Decision
+Are Account/Policy Numbers unique per person? (Do you have customer numbers?)
+Account Number and Policy Number are the same on DuckCreek and they are unique to SOI
+Under what circumstances would Account Numbers change?
+Account numbers might change if they are renewed.  If its the same person we suggest linking accounts or using customer renewal API.
+Does not change - Account Number will remain the same even if name change occurs. - There will never be a new user with the same account number. Only during cancel/rewrite a new account number is created. User would have access to both accounts. 
+Do you expire previous bills so that payments cannot be made after a certain time? In what scenario(s)?
+No expiration date - they will receive a precancellation notification - additional transaction on duck creek - can make a payment on the most recent invoice - precancellation will not create a new invoice 
+payments are applied on account and not invoice. There is a certain date where after cancelation we would not accept payments on a cancelled policy. 
+How is autopay currently handled?
+Process for autopay is different for duck creek and might need to be turned off. Duckcreek completes auto pay via webservice with tokens. - can be setup for due date - auto pay will be handled with IC moving forward - Will need to discuss and decide on whether turning this off would work as needed
+How will you communicate block payments to Invoice Cloud (CC or ACH)?
+Will not be using blocking of payments on IC or Duckcreek
+File Transfer
+Internal Notes
+Response/Decision
+Is there an automated process to produce the file? 
+Files should be sent to IC any time there is a new billing
+Automation is preferred 
+Which method will be used SFTP or Webservice?
+SOAP Web services can only be used when coding to Invoice Cloud BIF specification.
+Webservice
+Additional Notes
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision
+What is the best way for IC to update balances? An API is preferred to allow IC to connect to your system to obtain the most recent balance.  
+ 
+Invoice Cloud prefers using an API to connect to the external system to obtain real time balances.  This is referred to as RTDR (real time data refresh)?
+ RTDR - API Call 
+Files Needed
+If an API cannot be provided, the following files are needed to keep balances updated.
+N/A
+IC Adjustment File (BAF)
+Review specs
+N/A
+Integrator file (if not using IC BAF)
+N/A
+Can you customize what is produced in the file?  Can invoice number be added if not present?
+Requirement:  If a bill is paid outside of Invoice Cloud and the balance is now zero, the adjustment file must include this information.
+N/A
+Will the file contain the adjusted balance or only the adjustments amount for each invoice?
+Balance differential verses fixed adjustment
+N/A
+How often can Adjustments be sent?
+ 
+Adjustment File must be sent a minimum of 1x per day
+ N/A
+Additional Notes
+ 
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision
+Invoice Cloud sends Autopay, Paperless, Customer Registrations, Pay by Text, Email Changes is there an API to allow these changes?
+ Invoice Cloud Datapump
+Autopay and Paperless Billing and Pay by Text
+Mainly need to know the enrollment - good information to know if its ACH/CC if possible
+If no, What format should we send these items to you? (Prompt for sample file)
+ 
+N/A
+From CIS
+ 
+ 
+Invoice Cloud updates blocking of ACH/CC (cash only) customers in real time. Can this status be included in your API balance response (RTDR)?
+ 
+ No blocking of payments
+If no, IC Customer Update File (CUF) is preferred.
+ Review IC CUF Spec
+N/A
+If no, Billers must manually update blocked payments via biller portal
+ 
+ N/A
+Additional Notes
+IM team will need to rename IC Paperless page to Paperless Billing
+Payments from IC
+Payments from Invoice Cloud
+Internal Notes
+ 
+Response/Decision
+Would you be able to receive an API call to your system when payments are made in Invoice Cloud (Datapump)?
+Data Pump - API Call
+Can the API also be used to send ACH Rejects/Voids/Chargebacks/Credits
+API will be used Non Approved Payments
+Are there specific GL codes that must be used?
+ReversalReason:
+Universal Reject Codes (R01, R02 etc.)
+"CB" (Chargeback)
+"Void"
+"Credit"
+Are additional fields available in the API to submit a reference number?
+Reference number would be used to pass a Payment GUID.  The payment GUID must be validated in the event a duplicate payment is sent in error.  If a payment GUID is on file already, the second payment would be blocked (error).
+PaymentGUID is included in all API calls
+Is a ReceiptGUID required?
+Payment GUIDs are generated for each payment made for each invoice.  A ReceiptGUID can contain multiple payments for different invoices and are representative of a transaction.
+N/A
+If no, would you be able to receive a file to your system when payments are made?
+ 
+N/A
+What file format should we send this information to you? (request for sample file)
+ 
+N/A
+Additional Notes
+ 
+Bill Presentment
+Bill Presentment
+Internal Notes
+ 
+Response/Decision
+Do you produce your own bill images or do you use a print vendor?
+ 
+Duck Creek
+Could we get a sample of the bill?
+ 
+Does the print vendor have a web service we can call to retrieve bills?
+ 
+The API is currently unavailable but will need to be created. 
+If no, do you (or the print vendor) have the ability to send us bills (PDFS) as individually named files?
+ 
+N/A
+If individual files are not provided, are PDFs readable?  What information is included on the PDF so they can be linked to a customers bill?
+N/A
+How is info exchanged so that paperless customers are not sent physical invoices?
+ 
+Duckcreek will have this information 
+Does the bill contain a bill number or any unique identifier? 
+ 
+N/A
+Additional Notes
+Invoice Number and Account Number used to find specific PDFs. Demo to be scheduled to show how bill presentment is generated on Duck Creek - Attachment ID instead of Invoice Number 
+ URL:/spaces/IM/pages/3815506450/BID+2817+Southern+Oak+Insurance+Discovery

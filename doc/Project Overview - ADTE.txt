@@ -1,0 +1,102 @@
+Overview
+Enhance the business categorized critical applications with configuration best practices, health checks, and a MVP for regression suite test coverage. 
+Goals
+Reduce incidents related to deployments
+Improve software quality
+Increase test automation coverage
+Improve software documentation
+Reduce scope of k8s migration work
+Engineering Resources 
+Primary: Tarun, Ankita, Jose, and Martin
+Consults: Sean, Anitha, Scott
+Jira Epic
+TODO Vasant
+Tooling
+Enhance the Open AI code analysis tool:
+Pull/clone target code repo based on main / master from ADO
+Provide software documentation that identifies the components to be covered in a health check
+Provide software documentation that identifies components that can not be configured per environment  
+Generate health check code, covering identified components, to be integrated into the target software
+Generate automated tests of the health check to be integrated into the regression test suite for the target software and deployment environment (test suite should be added, if not already, in the target code repo as a separate project)
+Critical Software Asset Inventory
+rollout.xlsx (sharepoint.com)
+Candidate Software Assets
+The assets below have been qualified from the asset inventory based on distinct run and deployment models.   Each asset will be used to prove out the AI tooling enhancements.  A software analysis (control base) of each asset will be conducted and used to verify the output of the AI tooling and a iterative approach of tooling modifications used to achieve the desired output.
+VM/IIS Web Application 
+ICRestAPI, 
+https://dev.azure.com/invoicecloud/Src/_git/ICRESTAPI?version=GBmain
+, Ankita
+Skybot Job
+BillerReportGenerator, 
+https://dev.azure.com/invoicecloud/Src/_git/BillerReportGenerator?version=GBmain
+, Jose
+Azure Function
+ICBatchCloseProcessor, 
+https://dev.azure.com/invoicecloud/Src/_git/ICBatchCloseProcessor?version=GBmain
+, Turan
+Azure Batch
+AutoPaymentProcessing, 
+https://dev.azure.com/invoicecloud/Src/_git/AutoPaymentProcessing?version=GBmain
+k8s Web Application
+PayerPayByTextService, 
+https://dev.azure.com/invoicecloud/Src/_git/PayerPayByTextService?version=GBmain
+ - Anitha
+Windows WCF Service
+ICBusinessService, 
+https://dev.azure.com/invoicecloud/Src/_git/ICBusinessService?version=GBmain
+WCF and Web Applications
+Enhancement
+Details
+Notes
+Add Health Check Endpoint
+Configuration checks
+Verify application configuration is valid and that all required settings are present (environment variables, config file settings, etc…)
+Database connectivity
+Verify the connection to database(s).  Ensure application can communicate with the database server(s).
+External service availability
+Check the availability of external services that the application depends on (Azure Key Vaults, Azure Blob Storage, FTP, etc…)
+Logging
+Ensure application can write to the log. 
+Version
+Ensure application is running the correct version, output version information.
+Response
+200 status code (healthy)
+503 status code (unhealthy)
+Software analysis is done by assigned architect and health check design artifacts created and published.
+Implementation of health check in the code is done by assigned SRE.
+Automating of health check test is done by assigned SDET/SRE and included in the regression test catalog. 
+Regression Tests
+Critical functionality test(s)
+Create automated test(s) to ensure essential functionality of the application in the target deployment environment (Dev, UAT, Regression, Production, etc…)
+Critical tests identified by assigned SME and runbooks created and published outlining how to test.
+Automating of test runbook is done by SDET / SRE and included in the test catalog.
+Console Applications
+Enhancement
+Details
+Notes
+Add Health Check Command
+Command logic must always be executed on startup
+A command line switch must be added to isolate executing just the health check
+Configuration checks
+Verify application configuration is valid and that all required settings are present (environment variables, config file settings, etc…)
+Database connectivity
+Verify the connection to database(s).  Ensure application can communicate with the database server(s).
+External service availability
+Check the availability of external services that the application depends on (Azure Key Vaults, Azure Blob Storage, FTP, etc…)
+Logging
+Ensure application can write to the log. 
+Version
+Ensure application is running the correct version, output version information.
+Response
+Return zero for application exit code (healthy)
+Return non-zero for application exit code (unhealthy)
+Software analysis is done by assigned architect and health check design artifacts created and published.
+Implementation of health check in the code is done by assigned SRE.
+Automating of health check test is done by assigned SDET/SRE and included in the regression test catalog. 
+Regression Tests
+Critical functionality test(s)
+Create automated test(s) to ensure essential functionality of the application in the target deployment environment (Dev, UAT, Regression, Production, etc…)
+Critical tests identified by assigned SME and runbooks created and published outlining how to test.
+Automating of test runbook is done by SDET / SRE and included in the test catalog.
+Recording of meeting:
+ URL:/spaces/EN/pages/3014197249/Project+Overview+-+ADTE

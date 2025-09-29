@@ -1,0 +1,63 @@
+Code-Generated Docs
+Description
+
+This pipeline produces a nuget package from a dotnet core project.
+
+Parameters
+Parameter
+Default
+Description
+packageName
+n/a
+Name of the package that will be published, e.g. IC.SomePackage.
+pathToProjectFile
+If not specified will default to "(packageName)/(packageName).*proj".
+pathToTestProjectFile
+If not specified will default to "(packageName).Tests/(packageName).Tests.*proj".
+packageArtifactName
+package
+Name of the package pipeline artifact, default "package".
+unitTestsArtifactName
+unit-tests
+Name of unit tests pipeline artifact, default "unit-tests".
+testAssemblyName
+If not specified will default to "(packageName).Tests.dll".
+mainBranchName
+main
+Name of the main/master branch for the repository, default "main".
+packageFeed
+Package feed to publish to, defaults to "ICPackages" for main branch and "test-feed" for all others.
+vmImage
+ubuntu-latest
+Pool image to use unless poolName is specified, default "ubuntu-latest".
+poolName
+Pool name to use, specify '' to us vmImage value, default is empty string.
+hasNoUnitTests
+False
+If true, unit tests will not be built or run, default false.
+enableSonarQube
+False
+If true, SonarQube will be enabled for unit tests, default false.
+hasFrameworkUnitTests
+False
+If true, unit tests will be built and run with .Net Framework instead of core.
+unitTests_vmImage
+Pool image to use to build and run unit tests unless unitTests_poolName is specified, defaults to vmImage value unless hasFramreworkUnitTests is true, then to empty string.
+unitTests_poolName
+Pool name to use to build and run unit tests, will override unitTests_vmImage if specified, defaults to poolName value unless hasFrameworkUnitTests is true, then "IC-Azure2019".
+versionTagPrefix
+v
+Prefix to be added to version tag created when a package is deployed from the main branch, defaults to "v".
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../jobs/dotnet-core/nuget-push-artifact.job.yaml
+../jobs/dotnet-core/unit-test-execute.job.yaml
+../jobs/dotnet-core/unit-test-build.job.yaml
+../jobs/dotnet-core/unit-test-execute-framework.job.yaml
+../jobs/dotnet-core/library-build.job.yaml
+../jobs/dotnet-core/unit-test-build-framework.job.yaml
+ URL:/spaces/platform/pages/3635511416/flows+library-dotnet-core.yaml

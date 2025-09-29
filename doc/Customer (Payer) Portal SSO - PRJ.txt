@@ -1,0 +1,43 @@
+Goals
+Use Kong to handle SAML handshakes for the Customer Portal 
+Resolve third-party cookie issue with IFRAME and SSO 
+SMEs
+Sean Concannon
+Constraints
+SSO integrators are using a specific endpoint to start the SSO flows.  This endpoint location can not change.
+SSO Endpoint Code Repository: 
+https://dev.azure.com/invoicecloud/Src/_git/ICSSOAuthentication
+Test Harness
+The link below is a javascript SPA application that is built to test SSO into the Customer Portal 
+https://www1.mcc.net/email/website/CloudPayment-TestV2.html
+Use the SAML form on the SPA page to test
+The important part of this is it IFRAMEs the SSO flow and is on a different domain then the Customer Portal.
+ 
+ 
+Customer Portal (MyIIS) SSO handler
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS
+Page:
+CustomerRedirect.aspx
+Flow
+GET:
+https://sso.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=10-2011-1184&ViewMode=1&CssUrl=https://www1.mcc.net/email/website/TestCss
+GET:
+https://dev-390385.okta.com/app/invoicecloudincdev390385_sustainsys_1/exk14pecrueYalBvq357/sso/saml?SAMLRequest=fZExb8IwEIV3JP5D5J04NglJLECiZUGiC7SV2iVyHUtYJHbw2RH99zWhVWFhffe%2Bu3t3c%2BBtQzu28u6gd%2FLkJbjo3DYa2LWyQN5qZjgoYJq3EpgTbL962TIaJ6yzxhlhGnTLPEY4gLROGY2izXqBVC3zghNBZ0VW5inhhNdcFHVOMlqTMiUlit6lhQAsUOADBeDlRoPj2gUpoekkKSc0eyUzRiijySeK1iGG0twN1MG5DhjGtewn0zKZFllsjo7HwrSYdx1WujdKSNEYXystgu3qqsCHIUrDN1QEy%2FORpJ0U1ssP3jz1p2mWYwCDL5lRtPqL9Ww0%2BFbavbR96Pq22%2F5vEOzx7bRhhQtfCd40X1wc0XI8iqL5cEc2JLXLR%2FQc31nHo1%2Fh%2FqPLHw%3D%3D&RelayState=wjWFsOBUrQ-KOXR6KPQHmI3N&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=cXEkyjS116Xl%2FJzdUjkIo8VV36iULXu9amKaTlShJNJU%2FHaUWqOyfCJu9lBWE1YBTd3JoRHYnVFdd2GXNiEg2nJNlbkZmfqA%2B8TWPq0K2GbWQG%2BjQIYfRSiuUdlWeVzJ4ksgNBhlB6zl%2Fw4uaG5MVw%2Fim1uiIFBQFBGtr0TyUScADy3rSXmIBWd1DeCBo8PuVCEIFybxKOArnvseZeCoJ%2BcdexmWK%2FZuCVczn1apwUc5Jly9lBDU8i%2B%2BmZa%2B9zafozveFCpuDRb7OjF16cGlwVfzWJpn3VQLy%2FNfCTy2Cck4Ycim1IjKDO%2BpsON9z%2Flysi1Tp1lZSwaUs8JvlT6fZg%3D%3D
+POST:
+https://sso.invoicecloud.com/saml_callback
+OKTA Test SAML Application
+Sign on URL
+https://dev-390385.okta.com/app/dev-390385_kongtest_1/exk1a5maz8uzF1Qov358/sso/saml
+Issuer
+http://www.okta.com/exk1a5maz8uzF1Qov358
+Cert
+MIIDpDCCAoygAwIBAgIGAZIAcH0KMA0GCSqGSIb3DQEBCwUAMIGSMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEUMBIGA1UECwwLU1NPUHJvdmlkZXIxEzARBgNVBAMMCmRldi0zOTAzODUxHDAaBgkqhkiG9w0BCQEWDWluZm9Ab2t0YS5jb20wHhcNMjQwOTE3MTQ0MjQ1WhcNMzQwOTE3MTQ0MzQ0WjCBkjELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xDTALBgNVBAoMBE9rdGExFDASBgNVBAsMC1NTT1Byb3ZpZGVyMRMwEQYDVQQDDApkZXYtMzkwMzg1MRwwGgYJKoZIhvcNAQkBFg1pbmZvQG9rdGEuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmW2WhnObDsXDtGRFmC5gZ3Eb4gX7D1UfcI65t/wHspszMriDxXKC6vRsoa3tQj+Yx7hqp7sWZPHmL6iPEJrYd3SoTdyz4MIrtkMTLeob2OyoJydDU813m6WjNpBTUnbADQeEMZ262RhRK22FobxwLR8a5p7qYUeccici2nN+Wy9anzqVmRyVK3LM0OT2crj+6iCIsW6OMflE8/RGqQobQV+PRFVUkcNy5A6GTGGbNkVuJd5uSI9bQDZ4JCsGWj8Et57znLbLH73XouoqiEeZAgcNVW4/M7Wi92EH++NJj5YcDSQE3X/gjXT/kQRI93TtCLqpUZ/oEDd2c0s31IxR0wIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQBM8z/mcDcAyajIhuyy6ue29tIBrAtwNZs7AQPoqm2ej0Kl5Zs2AtdSLRJMckuDwzgLQ2oODZmXwTnrVh/DaCj7x12oiih4sBkg6kLPoqrApbkVofRh5+bQqEBlOl9GiGvYomPJbI1s1Qliw7FHaEOcW+wS+i0VzKSUBTA5T0RRW19xEt36moqHYImVjjs1ZWpcunFqnnTraU+XJyXos00Zhjrl845t1qwGvAXVURENMm5cudCl12uFOUZzLGhqOHKAqmuOS+KcgQdGPuvD69idKtk4BO//HBPzHRFcNRTDQnvsCJiKxmqiGOw9JGFjtMoTooo1R/3ACFuxapXqFJ5I
+Kong SAML
+You can have SAML attributes passed to the backend by configuring the headers in the SAML plugin configuration.  Below is sending the subject and the email.
+"config": {
+  headers": {
+      "X-User-Id": "subject",
+      "X-User-Email": "email"
+    }
+  }
+ URL:/spaces/EA/pages/3597402157/Customer+Payer+Portal+SSO+-+PRJ

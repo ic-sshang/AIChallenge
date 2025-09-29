@@ -1,0 +1,90 @@
+This is a non-exhaustive list of items that we want to either fix or improve to make our lives and our systems better.
+none
+Errors
+EQP - losing log files: 
+Whenever an EQP job shows 
+FileUploadAccessDenied 
+in Azure, it means that it was unable to move the logfile to iclogstorage.  That log file is lost permanently.
+Token Expiry
+Error on ICAutoPayScheduledPayRemindersController. Microsoft.Rest.Azure.CloudException: The 'EvolvedSecurityTokenService' access token expiry UTC time '7/12/2025 8:23:34 PM' is earlier than current UTC time '7/12/2025 8:24:11 PM'.
+Alerts
+Single biller exceptions call folks in the middle of the night.  There is nothing that can be done 
+until AutoPay is done for the day.  On-call will address these errors when they log on for the day.
+Biller exception/decline alert.  It is almost always a false alarm since the declines are normal (account closed, expired card, suspicious activity, etc..).
+
+
+
+
+72
+
+
+24640a3c-f12a-41b1-974f-dee10ff519f0
+
+
+incomplete
+
+
+The alert should check if the decline is normal
+
+
+
+
+o   7/11/2025        Completed AutoPay Job Error Detected: The following Billers Exception Rate > 50% or Decline Rate > 50%: Biller: 1692 U.S. Auto Company
+Completed AutoPay Job Error Detected: The following Billers have more than 5% failed payments: Biller: 223 Town of Glastonbury
+What triggers this?  Almost always a false alarm
+Completed AutoPay Job Error Detected: No completed AutoPay tasks in the last 20 minutes!
+Mark 
+– The trigger is in perflogging database.  SP/SPMulti/AP/APMulti.  Tweak is to bring timer down in logic app.  Reduce overall window to 3:30 – 7:30 central
+RTDR auto-disconnect for AutoPay and EQP
+:
+The AP/EQP jobs should auto-disconnect from RTDR when certain criteria are met.  This is a common source of delayed AP and EQP runs and requires assistance from Client Services.
+o   Configurable per biller.  Some billers are very sensitive about RTDR
+o   Command line parameter to control it during re-runs
+o   
+Mark
+:  CIRCUIT BREAKER PATTERN – loop in Anita/Cat for thresholds
+Alert Improvements
+Add time zone and priority to alert text.  Don't make me have to look them up in the CRM:
+                Completed AutoPay Job Error Detected:
+                The following Billers Exception Rate > 50% or Decline Rate > 50%:
+                Biller: 1741 James Island Public Service District
+                                TotalItemsToProcess: 85
+                                TotalApproved: 8
+                                TotalDeclined: 76
+                                TotalExceptions: 0
+ 
+                Biller: 1846 Rattlesnake Ridge Water District
+                                TotalItemsToProcess: 69
+                                TotalApproved: 10
+                                TotalDeclined: 56
+                                TotalExceptions: 0
+                
+Mark:  quick db change
+In Jira alerts, insert a dash between the run number and the biller id
+. 
+Easy to mistake the BID for 1287, instead of 287, in an emergency
+Before: Job Name: 2025-07-02-autopayschedulepayprocessing-Staging-Med-CT_1287-----InvoiceCloud---QE-287
+After:  Job Name: 2025-07-02-autopayschedulepayprocessing-Staging-Med-CT_1-287-----InvoiceCloud---QE-287
+Mark:  quick change to the controller
+Code Improvements
+Receipt pages
+ –
+Document the flows
+redesign/refactor – Carlos and Papa Bill have some suggestions
+Better way of re-running AP
+Automate the re-run -> have it figure out what’s broken and how to fix.
+Manual runs – what information do we need to re-run?  
+Make it as easy as clicking single button so that CS can just “click a button”
+Have more options via controller or scripts - script to create a schedule
+Control what RTDR refreshes for re-runs 
+(have it refresh only invoices with a balance instead of zero balances because that may cause double payments) – 
+discuss with Cat/Anita
+Anitha – separate regular AP runs into RTDR and non-RTDR runs
+Run multiple AP’s and EQP’s simultaneously
+We should be able to stage an AP/EQP re-run while another run is happening instead of having to wait until the main run finishes.  This takes up a lot of time for the on-call person, particularly during weekends and holidays.
+Library Maintainance
+IC.Logins – who should own this?  Shared Services
+The library is a bit of a mess.  There are two branches, one for Framework and one for Standard 2.0.  Versioning was not consistent in the past.
+Break out into separate repos (framework vs standard)
+Use correct Semantic versioning – all IC developers should do this
+ URL:/spaces/PE/pages/4498194675/Pain+Points+to+Improve

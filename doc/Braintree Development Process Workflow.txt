@@ -1,0 +1,135 @@
+Overview
+The development process begins with the 
+work ahead team
+ who fleshes out the stories prior to grooming with the engineering team.  Once the stories go to the 
+engineering team
+ they groom them further and estimate the level of effort.  Afterwards the work moves into the 
+delivery process
+ which utilizes Kanban practices to track the delivery of the software as it moves through the various stages of development. 
+Delivery Process
+Once the work ahead team has finished with their work, and the engineering team has groomed the stories, those stories are placed in the 
+Ready For Dev
+ column.  This initiates those stories into the Kanban process. 
+When a developer has picked up a story to begin work, they are responsible for moving the work item into the 
+In Progress
+ column.  After all of the development and quality engineering work takes place - this may also include a review by 
+finance operations
+ - a pull request (PR) will be created by the engineering team member responsible for the work.  This PR will target the ‘main’ branch of the repository if it is destined for immediate release to production.  In the event that the PR is intended to go through UAT first then it will instead target a release candidate branch.  Additionally, a second PR will be created that targets main for when it is ready for the production release.
+The 
+Blocked
+ column is a specific purpose column.  It is not utilized if everything is on the happy path.  So, for now, this document will ignore this column, but we will revisit it later.  
+Once the PR is started, the story is moved to 
+Tech Lead Review (TLR)
+.  The PR is then reviewed by the 
+Tech Leads
+. 
+If approved, it will be completed and targeted for a release (fix version) into the destined environment.  
+If it is not approved, then it returns to the 
+In Progress
+ column with comments added by the reviewer in the pull request.  Additional comments may also be added to the 
+discussion
+ section of the Jira ticket.
+After the PR is approved by the TLR process the code will be merged into the appropriate branch and deployed to the appropriate environment.  If that environment is the cert / uat environment, then the story will move into the UAT column.  Otherwise, it will go straight into the deployment queue.
+Each time a deployment is made to the cert environment it will contain the latest code from the Main branch.  This means any code that did not explicitly go to the UAT environment will still be included with the next subsequent deployment to that environment.
+At any point in this process if the code cannot move forward for any reason, it may be moved to the Blocked column.  This means that progress is being delayed by some factor and calls attention to getting that issue resolved so progress can continue.
+Dev Notes
+During the development process, it is common that items must be changed which exist outside the obvious scope of the Conditions of Acceptance / Acceptance Criteria.  For example, we may need to update data mapping for an object, which could impact 2-3 other areas.  This information doesn’t make sense to add to the Acceptance Criteria as it’s not part of the things that product wanted from the story and Acceptance Criteria is more intended for that specific purpose.  Going forward (as of 11/28/2023) it is critical that any notes of this nature are included in the content of the Jira item.  This ensures the Quality Engineering team is aware of those changes and can plan tests around those other affected areas.
+If the 
+DevNotes
+ section does not exist in the story it should be added as an info panel in the Description text box in JIRA.  This should appear on new tickets as part of the grooming process, but for existing tickets the new info panel should be added.  Once created then subsequent notes should be added there.  
+This is preferrable to comments as they are often disorganized and not structured in a way that provides the desired value.
+Dev Notes are an expectation from QE on every story going forward, the engineer working on the story will be ultimately responsible for making sure this section is added and updated as the work item is under development.
+See the screenshot below for an example of how to use the info panel.  In addition, 
+//
+ commands can be used to add them.  e.g.  
+//Warning panel
+ will render the panel as shown in the screen shot.
+Branching and Merging 
+Unlike many of the other product teams at InvoiceCloud currently, the Braintree project team must account for branching and merging with a UAT / Certification environment in the mix.  Therefore, it requires a bit more upfront planning and it’s important that everyone understands that workflow.  A 
+separate document
+ has been created which breaks this down further.
+Work Ahead Team
+The role of the work ahead team is to pull together the necessary resources to flesh out the user stories in advance of any grooming attempts by the team.  The group meets regularly and reviews the backlog, working to as subject matter experts from the perspectives of engineering and product development from all of the involved stakeholder organizations.
+Roster
+This roster is a list of those directly involved with the project (as of 8/16/2023)
+Member
+Organization
+Role
+Team(s)
+Olalekan Agbaje
+Altimetrik
+Product Owner
+Work Ahead, Product
+Jonathan Blackburn
+IC
+Prod. Eng. - Manager
+Work Ahead, Engineering
+Matt Cowie
+PSN
+Prod. Eng. - Director
+Work Ahead, Engineering
+TeNeice Gordy-Dunlap
+IC
+Settlement Ops - Sr. Manager
+Work Ahead, Financial Operations
+CJ Hathaway
+IC
+Program Manager
+Work Ahead
+Martin Henderson
+IC
+Prod. Eng. - Architecture
+Work Ahead, Engineering
+Krishna Kanth
+Altimetrik
+Software Engineer
+Engineering
+Sujith KP
+Altimetrik
+Software Engineer
+Engineering
+Chandrakanth KR
+Altimetrik
+Quality Engineer
+Engineering
+Lakshmi Krishnamoorthy
+IC
+Quality Engineer
+Engineering
+Praveen Kumar
+Altimetrik
+Software Engineer
+Engineering
+Ranju Kumari
+Altimetrik
+Quality Engineer
+Engineering
+Ross Lefrancois
+IC
+Data Engineering - VP
+Work Ahead, Engineering
+Jackie Manuell
+PSN
+Product - Director
+Work Ahead, Product
+Vinay Pandey
+Altimetrik
+Team Lead – Braintree
+Work Ahead, Engineering
+Kartik Peshori
+Altimetrik
+Product Owner
+Work Ahead, Engineering
+Sara Phelps
+IC
+Payment Operations - VP
+Work Ahead, Financial Operations
+Ryan Pieszak
+IC
+Product - VP
+Work Ahead, Product
+Rene Reyes
+IC
+Prod. Eng. - Sr. Software Engineer 
+Work Ahead, Engineering
+ URL:/spaces/ED/pages/2796945435/Braintree+Development+Process+Workflow

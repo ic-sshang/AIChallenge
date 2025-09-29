@@ -1,0 +1,2354 @@
+Stored Procedures That Modify 
+mcl.CustomerLogins
+Level 1: Primary Procedures (Directly Modify Data)
+These procedures directly modify data in the 
+mcl.CustomerLogins
+ table:
+mcl.insCustomerLogin
+ - Inserts new customer login records
+mcl.spCreateLogin
+ - Comprehensive login creation procedure
+mcl.updCustomerLogins
+ - Updates existing customer login records
+mcl.delCustomerLogin
+ - Deletes specific customer login records
+mcl.delLogin
+ - Deletes login records and associated customer logins
+mcl.delTempLogin
+ - Deletes temporary login records
+mcl.updLogin
+ - Updates login information
+mcl.spTulareMigratePriorYearData
+ - Data migration procedure
+dbo.ImportFileRealTimeSetBasedInv
+ - Import procedure
+dbo.PurgeBillerData
+ - Bulk deletion procedure
+Level 2: Secondary Procedures (Call Primary Procedures)
+These procedures call the primary procedures:
+Procedures That Call 
+mcl.spCreateLogin
+:
+mcl.insChandlerCustomerAndInvoice
+ - Creates customers and invoices for Chandler billing system
+dbo.spLinkNewCustomerToOriginal
+ - Links new customers to original customer accounts
+dbo.insBIFCustomer
+ - Imports customers from BIF (Biller Import File) format
+Procedures That Call 
+mcl.delCustomerLogin
+:
+mcl.UnConveyAccounts
+ - Reverses account conveyance operations
+mcl.UnConveyAccounts_V2
+ - Updated version of account conveyance reversal
+Procedures That Call 
+mcl.updLogin
+:
+mcl.spCreateLogin
+ (self-referential) - Internal procedure optimization
+dbo.insBIFCustomer
+ - Updates existing login records during import
+Procedures That Call 
+dbo.ImportFileRealTimeSetBasedInv
+:
+dbo.ZZZImportInvoiceFileByJob
+ - Processes invoice file imports as background jobs
+dbo.ImportInvoiceFileByJob
+ - Alternative invoice file import job processor
+dbo.spPromoteImportInvoiceDuplicate
+ - Promotes duplicate invoice imports
+Procedures That Call 
+dbo.PurgeBillerData
+:
+dbo.PurgeData_SqlJob
+ - SQL Server Agent job wrapper for data purging
+dbo.ZZZPurgeBillerData
+ - Alternative purge procedure wrapper
+Level 3: Tertiary Procedures (Call Secondary Procedures)
+These procedures call the secondary procedures:
+Procedures That Call 
+dbo.spLinkNewCustomerToOriginal
+:
+dbo.ImportConveyanceFile
+ - Imports conveyance files and links customers
+Procedures That Call 
+dbo.insBIFCustomer
+:
+pld.spSplitImport
+ - Splits import files for preload processing
+dbo.ImportFileRealTime
+ - Legacy import procedure
+dbo.ImportFileRealTimeV2
+ - Updated import procedure
+dbo.ImportFileRealTimeMishawaka
+ - Mishawaka-specific import procedure
+dbo.ImportFileRealTimeSetBased
+ - Set-based import procedure
+dbo.ImportFileRealTimeSetBasedInv_WS
+ - Web service import procedure
+dbo.ImportFileRealTimeSetBasedInvElasticTest
+ - Elastic test import procedure
+Procedures That Call 
+dbo.ImportConveyanceFile
+:
+dbo.ZZZImportInvoiceFileByJob
+ - Job processor that handles conveyance files
+dbo.ImportInvoiceFileByJob
+ - Alternative job processor for conveyance files
+Procedures That Call 
+pld.spSplitImport
+:
+dbo.spCopyToPreLoad
+ - Copies data to preload tables
+Procedures That Call 
+dbo.spCopyToPreLoad
+:
+dbo.ImportInvoiceFileToPreLoad
+ - Preload import procedure
+Level 4: Quaternary Procedures (Call Tertiary Procedures)
+These procedures call the tertiary procedures:
+Procedures That Call 
+dbo.ImportFileRealTime*
+ Procedures:
+dbo.ZZZImportInvoiceFileByJob
+ - Job processor (self-referential)
+dbo.ImportInvoiceFileByJob
+ - Alternative job processor (self-referential)
+Procedures That Call 
+dbo.spFileImportAnalyzer
+:
+dbo.spFileImportAnalyzer_ValidateBillerGUID
+ - Validates biller GUIDs
+dbo.spFileImportAnalyzer_SingleLineFile
+ - Analyzes single line files
+Level 5: Quinary Procedures (Call Quaternary Procedures)
+These procedures call the quaternary procedures:
+Procedures That Call 
+dbo.spFileImportAnalyzer_ValidateBillerGUID
+:
+dbo.spFileImportAnalyzer
+ - Main file import analyzer (self-referential)
+Procedures That Call 
+dbo.spFileImportAnalyzer_SingleLineFile
+:
+dbo.spFileImportAnalyzer
+ - Main file import analyzer (self-referential)
+Raw SP List
+mcl.insCustomerLogin
+mcl.spCreateLogin
+mcl.updCustomerLogins
+mcl.delCustomerLogin
+mcl.delLogin
+mcl.delTempLogin
+mcl.updLogin
+mcl.spTulareMigratePriorYearData
+dbo.ImportFileRealTimeSetBasedInv
+dbo.PurgeBillerData
+mcl.insChandlerCustomerAndInvoice
+dbo.spLinkNewCustomerToOriginal
+dbo.insBIFCustomer
+mcl.UnConveyAccounts
+mcl.UnConveyAccounts_V2
+dbo.ZZZImportInvoiceFileByJob
+dbo.ImportInvoiceFileByJob
+dbo.spPromoteImportInvoiceDuplicate
+dbo.PurgeData_SqlJob
+dbo.ZZZPurgeBillerData
+dbo.ImportConveyanceFile
+pld.spSplitImport
+dbo.ImportFileRealTime
+dbo.ImportFileRealTimeV2
+dbo.ImportFileRealTimeMishawaka
+dbo.ImportFileRealTimeSetBased
+dbo.ImportFileRealTimeSetBasedInv_WS
+dbo.ImportFileRealTimeSetBasedInvElasticTest
+dbo.spCopyToPreLoad
+dbo.ImportInvoiceFileToPreLoad
+dbo.spFileImportAnalyzer
+dbo.spCheckActiveFileImport
+dbo.spBalanceForwardByFileID
+dbo.spFileImportAnalyzer_ValidateBillerGUID
+dbo.spFileImportAnalyzer_SingleLineFile
+Raw Code Repository Search Results
+"mcl.insCustomerLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",2096,2258
+"mcl.insCustomerLogin","Src\IC.Logins","IC.Logins\DAL.vb",1,156
+"mcl.insCustomerLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",339,514
+"mcl.insCustomerLogin","Src\MyIIS","IC.Common\clsCustomers.vb",2410,2612
+"mcl.insCustomerLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",317,475
+"mcl.insCustomerLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\wsRemoteAuthentication.vb",1396,1580
+"mcl.insCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1210,1356
+"mcl.insCustomerLogin","Src\RegisterCustomers","RegisterCustomers\Module1.vb",667,775
+"mcl.insCustomerLogin","Src\IC.Logins","IC.Logins\Extended\DAL.vb",1,169
+"mcl.insCustomerLogin","Src\RegisterAutoPay","RegisterAutoPayTests\BusinessTests\Operators\Login\LinkAccountTests.cs",1,80
+"mcl.insCustomerLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",1497,1688
+"mcl.insCustomerLogin","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\LoginAccount.vb",1,92
+"mcl.insCustomerLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\LoginAccount.vb",1,92
+"mcl.insCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1347,1536
+"mcl.insCustomerLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",558,699
+"mcl.insCustomerLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\clsCustomerLogins.vb",1,122
+"mcl.insCustomerLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\Tools\clsCustomerLogins.vb",1,128
+"mcl.insCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\clsCustomerLogins.vb",1,129
+"mcl.insCustomerLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI.Tests\Models\CustomerLoginHelper.vb",101,110
+"mcl.insCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",501,690
+"mcl.insCustomerLogin","Src\TulareAccountLinking","TulareAccountLinking\Linking\LinkingProcessV2.vb",136,295
+"mcl.spCreateLogin","Src\AutoPaymentProcessing","AutoPaymentProcessing\Models\AccountOwnerLogin.vb",77,86
+"mcl.spCreateLogin","Src\ScheduledPaymentProcessing","ScheduledPaymentProcessing\Models\Logins\AccountOwnerLogin.vb",78,87
+"mcl.spCreateLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1210,1356
+"mcl.spCreateLogin","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\Login.vb",136,194
+"mcl.spCreateLogin","Src\ScheduledPaymentProcessing","ScheduledPaymentProcessing\Models\Logins\AccountOwnerLogin.vb",1,87
+"mcl.spCreateLogin","Src\AutoPaymentProcessing","AutoPaymentProcessing\Models\AccountOwnerLogin.vb",1,86
+"mcl.spCreateLogin","Src\RegisterAutoPay","RegisterAutoPay\Business\Operations\LoginOperations.vb",1,159
+"mcl.spCreateLogin","Src\IC.Logins","IC.Logins\DAL.vb",1,156
+"mcl.spCreateLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\clsCustomerLogins.vb",1,122
+"mcl.spCreateLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\clsCustomerLogins.vb",1,129
+"mcl.spCreateLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalV2Controller.vb",3674,3697
+"mcl.spCreateLogin","Src\IC.Logins","IC.Logins\Extended\DAL.vb",1,169
+"mcl.spCreateLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",347,516
+"mcl.spCreateLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",2249,2416
+"mcl.spCreateLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",1973,2147
+"mcl.spCreateLogin","Src\DemoPortals","DemoPortals\clsUtilityStage.cs",1856,2026
+"mcl.spCreateLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\Tools\clsCustomerLogins.vb",1,128
+"mcl.spCreateLogin","Src\DemoPortals","DemoPortals\clsInsuranceStage.cs",1100,1262
+"mcl.spCreateLogin","Src\DemoPortals","DemoPortals\clsTaxBase.cs",1253,1427
+"mcl.spCreateLogin","Src\RegisterPaperless","RegisterPaperless\Module1.vb",490,548
+"mcl.spCreateLogin","Src\ICEntitySecUpdater","Tests\IntegrationTests\Logins\LoginOperationsTests.cs",1,43
+"mcl.spCreateLogin","Src\IC.Logins","IC.Logins\Login.vb",1,180
+"mcl.spCreateLogin","Src\ICRedirect","ICRedirect\Registration\SandSRegistration.aspx.vb",148,302
+"mcl.spCreateLogin","Src\RegisterPaperless","RegisterPaperless\Module1.vb",341,499
+"mcl.spCreateLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\wsRemoteAuthentication.vb",332,498
+"mcl.spCreateLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\AccountManagement\AccountService.vb",1,154
+"mcl.spCreateLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",317,475
+"mcl.spCreateLogin","Src\ICKioskAPI","ICKioskAPI\Models\Repository\Database.Customer.vb",121,275
+"mcl.spCreateLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1045,1219
+"mcl.spCreateLogin","Src\MyIIS","IC.Common\clsCustomers.vb",2410,2612
+"mcl.spCreateLogin","Src\ICRESTAPI","ICRESTAPI.DB\Database\LoginRepository.vb",1,131
+"mcl.spCreateLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",145,293
+"mcl.spCreateLogin","Src\ICCRM","ICCRM\App_Code\Models\MultiCustomerLogin\CustomerLogin.vb",169,339
+"mcl.spCreateLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",339,514
+"mcl.spCreateLogin","Src\MotorVehicleLinking","IntegrationTests\BusinessTests.vb",1,55
+"mcl.spCreateLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",179,347
+"mcl.spCreateLogin","Src\RegisterCustomers","RegisterCustomers\Module1.vb",667,775
+"mcl.spCreateLogin","Src\RegisterAutoPay","RegisterAutoPay\Module1.vb",818,967
+"mcl.spCreateLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",681,843
+"mcl.spCreateLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",1120,1278
+"mcl.updCustomerLogins","Src\IC.Logins","IC.Logins\Extended\DAL.vb",1,169
+"mcl.updCustomerLogins","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\LoginAccount.vb",1,92
+"mcl.updCustomerLogins","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",339,514
+"mcl.updCustomerLogins","Src\ICRedirect","ICRedirect\Models\MultiCustomerLogin\clsCustomer.vb",1,142
+"mcl.updCustomerLogins","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",1120,1278
+"mcl.updCustomerLogins","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\LoginAccount.vb",1,92
+"mcl.updCustomerLogins","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLoginAccount.vb",1,165
+"mcl.updCustomerLogins","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\AccountManagement\AccountService.vb",1,154
+"mcl.updCustomerLogins","Src\ICRESTAPI","ICRESTAPI.DB\Database\LoginRepository.vb",1,131
+"mcl.updCustomerLogins","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",317,475
+"mcl.updCustomerLogins","Src\MyIIS","BillerPortal.Business.VisualBasic\Repositories\CustomerLoginRepository.vb",1,110
+"mcl.updCustomerLogins","Src\IC.Logins","IC.Logins\Portal\Models\LoginAccount.vb",281,416
+"mcl.updCustomerLogins","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLoginAccount.vb",1,155
+"mcl.delCustomerLogin","Src\IC.Logins","IC.Logins\Portal\Models\LoginAccount.vb",407,416
+"mcl.delCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1210,1356
+"mcl.delCustomerLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Repositories\CustomerLoginRepository.vb",1,110
+"mcl.delCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\clsCustomerLogins.vb",1,129
+"mcl.delCustomerLogin","Src\ICCRM","ICCRM\App_Code\Models\MultiCustomerLogin\CustomerLogin.vb",1,178
+"mcl.delCustomerLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",284,460
+"mcl.delCustomerLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\clsCustomerLogins.vb",1,122
+"mcl.delCustomerLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",624,743
+"mcl.delCustomerLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",339,514
+"mcl.delCustomerLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\Tools\clsCustomerLogins.vb",1,128
+"mcl.delCustomerLogin","Src\ICRESTAPI","ICRESTAPI.DB\Database\LoginRepository.vb",1,131
+"mcl.delCustomerLogin","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\LoginAccount.vb",1,92
+"mcl.delCustomerLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",1120,1278
+"mcl.delCustomerLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\AccountManagement\AccountService.vb",1,154
+"mcl.delCustomerLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\wsRemoteAuthentication.vb",1396,1580
+"mcl.delCustomerLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\LoginAccount.vb",1,92
+"mcl.delCustomerLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",1326,1506
+"mcl.delCustomerLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",1497,1688
+"mcl.delCustomerLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLoginAccount.vb",1,165
+"mcl.delCustomerLogin","Src\ICSSOAuthentication","ICSSOAuthentication\Models\Repositories\CustomerLoginRepository.cs",1,123
+"mcl.delCustomerLogin","Src\ICRedirect","ICRedirect\Registration\SandSRegistration.aspx.vb",480,642
+"mcl.delCustomerLogin","Src\IC.Logins","IC.Logins\Portal\Models\LoginAccount.vb",281,416
+"mcl.delCustomerLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",466,629
+"mcl.delCustomerLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLoginAccount.vb",1,155
+"mcl.delCustomerLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",501,690
+"mcl.delLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",317,475
+"mcl.delLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\Login.vb",1,65
+"mcl.delLogin","Src\IC.Logins","IC.Logins\Login.vb",171,344
+"mcl.delLogin","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\Login.vb",1,145
+"mcl.delLogin","Src\IC.Logins","IC.Logins\DAL.vb",1,156
+"mcl.delLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",185,348
+"mcl.delLogin","Src\IC.Logins","IC.Logins\Extended\DAL.vb",1,169
+"mcl.delLogin","Src\ICRedirect","ICRedirect\Models\MultiCustomerLogin\clsCustomer.vb",133,142
+"mcl.delLogin","Src\MyIIS","BillerPortal\Dialogs\RemoveLogin.aspx.vb",191,330
+"mcl.delLogin","Src\MyIIS","MyIIS\2\RemoveLogin.aspx.vb",1,184
+"mcl.delLogin","Src\MyIIS","IC.Common\clsCustomers.vb",2410,2612
+"mcl.delLogin","Src\ICRedirect","ICRedirect\Models\MultiCustomerLogin\clsCustomer.vb",1,142
+"mcl.delLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",2249,2416
+"mcl.delLogin","Src\RegisterCustomers","RegisterCustomers\Module1.vb",667,775
+"mcl.delTempLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",317,475
+"mcl.delTempLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",172,326
+"mcl.delTempLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",185,348
+"mcl.delTempLogin","Src\ICRedirect","ICRedirect\Models\MultiCustomerLogin\clsCustomer.vb",133,142
+"mcl.updLogin","Src\IC.Logins","IC.Logins\DAL.vb",1,156
+"mcl.updLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\Login.vb",58,65
+"mcl.updLogin","Src\IC.Logins","IC.Logins\DAL.vb",147,156
+"mcl.updLogin","Src\MyIIS","MyIIS\App_Code\WebControls\2\PaperlessPanel.vb",931,1065
+"mcl.updLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI.Tests\TestUtilities.vb",1,111
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",1210,1356
+"mcl.updLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",159,311
+"mcl.updLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\Login.vb",57,65
+"mcl.updLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\Login.vb",56,65
+"mcl.updLogin","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\Login.vb",1,65
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\clsCustomerLogins.vb",1,129
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalV2Controller.vb",1747,1939
+"mcl.updLogin","Src\DemoPortals","DemoPortals\clsInsuranceStage.cs",1100,1262
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\clsCustomerLogins.vb",1,122
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalController.vb",1876,2049
+"mcl.updLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",624,743
+"mcl.updLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",1120,1278
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalController.vb",2958,3083
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalV2Controller.vb",3383,3533
+"mcl.updLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",307,444
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Controllers\CustomerPortalController.vb",1711,1885
+"mcl.updLogin","Src\EmailQueueProcessing","UnitTests\Tests\ReceiptQueue\ReceiptQueueTests.vb",1,80
+"mcl.updLogin","Src\MyIIS","MyIIS\2\Controls\ctrlCustomerPaymentRouteAutoPay.ascx.vb",438,567
+"mcl.updLogin","Src\ICEntitySecUpdater","ICEntitySecUpdater.Business\Logins\LoginRepository.cs",1,108
+"mcl.updLogin","Src\ICRemoteAuthenticationAPI","ICRemoteAuthenticationAPI\Models\CustomerLogin.vb",948,1129
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Models\MultiCustomerLogin\CustomerLogin.vb",156,289
+"mcl.updLogin","Src\EmailQueueProcessing","UnitTests\HelperTests.vb",1,207
+"mcl.updLogin","Src\ICRedirect","ICRedirect\Registration\SandSRegistration.aspx.vb",480,642
+"mcl.updLogin","Src\DemoPortals","DemoPortals\clsUtilityStage.cs",1856,2026
+"mcl.updLogin","Src\DemoPortals","DemoPortals\clsTaxBase.cs",1253,1427
+"mcl.updLogin","Src\MyIIS","MyIIS\App_Code\WebControls\2\PaperlessPanel.vb",833,940
+"mcl.updLogin","Src\MyIIS","MyIIS\2\RemoveLogin.aspx.vb",1,184
+"mcl.updLogin","Src\MyIIS","BillerPortal\Dialogs\RemoveLogin.aspx.vb",191,330
+"mcl.updLogin","Src\ICKioskAPI","ICKioskAPI\Models\Repository\Database.Customer.vb",121,275
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",1143,1335
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",179,347
+"mcl.updLogin","Src\MyIIS","MyIIS\App_Code\WebControls\2\PaperlessPanel.vb",1056,1145
+"mcl.updLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",1,168
+"mcl.updLogin","Src\ICSSOAuthentication","ICSSOAuthentication\Models\Repositories\LoginRepository.cs",1,47
+"mcl.updLogin","Src\RegisterCustomers","RegisterCustomers\Module1.vb",667,775
+"mcl.updLogin","Src\MyIIS","UnitTests\CustomerLoginTest.vb",1,118
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\wsRemoteAuthentication.vb",1227,1405
+"mcl.updLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\Customers\Customer.vb",2249,2416
+"mcl.updLogin","Src\MyIIS","IC.Common\clsCustomers.vb",1,174
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",338,510
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",688,860
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",501,690
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\wsRemoteAuthentication.vb",1075,1236
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthenticationTests\Business\wsRemoteAuthentication.vb",981,1152
+"mcl.updLogin","Src\ICFramework.Web","ICFramework.Web\ICFramework.Web\Abstracts\BaseLoginPageHelper.cs",206,211
+"mcl.updLogin","Src\RemoteAuthentication","RemoteAuthentication\App_Code\Tools\clsCustomerLogins.vb",1,128
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\semco.vb",681,843
+"mcl.updLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",284,460
+"mcl.updLogin","Src\ICCRM","ICCRM\App_Code\Models\MultiCustomerLogin\CustomerLogin.vb",1,178
+"mcl.updLogin","Src\RegisterCustomers","RegisterCustomers\Module1.vb",503,676
+"mcl.updLogin","Src\ICRedirect","ICRedirect\SSO\SandS.aspx.vb",451,633
+"mcl.updLogin","Src\MyIIS","BillerPortal.Business.VisualBasic\Models\MultiCustomerLogin\CustomerLogin.vb",172,326
+"mcl.updLogin","Src\IC.Logins","IC.Logins\Extended\DAL.vb",1,169
+"mcl.updLogin","Src\ICRESTAPI","ICRESTAPI\Models\MultiCustomerLogin\CustomerLogin.vb",1,165
+"mcl.updLogin","Src\OracleOfsllDataImport","OracleOfsllDataImport\Models\Login.vb",1,145
+"mcl.updLogin","Src\RegisterPaperless","RegisterPaperless\Module1.vb",341,499
+"mcl.updLogin","Src\SystemsAndSoftware4.0","SystemsAndSoftware4.0\App_Code\systemsandsoftware.vb",851,1054
+"mcl.updLogin","Src\ICRedirect","ICRedirect\CSRRedirect\CSRRedirect.aspx.vb",537,711
+"mcl.updLogin","Src\MyIIS","IC.Common\clsCustomers.vb",2410,2612
+"mcl.updLogin","Src\MyIIS","IC.Common\Models\MultiCustomerLogin\CustomerLogin.vb",185,348
+"mcl.spTulareMigratePriorYearData","Src\TulareAccountLinking","TulareAccountLinking\LinkingModule.vb",142,167
+"mcl.spTulareMigratePriorYearData","Src\TulareAccountLinking","TulareAccountLinking\LinkingModule.vb",1,151
+"dbo.ImportFileRealTimeSetBasedInv","Src\ICRESTAPI","ICRESTAPI\Models\Database.vb",54,59
+"dbo.PurgeBillerData","Src\MyIIS","IC.Common\AzureQueueStorage.vb",107,112
+"mcl.insChandlerCustomerAndInvoice","Src\OneTimePaymentService","src\OneTimePaymentService.Repositories\InvoiceRepository.cs",53,59
+"dbo.spLinkNewCustomerToOriginal","Src\ChandlerLinkedAccounts","ChandlerLinkedAccounts\Linking\LinkingProcessor_v2.vb",1,134
+"dbo.insBIFCustomer","Src\ICUserInviteQueueProcessor","ICUserInviteQueueProcessor\Tools\clsCustomers.cs",14,20
+"mcl.UnConveyAccounts","Src\MyIIS","BillerPortal\Dialogs\UnconveyCustomerAccount.aspx.vb",1,110
+"mcl.UnConveyAccounts_V2","Src\MyIIS","UnitTests\BillerPortal\Repositories\ConveyanceReport\ConveyanceReportHelper.vb",46,50
+"dbo.ZZZImportInvoiceFileByJob","Src\ICPaymentProcessingAPI","Jobs\PayPalDailyFileProcessing\Program.cs",453,658
+"dbo.ImportInvoiceFileByJob","Src\ICRESTAPI","ICRESTAPI\Services\Invoice\IInvoiceFileService.vb",5,7
+"dbo.spPromoteImportInvoiceDuplicate","Src\DemoPortals","DemoPortals\clsStageBase.cs",647,856
+"dbo.PurgeData_SqlJob","Src\ICAutoPayController","ICAutoPayController\DAL\DailyJobsRepository.cs",28,36
+"dbo.ZZZPurgeBillerData","Src\MyIIS","IC.Common\AzureQueueStorage.vb",108,112
+"dbo.ImportConveyanceFile","Src\StratusWebServices","StratusWebServices\frmConveyanceUpload.aspx.vb",1,183
+"pld.spSplitImport","Src\ScheduledPaymentReminders","ScheduledPaymentReminders\Extensions\StringExtensions.vb",10,10
+"dbo.ImportFileRealTime","Src\ICRESTAPI","ICRESTAPI\Models\Database.vb",51,59
+"dbo.ImportFileRealTimeV2","Src\ICRESTAPI","ICRESTAPI\Repositories\Invoice\IInvoiceFileRepository.vb",9,14
+"dbo.ImportFileRealTimeMishawaka","Src\IC.Gateway","IC.Gateway\Models\Services\Reporting\RptCassBillingActivityResponse.cs",20,28
+"dbo.ImportFileRealTimeSetBased","Src\ICRESTAPI","ICRESTAPI\Repositories\Invoice\IInvoiceFileRepository.vb",9,14
+"dbo.ImportFileRealTimeSetBasedInv_WS","Src\ICRESTAPI","ICRESTAPI\Repositories\Invoice\IUploadInvoiceRepository.vb",5,11
+"dbo.ImportFileRealTimeSetBasedInvElasticTest","Src\ICPaymentProcessingAPI","Jobs\PayPalDailyFileProcessing\Program.cs",649,827
+"dbo.spCopyToPreLoad","Src\CassApplyScheduledLedgerEntries","CassApplyScheduledLedgerEntries\Implementations\Repository.cs",108,114
+"dbo.ImportInvoiceFileToPreLoad","Src\MyIIS","BillerPortal\Dialogs\DeletePreloadFile.aspx.vb",1,93
+"dbo.spFileImportAnalyzer","Src\ICPaymentProcessingAPI","Jobs\PayPalDailyFileProcessing\Program.cs",649,827
+"dbo.spCheckActiveFileImport","Src\ICPaymentProcessingAPI","Jobs\PayPalDailyFileProcessing\Program.cs",649,827
+"dbo.spBalanceForwardByFileID","Src\ICCSRConnectAPI","ICCSRConnectAPI\Models\Invoice.cs",278,281
+"dbo.spFileImportAnalyzer_ValidateBillerGUID","Src\PayerAccountService","PayerAccountService.Specs\Hooks\Hooks.cs",21,23
+"dbo.spFileImportAnalyzer_SingleLineFile","Src\IC.Net.ICGateway","IC.Net.ICGateway\Models\Services\Reporting\DSDRFileResponse.cs",15,22
+
+Code Repository Search
+Repository: 
+Src\\AutoPaymentProcessing
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+AutoPaymentProcessing\\Models\\AccountOwnerLogin.vb
+. The relevant code appears between lines 
+77
+ and 
+86
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+AutoPaymentProcessing\\Models\\AccountOwnerLogin.vb
+. The relevant code appears between lines 
+1
+ and 
+86
+.
+Repository: 
+Src\\CassApplyScheduledLedgerEntries
+The search term 
+dbo.spCopyToPreLoad
+ was possibly referenced in the file 
+CassApplyScheduledLedgerEntries\\Implementations\\Repository.cs
+. The relevant code appears between lines 
+108
+ and 
+114
+.
+Repository: 
+Src\\ChandlerLinkedAccounts
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\Login.vb
+. The relevant code appears between lines 
+1
+ and 
+65
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\Login.vb
+. The relevant code appears between lines 
+58
+ and 
+65
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\Login.vb
+. The relevant code appears between lines 
+57
+ and 
+65
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\Login.vb
+. The relevant code appears between lines 
+56
+ and 
+65
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\Login.vb
+. The relevant code appears between lines 
+1
+ and 
+65
+.
+The search term 
+dbo.spLinkNewCustomerToOriginal
+ was possibly referenced in the file 
+ChandlerLinkedAccounts\\Linking\\LinkingProcessor_v2.vb
+. The relevant code appears between lines 
+1
+ and 
+134
+.
+Repository: 
+Src\\DemoPortals
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+DemoPortals\\clsUtilityStage.cs
+. The relevant code appears between lines 
+1856
+ and 
+2026
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+DemoPortals\\clsInsuranceStage.cs
+. The relevant code appears between lines 
+1100
+ and 
+1262
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+DemoPortals\\clsTaxBase.cs
+. The relevant code appears between lines 
+1253
+ and 
+1427
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+DemoPortals\\clsInsuranceStage.cs
+. The relevant code appears between lines 
+1100
+ and 
+1262
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+DemoPortals\\clsUtilityStage.cs
+. The relevant code appears between lines 
+1856
+ and 
+2026
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+DemoPortals\\clsTaxBase.cs
+. The relevant code appears between lines 
+1253
+ and 
+1427
+.
+The search term 
+dbo.spPromoteImportInvoiceDuplicate
+ was possibly referenced in the file 
+DemoPortals\\clsStageBase.cs
+. The relevant code appears between lines 
+647
+ and 
+856
+.
+Repository: 
+Src\\EmailQueueProcessing
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+UnitTests\\Tests\\ReceiptQueue\\ReceiptQueueTests.vb
+. The relevant code appears between lines 
+1
+ and 
+80
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+UnitTests\\HelperTests.vb
+. The relevant code appears between lines 
+1
+ and 
+207
+.
+Repository: 
+Src\\IC.Gateway
+The search term 
+dbo.ImportFileRealTimeMishawaka
+ was possibly referenced in the file 
+IC.Gateway\\Models\\Services\\Reporting\\RptCassBillingActivityResponse.cs
+. The relevant code appears between lines 
+20
+ and 
+28
+.
+Repository: 
+Src\\IC.Logins
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+IC.Logins\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+156
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+IC.Logins\\Extended\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+169
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IC.Logins\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+156
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IC.Logins\\Extended\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+169
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IC.Logins\\Login.vb
+. The relevant code appears between lines 
+1
+ and 
+180
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+IC.Logins\\Extended\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+169
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+IC.Logins\\Portal\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+281
+ and 
+416
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+IC.Logins\\Portal\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+407
+ and 
+416
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+IC.Logins\\Portal\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+281
+ and 
+416
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+IC.Logins\\Login.vb
+. The relevant code appears between lines 
+171
+ and 
+344
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+IC.Logins\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+156
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+IC.Logins\\Extended\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+169
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Logins\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+156
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Logins\\DAL.vb
+. The relevant code appears between lines 
+147
+ and 
+156
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Logins\\Extended\\DAL.vb
+. The relevant code appears between lines 
+1
+ and 
+169
+.
+Repository: 
+Src\\IC.Net.ICGateway
+The search term 
+dbo.spFileImportAnalyzer_SingleLineFile
+ was possibly referenced in the file 
+IC.Net.ICGateway\\Models\\Services\\Reporting\\DSDRFileResponse.cs
+. The relevant code appears between lines 
+15
+ and 
+22
+.
+Repository: 
+Src\\ICAutoPayController
+The search term 
+dbo.PurgeData_SqlJob
+ was possibly referenced in the file 
+ICAutoPayController\\DAL\\DailyJobsRepository.cs
+. The relevant code appears between lines 
+28
+ and 
+36
+.
+Repository: 
+Src\\ICCRM
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICCRM\\App_Code\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+169
+ and 
+339
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICCRM\\App_Code\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+1
+ and 
+178
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICCRM\\App_Code\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+1
+ and 
+178
+.
+Repository: 
+Src\\ICCSRConnectAPI
+The search term 
+dbo.spBalanceForwardByFileID
+ was possibly referenced in the file 
+ICCSRConnectAPI\\Models\\Invoice.cs
+. The relevant code appears between lines 
+278
+ and 
+281
+.
+Repository: 
+Src\\ICEntitySecUpdater
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+Tests\\IntegrationTests\\Logins\\LoginOperationsTests.cs
+. The relevant code appears between lines 
+1
+ and 
+43
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICEntitySecUpdater.Business\\Logins\\LoginRepository.cs
+. The relevant code appears between lines 
+1
+ and 
+108
+.
+Repository: 
+Src\\ICFramework.Web
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICFramework.Web\\ICFramework.Web\\Abstracts\\BaseLoginPageHelper.cs
+. The relevant code appears between lines 
+206
+ and 
+211
+.
+Repository: 
+Src\\ICKioskAPI
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICKioskAPI\\Models\\Repository\\Database.Customer.vb
+. The relevant code appears between lines 
+121
+ and 
+275
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICKioskAPI\\Models\\Repository\\Database.Customer.vb
+. The relevant code appears between lines 
+121
+ and 
+275
+.
+Repository: 
+Src\\ICPaymentProcessingAPI
+The search term 
+dbo.ZZZImportInvoiceFileByJob
+ was possibly referenced in the file 
+Jobs\\PayPalDailyFileProcessing\\Program.cs
+. The relevant code appears between lines 
+453
+ and 
+658
+.
+The search term 
+dbo.ImportFileRealTimeSetBasedInvElasticTest
+ was possibly referenced in the file 
+Jobs\\PayPalDailyFileProcessing\\Program.cs
+. The relevant code appears between lines 
+649
+ and 
+827
+.
+The search term 
+dbo.spFileImportAnalyzer
+ was possibly referenced in the file 
+Jobs\\PayPalDailyFileProcessing\\Program.cs
+. The relevant code appears between lines 
+649
+ and 
+827
+.
+The search term 
+dbo.spCheckActiveFileImport
+ was possibly referenced in the file 
+Jobs\\PayPalDailyFileProcessing\\Program.cs
+. The relevant code appears between lines 
+649
+ and 
+827
+.
+Repository: 
+Src\\ICRESTAPI
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalV2Controller.vb
+. The relevant code appears between lines 
+3674
+ and 
+3697
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRESTAPI.DB\\Database\\LoginRepository.vb
+. The relevant code appears between lines 
+1
+ and 
+131
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+ICRESTAPI.DB\\Database\\LoginRepository.vb
+. The relevant code appears between lines 
+1
+ and 
+131
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRESTAPI.DB\\Database\\LoginRepository.vb
+. The relevant code appears between lines 
+1
+ and 
+131
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalV2Controller.vb
+. The relevant code appears between lines 
+1747
+ and 
+1939
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalController.vb
+. The relevant code appears between lines 
+1876
+ and 
+2049
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalController.vb
+. The relevant code appears between lines 
+2958
+ and 
+3083
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalV2Controller.vb
+. The relevant code appears between lines 
+3383
+ and 
+3533
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Controllers\\CustomerPortalController.vb
+. The relevant code appears between lines 
+1711
+ and 
+1885
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+156
+ and 
+289
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRESTAPI\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+1
+ and 
+165
+.
+The search term 
+dbo.ImportFileRealTimeSetBasedInv
+ was possibly referenced in the file 
+ICRESTAPI\\Models\\Database.vb
+. The relevant code appears between lines 
+54
+ and 
+59
+.
+The search term 
+dbo.ImportInvoiceFileByJob
+ was possibly referenced in the file 
+ICRESTAPI\\Services\\Invoice\\IInvoiceFileService.vb
+. The relevant code appears between lines 
+5
+ and 
+7
+.
+The search term 
+dbo.ImportFileRealTime
+ was possibly referenced in the file 
+ICRESTAPI\\Models\\Database.vb
+. The relevant code appears between lines 
+51
+ and 
+59
+.
+The search term 
+dbo.ImportFileRealTimeV2
+ was possibly referenced in the file 
+ICRESTAPI\\Repositories\\Invoice\\IInvoiceFileRepository.vb
+. The relevant code appears between lines 
+9
+ and 
+14
+.
+The search term 
+dbo.ImportFileRealTimeSetBased
+ was possibly referenced in the file 
+ICRESTAPI\\Repositories\\Invoice\\IInvoiceFileRepository.vb
+. The relevant code appears between lines 
+9
+ and 
+14
+.
+The search term 
+dbo.ImportFileRealTimeSetBasedInv_WS
+ was possibly referenced in the file 
+ICRESTAPI\\Repositories\\Invoice\\IUploadInvoiceRepository.vb
+. The relevant code appears between lines 
+5
+ and 
+11
+.
+Repository: 
+Src\\ICRedirect
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRedirect\\Registration\\SandSRegistration.aspx.vb
+. The relevant code appears between lines 
+148
+ and 
+302
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+145
+ and 
+293
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+ICRedirect\\Models\\MultiCustomerLogin\\clsCustomer.vb
+. The relevant code appears between lines 
+1
+ and 
+142
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+284
+ and 
+460
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+624
+ and 
+743
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRedirect\\Registration\\SandSRegistration.aspx.vb
+. The relevant code appears between lines 
+480
+ and 
+642
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+ICRedirect\\Models\\MultiCustomerLogin\\clsCustomer.vb
+. The relevant code appears between lines 
+133
+ and 
+142
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+ICRedirect\\Models\\MultiCustomerLogin\\clsCustomer.vb
+. The relevant code appears between lines 
+1
+ and 
+142
+.
+The search term 
+mcl.delTempLogin
+ was possibly referenced in the file 
+ICRedirect\\Models\\MultiCustomerLogin\\clsCustomer.vb
+. The relevant code appears between lines 
+133
+ and 
+142
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+624
+ and 
+743
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRedirect\\Registration\\SandSRegistration.aspx.vb
+. The relevant code appears between lines 
+480
+ and 
+642
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+284
+ and 
+460
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRedirect\\SSO\\SandS.aspx.vb
+. The relevant code appears between lines 
+451
+ and 
+633
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRedirect\\CSRRedirect\\CSRRedirect.aspx.vb
+. The relevant code appears between lines 
+537
+ and 
+711
+.
+Repository: 
+Src\\ICRemoteAuthenticationAPI
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+558
+ and 
+699
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI.Tests\\Models\\CustomerLoginHelper.vb
+. The relevant code appears between lines 
+101
+ and 
+110
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\AccountManagement\\AccountService.vb
+. The relevant code appears between lines 
+1
+ and 
+154
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+1120
+ and 
+1278
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+1120
+ and 
+1278
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\AccountManagement\\AccountService.vb
+. The relevant code appears between lines 
+1
+ and 
+154
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+1120
+ and 
+1278
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\AccountManagement\\AccountService.vb
+. The relevant code appears between lines 
+1
+ and 
+154
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI.Tests\\TestUtilities.vb
+. The relevant code appears between lines 
+1
+ and 
+111
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+1120
+ and 
+1278
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+307
+ and 
+444
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICRemoteAuthenticationAPI\\Models\\CustomerLogin.vb
+. The relevant code appears between lines 
+948
+ and 
+1129
+.
+Repository: 
+Src\\ICSSOAuthentication
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+ICSSOAuthentication\\Models\\Repositories\\CustomerLoginRepository.cs
+. The relevant code appears between lines 
+1
+ and 
+123
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+ICSSOAuthentication\\Models\\Repositories\\LoginRepository.cs
+. The relevant code appears between lines 
+1
+ and 
+47
+.
+Repository: 
+Src\\ICUserInviteQueueProcessor
+The search term 
+dbo.insBIFCustomer
+ was possibly referenced in the file 
+ICUserInviteQueueProcessor\\Tools\\clsCustomers.cs
+. The relevant code appears between lines 
+14
+ and 
+20
+.
+Repository: 
+Src\\MotorVehicleLinking
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IntegrationTests\\BusinessTests.vb
+. The relevant code appears between lines 
+1
+ and 
+55
+.
+Repository: 
+Src\\MyIIS
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+2096
+ and 
+2258
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+339
+ and 
+514
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+IC.Common\\clsCustomers.vb
+. The relevant code appears between lines 
+2410
+ and 
+2612
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+317
+ and 
+475
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+2249
+ and 
+2416
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+317
+ and 
+475
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IC.Common\\clsCustomers.vb
+. The relevant code appears between lines 
+2410
+ and 
+2612
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+339
+ and 
+514
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+339
+ and 
+514
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+165
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+317
+ and 
+475
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Repositories\\CustomerLoginRepository.vb
+. The relevant code appears between lines 
+1
+ and 
+110
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+155
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Repositories\\CustomerLoginRepository.vb
+. The relevant code appears between lines 
+1
+ and 
+110
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+339
+ and 
+514
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+165
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+466
+ and 
+629
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+155
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+317
+ and 
+475
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+185
+ and 
+348
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+BillerPortal\\Dialogs\\RemoveLogin.aspx.vb
+. The relevant code appears between lines 
+191
+ and 
+330
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+MyIIS\\2\\RemoveLogin.aspx.vb
+. The relevant code appears between lines 
+1
+ and 
+184
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+IC.Common\\clsCustomers.vb
+. The relevant code appears between lines 
+2410
+ and 
+2612
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+2249
+ and 
+2416
+.
+The search term 
+mcl.delTempLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+317
+ and 
+475
+.
+The search term 
+mcl.delTempLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+172
+ and 
+326
+.
+The search term 
+mcl.delTempLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+185
+ and 
+348
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+MyIIS\\App_Code\\WebControls\\2\\PaperlessPanel.vb
+. The relevant code appears between lines 
+931
+ and 
+1065
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+159
+ and 
+311
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+MyIIS\\2\\Controls\\ctrlCustomerPaymentRouteAutoPay.ascx.vb
+. The relevant code appears between lines 
+438
+ and 
+567
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+MyIIS\\App_Code\\WebControls\\2\\PaperlessPanel.vb
+. The relevant code appears between lines 
+833
+ and 
+940
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+MyIIS\\2\\RemoveLogin.aspx.vb
+. The relevant code appears between lines 
+1
+ and 
+184
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+BillerPortal\\Dialogs\\RemoveLogin.aspx.vb
+. The relevant code appears between lines 
+191
+ and 
+330
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+MyIIS\\App_Code\\WebControls\\2\\PaperlessPanel.vb
+. The relevant code appears between lines 
+1056
+ and 
+1145
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+1
+ and 
+168
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+UnitTests\\CustomerLoginTest.vb
+. The relevant code appears between lines 
+1
+ and 
+118
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\Customers\\Customer.vb
+. The relevant code appears between lines 
+2249
+ and 
+2416
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Common\\clsCustomers.vb
+. The relevant code appears between lines 
+1
+ and 
+174
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+BillerPortal.Business.VisualBasic\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+172
+ and 
+326
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Common\\clsCustomers.vb
+. The relevant code appears between lines 
+2410
+ and 
+2612
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+IC.Common\\Models\\MultiCustomerLogin\\CustomerLogin.vb
+. The relevant code appears between lines 
+185
+ and 
+348
+.
+The search term 
+dbo.PurgeBillerData
+ was possibly referenced in the file 
+IC.Common\\AzureQueueStorage.vb
+. The relevant code appears between lines 
+107
+ and 
+112
+.
+The search term 
+mcl.UnConveyAccounts
+ was possibly referenced in the file 
+BillerPortal\\Dialogs\\UnconveyCustomerAccount.aspx.vb
+. The relevant code appears between lines 
+1
+ and 
+110
+.
+The search term 
+mcl.UnConveyAccounts_V2
+ was possibly referenced in the file 
+UnitTests\\BillerPortal\\Repositories\\ConveyanceReport\\ConveyanceReportHelper.vb
+. The relevant code appears between lines 
+46
+ and 
+50
+.
+The search term 
+dbo.ZZZPurgeBillerData
+ was possibly referenced in the file 
+IC.Common\\AzureQueueStorage.vb
+. The relevant code appears between lines 
+108
+ and 
+112
+.
+The search term 
+dbo.ImportInvoiceFileToPreLoad
+ was possibly referenced in the file 
+BillerPortal\\Dialogs\\DeletePreloadFile.aspx.vb
+. The relevant code appears between lines 
+1
+ and 
+93
+.
+Repository: 
+Src\\OneTimePaymentService
+The search term 
+mcl.insChandlerCustomerAndInvoice
+ was possibly referenced in the file 
+src\\OneTimePaymentService.Repositories\\InvoiceRepository.cs
+. The relevant code appears between lines 
+53
+ and 
+59
+.
+Repository: 
+Src\\OracleOfsllDataImport
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\Login.vb
+. The relevant code appears between lines 
+136
+ and 
+194
+.
+The search term 
+mcl.updCustomerLogins
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\LoginAccount.vb
+. The relevant code appears between lines 
+1
+ and 
+92
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\Login.vb
+. The relevant code appears between lines 
+1
+ and 
+145
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+OracleOfsllDataImport\\Models\\Login.vb
+. The relevant code appears between lines 
+1
+ and 
+145
+.
+Repository: 
+Src\\PayerAccountService
+The search term 
+dbo.spFileImportAnalyzer_ValidateBillerGUID
+ was possibly referenced in the file 
+PayerAccountService.Specs\\Hooks\\Hooks.cs
+. The relevant code appears between lines 
+21
+ and 
+23
+.
+Repository: 
+Src\\RegisterAutoPay
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RegisterAutoPayTests\\BusinessTests\\Operators\\Login\\LinkAccountTests.cs
+. The relevant code appears between lines 
+1
+ and 
+80
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RegisterAutoPay\\Business\\Operations\\LoginOperations.vb
+. The relevant code appears between lines 
+1
+ and 
+159
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RegisterAutoPay\\Module1.vb
+. The relevant code appears between lines 
+818
+ and 
+967
+.
+Repository: 
+Src\\RegisterCustomers
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RegisterCustomers\\Module1.vb
+. The relevant code appears between lines 
+667
+ and 
+775
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RegisterCustomers\\Module1.vb
+. The relevant code appears between lines 
+667
+ and 
+775
+.
+The search term 
+mcl.delLogin
+ was possibly referenced in the file 
+RegisterCustomers\\Module1.vb
+. The relevant code appears between lines 
+667
+ and 
+775
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RegisterCustomers\\Module1.vb
+. The relevant code appears between lines 
+667
+ and 
+775
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RegisterCustomers\\Module1.vb
+. The relevant code appears between lines 
+503
+ and 
+676
+.
+Repository: 
+Src\\RegisterPaperless
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RegisterPaperless\\Module1.vb
+. The relevant code appears between lines 
+490
+ and 
+548
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RegisterPaperless\\Module1.vb
+. The relevant code appears between lines 
+341
+ and 
+499
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RegisterPaperless\\Module1.vb
+. The relevant code appears between lines 
+341
+ and 
+499
+.
+Repository: 
+Src\\RemoteAuthentication
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1396
+ and 
+1580
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1497
+ and 
+1688
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+122
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\Tools\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+128
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+122
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+347
+ and 
+516
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1973
+ and 
+2147
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\Tools\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+128
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+332
+ and 
+498
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+122
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\Tools\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+128
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1396
+ and 
+1580
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1326
+ and 
+1506
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1497
+ and 
+1688
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+122
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1143
+ and 
+1335
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1227
+ and 
+1405
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+1075
+ and 
+1236
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthenticationTests\\Business\\wsRemoteAuthentication.vb
+. The relevant code appears between lines 
+981
+ and 
+1152
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+RemoteAuthentication\\App_Code\\Tools\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+128
+.
+Repository: 
+Src\\ScheduledPaymentProcessing
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ScheduledPaymentProcessing\\Models\\Logins\\AccountOwnerLogin.vb
+. The relevant code appears between lines 
+78
+ and 
+87
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+ScheduledPaymentProcessing\\Models\\Logins\\AccountOwnerLogin.vb
+. The relevant code appears between lines 
+1
+ and 
+87
+.
+Repository: 
+Src\\ScheduledPaymentReminders
+The search term 
+pld.spSplitImport
+ was possibly referenced in the file 
+ScheduledPaymentReminders\\Extensions\\StringExtensions.vb
+. The relevant code appears between lines 
+10
+ and 
+10
+.
+Repository: 
+Src\\StratusWebServices
+The search term 
+dbo.ImportConveyanceFile
+ was possibly referenced in the file 
+StratusWebServices\\frmConveyanceUpload.aspx.vb
+. The relevant code appears between lines 
+1
+ and 
+183
+.
+Repository: 
+Src\\SystemsAndSoftware4.0
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1210
+ and 
+1356
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1347
+ and 
+1536
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+129
+.
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+501
+ and 
+690
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1210
+ and 
+1356
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+129
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1045
+ and 
+1219
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+179
+ and 
+347
+.
+The search term 
+mcl.spCreateLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+681
+ and 
+843
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1210
+ and 
+1356
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+129
+.
+The search term 
+mcl.delCustomerLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+501
+ and 
+690
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+1210
+ and 
+1356
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\clsCustomerLogins.vb
+. The relevant code appears between lines 
+1
+ and 
+129
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+179
+ and 
+347
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+338
+ and 
+510
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+688
+ and 
+860
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+501
+ and 
+690
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\semco.vb
+. The relevant code appears between lines 
+681
+ and 
+843
+.
+The search term 
+mcl.updLogin
+ was possibly referenced in the file 
+SystemsAndSoftware4.0\\App_Code\\systemsandsoftware.vb
+. The relevant code appears between lines 
+851
+ and 
+1054
+.
+Repository: 
+Src\\TulareAccountLinking
+The search term 
+mcl.insCustomerLogin
+ was possibly referenced in the file 
+TulareAccountLinking\\Linking\\LinkingProcessV2.vb
+. The relevant code appears between lines 
+136
+ and 
+295
+.
+The search term 
+mcl.spTulareMigratePriorYearData
+ was possibly referenced in the file 
+TulareAccountLinking\\LinkingModule.vb
+. The relevant code appears between lines 
+142
+ and 
+167
+.
+The search term 
+mcl.spTulareMigratePriorYearData
+ was possibly referenced in the file 
+TulareAccountLinking\\LinkingModule.vb
+. The relevant code appears between lines 
+1
+ and 
+151
+.
+ URL:/spaces/EA/pages/4622975110/MCL+-+Account+Linking+Stored+Procedure+Stack

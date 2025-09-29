@@ -1,0 +1,85 @@
+3
+3
+false
+list
+false
+Docker Build Agents
+We have 2 Docker Build Agents:
+vm0-pri-dckrbldwn2rmbj-sbx
+ (0pridckrbldwn2r): 10.152.96.68
+vm1-pri-dckrbldwn2yvzz-sbx
+ (1pridckrbldwn2y): 10.152.96.69
+Configuration of Build Server
+If you want to run Docker Desktop on an Azure Pipeline agent, you need to ensure that the 
+Azure Pipelines Agent
+ service is running under the 
+Local System account
+ rather than 
+NetworkService
+, which is the default.
+There are a couple Scheduled Tasks we have setup to aid in the support of the Servers, as the User Account you wish to run the Scheduled Tasks under, make the following configurations on the Server:
+ Install 
+WSL 2
+ with 
+Ubuntu
+ as the Linux Distribution
+ as outline here
+.
+Enable Hyper V with Containers to run Windows Containers 
+as outlined here
+.
+Add User Account to 
+docker-users
+ Local Group 
+as outlined here
+.
+Download and Install with 
+Version 4.24.2
+Start Docker Desktop and Accept Terms and Conditions
+Sign Into Docker Desktop with the Docker ID you want to run the Docker Desktop under
+AutoStart Docker Daemon Scheduled Task
+To enable the Docker Daemon to start on Server Restarts, we have added the following 2 configurations:
+As the User Account you wish to run the Scheduled Tasks under, set the 
+Docker Desktop Service
+ needs configured as 
+Automatic
+ Startup Type.
+Create a Scheduled Task to run a script which will start 
+docker.exe
+:
+Name: 
+DockerServiceDaemonStart
+Run Under: 
+AzureAD\DockerService
+Schedule: 
+Run at Startup
+Action: 
+Start a program
+Program/Script: 
+mshta
+Arguments: 
+vbscript:Execute("CreateObject(""WScript.Shell"").Run ""powershell -ExecutionPolicy Bypass & 'C:\start-docker.ps1'"", 0:close")
+Contents of 
+start-docker.ps1
+:  
+start "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+Error when trying to run Windows containers: docker client must be run with elevated privileges - Docker Desktop - Docker Community Forums
+Docker Image Cleanup Scheduled Task
+To reduce the need for manual intervention or increasing the Disk Size of the Server hosting the Docker Server, we have implemented a Scheduled Task that runs every Sunday morning that removes any Docker Image that has a Timestamp older than 1 week.
+Name: 
+DockerServiceImageCleanup
+Run Under: 
+AzureAD\DockerService
+Schedule: 
+Every Night
+Action: 
+Start a program
+Program/Script: 
+mshta
+Arguments: 
+vbscript:Execute("CreateObject(""WScript.Shell"").Run ""powershell -ExecutionPolicy Bypass & 'C:\cleanup-docker.ps1'"", 0:close")
+Contents of 
+cleanup-docker.ps1
+: 
+docker system prune --all --force
+ URL:/spaces/platform/pages/3645636642/Docker+Build+Agents+-+Windows

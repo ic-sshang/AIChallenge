@@ -1,0 +1,114 @@
+Overview:
+Detailed steps shown on how to create a build through the Azure Devops pipeline
+ 
+Creating the Build Pipeline on Azure DevOps
+Go to the repo and select the project.
+Click on the 3 dots on the right and click New > Folder
+In popup window provide the folder name (suggestion folder name should start with a dot. [ ex: .azuredevops])
+In the same window user must put a file name azure-pipleines.yaml extension
+In the file put the following values
+Below there's a sample yaml code with the needed spacing.
+trigger: none
+parameters:
+- name: tfInit
+  type: boolean
+  displayName: Terraform Init
+- name: tfPlan
+  type: boolean
+  displayName: Terraform Plan
+- name: tfApply
+  type: boolean
+  displayName: Terraform Apply
+
+variables:
+- group: newrelic-infrastructure
+- name: vmImageName
+  value: 'ubuntu-latest'
+- name: terraformVersion
+  value: '1.3.7'
+- name: deployDatapump
+  value: true
+
+stages:
+  - stage: newRelicDeployment
+    displayName: NewRelic Deployment via Terraform
+    condition: and(succeeded(),eq(variables.deployDatapump, 'true'))
+    jobs:
+    - job: dataPumpDeplyment 
+      displayName: Datapump Setup
+      pool:
+        vmImage: $(vmImageName)
+      steps:
+      - checkout: self
+        displayName: checkout repository
+
+      - task: TerraformInstaller@0
+        displayName: Terraform Installation
+        inputs:
+          terraformVersion: $(terraformVersion)
+
+      - script: |
+          terraform version
+        displayName: Check Terraform Version
+
+      - script: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+        displayName: Install Tfsec
+
+      - script: |
+          cd $(System.DefaultWorkingDirectory)
+          tfsec .
+        displayName: Run Tfsec
+
+      - script: |
+          cd $(System.DefaultWorkingDirectory)/datapump
+          env
+          echo "A-${TF_VAR_account_id}-A"
+          terraform init
+        displayName: terraform init
+        env:
+          TF_VAR_account_id: $(ACCOUNT_ID)
+          TF_VAR_api_key: $(API_KEY)
+        condition: eq('${{ parameters.tfInit }}', 'true')
+
+      - script: |
+          cd $(System.DefaultWorkingDirectory)/datapump
+          terraform validate
+        env:
+          TF_VAR_account_id: $(ACCOUNT_ID)
+          TF_VAR_api_key: $(API_KEY)
+        displayName: terraform validate
+
+      - script: |
+          cd $(System.DefaultWorkingDirectory)/datapump
+          terraform plan
+        displayName: terraform plan
+        env:
+          TF_VAR_account_id: $(ACCOUNT_ID)
+          TF_VAR_api_key: $(API_KEY)
+        condition: eq('${{ parameters.tfPlan }}', 'true')
+
+      - script: |
+          cd $(System.DefaultWorkingDirectory)/datapump
+          terraform apply -auto-approve
+        displayName: terraform apply
+        env:
+          TF_VAR_account_id: $(ACCOUNT_ID)
+          TF_VAR_api_key: $(API_KEY)
+        condition: eq('${{ parameters.tfApply }}', 'true')
+
+
+
+After complete editing the file. User must commit.
+Click on the Pipeline menu from the left section
+Click on the “New Pipeline” button on the left
+Click on Azure Repos Git
+Select your repo from the list and click on that.
+Select “Existing Azure Pipelines YAML file” 
+Select you branch and select the YAML file you have created.
+  click on “Continue”
+ A new window will come where you can see your yaml file 
+You can click on the Run button from left to test your yaml.
+ After hitting the “Run” button a build will be queued.
+If it build successful it will give you the details of the Job.
+ URL:/spaces/DS/pages/2666889229/Create+Build+pipeline+using+YAML

@@ -1,0 +1,63 @@
+Description
+Things to know when the Conversion Team is migrating a biller from NorthStar CC6 to NorthStar with SilverBlaze SSO integration.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+This document outlines the process and considerations for converting a biller from NorthStar CC6 to NorthStar SilverBlaze SSO. It includes lessons learned from previous implementations, account number formatting, re-registration requirements, and the need for data synchronization between InvoiceCloud and NorthStar/SilverBlaze. The guide also highlights the importance of test system validation and coordination with NorthStar for data provisioning.
+ Process
+Definitions
+CC6: Legacy NorthStar Customer Care version 6 used for autopay processing.
+CIS: Customer Information System, in this case NorthStar.
+SSO: Single Sign-On, allowing users to access multiple systems with one login.
+SilverBlaze (SB): Customer portal platform integrated with NorthStar for SSO functionality.
+iFrame: An HTML element used to embed another document within the current page, used by SilverBlaze.
+Key Responsibilities
+InvoiceCloud: Coordinate data conversion and CRM updates; validate SSO functionality.
+NorthStar: Provide account, email, and password data for registered users; manage re-registration communication with billers.
+Project Manager: Ensure test system validation and Go Live readiness.
+Quality Assurance
+InvoiceCloud: Verify that customer data is correctly loaded and accessible via SSO in the test environment.
+NorthStar: Ensure that account data provided is accurate and complete for conversion.
+Project Manager: Confirm that all stakeholders are aligned on re-registration requirements and Go Live timing.
+Roles
+Biller: The utility or organization being converted from NorthStar CC6 to NorthStar with SilverBlaze.
+InvoiceCloud: The payment platform provider responsible for CRM and SSO integration.
+NorthStar: The CIS provider managing customer data and SSO integration.
+Project Manager: The individual overseeing the conversion process and coordination
+Procedure
+1. Review Conversion Requirements
+Who: Project Manager
+Review the guide and lessons learned from previous conversions (e.g., City of Shelby) to understand the technical and procedural requirements.
+2. Validate Account Format
+Who: InvoiceCloud
+Ensure that NorthStar account numbers follow the correct format (e.g., XX-XX to XXXXX-XX) and do not include leading zeroes.
+3. Coordinate Re-registration
+Who: NorthStar
+Inform the biller that customers must re-register on the new NorthStar/SilverBlaze platform. NorthStar manages this communication.
+4. Prepare Data Conversion
+Who: NorthStar, InvoiceCloud
+NorthStar provides a list of account numbers, emails, and passwords for previously registered customers. InvoiceCloud prepares to load this data using the CRM tool.
+5. Test System Validation
+Who: InvoiceCloud
+Perform the data conversion in the test system first. Validate that SSO login, password reset, and iFrame functionality work as expected.
+6. Go Live Preparation
+Who: Project Manager
+Confirm that all systems are ready for Go Live. Ensure that customer data is synchronized and that all stakeholders are informed of the launch timeline
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4474077362/NorthStar+CC6+to+SilverBlaze+Conversion+Team+Details

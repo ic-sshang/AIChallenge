@@ -1,0 +1,20 @@
+Phase 1 will be the introduction to Kong into the ecosystem.
+Goals
+TLS for all proxied traffic (.invocecloud.com)
+Routing and pass-through for new RESTful APIs hosted on 
+api.invoicecloud.com
+Routing and pass-through for qualified (roll out program) existing APIs hosted on www.invoicecloud.com
+Sending tracing data of all proxied communications to New Relic (global zipkin plugin)
+Configure New Relic for observability/monitoring and alerting 
+Establish configuration (Dinesh / SRE input) dashboards, charts, alerts etc..
+Using Kong Manager to review routing and plugin configurations
+Using YAML in ADO pipelines to configure Kong routes and plugins
+Using the Developer Portal to provide/publish API documentation
+Establish API documentation standard (Open API) and API suites
+Using YAML in ADO pipelines to handle blue / green deployments of proxied backends, ring balancer
+Using Kong Manager to temporarily re-route proxied backends, ring balancer
+Proposal 1
+Kong is used for APIs and a upstream component is used to manage what traffic is sent to Kong (roll out to Kong can be scoped to target applications using path based routing)
+Proposal 2
+ Kong is used for all HTTP traffic on a given domain (roll out to Kong is scoped at a domain level)
+ URL:/spaces/EN/pages/2706243591/Kong+Phase+1+P1

@@ -1,0 +1,190 @@
+This doc outlines options to writing to AuditLog - a table, which records the INSERT/UPDATE/DELETE actions on the main entity of the Payments schema (Payments table) and records an agent performing that change and the intention. We explore the following options with their pros and cons and then provide the recommendation:
+Writing in stored procedures (sprocs)
+DB triggers
+Combination of writing in sprocs + DB triggers
+Change data capture (CDC)
+The recommendation is to write in sproc bypassing the trigger and if the change happens outside of our sprocs, employ triggers. It would allow us to have fine-grained control over what is written providing more details during writing in sproc and still ensuring writing some details of the action when the modification is done manually.
+Option 1. Auditing in sprocs
+Pros:
+Audit logic is embedded directly in the sproc, ensuring consistency.
+Audits are written within the same transaction as the business operation.
+If the sproc runs, the audit logic runs - no risk of developer omission.
+Efficiency due to tight DB integration.
+Can restrict audit logic to DB
+Cons:
+Manual process - engineers need to make sure to include audit logging in the sproc implementation
+Need to explicitly pass application-level metadata
+Only captures what the sproc chooses to log - not automatic like CDC or triggers
+Implementation changes:
+c#
+await _context.Database.ExecuteSqlRawAsync(
+    "EXEC sp_set_session_context @key = N'PerformedBy', @value = {0}", performedBy);
+
+// Now call your stored procedure
+await _context.Database.ExecuteSqlRawAsync(
+    "EXEC InsertPayment @BillerID = {0}, @Amount = {1}, ...", billerId, amount, ...);
+
+Option 2. Auditing in DB triggers
+Pros:
+Automatically logs changes as they happen.
+You can write full logic to insert into 
+AuditLog
+, including old/new values.
+Works regardless of whether changes come from EntityFramework, raw SQL, or other apps.
+Cons:
+Triggers run synchronously and can slow down inserts/updates.
+Harder to debug and maintain, especially with nested triggers or rollback scenarios.
+You’ll need to pass 
+PerformedBy
+ via 
+SESSION_CONTEXT()
+ or similar.
+Implementation changes:
+Add a trigger on 
+Payments
+:
+sql
+CREATE TRIGGER trg_Payments_Audit
+ON Payments
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @PerformedBy NVARCHAR(100) = SESSION_CONTEXT(N'PerformedBy');
+
+    INSERT INTO AuditLog (EntityType, EntityID, ActionType, ActionTimestamp, PerformedBy, OldValue, NewValue)
+    SELECT 
+        'Payment',
+        i.PaymentID,
+        CASE WHEN u.PaymentID IS NULL THEN 'Created' ELSE 'Updated' END,
+        GETUTCDATE(),
+        @PerformedBy,
+        CASE WHEN u.PaymentID IS NOT NULL THEN (SELECT * FROM u FOR JSON PATH, WITHOUT_ARRAY_WRAPPER) ELSE NULL END,
+        (SELECT * FROM i FOR JSON PATH, WITHOUT_ARRAY_WRAPPER)
+    FROM inserted i
+    LEFT JOIN deleted u ON i.PaymentID = u.PaymentID;
+END
+
+In EF Core, set the session context:
+c#
+await _context.Database.ExecuteSqlRawAsync("EXEC sp_set_session_context @key=N'PerformedBy', @value={0}", performedBy);
+
+// call sproc without auditing
+Option 3. Combination of writing audit date in sprocs and DB triggers
+Pros:
+Guaranteed auditing at the database level, regardless of how data is changed (EF, raw SQL, SSMS, etc.).
+Centralize audit logic in the database for consistency.
+Use EF Core with sprocs for business logic, validation, and orchestration and doing auditing on sproc level then.
+Cons:
+Need to ensure that when calling sprocs from within EF Core, the context gets passed down
+Need to ensure not to miss the case with skipping trigger execution and forgetting to update the AuditLog
+Implementation considerations:
+Pass down session context for user info:
+c#
+
+await _context.Database.ExecuteSqlRawAsync(
+        "EXEC sp_set_session_context @key = N'PerformedBy', @value = {0}", performedBy);
+
+if (skipTriggerAudit)
+{
+    await _context.Database.ExecuteSqlRawAsync(
+        "EXEC sp_set_session_context @key = N'SkipTriggerAudit', @value = 1");
+}
+
+// Now call your stored procedure
+await _context.Database.ExecuteSqlRawAsync(
+    "EXEC InsertPayment @BillerID = {0}, @Amount = {1}, ...", billerId, amount, ...);
+
+Update trigger to check for session context flag and to retrieve PerformedBy:
+sql
+CREATE TRIGGER trg_Payments_Audit
+ON Payments
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check if EF Core has already logged the audit
+    IF SESSION_CONTEXT(N'SkipTriggerAudit') = 1
+        RETURN;
+
+    DECLARE @PerformedBy NVARCHAR(100) = SESSION_CONTEXT(N'PerformedBy');
+
+    INSERT INTO AuditLog (
+        EntityType, EntityID, ActionType, ActionTimestamp, PerformedBy, OldValue, NewValue
+    )
+    SELECT 
+        'Payment',
+        i.PaymentID,
+        CASE 
+            WHEN d.PaymentID IS NULL THEN 'Created'
+            ELSE 'Updated'
+        END,
+        SYSUTCDATETIME(),
+        @PerformedBy,
+        CASE 
+            WHEN d.PaymentID IS NOT NULL THEN (
+                SELECT d.Status, d.Amount, d.CurrencyCode
+                FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+            )
+            ELSE NULL
+        END,
+        (
+            SELECT i.Status, i.Amount, i.CurrencyCode
+            FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+        )
+    FROM inserted i
+    LEFT JOIN deleted d ON i.PaymentID = d.PaymentID;
+END;
+
+Summary
+Scenario
+Trigger Fires?
+Manual Logging?
+EF Core calling sprocs with manual audit
+Skipped via 
+SESSION_CONTEXT
+Yes
+Raw SQL / SSMS edit
+Yes
+No
+EF Core calling sprocs without manual audit
+Yes
+No
+Option 4. CDC
+Pros:
+No need to modify existing application logic.
+Captures all changes (INSERT, UPDATE, DELETE) on specified tables.
+Keeps a full history of changes for auditing or rollback.
+Reusable for syncing up data to the external data warehouse.
+Cons:
+CDC captures changes but doesn’t write to the 
+AuditLog
+ table directly.
+Need a background job or ETL process to read from CDC tables and write to 
+AuditLog
+.
+Can increase I/O and log space usage.
+Doesn’t capture user context (e.g., 
+PerformedBy
+) unless you pass it explicitly via session context.
+Implementation Changes:
+Enable CDC on the 
+Payments
+ table:
+sql
+EXEC sys.sp_cdc_enable_table  
+    @source_schema = N'dbo',  
+    @source_name   = N'Payments',  
+    @role_name     = NULL;
+
+Create a background service to:
+Poll the CDC change tables.
+Map changes to 
+AuditLog
+ format.
+Insert into 
+AuditLog
+.
+ URL:/spaces/EA/pages/4541251693/Writing+to+AuditLog+for+Payments+table

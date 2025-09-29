@@ -1,0 +1,194 @@
+Project Status
+ Smooth Sailing!
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+Est Completion
+ Problem Alignment
+Bank deposit reconciliation frustrations are the single biggest complaint billers have with our system.  This is well documented.  The Braintree project is intended to solve this, but that can only happen if we adjust (a) how our system supports settlement configurations, and (b) how we report on these settlement activities in the biller portal.
+ Objective
+This effort is a portion of the Braintree project.
+The objectives are:
+Give the boarding/implementation teams an easy-to-use interface to define how funds should be settled to the billers, and ensure it accommodates all scenarios the billers need.
+Give the billers a report in the biller portal they can use to EASILY reconcile their bank activity
+Daily report
+Monthly report - see example/notes from Sissy @ Ardmore
+ Requirements
+Requirement
+Importance
+Jira Link
+CRM Config…
+There should be a dedicated section in CRM for settlement configuration.  This should function completely independently from the terminals and banks section as to not be confusing.
+ 
+This page should present the current matrix of settlement configurations with deposit criteria listed.
+ 
+The default configuration should be single daily deposit, where all funds are settled in one deposit into the billers bank account.
+ 
+There should always be a “catch all” configuration for when all other configurations don’t capture a particular payment.  This is represented by the “Deposit X” above.  The user cannot alter the checkboxes for this deposit, but they will need to edit the name, bank account, and settlement methods by clicking on the Edit link.
+The edit link will take them to a config details page where they can edit these details:
+In the config details page, the following field attributes are applied:
+Deposit Name: this will be what appears in the biller portal, should be text up to a certain length (TBD)
+Bank Account: select list that pulls from the bank accounts configured in the Banks section of the CRM.  Will only display the last 4 of account number.
+Settlement types: select list with Gross and Net as options.
+If the users chooses to add additional settlements, they can do so by clicking the 
++Add new
+Blue
+  button, which will take them to the details page above.  They provide the details, press submit, and be brought back to the main page where they can edit the settlement options.
+The user can define settlements by the following attributes:
+Payment Type
+Cards (credit, debit) (not at card brand level)
+ACH (echecks)
+PayPal (paypal, paypal credit, venmo)
+Invoice Type
+Dynamic list of the invoice types the biller has configured
+The user will then add settlements based on biller preference.
+If, for example, the biller wants settlements by invoice type, the config may look like this:
+Biller Portal reporting…
+A new menu option under Reconciliation called Settlements (this may change):
+When clicked, the user will be taken to a page where they are given some filters:
+Start Date - represents the date of the bank activity, not the payment activity
+End Date - represents the date of the bank activity, not the payment activity
+Transaction Account - rename to Bank Account
+Invoice Type - not sure if this will stay
+Transaction Category - not sure if this will stay
+Submit button
+The resulting report is very much open to redesign, but the concepts that should be included are:
+At the date level:
+The date of the bank activity
+The total aggregate inflow and outflow for that day
+We may be able to remove outflow if the biller is set up for all Net settlement
+At the settlement level:
+The deposit name - taken from CRM config
+The bank account - from config, only last 4
+The descriptor - some sort of an identifier that also displays on the activity on the biller’s statement
+Pmts - count of transactions included in that settlement
+Amount - total sum of payment amounts in that settlement
+Would be +payments -reversals
+Clickable link - see below
+Reconciled - see below
+Example of single daily deposit:
+Example of deposit by invoice type:
+Clickable amount link
+When clicked, this should take the user to a listing of the payments that are included in this settlement.  Report should mimic payment search, except the last icon under options should be removed.
+Reconciled checkbox
+To help the user with keeping track of which settlements they’ve reconciled, we want to give them a checkbox they can use.
+When this checkbox is enabled, it should save and display the name of the user and the date/time in local timezone.
+If the checkbox is unchecked, username/timestamp should be erased.  If it’s checked again, updated (new) username and date/time should be displayed.
+Reconciliation audit report
+Driving off of the reconciled checkbox, we want to have a report they can pull showing each settlement activity, the activity date, the recon date, and the user.
+This is likely a separate page in the biller portal
+Report filters would include
+Bank Activity start/end
+Reconciliation start/end
+Reconciled vs Not Reconciled
+List of users in a dropdown to choose from
+ MoSCoW Analysis
+Must Have
+Deposits should be configurable by payment type
+Deposits should be configurable by invoice type
+Standalone config page in CRM
+"Catch-all" configuration due to possible complexity
+Assign a "name" to each deposit config
+Assign a bank account to each deposit config
+Select Net or Gross settlement type for each deposit config
+Payment type options: Cards, ACH, PayPal
+New report in biller portal named Bank Settlements
+Settlement report filterable by start/end dates
+Settlement report filterable by bank account
+Settlement report to display multi-level data
+Settlement report to display bank activity date
+Settlement report to display aggregate totals per date
+Settlement report to display deposit name
+Settlement report to display bank account the deposit touched
+Settlement report to display deposit descriptor (see below)
+Settlement report to display count of payments in the deposit
+Settlement report to display net amount of payments
+Net amount is clickable link that bounces to filtered payment report
+Unique ID in descriptor that ties bank statement to settlement report
+Should Have
+Settlement report filterable by invoice type
+Settlement report filterable by transaction category
+Settlement report to display Reconciled checkbox
+Checking reconciled checkbox to record/display name and timestamp
+Unchecking reconciled checkbox to delete name and timestamp
+New page in BP showing audit history of Reconciled checkbox activity
+Audit history filterable on dates (bank, reconcile), reconciled, users
+Could Have
+Deposits should be configurable by payment channel
+Deposits configurable by card brand
+Deposits configurable by credit card vs debit card
+Will Not Have
+Will not automatically reconcile deposits for the biller
+Will not alter any email or SMS notifications the biller currently receives
+Will not attempt to replicate the biller’s bank statement
+ Target Audience
+Group
+Impact
+Boarding/Implementations team
+Billers (users responsible for reconciliation)
+ Components Impacted
+Component
+Impact
+CRM
+New page to be added, or a revision to existing page
+My (Ryan) preference is to add a new page so we can break out “settlement config” from “bank account config”.
+Biller Portal
+New page to be added, name TBD (Deposit Config is taken, so maybe Settlement Reconciliation, or Settlement Report).
+ Technical Architecture
+TBD
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Dependencies
+TBD
+ Assumptions
+TBD
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+What is the thing that we need to know?
+ 
+Here is the answer to that question
+Type // to add a date
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+TBD
+TBD
+TBD
+ User Interaction and Design
+ Success Metrics
+List the project goals and metrics that will be used to determine its success.
+Goal
+Metric
+Current
+Good
+Great
+ URL:/spaces/PRODUCT/pages/2788098064/Settlement+Config+and+Reporting+with+Braintree

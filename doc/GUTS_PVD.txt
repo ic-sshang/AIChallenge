@@ -1,0 +1,10 @@
+Summary
+Information regarding the GUTS PVD integration.  Integration includes a place holder invoice (1 Cent Bills) and actuals and replacement bills.  
+Integration also includes a custom integration for Marion County where a ‘prelim’ bill is created before Installment 1 is available. In December, IC creates ‘prelim’ invoice records and on Jan 1, the FlexPayAutoEnrollScheduleGenerator job runs to copy the previous FlexPay schedules to the new ‘prelim’ invoice record. If a FlexPay schedule is created before the FlexPayAutoEnrollScheduleGenerator job runs, the account will be skipped and no ‘extra’ schedule will be created. 
+The FlexPayAutoEnrollScheduleGenerator job is also run once Installment 1 invoices are available so that schedules are copied from the ‘prelims’ to the Installment 1 invoices.
+We have a custom project called 
+GUTSToICIntegration 
+which is located in the MISC Source in dev ops.
+Navigation
+Knowledge Transfer
+ URL:/spaces/IM/pages/2099314694/GUTS+PVD

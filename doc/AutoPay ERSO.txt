@@ -1,0 +1,340 @@
+Epic Link: 
+EBPP-4227
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+COMPLETE
+ 
+COMPLETE
+ 
+COMPLETE
+ 
+STARTED
+Green
+ 
+STARTED
+Green
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+January 18th Review Meeting:
+Feedback from last meeting: prioritizing fixing autopay errors, technical diagrams, UX research to support visibility objective.
+We will cover: 
+how we are putting fixing errors first 
+approach for fixing these errors
+research to support visibility 
+first draft of project timeline
+ Problem Alignment
+InvoiceCloud has problems with AutoPay processing. AutoPay does not always run correctly and there is a lack of clear visibility into its performance. This is a real problem worth solving since our billers are the first to recognize AutoPay failures. Moreover when AutoPay failures occur it takes our development team a significant amount of time to resolve the issue, customer support and CSM time to resolve the issue with the effected billers. 
+Data analysis shows we spend significant time on resolving AutoPay processing issues. 
+Time spent in a week: 
+incident-free: 
+~3.5hrs/wk. 
+ When this occurs we have some understanding and maintainability of fixing these issues. 
+incident: 
++8hrs/wk
+. When this occurs we have fewer insights into finding the issue and resolving.
+In a month we have 
+150
+ 
+billers affected by AutoPay failures. 
+Our current time for doing reruns is 
+~2.75hrs/wk
+ 
+All of the above metrics on time spent and impact we found are attributed to the following:
+Within a 30-day period there are
+ 
+many AP/SP exceptions. Of these exceptions we know that: 
+calculating service fee errors account for 
+65% of all errors
+CTP timeouts account for 
+20% of all errors
+Less discovered errors account for 
+15% of all errors 
+We know that the 65% and 20% of errors then result in 3.5 hours of dev work per week, plus 2.75 hours per week of reruns. While the 15% of errors when they occur cause significantly more time and are often found by our billers, not us.
+ Objective
+The objective of this project is to make monitoring and supporting AutoPay processing work every time and enable IC to be proactive in handling any issues. Our ultimate goal is for AutoPay to run every time correctly and when it does fail to fail gracefully. 
+We want to be proactive. We will never have a biller tell us about a problem we don’t know about. We should have better internal visibility to AutoPay Processing. 
+Therefore our objectives are: 
+reducing majority if not all errors (65% + 20%) → successful run 
+addressing less discover errors (15%) → successful run 
+increasing visibility → proactive handling 
+ Success Metrics
+Goal
+Metric
+Current
+Good
+Great
+Billers don’t experience failures
+Reduce amount of billers per month with AutoPay processing issues.
+150
+ billers per month
+50
+<
+10
+Less development spent on AutoPay 
+Reduce development effort to resolve failures. 
+3.5
+ hours per week
+<
+1
+hr
+<
+5
+m
+Lower exceptions 
+Reduce number of exceptions.
+370
+ exceptions per month
+50
+<
+10
+Universal monitoring
+Number of people in IC who can view AutoPay processing monitoring.
+~15 
+people 
+100
+1,000+
+ (DS + CS + CRM users + biller users)
+ Target Audience
+Group
+Impact
+Billers with AutoPay 
+Billers with AutoPay are currently affected by AutoPay processing failures when these occur. When we complete this work fewer billers will be impacted by failures.
+IC development team 
+The outcome of this work should reduce error remediation time spent, increase alerting, and monitoring of processing errors. 
+IC Support teams 
+IC CSMs, CS, DS are impacted by billers reaching out when AutoPay issues arise. The outcome of this work should enable this team to identify problems before our billers.
+ User Interaction and Design
+User Research Background 
+From 2022 Q4 research we’ve found the most frequent AutoPay inquires from billers are around AutoPay not running and receiving no notification of the completed AutoPay run which usually occurs early morning. This occurred for a majority of billers asking about why all AutoPays did not run with some billers only asking about a few customers.
+The second most frequent biller inquiring is why amounts of AutoPay processing are different than they expected, follow by questions on AutoPay conversions and linked accounts with AutoPay. Linked Account/ Conveyance questions are typically about why an AutoPay was processed on the previous owner’s payment method or not processed on all linked accounts and how to remove these. 
+The problem is when new invoices are loaded before AutoPay has processed on the CURRENT invoice, this triggers "balance forward" (sets prior invoices to $0.00), which prevents AutoPay from running. 
+From this research suggested data points that could be of value are: 
+Per Biller: 
+Count of AutoPay invoices that have not run by certain time in the morning
+email of count of invoices which autopay did not run with details to help the biller remediate. 
+Count of 5 top most common autopay processing errors thrown (of the top 65% + 20%) what's the most common errors for the biller. This could be included in the daily email. 
+Business Logic
+Business logic for reporting of errors is outlined below.
+We will have checks on number of payments processed in a given time frame from the start of the job to end. Transactions begin around 3:30 and in the early hours we see about 3+ payments/second. As billers complete the chain and we’re left with a handful, that drops to a payment every 3 seconds. With slow RTDR billers, that average drops to a payment every 8-20 seconds toward the end of the run.  
+First we will have a Job to check for Completed AutoPay runs between 3:45-7:00 AM EST. This does the following: 
+Checks for No completed jobs within the last 20 minutes. If there are no completed jobs in the last 20 minutes we will post a message in the slack channel. 
+Checks for jobs completed where percentage of approvals is less than 50% of the total items processed, with threshold it must have 50 or more items to process. 
+Check for average payment time being greater than 5 seconds, must have 50 or more items to be process. 
+Example of Error: 
+The second job is for actively running AutoPay Billers. This starts after the DailyProcessing.APProcessStartDate + AverageRTDRTimeForBiller and before APProcessEndDate has a value. This is a check per biller checking the time their processing starts add the average time of that’s billers RTDR, then start checking 1and 2 below before the biller’s AutoPay processing is complete. This checks the following: 
+Checks for no payments processed in the last 30 seconds 
+Checks for average payment time being greater than 10 seconds, with threshold it must have 50 or more items to process. 
+Example of Error: 
+ Components Impacted
+AutoPay processing 
+Component
+Impact
+AP / SP 
+To list the affected repos. 
+CRM
+We will add a tool in the CRM to monitor AutoPay processing, and any failures. 
+Biller Emails 
+Additional email to billers alerting of any AutoPay processing failures at certain time. 
+ Technical Architecture
+What are the right questions to ask or diagrams to provide for this section?
+Internal Visibility: 
+What changes / additions need to happen in the database for logging, metrics, etc. (ic_perflogging – new columns, tables, sp’s)?
+65% and 20% of errors: 
+What is the best tool for shifting manual reruns to another team and how is access managed (if we resolve the calculate fee and timeout errors, that takes care of 85% of errors, leaving 15% for DS/CS)? They will need to run a specific 
+step
+ for specific 
+invoices
+, which is not possible with ICAutoPayController today (it runs 
+all subsequent steps 
+and can pick up previously declined invoices). Do we extend the controller repo or create a wrapper / UI for it?
+Less discovered errors::
+ What is the best tool for managing tasks created by the ICAutoPayController (we can only terminate tasks manually one at a time or all at once – no ability to pause, group, etc.)? Where will it be deployed and who can access it?
+Less discovered errors:
+ Daily Ops has issues with errors that account for 15% of errors. Have all gaps been identified for each step of the AP/SP chain, i.e., failures are logged + alerts are raised where necessary? No.
+Initial diagrams (WIP)
+EBPP-7009
+EBPP-4211
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+EBPP-7875
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Will be tested in the Cloudie’s Email Notifications
+ 
+EBPP-11322
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ 
+Tested by seeing logs in New Relic, Cloudie’s Email Notifications, and Oppsgenie Alerts
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Serviceability/Observability
+What are the right questions to ask or diagrams to provide for this section?
+Internal Visibility:
+ What salient features of the AP/SP chain need to be visible and by who (e.g., which 
+step
+ of the 
+chain 
+a biller is on vs. more granular, such as the RTDR part of the AutoPaymentProcessing 
+step
+ vs. holistic views such as 120k payments across 3k billers to process today and what % payments/billers are completed)?
+How can we find that AutoPay is not running/ is on AutoPay/ Schedule Pay/ RDTD running.
+Should this be visible only in the CRM?
+Examples of what we have today:
+Slack channel (visible company-wide) 
+Azure batch 
+3. Biller Portal 
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Name
+Company
+Team
+Role
+Shelby Webster
+InvoiceCloud
+SPAM
+Product Manager
+Mark Lagunez 
+InvoiceCloud
+SPAM
+Technical Lead
+ Requirements
+Change to rely on Jira, pull in epic details
+Requirement
+Importance
+Jiras Linked 
+Notes / Outcome
+Addressing the top two errors: 
+calculating service fees 
+relates to metric of reducing daily errors, and engineering time.  Currently calculating service fee errors accounts for 65% of all errors. 
+Reduction in errors
+Addressing the top two errors: 
+2. CTP timeouts 
+ relates to metrics of reducing daily errors, and engineering time. Currently CTP timeouts account for 20% of all errors. 
+ Reduction in CTP errors
+Less discovered errors 
+relates to metrics of reducing incidents,  15% of all errors 
+logging of 5%/ list of issue areas and we will develop top 3 places to add alerts 
+Internal Visibility 
+Importance so others in the organization benefit entirely from the above work, so work is seen. 
+something very minimal added to the CRM.
+From this research suggested data points that could be of value are: 
+Per Biller: 
+Count of AutoPay invoices that have not run by certain time in the morning
+email of count of invoices which autopay did not run with details to help the biller remediate. 
+Count of 5 top most common autopay processing errors thrown (of the top 65% + 20%) what's the most common errors for the biller. This could be included in the daily email. 
+ Competitive Analysis
+Competitors have AutoPay. 
+ Dependencies
+ Assumptions
+Assuming we will spend 2 months of Q1 2023 on this project
+Assuming we will not be resolving all exceptions. We will target specific exceptions within this timeframe. 
+ Timeline
+Event
+Date
+Confidence
+Status/Work 
+Kickoff call
+ 
+complete
+Green
+ 
+Design review
+ 
+complete
+Green
+ 
+Milestone 1 
+ 
+Research of 15% errors, remediation on 65%+20%
+Milestone 2 
+ 
+Additional logging of 15% errors, remediation on 65%+20%
+Milestone 3 
+ 
+Remediation on 65%+20% Complete
+Milestone 4 
+ 
+Visibility initiative
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+Showing AutoPay processing success or failure in the biller portal 
+Getting all logging / alerting covered on the 15% of less discovered errors – 
+will discuss further
+ Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+Early Access Billers
+NA
+All Billers
+In monthly email 
+Partners
+NA
+Internal \ Training
+In The Know
+Internal \ Support+CSM
+Meeting with Anita and Cat 
+Internal \ Sales
+NA
+Internal \ Boarding
+NA
+Internal \ General
+NA
+Results 
+Results as of 5/10: 
+ URL:/spaces/PRODUCT/pages/2519138333/AutoPay+ERSO

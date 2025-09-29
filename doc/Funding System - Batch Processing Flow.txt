@@ -1,0 +1,16 @@
+Problem Statement
+The current design for our batch funding job has two main issues that can lead to errors and financial loss.
+1. Stale Funding Instructions
+The funding instructions sent to the API can become 
+stale
+ because critical details—such as the payout amount or bank account information—can change after the batch job has run. This creates a risk of funding the wrong amount or sending money to an incorrect or outdated bank account.
+The system must ensure that when a batch of payments is scheduled for funding, all instructions are current and accurate at the precise moment of execution.
+2. Timing and Data Freshness
+The second issue is a matter of timing and data freshness, particularly concerning ACH payments and changing bank details.
+Payment Rejection Risk:
+ ACH payments can be rejected up to two business days after being initiated. Funding these payments too early could mean sending money for a transaction that will ultimately fail, leading to unnecessary effort and potential financial complications.
+Outdated Biller Information:
+ 
+Biller bank account details often change. The Nacha Funding Job must fetch the most recent bank account information for a payout as close as possible to the moment it creates the Nacha file to ensure the funds are routed correctly.
+In short, the system needs to guarantee that funding instructions are created and sent only when we have a high degree of confidence that the payments are valid and that all associated data (like bank account details) is up-to-the-minute.
+ URL:/spaces/EA/pages/4568219991/Funding+System+-+Batch+Processing+Flow

@@ -1,0 +1,72 @@
+Page Navigation:
+1
+7
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Summary
+Summary
+Details
+Software Partner Name
+Caselle/Civic
+Caselle is the software name. Civic is the software reseller.
+Software Product Name
+Caselle
+Caselle software referred to by the version name ‘Connect’
+Software Cashiering System
+N/A
+Supported Versions
+Connect version 2020.11.195 and Clarity
+Clarity is their Legacy product and no longer sold. Billers currently on Legacy are being converted to Connect version 2020.11.195 or higher (higher versions are all compatible with the IC integration)
+Integration Requirements and Pre-Requisites
+Outlined Below
+See: 
+Pre-requisites for Installation of the Caselle Interface Module
+ 
+Vertical
+GUB
+Sample Biller Implementation
+2073 Camino Real Regional
+2368 East Duqubue
+Planning
+Test Portals
+Caselle Batch Integration - BID: 2077
+Rules of Engagement
+This integration will not require direct contact with Partner. This will follow the “hands free” implementation that PSN currently uses. Please use Email template under Actions to send to Biller. 
+Once information has been gathered, create track “Implementations - Caselle Interface Module and Stratus Install” and someone from the Madison team will get assigned to it.
+Timeline
+45-60 Days
+Pre-requisites for Installation of the Caselle Interface Module
+The following questions and actions must be considered in preparation for the install of the Caselle Interface module. Usually, this information is presented to the Biller contact via email. An email sample has been provided below that can be used to send to the Biller. This information is needed in order for Invoice Cloud to complete the installation of Caselle Interface Module: 
+Questions
+Confirm the version of Caselle that is being used (Clarity or Connect)
+Contact person that we would work with to get access to the server to install the interface module
+Actions
+To store paperless enrollment status in Caselle, the Biller will need to provide Invoice Cloud with a Customer User-Defined Field name of the field in Caselle that will be used to record which customers have elected to opt-out of paper billing. We suggest the field name be called “OptOut” 
+Biller will need to set up a “workspace” in their Caselle software to facilitate payment posting.
+Biller will need to provide the Cash GL and Cash Clearing GL codes that they wish to have the online payments applied to.
+Biller will need to add payment types for ACH and Credit Card to their Caselle Software if payment types do not already exist.
+Biller will need to create a user in the Caselle software for payments to be associated with if they would like to track the payments by user.
+Fields for these values can be found on the 
+Caselle Implementation Worksheet
+Caselle Close Billing Period/Month Requirement
+Biller must close out their current billing period before generating invoice for Invoice Cloud. This will ensure that the Adjustment file has the correct balances.
+Samples for Project Kick-Off and Requirement Gathering
+Caselle Implementation Worksheet
+ used for value sharing between IC and Caselle
+Invoice File Creation:
+ XML imported into Caselle to produce an invoice file for IC - XML is called ‘Invoice Cloud Form Definition'. The Caselle Implementation Manager will import the ‘Invoice Cloud Form Definition' XML to generate the invoice file.
+Sample XML - Connect
+Sample XML - Clarity
+Sample E-mail
+Caselle Cloud Store Setup Form
+Note: 
+If a Biller has more than one Cloud Store that we are producing a payment file for, we can create one file which contains the payments across all Cloud Stores. I.e. The Caselle file can support multiple combinations of Distribution Code and Payment Code in a single file, as seen in the Sample File in the Technical Details page. For any Cloud Store LockBox invoice types, an ITR must be submitted to tie specific Distribution and GL codes.  Any addition or changes to Caselle’s cloud stores will require an ITR to make sure that all items are set up with the corresponding GL#. 
+Contacts
+1500
+400
+Caselle CRM MAP
+ URL:/spaces/IM/pages/182878259/Caselle+Batch+Implementation+Details

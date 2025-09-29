@@ -1,0 +1,59 @@
+Plan
+The below APIs on the domain (www.invoicecloud.com) have been identified for routing and pass-through via Kong.  These APIs will be rerouted to fall under under the (
+api.invoicecloud.com
+) domain.
+These APIs are Kong roadmap accelerators for Texas Mutual contract.
+Careful monitoring of these APIs will be done to understand Kong behaviors and used to operationalize the use of Kong for all legacy APIs.
+This effort will be used to establish the standards for routing all legacy APIs via Kong.
+URL Convention
+/apis/{domain || persona}/{version}/{resource}
+Use dashes for word separators to improve readability and avoid URL encoding white spaces
+invoice%20payments vs invoice-payments
+Route Table
+Ingress URL
+Back End Host
+Backend Path
+Method
+https://api.invoicecloud.com/apis/biller/v1/invoices
+www.invoicecloud.com
+(VM IIS)
+/portal/webservices/CloudInvoicing/InvoiceUpload
+*The above is slated for REST implementation in place of SOAP
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/invoice-files
+www.invoicecloud.com
+(VM IIS)
+/portal/webservices/CloudInvoicing/InvoiceUploadFile
+*The above is slated for REST implementation in place of SOAP
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/invoice-payments/creditcard-sale
+www.invoicecloud.com
+(VM IIS)
+/api/v1/invoicepay/cc/sale
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/invoice-payments/ach-sale
+www.invoicecloud.com
+(VM IIS)
+/api/v1/invoicepay/ach/sale
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/customers
+www.invoicecloud.com
+(VM IIS)
+/api/v1/customers/add
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/payment-methods/ach
+www.invoicecloud.com
+(VM IIS)
+/api/v1/bank/add
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/payment-methods/creditcard
+www.invoicecloud.com
+(VM IIS)
+/api/v1/creditcard/add
+POST, OPTIONS
+https://api.invoicecloud.com/apis/biller/v1/customer-autopay
+www.invoicecloud.com
+(VM IIS)
+/api/v2/cp/autopay
+PUT, OPTION
+ URL:/spaces/EN/pages/2705195081/Kong+P1+Legacy+API+Rollout+Plan

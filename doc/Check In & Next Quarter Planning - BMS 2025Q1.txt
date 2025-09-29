@@ -1,0 +1,275 @@
+ Overview
+Check in on quarterly commitments, and discuss a proposal of next quarter’s work.
+What is the status of our current commitments? Are any changes or adjustments needed?
+What are we considering for next quarter’s work?
+What do we need to discover or resolve before we are able to make commitments on that work?
+Date
+ 
+Team
+ 
+ 
+Participants
+@ mention participants
+Current Quarter Commits
+List out current quarter commitments that are 
+ At Risk or 
+ Delayed. Link to Jira items. Provide an update for each item: Why is it delayed, is there a way to pull it back to green, or do we need to reset the date. If we are resetting the date, provide the new date the team believes it can hit. 
+Commitment
+Status
+Notes
+EBPP-24954
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+Changes are going into Production on the evening of 2/13. The new auto conveyance similarity score will be 
+enabled for a few billers initially
+ and then rolled out to others after verifying results.
+EBPP-3334
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+  On Track
+Change of path here
+Initially, we intended to queue invoices if names didn’t match the account (but had 70-90% similarity) before processing them to allow billers to review them. However, this approach would require extensive changes to our file import process, increase development time, delay email notifications, and add extra work for billers.
+Instead, we will enhance the existing Customer Conveyance report to include:
+Date/time column
+Previous Customer Name column
+Name Similarity column
+Default view of the last 30 days, sorted by the most recent
+Accounts will be auto-conveyed if names are 70-90% similar, but billers can reverse the any conveyances with 1 click if needed. This will reduce biller workload, ensure timely customer notifications, and minimize incorrect auto conveyances. Using the new Similarity Score, billers can easily see accounts most likely to require a conveyance reversal.
+We are currently 25% through this update, aiming for a release on March 12.
+EBPP-25370
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+Recently began on phase 2 items which will include many bug fixes, improvements, and new features such as saving reports.
+EBPP-23892
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+PRISM helping here
+, but 
+new team support has affected developer focus
+This is 47% complete and going smoothly with 10 items remaining.
+EBPP-23358
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ At Risk
+PRISM helping here
+The Prism team will be working on these items.
+EPD-202
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+PRISM helping here
+EBPP-24955
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+Escalations have not interfered with our roadmap this quarter.
+EBPP-24956
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ On Track
+PRISM helping here
+Current Quarter Commitments: Full List
+Create a filter in Jira Plans that displays a list of commitments for the current quarter. 
+https://support.atlassian.com/jira-software-cloud/docs/embed-your-advanced-roadmap-plan-in-a-confluence-page/
+what goes here?
+ Next Quarter: Items Under Consideration
+List out what the team proposes to do for next quarter, highlighting whether the item must be done next quarter (with a date if applicable), should be done, or could be done. Indicate a cut line of what you think makes it in, and your top 2-3 items out (or wherever you believe a controversial/thought-provoking line is). If you prefer, insert a Jira Plans embed below instead.
+Jira Item
+MoSCoW Scoring
+EPD-49
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Must Do
+EPD-48
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Should Do
+EPD-51
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Should Do
+Agentic AI
+ 
+ Open Questions
+Provide a list of any discussion questions the team has, especially if there are decisions/actions needed to unblock the next quarter’s roadmap. 
+
+
+
+
+6
+
+
+6
+
+
+incomplete
+
+
+Auto Conveyance project - Complete the confusion matrix that Jed sent
+
+
+
+
+
+
+7
+
+
+7
+
+
+incomplete
+
+
+Need to have an agentic AI discovery item on the list for Q2
+
+
+
+
+
+
+
+
+8
+
+
+8
+
+
+incomplete
+
+
+Send Jed the list of jobs to be done
+
+
+
+
+
+
+9
+
+
+9
+
+
+incomplete
+
+
+Review insurance items with Sarah to determine what to commit for Q2
+
+
+
+
+
+
+10
+
+
+211296f8-c09a-4932-a54f-f3534ca4e2b2
+
+
+incomplete
+
+
+AI report gen (phase 3)
+
+
+
+
+
+
+
+
+11
+
+
+3121a26a-0843-4c93-be4b-6ae9fd5a71c0
+
+
+incomplete
+
+
+Add more enhancements for Q2
+
+
+
+
+
+
+12
+
+
+8fe1b7a4-cfa5-44de-9be4-9dd287c72964
+
+
+incomplete
+
+
+Talk to Cat/Anita to get feedback from Ops team
+
+
+
+
+
+
+13
+
+
+1e627572-5027-4983-a073-1129273a8ffd
+
+
+incomplete
+
+
+Send message to internal group when we reach a milestone for AI report generator
+
+
+
+
+
+
+14
+
+
+c01ad8c4-9aa0-4d23-b822-826e82ecd239
+
+
+incomplete
+
+
+Add Outbound Payments item to commitments (and similar going forward)
+
+
+
+
+
+
+15
+
+
+7252f071-da39-44df-bfdb-11725fc42388
+
+
+incomplete
+
+
+PM should be aware of all work devs are spending time on
+
+
+
+
+ URL:/spaces/PE/pages/3991797761/Check+In+Next+Quarter+Planning+-+BMS+2025Q1

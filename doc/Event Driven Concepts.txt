@@ -1,0 +1,197 @@
+Overview
+This guide was initially scoped around the adoption of MassTransit as a distributed messaging framework. As of April 2025, there has been a pivot away from the adoption of that SDK with the maintainer moving to a 
+commercial model
+.
+Despite this unfortunate circumstance (for us), the information contained here is still highly relevant to distributed messaging concepts and organizing initiatives around their adoption. As a result, any remaining language within regarding MassTransit or its implementation can largely be ignored.
+Assuming these are new concepts for most, this section will seek to distill some of the core ideas around distributed messaging and event-driven communication into a more digestible format. The splash page should get you up and running, the remainder of the guide will be a deeper dive.
+Prerequisites
+Review standards documentation for 
+Commands and Events
+OPTIONAL
+ - We will be using Rebus as our messaging SDK, 
+familiarize yourself with the documentation
+ and keep it bookmarked.
+Scope & Objectives
+Outline the high-level concepts of Event Driven Messaging
+Provide design and implementation guidance for the use of Rebus
+Provide deployment and scaling guidance for Kubernetes workloads
+Currently Out of Scope
+Implementation or orchestration of Saga behavior
+Terminology
+Message Broker
+ - Software component that facilitates the exchange of messages between producers/publishers and consumers/subscribers.
+Producers/Publishers 
+- A producer is responsible for 
+producing
+ or writing messages to an intermediary message broker.
+Consumers 
+-
+ 
+A consumer is responsible for 
+consuming
+ messages from an intermediary message broker.
+Commands 
+- Commands tell a service to 
+do something.
+Events 
+- Events are emitted as the result of 
+something 
+occurring, typically as the result of a command - though not always.
+Review Ubiquitous Concepts
+Read up on messaging concepts of 
+Commands and Events
+Including 
+Naming Best Practices
+There are two messaging patterns you should familiarize yourself with before getting deep into the implementation of messaging architectures. Those two patterns are
+Producer-Consumer
+Publisher-Subscriber (Pub/Sub)
+Understand the Producer-Consumer Pattern
+Simple Summary
+Producers produce messages, which are received and processed downstream 
+by one consumer
+.
+Simple Visual of Producer-Consumer. 
+Source: 
+Azure Architecture Center
+Understand the Publisher-Subscriber Pattern
+Simple Summary
+Publishers publish messages, which are received and processed downstream 
+by one or many subscribers
+.
+Simple Visual of Publisher-Subscriber.
+Source: 
+Azure Architecture Center
+Messages
+Messages are either 
+Commands
+ or 
+Events
+Commands 
+tell a service to 
+do something
+ and should be of an imperative mood - e.g. 
+RunReport
+, 
+RegisterUser
+, 
+CreateBiller
+Events
+ are emitted by a service when 
+something has happened
+ and should be past tense - e.g. 
+ReportRan
+, 
+UserRegistered
+, 
+BillerCreated
+.
+Example of a Command and Event alongside their 
+Rebus
+ 
+handler implementations
+c#
+// Important - Inheritance behavior is allowed 
+// however, each Consumer/Handler can only handle a single, concrete event type.
+public record MessageBase {
+   public string CorrelationId { get; set; }
+   public string Username { get; set; }
+   public DateTimeOffset TimeStamp { get; set; }
+}
+
+public record RunReport: MessageBase {
+   Guid BillerId { get; init; }
+   // Other properties
+}
+
+public record ReportCancelled: MessageBase {
+    Guid BillerId { get; init; }
+    Guid ReportId { get; init; }
+}
+
+// This will not work.
+public class ReportMessageConsumer : IHandleMessages<MessageBase> {
+   public async Task Handle(MessageBase @event) {
+   }
+}
+
+// The two below are correct.
+public class RunReportConsumer : IHandleMessages<RunReport> {
+   public async Task Handle(RunReport command) {
+   }
+}
+
+public class CancelReportHandler : IHandleMessages<ReportCancelled>{
+   public async Task Handle(ReportCancelled @event) {
+   }
+}
+Producers/Publishers
+Producers 
+produce
+ messages and Publishers 
+publish
+ messages. While the terms are often used colloquially, they do indicate slightly different behaviors. 
+The difference between the two is that a 
+producer 
+tends imply that there is a 
+single recipient for the produced message
+ while a 
+publisher 
+publishes messages to 
+any number of recipients.
+To simplify that even more, what a producer/publisher is really doing is placing messages on 
+messaging queues
+ 
+or
+ 
+topics
+.
+Often, distributed messaging SDKs will support both models and there will be a delineation between producer/publisher actions using 
+Send
+ and 
+Publish
+ verbiage, respectively.
+Consumers/Subscribers
+Consumers 
+consume
+ messages and Subscribers 
+subscribe
+ to messages. Again, these are often used interchangeably but tend to imply a 
+1-to-1
+ vs 
+1-to-many
+ relationship a receiver has with a particular message type.
+Rebus provides the 
+IHandleMessages<T>
+ interface to allow for the setup & creation of 
+Handler
+ types for message consumption.
+Correlation and Azure Service Bus Sessions
+This is heavily contingent upon leveraging built-in features of Azure Service Bus. Different message broker technologies are conceptually nearly identical - Azure Service Bus, however, provides many things implemented out-of-the-box with minimal setup on the part of the developer. This is where the benefit of having a fully managed Enterprise-tier messaging service is fully realized.
+Message correlation provides a way to track message behavior through the system. This can be done simply by attaching a 
+CorrelationId
+ and ensuring that it is carried through each subsequent transaction that results in an event.
+Extending this concept, Azure Service Bus has the concept of 
+Sessions
+ - which can leverage this behavior to massive benefit.
+A session will allow a single consumer to create a LOCK on a specific 
+SessionId
+ - meaning that any messages on the bus will always be handled by the same consumer instance, in order.
+The 
+SessionId
+ DOES NOT have to be the 
+CorrelationId
+ property. While that is an extremely valid, and useful use-case - it may also be of value to use a 
+ReportId
+ or 
+BillerId
+ for the session - meaning one consumer would handle all commands/events for one report or biller within a particular session.
+This is where understanding the 
+Competing Consumers
+ pattern becomes valuable.
+You will never need to implement this pattern explicitly - simply adding additional message consumers allows Azure Service bus to being distributing messages in a round-robin manner using Competing Consumers. 
+Resources
+Communication Patterns - Engineering Architecture - Confluence
+Asynchronous messaging options - Azure Architecture Center | Microsoft Learn
+Competing Consumers pattern - Azure Architecture Center | Microsoft Learn
+Home · rebus-org/Rebus Wiki
+ URL:/spaces/PMK/pages/4279304315/Event+Driven+Concepts

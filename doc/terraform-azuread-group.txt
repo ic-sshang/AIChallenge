@@ -1,0 +1,58 @@
+This repo contains a Terraform module used to create EntraID (previously known as Azure AD) Groups as well as:   1. Manage the Members of the Group (this feature is being deprecated for Users as we only want Users added thru INFRA Tickets and ClickOps but is still valid for Service Principal Members). 2. Manage the RBAC Assigned to the Group. 3. Manage the Group Memberships (`parent_groups`) for the Group.
+This repo contains a Terraform module used to create EntraID (previously known as Azure AD) Groups as well as the following features:
+Manage the Members of the Group (this feature is being deprecated for Users as we only want Users added thru INFRA Tickets and ClickOps but is still valid for Service Principal Members).
+Manage the RBAC Assigned to the Group.
+Manage the Group Memberships (`parent_groups`) for the Group.
+Repo Location
+terraform-azuread-group - Repos
+Repos that Use this Module
+Global_AAD - Repos
+Example Usages
+Manage the RBAC Assigned to the Group
+hcl
+module "icsecureuploadstorage_readers" {
+  count        = var.environment == "prd" ? 1 : 0
+  source       = "git@ssh.dev.azure.com:v3/invoicecloud/Platform/terraform-azuread-group//?ref=platform-0/0.2.0"
+  display_name = "az-icsecureuploadstorage-readers-${var.environment}"
+  description  = "Grants read access to icsecureuploadstorage in the ${var.environment} environment"
+  environment  = var.environment
+  group_rbac_configuration = {
+    "icsecureuploadstorage_resource_group_reader" : {
+      role_name = "Reader"
+      scope     = "/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/rg-icsecureuploadstorage"
+    }
+    "icsecureuploadstorage_resource_group_storage_blob_reader" : {
+      role_name = "Storage Blob Data Reader"
+      scope     = "/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/rg-icsecureuploadstorage"
+    }
+    "icsecureuploadstorage_resource_group_storage_queue_reader" : {
+      role_name = "Storage Queue Data Reader"
+      scope     = "/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/rg-icsecureuploadstorage"
+    }
+  }
+}
+Manage the Group Memberships for the Group
+hcl
+module "users_platform_admins" {
+  count        = var.environment == "prd" ? 1 : 0
+  source       = "git@ssh.dev.azure.com:v3/invoicecloud/Platform/terraform-azuread-group//?ref=feature/PLAT-1688/add-user-persona-groups-for-platform"
+  display_name = "users-platform-admins"
+  description  = "Group to add Users to for the Platform Team Admins, this Group will get added as a Member of other Groups that have RBAC and ACL permissions assigned."
+  environment  = var.environment
+  parent_groups = [
+    "az-sandbox-owners",
+    "az-enterprise-devtest-owners",
+    "az-enterprise-prod-owners",
+    "az-primary-subscription-owners",
+    "ic-iac-global-cloud-engineers-sbx",
+    "ic-iac-global-cloud-engineers-dev",
+    "ic-iac-global-cloud-engineers-iat",
+    "ic-iac-global-cloud-engineers-qar",
+    "ic-iac-global-cloud-engineers-xat",
+    "ic-iac-global-cloud-engineers-prd",
+    "IC-DevTest-App-Admins",
+    "IC-DevTest-Web-Admin",
+    "AAD DC Administrators"
+  ]
+}
+ URL:/spaces/platform/pages/3929767937/terraform-azuread-group

@@ -1,0 +1,92 @@
+Scheduled Changes
+Pre work
+Saturday Evening at 8 PM run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ or 
+ 
+Saturday Evening at 9:30 PM pull web servers IC-Web6 - 10 out of pool and kick off updates
+ 
+Sunday morning 4:30 AM Move MCC, IC-FTP, ProxyTemp1 - 5, App/PDF/Skybot servers into the September WSUS group and kick off updates
+ 
+Sunday Morning at 4:45 AM run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ or 
+ 
+Day of:
+Notify dailyops and maintenance slack channels of maintenance starting
+ 
+Put pingdom in maintenance mode (only if putting up the maintenance page)
+ 
+Enable the maintenance page on 
+www
+ and 
+my
+ by replacing 
+pal.invoicecloud.com
+ with 
+icmaintenance.azurewebsites.net
+ in Cloudflare under DNS
+ 
+Primary Work
+PLAT-1057
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+This change was rolled back after we found this had negative impact on the 
+sp_execute_remote
+ pattern used in the Database Stored Procedures.  Will follow up with 
+ and 
+ for long term strategic planning on this issue as it might also have impacts on the eventual need to have multiple Azure SQL Server instances hosting our Biller Shard Databases due to the DB count limit of 5,000 Databases per an Azure SQL Server instance which we are steadily approaching.
+INFRA-638
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ & 
+ 
+Pipeline Run
+PLAT-1311
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+https://invoicecloud360.sharepoint.com/:x:/r/sites/IC-Technology/Shared%20Documents/General/Infrastructure/Patching/Update%20Tracking/Update%20Tracking%202024-11-17.xlsx?d=w6e2a266ed701472da6955d65f80664fc&csf=1&web=1&e=RP504S
+ 
+INFRA-453
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Move the Cloudflare WAF rule “Block by headers” from Log to Block
+INFRA-576
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Add 
+my.invoicecloud.com
+ to ADDS DNS pointing to CNAME(A record AppGateway-Prod)
+Test Plan
+Run the Smoke Tests on 
+www4.invoicecloud.com
+ 
+Remove maintenance page and purge the cache on Cloudflare
+ 
+Run full regression tests on 
+www.invoicecloud.com
+ 
+Post-Steps
+Start the Jobs - 
+Refer to Post-maintenance steps related to Jobs here
+ or 
+ 
+Notify dailyops and maintenance channels of maintenance finished and results
+ 
+ URL:/spaces/icinfradoc/pages/3698032645/11+17+2024

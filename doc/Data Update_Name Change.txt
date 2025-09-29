@@ -1,0 +1,21 @@
+Data updates typically ask for customer name changes or email changes.
+To complete a data update you will need SOAP UI and the following WSDL URL:
+https://www.invoicecloud.com/portal/webservices/CloudManagement.asmx?wsdl
+Open SOAP UI
+Create a New Soap Project
+Copy and paste the WSDL URL into the Initial WSDL textbox and click OK
+Look for Update Customer Record and click on expand (+). Then double click on Request 1. This should open up the Update Customer Record Page
+In SSMS make sure to search for the information under biller shard the customer belongs to. 
+To find the billerGUID and WebServiceKey, use the following query:
+select * from billers
+To find the customer information, use the account number provided in the ticket and the following query:
+select * from customers where accountnumber = '***'
+Erase the question mark and place the updated customer information in its place. Make sure to also fill in the remaining fields with the already existing customer information found in the database. 
+If fields are filled out incorrectly or accidentally left blank, customer information will be updated incorrectly!
+When all fields are filled out correctly, click on the Green Run Button.
+Note:
+Sometimes customer name updates will request changes with the special character '&'.
+When the Run button is clicked an error will occur if just the character ‘&' is used. Make sure to use the character '&’ as follows: 
+&amp;
+This will allow the name update with the character '&' to work successfully.
+ URL:/spaces/DS/pages/2525036547/Data+Update+Name+Change

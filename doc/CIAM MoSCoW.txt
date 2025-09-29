@@ -1,0 +1,82 @@
+ Must Haves
+SSO Integration for External IDPs
+Ability to configure external Identity Providers (IDPs) for billers who wish to use their existing Single Sign-On (SSO) to access the Biller Portal.
+Multi-Factor Authentication (MFA) Support
+Option for billers (without their own IDP) to enable MFA, with configurable factors such as:
+Password
+Authenticator App
+Email-based One-Time Password (OTP)
+Passkey
+MFA preferences should be configurable at the organization level.
+SSO via Our IDP
+Support for billers without their own IDP to authenticate via our Identity Provider using SSO.
+Custom Sign-In Page
+ for the SSO-MFA for Biller Portal
+Allow IC-specific branding
+Allow configurable elements such as different ID fields, MFA factors, and messaging
+Provisioning of user accounts and details into our IDP for their access to the Biller Portal through our IDP or their IDP SSO/MFA.
+Managing the Password policy through our IDP within the scope of PCI compliance.
+Self-Service Security Management through Biller Portal
+ for managing the Password.
+Delegated User Management: 
+Enable billers to manage user creation and administration via the Biller Portal.
+Support Single Log Out. 
+In case the Biller Portal is integrated with the Billers’ IDP, signing out from the Biller Portal should also singout for their IDP and Signing out from their IDP should also sign out for Biller Portal.
+For the Billers with IDP: Tightly integrated with their HR system, so when employees are terminated, their access is immediately killed.
+Should always have a backdoor user/pass (admin) that can bypass the SSO in case the provider is down
+Level of Assurance Settings (
+see here
+)
+Ability to migrate biller accounts one by one to allow for a phased approach to rollout
+Allow biller to control permissions/roles/access levels from their IdP
+ Should Have
+Ability to allow username uniqueness within a biller account
+Demo portal available for Sales/CS to demo IAM functionality
+IdP config integrated into CRM so IM/boarding teams don’t need to access IdP
+Self-Service Security Management through our IDP or their IDP for managing the Password.
+Support ability for one user to log into multiple billers with single authentication
+This is the “super biller” scenario
+Self-Service Security Management
+Allow users to:
+Set up additional sign-in methods (e.g., another authenticator app)
+Manage active sessions across devices via SecureAuth’s Security section
+Integrate with a Risk Engine
+ Could Have
+Multi-Language Support
+Delegated User Management: Enable billers to manage user creation and administration via the IDP Admin Portal.
+ Won’t Have
+Possible Approach
+Custom Sign-In Page Development
+Design and implement a branded sign-in page for the Biller Portal using Invoice Cloud branding.
+Branding Configuration: Allow system administrators to configure login page appearance and branding via the Appearance settings.
+Tenant and Identity Pool Management
+Through the Business Admin Portal:
+Create a tenant for each organization.
+Within each tenant, configure identity pools and sign-in methods.
+Connect external IDPs (supporting OIDC) during onboarding.
+Provide UI and API-based onboarding and training documentation.
+Level of Assurance Settings
+Enable setting of assurance levels under “Users” to define security levels based on authentication methods.
+User Account Provisioning
+Support user creation via:
+API-based migration to SecureAuth
+Just-in-Time (JIT) provisioning with dynamic password setup using existing credentials.
+Password Policy Management
+Define and enforce password policies for biller user accounts under “Users”.
+User Attribute Storage
+Store user attributes such as First Name, Last Name, and Email in SecureAuth for registration and sign-in.
+Business Admin View for Identity Pools
+Within each tenant, allow billers to:
+Configure sign-in methods
+Manage users
+Create sub-organizations and delegate access
+Multi-Language Support
+Configure translations under Appearance for international customers to localize the sign-in page.
+Self-Registration for Biller Users
+Provide a self-registration option under “Users” in the workspace.
+Risk-Based Authentication
+Integrate with a Risk Engine to:
+Analyze user behavior
+Assess risk signals
+Leverage APIs for sign-in risk evaluation
+ URL:/spaces/PRODUCT/pages/4368367620/CIAM+MoSCoW

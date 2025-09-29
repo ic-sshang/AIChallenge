@@ -1,0 +1,87 @@
+none
+About this library
+Microsoft.Data.OData is a .NET library used for building OData (Open Data Protocol) clients and servers. This protocol allows for the creation and consumption of queryable and interoperable RESTful APIs in a simple and standard way. It's commonly used by developers working on .NET applications that need to consume or generate OData feeds. Microsoft.Data.OData is deprecated, for new projects or applications requiring OData v4, Microsoft recommends using the newer Microsoft.OData.Core library.
+Useful Links
+Official GitHub Repository: 
+https://github.com/OData/odata.net
+ 
+Microsoft Documentation: 
+https://docs.microsoft.com/en-us/odata/
+ 
+OData Official Website: 
+https://www.odata.org/
+ 
+Microsoft.Data.OData NuGet Package: 
+https://www.nuget.org/packages/Microsoft.Data.OData/
+ 
+Microsoft OData Core Library: 
+https://www.nuget.org/packages/Microsoft.OData.Core/
+ 
+Identified CVEs
+CVE
+Affected Version(s)
+Next Safest Version
+https://www.cvedetails.com/cve/CVE-2018-8269/
+ 
+All versions are affected
+No next safest version 
+Solutions
+Repository
+Cause
+Solution
+Learnings
+Jira Item
+ICAutopayController
+IC.Azure.Batch had a dependency on IC.Azure.Blob package which was a legacy version that had a dependency on Microsoft.Data.OData
+Update IC.Azure.Blob on IC.Azure.Batch to the latest version.
+OData was not used by the legacy version of IC.Azure.Blob which made the path to upgrade easier.
+This was the 2nd library that had OData tied to it.  The other, so far, was WindowsAzure.Storage, which was tackled with the solution below.  
+The latest version of IC.Azure.Blob came with a KeyVault requirement which led to us needing to update ICAutoPayController to have MI/KeyVault patterns.
+EBPP-18776
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AmexGRRCN_Import
+IC.Azure.Blob had a dependency on Microsoft.Data.OData
+Removed IC.Azure.Blob since it was not being used
+IC.Azure.Blob is found to use OData on legacy applications
+EBPP-19750
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+BillerAPIDataImport
+ICAzureMessageQueue had a dependency on Microsoft.Data.OData
+Removed ICAzureMessageQueue since it was not being used.
+ICAzureMessageQueue is found to use OData on legacy applications
+EBPP-19752
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AzureBatchLateStartMonitor
+IC.Azure.Batch had a dependency on Microsoft.Data.OData
+Updated IC.Azure.Batch to the latest version which does not use OData
+IC.Azure.Batch is found to use OData on legacy applications
+Updating IC.Azure.Batch introduces managed identity so managed identity creation and 2.0 YAML roll out is necessary.
+EBPP-19751
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DirectoryCleanUp
+IC.Azure.Blob had a dependency on Microsoft.Data.OData
+Updated IC.Azure.Blob to the latest version which does not use OData
+IC.Azure.Blob is found to use OData on legacy applications
+Updating IC.Azure.Blob introduces managed identity so managed identity creation and 2.0 YAML roll out is necessary.
+EBPP-19828
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICCRM
+IC.Azure.Blob had a dependency on Microsoft.Data.OData
+Updated IC.Azure.Blob to the latest version which does not use OData
+IC.Azure.Blob is found to use OData on legacy applications
+Updating IC.Azure.Blob introduces managed identity so managed identity creation and 2.0 YAML roll out is necessary.
+EBPP-20695
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ URL:/spaces/ED/pages/3210444840/Microsoft.Data.OData

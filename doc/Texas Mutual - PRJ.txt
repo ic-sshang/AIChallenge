@@ -1,0 +1,32 @@
+The Texas Mutual project requires API format and authentication enhancements to the Guidewire integration endpoints.   
+Guidewire Cloud Native Accelerator Technical Design
+ 
+SOAP → RESTful API Migration Scope
+The following SOAP API operations need to be converted to RESTful APIs.  They will be added to the ICRESTAPI code repository.
+https://www.invoicecloud.com/portal/webservices/CloudInvoicing.asmx
+UploadInvoiceFile
+UploadInvoice
+PaymentReportingDataSetByDateRangeFromGMT2
+See details
+OAuth 2.0 Scope
+The following RESTful endpoints will need to be registered in Kong and support Auth 2.0 Client Credential grants for MVP Billers.   All of these endpoints can be found in the ICRESTAPI code repository.
+See details
+MVP ICRESTAPI Endpoints (Existing)
+https://www.invoicecloud.com/api/v1/invoicepay/cc/sale
+https://www.invoicecloud.com/api/v1/invoicepay/ach/credit
+https://www.invoicecloud.com/api/v1/creditcard/add
+https://www.invoicecloud.com/api/v1/bank/add
+https://www.invoicecloud.com/api/v1/customer/add
+https://www.invoicecloud.com/api/v2/cp/autopay
+MVP ICRESTAPI Endpoints (New / SOAP Migrated)
+Legacy SOAP
+New RESTful Implementation
+METHOD
+PaymentReportingDataSetByDateRangeFromGMT2
+https://www.invoicecloud.com/api/v1/biller/reporting/payment
+GET, OPTIONS
+UploadInvoiceFile
+POST
+UploadInvoice
+POST
+ URL:/spaces/EA/pages/3489169409/Texas+Mutual+-+PRJ

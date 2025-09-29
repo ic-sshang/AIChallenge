@@ -1,0 +1,175 @@
+This document describes how we get things done. It answers questions like “Where does the work come from?” and “When is it complete?” As questions arise, we’ll expand the document with more answers.
+The Workflow
+EBPP Dual Workflow (Jira kanban board)
+All work items created in Jira start with the “
+New
+” status. They may come from dev support as an escalation of one of their tickets. They may come from the product request stream (check the Slack channel). They may be created as action items from incident postmortems. They can also be created by anyone on the team as we identify items to work on (bug fixes, tasks, follow-up stories, etc.).
+Some items go through product triage and review where our team may provide initial feedback on the effort required or to determine if it’s even a valid request. Eventually, items get to the “
+Grooming
+” status to be discussed on the weekly grooming calls before they’re moved to “
+Backlog
+”.
+The rules around tasks and database tasks are lax, but 
+stories
+ and 
+bugs
+ should be 
+consistent
+. Those two Jira item types are specifically for 
+code releases
+. These Jira 
+fields are required
+ 
+before they move to “Ready For Dev”
+:
+Description – what are we doing? Acceptance Criteria. Testing.
+Story Points
+Scrum Team – Team SPAM
+Work Item Category
+Error Risk [IT ONLY]
+Repos Changed
+If you aren’t sure what values to put in these fields, ask the team! It’s usually done as part of grooming, but if you see an item in a later stage of the workflow with any of these fields missing, then please update it. For bug items, try to 
+link to the story that introduced the bug 
+(
+“Caused By”
+ in Jira).
+If you’re not actively working on an item as the primary developer or test engineer, then pick the item at the top of the “
+Ready For Dev
+” column (they’re stack-ranked) and move it to “
+In Progress
+”. Let the team know in Slack, as well. This stage is generally the longest and there is an entire 
+Development
+ section dedicated to it later in this document. Once the development 
+and developer testing
+ is complete, the item is ready for “
+Code Review”
+.
+The team reviews any pull requests (PRs) in the item via Zoom/Slack/fireside chat and provides any feedback that may require it to be sent back to “
+In Progress
+”. PRs are 
+approved but
+ 
+not completed yet
+. Once reviewed and approved, the item goes to “
+Ready for Testing
+” where an available engineer can pick it up and assign themselves the test engineer role in the Jira item. Once it’s been assigned to a test engineer, the application(s) should be deployed and the item moved to “
+In Testing
+”. When testing is complete, move it to “
+Final Review
+”. Since the PR should already have the necessary approvals, it should be able to be completed and assigned a fix version to go to the “
+Deployment Queue
+”. These fields are required to move it to that status:
+Release Review Notes
+Post Deployment Checks
+Fix Versions – should be at least 2 days from the current date, e.g., a change for a June 3rd release should be completed by the end of June 1st.
+The day before the fix version, a release document is shared in the #releases-prod-engineering Slack channel, which we should complete as best we can. Run any pipelines needed and share with DS/CS what will deploy.
+On the release day (fix version), if the code is deployed to a regression or preview area, then update the Jira fields “Passed Regression” and “Passed Preview”. If your changes are deployed in the evening, you or the tech lead must 
+attend the release call
+. Once code is deployed to production, complete any post deployment checks, which are already listed in the item, then update the “Passed Production” field. 
+Stories cannot be resolved until “Passed Production” is set.
+ 
+There are a couple draft documents for a “Definition of Ready” and “Definition of Done” which are a helpful but 
+not
+ comprehensive checklist:
+Definition of Ready and Done
+ 
+Definition of Ready
+ 
+Development
+Many things must be completed before “
+In Progress
+” item moves to “
+Code Review
+. First and foremost, 
+X-Ray tests
+. Every story and bug item need 
+at least one x-ray
+. Preferably, there are two or more, including negative test cases. Ideally, they are fully automated. Before choosing a manual test, consider how much effort it would take to automate and how we can incrementally get to the goal of 
+Fully Automated Luxury Communism
+. Remember to 
+include any existing x-rays
+. New x-rays must belong to a parent test epic (choose wisely). X-rays should correspond to the acceptance criteria and are a 
+formal
+, 
+precise
+, and 
+technical 
+description of how the feature/fix is tested. In the case of automation, use 
+Gherkin
+.
+Before writing code, add/create the x-rays!
+ More may be added as new cases are discovered or if the scope changes. You cannot write code when no behavior has been defined, even if it’s just a change to some text copy or a new whitelisted IP address!
+Next, 
+try to create a unit test
+ – I will have more on how to tackle this when dealing with legacy code. Additionally, it may not apply when updating some verbiage or tacking on a video link; however, consider 
+bringing another (small) part of the system under test.
+Every story/bug has a test engineer and main developer. The main developer is responsible for implementing the solution in the code and writing any unit/integration tests in the test repo(s) of the impacted application(s). They are responsible for deploying the code to a devtest environment and fixing any failing tests in the project(s), 
+even if they did not break them
+. “Leave it better than you found it.” Our test area for web apps is 
+devtest1
+ and for batch apps is 
+icbatchtest
+ or 
+icautopaydevtest
+.
+The test engineer is responsible for writing any code in the automation framework(s), 
+which can and should be done while the main dev works in the main solution
+. Collaborating is welcome, as is pair programming. Additionally, the test engineer marks all the x-rays as resolved (if they pass, of course) by running any tests (unit, integration, E2E, manual, etc.), adding screenshots or videos if needed to the x-rays, and then marks the “Test/Code Review” as “Passed” in the main Jira item.
+Both engineers should fill out the “Pull Requests” field, as needed, with links to any PRs, along with the “Rollback Plan” and “Test Plan”. If there are questions on any of these fields, we can discuss as a team. 
+Don’t forget documentation!
+ Schedule a demo with the TL/PM – if possible. Either engineer can move the story along and Jira will complain 
+if there are fields missing values
+. Feel free to include other team members in reviewing code before “
+Code Review
+” as they can help catch issues earlier in the flow.
+SPAM Repos
+can also refer to 
+SRC Code Repository Inventory.xlsx
+AutoPaymentProcessing
+AutoPaymentReminders
+AutoPaymentsProcessingMultiInvoice
+AutoPaySchedulePayChainComplete
+AzureBatchLateStartMonitor
+BillerSpamNotifications
+BouncedEmailMonitor (shared)
+BouncedEmailProcessing (shared)
+CreateLateFees
+EmailQueueProcessing (shared)
+EmailQueueProcessor (shared)
+EmailQueueStats (shared)
+EmailRegistrationManagement
+FlexPayAutoEnrollScheduleGenerator
+HighVolumeAutoPay
+IC-AlertMonitor
+ICAutoPayController
+ICAutoPayScheduledPayRemindersController
+ICAzureBatchRunner
+ICCloudPaymentsAPI
+ICCSRConnectAPI
+ICDocumentation (shared)
+ICEmailQueueController
+ICEmailTemplates (shared)
+ICRecaptchaAPI
+ICRedirect
+ICRESTAPI (shared)
+ICUserInviteQueueProcessor
+MailgunDeclineMonitor
+MailgunSpamComplaints
+MyIIS (shared)
+RecurringScheduledPaymentsGenerator
+ScheduledPaymentBalanceCheck
+ScheduledPaymentProcessing
+ScheduledPaymentProcessingMultiInvoice
+ScheduledPaymentReminders
+Sms
+SmsNotifications
+SPAM Test Billers
+Mark - 1423
+Alexis - 1727
+Nha - 2401
+Rei - 2477
+William - 4156 
+Garrett - 4157
+On-Call Rotation
+Who is on call?
+ URL:/spaces/PE/pages/3029958770/Our+Process

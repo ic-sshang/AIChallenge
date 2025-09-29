@@ -1,0 +1,1046 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+N/A
+ITR
+N/A
+Release Date
+N/A
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Solution engineer
+N/A
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+Service Key: V0JMSzEyMjAh-cslA0/oBf/Q=
+Web Service URL: 
+https://eubservice.whitebearlake.org/aws_director/Director.asmx
+ 
+IC Account Number Configuration: Customer#-Account# or Account#-Customer#
+TEST BASE URL (for all integrations): Unique per biller
+PROD BASE URL (for all integrations): Unique per biller
+API Authentication Method: API Key 
+Renewal process: URL for renewal token, etc.
+Details
+1800
+Version
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+1-3-5
+RTDR: Balance Update
+RTDR - Account Linking
+When RTDR is triggered for a Customer, we also attempt to perform Account Linking depending on two Advanced Settings:
+Advanced Setting 75 - AUS - Link Accts by Acct Number
+Advanced Setting 76 - AUS - Link Accts by Email Address
+If the settings are not set to '1' then we will not perform Account Linking.
+GetAccountData
+Use to get an account’s balance
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:GetAccountData>
+         <tem:PortalID>?</tem:PortalID>
+         <!--Optional:-->
+         <tem:Key>?</tem:Key>
+         <!--Optional:-->
+         <tem:Customer>?</tem:Customer>
+         <!--Optional:-->
+         <tem:Account>?</tem:Account>
+      </tem:GetAccountData>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <GetAccountDataResponse xmlns="http://tempuri.org/">
+         <GetAccountDataResult>
+            <ResponseCode></ResponseCode>
+            <CurrentBalance></CurrentBalance>
+            <IVRStatus></IVRStatus>
+            <BillDate></BillDate>
+            <BillDueDate></BillDueDate>
+            <BillAmount></BillAmount>
+            <PastDueAmount></PastDueAmount>
+            <PaymentAmount></PaymentAmount>
+            <PaymentDate></PaymentDate>
+            <CashOnly></CashOnly>
+            <DisconnectDate></DisconnectDate>
+            <PendingPayment></PendingPayment>
+            <PaymentPlanType></PaymentPlanType>
+            <DrawPayment>false</DrawPayment>
+            <ArrangementAmount></ArrangementAmount>
+            <ArrangementDate></ArrangementDate>
+            <ArrangementStatus></ArrangementStatus>
+            <ServiceOrder>false</ServiceOrder>
+            <PastDueDate></PastDueDate>
+            <AmountDueBeforeDueDate></AmountDueBeforeDueDate>
+         </GetAccountDataResult>
+      </GetAccountDataResponse>
+   </soap:Body>
+</soap:Envelope>
+EnabledPaymentMethod:
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <GetAccountDataResponse xmlns="http://tempuri.org/">
+      <GetAccountDataResult>
+        <ResponseCode>int</ResponseCode>
+        <Customer>string</Customer>
+        <Pin>string</Pin>
+        <CurrentBalance>decimal</CurrentBalance>
+        <AccountStatus>string</AccountStatus>
+        <IVRStatus>int</IVRStatus>
+        <BillNumber>long</BillNumber>
+        <BillDate>dateTime</BillDate>
+        <BillDueDate>dateTime</BillDueDate>
+        <BillAmount>decimal</BillAmount>
+        <PastDueAmount>decimal</PastDueAmount>
+        <FirstName>string</FirstName>
+        <LastName>string</LastName>
+        <StreetNumber>string</StreetNumber>
+        <StreetName>string</StreetName>
+        <CityTown>string</CityTown>
+        <StateProv>string</StateProv>
+        <ZIPPostal>string</ZIPPostal>
+        <PaymentAmount>decimal</PaymentAmount>
+        <PaymentDate>dateTime</PaymentDate>
+        <ColStatusCode>string</ColStatusCode>
+        <CashOnly>boolean</CashOnly>
+        <DisconnectDate>dateTime</DisconnectDate>
+        <PendingPayment>decimal</PendingPayment>
+        <PaymentPlanType>int</PaymentPlanType>
+        <DrawPayment>boolean</DrawPayment>
+        <ArrangementAmount>decimal</ArrangementAmount>
+        <ArrangementDate>dateTime</ArrangementDate>
+        <ArrangementStatus>int</ArrangementStatus>
+        <PhoneNumber>string</PhoneNumber>
+        <PhoneType>string</PhoneType>
+        <PhoneDesc>string</PhoneDesc>
+        <AccountType>string</AccountType>
+        <CommentCode>string</CommentCode>
+        <Cycle>string</Cycle>
+        <ServiceOrder>boolean</ServiceOrder>
+        <PastDueDate>dateTime</PastDueDate>
+        <AmountDueBeforeDueDate>decimal</AmountDueBeforeDueDate>
+        <CommentTypeCode>string</CommentTypeCode>
+        <ContainerName>string</ContainerName>
+        <EnabledPaymentMethods>None or Both or CreditCard or eCheck</EnabledPaymentMethods>
+      </GetAccountDataResult>
+    </GetAccountDataResponse>
+  </soap12:Body>
+</soap12:Envelope>
+If Option 50 is true then Custom2 = Customer and Custom3 = Account.
+Else Custom3 = Customer and Custom2 = Account.
+Version 3 has the option to use the “Amount Before Due Date“ field instead of Current Balance
+Block Payments:
+Cash Only Version
+/Service Version 4: New Service Reference: “
+http://director.newlondonwwpca.org/director.asmx
+ ?wsdl“ will need to use the CashOnly (Boolean) flag to block EFT/ACH and CC payments with AUS.
+Reference <EnabledPaymentMethods> instead of <CashOnly>.
+/Service Version 5: Values are mapped as follows: 
+None = block CC and block ACH
+Both = no blocks
+CreditCard = block ACH only
+eCheck = block CC only
+Budget Billing Logic:
+Custom4 = BudgetBilling
+AdvancedSetting 100 = UpdatedWithBudgetBilling
+If Custom4 = 0 or BAS 100 = 1, Then we update the balance. Else, We don’t update the customer’s balance.
+See City of Westerville BID 1018 for Budget Billing 
+7 (new)
+RTDR: Balance Update
+GetAccountData
+Use to get an account’s balance
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:GetAccountData>
+         <tem:PortalID>0</tem:PortalID>
+         <!--Optional:-->
+         <tem:Key>YWJjZGVmZzEyMzQ1Njc=-aVdcz3AinFg=</tem:Key>
+         <!--Optional:-->
+         <tem:Customer>000226126</tem:Customer>
+         <!--Optional:-->
+         <tem:Account>00058660</tem:Account>
+      </tem:GetAccountData>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <GetAccountDataResponse xmlns="http://tempuri.org/">
+         <GetAccountDataResult>
+            <ResponseCode>1</ResponseCode>
+            <Customer>000226126</Customer>
+            <Pin></Pin>
+            <CurrentBalance>372.70</CurrentBalance>
+            <AccountStatus>AC</AccountStatus>
+            <IVRStatus>3</IVRStatus>
+            <BillNumber>0</BillNumber>
+            <BillDate>2024-05-31T00:00:00</BillDate>
+            <BillDueDate>2024-06-21T00:00:00</BillDueDate>
+            <BillAmount>131.92</BillAmount>
+            <PastDueAmount>248.70</PastDueAmount>
+            <FirstName>LUIS</FirstName>
+            <LastName>CRUZ</LastName>
+            <StreetNumber>4491</StreetNumber>
+            <StreetName>HOLSTEIN ST</StreetName>
+            <CityTown>SAINT CLOUD</CityTown>
+            <StateProv>FL</StateProv>
+            <ZIPPostal>34772</ZIPPostal>
+            <PaymentAmount>-140.00</PaymentAmount>
+            <PaymentDate>2024-06-17T00:00:00</PaymentDate>
+            <ColStatusCode>DP</ColStatusCode>
+            <CashOnly>false</CashOnly>
+            <DisconnectDate>2024-09-04T00:00:00</DisconnectDate>
+            <PendingPayment>0.00</PendingPayment>
+            <PaymentPlanType>0</PaymentPlanType>
+            <DrawPayment>false</DrawPayment>
+            <ArrangementAmount>0.00</ArrangementAmount>
+            <ArrangementDate>1900-01-01T00:00:00</ArrangementDate>
+            <ArrangementStatus>0</ArrangementStatus>
+            <PhoneNumber>3522848450</PhoneNumber>
+            <PhoneType>HO</PhoneType>
+            <PhoneDesc>Primary</PhoneDesc>
+            <AccountType>RE</AccountType>
+            <CommentCode>Cash                     ,Check                    ,Credit Card              ,Money Order / Traveler</CommentCode>
+            <Cycle>14</Cycle>
+            <ServiceOrder>true</ServiceOrder>
+            <PastDueDate>2024-06-21T00:00:00</PastDueDate>
+            <AmountDueBeforeDueDate>248.70</AmountDueBeforeDueDate>
+            <EnabledPaymentMethods>Both</EnabledPaymentMethods>
+         </GetAccountDataResult>
+      </GetAccountDataResponse>
+   </soap:Body>
+</soap:Envelope>
+Version 7 is currently added for 
+BID 1025-Tohopekaliga Water Authority.
+It has the option to use the “Amount Before Due Date“ field instead of Current Balance
+It starts using the RTDR Service Version Advanced Settings, so that we don’t change the version that Data pump is using. 
+1
+Data Pump: Payment
+MakePayment
+Used to post a payment
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:MakePayment>
+         <tem:PortalID>?</tem:PortalID>
+         <!--Optional:-->
+         <tem:Key>?</tem:Key>
+         <!--Optional:-->
+         <tem:Customer>?</tem:Customer>
+         <!--Optional:-->
+         <tem:Account>?</tem:Account>
+         <!--Optional:-->
+         <tem:Transcode>?</tem:Transcode>
+         <tem:Amount>?</tem:Amount>
+         <!--Optional:-->
+         <tem:ExtReference>?</tem:ExtReference>
+         <!--Optional:-->
+         <tem:ExtSource>?</tem:ExtSource>
+         <!--Optional:-->
+         <tem:ConfNumber>?</tem:ConfNumber>
+      </tem:MakePayment>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <MakePaymentResponse xmlns="http://tempuri.org/">
+         <MakePaymentResult>
+            <ResponseCode></ResponseCode>
+            <PaymentID></PaymentID>
+         </MakePaymentResult>
+      </MakePaymentResponse>
+   </soap:Body>
+</soap:Envelope>
+Service Version 1 checks for Biller ID
+If BID 853: Payment amount is PaymentAmount * -1
+Else: Payment amount is PaymentAmount rounded to 2 decimals * -1
+2-3
+Data Pump: Payment
+AddPendingPayment
+Used to post a payment
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:AddPendingPayment>
+         <tem:portalId>?</tem:portalId>
+         <!--Optional:-->
+         <tem:key>?</tem:key>
+         <!--Optional:-->
+         <tem:customerNumber>?</tem:customerNumber>
+         <!--Optional:-->
+         <tem:accountNumber>?</tem:accountNumber>
+         <!--Optional:-->
+         <tem:transactionCode>?</tem:transactionCode>
+         <tem:amount>?</tem:amount>
+         <!--Optional:-->
+         <tem:externalReference>?</tem:externalReference>
+         <!--Optional:-->
+         <tem:token>?</tem:token>
+         <!--Optional:-->
+         <tem:externalSource>?</tem:externalSource>
+         <tem:paymentGatewayId>?</tem:paymentGatewayId>
+         <tem:paymentDate>?</tem:paymentDate>
+         <tem:paymentType>?</tem:paymentType>
+         <tem:uniqueId>?</tem:uniqueId>
+      </tem:AddPendingPayment>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <AddPendingPaymentResponse xmlns="http://tempuri.org/">
+         <AddPendingPaymentResult></AddPendingPaymentResult>
+      </AddPendingPaymentResponse>
+   </soap:Body>
+</soap:Envelope>
+Include Credits & Chargebacks?
+Credits?
+Yes
+Chargebacks?
+Yes/No
+Sent a Negative value, using dash indicator?
+Yes
+Little to no difference between Service Version 2 and 3, just uses different directors.
+transactionCode is used by AUS to update the description on their CIS. They will need to know the transactionCode in order to update this to reflect the payment source it is being made from. All payment sources require a transaction code.
+All payment sources (which include OBD, EFT, CC, AutoPay, Biller Portal, Scheduled, IVR, Cloud Store, Customer Portal etc)
+Donations(
+This is only for Pasco County, and transactionCode could be vary for each county
+): 
+InvoiceTypeID 188 transactionCode: RDPP
+Data Pump: Paperless Enrollment
+UpdateCisLinkTableEBillAndLinkRegistration
+Used to update a customer’s paperless record
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:UpdateCisLinkTableEBillAndLinkRegistration>
+         <tem:portalID>?</tem:portalID>
+         <!--Optional:-->
+         <tem:key>?</tem:key>
+         <!--Optional:-->
+         <tem:customer>?</tem:customer>
+         <!--Optional:-->
+         <tem:account>?</tem:account>
+         <!--Optional:-->
+         <tem:email>?</tem:email>
+         <tem:eBill>?</tem:eBill>
+         <tem:allowRegistration>?</tem:allowRegistration>
+         <!--Optional:-->
+         <tem:billPrintCode>?</tem:billPrintCode>
+         <!--Optional:-->
+         <tem:signupUser>?</tem:signupUser>
+      </tem:UpdateCisLinkTableEBillAndLinkRegistration>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <UpdateCisLinkTableEBillAndLinkRegistrationResponse xmlns="http://tempuri.org/">
+         <UpdateCisLinkTableEBillAndLinkRegistrationResult></UpdateCisLinkTableEBillAndLinkRegistrationResult>
+      </UpdateCisLinkTableEBillAndLinkRegistrationResponse>
+   </soap:Body>
+</soap:Envelope>
+AccountNumber is split on “-“ to determine custNo and acctNo:
+If Option 50 is true then the first split value is custNo and the second is acctNo.
+Data Pump: AutoPay Enrollment
+UpdatePaymentPlan
+Used to update a customer’s paperless record
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:UpdatePaymentPlan>
+         <tem:portalID>?</tem:portalID>
+         <!--Optional:-->
+         <tem:key>?</tem:key>
+         <!--Optional:-->
+         <tem:custNo>?</tem:custNo>
+         <!--Optional:-->
+         <tem:acctNo>?</tem:acctNo>
+         <!--Optional:-->
+         <tem:planType>?</tem:planType>
+         <!--Optional:-->
+         <tem:accountType>?</tem:accountType>
+         <tem:startDate>?</tem:startDate>
+         <!--Optional:-->
+         <tem:bankNum>?</tem:bankNum>
+         <!--Optional:-->
+         <tem:branchNum>?</tem:branchNum>
+         <!--Optional:-->
+         <tem:bankAccountNum>?</tem:bankAccountNum>
+         <!--Optional:-->
+         <tem:achCustomerName>?</tem:achCustomerName>
+         <!--Optional:-->
+         <tem:expiryDate>?</tem:expiryDate>
+         <!--Optional:-->
+         <tem:email>?</tem:email>
+         <!--Optional:-->
+         <tem:phone>?</tem:phone>
+         <!--Optional:-->
+         <tem:notes>?</tem:notes>
+         <!--Optional:-->
+         <tem:token>?</tem:token>
+      </tem:UpdatePaymentPlan>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <UpdatePaymentPlanResponse xmlns="http://tempuri.org/">
+         <UpdatePaymentPlanResult></UpdatePaymentPlanResult>
+      </UpdatePaymentPlanResponse>
+   </soap:Body>
+</soap:Envelope>
+AccountNumber is split on “-“ to determine custNo and acctNo:
+If Option 50 is true then the first split value is custNo and the second is acctNo.
+Request values that are configurable per biller:
+<planType> is set to ‘VP’ by default. If the biller would like to specify this value, populate advanced setting 131 with the value. 
+Data Pump: AutoPay Payment Method Change
+UpdatePaymentPlan
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:UpdatePaymentPlan>
+         <tem:portalID>?</tem:portalID>
+         <!--Optional:-->
+         <tem:key>?</tem:key>
+         <!--Optional:-->
+         <tem:custNo>?</tem:custNo>
+         <!--Optional:-->
+         <tem:acctNo>?</tem:acctNo>
+         <!--Optional:-->
+         <tem:planType>?</tem:planType>
+         <!--Optional:-->
+         <tem:accountType>?</tem:accountType>
+         <tem:startDate>?</tem:startDate>
+         <!--Optional:-->
+         <tem:bankNum>?</tem:bankNum>
+         <!--Optional:-->
+         <tem:branchNum>?</tem:branchNum>
+         <!--Optional:-->
+         <tem:bankAccountNum>?</tem:bankAccountNum>
+         <!--Optional:-->
+         <tem:achCustomerName>?</tem:achCustomerName>
+         <!--Optional:-->
+         <tem:expiryDate>?</tem:expiryDate>
+         <!--Optional:-->
+         <tem:email>?</tem:email>
+         <!--Optional:-->
+         <tem:phone>?</tem:phone>
+         <!--Optional:-->
+         <tem:notes>?</tem:notes>
+         <!--Optional:-->
+         <tem:token>?</tem:token>
+      </tem:UpdatePaymentPlan>
+   </soapenv:Body>
+</soapenv:Envelope>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <soap:Body>
+      <UpdatePaymentPlanResponse xmlns="http://tempuri.org/">
+         <UpdatePaymentPlanResult></UpdatePaymentPlanResult>
+      </UpdatePaymentPlanResponse>
+   </soap:Body>
+</soap:Envelope>
+AutoPay and AutoPay Method Change will be use the same API endpoint.
+N/A
+Bill Presentment
+Basic Auth REST API call is made to receive a PDF of an invoice directly in the response. 
+Basic Auth
+Username : SVC_INVOICECLOUD
+Password : KEY:kLZ1tBjMcIw7Q2tQui++YP6telbRo2r+IFVLU+YdtmcvqSJY6OA1dFncHlPijVs8S8BQFwHt8a/ioh/3Ebh0vvdzGZCrdd52PjvJDgGfkEU6yGAkaMLEOG+yYguYpzbV
+https://gilbert-apiprod.infinitycis.com/data/ebill/
+%billnumber%
+/image
+Example: 
+https://gilbert-apiprod.infinitycis.com/data/ebill/5587522/image
+We receive a PDF image directly as a response.
+AUS Integrations can either do SOAP or REST API calls for PDF Linking. This is documentation on the REST API for PDF Linking. 
+The API URL is 
+https://gilbert-apiprod.infinitycis.com/
+ 
+billnumber = IC Invoice Number
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .txt
+File Naming Convention: <BillerID>_BillFile_<Year><Month><Day>_<Daily file number>.txt  ex. 644_BillFile_20220722_01.txt
+File Delimiter: pipe character ' | '
+Specification: Harris Advanced Utility Print File
+Sample File: 
+Sample File with new SmartVX URL field:
+Field Mapping
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to always use 'FH'
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - value generated by IC
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - value generated by IC using current date
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - value generated by IC using invoice count in the file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+N/A - value generated by IC using invoice balances in the file
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to always use ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC to always use type 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - value generated by IC - BIF Customization
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Field 4
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Field 2
+vbnet
+Try
+                retVal = Convert.ToDateTime(fields(2).Trim.Substring(5, 2) & "/" & fields(2).Trim.Substring(8, 2) & "/" & fields(2).Trim.Substring(0, 4))
+            Catch ex As Exception
+                retVal = Convert.ToDateTime(fields(2).Trim).ToShortDateString
+            End Try
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Field 3
+Try
+                retval = Convert.ToDateTime(fields(3).Trim.Substring(5, 2) & "/" & fields(3).Trim.Substring(8, 2) & "/" & fields(3).Trim.Substring(0, 4))
+            Catch ex As Exception
+                retval = Convert.ToDateTime(fields(3).Trim).ToShortDateString
+            End Try
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Field 5
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Field 8
+Invoice Header
+29
+TrackingNumber
+Y
+FALSE
+Field 22
+SmartVX URL
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Field 16
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Field 1 or Field 0
+vbnet
+If AdvancedSetting48 = True Then
+                Return fields(1).ToString.Trim
+            Else
+                Return fields(0).ToString.Trim
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Field 1 or Field 0
+vbnet
+If AdvancedSetting48 = True Then
+                Return fields(0).ToString.Trim
+            Else
+                Return fields(1).ToString.Trim
+            End If
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Budget Billing.
+Uses 
+Field 17 which is either 1 or 0.
+If Field 17 is not present then
+ 0
+.
+vbnet
+If fields.Length > 17 Then
+                Return fields(17).ToString.Trim
+            Else
+                Return "0"
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Field 0 & Field 1
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+FIeld 6
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+N/A - Set in SWS code base.- If field 20 contains a value, Invoice Type ID should be set based on Advanced Setting (TBD). If field 20 does not contain a value, set in SWS code base.
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - IC to always use “CR“
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Field 1 and FIeld 0
+If AdvancedSetting48 = True Then
+                Return fields(1).ToString.Trim & "-" & fields(0).ToString.Trim
+            Else
+                Return fields(0).ToString.Trim & "-" & fields(1).ToString.Trim
+            End If
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Field 9
+Customer Record
+61
+Address1
+Y
+FALSE
+FIeld 10
+Customer Record
+62
+Address2
+Y
+FALSE
+Field 11
+Customer Record
+63
+City
+Y
+FALSE
+Field 12
+Customer Record
+64
+State
+Y
+FALSE
+Field 13
+Customer Record
+65
+Zip
+Y
+FALSE
+Field 14
+Customer Record
+66
+Phone
+Y
+FALSE
+Field 17
+If there is more than 17 fields, it uses field 17
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Field 15
+Customer Record
+68
+CustomerVATNumber
+N
+FALSE
+N/A
+Customer Record
+69
+RegistrationValue
+N
+FALSE
+N/A
+Customer Record
+356
+BlockPaymentsCC
+N
+FALSE
+N/A - Determined by Biller Options
+Customer Record
+357
+BlockPaymentsEFT
+N
+FALSE
+N/A - Determined by Biller Options
+Customer Record
+407
+PastDue
+Y
+FALSE
+Field 18
+Invoice Header
+373
+DisplayAccountNumber
+Y
+FALSE
+Field 0
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - IC to always use “ID“
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+3
+SSO Customer Login URL
+Y
+4
+Customer Portal Session Expire - Close Window?
+0 or 1
+N
+5
+Customer Portal Home Button Redirect
+0 or 1
+N
+6
+Customer Portal - Suppress Change Email
+0 or 1
+N
+8
+RTDR EndPoint/WebService URL
+Y
+10
+RTDR Key or Password if Applicable
+Y
+11
+DataPump Payments EndPoint/WebService URL
+Y
+13
+DataPump Payments EndPoint/WebService Password14
+Y
+16
+DataPump Paperless EndPoint/WebService Password
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+Y
+19
+DataPump AutoPay EndPoint/WebService Password
+Y
+20
+Remote PDF EndPoint/WebService URL
+Y
+22
+Remote PDF EndPoint/WebService Password
+Y
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+1
+N
+35
+Service Version
+The features and functionalities are different for each service version. For more details, please refer to Advanced Settings 131.  
+1, 2, 3, 4, 5 or 7
+N
+36
+SSO - One Time Payment ReturnUrl
+Y
+64
+DataPump Payments CC Code
+Used to define payment codes for CC transactions for different payment sources
+Format: ICPaymentSource(AUSPaymentCode)|ICPaymentSource(AUSPaymentCode)
+Ex: 10(IVR)|15(AUTO)|23(TEXT)|0(WEB)
+*Using 0 as the ICPaymentSource will include anything not specified in the string
+A full list of payment sources can be found in guru
+Y
+65
+DataPump Payments ACH Code
+Used to define payment codes for ACH transactions for different payment sources
+Format: ICPaymentSource(AUSPaymentCode)|ICPaymentSource(AUSPaymentCode)
+Ex: 10(IVR)|15(AUTO)|23(TEXT)|0(WEB)
+*Using 0 as the ICPaymentSource will include anything not specified in the string
+A full list of payment sources can be found in guru
+Y
+74
+External Source Configurable Format
+Used to define an external source code depending on the payment method and transaction code
+Format: 
+paymentMethodCode1:externalSourceCode1|paymentMethodCode2:externalSourceCode2
+Ex 1: PIC5:IVV5
+Ex 2: PIC1:INV1|PIC2:INV2|PIC5:INV5
+98
+AUS – RTDR - Override Block Payment Check	
+We use Advanced Setting 98 to determine if we are going to be blocking payments or not. If advSetting98 equals 1, we are skipping the blocking process. Else If advSetting98 equals 0, we are not skipping the blocking process and 
+will proceed to check for other conditions.
+Once we have determined that the biller wants blocking in RTDR, we check if the Customer’s Invoice has Custom4 equal to “0”. If Custom4 is “0” and the response was successful, we can finally proceed to the blocking methods.
+We check if the service version is “5”. If it is equal to “5”, we then grab the response’s EnabledPaymentMethods value. Here’s a list of that works depending on the response’s EnabledPaymentMethods value:
+0 or 1
+Y
+100
+131
+JSON Configuration 
+(Used for Blocking Payment Methods)
+This is used to change the “plantype” sent to AUS through the data pump. See how to populate this in the ‘value’ section - the highlighted portion is what the biller should provide for IC to pass.
+{"AUS": {"planType":"CC"}}
+Y
+This is used to assign each division an Invoice Type ID. Multiple Divisions may have the same Invoice Type ID.
+Y
+JSON Configuration 
+(Used for Updating Past Due amount)
+Service Version 2: The Past Due values returned in RTDR would be 0.00. 
+Service Version 5: The expected Past Due values would be returned for invoices.
+Add the JSON configuration for Version 5.
+{ "AUS": { "RTDRConfig": { "UpdatePastDueAmount": true} } }
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Biller Questionnaire: Should be set to 1
+AutoPayCollectionDate
+N/A
+BalanceForward
+Biller Questionnaire: Should be set to 1
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller Questionnaire
+InvoiceDate
+In BIF
+InvoiceDueDate
+In BIF
+InvoiceFormatGuid
+Biller Questionnaire
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+Biller Questionnaire
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller Questionnaire
+ThirdNotifyRequestedDate
+Biller Questionnaire
+User Interaction and Design
+Data Flow - Invoice
+1800
+att2378334468
+2251980801
+1
+AUS Invoices
+IM
+att2378367247
+att2378367242
+0
+Data Flow - Adjustments
+1800
+att2378301638
+2251980801
+1
+AUS RTDR
+IM
+att2378334473
+att2378367252
+0
+Data Flow - Payment
+1800
+att2378367264
+2251980801
+1
+AUS Payments
+IM
+att2378399985
+att2378367259
+0
+Data Flow - Void
+1800
+att2378727452
+2251980801
+1
+AUS Void
+IM
+att2378727447
+att2378367269
+0
+Data Flow - Change Log
+1800
+att2378301648
+2251980801
+1
+AUS Customer Changes
+IM
+att2378301643
+att2378334480
+0
+Data Flow - Bill Presentment
+1800
+Most Billers use PDF Linking through AUS. Billers can have outside print vendor.
+Payer Experience
+1800
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+1800
+Billers will access Invoice Cloud using the standard Invoice Cloud Biller Portal.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5188
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Est Nov 2022
+RTDR updates used <CashOnly> indicators and did not specify CC only or ACH only.
+RTDR updates using <EnabledPaymentMethods> to specify none, both, CC or ACH.
+Allows billers to block CC or ACH only, without having to block both.
+INT-5187
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Est Nov 2022
+AutoPay enrollment updates through data pump always post the <planType> as ‘VP’
+Autopay enrollment updates to be variable per biller to pass any value.
+Pasco County wants to pass ‘CC’ as the <planType> instead of ‘VP’.
+INT-4300
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8/25/2022
+Integration did not include ‘Past Due’
+Import the ‘Past Due’ amount from the invoice file
+If a biller provides the ‘Past Due’ amount, import the value
+INT-4432
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+December 2022
+Does not set Cash Only Flag for Blocking EFT/ACH and CC payments
+Cash Only Flag from AUS for Blocking EFT/ACH and CC payments
+Use Cash Only Flag sent by AUS to block EFT/ACH and CC payments on IC
+INT-5188
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+December 2022
+Does not set blocking for payment methods depending on the payment method being blocked
+Being able to block customers from making ACH Payments, CC Payments or Both
+Using the EnabledPaymentMethods field in RTDR, we will be able to tell which payment methods should be used for the account
+INT-7074
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+08/31/2023
+OBD payments are being posted using the PaymentSourceID
+Biller request to add new functionality to integration using a transaction code “PIC5” to be mapped to external source INV5.
+Update the GetExternalSource method to allow parsing of the advanced setting and support multiple paymentmethod code translations. Currently it only supports a single code, but the biller in question has multiple external source codes.
+INT-11319
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+09/10/2024
+A new RTDR endpoint added to Biller (1025, TEST: 4252) advanced settings after a cyber attach that occurred in April and now the RTDR current integration that they are using (v3 is the set service reference in the advanced settings) is not working for them anymore.
+New RTDR endpoint should work due to no service change on AUS side.
+IC created a new service version 7, and we need to code the new WSDL into RTDR and include the "amountDueBeforeDueDateField" logic.
+In addition, we are going to start using the RTDR Service Version Advanced Setting so that we don't change which version that Data Pump is using.
+ITG-3421
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+04/01/2025
+PDF Linking was integrated with SOAP API
+PDF Linking to be integrated with REST API
+Some AUS integrations have REST API availability and would like to use this new API to reflect their bill presentment. 
+ITG-4000
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+No way to pass donation payment to data pump.
+Data pump donation payment to AUS
+AUS provided transactionCode that allows IC to data pump donation payments back to AUS.
+ URL:/spaces/IM/pages/2251980801/Harris+Advanced+AUS+Technical+Design

@@ -1,0 +1,74 @@
+Name
+Description
+Group
+PayByText SMS Registration Job
+Operationalize k8 event driven (Azure Service Bus + KEDA) job architecture
+Architecture + Platform
+S
+IC Package Release Management 
+Formalize the SDLC process for first party packages, feed promotion, feed maintenance, and documentation. 
+Architecture + Platform
+M
+OTEL Tracing, Logging, Metrics
+Standardize on OTEL SDKs and collectors removing direct dependency in products on NR.
+Create guides
+.Net Framework Applications
+.Net 8+ Applications
+Architecture + Platform
+Slack Integration
+Standardize on using NR to provide Slack notifications removing direct dependency in products
+SREs
+S = Guideline / Standard
+Kong Developer Portal
+Operationalize Kong Developer Portal.  Publish Authentication + Open API specifications for pilot APIs. (developer.invoicecloud.com)
+M
+IDp
+Determine IDp for use in centralizing customer user facing authentication flows for products and APIs for various personas (Biller, Payer, Partner, etc…)
+M
+CloudFlare CDN
+Use caching / edge for static assets
+Platform + Architects
+M
+k8s Containerization 
+Proxy Workloads + Gateway API Workloads
+Platform + Architects + Product + Integration
+M
+DR
+Plan is stale / incomplete.  Need to define RTO and RPO. (1 day RTO) and hydration strategy.
+Platform + Architects + Product + Integration
+L
+Testing: Data Staging 
+Uses a existing provisioned Biller Shard. Testing can not be run at the same time with the same biller.
+Dynamic Biller Shard provisioning and seeding.
+M
+Testing: SMS
+How to test mobile workflows
+without E2E, mocking Mailgun or Cdyne
+k8s vs VM: Environment Parity (DB)
+Database parity VM vs k8s.  Prod vs Non-Prod.  Regression is production for VMs but Dev for k8s.
+Ansible (current selection) for VM
+ArgoCD for k8s
+Operationalize use of an agent pull type provision/configuration (GitOps)
+M
+.Net Framework Web Site Project (Deprecated)  
+MyIIS, CRM (BIN asset change issues).  Tooling complexities.
+Product
+M
+Mono Repos (breakout repos)
+Mono repos create complexities for tooling standards.  Biller Portal, IC.Common, MyIIS, ICPaymentProcessingAPI, need to create nuget packages for shared components, searate repos, sepearate pipelines
+S
+Evaluate using data stores other than MS SQL
+Azure Comos DB, Azure Table Storage, etc..
+Data stores can be application specific to foster independent  deployments.
+Azure Devops vs Github Analysis
+Do we stay with Azure Devops?
+Azure DevOps Hygiene 
+Need to audit pipelines.  There is  pollution.  Remove invalid pipelines.  Rename pipelines with a standard convention that are no longer in use but needed for audit history.  Current names are confusing.
+Need to delete stale branches for code repositories.  Old feature branches lead to confusion and automation scanning scaling issues.
+Architects + SMEs
+M
+Testing: Google Pay, Apple Pay and Venmo
+How to test Google Pay, Apple Payand Venmo payment methods.
+Right now there is no provision to test in devtest or in qa-reg.
+Cert env was provided an alternate to test these payment methods. But was not successful due to recpatcha or unable to see thse options in the payment route etc.
+ URL:/spaces/EA/pages/3473899521/FY2025+Roadmap+-+PRJ

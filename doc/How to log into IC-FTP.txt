@@ -1,0 +1,21 @@
+To access our FTP directories, and see the folder setup for our billers, first you will need to log in to one of our terms in RDC.
+Once logged in, go to File Explorer, and right click
+ “This PC“
+ on the sidebar.
+Then, click on 
+“Add a network Location“
+.
+Once the 
+“Add Network Location Wizard”
+ appears, click on Next until the page below is reached.
+On the page, paste the text below under the 
+“Internet or network address:“
+ textbox, and click Next.
+\\icwebsftppremium.file.core.windows.net\icftproot
+You will be prompted to enter network credentials. At this step, ask a fellow Dev Support/SRE member for the credentials.
+Once the credentials have been inputted, continue by clicking Next and Finish.
+You now have access to the FTP Directories for our billers!
+If you cannot find the biller that you are looking for, make sure to check in the CRM to see if the biller is set up for FTP. 
+To find a biller's FTP settings, go to the FTP Management page found in the sidebar.
+Once in the page, there should be a path/s set up if the biller is set up for FTP. Below are example paths from one of our test BIDs that is set up for FTP. 
+ URL:/spaces/DS/pages/2593194010/How+to+log+into+IC-FTP

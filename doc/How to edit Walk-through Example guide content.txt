@@ -1,0 +1,382 @@
+CONTENTS
+Overview
+Template guide name:
+Walk-through Example_DO NOT EDIT
+Purpose:
+Provide step-by-step guidance on a new feature/product or for complex functionality.
+Activation:
+Automatic + Target Element
+Segment:
+Varies
+Scheduling:
+Varies
+note
+“Example” templates are intended to aid the edit process.  Content for this type of guide depends on the feature or product, but certain elements will persist.
+
+
+“Example” templates are intended to aid the edit process.  Content for this type of guide depends on the feature or product, but certain elements will persist.
+
+
+Considerations
+Preview Template
+note
+First, watch 
+Walk-through Example
+ in preview mode to understand output and interaction with this type of guide, and consider the following, as it relates to the new feature/product:
+Determine if a walk-through guide is warranted
+Determine how many guide steps will be required
+1
+Determine if automatic activation is necessary, or if only a target element or badge is needed
+2
+Target element (pre-existing page text) or a Pendo badge is required
+Automatic should be limited primarily to new pages/products
+
+
+First, watch 
+Walk-through Example
+ in preview mode to understand output and interaction with this type of guide, and consider the following, as it relates to the new feature/product:
+Determine if a walk-through guide is warranted
+Determine how many guide steps will be required
+1
+Determine if automatic activation is necessary, or if only a target element or badge is needed
+2
+Target element (pre-existing page text) or a Pendo badge is required
+Automatic should be limited primarily to new pages/products
+
+
+Need help with guide preview?
+  Please see 
+https://support.pendo.io/hc/en-us/articles/360031864612-Guide-Details-Settings-Visual-Designer-
+.
+TIP
+:  Alternatively, a Payment Reconciliation public guide can be viewed from within any live Chase-only biller portal with at least 3-day-old settled batches, by accessing the page and clicking “
+here
+” below the title - 
+this guide was implemented prior to application of template branding, so its use of logos and various designs is outdated and should not be replicated
+.
+1
+ A step-by-step guide should provide benefit and as much needed guidance as possible, but please keep the user experience in mind, and 
+limit the total number of guide steps to 10
+.
+For difficulty limiting steps, create a Jira issue on the 
+UX/UI Board
+ for product design team assistance.
+2
+ 
+Automatic activation guides must be coordinated
+.  It is strongly recommended to only use either a target element (pre-existing page text, similar to this example), or a badge, for activation.
+Edit Guide
+Editable guide elements are outlined in the following steps - no other modifications should be made without consent.
+Modify Activation (recommended)
+note
+Cloning the Walk-through Example template, defaults guide activation to “AUTOMATICALLY, TARGET ELEMENT“.  Most often, automatic activation must be disabled, and set to either target element or badge.  It is best to decide on activation before proceeding.
+Plan to use badge activation?
+  See the requirement below.  Also, to avoid delays, continue to edit/build the guide while waiting for the badge-activation setup.
+
+
+Cloning the Walk-through Example template, defaults guide activation to “AUTOMATICALLY, TARGET ELEMENT“.  Most often, automatic activation must be disabled, and set to either target element or badge.  It is best to decide on activation before proceeding.
+Plan to use badge activation?
+  See the requirement below.  Also, to avoid delays, continue to edit/build the guide while waiting for the badge-activation setup.
+
+
+How to disable Automatic activation
+From the main navigation menu, click Activation to open an Activation Settings window, then click the on/off switch to disable.
+How to disable Target Element activation
+From the main navigation menu, click Activation to open an Activation Settings window, then click the on/off switch to disable.
+note
+If using a target element, it will be updated later in the edit process.
+
+
+If using a target element, it will be updated later in the edit process.
+
+
+How to enable Badge activation
+Badge design and placement will vary depending on the page and use case.
+Requirement (ASAP)
+:  Create a Jira issue on the 
+UX/UI Board
+ to request badge activation to be set up by product design.
+Choose a Guide Step to Edit
+(1) Click the 
+View Steps
+ drop-down caret to expand the main navigation menu.
+(1b) Mouse over the desired step, select 
+Edit Step
+, then click 
+Hide Steps
+.
+Update Text
+This section illustrates how to modify both modal and tooltip guide steps.  These steps differ slightly in appearance and functionality, but the edit process is generally similar.
+Guide Step 1 of 4 (Modal Style)
+If a step-by-step guide will be used for a new feature/product, it is strongly recommended to include this guide step to briefly describe it, and to provide some context about the walk-through.
+In rare instances, this guide step might be deemed inappropriate - if so, 
+jump to Guide-Step-2-of-4
+.
+(2) Click 
+bracketed text
+ in the guide (right) to access Guide Content in the Edit Text window (left).
+note
+Repeat step 2 for each bracketed row/section.
+
+
+Repeat step 2 for each bracketed row/section.
+
+
+(2a) Type the 
+applicable information
+ into the Guide Content text box and click Done - 
+all other edit text formatting and styling settings should remain
+.
+[Heading]
+note
+Limit heading as much as possible (1-10 words).
+
+
+Limit heading as much as possible (1-10 words).
+
+
+[Description]
+note
+Limit description as much as possible (15-30 words).
+
+
+Limit description as much as possible (15-30 words).
+
+
+Example Updated Guide Step 1 of 4
+(2b) For guides with more/less than 4 total steps, update the
+ 
+step total
+ using the same process as editing bracketed text.
+Step Total
+Example with Updated Guide Step Total
+Just finish editing text for the final guide step?
+  Return to 
+Guide-Step-4-of-4
+ 
+Guide Step 2 of 4 (Tooltip Style)
+Step used to point out and describe key features.
+note
+This step style is not required in the guide, but it can be used when appropriate.
+
+
+This step style is not required in the guide, but it can be used when appropriate.
+
+
+(3) Follow the same process shown above to 
+update bracketed text and step totals
+, then resume here.
+note
+Guide Step 3 of 4
+ is the same as 2 of 4, except for the caret - use this version when a centered appearance is desired.
+
+
+Guide Step 3 of 4
+ is the same as 2 of 4, except for the caret - use this version when a centered appearance is desired.
+
+
+Modify Tooltip Step Orientation
+(3a) To change placement of a tooltip style step, mouse over any edge of the guide (right) to trigger an 
+Edit Container
+ border, and click inside the blue shading to access the Edit Container window (left).
+(3b) Under the 
+Location tab
+, select the preferred orientation from the 
+Position to Element
+ drop menu.
+BEFORE
+(Position set to Bottom)
+AFTER
+(Position changed to Top)
+note
+Target element not found warning?
+Indicates that the guide step is not/no longer tagged to the element, and it will not function properly when viewed.
+When this occurs, click 
+Re-target Element
+, and do the following.
+
+
+Target element not found warning?
+Indicates that the guide step is not/no longer tagged to the element, and it will not function properly when viewed.
+When this occurs, click 
+Re-target Element
+, and do the following.
+
+
+(3b.1) Mouse over the screen in target mode, taking notice of places where the 
+red border
+ (detected element) appears, then 
+left-click the mouse/touchpad
+ to select a section relevant to the guide step and return to edit mode.
+(3b.2) Anchor to Element defaults to 
+Suggested Match
+ - if preferred, this can be adjusted to include adjacent or broader sections.  Click the 
+Parent Element
+ button to access a drop menu and view each option listed, then 
+select the element that works best
+.
+Suggested Match
+Parent Element Options
+Need to Copy or Remove a Guide Step?
+note
+1. Click 
+View Steps
+ to expand the main navigation menu
+
+
+1. Click 
+View Steps
+ to expand the main navigation menu
+
+
+note
+2. Mouse over any step of the desired style (modal or tooltip), click the 
+ellipsis menu
+, then…
+
+
+2. Mouse over any step of the desired style (modal or tooltip), click the 
+ellipsis menu
+, then…
+
+
+Copy
+Select the 
+Duplicate Step
+ option, then 
+repeat the edit guide process
+ for the new step.
+Remove
+Guide Step 4 of 4 (Tooltip Style)
+note
+This step must be included to signify the end of the guide and to give the user an option to restart it.  If preferred, a modal-style guide step can be used for the view-guide-again final step, but be sure to update its text to clearly indicate where the user can click to view the guide in the future.
+
+
+This step must be included to signify the end of the guide and to give the user an option to restart it.  If preferred, a modal-style guide step can be used for the view-guide-again final step, but be sure to update its text to clearly indicate where the user can click to view the guide in the future.
+
+
+(4) Follow the same process shown for 
+Guide-Step-1-of-4
+ to 
+update text and step totals
+, then return to this section.
+Relocate the Target Element (Guide Step)
+note
+Complete (4a-4a.1) to point out the pre-existing page text or badge described in the final guide step.
+
+
+Complete (4a-4a.1) to point out the pre-existing page text or badge described in the final guide step.
+
+
+Modal-style final step?
+  Jump to 
+Update-Target-Element-(Guide-Activation)
+.
+(4a) Under the 
+Location tab
+, scroll up to the Anchor to Element section and click 
+Re-target Element
+.
+(4a.1) Mouse over the screen in target mode until a 
+red border
+ appears around the target text, or badge, then 
+left-click the mouse/touchpad
+ to select it and return to edit mode.
+Update Target Element (Guide Activation)
+If Target Element will not be used for activation, it should show as disabled (set earlier in the process) - skip this, and scroll to the next step.
+If using Target Element activation, click 
+Activation
+ in the main navigation menu, 
+Edit Settings
+, then click 
+Re-target Element
+ (similar to the preceding steps).
+Mouse over the screen in target mode until a 
+red border
+ appears around the target text, then 
+left-click the mouse/touchpad
+ to select it and return to edit mode.
+Set Up Page Location
+(5) Mouse over any edge of 
+guide step 1
+ (right) to trigger an 
+Edit Container
+ border, and click inside the blue shading to access the Edit Container window (left).
+(5a) Under the 
+Location tab
+, scroll down to the 
+Page Location
+ section.
+note
+Page Mismatch Warning?
+Alert appears when the URL used to launch the designer differs from the Walk-through Example template page.
+This is to be expected, unless the guide will be displayed on the same page as the template.
+
+
+Page Mismatch Warning?
+Alert appears when the URL used to launch the designer differs from the Walk-through Example template page.
+This is to be expected, unless the guide will be displayed on the same page as the template.
+
+
+(5b) Select the 
+proper page
+ listed in the drop menu and click Done.
+note
+Do not see the proper Page Location?
+Designer was launched with a URL that differs from the page intended for this guide.
+Cancel
+ out of the Edit Container window.  On the main navigation menu, click 
+Save
+, then 
+Exit
+.
+Relaunch the designer
+ using a URL from the proper page, and 
+resume editing
+ from step 5.
+
+
+Do not see the proper Page Location?
+Designer was launched with a URL that differs from the page intended for this guide.
+Cancel
+ out of the Edit Container window.  On the main navigation menu, click 
+Save
+, then 
+Exit
+.
+Relaunch the designer
+ using a URL from the proper page, and 
+resume editing
+ from step 5.
+
+
+If additional changes are desired, email 
+pendo@invoicecloud.com
+ with details about the guide and requested modifications.
+Review the Guide
+Before moving on to the next step in building a guide, please take a few moments to see the guide in action in preview mode.
+(6) From the main navigation menu, click 
+Preview
+, then select 
+Preview in same tab
+.
+(6a) Triple check for typos and grammar, click buttons/links to verify guide actions, and confirm placement of guide/guide steps on the page - when finished, click 
+Back to Designer
+.
+If unexpected results persist, return to design mode to recheck guide settings.
+note
+Preview displays or behaves quirky?
+Occasionally, text or buttons seem misaligned, or the preview will not restart.  This is sometimes resolved by refreshing the browser in preview mode.
+
+
+Preview displays or behaves quirky?
+Occasionally, text or buttons seem misaligned, or the preview will not restart.  This is sometimes resolved by refreshing the browser in preview mode.
+
+
+(6b) If all looks good, from the main navigation menu, click the Save drop-down caret and choose 
+Save and Exit
+.
+Steps to edit guide content are complete!  Continue to 
+https://invoicecloud.atlassian.net/wiki/spaces/PRODUCT/pages/1981972493
+.
+ URL:/spaces/PRODUCT/pages/1987182666/How+to+edit+Walk-through+Example+guide+content

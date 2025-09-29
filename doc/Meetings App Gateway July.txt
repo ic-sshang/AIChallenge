@@ -1,0 +1,72 @@
+1
+6
+false
+default
+list
+true
+7/24/2024
+Still seeing 2 hour delay in ingesting App Gateway Access Logs into AlienVault
+ to follow up with AlienVault
+Still seeing Large Stratus File
+Posted message to 
+ and 
+ concerning large Stratus file still be seen causing 302.
+AGWAccessLogs
+| where TimeGenerated between (todatetime("7/24/2024, 2:00:00.000 PM") .. todatetime("7/24/2024, 2:02:00.000 PM"))
+| order by ReceivedBytes
+| project TimeGenerated, Host, RequestUri, UserAgent, ReceivedBytes, SentBytes, ServerStatus, TimeTaken
+Still Seeing waves of 500 Spikes
+ Still seeing spikes in 500s at somewhat random intervals for 
+www.invoicecloud.com/remoteauthenticationapi/user/RetrieveUsers
+AGWAccessLogs
+| where TimeGenerated between (todatetime("7/24/2024, 1:17:00.000 PM") .. todatetime("7/24/2024, 2:02:00.000 PM"))
+| where HttpStatus > 499
+| project TimeGenerated, Host, RequestUri, UserAgent, ReceivedBytes, SentBytes, HttpStatus, ServerStatus, TimeTaken
+| summarize count()  by Host, RequestUri, HttpStatus, ServerStatus
+ also seeing spike in 500s for 
+/kioskapi/
+ , all seem due to 
+Object Reference not set to instance of an Object
+select errorMessage, * from Transaction WHERE request.headers.host = 'www.invoicecloud.com' and request.uri LIKE '/kioskapi/v1/biller/config%' and response.status = '500' SINCE '2024-07-24 09:17:00' UNTIL '2024-07-24 10:30:00' LIMIT MAX 
+error.message:Object reference not set to an instance of an object.
+error.stack:	   at ICKioskAPI.CustomRedirectHttpModule.context_BeginRequest(Object sender, EventArgs e) in C:\agent\_work\237\s\ICKioskAPI\HttpModules\CustomRedirectHttpModule.vb:line 124
+error.message:Object reference not set to an instance of an object.
+error.stack:	   at ICKioskAPI.SystemEmail.SendInternalServerErrorEmail(Biller biller, Exception ex) in C:\agent\_work\237\s\ICKioskAPI\Models\Business\SystemEmail.vb:line 101 
+	   at ICKioskAPI.ApiExceptionLogger.VB$StateMachine_1_LogAsync.MoveNext() in C:\agent\_work\237\s\ICKioskAPI\Logger\ApiExceptionLogger.vb:line 30
+Observed Large Spike in Backend Server Response Time
+ see details below:
+AGWAccessLogs
+| where TimeGenerated between (todatetime("7/24/2024, 3:00:00.000 AM") .. todatetime("7/24/2024, 3:30:00.000 AM"))
+| where TimeTaken > 4
+| project TimeTaken, ServerResponseLatency, Host, RequestUri, ReceivedBytes, SentBytes, ServerRouted, ServerStatus, TimeGenerated
+| order by TimeTaken desc 
+Barracuda WAF has no traffic, still on track to 
+deallocate
+ those VMs on 7/28/2024
+ has script for 
+dellocate
+7/31/2024
+New Relic is showing very low Traffic while Azure Metrics showing expected traffic pattern
+Looks like the large stratus file every 15 minutes and causing a 302 has been resolved 
+ 
+Thanks 
+ 
+ and 
+ 
+Over last 24 hours, only two noticeable spikes in 5XX’s
+70 around 4 AM
+275 at 2 PM on 7/30
+Spikes in response time, almost all were due to Server Response Time
+AGWAccessLogs
+| where TimeGenerated between (todatetime("7/31/2024, 1:33:00.000 PM") .. todatetime("7/31/2024, 1:37:00.000 PM"))
+| where TimeTaken > 4 and (TimeTaken - ServerResponseLatency) > 1
+| project TimeTaken, ServerResponseLatency, Host, RequestUri, ReceivedBytes, SentBytes, ServerRouted, ServerStatus, TimeGenerated
+| order by TimeTaken desc 
+Noting 7K requests in the last hour with the HttpStatus of 499 where there is no Server Status replied back, cannot find these Transactions in NewRelic by the SessionId.
+Costing is projected to be below the ~$1,400 we estimated per month.  When we get rid of the Log Analytics Workspace and use NEwRelic Log forwarding instead, the cost of App Gateway should be around $700 per month, but should drop even more when we scale down to only 3 App Gateway instances on reserve.
+The amount of 404 due to no Routes in App Gateway is down after removing orphaned DNS Records.  Still more to try to prevent tho.
+AGWAccessLogs
+| where HttpStatus == 404 and ServerRouted == ""
+| project OriginalHost, OriginalRequestUriWithArgs, HttpMethod, InstanceId, TimeGenerated, TimeTaken, ClientIp, UserAgent
+| summarize count() by OriginalHost
+ URL:/spaces/platform/pages/3418783805/Meetings+App+Gateway+July

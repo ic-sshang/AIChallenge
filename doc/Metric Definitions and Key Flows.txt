@@ -1,0 +1,57 @@
+Objective
+The purpose of this page is to define how we are currently calculating key metrics, nuances of how we calculate different features, and how we want to be calculating these metrics in the future. It is also to define the key flows on the payer site we want to track. This will dictate the analytics instrumentation we add to the payer site. 
+Most of these metric definitions listed below are attempting to show opportunity in payer adoption and growth in the products payers can engage in. The goal is to measure and push payer behavior to engage in more products, payments. 
+CRM Metrics Definitions 
+Data Field
+Where
+Note
+Example
+Invoices
+Biller, invoice type count and % Invoice Paid - CRM Invoice Analysis
+total invoices created? sent out that month? This is total invoices created
+Paid Invoices
+Biller, invoice type count and % Invoice Paid - CRM Invoice Analysis
+total paid from where?
+Invoices
+CRM invoice type payments by source - payment source analysis
+payment count, payments made in that timeframe
+uploaded invoices - invoice date
+Ideal Definitions 
+Autopay registrations: total autopay registrations at that time 
+Autopay Adoption: autopay registration / total current invoices (include balance forward calculation)
+Autopay growth rate: (months current new autopay registrations - last month’s new autopay registrations) / months current new autopay registrations
+Autopay opportunity: billers with autopay enabled - invoices enrolled in autopay (include balance forward calculation)
+Paperless registrations: total paperless registrations at that time 
+Paperless Adoption: paperless registration / total notifications
+Paperless growth rate: (months current new paperless registrations - last month’s new paperless registrations) / months current new paperless registrations
+Paperless opportunity: billers with paperless enabled - invoices enrolled in paperless (include balance forward calculation)
+Pay by text registrations: total PBT registrations at that time 
+Pay by text Adoption: PBT registration / total current eligible invoices (invoices with PBT enabled)
+Pay by text growth rate: (months current new PBT registrations - last month’s new PBT registrations) / months current new PBT registrations
+Pay by text opportunity: billers with PBT enabled - invoices enrolled in PBT (include balance forward calculation)
+Online payments on virtual site: online payments - Autopay, RSP, FlexPay payments, payments on virtual site. (could be approved cartpaymentconfirmation.aspx) 
+Notifications to Payment: 
+1st - payments after invoice is sent to that invoice being paid. Requires invoice sent to payment tracking.
+2nd - payments after invoice is sent. Requires invoice sent to payment tracking. 
+3rd - payments after invoice is sent.
+Hypothesized Key Flows
+The below flows are hypothesized key flows based off GA data, Biller Feedback and quarterly UX research reports. These can be our ideal flows and also hypothesized real existing user flows, that we may want to change.
+Virtual Site 
+Search Experience: 
+Payers on Customerlocator struggle to get to results page even after typing in their correct information. They receive a “no results” response. 
+Payers on Customerlocator struggle to enter information in correctly into search results. They receive different types of errors. 
+Payers on the Customerlocatorresults page struggle to find their invoice and have to return to search. 
+Payers on the Customerlocatorresults find their invoice but are confused by the invoice they find (amount, invoice PDF, etc) and contact support. 
+Payers search by related invoices and find results with 0 balance due, but are not able to proceed in payment. 
+Checkout Route: 
+Payers find their invoice and continue through the checkout route. They may not continue through the checkout route when they see an additional fee applied. Fee is applied on the Cloudpayment page. 
+Customerlocatorresults  to cloudpayment to cloudpaymmentmethod.
+Payers find their invoice and continue through checkout route. On CloudPayment they have the option to  pay in full, pay minimum amount, or pay other amount. 
+Payers select payment method available on the CloudPayment page.
+Customer Portal 
+AutoPay
+AutoPay registrations are more frequently in the customer portal. This is under the assumption payers are more comfortable saving their payment information when they are registered and logged in. We need a user flows for tracking AutoPay enrollment in the customer portal. This involves tracking AutoPay to store payment method pages. 
+Open Invoices
+Payers on the Customergroupledger open find their invoice but are confused by the invoice they find (amount, invoice PDF, etc) and contact support or toggle back and forth between recent closed and open invoices. 
+Questions
+ URL:/spaces/PRODUCT/pages/2238808117/Metric+Definitions+and+Key+Flows

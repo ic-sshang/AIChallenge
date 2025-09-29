@@ -1,0 +1,54 @@
+ID
+Event
+Pains
+Opportunities
+1
+IC onboards Biller unto Chase platform with manual paperwork
+Manual paperwork
+Replace current manual Chase onboarding process with new automated process
+Significant improvement in time to go live 
+Need ability to make adhoc updates post go live such as address updates, etc
+2
+IC configures Chase terminals in CRM while in demo mode
+3
+Biller tests Chase processing using IC platform
+“IC terminal” is used to process transactions in demo mode.  This transaction never goes through Chase.
+Build out full Chase testing capability for lower environments
+4
+Biller is configured on CRM to “go live”
+5
+Payer goes through payment flow before submitting payment
+Gap in fraud detection
+Safetech integration for fraud detection
+Ach verification/Certegy replacement
+6
+Payer submits payment
+AVS/CVV actions owned by Chase
+AVS/CVV improvements (we don't handle them today, configured with Chase)
+Network tokenization (Card brand direct or Chase)
+Payment APIs switch from Orbital to new Chase platform
+Separate Auth and Capture (gives us a window in between for risk analysis, etc)
+ACH processing changes to accommodate daily NACHA file requirement
+Move PayPal integration to Chase-processed vs BT-processed
+Processor-down processing support
+7
+Biller manages submitted payments before settlement
+Updating void/credits logic to support us being payfac
+8
+End of day batch settlement
+IC / Chase batches out of sync due to high payment velocity
+9
+Biller is funded for transactions in settled batch
+Chase reconciliation report integrations (daily file that includes payments settled, etc)
+Integrate to new Chase bank account for credits/funding
+Finance needs for daily reconciliation process
+Biller payout process using new Chase bank account
+10
+Biller reconciles using IC provided reporting
+Biller Portal report additions and updates to reflect new model
+11
+Processing of ACH rejects and Chargebacks
+Integrate to new Chase bank account for debits (rejects, chargebacks)
+Chase DFR replacement for rejects/chargebacks
+Chase DFR replacement for bin files/residuals/etc
+ URL:/spaces/EA/pages/3403808780/Existing+Biller+lifecycle+with+Chase

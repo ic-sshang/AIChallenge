@@ -1,0 +1,9 @@
+New Relic Infrastructure Agent Excerpt
+Pre+Post-Provisioning 
+We use the New Relic Infrastructure Agent to send system metrics and events as well as both system and application logs to New Relic.
+Install the agent with MSI installer | New Relic Documentation
+Note
+: may require injection of license key after deployment. Don’t add sensitive values to the image itself.
+While we can install the agent during the image build, we should not include any secrets at that point. We’ll need to inject secrets at runtime.
+New Relic Infrastructure Agent
+ URL:/spaces/platform/pages/3953754126/New+Relic+Infrastructure+Agent

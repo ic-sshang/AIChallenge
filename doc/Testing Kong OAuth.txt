@@ -1,0 +1,158 @@
+Below are the behaviors of Kong and a endpoint with the OAuth plugin.
+Test API Route
+The HTTP Bin service will be used for testing to highlight the headers that Kong will append to the request to the backend after the OAuth token verification.
+/httpbin/v2 
+Test Consumer
+Consumers are a entity in Kong.  Consumers represent the end-users or clients that consume the APIs managed by Kong.  Consumers can be associated with various authentication methods like OAuth2 tokens to secure API access.
+A test consumer “testbiller” was created with OAuth credentials (client_id and client_Secret) and associated with a Biller ID using the Custom ID on the test consumer record.   Kong will send Custom ID to the backend in the header 
+X-Consumer-Custom-Id
+.  A backend API should trust and use this header to understand the authenticated user context.
+HTTP Request with OAuth Enabled without a Bearer Token
+GET /httpbin/v2 HTTP/1.1
+User-Agent: PostmanRuntime/7.41.2
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: 7006abe2-78b2-4def-aff0-e4f1c795f8e4
+Host: api-dev.invoicecloud-beta.com
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+ 
+HTTP/1.1 401 Unauthorized
+Date: Wed, 11 Sep 2024 17:23:56 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 77
+Connection: keep-alive
+WWW-Authenticate: Bearer realm="service"
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 8c195934ddb3e10c-ORD
+Cf-Team: 2283b615030000e10c618a2400000001
+ 
+{"error_description":"The access token is missing","error":"invalid_request"}
+HTTP Request to obtain OAuth Token
+Kong creates routes for OAuth operations on the root where the OAuth plugin was enabled.  This can be at the Route, Service, or Global level.  Kong will lookup the consumer that is tied to the client_id and mint a access_token.
+Kong OAuth Plugin Token Route
+/oauth2/token
+Full Route after activating on the test Route
+/httpbin/v2/aoth2/token
+POST /httpbin/v2/oauth2/token HTTP/1.1
+Content-Type: application/json
+User-Agent: PostmanRuntime/7.41.2
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: 784c94be-bf25-4687-a0c9-211dab7e1ac4
+Host: api-dev.invoicecloud-beta.com
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Length: 160
+ 
+{
+"client_id": "to9ucDNYljO64yr3WmpSCePYWBR1tot9",
+"client_secret": "OI7FPp97MGetQrgIIIQ30MgS3YJpu88R",
+"grant_type": "client_credentials"
+}
+ 
+HTTP/1.1 200 OK
+Date: Thu, 12 Sep 2024 12:49:57 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+pragma: no-cache
+cache-control: no-store
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 8c20053c5abbe10c-ORD
+Content-Encoding: gzip
+Cf-Team: 2287e199b20000e10c24c11400000001
+ 
+{"expires_in":7200,"access_token":"VWgiw0A26358u1szuRVlP970PlC2oAN2","token_type":"bearer"}
+HTTP Request with OAuth Enabled with Bearer Token
+GET /httpbin/v2?show_env HTTP/1.1
+Authorization: Bearer VWgiw0A26358u1szuRVlP970PlC2oAN2
+User-Agent: PostmanRuntime/7.41.2
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: c9078017-8fc6-40b5-86b4-b8a74dddffd0
+Host: api-dev.invoicecloud-beta.com
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+ 
+HTTP/1.1 200 OK
+Date: Thu, 12 Sep 2024 12:52:37 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 8c200927dc7ee10c-ORD
+Content-Encoding: gzip
+Cf-Team: 2287e40cdc0000e10c265f7400000001
+ 
+{
+"args": {
+"show_env": ""
+},
+"data": "",
+"files": {},
+"form": {},
+"headers": {
+"Accept": "*/*",
+"Accept-Encoding": "gzip, br",
+"Authorization": "Bearer VWgiw0A26358u1szuRVlP970PlC2oAN2",
+"Cache-Control": "no-cache",
+"Cdn-Loop": "cloudflare; loops=1",
+"Cf-Connecting-Ip": "8.29.230.189",
+"Cf-Ipcountry": "US",
+"Cf-Ray": "8c200927dc7ee10c-ORD",
+"Cf-Visitor": "{\"scheme\":\"https\"}",
+"Host": "httpbin.org",
+"Postman-Token": "c9078017-8fc6-40b5-86b4-b8a74dddffd0",
+"Traceparent": "00-8f1b584d0d1e4b1ea2b06958d7f87cbb-176d9d0ec9ca03a9-01",
+"User-Agent": "PostmanRuntime/7.41.2",
+"X-Amzn-Trace-Id": "Root=1-66e2e415-0d2c75d3132e667417c90036",
+"X-Appgw-Trace-Id": "036313b608ce8387c18041ff3b533e03",
+"X-Consumer-Custom-Id": "billerid=265",
+"X-Consumer-Id": "f1d3b6ba-93b8-4045-a914-0aa19d6609db",
+"X-Consumer-Username": "testbiller",
+"X-Credential-Identifier": "to9ucDNYljO64yr3WmpSCePYWBR1tot9",
+"X-Forwarded-For": "8.29.230.189,10.152.2.7, 10.152.88.64, 20.246.162.241",
+"X-Forwarded-Host": "api-dev.invoicecloud-beta.com",
+"X-Forwarded-Path": "/httpbin/v2",
+"X-Forwarded-Port": "443",
+"X-Forwarded-Prefix": "/httpbin/v2",
+"X-Forwarded-Proto": "https",
+"X-Original-Host": "api-dev.invoicecloud-beta.com",
+"X-Original-Url": "/httpbin/v2?show_env",
+"X-Real-Ip": "10.152.2.7"
+},
+"json": null,
+"method": "GET",
+"origin": "8.29.230.189,10.152.2.7, 10.152.88.64, 20.246.162.241",
+"url": "https://api-dev.invoicecloud-beta.com/anything/kong/to/httpbin?show_env"
+}
+HTTP Request with OAuth Enabled with expired token
+GET /httpbin/v2?show_env HTTP/1.1
+Authorization: Bearer VWgiw0A26358u1szuRVlP970PlC2oAN2
+User-Agent: PostmanRuntime/7.41.2
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: 90c0c4bb-2244-477e-bb7c-3f22d595ba6c
+Host: api-dev.invoicecloud-beta.com
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+ 
+HTTP/1.1 401 Unauthorized
+Date: Sat, 14 Sep 2024 13:22:38 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 90
+Connection: keep-alive
+WWW-Authenticate: Bearer realm="service" error="invalid_token" error_description="The access token is invalid or has expired"
+CF-Cache-Status: DYNAMIC
+Server: cloudflare
+CF-RAY: 8c30afdf7e9ce10c-ORD
+Cf-Team: 22924c3f9b0000e10cd52e0400000001
+ 
+{"error_description":"The access token is invalid or has expired","error":"invalid_token"}
+ URL:/spaces/EA/pages/3554377770/Testing+Kong+OAuth

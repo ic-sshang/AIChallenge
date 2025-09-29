@@ -1,0 +1,115 @@
+Summary
+Summary
+Details
+Software Partner Name
+Caselle/Civic
+Software Product Name
+Caselle Connect
+Software Cashiering System
+N/A
+Supported Versions
+2021.02.160 or later
+Integration Requirements and Pre-Requisites
+Outlined Below
+See Rules of Engagement
+Vertical
+Accounts Receivable
+Sample Biller Implementation
+Newport OR
+ BID 2493
+Planning
+Test Portals
+IC Hosted Test Portal - 2137
+Partner Hosted Test Portal
+Rules of Engagement
+IM’s will work with the Caselle CSM assigned to the specific biller and provide the items below.  IM will need to ask the Biller on the Kick-off Call who is their assigned CSM (Customer System Manager). Please use Email template below:
+Coding Requirements
+Partner Coding Requirements
+What
+Provided To
+When
+Notes/Details
+Third Party Name (Always Invoice Cloud)
+Biller
+Invoice Cloud CallBack URL w/API Key
+Caselle
+Project Assignment 
+Import/Setup AR Bill ‘Form Definition’
+Biller/IC
+Make sure to adjust process to only send “Open Items”
+‘Form Definition’ is attached in case you need to send to Biller: 
+Ensure all Caselle biller workstations have latest general release version of Caselle Connect Version 2021.02.160 or later.
+If the biller does not have the proper Caselle version, the integration features will not work properly. This includes ACH rejects, AutoPay change log and user registration email.
+Ensure server where Connect Online Web Service(COWS) is running. If COWS has not been updated since the last general release update, COWS will need to be updated immediately on the customers Caselle server.
+If COWS is not running, IC cannot connect to the billers endpoint.
+Ensure Biller has Security Licenses in place
+Verify that the customer has the CRW40000 Security License (Cash Receipting Web Service Interface)
+Verify that the customer has the ARW4000 Security License (Utility Management Web Service Interface)
+If customer does not have the licenses list above: Have the customer contact their Caselle CRM to get the license added to their security file. This could take a couple of days depending on when the request is submitted.
+Security Licenses are needed in order for the integration to work real time. Workspace needs to allow payments online payments in order for payments to post.
+Verify that COWS is installed and running on the Caselle server
+It is also important to make sure that an admin at the city has access to the Caselle server where COWS is running on so if there is ever a problem the user can login to the server, verify COWS is running and restart if necessary.
+Make sure the Cash Receipting Workspace that is setup specifically for Online Payments has the checkbox marked to “use for online payments”.
+If this is not selected, payments will error out in the data pump (with a very generic error message that’s difficult to decipher)
+Invoice Cloud Coding Requirements
+What
+Provided By
+ETA
+Notes/Details
+CallBack URL that includes the APIKey
+Biller
+After IM generates the APIKey
+Example: 
+https://icoauthtokenprocessor.azurewebsites.net/api/ICOAuthTokenProcessor?BK
+=
+(Generated API Key without the parenthesis)
+Steps to generate the API key under biller portal:
+Access biller portal
+Then click Support → Documentation / API’s → Application API Keys
+Click Create New Application Key
+Enter Application Name : Caselle CallBack URL API Key
+Check box for Active
+Click Create New Application Key
+Copy and Paste APIKey to the end of the CallBack URL in the email template over to Caselle.
+NOTE: If biller is integrated Real-Time with Utility, it will use same Callback URL and no need to ask for the step above.
+Invoice Data
+Biller
+Once Caselle CSM has imported the Forms definitions. 
+Bill Images
+Biller
+RTDR API URL
+see details
+Always 
+https://ranchero1.caselleconnect.com/tp/api/ar0/graphql
+DataPump API URL
+see details
+Always 
+https://ranchero1.caselleconnect.com/tp/api/cr0/graphql
+Caselle Software Configuration
+Category Code
+Distribution Code
+Payment Code ACH
+Payment Code CC
+Payment Code OBD (optional, will use ACH payment code by default)
+Customer SUBDomain
+ClientID
+ClientSecret
+OAuth Token
+Expiration Date of OAuth Token
+Caselle
+During Configuration 
+Caselle CSM configures and provides these items once they configure the Caselle Software for this integration.
+Caselle Support Ticketing System Login 
+Summary: This Ticketing system is used for support post go-live.
+Website: 
+https://support.caselle.com/
+Username: invoicecloud
+Password: casellesupport
+How to create support tickets
+Once logged in, you will land on Announcements. 
+Click on “Create a New Support Incident”. See below screen shot
+3. Complete ticket details and requirements then click the submit button on top right hand corner.
+Contacts
+1500
+400
+ URL:/spaces/IM/pages/718340114/Caselle+Real-Time+AR+Implementation+Details

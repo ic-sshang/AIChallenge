@@ -1,0 +1,22 @@
+Notes:
+RPPS
+	Portfolio wide and each biller at a time
+Data Pump
+	Runs multiple instances per biller and 32 threads
+Email Queue Processing
+	Polls DB
+Pay By Text
+	Polls DB
+Mutli-Shared queries will not scale with any significant increase billers
+The queries need to be inventoried and recorded as a refactoring target
+Some APIs are open ended (just grows and takes longer as data is retained)
+Operations against an entire table no limit 
+Result set returning a entire table 
+Add maximum hard limit (no DDOS)
+	Paging through the data set instead
+Timeouts
+We do not have alignment on timeouts
+Arbitrary values set to solve single use case (no thought on the impact in multi user cases)
+JMeter
+	Existing perf tests are failing with nominal load
+ URL:/spaces/EA/pages/4061200394/Performance+Testing+Planning+-+PRJ

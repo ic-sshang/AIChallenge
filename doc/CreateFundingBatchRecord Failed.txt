@@ -1,0 +1,8 @@
+If the CreateFundingBatchRecord failed, pull down the branch “ManualRunForFiservForReceiptNameError“ on MC_RPPS. Under MC_RPPS.UnitTests>Utilities, find UnitTest1.vb.
+We just need to update the request with the information found in the MC_RPPS log (don’t forget the dateTime) and place a break point on “testclass.CreateFundingBatchRecord(request)”so we can debug and step into it.
+*
+If the credit count is more than 1 then the credit volume will be different than what is in the request from the log. For example:
+Request from Log:
+Updated Request:
+We want to take a screenshot of the request and response and sent it over to Randy, and we want to stop at the response.
+ URL:/spaces/ED/pages/2912944278/CreateFundingBatchRecord+Failed

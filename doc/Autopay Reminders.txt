@@ -1,0 +1,11 @@
+By Default, Autopay Reminders are sent 3 days before the invoice is due this means emails begin processing 3 days before the autopay collection date. 
+Billers can change the number of days before the autopay collection date to send autopay reminders. 
+Invoice Type Setting 63 - AutoPayment Email Reminders - Days before the collection date to send reminders.
+Repo: AutoPaymentReminders 
+Logs: 
+Portal.Azure.com
+ > iclogstorage> containers> icautopay >YYYY-MM-DD-icpaymentreminders > BillerID
+Search by YYYY-MM-DD-icpaymentreminders for the day the autopay reminder was sent out or was supposed to be sent out. 
+Note: Remember they are sent 3 days before the invoice is due so you will need to search by that date
+The logs show the SQL statements that are used to find the AutoPay Processing List.
+ URL:/spaces/DS/pages/2791473161/Autopay+Reminders

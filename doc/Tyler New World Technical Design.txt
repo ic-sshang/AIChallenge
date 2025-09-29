@@ -1,0 +1,600 @@
+Billers using this integration: 
+BID 2413 - City of Yuma BID 
+BID 3204 - City of Bowling Green
+Page Navigation
+Jira ticket 
+Document status
+COMPLETE
+Green
+Document owner
+Solution engineer
+ 
+ 
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+Tyler New World sends duplicate records in the invoice file when the biller prints 2 bills, one for the landlord and one for the tenant. The only way to solve this is by the client removing one of the payers (usually the landlord) from the bill/print.
+Ideally, sales will warn Billers about this limitation.
+ 
+Video demonstrating this here 
+https://invoicecloud.app.box.com/folder/199268779788
+API Documentation
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+GET api/um/v1/account/{accountNumber}
+Sample:
+{
+  "AccountNumber": "00000001-001",
+  "AccountStatus": "Active",
+  "PrimaryCustomerLastName": "sample string 3",
+  "PrimaryCustomerFirstName": "sample string 4",
+  "PrimaryCustomerMiddleName": "sample string 5",
+  "PrimaryCustomerNameSuffix": "sample string 6",
+  "ServiceAddressHouseNumber": "sample string 7",
+  "ServiceAddressAdditionalInfo": "sample string 8",
+  "ServiceAddressStreetPrefix": "sample string 9",
+  "ServiceAddressStreetType": "sample string 10",
+  "ServiceAddressStreetPreType": "sample string 11",
+  "ServiceAddressStreetName": "sample string 12",
+  "ServiceAddressStreetSuffix": "sample string 13",
+  "ServiceAddressApartment": "sample string 14",
+  "ServiceAddressCity": "sample string 15",
+  "ServiceAddressState": "sample string 16",
+  "ServiceAddressZip": "sample string 17",
+  "ServiceAddressZip4": "sample string 18",
+  "BillingAddressLineOne": "sample string 19",
+  "BillingAddressLineTwo": "sample string 20",
+  "BillingAddressLineThree": "sample string 21",
+  "BillingAddressCity": "sample string 22",
+  "BillingAddressState": "sample string 23",
+  "BillingAddressZip": "sample string 24",
+  "TotalDueAmount": 25.0,
+  "PastDueAmount": 26.0,
+  "LastBillDueDate": "2020-12-16T10:59:11.5135748-07:00",
+  "LastBillTransactionDate": "2020-12-16T10:59:11.5135748-07:00",
+  "PrimaryPhoneNumber": "sample string 27",
+  "PrimaryEmailAddress": "sample string 28",
+  "LastPaymentAmount": 29.0,
+  "LastPaymentDate": "2020-12-16T10:59:11.5145812-07:00",
+  "OnAutopayProgram": true,
+  "OnPaperlessBilling": true,
+  "OnBudgetBilling": true,
+  "BudgetBillEnrollmentDate": "2020-12-16T10:59:11.5145812-07:00",
+  "BudgetBillAmount": 33.0,
+  "CustomerType": "sample string 34",
+  "RestrictedPaymentMethods": "sample string 35",
+  "ShutOffDate": "2020-12-16T10:59:11.5145812-07:00",
+  "AccountBlocked": true,
+  "AccountBlockedReason": "sample string 37",
+  "OnPaymentPlan": true,
+  "PaymentPlanRecentChargesAmountDue": 39.0,
+  "PaymentPlanRecentChargesDueDate": "2020-12-16T10:59:11.5145812-07:00",
+  "PaymentPlanInstallmentAmountDue": 40.0,
+  "PaymentPlanInstallmentDueDate": "2020-12-16T10:59:11.5145812-07:00"
+}
+Field Mapping:
+TotalDueAmount
+ = IC Balance Due
+Unless version specified in advanced setting 100 is to use Budget Biling, then: BudgetBillAmount = IC Balance Due
+PastDueAmount = IC Past Due
+Restricted Payment Method= 
+Blank- Allow All Payment Methods
+Check = Block ACH (true) 
+CreditCard = Block CC (true)
+Check, CreditCard = Block ACH and Block CC (true)
+Data Pump: Payment
+POST api/um/v1/payment/{accountNumber}
+{
+  "AccountNumber": "00000001-001",
+  "PayeeName": "sample string 2",
+  "PaymentAmount": 3.0,
+  "PaymentDate": "2021-01-15T10:10:19.3656449-07:00",
+  "PaymentType": "sample string 5",
+  "AuthorizationCode": "sample string 6",
+  "TransactionCode": "sample string 7",
+  "Comment": "sample string 8",
+  "FeeAmount": 1.0,
+  "FeeType": "sample string 9",
+  "FeeAuthorizationCode": "sample string 10"
+}
+PayeeName= 
+Payer Name
+Payment Amount= Payment Amount
+Payment Date= Payment Date
+Payment Type= CC/ACH
+Authorization Code= 
+Approval Code (First 32 Characters)
+TransactionCode= 
+WEB, IVR, MOBILE
+Comment= (Leave Blank)
+FeeAmount=
+ (Leave Blank)
+Fee Type=
+ (Leave Blank)
+FeeAuthorizationCode=
+ (Leave Blank)
+No Sample Available
+File Mapping
+Invoice File
+File Extension: XML
+File Naming Convention: billfileMMDDYY_XX
+File Delimiter: 
+Specification: 
+Sample File: 
+ 
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Header Tag
+Record Type
+1
+RowType
+TRUE
+N/A- IC to generate-Always FH
+File Header
+2
+BillerGuid
+TRUE
+N/A- IC to generate
+File Header
+4
+FileCreationDate
+TRUE
+N/A- IC to generate
+File Header
+5
+InvoiceCount
+TRUE
+N/A- IC to generate
+File Header
+6
+TotalInvoiceAmount
+TRUE
+N/A- IC to generate
+File Header
+7
+RowType
+TRUE
+N/A- IC to generate- Always IH
+Invoice Header
+8
+RecordType
+TRUE
+N/A- IC to generate
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+N/A- IC to generate
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A-IC to generate- 
+AccountNumber-InvoiceDate
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BillingDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+Date
+Due Date
+UTILITYBILLS
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+CurrentCharges
+Numeric/Currency
+Current Charges
+Invoice Header
+38
+Custom1
+FALSE
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+BalanceDue
+For Budget Billing (File Type ID 471)
+:
+If BudgetBillAmount is set, use that. If not set use BalanceDue
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A- Generated by IC- Always 42
+Invoice Header
+407
+PastDue
+Y
+FALSE
+BalanceatBilling
+Currency
+Ballance at Billing
+Invoice Header
+58
+RowType
+N
+TRUE
+ N/A- Generated by IC- Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+AccountNumber
+Numeric
+Account Number
+BILL
+Customer Record
+60
+CustomerName
+Y
+TRUE
+CustomerName
+Customer Record
+61
+Address1
+Y
+FALSE
+ServiceAddress
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+ServiceCity
+Customer Record
+64
+State
+Y
+FALSE
+ServicevsState
+Customer Record
+65
+Zip
+Y
+FALSE
+ServiceZip
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+CustomerPrimaryEmailAddress
+Customer Record
+70
+RowType
+N
+TRUE
+N/A- Generated by IC- Always ID
+Invoice Detail
+Adjustments File
+File Extension: CSV
+File Naming Convention:
+File Delimiter: CSV
+Specification: 
+Sample File: 
+ 
+File Transfer Frequency: 
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+N/A- Generated by IC
+File Header
+306
+BillerGuid
+TRUE
+N/A- Generated by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+N/A- Generated by IC
+File Header
+309
+AdjustmentCount
+TRUE
+N/A- Generated by IC
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+N/A- Generated by IC
+File Header
+311
+RowType
+TRUE
+N/A- Generated by IC
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+N/A
+Adjustment Record
+313
+AccountNumber
+TRUE
+ReportColumnFieldValue2
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+AccountBalance
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+N/A - Generated by IC; always 
+1
+ for FixedAmount
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Current date and time formatted MM/dd/yyyy
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+N/A - Generated by IC; always 
+2
+ for newest
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+N/A - Generated by IC
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: TXT
+File Naming Convention:
+File Delimiter: N/A
+Specifications: All approved payments
+Sample File: 
+ 
+Documentation: 
+ 
+SFTP File Path:
+File Transfer Frequency:
+Field
+Data Type
+Character Limits
+Format
+Description
+Values
+Remitter Number
+String
+Must be 13 total characters, alpha-numeric
+Left-padded with zeros if less than 13 characters
+If AccountNumber includes a hyphen, the hyphen must be removed.
+AccountNumber 1234-56789 would go into the file as 
+0000123456789
+Required - first 13 characters in the file
+“Remitter Number” in the lockbox documentation (attached above)
+AccountNumber
+Remittance Amount
+Integer
+Must be 10 total characters, numeric
+ Left-padded with zeros if less than 10 characters
+PaymentAmount of $150.25 would go into the file as 
+0000015025
+Required - characters 14 through 23
+“Remittance Amount” in the lockbox documentation (attached above)
+PaymentAmount
+Transaction Date
+Date
+Must be 8 total characters
+MM-DD-YY
+01-31-24
+Required - characters 24 through 31
+“Transaction Date” in the lockbox documentation (attached above)
+PaymentDate
+Check Number
+String
+Must be 16 total characters
+Always 16 zeros
+0000000000000000
+Required - characters 32 through 47
+“Check Number” in the lockbox documentation (attached above)
+Always 16 zeros
+0000000000000000
+Comments
+String
+Maximum 20 characters, alpha-numeric
+No padding necessary
+Required - characters 48 through 67 (not all will be used)
+“Comments” in the lockbox documentation (attached above)
+ApprovalCode - only include the actual code (exclude “Approved”)
+Advanced Settings
+Setting ID
+Description 
+Value
+Is value unique per biller? (Y/N)
+100
+Budget Billing
+0 = False
+1 = True
+Yes - If the biller needs IC to map the Budget Billing amount from the RTDR response, this value should be set to 1.
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Biller Questionnaire
+AutoPayCollectionDate
+Biller Questionnaire 
+BalanceForward
+BIF Customization- Yes
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller Questionnaire
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGuid
+InvoiceTypeID
+BIF Customization
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+Biller Questionnaire
+PaymentExpirationMessage
+Biller Questionnaire
+PromptPayExpirationDate
+Biller Questionnaire
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller Questionnaire
+ThirdNotifyRequestedDate
+Biller Questionnaire
+User Interaction and Design
+Data Flow - Invoice
+att1232830469
+1016856684
+1
+City of Yuma Invoices
+IM
+att1231716374
+att1231618069
+0
+Data Flow - Adjustments
+att1231945738
+1016856684
+1
+City of Yuma - Adjustments
+IM
+att1231945733
+att1231749125
+0
+Data Flow - Payment
+att1231454224
+1016856684
+1
+City of Yuma - Payments
+IM
+att1231749135
+att1231618074
+0
+Data Flow - Void
+att1231618079
+1016856684
+1
+City of Yuma Void
+IM
+att1232830474
+att1231749131
+0
+Data Flow - ACH Reject
+att1231749158
+1016856684
+1
+ACH Reject City of Yuma
+IM
+att1231749153
+att1231454233
+0
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Billers will use the Biller Portal to search for payments and make changes
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ 
+INT-3918
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 7/2022
+There was no mapping for accounts on budget billing in the invoice file
+A new file type to support budget billing, if that amount is set it will pull from that amount
+ budget billing
+INT-4681
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+There was no mapping in RTDR for accounts on budget billing
+Add mapping in RTDR to use the ‘Budget Billing’ amount for IC ‘Balance Due' if the biller wants this included in the implementation
+ 
+ URL:/spaces/IM/pages/1016856684/Tyler+New+World+Technical+Design

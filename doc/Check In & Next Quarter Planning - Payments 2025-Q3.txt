@@ -1,0 +1,177 @@
+ Overview
+Check in on quarterly commitments, and discuss a proposal of next quarter’s work.
+What is the status of our current commitments? Are any changes or adjustments needed?
+What are we considering for next quarter’s work?
+What do we need to discover or resolve before we are able to make commitments on that work?
+Date
+ 
+Teams
+Wicked Tendies, PACE and Titans
+Participants
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Current Quarter Commits
+List out current quarter commitments that are 
+ At Risk or 
+ Delayed. Link to Jira items. Provide an update for each item: Why is it delayed, is there a way to pull it back to green, or do we need to reset the date. If we are resetting the date, provide the new date the team believes it can hit. 
+Commitment
+Due Date
+Status
+Notes
+EBPP-28702
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Discovery 
+ On Track
+Expect to have Day 1 functionality identified by end of Aug.  
+EBPP-28408
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+ Delayed
+Discovery was delayed; but we have slated items into each sprint and expect it to be completed by the end of Q3.  
+Contract is being worked on and migration will likely spill into Q4. 
+During delay, team worked on Shadow Mode (payment processing) while waiting for Kount. 
+EBPP-28659
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24895
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delivery 
+ 
+Additional Discovery for Q4 complete by Mid-Q3
+ On Track
+ Potential Risk - 
+ApplePay may involve some unknowns
+WT-72 was moved to an initiative for reporting purposes
+ 
+TT-22: Visa Commercial Interchange Update
+Delivery 
+ At Risk
+Delayed due to following reasons
+External Dependency:
+ Chase’s responses were slower with delays in sharing required documents and identifying root causes.
+Internal Analysis:
+ Additional time was spent on our side to pinpoint the root cause of the 
+null zip code
+ issue.
+We are also facing an 
+ongoing risk
+:
+Null zip codes are originating from billers integrated with 
+BS&A
+, where we don't have control on their interface, the risk and impact are to be borne.
+TT-17
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Delivery 
+ On Track
+Plan:
+ 100 billers by end of Q3 (Phase 1 started mid of July).
+Status:
+ 30 migrated; 70 on track for Q3 completion.
+EBPP-23346
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Delivery 
+ At Risk
+All vendors rely on a common DB (EWS) plus in-house data. While they claim higher efficiency, proof requires sharing sensitive account data. Pricing discussions with Chase AVS are in progress; efficiency testing will follow.
+EBPP-28607
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Discovery 
+Delivery in Q4
+ Delayed
+Open banking validation vendor analysis delayed due to extended MNDA negotiations. Sarah is gathering feedback on billers’ appetite for the higher-priced solution
+EBPP-4693
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Discovery 
+Delivery in Q4
+ Delayed
+Discovery delayed due to MNDA sign-offs and identifying Mastercard/VISA SPOCs, with VISA taking longer. Analysis has started with VISA and discovery is expected to complete by end of Q3.
+TT-20
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Stretch Goal
+Delivery 
+ On Track
+NACHA file creation (ACH Debit & Credit) and other funding related items will be delivered by end of Q3
+EBPP-26854
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Discovery 
+Delivery in Q4
+ Delayed
+Over the past weeks, Team had multiple discussions with the onboarding team to understand the current 
+manual onboarding process
+ in detail. Finalizing the biller wizard flow has taken slightly longer than anticipated, which has contributed to some delay.
+In parallel, the team has been focusing on building the 
+Onboarding API
+, which will serve as the backend for the portal. This ensures that once the biller wizard flow is finalized, the API will be readily available and fully aligned to support it.
+This approach minimizes overall downstream impact — while the flow finalization is in progress, the backend infrastructure is being prepared in advance.
+EBPP-28708
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Discovery 
+Delivery in Q4
+ On Track
+We have identified top 2 vendors. Lexis Nexis and With Persona. We have NDA signed with both and receive pricing also. 
+POC is in progress with With Persona. With Lexis Nexis we are analyzing the output of KYC/KYB checks.
+We analyze and compare the output of both vendor and select the preferred one
+Current Quarter Commitments: Full List
+Create a filter in Jira Plans that displays a list of commitments for the current quarter. 
+https://support.atlassian.com/jira-software-cloud/docs/embed-your-advanced-roadmap-plan-in-a-confluence-page/
+ Next Quarter: Items Under Consideration
+List out what the team proposes to do for next quarter, highlighting whether the item must be done next quarter (with a date if applicable), should be done, or could be done. Indicate a cut line of what you think makes it in, and your top 2-3 items out (or wherever you believe a controversial/thought-provoking line is). If you prefer, insert a Jira Plans embed below instead.
+Jira Item
+MoSCoW Scoring
+Continue to work on Payment Processing
+Kount (roll out/maintenance) will be part of Q4
+ McLoggin Project - unknown effort that we need to consider
+Biller Onboarding Portal - Implementation
+Funding and Pay-out implementation in PayFac model (Funding Rules engine, ledger management, Pay-outs)
+Recommendation for Q4
+KYC/KYB Integration - Implementation
+Recommendations for Q4 
+ Open Questions
+Provide a list of any discussion questions the team has, especially if there are decisions/actions needed to unblock the next quarter’s roadmap. 
+
+
+
+
+6
+
+
+6
+
+
+incomplete
+
+
+
+
+ URL:/spaces/PE/pages/4565106689/Check+In+Next+Quarter+Planning+-+Payments+2025-Q3

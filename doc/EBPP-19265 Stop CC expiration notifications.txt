@@ -1,0 +1,118 @@
+This document details the initial problems that led to EBPP-19265’s creation as well as the approach taken to disable credit card expiration notifications.
+Worked On By:
+Katelyn Espinoza (Assignee)
+Blake Saltzman (Reporter)
+Rob Hoerning (Test Engineer)
+Dolly Tyagi (QA)
+Related Items:
+EBPP-19265
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19332
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19703
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19742
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-34
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance:
+Almeda County Water District (BID:1321) has a customer engagement platform called Smart Energy Water (SEW) that they use to send notifications. SEW sends credit card expiration notices to their payers and does not want InvoiceCloud to send any credit card expiration notifications to their payers as it causes confusion and complaints. The spike item EBPP-19332 housed the research into how we could stop these emails from being sent. Ultimately, the We’ll Do It Live! team determined that altering biller option 87 to allow 
+-1
+ as a valid input that would disable credit card expiration notifications from being sent was the best solution for this use case.
+Biller option 87 determines when a credit card expiration notification should be sent.
+Solution:
+The credit card expiration notification email queue (EmailQueueTypeID: 30) runs differently than a typical email queue. 
+Standard Email Queues
+Credit Card Expiration Notification
+Runs every day
+Only runs on the 1st and 16th day of the month on SkyBot
+Is inserted into the email queue to be sent
+Uses a stored procedure to determine if the email gets sent
+Can be tested on demo portals
+Must alter the stored procedure to allow testing on demo portals
+EmailQueueProcessing uses the stored procedure 
+mcl.spCustomersWithExpiringCards
+ to determine which customers need a credit card expiration notification to be sent. Within this stored procedure, we determine if the specified number of days within the biller option 87 have passed since the latest invoice was sent. For example, an invoice was uploaded on March 31st. If the customer in the invoice is registered and has a card expiring THIS month (June) and the biller is not a demo portal, then the stored procedure will return the customer with an expiring credit card. Now, the stored procedure checks that biller option 87 does not have a value of 
+-1
+. If it does, then we do not provide any customers.
+ 
+The stored procedure 
+mcl.spCustomersWithExpiringCards
+ returns a customer with a card expiring in the month of June with biller option 87 set to 
+3
+.
+ 
+The stored procedure 
+mcl.spCustomersWithExpiringCards
+ not returning a customer with a card expiring with biller option 87 set to 
+-1
+.
+The CRM was also updated in EBPP-19256. Previously, biller option 87 had validation that prohibited the use of negative numbers as a valid input. The validation was altered to only allow an input equal to 
+-1
+ or greater. Otherwise, we will show the following error message.
+Code Referenced
+Error message shown when biller option 87 is less than 
+-1
+How to Test EBPP-19256:
+To test biller option 87 original functionality.
+Upload a BIF file with a new customer
+Register the customer’s account
+Ask Data Services to alter 
+mcl.spCustomersWithExpiringCards
+ to allow demo portals
+Add a card to the new customer that will be expiring the CURRENT month
+Set biller option 87 to the number of days that have passed since you uploaded the BIF file
+If you just uploaded the invoice, then you should set the option to 
+0
+Setting biller option 87 to 
+0
+Run the following query in the database
+exec mcl.spCustomersWithExpiringCards @BillerID = 3928 --use your test BillerID
+If done correctly, the stored procedure should return the customer’s card information you just entered.
+The stored procedure 
+mcl.spCustomersWithExpiringCards
+ returns a customer with a card expiring in the month of June with biller option 87 set to 
+3
+.
+Follow 
+this
+ confluence page to ensure an email was sent to the customer.
+To test biller option 87’s new functionality of disabling credit card expiration notifications.
+Upload a BIF file with a new customer
+Register the customer’s account
+Ask Data Services to alter mcl.spCustomersWithExpiringCards to allow demo portals
+Add a card to the new customer that will be expiring the CURRENT month
+Set biller option 87 to 
+-1
+Setting biller option 87 to 
+-1
+Run the following query in the database
+exec mcl.spCustomersWithExpiringCards @BillerID = 3928 --use your test BillerID
+If done correctly, the stored procedure should return no data.
+The stored procedure 
+mcl.spCustomersWithExpiringCards
+ not returning a customer with a card expiring with biller option 87 set to 
+-1
+.
+Follow 
+this
+ confluence page to ensure no email is sent to the customer.
+Test Plan for Release Night:
+An invoice featuring a customer with an expiring card will be uploaded. 
+Data Services will temporarily permit demo accounts on the production test portal BID: 3928 to dispatch credit card expiration notifications on release night by modifying the stored procedure 
+mcl.spCustomersWithExpiringCards
+. 
+The EmailQueueProcessing repository will be executed locally against the production test portal to confirm that -1 does not trigger an email.
+The EmailQueueProcessing repository will be executed locally again against the production test portal with the value of biller option 87 set to 0 or higher to confirm it does send an email.
+The value of biller option 87 corresponds to the number of days that have passed since the invoice was uploaded.
+ URL:/spaces/PE/pages/3286860241/EBPP-19265+Stop+CC+expiration+notifications

@@ -1,0 +1,25 @@
+What is Hub Jumpbox?
+Secure
+ VM/s deployed within Hub allowing 
+automatically discoverable
+ 
+network connectivity
+.
+Automatically discoverable
+ - Any resources (Azure or k8s) deployed within hub/spoke will ensure automatic registration with appropriate DNS zones linked to hub VNet (hence eradicating need for manual host file updates).
+Network Connectivity
+ - Any resources (Azure or k8s) deployed within hub/spoke will ensure establishing network path (peering/firewall rules) to the Jumpbox.
+Windows Jumpboxes
+ - A series of Windows Jumpboxes have been created for network access to private network swimlanes.  More info can be found 
+here
+.
+Linux Jumpboxes
+ - A series of Linux Jumpboxes have been created for network access to private network swimlanes.  More info can be found 
+here
+.
+Security
+Secure software
+ - Appropriate software ensuring security of the virtual machine
+Secure connectivity
+ - Appropriate connection security requiring users to be on the InvoiceCloud VPN to connect and traffic outbound from the Jumpbox VMs routing thru the Palo Alto Firewall protecting the Network Swimlane the Jumpbox is within, i.e. traffic from the Jumpboxes in the NonProd Network Swimlane (which supports the Sandbox and DevTest Environments) goes thru the NonProd Palo Alto firewall instance and traffic from the Jumpboxes in the Prod Network Swimlane goes thru the Prod Palo Alto firewall instance.
+ URL:/spaces/icinfradoc/pages/2582216705/Jumpboxes

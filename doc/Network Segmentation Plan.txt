@@ -1,0 +1,367 @@
+1
+6
+false
+disc
+list
+true
+VNET Segmentation - 
+Unpeer devtest vnets from prod hub
+Task
+Owner
+Status
+ETA
+Kong NonProd Deployed and routing 
+devtest
+ and 
+cert
+ hostnames thru NonProd Network Lane.  
+ 
+ 
+Complete
+Shutdown/deletion of Proxy1/2
+ 
+ 
+ 
+ 
+Complete
+5/17/2024
+Shutdown/deletion of QA-Web 1/2 
+ 
+ 
+ 
+Complete
+5/17/2024
+QA Proxy 3 and Proxy Test 1 restored in DevTest Network 
+ 
+ 
+Complete
+5/21/2024
+Move Contractors to AVD 2.0  
+ 
+ 
+Complete
+5/8/2024
+Network Monitoring & Mitigation from NonProd Networks to InternalNetwork 
+Analysis 
+ 
+Execute legacy DNS CNAME → External Cloudflare DevTest/Cert
+ 
+Complete
+8/27/2024
+Is 
+aks_legacytooling
+ being still used? We negotiated with 
+ and 
+ that this Selenium Grid host will only be able to access QA Regression, Preview, and Production Environment.
+ 
+Complete
+5/22/2024
+Change the Routing of DevTest VNets between themselves in their 3 Route Tables 
+ 
+Prerequisite: 
+[INFRA-250] Allow the 3 DevTest VNets to flow traffic between themselves in the NonProd Palo Firewall - JIRA (atlassian.net)
+ 
+ 
+ 
+Completed
+5/15/2024
+Barracuda to Kong Migration (nonprod)
+ 
+ 
+ 
+At least nonprod routing is needed to be separated from Barracuda to nonprod kong. 
+ 
+Prod can still flow thru Barracuda. But Barracuda going away by June, hence both migration will need to be scope.
+ 
+Completed
+4/28/2024
+Enable SauceLabs tunnel to be able to test regression
+ 
+Complete
+5/24/2024
+Securing Prod SQL - 
+Remove checkbox from SQL FW
+Owner:
+ 
+ / 
+ 
+Date:
+ TBD
+Status: 
+In Progress
+Epics
+PLAT-231
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+  - 11th Aug 2024
+PLAT-200
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+  28th Jun 2024
+Task
+Owner
+Status
+ETA
+NOTES
+PLAT-234
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Done
+5/21/2024
+6/27/2024
+PLAT-232
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+InProgress
+5/21/2024
+7/5/2024
+PLAT-254
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Not Started
+6/23/2024
+7/30/2024
+PLAT-233
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Not Started
+7/12/2024
+PLAT-251
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Not Started
+8/11/2024
+PLAT-252
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Not Started
+8/11/2024
+PLAT-253
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Not Started
+8/11/2024
+PLAT-200-Agent Pool Migration to Support Environmental Network Isolation
+Ensure deploy-ability of nonprod workloads in dev test from nonprod agents
+Ensure test-ability of nonprod workloads in dev test from nonprod agents
+Build agent movements
+Review current agent structure below
+ 
+Complete
+7/30/2024 + 1 week
+DevOps Agent current architecture
+DevOps architecture page 
+by 
+ 
+ADDS current peerings
+Details of current peerings
+To be disconnected peerings: <Add> 
+ 
+Remove disconnected peers
+Remove Hub peers
+Add InternalNetwork Peer
+Keep peers to 3 devtest vnets
+Cross Network Lane Monitoring
+Cross Network Lane Monitoring Analysis
+Traffic originating from Production Networks into DevTest Networks
+Source IP
+Source Resource
+Destination IP
+Destination Resource
+Is a Concern for Unpeer?
+10.0.2.14
+IC-BuildAgent2
+10.33.0.4
+vm-app-vm1qa2
+No
+10.0.6.4 thru 10.0.6.11
+IC-App1 thru IC-App8
+10.33.0.5
+vm-app-vm1qa1
+No
+10.0.1.4 thru 10.0.1.15
+IC-Web1 thru IC-Web10
+10.32.0.11
+vm-web-vm1qa6
+No
+10.0.2.14
+IC-BuildAgent2
+10.32.0.13 and 10.32.0.10
+vm-web-vm1qa5 and vm-web-vm1qa1
+No
+10.0.2.14
+IC-BuildAgent2
+10.31.0.21 and 10.31.0.6
+vm-web-vm1qa12 and IC-QA-Proxy1-Dev
+No
+10.0.2.6
+AlienVaultEast
+All VMs in 10.31.*.* VNet
+No
+Traffic originating from DevTest Networks into Production Networks
+Source IP
+Source Resource
+Destination IP
+Destination Resource
+Is a concern for Unpeer?
+10.33.0.20
+vm-app-UAT1-control
+10.0.2.8
+WSUS
+No
+10.33.0.21
+vm-app-UAT1-agent1
+10.0.2.8
+WSUS
+No
+10.33.0.4
+vm-app-vm1qa2
+10.0.2.13
+IC-SonarQube1
+No
+10.33.0.4
+vm-app-vm1qa2
+10.0.2.8
+WSUS
+No
+10.33.0.4
+vm-app-vm1qa2
+10.0.3.20
+IC-LB-WAF-East
+No
+10.33.0.5
+vm-app-vm1qa1
+10.0.2.8
+WSUS
+No
+10.32.0.10
+vm-web-vm1qa1
+10.0.2.8
+WSUS
+No
+10.32.0.11
+vm-web-vm1qa6
+10.0.2.8
+WSUS
+No
+10.32.0.12
+vm-web-vm1qa4
+10.0.2.8
+WSUS
+No
+10.32.0.13
+vm-web-vm1qa5
+10.0.2.8
+WSUS
+No
+10.32.0.13
+vm-web-vm1qa5
+10.0.1.101
+IC-TestWeb1
+No
+10.32.0.14
+vm-web-vm1qa2
+10.0.2.8
+WSUS
+No
+10.32.0.15
+vm-web-vm1qa3
+10.0.2.8
+WSUS
+No
+10.31.0.17
+vm-web-vm1qa8
+10.0.2.8
+WSUS
+No
+10.31.0.18
+vm-web-vm1qa14
+10.0.2.8
+WSUS
+No
+10.31.0.19
+vm-web-vm1qa11
+10.0.2.8
+WSUS
+No
+10.31.0.20
+vm-web-vm1qa9
+10.0.2.8
+WSUS
+No
+10.31.0.21
+vm-web-vm1qa12
+10.0.2.8
+WSUS
+No
+10.31.0.22
+vm-web-vm1qa10
+10.0.2.8
+WSUS
+No
+10.31.0.23
+vm-web-vm1qa13
+10.0.2.8
+WSUS
+No
+10.31.0.6
+IC-QA-Proxy1-Dev
+10.0.2.6
+AlienVaultEast
+No
+10.31.0.6
+IC-QA-Proxy1-Dev
+10.0.2.8
+WSUS
+No
+10.31.0.9
+IC-ProxyTest1-Dev
+10.0.2.100
+Management1
+No
+10.31.0.9
+IC-ProxyTest1-Dev
+10.0.2.8
+WSUS
+No
+ADDS Export
+DNS-7-23-2024.csv
+Notes from meeting on 8/22/2024
+It was determined that the traffic from Production Web Apps to DevTestWeb6 is not a stopper to break the peering.  Jira Item was created for App Dev Team to update code so this dependency is not needed but breaking the functionality to unpeer is determined to be acceptable:  
+PLAT-736
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+It was determined that the traffic from Production App Servers to DevTestApp1 is not a stopper to break the peering.  We were unable to identify the Application on the Production Web Server that is the root cause of this traffic.  Breaking the peering should surface which application deployed to the Production App Servers is the culprit of this antipattern and breaking the functionality to expose the culprit should not have negative Production impact. 
+Enable SauceLabs tunnel to be able to test regression - Phase 1
+Update nonprod Palo rules 
+ 
+Sauce should not be able to hit any internal resources
+Sauce should not have outbound restrictions
+Unlink 
+invoicecloud.com
+ private DNS zone from Sauce vnet  
+ 
+Update Cloudflare inbound rules 
+ 
+nonprod Palo outbound IP's should be allowed to hit any domain
+Whitelist nonprod Palo outbound IP's in application 
+Enable SauceLabs tunnel to be able to test regression - Phase 2
+Whitelist all SauceLabs outbound IP's in application
+Update tests to not use tunnel
+Delete tunnel + all corresponding infra and firewall rules
+ URL:/spaces/platform/pages/3139993664/Network+Segmentation+Plan

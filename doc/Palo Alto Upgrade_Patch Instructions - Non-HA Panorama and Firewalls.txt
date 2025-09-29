@@ -1,0 +1,141 @@
+Upgrade the Panorama:
+Commit and push any outstanding changes
+Verify that the updates you plan to install are appropriate for your Panorama deployment.
+Palo Alto Recommended Versions
+ 
+Save a backup of the current Panorama configuration file that you can use to restore the configuration if you have problems with the upgrade.
+Log in to the Panorama web interface.
+Save named Panorama configuration snapshot (Panorama > Setup > Operations), enter a Name for the configuration, and click OK.
+Export named Panorama configuration snapshot, select the Name of the configuration you just saved, click OK, and save the exported file to a location that is external to Panorama.
+Install the latest content updates.
+Palo Alto Networks® highly recommends that Panorama, Log Collectors, and all managed firewalls run the same content release version. Additionally, we recommend that you schedule automatic, recurring updates so that you are always running the latest content versions 
+Select Panorama > Dynamic Updates and Check Now for the latest updates. If the value in the Action column is Download, an update is available.
+Before you update the content release version on Panorama, be sure to upgrade managed firewalls and then Log Collectors (see Upgrade Log Collectors When Panorama Is Internet-Connected) to the same (or a later) content release version.
+If you do not need to install content updates at this time, then skip ahead to the next step.
+Install remaining content updates, as needed. When installed, the Currently Installed column displays a check mark.
+Download and Install the Applications or Applications and Threats update. Regardless of your subscription, Panorama installs and needs only the Applications content update, not the Threats content. For details, see Panorama, Log Collector, Firewall, and WildFire Version Compatibility.
+Download and Install other updates (Antivirus, WildFire®, or URL Filtering) as needed, one at a time, and in any sequence.
+Upgrade Panorama to the PAN-OS releases along your upgrade path
+Check Now (Panorama > Software) for the latest releases. If a software release is available, the Action column displays Download.
+Locate and Download the PAN-OS 10.1.x image. After a successful download, the Action column changes from Download to Install for the downloaded image.
+Install the downloaded image and then reboot.
+After the installation completes successfully, reboot using one of the following methods:
+If prompted to reboot, click Yes. If you see a CMS Login prompt, press Enter without typing a username or password. When the Panorama login prompt appears, enter the username and password you specified during initial configuration.
+If you are not prompted to reboot, Reboot Panorama from the Device Operations section (PanoramaSetupOperations).
+Test the Panorama after upgrade
+Login to the management console
+Verify the new version in the dashboard
+Push a trivial change to panorama and firewalls
+Verify logging is working in Monitor
+Verify outbound 
+Here are the full instructions:
+https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-upgrade/upgrade-panorama/install-content-and-software-updates-for-panorama/install-updates-for-panorama-with-internet-connection#id21940aa0-7656-4ac2-9115-611e9111d6d9
+ 
+Upgrade the firewalls using Panorama:
+Before you can upgrade firewalls from Panorama, you must:
+Make sure Panorama is running the same or a later PAN-OS version than you are upgrading to. You must upgrade Panorama and its Log Collectors to 10.1 before upgrading the managed firewalls to this version. In addition, when upgrading Log Collectors to 10.1, you must upgrade all Log Collectors at the same time due to changes in the logging infrastructure.
+Make sure plugin versions on Panorama are equal to or higher than the plugin versions on managed firewalls.
+Ensure that firewalls are connected to a reliable power source. A loss of power during an upgrade can make a firewall unusable.
+Decide whether to stay in Legacy mode if the Panorama virtual appliance is in Legacy mode on upgrade to PAN-OS 10.1. Legacy mode is not supported for a new Panorama virtual appliance deployment running PAN-OS 9.1 or later release. If you upgrade the Panorama virtual appliance from PAN-OS 9.0 or earlier release to PAN-OS 10.1, Palo Alto Networks recommends reviewing the Setup Prerequisites for the Panorama Virtual Appliance and changing to Panorama mode or Management Only mode based on your needs.
+If you want to keep the Panorama virtual appliance in Legacy mode, increase CPUs and memory allocated to the Panorama virtual appliance to a minimum 8 CPUs and 16GB memory to successfully upgrade to PAN-OS 10.1. See the Setup Prerequisites for the Panorama Virtual Appliance for more information.
+If you want to keep the Panorama virtual appliance in Legacy mode, increase CPUs and memory allocated to the Panorama virtual appliance to a minimum 16 CPUs and 32GB memory to successfully upgrade to PAN-OS 10.2. See the Setup Prerequisites for the Panorama Virtual Appliance for more information.
+After upgrading Panorama, commit and push the configuration to the firewalls you are planning to upgrade.
+Save a backup of the current configuration file on each managed firewall you plan to upgrade.
+From the Panorama web interface, select Panorama>Setup>Operations and click Export Panorama and devices config bundle to generate and export the latest configuration backup of Panorama and of each managed appliance.  
+ 
+Update the content release version on the firewalls you plan to upgrade.
+Select Panorama>Device Deployment>Dynamic Updates and Check Now for the latest updates. If an update is available, the Action column displays a Download link.  
+ 
+If not already installed, Download the latest content release version.
+Click 
+Install
+, select the firewalls on which you want to install the update, and click 
+OK
+. If you are upgrading HA firewalls, you must update content on both peers.
+You cannot skip the installation of any feature release versions in the path from the currently running PAN-OS version to PAN-OS 10.1
+Review PAN-OS Upgrade Checklist, the known issues and changes to default behavior in the Release Notes and Upgrade/Downgrade Considerations for each release through which you pass as part of your upgrade path.
+Make a screen shot of the load balancer backend pools for each of the inbound and outbound load balancers for reference when putting the servers back in the pools.
+Download the target PAN-OS 10.1 release image.
+Select 
+Panorama > Device Deployment> Software 
+and Check Now for the latest release versions.
+Download 
+the firewall-specific file (or files) for the release version to which you are upgrading. You must download a separate installation file for each firewall model (or firewall series) that you intend to upgrade.
+Remove Inbound Firewall1 and Outbound Firewall 1 from the Azure load balancers
+Install the PAN-OS 10.1 software update on the firewalls.
+Click Install in the Action column that corresponds to the firewall models you want to upgrade. For example, if you want to upgrade your PA-3200 firewalls, click Install in the row that corresponds to PanOS_3200-10.1.0.
+In the Deploy Software file dialog, select all firewalls that you want to upgrade.
+Select Reboot device after install
+To begin the upgrade, click OK
+After the installation completes successfully, reboot using one of the following methods:
+If you are prompted to reboot, click Yes
+If you are not prompted to reboot, select 
+Device > Setup > Operations 
+and Reboot Device
+After the firewalls finish rebooting, select 
+Panorama > Managed Devices
+and verify the Software Version is 10.1.x for the firewalls you upgraded. 
+Verify the software and content release version running on each managed firewall.
+On Panorama, select 
+Panorama > Managed Devices
+Locate the firewalls and review the content and software versions in the table.
+For HA firewalls, you can also verify that the HA Status of each peer is as expected.
+Test the upgraded firewalls
+Put the patched firewalls back into the load balancers and remove the non-patched firewalls (2 steps)
+Test outbound traffic, and east-west traffic
+AVD to Internet (google)
+AVD to payer
+AVD to Dev/Test VMs
+Verify logging is working in Monitor on the Panorama
+Upgrade the remaining firewalls and put them back in the load balancers
+Test outbound traffic, and east-west traffic
+AVD to Internet (google)
+AVD to payer
+AVD to Dev/Test VMs
+Back out trivial change from above
+If everything looks good, patch the remaining firewalls that should be out of the load balancers and put them back into the load balancers after they reboot.
+Test again following step 9
+Backout Proceedures
+https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-upgrade/upgrade-pan-os/upgrade-the-firewall-pan-os/upgrade-firewalls-using-panorama
+ 
+Communication Plan
+Action
+Application of minor patch on Palo Alto firewall infrastructure
+Why
+Emergency Update Required - PAN-OS Root and Default Certificate Expiration on April 7th 2024
+This will result in the Panorama management server being unable to communicate with the firewalls
+Risks management - identification of risks and mitigation steps
+Risk of not applying the patch
+If certificates are not renewed before this date, the firewalls and Panorama appliances will no longer be able to establish new connections to Palo Alto Networks cloud services, which may impact network traffic and potentially cause an outage when existing connections terminate and attempt to reconnect.
+Risk of applying the patch
+Firewalls not able to pass traffic properly or not blocking traffic as designed
+Panorama unable to manage the firewalls
+Panorama log collector not functioning
+Mitigation of risks
+Backup of running config save off appliances for Panorama and firewalls
+Testing of 1/2 (SBX) or 1/3 (Prod) firewalls functionality, leaving a quick fallback plan to roll back to the remaining un-patched firewalls.
+Test/Validation plan 
+SBX environment
+Test outbound traffic, and east-west traffic
+AVD to Internet (google)
+AVD to payer
+AVD to Dev/Test VMs
+Production environment
+Run the following QA tests
+Smoke tests
+Regression tests
+Manually test the following systems access to the internet
+Prod Term
+Web server
+Proxy server
+App server
+Test the following internal traffic
+Prod term access to app, proxy, and web servers
+Schedule of work
+SBX environment
+Upgrade panorama April 3rd, 3 pm Eastern Time
+Upgrade the firewalls April 3rd, 9 pm Eastern Time
+Production environment
+Upgrade panorama April 4th, 9 pm Eastern Time
+Upgrade the firewalls April 4th, 9 pm Eastern Time
+ URL:/spaces/icinfradoc/pages/3001123051/Palo+Alto+Upgrade+Patch+Instructions+-+Non-HA+Panorama+and+Firewalls

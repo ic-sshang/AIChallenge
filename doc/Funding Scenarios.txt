@@ -1,0 +1,120 @@
+1
+6
+false
+none
+list
+true
+Scenario 1: Real-Time Integration (Data Pump/RTDR) - All Payments Posted
+Overview:
+ This scenario represents a PayFac (Payment Facilitator) model with real-time integration between the platform and the merchant's CIS (Customer Information System). The PayFac pushes payment status updates to the merchant's CIS in real-time via a data pump/API integration. This path assumes that all payments are successfully posted and processed.
+Key Assumptions:
+Real-time data pump/API integration with merchant CIS
+All payments posted are successful (no failures)
+Batch settlement occurs at the end of the day (EOD)
+Funds are deposited into the merchant’s bank account on T+1 business days
+Flow Description:
+Throughout the day, payments are processed on the PayFac platform.
+As each payment is processed,
+ a status update is pushed to the merchant's CIS via real-time API integration.
+At EOD, a batch of all processed payments is created and marked as "Settled".
+The batch is prepared for funding.
+On T+2 business days, the full batch amount is deposited into the merchant's designated bank account.
+Summary:
+In a real-time integration model, the merchant receives instant status updates for each payment as it is processed. At the end of the day, these payments are grouped into a settled batch. The PayFac then schedules the funds for deposit to the merchant's bank account on a T+1 business day cycle.
+Actors:
+Biller
+IC Platform (PayFac)
+J
+PMTreasury (Bank) 
+2
+1
+0
+0
+4500062228
+4499963922
+1
+FundingRealTime.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+FundingRealTime.drawio
+0
+589
+575
+Scenario 2: End-of-Day File Integration - All Payments Posted
+Overview:
+ This scenario represents a PayFac model where the merchant receives a summary of payment statuses through an end-of-day file integration instead of real-time updates. The system generates a file containing all the payment statuses and sends it to the merchant's CIS at the end of the processing day. This path assumes no issues in the file transmission or payment posting.
+Key Assumptions:
+End-of-day flat file or report is generated and transmitted to the merchant CIS
+All payments posted are successful (no failures)
+Batch settlement occurs at end-of-day (EOD)
+Funds are deposited into the merchant’s bank account on T+1 business days
+Flow Description:
+Throughout the day, payments are processed on the PayFac platform.
+No real-time updates are sent; statuses are queued internally.
+At EOD, all payment statuses are compiled into a single file.
+The file is transmitted to the merchant’s CIS. (FTP, Stratus, Email, etc) 
+The batch is marked as "Settled" and scheduled for funding.
+On T+1 business days, the batch amount is deposited into the merchant’s designated bank account.
+Summary:
+In an end-of-day file-based integration model, the merchant does not receive real-time status updates. Instead, a file summarizing all payments processed that day is delivered at the end of the processing day. The PayFac then groups these payments into a settled batch and schedules funding to the merchant’s account on a T+1 business day timeline.
+Actors:
+Biller
+IC Platform (PayFac)
+JPMTreasury (Bank)
+2
+1
+0
+0
+4499996718
+4499963922
+1
+FundingPaymentFile.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+FundingPaymentFile.drawio
+0
+550
+560
+Scenario 3: Real-Time Integration (Data Pump/RTDR) with Partial Failures - Still Funded
+Overview:
+ This scenario reflects a real-time integration setup where the merchant's CIS receives individual payment status updates via API. Unlike the happy path, this flow involves one or more payments failing to post successfully. However, the PayFac still proceeds with 
+funding the batch to the merchant’s bank account based on the settled amounts
+, while marking and notifying the failed transactions.
+Key Assumptions:
+Real-time data pump/API integration with merchant CIS
+Some payments failed to post, but are clearly indicated
+Batch settlement occurs at end-of-day (EOD)
+Funds are deposited into the merchant’s bank account on T+1 business days
+Funding includes both successful and marked failed payments
+Flow Description:
+Throughout the day, payments are processed on the PayFac platform.
+As each payment is processed, a status is pushed to the merchant's CIS via real-time API.
+Some payments fail to post; those are marked as failed.
+At EOD, the batch of payments is created and includes both successful and failed ones.
+The entire batch is marked "Settled" and prepared for funding.
+On T+1 business days, the full batch amount (including failed payments) is deposited into the merchant’s designated bank account.
+Summary:
+This real-time model handles payment posting failures. While the merchant receives real-time notifications of all statuses—including failures—the PayFac still funds the batch in full. It is understood that this may lead to a scenario where a payer's bill does not reflect the correct payment status within the CIS. Nevertheless, the merchant will still receive funding.
+ Our reporting will clearly show each deposit and the associated payments in the batch, along with an indicator showing whether each payment was successfully posted to the CIS or not.
+Actors:
+Biller
+IC Platform (PayFac)
+JPMTreasury (Bank)
+2
+1
+0
+0
+4500062278
+4499963922
+1
+FundingRealTimeWFailures.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+FundingRealTimeWFailures.drawio
+0
+703
+589
+ URL:/spaces/EA/pages/4499963922/Funding+Scenarios

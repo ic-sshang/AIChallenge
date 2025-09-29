@@ -1,0 +1,62 @@
+Overview
+Summary description and high level things to note of the Integration
+Printer/Biller Requirements
+Description of the elements required for this configuration. (OAuth Credentials, Endpoints, Software Partner Codes, Software Partner configurations.
+Name
+ Value
+Endpoint Sample
+https://endpoint.billerwebsite.com/bills/
+Username Sample
+billersUsername
+Integration Summary
+In the Integration Summary page, make sure you're under the specific Invoice Type that needs to be configured then, and add or modify the InvoiceFormatGUID in the BIF Customizations.
+Click 
+here
+ to learn on how to add or edit a BIF Customization.
+For this setup, search and add the 
+{Insert InvoiceFormatGUID name here}
+ template for this configuration.
+Advanced Settings
+{Printer/Biller Name}
+ requires the following Advanced Settings: 
+Note: Add or remove the following settings as necessary for this remote link
+Advanced Setting 20 - Remote PDF EndPoint/Web Service URL
+Advanced Setting 21 - Remote PDF EndPoint/WebService Username
+Advanced Setting 22 - Remote PDF EndPoint/WebService Password
+Advanced Setting 119 - Remote PDF Service Version
+Advanced Setting 131 - JSON Configuration
+Advanced Setting 144 - OAuth Endpoint
+Advanced Setting 145 - OAuth Client Secret
+Advanced Setting 146 - OAuth Client ID
+Advanced Setting 147 - OAuth Scope
+Click 
+here 
+to learn more about Advanced Settings.
+Click 
+here 
+on how to add or edit Advanced Settings.
+Use the chart below to add the Advanced Settings based on the Biller/Printer requirements.
+Advanced Setting
+Value
+20
+Endpoint Sample
+22
+Username Sample
+Advanced Setting 131 
+Note: Remove this entire section if this is not needed
+Advanced Setting 131 contains a configurable set of datapoints in JSON. For more information about understanding JSON go to this website for more info: 
+https://www.w3schools.com/js/js_json_intro.asp
+ 
+{Printer/Biller Name}
+ requires and will provide the following 
+PDFConfig
+ datapoints. Each value is placed within quotation marks. The configuration to enter looks like this (placeholder values shown):
+json
+{
+  "PdfConfig": {
+    "{PropertyNameStringSample}": "{requiredStringValueSample}",
+    "{PropertyNameBooleanSample}": {requiredBooleanValueSample},
+  }
+}
+Setup is complete when all of the configurations have been set.
+ URL:/spaces/IM/pages/4146495544/Template+Printer+Name+PDF+Remote+Link+guide

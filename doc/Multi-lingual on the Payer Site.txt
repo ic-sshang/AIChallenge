@@ -1,0 +1,465 @@
+Epic Link: 
+EBPP-17456
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ February 28, 2024
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+In Concept
+TBD
+TBD
+TBD
+TBD
+Est Completion
+02/28
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+Kick off PDR Deck: 
+ 
+ Problem Alignment
+Problem Alignment
+InvoiceCloud currently only supports English on the payer site. This limitation on our payer site prevents some sales particularly with enterprise prospects. In order to compete we need to provide multilingual options. 
+ Supporting Research
+Supporting Research
+English is still vastly the most prominent language used on our site. The below chart shows the most common languages set in the browser including all English and non English. 
+We additionally face a potential problem not having multi-lingual options in iframe. Below are examples of partner portals that support some non English options. As we work with more portal partners using IC iframes we need to reciprocate the payer’s language preference in the portal.
+While most  RFPs do not have clauses about multi-lingual options or lack detail we have a few upcoming RFPs that have specific clauses on support languages they require. 
+Biller
+Clause in the RFPs
+City of Austin TX
+Provide bilingual (English and Spanish) options for telephone payments. 
+City of Phoenix
+Have the ability to accommodate multi-language translations.
+Dakota Electric
+Capture a member’s preferences, e.g., smart meter opt in/out, communicationpreferences, language preference. On their member portal.
+City of Corona, CA
+Ability to support multiple communication channels, including email, SMS and automated voice calling.e) Ability to create, publish a
+City of LA, CA
+Assuming we need this, but no existing language found.
+City of Atlanta, GA
+Korean, Vietnamese, Chinese (simplified), Arabic, Swahili, Russian, Portuguese, Spanish, French and English. They are also looking for some multi-lingual support in the biller portal.
+ Objective
+Objective
+The objective of this project is to introduce multilingual to the payer site. We have an opportunity to appeal to more billers by offering a payer site with multiple languages. Some of our existing billers already offer multiple languages on their site (see the below table of our top billers and the language options on their site). However we don’t then support their language selection on our payer site. For example a payer on Narragansett Bay Commission site can select Spanish on the biller’s website however when they continue to pay on InvoiceCloud that language selection does not continue and the payer sees English. 
+Our objective is to introduce a high level approach for how we could market and implement multilingual on the payer site so that we can market we have multilingual options. 
+ Success Metrics
+Success Metrics 
+Goal
+Metric
+Current
+Good
+Great
+Remove sales blocker of not having multilingual. 
+increased sales to billers requiring multilingual as a show stopper. 
+Have multiple languages available.
+number of languages offered
+one - English
+offering Spanish
+offering scalable solution for more languages to be added
+Upon releasing have majority of billers confirm translations. 
+X amount of billers confirm translations. 
+ Target Audience
+Target Audience
+Group
+Impact
+Billers
+Billers that currently offer multiple languages. This targets existing billers, and prospects. 
+Payers
+Payers who do not speak English. 
+ User Interaction and Design
+User Interaction
+From research on Multilingual below is a list of our top billers and the languages available on their site for payment. 
+Biller
+State
+Languages on Site 
+Safety Insurance
+Massachusetts
+Spanish and English on IVR
+UGI
+Pennsylvania
+LIHEAP is in Spanish 
+SEMCO Energy
+Michigan
+English
+HRSD/HRUBS
+Virginia
+English
+Baton Rouge Water Company
+Louisiana
+English
+Hawaiian Telcom, HI
+Hawaii
+English
+DeKalb County
+Georgia
+English
+City of Atlanta
+Georgia
+English
+Pasco County FL
+Florida
+English
+City of Wichita
+Kansas
+Google Translator - Chinese, French, Spanish, Swahaili, Vietnamese 
+Virginia Beach Public Utilities
+Virginia
+English
+Sewerage and Water Board of New Orleans
+Louisiana
+Google Translator - many languages
+ 
+Truckee Meadows Water Authority
+Nevada
+Google Translator - Spanish
+Modesto Irrigation District
+California
+English
+Central Arkansas Water
+Arkansas
+Google Translator - Spanish
+SJWG San Jose Water Company
+California
+Google Translator - Spanish, Vietnamese
+City of Tallahassee FL
+Florida
+Google Translator - many languages
+Chugach Electric Association, Inc.
+Alaska
+English
+City of Portland, OR
+Oregon
+Portuguese - Traducción e Interpretación |
+Vietnamese - Biên Dịch và Thông Dịch  |
+Chinese - 口笔译服务  |
+Russian - Устный и письменный перевод  |
+Somali - Turjumaad iyo Fasiraad |
+Ukrainian - Письмовий і усний переклад  |
+Romanian - Traducere și interpretariat  |
+Sundanese - Chiaku me Awewen Kapas |
+Hindi - अनुवादन तथा व्याख्या
+LexServ
+Kentucky
+Many languages, not sure what service
+Mobile Area Water & Sewer System
+Alabama
+English
+San Gabriel Valley Water Company, California
+California
+English
+Prince William County Service Authority
+Virginia
+Korean, Spanish, Urdu, Vietnamese
+Des Moines Water Works
+Iowa
+Many languages, don’t know source 
+Narragansett Bay Commission (RI)
+Rhode Island
+Spanish but custom translated
+Most common languages in the US besides English and Spanish are Cantonese and Mandarin. Estimated number of speakers are 3.5m and in the following states: California, Washington, Oregon, Idaho, Utah, Colorado, Kansas, Missouri, Alabama, New York, Pennsylvania, Virginia, West Virginia, North Carolina, New Jersey, Delaware and Maryland. Vietnamese is also a common language for the following states: Nebraska, Oklahoma, Texas, Mississippi and Georgia.
+ Components Impacted
+Components
+Component
+Impact
+Virtual Site
+Multiple languages on the virtual site, all devices. 
+Customer Portal 
+Multiple languages on the customer portal, all devices. User can configure their language preferences. 
+CRM - TBD
+Way to configure which languages biller has on their site. 
+Email Notifications 
+Not in MVP scope.
+Payment Receipt Notification
+Way to send this one email in the language the user made the payment in. 
+SMS Notifications 
+Not in MVP scope.
+ Technical Architecture
+Technical Architecture
+What are the right questions to ask or diagrams to provide for this section?
+Resource files
+Webforms - .resx - other formats can also be utilized
+Can be used per-page and/or globally
+Resx resource manager
+Westwind.Globalization
+Can be static/db-driven or a hybri
+Client-side
+il8next – compatible with jquery/react/etc. but framework not required (pure JS)
+Depending on "resource" file implementation, could leverage CDN or compile with MyIIS
+Server-side
+Extending customizable text/grids/aliases/errors in the CRM
+Sizeable amount of dynamic content (up to 25%?), served from the db, based on CRM config
+How much needs to reside in the db vs. code vs. elsewhere
+"Naïve" db storage introduces unnecessary duplication for each biller
+Centralize sensible defaults / translations
+Changes are rare and would require approval, so an "instant" db update isn't critical
+ Testing Plan
+Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+Virtual Site
+ Customer Portal 
+ 
+ 
+ 
+ 
+ Email notifications
+ 
+ 
+ 
+  Serviceability/Observability
+Serviceability
+What are the right questions to ask or diagrams to provide for this section?
+ Timeline
+Timeline
+Event
+Date
+Confidence
+Status
+Kickoff Call
+02/28
+HIGH
+Green
+ 
+in progress
+Blue
+ 
+Design Review 
+03/20
+MEDIUM
+Yellow
+ 
+INCOMPLETE
+Red
+ 
+Project Start 
+ 04/01
+unknown
+ 
+INCOMPLETE
+Red
+ 
+Milestone 1 - POC trying first translation
+ 
+INCOMPLETE
+Red
+ 
+Milestone 2 - 
+ 
+INCOMPLETE
+Red
+ 
+Milestone 3 - Communication to billers on translations and approvals
+ 
+INCOMPLETE
+Red
+ 
+ Release Plan 
+Release Plan
+Releasing the Multi-lingual changes involves getting support from billers to accept the changes on their customizable text and their individual content. We will translate our IC content using manual translation and then we will use automation for translating the biller’s custom content. The biller will have to confirm the changes to their custom content before we switch their whole site to showing a new language option. 
+Communication needed: 
+email notifying billers of the upcoming change for multi-lingual and steps of what to do. 
+biller’s have X timeline for completing approval of new multi-lingual on their site. 
+When billers do approve the translations we will need a way to automatically and easily turn the changes on for their site individually. 
+ Business Logic
+Business Logic 
+Logic for the Tiers of options we can pursue. Green are the stages for new functionality. 
+Areas for Updates
+Tier 1
+Tier 2
+Tier 3
+IVR
+Not in MVP Scope
+Not in MVP Scope
+Not in MVP Scope
+Customer Portal
+ (static vs. Biller provided) static files. Consider ML for dynamic content
+Configuration in the Customer Portal for Spanish. 
+Configuration in the Customer Portal for language preference for email notifications.
+Virtual Site
+ One Time Payment
+Configuration on the one time payment route for Spanish. 
+SMS
+Not in MVP Scope
+Not in V2 Scope 
+Email Notifications
+Not in MVP Scope
+Payer can configure their language preferences in the customer portal. And emails are sent in that language.
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Project Participants
+Name
+Company
+Team
+Role
+Shelby Webster 
+InvoiceCloud
+Team SPAM
+Product Manager
+ Mark Lagunez 
+InvoiceCloud 
+Team SPAM 
+Technical Lead 
+ Nicole Furi
+ InvoiceCloud
+Design 
+ Design
+ Requirements
+Requirements, Use Cases 
+Other Language Areas: 
+Bill Presentment
+ - over 1K different integrations for bill presentment.
+Email Notifications 
+- 30 email queue processors, about 212 email templates. X many email template markers. 
+Error Messaging 
+-  21 found errors on the site: 
+https://docs.google.com/spreadsheets/d/1KHZhYJVGORppkTC8yDRfe9EOy53F1Kpcz_q17T_0zes/edit?usp=drive_web&ouid=113194160652397519322
+ 
+Error Messaging for Input Field Validation 
+- Date, CC, banking number, routing number, CVC, email address, text fields, number fields. 
+Requirement
+Importance
+Jira Link
+Notes
+As a biller I want to ensure and approve my custom text language change.  
+V1
+ 
+As a biller I want to make suggested changes to my custom text that IC changed to another language. 
+ V1
+ 
+As a payer I want to change my language preference on the payer site, virtual site easily on the header. 
+ V1
+ 
+As a payer I want to change my language preference in the customer portal on the header.
+V1
+As a payer I want my language preference changes made in the customer portal to be remembered in my email notification receipt. 
+V1
+As a payer I want my language preference changes made in the customer portal to be remembered in all my future email notifications. 
+V2
+Translation will need more effor since billers change write whatever they in emails. 
+As a payer I want to receive SMS messages in my preferred language set in the customer portal.
+V3
+As an IC developer I want to store translated custom text in files. 
+V1
+ Competitive Analysis
+Competitive Analysis
+Company
+Overview
+Multi-lingual Position
+Multi-lingual Offering
+Paymentus
+Paymentus is a provider of cloud-based bill payment technology and solutions. The company's Instant Payment Network (IPN) is a unified platform that delivers next-generation digital billing capabilities, accelerated payments and money movement, and simplified operations and customer experiences for billers, banks, fintechs, partners, and consumers.
+Not seeing it on City of Wilmington, City of Clovis, or Henrico County.
+Kubra
+Kubra as standard supports (5) languages across their web platforms including outbound communication. They will add additional languages if required. This is a formal language file and translation process.
+•English, Spanish, French, Chinese, Mandarin
+We see other portals using an options Google translate with a language selection supporting 10+ languages. IVR has traditionally been just English and Spanish, Kubra does support French for their Canadian customers.
+Natural language IVR technology – not multi-lingual, or they do offer bill presentment in different languages – assume they do this on their site too.
+Outbound would include SMS, email, IVR, Amazon Alexa, Facebook and paper.
+One inc.
+Founded with the single purpose of developing insurance-centric software. They have four key pillars for carriers: IT and security, finance and accounting, customer experience, and claims.
+SEW
+SEW focuses on English and Spanish. 
+ Dependencies
+Dependencies 
+Dependency
+Team/Product
+Notes
+ Dependent on finding a manual translation service for IC content. 
+ 
+Dependent on finding an automation process/ service for biller custom context. 
+ 
+ Assumptions
+Assumptions 
+List any assumptions you have about your users, technical constrains, business goals, etc.
+ 
+ Open Questions
+Open Questions
+Question
+Owner
+Answer
+Date Answered
+What is the thing that we need to know?
+@ tag
+ 
+Here is the answer to that question
+Type // to add a date
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Out of Scope
+Out of Scope
+Not introducing global Google Translations across our IC Payer Site as the payer can do this from their web browser.
+Allowing language selection on the virtual site, as we won’t have the user registered and their consent for selecting a certain language.
+For MVP we will not do translations for all emails.
+For MVP we will not do translations for Pay by Text. 
+Additional languages besides those preset by partner portal.
+Introducing additional languages to IVR.
+Bill presentment translation. We will not be supporting multiple bill presentment translations for MVP as this will require the biller to send us multiple versions of invoice PDFs. Instructions on the back of the bill on how to translate. Could we use AI for content generation and use this in PDF? Language selection for PDFs.
+Not focusing on multi-lingual needs for Consumer Finance vertical.
+ Communication Checklist
+Communication Checklist
+Communication Audience
+Notes/Action/ Things Needed 
+Date
+Task
+Project team members
+ 
+ 
+Early Access Billers
+ Need to identify early access biller list
+All Billers
+ 
+ 
+Partners
+ Need to identify any requirements here
+ 
+Internal \ Training
+ 
+ 
+Internal \ Support+CSM
+ Communication assets for CSM and Support 
+ 
+Internal \ Sales
+ Updated communication assets for CSM and Support 
+ 
+Internal \ Boarding
+ Strategy for offering multi-lingual and onboarding custom translated text
+ 
+Internal \ General
+ 
+ 
+ URL:/spaces/PRODUCT/pages/2677669889/Multi-lingual+on+the+Payer+Site

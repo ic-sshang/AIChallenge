@@ -1,0 +1,65 @@
+🔴 Critical Job Monitoring Table
+Job Name
+Criticality
+Run Frequency / Time
+Impact if Failed
+Immediate Action
+When to Spin an Incident
+Batch Close
+High
+Nightly (US) / Day (India)
+Downstream billing impact
+Manually close immediately
+If manual close fails or delay in resolution
+Funding (CASS/Braintree)
+High
+Daily (US Daytime)
+Billers not funded
+Attempt rerun or manual fix
+If job fails and cannot be resolved quickly
+Chase DFR Import
+Medium-High
+Daily (US Daytime)
+Data sync issues
+Retry if minor (e.g. FTP fail)
+If missing file or persistent failure
+Payer Reject Processing
+High
+Nightly (close to midnight)
+Payer notifications delayed
+Retry immediately
+If not resolved before midnight
+1st of Month Jobs
+High
+Monthly (1st of month)
+Finance billing blocked
+Ensure job runs regardless of day
+If delayed or failed on the 1st
+Auto Close (ACH/CC)
+Medium
+Hourly (Skybot)
+Transactions not closed
+Monitor for repeated failures
+If recurring failures or backlog builds
+Batch Close Notifications
+Medium
+Event-based (post-batch)
+Missed alerts, confusion
+Investigate email delivery
+If persistent or affects multiple batches
+Stale Email Queue
+High
+Continuous
+Billers unaware of batch status
+Clear queue or investigate
+If unresolved or queue grows
+Failed Payments / Vendor Issues
+High
+Event-based
+Payment failures
+Investigate immediately
+Always spin incident
+📎 Incident Management Reference
+If an incident needs to be created, follow the steps outlined in the 
+Incident Management Protocol
+ URL:/spaces/PE/pages/4448157785/On-Call+Incident+Response+Protocols+Critical+Job+Runbook

@@ -1,0 +1,490 @@
+1
+6
+false
+default
+list
+true
+Legend
+Expand to View Legend
+760
+Changes with Numbering indicate mandatory sequential steps
+Changes with bullet points indicate parallel steps
+ Done
+ Not Doing
+ Doing
+Change Teams
+Server Patching
+ 
+ 
+ 
+ 
+ 
+K8s Cluster Patching
+ 
+MCC DNS Changes
+ 
+Monitoring Team
+Proposal is to have a representative from each 
+App Dev Team
+ and the SRE Team to do a slack channel for monitoring of 
+any and all Alerts
+ from 8 AM to 10 AM Eastern Time and do a mandatory meeting for the Team at 10 AM to review what was seen and do a stamp of approval.
+USA
+SRE Team
+ 
+Payer Domain (Spam)
+ 
+Biller Domain (BMS)
+ 
+Payments (Wicked Tendies)
+ 
+Go Live (We’ll Do it Live)
+ 
+Egress Process (Data Dawgs)
+ 
+Ingress Processes (BIF)
+ 
+Ingress processes / Bill Presentment (BBQ)
+ 
+Platform Team
+ 
+India review team at the start of the India Monday
+Scrum Team Name
+Who is reviewing
+What are you reviewing
+ Payments Team
+ 
+ 
+Skybot jobs for batch closes
+ Tested
+Paypal 
+ Tested(but we do had 
+incident
+)
+cass 
+ Tested
+etc
+ Payer Teams
+ 
+Skybot jobs for EQP 
+ Tested
+Azure batch – AutoPay and EmailQueue 
+ Tested
+Customer Portal 
+ Tested
+ Integration
+ 
+ 
+ICFTPExportProcessor 
+ Tested
+Datapump 
+ Tested
+StratusFileProcessor 
+ Tested
+BillerFileSplit 
+ Tested
+ India Biller
+ 
+ 
+ KioskAPI 
+ Tested
+ICRemoteAuthenticationAPI 
+ Tested
+BillerPortal 
+ Tested
+Pre Work 
+Saturday Evening at 7 PM EST run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+Saturday Evening at 6 PM Eastern patching for IC-Web1 thru 5 
+ 
+Disable Alerts per these instructions 
+ 
+Patching Procedure Current
+ 
+Patching Procedure Current
+ 
+Go thru Patching Process 
+ 
+Enable the Alerts 
+ 
+ 
+Day of
+ Disable Alerts per these instructions
+Patching Procedure Current
+ 
+ 
+Patching Procedure Current
+ 
+ 
+Patching Procedure Current
+ 
+ 
+ 
+Put Pingdom in maintenance mode for MCC Biller Portal 
+ 
+ 
+ Sunday morning 4:30 AM Eastern (2 PM IST) ensure IC-Web1 thru 5 are healthy, put them back in the pool, and then start patching for IC-Web6 thru 10
+ 
+ Sunday Morning at 4:45 AM EST (2:15 PM IST) run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+ 
+ At 5 AM Eastern Time, post maintenance message.
+Today we will be Releasing Changes for 
+2025-07-20
+ per our 
+Weekly Change Window Guidelines
+.
+ 
+
+
+
+
+1
+
+
+7e2c1864-22fd-45a9-8c91-88a9c4a4c93f
+
+
+complete
+
+
+#platform-support
+
+
+
+
+
+
+2
+
+
+9df8a65e-92ef-4555-85b5-584c59eeb737
+
+
+complete
+
+
+#engineering-maintenance
+
+
+
+
+
+
+3
+
+
+b1ce45ab-9fb7-47a0-93ff-da93f59d9b93
+
+
+complete
+
+
+#eng-monthlymaintenance
+
+
+
+
+
+
+4
+
+
+cef61393-99f0-4e0f-a4c6-ca8677e79628
+
+
+complete
+
+
+#dailyopsissues
+
+
+
+
+Sunday Morning at 5:00 AM Eastern, all other changes not outlined in this section can begin.
+Changes
+ 
+InternalNetwork
+PLAT-2019
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+Scripts to Run: 
+delete-unused-internal-network-subnets.azcli - Repos
+ 
+ 
+Kong_Infrastructure
+PLAT-1773
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Medium
+Run: 
+Pipelines - Run kong-azure-apply-2.46.0
+ 
+Decommission resources related to ICProcessNotifier
+JEDI-172
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Medium
+Run this script
+ 
+ 
+Decommission resources related to ICMonitor app
+JEDI-173
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Medium
+Run this script
+ 
+ Upgrade of LoadBalancer IC-LB-WebSVR-4AppSVR from Basic to Standard 
+JEDI-195
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Medium
+ 
+Add Strict-Transport-Security http request header to the IC-Gateway web servers, talk about readiness of the IC-Web prod web servers
+https://invoicecloud.atlassian.net/browse/INFRA-1536 
+Risk: Medium
+ 
+ 
+ Web Servers
+PLAT-2456
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2354
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Risk: 
+Low
+ will do Saturday Night remove of 
+IC-Web1
+ thru 
+5
+ from Rotation and initiate Patching Process
+ 
+Sunday morning will ensure 
+IC-Web1
+ thru 
+5
+ are ready to be put back in the pool, put them back in the Pool, and then remove 
+IC-Web6
+ thru 
+10
+ from Rotation and initiate Patching Process 
+ 
+ 
+Gateway Servers
+PLAT-2461
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2360
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+ 
+Remove TLS 1.1 ciphers for Client and Server setting in registry on IC-Gateway servers and the IC-Web prod server after discussing with the team
+Ticket being created
+Risk: 
+Medium
+ 
+ 
+App Servers
+ 
+PLAT-2459
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2358
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2498
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+ 
+ 
+PLAT-2502
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+ 
+Proxy Servers
+Disable the Proxy Alerts prior to patching
+PLAT-2457
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Enable the Proxy Alerts after patching
+Risk: 
+Low
+ 
+ 
+SFTP Servers
+PLAT-2458
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2356
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+ 
+ 
+K8s Clusters Upgrades
+PLAT-2451
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+Pipeline to Run:
+ 
+Pipelines - Run AKS Upgrade Pipeline logs
+ 
+Biller_Infrastructure
+ 
+PLAT-2467
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ARC-11
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+JEDI-244
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INFRA-1559
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+Pipeline to Run: 
+Pipelines - Run apply-biller-infrastructure-0.26.0
+ 
+Payer_Infrastructure
+ARC-11
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Disables OTEL Log Collection. Updates OpenTelemetry Helm Chart Version + adds additional receiver & processor configurations for OpenTelemetry.
+Risk: 
+Low
+Pipeline to Run: 
+Pipelines - Run apply-payer-infrastructure-3.22.1
+ 
+Route www1.mcc.net through Cloudflare adding WAF capability to www1.mcc.net
+PLAT-2236
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2237
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Medium
+Manual Changes
+Test on: 
+https://www1.mcc.net/tvhactive/BillPayerLogin.aspx
+ 
+ 
+ 
+MCC Servers
+ 
+PLAT-2499
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Risk: 
+Low
+ 
+Testing
+Healthcheck Exercising
+Pipelines - Runs for healthcheck-automated-exercising
+ Do a baseline run on Friday
+ Run after all the changes on Sunday
+prod - Repos
+ Do a baseline run on Friday
+Run after all the changes on Sunday
+Exercising of Proxy Healthchecks which are on the Servers will be done as part of putting the Servers back in rotation
+Regression Testing
+ 
+ 
+ Saturday evening between 9:30 to 10 PM Eastern time run the Smoke TESTs on 
+www.invoicecloud.com
+ after IC-Web1 thru 5 are patched and put back in the Pool.
+ will notify in #
+eng-monthlymaintenance 
+slack channel when IC-Web1 thru 5 are back in the Pool and ready for Smoke Tests to be run
+  Sunday around 8 AM Eastern run the Smoke Tests on 
+www.invoicecloud.com
+ after all changes are done.
+ will notify in #
+eng-monthlymaintenance 
+slack channel when all canges are complete
+ Sunday after Smoke tests run full regression tests on 
+www.invoicecloud.com
+ after all changes are done and smoke tests are done.
+Post-Steps
+ Enable Alerts per these instructions
+Patching Procedure Current
+ 
+Patching Procedure Current
+ 
+Patching Procedure Current
+ 
+ 
+ Run 
+Finishing Maintenance
+ Stage of 
+Monthly-Maintenance
+ pipeline
+ Start the Jobs for Product Integrations - 
+Refer to Post-maintenance steps related to Jobs here
+ to notify 
+ when this can be run
+Start the Jobs for Product Engineering - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ Notify 
+dailyops
+ and 
+engineering-maintenance
+ and 
+eng-monthlymaintenance
+ slack channels of maintenance finished
+ 
+ URL:/spaces/platform/pages/4346216466/2025-07-20+Monthly

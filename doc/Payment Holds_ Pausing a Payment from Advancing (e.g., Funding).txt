@@ -1,0 +1,280 @@
+TL;DR
+We’re adding a table—
+PaymentHolds
+—that lets us 
+pause
+ a payment so it doesn’t move to its next state (for example, 
+exclude from Funding
+ when it’s “Captured”). A payment is considered 
+held
+ if it has an 
+active hold
+ row. Holds can be created by a 
+Cloud Process
+ or a 
+Cloud Employee
+ and later 
+released
+ 
+(or automatically 
+expire
+)
+.
+Why are we doing this?
+Operational control:
+ Temporarily pause a payment while investigating issues or waiting for approvals.
+Safety:
+ Prevent unintended advancement (e.g., Captured → Funded) during reviews.
+Auditability:
+ Capture who held/released a payment and why.
+Flexibility:
+ Today, we can’t hold “anything from advancing”; With this approach, we can now hold payments from 
+transitions
+ (e.g., Authorized → Captured, Captured → Funded).
+How it works (conceptual)
+Place a hold
+ → insert one row in 
+PaymentHolds
+ for the 
+PaymentID
+.
+Active hold
+ = the row has 
+no UTC release timestamp
+ and (if an expiry is set) the 
+expiry is in the future
+:
+UTCReleaseDate IS NULL
+AND (UTCExpirationDate IS NULL OR UTCExpirationDate > GETUTCDATE())
+
+Jobs (like Funding)
+ add a simple 
+“skip held”
+ rule: don’t pick up any payment that currently has an active hold.
+Release or 
+expire
+ 
+→ the hold becomes inactive and the payment flows normally again.
+Common scenarios
+Captured but don’t fund yet:
+ Ops sets a hold; Funding job skips it. Once released, the next Funding run picks it up.
+Block a specific transition:
+ Optionally populate 
+TransitionFromStatusID
+ → 
+TransitionToStatusID
+ (using our existing 
+tblPaymentStatus
+) to block a particular move (e.g., Authorized → Captured).
+Data model (DBML)
+Sample Schema (WIP) 
+wide
+760
+Table Payments {
+  PaymentID int [pk, increment, note: 'IDENTITY (1,1) NOT FOR REPLICATION']
+  Amount money
+  InvoiceNumber varchar(100) [not null]
+  DateRecAdded datetime [not null]
+}
+
+Table tblPaymentStatus {
+  PaymentStatusID int [pk]
+  PaymentStatusDesc varchar(50) [not null]
+  DateRecAdded datetime [not null]
+}
+
+Table tblChangeRequestor {
+  ChangeRequestorID int [pk, increment, note: 'IDENTITY (1,1) NOT FOR REPLICATION']
+  ChangeRequestorDesc varchar(25) [not null, default: '']
+  Note: 'Used here: 3=Cloud_Employee, 4=Cloud_Process'
+}
+
+Table tblEmployees { // optional, if present
+  EmployeeID int [pk]
+}
+
+Table PaymentHolds {
+  PaymentHoldID int [pk, increment, note: 'IDENTITY (1,1) NOT FOR REPLICATION']
+  PaymentID int [not null, ref: > Payments.PaymentID]
+
+  // Optional transition targeting (future)
+  TransitionFromStatusID int [ref: > tblPaymentStatus.PaymentStatusID]
+  TransitionToStatusID   int [ref: > tblPaymentStatus.PaymentStatusID]
+
+  ReasonText nvarchar(4000) [not null, default: '']
+
+  // Created by (3/4 only); EmployeeID required when 3
+  CreatedByChangeRequestorID int [not null, default: 4, ref: > tblChangeRequestor.ChangeRequestorID, note: '3=Cloud_Employee, 4=Cloud_Process']
+  CreatedByEmployeeID int [ref: > tblEmployees.EmployeeID]
+
+  DateRecAdded datetime [not null, note: 'DEFAULT ([dbo].[CST_GetDate]())']
+  UTCDateRecAdded datetime [not null, note: 'DEFAULT (GETUTCDATE())']
+
+  // Optional expiration (auto-lapse if set)
+  ExpirationDate datetime
+  UTCExpirationDate datetime
+
+  // Release lifecycle (NULL UTC = still active)
+  ReleaseDate datetime
+  UTCReleaseDate datetime
+  ReleasedByChangeRequestorID int [not null, default: 4, ref: > tblChangeRequestor.ChangeRequestorID, note: '3=Cloud_Employee, 4=Cloud_Process']
+  ReleasedByEmployeeID int [ref: > tblEmployees.EmployeeID]
+  ReleaseReason nvarchar(4000) [not null, default: '']
+
+  CorrelationID varchar(200) [not null, default: '']
+
+  Note: 'Active hold = UTCReleaseDate IS NULL AND (UTCExpirationDate IS NULL OR UTCExpirationDate > GETUTCDATE()). Created/Released: if CR=3 then EmployeeID required; if CR=4 then EmployeeID must be NULL.'
+
+  indexes {
+    (PaymentID) [name: 'ix_PH_Active_ByPayment', note: 'Filtered in SQL: UTCReleaseDate IS NULL AND (UTCExpirationDate IS NULL OR UTCExpirationDate > GETUTCDATE())']
+    (PaymentID, TransitionFromStatusID, TransitionToStatusID) [unique, name: 'uq_PH_Active_ByTransition', note: 'Filtered unique in SQL: Transition IDs NOT NULL AND (UTCReleaseDate IS NULL AND (UTCExpirationDate IS NULL OR UTCExpirationDate > GETUTCDATE()))']
+  }
+}
+
+Column overview (what each field is for)
+PaymentHolds
+ (core)
+PaymentHoldID
+ – Unique row ID for the hold (audit/history).
+PaymentID
+ – The payment being held (FK to 
+Payments
+).
+TransitionFromStatusID / TransitionToStatusID
+ 
+(optional)
+ – If set, this hold applies specifically to a transition between two statuses in 
+tblPaymentStatus
+ (e.g., Captured → Funded). Leave 
+NULL
+ for a generic “don’t advance” hold.
+ReasonText
+ – Explanation for hold 
+(why it’s held)
+.
+CreatedByChangeRequestorID
+ 
+– Who created the hold, via our existing 
+tblChangeRequestor
+:
+3 = Cloud_Employee
+ → must also set 
+CreatedByEmployeeID
+.
+4 = Cloud_Process
+ → 
+CreatedByEmployeeID must be NULL
+.
+CreatedByEmployeeID
+ – Employee who created the hold (only for CR=3).
+DateRecAdded / UTCDateRecAdded
+ – When the hold was created (local + UTC).
+ExpirationDate / UTCExpirationDate
+ 
+(optional)
+ – Auto-end the hold at this time.
+ReleaseDate / UTCReleaseDate
+ – When the hold was explicitly released. 
+If 
+UTCReleaseDate
+ is 
+NULL
+, the hold is active.
+ReleasedByChangeRequestorID / ReleasedByEmployeeID / ReleaseReason
+ – Who released it and why (same CR rules as creation).
+CorrelationID
+ 
+(optional)
+ – 
+Ticket/incident/trace id for cross-system investigations.
+tblChangeRequestor
+ (existing)
+Used to classify the 
+actor
+ (Cloud Employee vs Cloud Process). For PaymentHolds we only allow 
+3 or 4
+.
+tblPaymentStatus
+ (existing)
+Canonical status list. We reference this for transition-specific holds (e.g., 
+Captured → Funded
+).
+What changes in Funding (and similar jobs)?
+Just 
+exclude payments with an active hold
+. Example pattern:
+wide
+760
+SELECT p.*
+FROM dbo.Payments p WITH (READPAST, ROWLOCK)
+WHERE /* existing funding filters, e.g. */ p.Approved = 1
+  AND NOT EXISTS (
+    SELECT 1
+    FROM dbo.PaymentHolds h
+    WHERE h.PaymentID = p.PaymentID
+      AND h.UTCReleaseDate IS NULL
+      AND (h.UTCExpirationDate IS NULL OR h.UTCExpirationDate > GETUTCDATE())
+  )
+ORDER BY p.PaymentID;
+
+Examples
+A) Hold a captured payment so it doesn’t fund (generic hold)
+Placed by process (Cloud_Process = 4):
+wide
+760
+INSERT dbo.PaymentHolds (
+  PaymentID, ReasonText,
+  CreatedByChangeRequestorID, CreatedByEmployeeID,
+  DateRecAdded, UTCDateRecAdded
+)
+VALUES (
+  @PaymentID, N'Automated validation pause',
+  4, NULL,
+  dbo.CST_GetDate(), GETUTCDATE()
+);
+
+Release (by employee, Cloud_Employee = 3):
+wide
+760
+UPDATE dbo.PaymentHolds
+SET ReleaseDate = dbo.CST_GetDate(),
+    UTCReleaseDate = GETUTCDATE(),
+    ReleasedByChangeRequestorID = 3,
+    ReleasedByEmployeeID = @EmployeeID,
+    ReleaseReason = N'Review complete'
+WHERE PaymentID = @PaymentID
+  AND UTCReleaseDate IS NULL;
+
+B) Transition hold: Captured → Funded (no hard-coded IDs)
+wide
+760
+DECLARE @CapturedID INT = (
+  SELECT TOP 1 PaymentStatusID
+  FROM dbo.tblPaymentStatus
+  WHERE PaymentStatusDesc = 'Captured'
+);
+
+DECLARE @FundedID INT = (
+  SELECT TOP 1 PaymentStatusID
+  FROM dbo.tblPaymentStatus
+  WHERE PaymentStatusDesc = 'Funded'
+);
+
+INSERT dbo.PaymentHolds (
+  PaymentID,
+  TransitionFromStatusID, TransitionToStatusID,
+  ReasonText,
+  CreatedByChangeRequestorID, CreatedByEmployeeID,
+  DateRecAdded, UTCDateRecAdded
+)
+VALUES (
+  @PaymentID,
+  @CapturedID, @FundedID,
+  N'Hold captured→funded until manual review',
+  3, @EmployeeID,
+  dbo.CST_GetDate(), GETUTCDATE()
+);
+
+(Jobs can continue to use the generic “active hold exists” check; you only need to look at transition IDs if you want transition-specific behavior.)
+Fig 1. DBML Schema Review
+ URL:/spaces/EA/pages/4653744151/Payment+Holds+Pausing+a+Payment+from+Advancing+e.g.+Funding

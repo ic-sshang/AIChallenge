@@ -1,0 +1,65 @@
+Item link(s): 
+WDIL-238
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ & 
+WDIL-214
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Requesting Biller: Safety (BID: 1591)
+Use Case:
+ Email address field limitation is 50 characters. Safety Insurance, who wants to potentially adopt this web service, has funky email addresses where agency names are appended to otherwise normal field values, thus often exceeding the current 50 characters value limitation. 
+Findings:
+I have identified and listed the Remote Authentication (
+ICRemoteAuthenticationAPI
+) endpoints below that’ll require updates to the email address validation to increase the character limit from 50 to 100.
+List of Remote Auth endpoints:
+Retrieve User Accounts 
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RetrieveUserAccounts
+Documentation link: 
+Retrieve User Accounts IC Docs
+Update Password
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/UpdateUserPassword
+Documentation link: 
+Update Password IC Docs
+Update Email Address
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/UpdateUserEmailAddress
+Documentation link: 
+Update Email Address IC Docs
+Remote Authentication
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RemoteAuthentication
+Documentation link: 
+Remote Authentication IC Docs
+Link Accounts
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/LinkAccounts
+Documentation link: 
+Link Accounts IC Docs
+Register Accounts
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RegisterAccountsForUser
+Documentation link: 
+Register Accounts IC Docs
+Add Users
+Different Endpoints: 
+Regular endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/customer/AddUsersToAccount
+Kong endpoints:
+Prod: 
+https://api.invoicecloud.com/biller/v2/customerusers
+Devtest: 
+https://api-dev.invoicecloud-beta.com/biller/v2/customerusers
+Documentation link: 
+Add Users IC Docs
+ 
+Unregister Accounts
+Endpoint: 
+https://www.invoicecloud.com/remoteauthenticationapi/customer/UnregisterAccounts
+Documentation link: 
+Unregister Accounts IC Docs
+ URL:/spaces/PE/pages/4583981188/WDIL-238+SSOConnect+-+Increase+Email+Address+Authentication+Parameter+Length+Limitation

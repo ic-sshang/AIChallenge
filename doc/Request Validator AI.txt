@@ -1,0 +1,86 @@
+Problem Statement
+Engineering teams often receive system issues and feature requests with insufficient context, making it difficult to assess and address them effectively.
+Objective
+This project aims to develop an AI-powered automation tool for Jira that collects detailed information directly from the issue reporter. By streamlining the issue reporting process, the tool aims to ensure that all necessary details are captured accurately and promptly, before engineering begins the investigation.
+Measurable Goals
+Reduce time to first response to under 1 minute.
+Why It's Being Built
+The tool is being developed to address a recurring challenge: 
+engineering teams receive Jira issues with insufficient or unclear information
+, which delays investigation and resolution. By automating the process of gathering detailed context from the reporter, the tool aims to:
+Reduce back-and-forth communication.
+Accelerate the triage process.
+Improve the quality of reported issues.
+How Does It Fix the Root Cause?
+It doesn’t fully fix the root cause
+, which is fundamentally a 
+human communication problem
+—incomplete, vague, or poorly structured issue reports. However, it 
+mitigates the impact
+ by:
+Prompting reporters with intelligent, context-specific questions.
+Reducing ambiguity before engineers begin their investigation.
+Creating a more structured and consistent intake process.
+How It Increases Engineering Productivity
+By improving the quality of incoming Jira tickets, the tool helps:
+Reduce time spent on clarification
+.
+Accelerate time to resolution
+.
+Enable better prioritization
+ with clearer problem statements.
+Additionally, in the future, the GPT can suggest:
+Possible root causes
+ based on issue metadata and historical patterns.
+Lines of investigation
+, such as affected components, recent changes, or similar past incidents
+Project Details
+EPIC
+: 
+SR-1346
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+REPO
+: 
+RequestValidatorAI
+Current Stage
+: BETA
+Project Team
+Project Sponsor: Rodrigo dos Santos
+Project Lead: Richard Ruiz
+Contributors: Christian Valdes, Jonathan Solis, Richard Ruiz, Sam Torres, Erik Guzman, Christopher Bazan Christopher Bazan
+Architecture Overview
+The solution is implemented as an 
+Azure Function
+, a serverless application triggered via HTTP. Here's how it works:
+Trigger
+: Jira automation calls the Azure Function by passing the issue ID.
+Data Retrieval
+: The function uses Atlassian APIs to gather context about the Jira issue.
+AI Integration
+: Sends the data to GPT (via AI Foundry) to generate intelligent, context-aware follow-up questions.
+Question Generation
+: GPT generates relevant follow-up questions to gather missing or unclear information from the reporter.
+This architecture is scalable, cost-efficient, and easily integrated into Jira workflows.
+Project Stages
+ALPHA
+: Develop and test core functionality in a controlled environment (MVP – “Do Something App”).
+BETA
+: Deploy the Azure Function, expand testing to a broader group, and refine based on feedback.
+RELEASE
+: Finalize the tool for broader use. Consider expanding functionality to support additional engineering teams.
+Example items:
+DS-9651
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-9654
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DS-9656
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ URL:/spaces/DS/pages/4186996797/Request+Validator+AI

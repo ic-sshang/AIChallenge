@@ -1,0 +1,134 @@
+This roadmap is designed to help stakeholders understand 
+what to expect in each phase (Alpha → Beta → GA)
+ of InvoiceCloud’s PayFac transformation. It highlights the 
+core capabilities
+ that impact billers and payers most: 
+onboarding, payments, funding, risk/compliance, and reporting
+.
+Alpha – Regulatory Baseline (1–3 Billers)
+Onboarding is entirely manual: Ops keys biller data into CRM and vendor portals. Chase Screening API exists but is only Ops-triggered; there are no automated vendor integrations at this stage.
+Onboarding & Compliance:
+ 
+Manual onboarding via CRM + vendor portals; 
+Ops triggers Chase Screening API and uploads evidence. 
+KYC/AML/OFAC checks are run manually in vendor portals. No vendor integrations yet
+Payments:
+ 
+Chase Commerce API integration
+ for core auth/capture/refund/void flows.
+Pilot billers live on Chase Commerce; 
+Non-Chase rails (PayPal via Hyperwallet, Mastercard RPPS/Fiserv) also settle into the Chase FBO -  providing billers with a single consolidated deposit experience.
+POS → TBD. 
+Amex Optblue
+MO# strategy
+ enforced from day one to track sub-merchant transactions.
+Funding:
+ 
+Funding Orchestrator (MVP)
+: nightly NACHA file generator with audit trail.
+Once-daily batch funding via NACHA from Chase Treasury 
+Daily Fee Debit enforced as baseline settlement model
+Support Gross only
+Good fund model to be introduced in Beta as an option. (T+2)
+Reconciliation handled through spreadsheets → similar process as today
+Discrepancy/exception report for reconciliation with uniqueID
+Ledger foundation
+ to support deposits, reconciliation, and future billing.
+Capture CIS payment delivery status and tie back to payment. Use for 
+display only
+ (funding criteria based on payments, not delivery).
+“Undownloaded/Unverified” + “Batch Deposit” reports for CIS exceptions
+Chargeback:
+Utilize existing reports for reporting
+Chargeback recovery would be automated based on the configured bank accounts
+Ability hold funds for rejects (TD)
+ACH rejects will be disabled on ap/sp based on codes.
+Hold specific failed transactions → Engineering to review this Alpha vs Beta
+Risk/Compliance:
+ 
+KYC/AML/OFAC/Underwriting checks are re-run manually in vendor portals. 
+Ops also conduct manual checks, and Kount will be used for fraud alerts, utilize existing tooling/process.
+Reporting:
+ 
+Minimal; Finance relies on Chase and existing IC reports+ manual tie-outs. 
+Biller-facing reports limited to reconciliation and will also re-use existing ones
+{placeholder for Chase Integration Guide report guides}
+Stakeholder Expectation:
+Early adopters can process payments and get consolidated deposits. Onboarding is manual, reporting is basic, and operations are manual.
+Notes
+:
+PSN Feedback: Consider 1 PSN Biller part of Alpha to enhance learning.
+Timeline
+: Feb 2026 (Stretch) 
+Launch Timeline
+: Q1 2026
+Goal
+: Achieve regulatory baseline. Processor integration + Funding orchestration.
+Beta  – Operational Baseline (~20 Billers)
+Onboarding & Compliance:
+ 
+Biller Portal (Day-1 version):
+ biller onboarding form, SF integration, invoice visibility, basic reporting.
+CRM workflows; API-driven KYC/OFAC persisted in CRM/New Biller Portal; 
+Chase Screening surfaced via Ops dashboard.
+Payments:
+ 
+Expand Commerce processing for ~20 billers. Perform necessary system fine tuning. 
+Amex routing 
+TBD
+: OptBlue the preferred path, with some cohorts remaining on legacy aggregator until GA. 
+Ops/Finance dashboards
+ for payouts and exceptions.
+Funding:
+ 
+Automated nightly 
+Funding Orchestrator
+ with gates option (Approved, CIS confirmed, deposit delay met, sufficient FBO balance); Daily debit +
+ Monthly invoicing
+Gross only
+Block funding option
+ if 
+sent_to_cis_at
+ is missing. Ops dashboards for eligibility/exceptions.
+Risk/Compliance:
+ 
+KYC/OFAC failure queues managed in CRM; reserves schema logged for audit only (not enforced at Beta); exception handling workflows live in Ops/Compliance.
+Reporting:
+ Ops/Finance dashboards reconciling payouts to Chase confirmations, with CSV extracts for Finance continuity. IC becomes the primary reporting source for billers.
+Stakeholder Expectation:
+Smoother and faster onboarding, predictable daily deposits, and access to early exception dashboards. Operations are still maturing but usable at scale for ~20 billers.
+Timeline
+: July 2026 (Stretch) 
+Note: Iterative development and delivery
+Launch Timeline
+: Q3 2026
+Goal
+: Ops can run without chaos, first signs of scalability.
+GA  – Scale & Optimization (100+ Billers)
+Onboarding & Compliance:
+ Full self-service onboarding wizard; automated re-KYC schedules.
+Funding:
+ risk-tiered deposit delays;
+Risk/Disputes:
+ Advanced fraud/AML dashboards; automated chargeback workflows with evidence retention.
+Reporting & Tax:
+ Real-time portal for billers (transaction lifecycle → settlement → funding); multi-rail ledger; automated 1099-K generation via vendor.
+Stakeholder Expectation:
+Scalable PayFac platform supporting 100+ billers. Faster payouts, expanded payment rails, full self-service onboarding, and transparent reporting/chargeback handling.
+Timeline
+: TBD -
+Goal
+: Scale, efficiency, compliance at volume.
+Key Decisions Impacting Roadmap
+Amex strategy
+ (OptBlue vs. direct aggregator).
+POS device migration
+ (Bluefin support vs. Chase POS).
+Timeline Summary
+Alpha:
+ Sep – Feb 2026→ Pilots live & reconciled.
+Beta:
+  July 2026 → Operational baseline for ~20 billers.
+GA:
+ TBD → Scaled platform with 100+ billers, advanced monitoring/dashboards, and other future states
+ URL:/spaces/EA/pages/4617699412/InvoiceCloud+PayFac+Roadmap+Stakeholder+View

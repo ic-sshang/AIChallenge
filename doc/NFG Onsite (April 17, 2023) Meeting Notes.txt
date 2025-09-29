@@ -1,0 +1,144 @@
+ Date
+ Participants
+List meeting participants using their @ mention names
+InvoiceCloud
+ 
+ onsite; Minn Rodriguez on Zoom
+NFG
+In person: Nate Barnes (to start), David Szabad, Ken Martin, Andrea Vasbinder, Jordan Good, Amanda Wanke, Ralph Krafft, Carlos Mercado
+Remote: Ashleigh Kinney, Jonathan Kidder, Jason Hicks, Kris Weitzel
+ Goals
+List goals for this meeting (e.g., Set design priorities for FY19)
+Introductions
+Review of high-level roadmap, capturing NFG feedback
+Feedback for future IC initiatives – Who should be involved with our Product team?
+What else is on NFG’s priority list? IVR for main phone number?
+Review open product item list (both IC and NFG) and agree on items & priorities
+Discuss cadence & audience for future roadmap reviews
+InvoiceCloud Site Reliability Engineering: Strategy & Observability
+Action Items & Next Steps
+🔝 Summary
+Positive meeting with no additional concerns raised on NFG’s end. We are moving in the right direction. 
+We will have another roadmap review in July but then not until 2024 as they feel more confident in our plans now. 
+There are only 3 roadmap items that we need to work on
+. Two of them (tighter batch sync and roles & permissions) are already on our roadmap this year and they are satisfied with the timeline. A third (EBPP-4233 / EBPP-11650) is the only other product issue they are looking for us to resolve, so we will discuss that in our weekly product triage process tomorrow.
+⚠️ Cautions
+They are interested in adding Portal capabilities – could be a risk if they use a competitive vendor or one that doesn’t want to partner. We have an opportunity to potentially align this with our customer self service initiative and expand the relationship. 
+When we go down they need to know we are down – Dave’s boss (CIO) keeps asking him to hold our feet to the fire on self-inflicted problems. This is the main rough edge in our relationship.
+They will want to see someone on our leadership team out in Buffalo in the next 6 months – was a side comment of how it’d be great for someone to come the next time we look at roadmap since their leadership (specifically 
+Marty Krebs, CIO
+) wants to be involved – Marty had a conflict and couldn’t join this time. Not sure if this is  or . We can discuss.
+Disconnect between staff on Nate and Dave’s teams and leadership – Andrea and Jordan can’t be our sole points of contact. Keep Nate and Dave in the loop as much as possible, CC them on things. This was not specifically stated by them but both Ray and I picked up a few hints there and we’ve seen this before with NFG.  
+ Discussion topics
+Item
+Notes
+File Dashboard
+There is a lot of interest in the file dashboard, specifically on Dave’s team, as a way to make sure they know what files are coming in and whether they were successfully processed. 
+Broadly the “Phoenix” team is the primary consumer (this is Jordan’s team with Billing)
+There is a desire to get alerts through ServiceNow – Ray to discuss in the next SRE meeting how that might be possible
+They want to get an emailed copy of the file dashboard on a daily basis so they don’t have to go in and look (PMs: we should be aware of this need and talk to them more about their real need here)
+Roles & Permissions
+clearly important to them
+We’ve interviewed Andrea but need to move beyond her – Jordan can broach the conversation with the right team (Dan Yeagar?) – need to talk to the team that actually provisions users and cares about the controls. It’s not Andrea. Ryan – we need to get Nicole and John back on this.
+Also a desire to get to audit logs as well as extending timeframe that we make for instance email history available on the portal. Potentially an upsell opportunity?
+Are OK with a timeline of Q3 to start seeing things delivered. Would expect that an MVP is just adding “Role” without adding other permissions that they’ve discussed before, which was interesting feedback.
+Portal
+They want “portal capabilities” and have been interested in this for some time. Doesn’t seem like they have a strong requirement doc defined. 
+They raised this on their own when they saw “Customer Self Service” on a slide. Would definitely be open to working with us on it. We need to know what capabilities they need and whether it’s aligned with our strategy around portal (or at least what we’d been looking at delivering this year). 
+Jordan can facilitate the conversation (I’ll loop Shelby and Bill in here) 
+Point of Sale
+They are interested in a handheld POS device (think PAX A920 Pro for us) that works independently, including over cell, for their teams in the field to take payments (restart terminated service when unlocking a meter onsite). Nate was very interested and excited about the possibility – concerned about how it would work for security side.
+Bill, at some point we should reach out to Nate on this to do discovery. He knows we have POS that works with biller portal and CIS. They don’t really have a need in-person for the devices other than this, but Nate/team have been talking about this possibility for years.  
+Tighter Batch Sync
+We clearly need to solve this but they are OK with a “this year” timeframe. Transactions are on the wrong side of the line.
+They recognize Vicki has been doing this process basically for them at this point – they said something to the effect that we’ll be happy to get her back when it’s done! The manual process is working for them today but they want it fixed. John on their team does have to deal with it daily.
+OBD
+I teed up some of the OBD changes and mentioned that we use both RPPS and Fiserv to make sure we eliminate as many paper checks as possible. Touted the funding improvements and the auto-match capabilities. We’ll see if they bite on anything there, but doubtful. 
+Product Research
+If we have product research questions: hit up both Jordan (on Dave’s team) and Andrea and Ashleigh (on Nate’s team). Can always include Nate! Based on level of work they will bring in others.
+Issues
+“I want to know about an issue with your site before our customers do”
+Dave’s big issue that has a lot of scrutiny around the organization on it. 
+Dave’s boss (Marty): What are we doing to push IC to be more responsive to know when there’s a blip, latency, etc.  
+We need to keep a leadership relationship with the team – the folks working with Minn on a regular basis are a bit more junior. David’s boss was interested in attending (and Dave recommended that someone else in our leadership team make a trip out later this year) as this has executive-level visibility at NFG. In fact it’s clear Dave’s boss is holding his feet to the fire to make sure they know if our system has issues before NFG’s customers tell them. 
+Payers that can’t pay with check hitting risk parameters due to max cap issue (can only pay 3x in a row with CC) – they have a newly opened ticket for this and we need to follow it out. That’s a new thing 
+ Action items
+Add action items to close the loop on open questions or discussion topics:
+
+
+
+
+117
+
+
+incomplete
+
+
+Roles & Permissions: We’ve interviewed Andrea but need to interview people on the IT/Security side to understand this better as they are the ones who provision users and care about them. Ryan: we need John (and Nicole) to follow up with them.
+
+
+
+
+
+
+118
+
+
+incomplete
+
+
+File Dashboard: Someone in Product (Sarah, Ryan, John, Nicole) to follow up on more detailed requests about File Dashboard project, specifically if we can set up a recurring email to display the output rather than logging in. This is mostly for scope beyond initial release. They had some other ideas that probably go into the long term bucket.
+
+
+
+
+
+
+119
+
+
+incomplete
+
+
+Portal: Bill/Shelby to set up a discussion with NFG about Portal requirements. Jordan will pull the appropriate stakeholders in.
+
+
+
+
+
+
+120
+
+
+incomplete
+
+
+POS: Bill to talk with Nate about their potential need. Low priority.
+
+
+
+
+
+
+121
+
+
+incomplete
+
+
+PMs coming onsite to watch NFG staff:  can work with Ashleigh on their team
+
+
+
+
+ Decisions
+5bdc289d-0aa4-48d4-8244-a5d3adb13603
+3ee2f103-cb16-4bc6-9c89-a5fdc7eaa2c8
+DECIDED
+InvoiceCloud will come back on site in July and review the roadmap; expectation is this moves to a meeting every 6 months afterwards (January 2024)
+DECIDED
+1524a3f5-a8ce-4bd5-b6f2-97f0ef41e68e
+We can close most other open roadmap items (see the deck)
+InvoiceCloud will come back on site in July and review the roadmap; expectation is this moves to a meeting every 6 months afterwards (January 2024)
+We can close most other open roadmap items (see the deck)
+ URL:/spaces/PRODUCT/pages/2680389678/NFG+Onsite+April+17+2023+Meeting+Notes

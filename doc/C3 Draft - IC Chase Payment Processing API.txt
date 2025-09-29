@@ -1,0 +1,269 @@
+OpenAPI Spec 
+openapi: 3.0.1
+info:
+  title: ICChase Health Monitoring API
+  description: A comprehensive API for health monitoring capabilities.
+  contact:
+    name: Invoice Cloud
+    email: support@invoicecloud.com
+  version: v1.0.0
+paths:
+  /health/version:
+    get:
+      tags:
+        - ICChasePaymentProcessingAPI.WebApi
+      responses:
+        '200':
+          description: OK
+  /health/builddate:
+    get:
+      tags:
+        - ICChasePaymentProcessingAPI.WebApi
+      responses:
+        '200':
+          description: OK
+  /health/uptime:
+    get:
+      tags:
+        - ICChasePaymentProcessingAPI.WebApi
+      responses:
+        '200':
+          description: OK
+  /api/v1/Refund:
+    post:
+      tags:
+        - Refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+  /api/v1/Sale:
+    post:
+      tags:
+        - Sale
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SaleRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SaleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SaleResponse'
+  /api/v1/Void:
+    post:
+      tags:
+        - Void
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VoidRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VoidRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/VoidResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/VoidResponse'
+components:
+  schemas:
+    AchInfo:
+      required:
+        - accountHolderName
+        - accountNumber
+        - accountType
+        - routingNumber
+      type: object
+      properties:
+        routingNumber:
+          minLength: 1
+          type: string
+        accountNumber:
+          minLength: 1
+          type: string
+        accountType:
+          minLength: 1
+          type: string
+        accountHolderName:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    CardInfo:
+      required:
+        - cardholderName
+        - cardNumber
+        - cvv
+        - expiryMonth
+        - expiryYear
+      type: object
+      properties:
+        cardNumber:
+          minLength: 1
+          type: string
+        expiryMonth:
+          minLength: 1
+          type: string
+        expiryYear:
+          minLength: 1
+          type: string
+        cvv:
+          minLength: 1
+          type: string
+        cardholderName:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    RefundRequest:
+      required:
+        - amount
+        - clientToken
+        - currency
+        - paymentReferenceId
+      type: object
+      properties:
+        paymentReferenceId:
+          minLength: 1
+          type: string
+        clientToken:
+          minLength: 1
+          type: string
+        amount:
+          minimum: 0.01
+          type: number
+          format: double
+        currency:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    RefundResponse:
+      type: object
+      properties:
+        paymentReferenceId:
+          type: string
+          nullable: true
+        amount:
+          type: number
+          format: double
+        status:
+          type: string
+          nullable: true
+        processedAt:
+          type: string
+          format: date-time
+        refundPaymentId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SaleRequest:
+      required:
+        - amount
+        - clientToken
+        - currency
+        - paymentReferenceId
+        - paymentType
+      type: object
+      properties:
+        clientToken:
+          minLength: 1
+          type: string
+        paymentReferenceId:
+          minLength: 1
+          type: string
+        amount:
+          minimum: 0.01
+          type: number
+          format: double
+        currency:
+          minLength: 1
+          type: string
+        paymentType:
+          minLength: 1
+          type: string
+        cardInfo:
+          $ref: '#/components/schemas/CardInfo'
+        achInfo:
+          $ref: '#/components/schemas/AchInfo'
+      additionalProperties: false
+    SaleResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        processedAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    VoidRequest:
+      required:
+        - clientToken
+        - paymentReferenceId
+      type: object
+      properties:
+        paymentReferenceId:
+          minLength: 1
+          type: string
+        clientToken:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    VoidResponse:
+      type: object
+      properties:
+        voidStatus:
+          type: string
+          nullable: true
+      additionalProperties: false
+
+ URL:/spaces/EA/pages/4526473223/C3+Draft+-+IC+Chase+Payment+Processing+API

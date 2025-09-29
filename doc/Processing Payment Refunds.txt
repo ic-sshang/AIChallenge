@@ -1,0 +1,51 @@
+Introduction
+This page will go over how to manually process payment refunds. This is performed by using a console application that was quickly created by the product team to resolve issues. This application is not a well-rounded program with validation so be careful and intentional when using it. It is advised to ask for supervision from Sean or Randy when processing the manual refunds once the environment is set up.
+Environment Setup
+This process must be performed from the Bastion production term servers.
+Cloning the Repo
+In Visual Studio, clone the CreditBackPayments repo from the Src_Miscellaneous project.
+This project contains the code for three main functions:
+Voiding Transactions
+Crediting Back Payments
+Reprocess Payment Transactions
+To process a refund, we will use the CreditBackShitTon function.
+Create a Branch
+Create a branch and name the branch in a similar format to the following:
+[Biller DBA]Refunds[Year]
+For example, if BillerID 1244 (Microf) needed to refund transactions in 2023, the branch name would be:
+microfRefunds2023
+Configuring the Function
+These are the variables that need to be updated and verified for the appropriate value before executing the program.
+Navigate to the CreditBackShitTon() function.
+DBClient, CTP, and Crypto service are already configured and do not need to be modified.
+Note: Line numbers may be inaccurate if there has been changes to the master branch.
+Variable Name
+Value Description
+Line Number
+bid
+Biller ID
+889
+sqlToCall
+SQL query that returns the payment records that will be credited
+892
+obj.TotalAmount
+The amount that will be credited. 
+The default value for this is the full payment amount.
+1687 (CC)
+1734 (ACH)
+Verify that the sqlToCall query returns the correct payment records. It is recommended that you create your query, get the payment IDs from the query, and create a select query based on the payment IDs.
+Note: 
+For Credit Card payments, make sure to uncomment the case.
+Executing the Program
+Execution of the program will be done in 
+debug mode
+.
+Before executing, there are recommended breakpoints to set as safety nets in case of any issues.
+Recommended Breakpoints:
+Set a breakpoint at the ‘data’ variable and view the data table to ensure the correct payment records were found using the query. You can also verify that the row count of the data table is the same as the rows from the query.
+Set a breakpoint at the for loop to process 1 payment first and make sure everything is executed as expected.
+Set a breakpoint at the call to process the credit, once there is a response, go to the database and verify the credit was processed for the correct amount.
+In the Main method of Module1, there will be 3 calls for the 3 functions that this project has.
+Make sure to comment out voidTransactions() and ReProcessPaymentIDTransactions()
+Once executing, if there is a large number of payments to process, be sure to not idle on the Bastion server since it will time you out and the refund execution will stop. In this case, it will be harder to identify which payments have not been refunded and create a new query to continue.
+ URL:/spaces/DS/pages/2667937807/Processing+Payment+Refunds

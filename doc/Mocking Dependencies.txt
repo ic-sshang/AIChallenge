@@ -1,0 +1,29 @@
+Use 
+Moq
+ to create mock objects for dependencies ( e.g., repositories, services ).  Isolate the code under test by mocking external interactions.
+Do not use infrastructure dependencies.  Unit tests should be testing business logic not infrastructure components.  A good rule of thumb is to think, would the test work if there was no network connectivity or if the file system was non-existent or read-only .
+Mock infrastructure components.  Infrastructure components should use interface segregation so that they can be easily mocked.
+c#
+[TestFixture]
+public class ProductServiceTests
+{
+  [Test]
+  public void FindById_ShouldReturnProduct()
+  {
+    // arrange
+    var productId = 42;
+    var mockProductRepository = new Mock<IProductRepository>();
+    mockProductRepository
+      .Setup( repo => repo.GetById(productId) )
+      .Returns( new Product { Id = productId, Name = "MyProduct", Price = 10.25m } );
+    var productService = new ProductService( mockProductRepository.Object );
+  
+    // act
+    var result = productService.FindById( productId );
+  
+    // assert
+    Assert.NotNull(result);
+    Assert.AreEqual( 42, result.Id );
+  }
+}
+ URL:/spaces/ED/pages/3517677570/Mocking+Dependencies

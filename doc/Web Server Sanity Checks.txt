@@ -1,0 +1,36 @@
+1
+6
+false
+default
+list
+true
+Generic Checks
+Generic Checks
+ 
+App Based Checks per Web Server
+Validate that the CRM is working on the server
+Navigate to 
+https://{server’s url}/crm
+ i.e. 
+https://ic-web1.invoicecloud.com/crm
+. 
+Make note of its previous value; you’ll need to reset it at the end
+Sign in with Okta
+Extended Checks - 
+you should run these if you’re worried that there’s an issue with the server and you’re trying to investigate. Don’t worry about running these if you’re just ensuring the server is ready to reintroduce to load balancing after patching
+Navigate to any biller. Click through a few screens and make sure that nothing fails to laod
+Validate that the payer portal is working on the server
+Make sure your test biller’s domain is set to the server under test in 
+Profile > Misc Settings > Domain
+Click the link with biller’s name as display text (just under search bar)
+Go through the payment flow. This is easiest with cloud store items, i.e. birth certificates on the QA shards. Use the card number 
+411111111111111
+Ensure payment processes successfully
+Revert test biller’s domain to whatever it was before
+Healthchecks Per Web Server
+Use the URLs found in this file, 
+web1-invoicecloud-com.ps1 - Repos
+, change the 
+1
+ in the URL to whatever number of Server you are sanity checking.
+ URL:/spaces/platform/pages/4275208388/Web+Server+Sanity+Checks

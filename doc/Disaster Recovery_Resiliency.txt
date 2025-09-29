@@ -1,0 +1,13 @@
+Current Plan: 
+IC Disaster Recovery v5 (1).docx
+Gaps
+Everything is currently setup with Azure Site Recovery going to West 2, but not sure which VNet that will be recovered to and that VNet is not Peered to the existing Secondary Hub (which is in West).  Note the Palo Alto Firewall in the Secondary Region rules are not setup.  
+No Load Balancers are in the West.
+No App Gateway in the West.
+No Kong instances in the West.
+No AVDs in the West.
+No ADDS in the West.
+However, with the introduction of new Web Servers and Proxy Servers using IaC we have the opportunity to move to an Active/Active stance or a Hot/Cool stance by keeping Infrastructure up in the West and deploying the Web Applications and Proxy Applications to the West along with when we deploy the to the East to allow for a quicker recovery or a natural regional traffic balanced resiliency.
+References
+https://dash.cloudflare.com/1d86145203dc6595bd61b27711f2ddb3/invoicecloud.com/traffic/load-balancing
+ URL:/spaces/platform/pages/4156948481/Disaster+Recovery+Resiliency

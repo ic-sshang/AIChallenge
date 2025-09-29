@@ -1,0 +1,102 @@
+Data Pump First Phase - Middleware Adapter
+This design supports existing applications that publish work items directly to the Biller Shard databases, requiring 
+no changes
+ to those source systems. The existing database work items will serve as the input for the data pump, which transforms them into Azure Service Bus topic messages for downstream processing.
+Additionally, the data pump processing components are being modernized to:
+Use 
+C# and .NET 8+
+Be 
+containerized
+ and hosted on 
+AKS (Azure Kubernetes Service)
+Include 
+two configurable dynamic scaling points
+ to optimize performance and resource utilization
+Introduce event driven implementations
+To prevent duplicate processing of work items, this design introduces the concept of a 
+control record
+. The control record ensures that messages are only created when a work item has not already been processed, effectively eliminating the risk of generating redundant messages.
+The existing Data Pump system will continue to run alongside the new implementation. A 
+feature toggle
+ will be used to identify which Billers are configured to use the new Data Pump system, allowing for a controlled and gradual rollout without impacting existing functionality.
+2
+1
+0
+0
+4622582198
+4623630476
+1
+Untitled Diagram-1756843552296.drawio
+10
+10
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1756843552296.drawio
+0
+2231
+560.5
+Data Pump Biller Publisher Job
+Trigger: Long Running Service
+The data pump biller publisher will:
+Process on interval
+Query for biller ids with the new data pump feature enabled
+Query each enabled biller shard for a data pump record count for records that do not have a control record or a control record status indicating “New”
+Publish a message (per biller) to the “Data Pump Data Created” topic
+Data Pump Biller Consumer Job
+Trigger: “Data Pump Data Created” Topic Subscription
+The data pump biller consumer will:
+Dequeue a biller “Data Pump Data Created” topic subscription queue message
+Atomically 
+Query data pump records that do not have a control record or a control record status indicating “New”
+Insert a new control record with status of “Fetched” 
+OR
+Update a existing control record status from “New” to “Fetched”
+Return records
+If no records meet the criteria exit
+For each data pump record
+Publish a message (per item) to the 
+item 
+type topic “Data Pump 
+Item 
+Created”
+Data Pump Payment Created
+Data Pump Paperless Registration Created
+Update existing control record status from “Fetched” to “Queued”
+Data Pump 
+Item 
+Consumer Job
+Item is a placeholder term.  Use the item type; Payment, Paperless, etc…
+Trigger: “Data Pump 
+Item 
+Created” Topic Subscription
+The Data Pump 
+Item 
+Consumer will:
+Dequeue a item’s “Data Pump 
+Item 
+Created” topic subscription queue message
+Atomically
+Query the biller shard using PK for the data pump record that with a control record status indicating “Queued”
+Update the control record status from “Queued” to “Processing”
+Return record
+If no record meets the criteria exit
+Query related records for processing enrichment
+Send the data to the external biller CIS APIs
+Update the control record status from “Processing” to “Processed”
+Data Pump Phase Next - Source Application Integration
+This design leverages the new data pump system.  However, to improve processing performance the source application will publish data pump items directly to the corresponding Azure Service Bus topic for each item type. This eliminates the need to poll the database for available work items (adapter middleware). Instead, the presence of a message on the topic serves as an indicator that work is ready to be processed.
+2
+1
+0
+0
+4623532782
+4623630476
+1
+Untitled Diagram-1756847296810.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1756847296810.drawio
+0
+1221
+341
+ URL:/spaces/EA/pages/4623630476/Data+Pump+V2+-+PRJ

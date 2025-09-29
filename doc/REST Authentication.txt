@@ -1,0 +1,9 @@
+HTTP requests to the Invoice Cloud REST API are protected using standard HTTP Basic Authentication. It is the simplest implementation technique for enforcing access controls to web resources because it doesn't require cookies, session identifiers, or login pages; rather, HTTP Basic authentication uses standard fields in the HTTP header, obviating the need for handshakes.
+Once an Application API Key has been generated, it must be converted to Base64 before it can be passed into the first parameter of the HTTP Basic Authentication object. Invoice Cloud does not require a password for the HTTP Basic Authentication object, so the second parameter can be set to an empty string.
+Base URL to REST API
+https://www.invoicecloud.com/api/v1/ 
+Postman Example: 
+Authorization - Select Basic Auth
+Username - Base64 encoded Application API Key
+Password - Empty
+ URL:/spaces/ED/pages/3457351691/REST+Authentication

@@ -1,0 +1,28 @@
+Let’s dive into some best practices for naming variables:
+Use Meaningful Names
+Choose descriptive names that convey the purpose of the variable.  Avoid single-letter or cryptic names.
+c#
+// Good
+int numberOfBillers;
+string billerName;
+
+// Bad
+int n;
+string bn;
+camelCase for Local Variables
+Local variables should use camelCase (start with a lowercase letter and capitalize subsequent words).
+c#
+// Good
+string firstName;
+DateTime dateOfBirth; 
+decimal totalAmount;
+
+// Bad
+string lname;
+string pOstAlCoDe;
+int invoiceitemcount;
+DateTime exp_date;
+Do not mix variable names with type information ( strName, intCount, etc… )
+Avoid abbreviations.
+Spell out words fully.  Clear names enhance code comprehension.
+ URL:/spaces/EA/pages/3376087120/Variable+Naming

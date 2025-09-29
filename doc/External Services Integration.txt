@@ -1,0 +1,63 @@
+Key concepts for external service integration testing:
+Ensuring Seamless Communication
+: These tests verify that your application can correctly communicate with external services, ensuring that data is accurately sent and received.
+Identifying Integration Issues
+: They help uncover bugs that may arise from the interaction between your application and external services, such as incorrect data formats or unexpected responses.
+NUnit Example
+This example tests the external service directly.
+c#
+[TestFixture]
+[Category("IntegrationTests")]
+public class ChaseReportingServiceIntegrationTests
+{
+    [Test]
+    public void GivenDateRange_ThenPaymentsCanBeRetrieved()
+    {
+        // Arrange
+        var settingsProvider = new ExampleSettingsProvider();
+        var chaseCredentialProvider = new ChaseCredentialProvider();
+        var chaseReportingService = new ChaseReportingService( 
+          settingsProvider,
+          chaseCredentialProvider
+        );
+        var startDate = DateTime.Now.AddDays(-2);
+        var endDate = DateTime.Now;
+        
+        // Act
+        var payments = chaseReportingService.GetPaymentsByDateRange(
+          startDate,
+          endDate
+        );
+        
+        // Assert
+        Assert.IsNotNull(payments);
+    }
+}
+You can take this testing further by creating tests that test business logic components that use the external service interface.
+c#
+[TestFixture]
+[Category("IntegrationTests")]
+public class ChaseReportingServiceIntegrationTests
+{
+    [Test]
+    public void GivenOldPayments_WhenVoidOldPaymentsCommandExecuted_ThenResultShouldBeZero()
+    {
+        // Arrange
+        var settingsProvider = new ExampleSettingsProvider();
+        var chaseCredentialProvider = new ChaseCredentialProvider();
+        var chaseReportingService = new ChaseReportingService( 
+          settingsProvider,
+          chaseCredentialProvider
+        );
+        var voidOldPaymentsCommand = new VoidOldPaymentsCommand(
+          chaseReportingService
+        );
+        
+        // Act
+        var result = voidOldPaymentsCommand.Execute();
+        
+        // Assert
+        Assert.IsEqual(0, result);
+    }
+}
+ URL:/spaces/ED/pages/3517644856/External+Services+Integration

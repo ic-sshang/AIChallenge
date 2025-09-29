@@ -1,0 +1,53 @@
+Updates to the Biller Experience 
+Create a new, centralized area in the Biller Portal for 
+User Management 
+and 
+Registration; or, 
+add new functionality to existing areas of the Biller Portal to better manage users and registration 
+User Management 
+Make user information visible in the Biller portal, not limited to but including: 
+User information
+User phone number 
+Date user registered 
+Login: Username or Email Address 
+Email Address 
+Courtesy Email Address 
+User Login Type: Account Owner, Co-owner, Guest, etc. 
+Payment method(s)
+Total # of Linked Accounts 
+Primary account or 1st registered account
+Display a date/time account link was created
+Customer Activity (logs, audit trail)
+Perform User Operations 
+Biller users and CSRs have specific actions available based on their role & permissions, not limited to but including: 
+Create a new user
+ 
+ 
+Ability to send a Registration link 
+Set the user login type (Owner, Account Oversight, etc.) 
+Transfer Account Ownership 
+ 
+Change a User Login Type 
+Edit User information 
+Edit User login email (NOT transferring to another human) 
+Remove and un-register user 
+Unlink account or accounts from a user 
+Add a label or tag to their user (landlord, tenant, property manager, etc.) 
+Ability to sort, parent-child relationship, way to manipulate the labels to get the information they need  
+Primary Account for that User (Linking Account scenarios) 
+Add a payment method 
+Remove a payment method 
+See payment methods belonging to a user (
+update existing ACH or CC tabs in Customer Profile
+) 
+Considerations 
+Biller user roles & permissions must apply to the new user operations
+Only certain Biller user roles should have ability to update login types, transfer accounts, etc.
+If there are side effects, the user should be warned in the UI and asked if they want to proceed. For example: 
+Unregistering this Account will unlink X accounts 
+Removing this payment method will require updating X AutoPay enrollments, etc. 
+An audit trail with history of Biller users performing actions with timestamp will be required to track who is performing what actions and on whom 
+For high-risk operations, provide ability to undo operations in the event a Biller user makes a mistake and wants to undo an action they took 
+Soft deletion in the DB 
+We must stop allowing Biller users to override an email address in the Biller Portal. The only use case this is relevant for is if a user mistypes their email address and needs to update it. Maybe an “edit” email operation in the Biller Portal? Instead of an open field like it is today.
+ URL:/spaces/EA/pages/4630020204/Biller+Portal+Customer+User+Management

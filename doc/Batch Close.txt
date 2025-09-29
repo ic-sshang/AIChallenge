@@ -1,0 +1,51 @@
+Batch Close With Negative Batch IDs
+To check if billers have negative batch ids, run a ‘Negative Batch Reset’ report. Go to CRM → Tools → Negative Batch Reset
+If the biller exists in the list, click on the reset arrow (highlighted below) and that should close the batch for the biller.
+**Note: If the biller is not listed in this report, next step will be to run the ‘BatchCloseListProcessor’ repository.
+SQL queries
+select * from BatchCloseMetrics -- look for processlog column to know the error 
+
+--Script for SelectTopNRows command from SSMS, check the DBMaster_GoldAzure shard
+select top (1000) [BatchCloseID]
+  ,[BillerID]
+  ,[TerminalID]
+  ,[ProcessedDate]
+  ,[DateRecAdded]
+from [dbo].[BatchCloseList]
+order by 1 desc
+Finding Logs in Azure for a Batch Close
+If you have any questions about this section please reach out to 
+ 
+In 
+dbmaster_goldazure 
+query the following:
+select top 10 * 
+from batchcloseaudit
+where billerid=XXXX
+order by 1 desc
+
+With this OperationID then navigate to 
+portal azure
+ and search for “ICBatchCloseProcessor”, click the one that mentions “Application Insights”.
+Go to the 
+Logs 
+tab and create a new query
+Then use the following query:
+traces
+|where operation_Id == 'e6a92d4e-51f1-4ac2-936f-c9e5c16f89be'
+
+--Find operationID using message contents
+traces|
+where message contains '@BillerID=1158'
+and message contains '@terminalid=4731'
+
+traces|
+where operation_Id == '8ea26ba4-a95a-4aee-86b8-d49b90f28071'
+
+traces|
+where message contains 'BillerID:XXXX'
+Select a date range consistent with the batch close and run the query. The result should looks something similar to the image below.
+Service Fee Batch Close
+If you cannot find the Settled Batch for service fee payments on either the SettledBatches or BatchCloseMetrics tables, this is because split service fee batches are settled on Shard1. 
+Navigate to Shard1 and query this DB’s SettledBatches table using the SettledBatchID on the service fee’s payment record to find the associated batch. 
+ URL:/spaces/DS/pages/2523070499/Batch+Close

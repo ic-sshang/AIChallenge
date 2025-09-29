@@ -1,0 +1,573 @@
+1
+6
+false
+default
+list
+true
+Overview
+The Identity and Access Management (IAM) strategy and architecture has historically been loosely defined and inconsistent amongst different types of Resources such as KeyVaults, SQL Servers, Skybot Management Portal, Azure Batch, Azure Functions etc…  Moving forward we would like to implement a more holistic and consistent IAM strategy.
+We will start with defining the requirements and then iterate to an Architecture that we will implement in 2025.
+Requirements
+Persona based role design.
+No User directly assigned Access to an Azure Resource, all Access must go thru Group based Permission/Access model.
+Tech Lead Group(s) to Manage and Consolidate ACL/RBAC activation and Membership.
+Minimize the number of AAD Groups (and other Identities) a User Identity is needed to be added to enabling appropriate access to all NonProd and Prod Resources on Day 1. 
+This includes access to:
+ADO
+SkyBot
+Azure Functions
+Azure Batch Accounts
+SQL Servers
+Azure Virtual Machines
+Azure Kubernetes Clusters
+It was decided that we will add 
+ado-
+ Groups to the applicable Persona Groups.
+No one should be in Admin Personas Groups Permanently unless on-call or during Release Window
+  Highly controversial
+  We are moving this direction with using PIM for all Admin Persona Group Memberships
+Groups for User Management will be separate from Groups for applying RBAC and ACLs to Azure Resources and other Systems.
+An AAD Group for a given Persona (examples: Biller Developers, Wicked Tendies Developers, SRE Application Dev Support)
+Persona Group
+Not scoped to Environment
+Users can be Members
+Will be Members of Access (RBAC) Groups that will model the access a Persona has for Each Environment
+No Direct RBAC or ACLs applied
+The Persona AAD Group will then be added as Members to the Access AAD Groups to enable Resource Access for the Personas contained in the Persona AAD Group.
+Access (RBAC) Group
+Scoped to an Environment
+Users cannot be direct Members, only Persona Groups should be Members
+Will provide access to a given Scope of Resources within an 
+Environment
+Will have RBAC and ACLs directly applied
+Organization Persona Groupings with Access Levels
+Organizational Role Groupings
+Platform 
+users-platform
+Engineer (Day 1 Baseline): 
+users-platform-engineers
+ 
+ado-org-contributors
+az-aisearchstorage-owner-dev
+az-aisearchstorage-owner-npd
+az-aisearchstorage-owner-sbx
+az-aisearchstorage-reader-iat
+az-aisearchstorage-reader-prd
+az-aisearchstorage-reader-qar
+az-aisearchstorage-reader-xat
+az-enterprise-devtest-contributors
+az-enterprise-devtest-virtual-machine-admin
+az-enterprise-prod-readers
+az-enterprise-prod-virtual-machine-user
+az-primary-subscription-readers
+az-primary-subscription-virtual-machine-user
+az-rg-devapps-website-contributor-dev
+az-sandbox-contributors
+az-sandbox-virtual-machine-admin
+IC-DevTest-App-Admins
+IC-DevTest-Web-Admin
+ic-iac-awx-admins-prd
+ 
+ic-iac-global-cloud-engineers-dev
+ic-iac-global-cloud-engineers-iat
+ic-iac-global-cloud-engineers-npd
+ic-iac-global-cloud-engineers-qar
+ic-iac-global-cloud-engineers-sbx
+ic-iac-global-readers-prd
+ic-iac-global-readers-xat
+IC-KeyVault-DevTest-Admin
+IC-KeyVault-DevTest-User 
+ICDB-Test-User 
+Admin (Added after evaluation period and needed for daily work): 
+users-platform-admins
+ 
+PIM into Group when access is needed
+AAD DC Administrators
+az-aisearchstorage-owner-iat
+az-aisearchstorage-owner-prd
+az-aisearchstorage-owner-qar
+az-aisearchstorage-owner-xat
+az-enterprise-devtest-owners
+az-enterprise-prod-owners
+az-enterprise-prod-virtual-machine-admin
+az-primary-subscription-owners
+az-primary-subscription-virtual-machine-admin
+az-rg-devapps-website-contributor-prd
+az-sandbox-owners
+ic-iac-global-cloud-engineers-prd
+ic-iac-global-cloud-engineers-xat
+IC-KeyVault-Prod-Admin
+IC-SonarQube-Admins
+ICDB-Prod-User
+Sustained Admin (Only for applications where PIM is not possible): 
+users-platform-admins-sustained-access
+ado-org-admins
+ado-org-approvers
+Azure Entra Tennent Group Admins (Added after evaluation period and needed for daily work): 
+entra-group-managers
+PIM into Group when access is needed
+Entra Roles
+Group Membership Administrator
+Groups Administrator
+Database 
+users-database-engineers
+Engineer (Day 1 Baseline): 
+users-database-engineers
+ado-org-contributors
+az-aisearchstorage-contributor-dev
+az-aisearchstorage-contributor-npd
+az-aisearchstorage-contributor-sbx
+az-aisearchstorage-reader-dev
+az-aisearchstorage-reader-iat
+az-aisearchstorage-reader-npd
+az-aisearchstorage-reader-qar
+az-aisearchstorage-reader-sbx
+az-aisearchstorage-reader-xat
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-primary-subscription-readers
+az-sandbox-readers
+ICDB-Test-User
+Admin (Added when needed after initial onboarding evaluation period): 
+users-database-admins
+PIM into Group when access is needed
+ICDB-Prod-User
+ICDBAdmin
+Sustained Admin (Only for applications where PIM is not possible): 
+users-database-admins-sustained-access
+ado-database_src-approvers
+Product Engineering (
+users-product-engineering
+) 
+Engineer (Day 1 Baseline): 
+users-product-engineering-engineers
+ado-org-contributors
+az-aisearchstorage-contributor-dev
+az-aisearchstorage-contributor-npd
+az-aisearchstorage-contributor-sbx
+az-aisearchstorage-reader-dev
+az-aisearchstorage-reader-iat
+az-aisearchstorage-reader-npd
+az-aisearchstorage-reader-qar
+az-aisearchstorage-reader-sbx
+az-aisearchstorage-reader-xat
+az-batch-contributors-dev
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-icbatchtest-contributors-dev
+az-icgateway-contributor-dev
+az-icgateway-reader-dev
+az-icpublicstorage-contributor-dev
+az-icpublicstorage-contributor-sbx
+az-icpublicstorage-reader-dev
+az-icpublicstorage-reader-iat
+az-icpublicstorage-reader-qar
+az-icpublicstorage-reader-sbx
+az-primary-subscription-readers
+az-rg-devapps-icg-website-contributor-dev
+az-rg-devapps-website-contributor-dev
+az-rg-east-devapps-contributors-sbx
+az-sandbox-readers
+az-servicebus-data-owner-dev
+az-servicebus-data-owner-sbx
+az-servicebus-receiver-iat
+az-servicebus-receiver-qar
+ic-iac-biller-team-admins-dev
+ic-iac-biller-team-admins-sbx
+ic-iac-biller-team-readers-iat
+ic-iac-biller-team-readers-qar
+ic-iac-payer-team-admins-dev
+ic-iac-payer-team-admins-sbx
+ic-iac-payer-team-readers-iat
+ic-iac-payer-team-readers-qar
+ic-iac-proxy-team-admins-dev
+ic-iac-proxy-team-admins-sbx
+ic-iac-proxy-team-readers-iat
+ic-iac-proxy-team-readers-qar
+ICDB-Test-User
+Admin (Added after evaluation period and needed for daily work): 
+users-product-engineering-admins
+ 
+PIM into Group when access is needed
+az-icgateway-contributor-prd
+az-icgateway-reader-prd
+az-rg-devapps-icg-website-contributor-prd
+az-rg-devapps-website-contributor-prd
+IC-DevTest-App-Admins
+IC-DevTest-Web-Admin
+ic-iac-biller-team-developers-xat
+ic-iac-biller-team-readers-prd
+ic-iac-payer-team-developers-xat
+ic-iac-payer-team-readers-prd
+ic-iac-proxy-team-readers-prd
+ic-iac-proxy-team-readers-xat
+ICDB-Prod-User
+Sustained Admin (Only for applications where PIM is not possible): 
+users-product-engineering-admins-sustained-access
+PIM into Group when access is needed
+ado-org-approvers
+Payer Product Engineering (
+users-payer-product-engineering
+)
+Engineer (Day 1 Baseline): 
+users-payer-product-engineering-engineers
+ 
+ado-org-contributors
+ado-platform-readers
+ic-iac-payer-team-admins-sbx
+ic-iac-payer-team-developers-dev
+ic-iac-payer-team-readers-iat
+ic-iac-payer-team-readers-qar
+Admin (Added after evaluation period and needed for daily work): 
+users-payer-product-engineering-admins
+ 
+PIM into Group when access is needed
+ic-iac-payer-team-developers-xat
+ic-iac-payer-team-readers-prd
+Sustained Admin (Only for applications where PIM is not possible): 
+users-payer-product-engineering-admins-sustained-access
+ 
+PIM into Group when access is needed
+ado-payer-approvers
+Integrations (
+users-integrations-engineering
+)
+Engineer (Day 1 Baseline): 
+users-integrations-engineering-engineers
+ 
+ado-org-contributors
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-icsqlaudit-contributor-dev
+az-primary-subscription-readers
+az-rg-devapps-website-contributor-dev
+az-sandbox-readers
+ic-iac-biller-team-developers-dev
+ic-iac-proxy-team-admins-dev
+ic-iac-proxy-team-admins-sbx
+ic-iac-proxy-team-readers-iat
+ic-iac-proxy-team-readers-qar
+IC-KeyVault-DevTest-User
+ICDB-Test-User
+Admin (Added after evaluation period and needed for daily work): 
+users-integrations-engineering-admins
+ 
+PIM into Group when access is needed
+ic-iac-proxy-team-readers-prd
+ic-iac-proxy-team-readers-xat
+ 
+ICDB-Prod-User
+Data Conversions (Added after evaluation period and needed for daily work): 
+users-integrations-engineering-data-conversions-engineers
+ 
+PIM into Group when access is needed
+az-icsecureuploadstorage-reader-prd
+Sustained Admin (Only for applications where PIM is not possible): 
+users-integrations-engineering-admins-sustained-access
+PIM into Group when access is needed
+ado-org-approvers
+Quality Engineering 
+users-quality-engineering
+Engineer (Day 1 Baseline): 
+users-quality-engineering-engineers
+ado-org-contributors
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-primary-subscription-readers
+az-rg-devapps-website-contributor-dev
+az-sandbox-readers
+ic-iac-biller-team-developers-dev
+ic-iac-biller-team-developers-iat
+ic-iac-biller-team-developers-qar
+ICQE-DBUser
+Admin (Added after evaluation period and needed for daily work): 
+users-quality-engineering-admins
+PIM into Group when access is needed
+ic-iac-biller-team-readers-prd
+ic-iac-biller-team-readers-xat
+Sustained Admin (Only for applications where PIM is not possible): 
+PIM into Group when access is needed
+ado-org-release-managers
+Site Reliability Engineering 
+users-sre
+Engineer (Day 1 Baseline): 
+users-sre-engineers
+ 
+ado-org-contributors
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-icblobstorage-reader-prd
+az-iclogstorage-reader-prd
+az-keyvault-admi-glb--fun-RequestValidatorAI-0-sbx
+az-primary-subscription-readers
+az-sandbox-contributors
+az-sandbox-readers
+IC-DevTest-App-Admins
+IC-DevTest-Web-Admin
+ic-iac-global-readers-dev
+ic-iac-global-readers-iat
+ic-iac-global-readers-npd
+ic-iac-global-readers-prd
+ic-iac-global-readers-qar
+ic-iac-global-readers-sbx
+ic-iac-global-readers-xat
+Admin (Added after evaluation period and needed for daily work): 
+users-sre-admins
+ 
+PIM into Group when access is needed
+az-enterprise-devtest-contributors
+az-enterprise-prod-contributors
+az-ic-sql-functions-website-contributor-prd
+az-primary-subscription-contributors
+az-sandbox-contributors
+ic-iac-global-cloud-engineers-dev
+ic-iac-global-cloud-engineers-iat
+ic-iac-global-cloud-engineers-npd
+ic-iac-global-cloud-engineers-prd
+ic-iac-global-cloud-engineers-qar
+ic-iac-global-cloud-engineers-sbxic-iac-global-cloud-engineers-xat
+SRE Sustained Admin (Only for applications where PIM is not possible): 
+users-sre-admins-sustained-access
+ 
+This Group gets added into NewRelic by Modern Desktop Team
+PIM into Group when access is needed
+ado-sre_src-admins
+Security  
+users-security-engineers
+Engineer (Day 1 Baseline): 
+users-security-engineers
+ 
+ado-org-contributors
+ado-org-readers
+az-sandbox-contributors
+IC-DevTest-App-Admins
+IC-DevTest-Web-Admin
+ic-iac-global-cloud-engineers-sbx
+Data Warehouse Engineering 
+users-data-warehouse
+Engineer (Day 1 Baseline): 
+users-data-warehouse-engineers
+ado-org-contributors
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-primary-subscription-readers
+az-sandbox-readers
+Data Warehouse Engineer
+ICDB-Test-User
+Admin (Added after evaluation period and needed for daily work): 
+users-data-warehouse-admins
+PIM into Group when access is needed
+Data Warehouse Admin
+Sustained Admin (Only for applications where PIM is not possible): 
+users-data-warehouse-admins-sustained-access
+ado-datawarehouse_src-approvers
+Architecture 
+users-product-engineering-architects
+Architect (Day 1 Baseline): 
+users-product-engineering-architects
+ 
+ado-org-contributors
+az-sandbox-readers
+az-enterprise-devtest-contributors
+az-enterprise-prod-readers
+az-primary-subscription-readers
+ICDB-Test-User
+IC-KeyVault-DevTest-User 
+IC-DevTest-App-Admins
+IC-QA-Server-Admin
+az-rg-devapps-icg-website-contributor-dev
+az-rg-devapps-website-contributor-dev
+az-rg-east-devapps-contributors-sbx
+az-icbatchtest-contributors-dev
+az-icgateway-reader-dev
+az-icgateway-contributor-dev
+az-batch-contributors-dev
+az-servicebus-data-owner-sbx
+az-servicebus-data-owner-dev
+az-servicebus-receiver-iat
+az-servicebus-receiver-qar
+ic-iac-azureaisearch-team-developers-sbx
+ic-iac-azureaisearch-team-developers-dev
+ic-iac-azureaisearch-team-developers-iat
+ic-iac-azureaisearch-team-developers-qar
+az-icpublicstorage-reader-sbx
+az-icpublicstorage-contributor-sbx
+az-icpublicstorage-reader-dev
+az-icpublicstorage-contributor-dev
+az-icpublicstorage-reader-iat
+az-icpublicstorage-reader-qar
+ic-iac-biller-team-admins-sbx
+ic-iac-biller-team-admins-dev
+ic-iac-biller-team-readers-iat
+ic-iac-biller-team-readers-qar
+ic-iac-payer-team-admins-sbx
+ic-iac-payer-team-admins-dev
+ic-iac-payer-team-readers-iat
+ic-iac-payer-team-readers-qar
+ic-iac-proxy-team-admins-sbx
+ic-iac-proxy-team-admins-dev
+ic-iac-proxy-team-readers-iat
+ic-iac-proxy-team-readers-qar
+Admin (Added after evaluation period and needed for daily work): 
+users-platform-admins
+ 
+PIM into Group when access is needed
+IC-DevTest-App-Admins
+IC-DevTest-Web-Admin
+ICDB-Prod-User
+az-rg-devapps-website-contributor-prd
+az-batch-contributors-prd
+az-rg-devapps-website-contributor-prd
+az-batch-contributors-prd
+az-rg-devapps-icg-website-contributor-prd
+ic-iac-biller-team-developers-xat
+ic-iac-biller-team-readers-prd
+ic-iac-azureaisearch-team-readers-xat
+ic-iac-azureaisearch-team-readers-prd
+ic-iac-payer-team-developers-xat
+ic-iac-payer-team-readers-prd
+ic-iac-proxy-team-readers-xat
+ic-iac-proxy-team-readers-prd
+az-icgateway-reader-prd
+az-icgateway-contributor-prd
+Sustained Admin (Only for applications where PIM is not possible): 
+users-platform-admins-sustained-access
+ado-org-approvers
+ado-architecture-admins
+Scrum Master 
+users-scrum-master
+ado-org-contributors
+az-sandbox-readers
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-primary-subscription-readers
+Standard Elevated Roles
+These people will also be in an additional set of Persona Group [Engineer, Admin] for the Organizational Role Group that they are in, i.e. Database, Platform, SRE, etc…
+Tech Lead 
+users-tech-lead
+PIM into Group when access is needed
+Baseline
+Manager 
+users-manager
+Engineer (Day 1 Baseline): 
+PIM into Group when access is needed
+Baseline
+Release Manager 
+users-release-manager
+Baseline 
+users-release-managers
+ado-org-readers
+az-enterprise-devtest-readers
+az-enterprise-prod-readers
+az-primary-subscription-readers
+az-sandbox-readers
+ic-iac-biller-team-readers-dev
+ic-iac-biller-team-readers-iat
+ic-iac-biller-team-readers-qar
+ic-iac-payer-team-readers-dev
+ic-iac-payer-team-readers-iat
+ic-iac-payer-team-readers-qar
+Elevated 
+users-release-manager-admins
+ado-org-release-managers
+ic-iac-biller-team-readers-prd
+ic-iac-biller-team-readers-xat
+ic-iac-biller-team-readers-prd
+ic-iac-biller-team-readers-xat
+Alternative
+The other alternative which would take some rework of current trajectory is to have Persona Groups and then bind the RBAC and ACLs needed directly to the Persona Groups.  Overall this would likely be a greater management and maintenance cost as each individual Persona Group would need its own RBAC and ACL modeling instead of inheriting from a set of available Parent Groups but would provide more insight into the exact RBAC of each Persona Group via the 
+Azure role assignment
+ blade on the Persona Group.
+Alternative declined
+Resources and External Apps to which Access is Needed
+Azure Control Plane and Data Planes
+Azure DevOps
+Done
+SkyBot
+CRM
+Done
+IC Dev Okta
+AlienVault
+ADDS
+Cloudflare
+NewRelic
+Done - 
+New Relic Roles.xlsx
+Jira
+Done - 
+Atlassian RBAC.xlsx
+SonarQube
+Snowflake
+Tableu
+Jellyfish
+BitWarden
+CodeScene
+LamdaTest
+GitHub
+Copilot
+Related Epic(s)
+PLAT-1651
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Legacy RBAC Groups
+ when were the 
+RBAC_*
+ EntraID Groups created and how much penetration do they have in this similar model?
+Manager Approval Guidelines
+Product Engineering
+Read or Write to 
+dev
+ Environment Resources, 
+No Manager Approval Necessary
+Read in 
+iat
+, 
+qar
+ 
+No Manager Approval
+Anything outside of  
+a
+ and 
+b
+ requires 
+Manager Approval
+Canned Response as we roll the new Persona Groups Out
+//TODO Tag Submitter
+ thanks for your patience as we included this request as an opportunity to integrate your access needs into our new IAM strategy at InvoiceCloud with the goal of minimizing the amount of access requests people need to make during their career at InvoiceCloud.  More info on this initiative can be found here: 
+IAM - Platform - Confluence
+You have been added to the following Entra ID Groups that we believe model the Access needs for your Teams normal day to day operations as well as the ability to be elevated into more privileged access when needed.
+Permanent: 
+//TODO add engineers group name
+PIM Eligible: 
+//TODO add admins group name
+How to Activate into the PIM Role: 
+Using PIM to Activate an Entra Group - Platform - Confluence
+Feel free to review this strategy with your manager and provide feedback.  We would like to get all of your Team Members into these Groups so please follow up with a Service Desk Ticket with the remaining members of your Team to get them into one or both (depending on their Role on your Team) of these new Access Model Persona Group.
+Thanks, and have a great day 
+ 
+Canned Email for when we rollout Persona Groups to Audiences
+Subject
+New IAM Groups for [Persona]
+Body
+Dear Users,
+We are refining our Identity Access Management (
+IAM
+) strategy at InvoiceCloud. We aim to simplify our processes and reduce the frequency of access requests, allowing our team members to concentrate more on their core responsibilities
+You have been added to the following Identity Groups that align with your team's day-to-day operations and provide the necessary access rights for your role:
+Permanent Group: 
+[Add -engineers Group Name]
+This Group should provide you all the access you need in lower Environments to do your daily development work.  There is also an elevated access Group you can request to be added to that will be PIM based that provides elevated access to the Production Zone that includes the Preview and Production Environments.
+Privileged Identity Management (PIM) Eligible Group: 
+[Add -admins Group Name if exists for Persona]
+To activate your PIM role, please follow the instructions in this guide: 
+Using PIM to Activate an Entra Group
+ 
+This strategy has been discussed and agreed upon with your manager. Please feel free to provide any feedback you might have.
+As part of this initiative, we aim to add all members of your team to these groups. If there are other members of your team who were missed, please submit an Infrastructure Service Desk Ticket with their details.
+Thank you for your cooperation.
+Best Regards,
+Platform Engineering Team
+References
+Role-based Access Control - Information Technology Services - Confluence
+ URL:/spaces/platform/pages/3897623053/IAM

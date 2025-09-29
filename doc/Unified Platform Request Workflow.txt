@@ -1,0 +1,129 @@
+2
+1
+0
+0
+3914072069
+3914006596
+1
+platform-request-workflow.drawio
+8
+8
+https://invoicecloud.atlassian.net/wiki
+platform-request-workflow.drawio
+0
+809
+601
+Statuses
+Status
+Purpose
+Submitted
+User completed questionnaire and created request. We haven’t looked at it yet.
+Review
+We’re looking at the request. We ask the customer for any missing details.
+This is when we set the request type to either change, access, or debug.
+For changes, we come up with implementation and backout plans. For access, we ensure the scope of access is clearly defined.
+We should also set priority during review.
+Any debug requests submitted should be considered high priority unless manually determined otherwise (just set manually).
+Authorize
+This is where we get the boss’s thumbs up! Well, the boss meaning the INFRA approvers group (Jesse, Jai, Michael, Scott).
+May ask for manager’s approval (manually - no need to add to workflow) for things like elevated access requests. 
+Debug requests get to skip this.
+Pending
+We’ve gathered all the details, come up with our plan, and are ready to take action! The item stays in this status until we’ve got some free time to actually begin work on it.
+In Progress
+We’re doing the work!
+Deployment Queue
+We’ve done all the work we can without being in a change window.
+To get here, fix version must be set.
+Waiting on Customer
+We need more details or clarification.
+Done
+We’ve either canceled or completed the request.
+Blocked
+We still want to work on the request, but some dependency needs to be done first.
+To get here, the request must have an item linked as 
+blocked by
+.
+Questionnaire
+This will be completed during submission. Answers will not be used to set any fields or determine any workflows apart from the summary (hopefully we will do this in the future, though).
+This is a first cut intended to help us change our current workflow quickly without spending too much time debating or locking ourselves into any particular pattern.
+Summarize the request in 10 words or fewer 
+(free text)
+This will become the issue summary (title)
+Which service is this request regarding? 
+(multiple choice - select one)
+AVD
+Skybot
+Azure DevOps
+Pipelines
+Repositories
+Other
+Kubernetes (AKS)
+Networking:
+Application Gateway
+Palo Alto
+Cloudflare WAF
+GoDaddy (DNS)
+Other
+Virtual Machines:
+Web
+Skybot (app)
+Proxy
+Gateway
+Other
+Azure Functions
+Azure Batch
+Cloudflare WARP
+New Relic
+Redis
+Other (
+note - database and crm are not managed by us!
+)
+Which environment is this request regarding? 
+(multiple choice - select as many as apply)
+production (prd)
+preview (xat)
+regression (qar)
+UAT (iat)
+devtest (dev)
+nonprod (npd)
+Other / Not Applicable
+Provide more details about your request 
+(rich text)
+If you're requesting access to something, why do you need it? What is it that you need to do?
+If you're experiencing an issue, please attach logs, screenshots, and links to relevant resources
+If you're requesting a change of some kind, please provide specific details around what you'd like to see changed, the purpose of the change, etc.
+The more details you provide here, the more quickly and easily we'll be able to fulfill your request.
+    Thanks!
+SLA’s
+We will review all submitted requests within 48 hours (total – including off hours)
+on-call Platform engineer is responsible for guaranteeing this SLA unless handling an active incident
+Submitter will reply to questions / clarification requests within 72 hours or we may cancel the request
+Manager Approvals
+As you can see in our workflow, any change or access request requires Platform approval. For some items, we will also want to require approval from the requester’s manager. 
+Note that 
+every access request must include an explanation of why the user needs this access
+ even if no manager approval is required.
+If they make requests on behalf of their team, we can assume they approve.
+Type 
+Environment
+Manager Approval Required?
+Read access to anything
+Production (including XAT)
+Yes
+Write access to anything
+Production (including XAT)
+Yes
+Read access to anything
+Nonproduction
+No
+Write access to anything
+Nonproduction
+Yes
+Source code contributor access
+(excluding Crypto project)
+No
+Source code access at any level 
+Crypto project
+Yes
+ URL:/spaces/platform/pages/3914006596/Unified+Platform+Request+Workflow

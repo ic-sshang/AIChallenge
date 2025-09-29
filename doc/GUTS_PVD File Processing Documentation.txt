@@ -1,0 +1,119 @@
+This document provides detailed instructions and procedures for the integration of GUTS with Invoice Cloud, focusing on handling invoice processing.
+Overview
+The integration between GUTS and Invoice Cloud involves specific steps in the billing cycle, the handling of preliminary invoices, and scheduled payment updates. This process is particularly crucial for Marion County, given its variations from other counties.
+GUTS Roll-Over Process
+When:
+ Every new cycle starts in December. The GUTS roll-over occurs annually on the Biller's side. Next load occurs around March/April and then again around September/October.
+Trigger:
+ The biller will notify CS when they are ready for the rollover to occur on our end. 
+Key Notes:
+ The biller must verify the timing for the rollover, ensuring the transition aligns with their billing schedule. New Due Dates must also be provided.
+CRM Configuration Requirements
+BIF Customizations
+Ensure 
+all
+ invoice types have the InvoiceFormatGUID BIF Customization configured under Integration Summary
+The correct InvoiceFormatGUID is 
+Guts/PVD PDF Viewer (81A88F26-E6B8-4D49-AC3C-DC0A51A9BA8B)
+Make sure it is set to 
+Active
+ for the 
+REGULAR
+ invoice class
+Make sure 
+Apply Global BIF Customizations
+ is disabled under Invoicing → Advanced Configuration
+JSON Config
+The JSON config (Advanced Setting 131) needs to contain the biller-specific invoice type mapping
+The biller-specific mappings can be found here: 
+GUTS/PVD Technical Design Standard
+ 
+Custom InvoiceDate & InvoiceDueDate
+Advanced Setting 41 (Generic Transaction Sequence Date) is how we can specify a custom invoice due date. 
+Note: since installments 1 & 2 come from the same file, you need to specify two dates separated by a pipe.
+Example: say the biller wants the 
+Installment 1
+ due date to be 
+5/12/2025
+ and 
+Installment 2
+ to be 
+9/12/2025
+. You would set Adv Setting 41 to 
+5/12/2025|9/12/2025
+.
+Example: say the biller wants the 
+Installment 2 Replacements
+ due date to be 
+11/15/2025
+. You would set Adv Setting 41 to 
+11/15/2025
+.
+FTP Import Tasks
+Set up FTP Import Tasks for each file type:
+GUTS Installment 1 & 2
+GUTS Installment 2 TrueUps Replacements
+Load Schedule
+December/January - New Cycle - Penny Bills
+Installment 1
+: Penny Bills
+Go to the File History page in the CRM and search for invoice files.
+Note: you will have to adjust the search dates to contain the last load date. For Marion County (212), this will be September/October. For other billers, this will be March.
+Find the latest invoice file and click the icon to generate 1 cent bills.
+Note: for non-Marion billers, there will be 2 files from March. You only need to trigger the 1 cent generation for the latest file.
+Enter the custom due date and click Generate Penny Invoices. The popup window will update once the invoices are done generating.
+Note: this button also updates Advanced Setting 7, which is the tax year for RTDR. If this is set to the wrong year, RTDR will pull the wrong data when refreshing invoices.
+If the current month is before June, the logic will set the tax year to last year. Otherwise, it will set it to this year. 
+Note: this button will also balance forward all invoices from the previous year.
+Marion County Specific:
+ Marion loads 9 files every bill cycle, so you will need to generate 1 cent bills for all 9 files
+You will also need to generate the Prelims after the 1 cent bills, see below.
+Marion County Customizations: Prelims
+ 
+After the 1 cent bills have been generated, you can generate the Prelims by clicking the icon to generate Prelims
+Note: you will need to do this for the same 9 files as you did for 1 cent bills
+On January 1, the FlexPayAutoEnrollScheduleGenerator job will run to copy FlexPay schedules to the prelim invoices
+Note: If a FlexPay schedule is setup by the biller or the payer before the job runs on Jan 1, the invoice will be skipped to avoid a duplicate schedule creation.
+If Marion wants the job to run on a different day, they need to give us at least 2 weeks' notice, and you will need to submit a product request to change the date.
+ 
+March/April - Installment 1 & 2
+Installment 1 & 2
+FTP Tasks should already be set up to import 
+GUTS Installment 1 & 2
+ (see the CRM section: 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/4145119262/GUTS+PVD+File+Processing+Documentation#CRM-Configuration-Requirements
+ )
+Set both custom due dates using Advanced Setting 41 according to the guide at the top
+Unzip the file provided by GUTs
+Drop the XML file in the appropriate biller FTP folder
+The file will be picked up for processing in the next 15 minutes, but it may take up to an hour to load into the database depending on the file size
+Marion County Customizations: Move Flexpay Schedules
+In March, after Installment 1 & 2 have loaded,
+ create a DBR to deactivate the Prelim invoices and move Flexpay/scheduled payments to the new invoices (see template below).
+Note: do not submit the DBR until the files are done loading, as Data Services cannot complete the work until the new invoices exist.
+On June 1, the FlexPayAutoEnrollScheduleGenerator job will run to copy FlexPay schedules to the Installment 2 invoices.
+Note: If a FlexPay schedule is setup by the biller or the payer before the job runs on June 1, the invoice will be skipped to avoid a duplicate schedule creation.
+If Marion wants the job to run on a different day, they need to give us at least 2 weeks' notice, and you will need to submit a product request to change the date.
+DBR Template - Deactivate Prelims and Move Flexpay
+1800
+Dear Data Services,
+Please deactivate all active invoices where BillerInstallmentNumber is 0 (Prelims) and move flexpay schedules to the new invoices for Marion County, IN (BillerID 212).
+Please also update scheduled payments to cover the bill amount.
+Thanks.
+September/October - Installment 2 Replacements (Marion County only)
+Installment 2 Replacements
+FTP Tasks should already be set up to import 
+Installment 2 True Ups Replacements
+ (see the CRM section: 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/4145119262/GUTS+PVD+File+Processing+Documentation#CRM-Configuration-Requirements
+ )
+Set the custom InvoiceDueDate using Advanced Setting 41 according to the guide at the top
+Unzip the file provided by GUTs and drop the XML file in the appropriate biller FTP folder
+Related Documentation:
+GUTS/PVD Manual File Processing: 
+https://invoicecloud.atlassian.net/wiki/x/EYC12g
+ 
+GUTS/PVD Technical Design (with invoice file mapping): 
+https://invoicecloud.atlassian.net/wiki/x/AQCTl
+ 
+ URL:/spaces/IM/pages/4145119262/GUTS+PVD+File+Processing+Documentation

@@ -1,0 +1,54 @@
+Meeting Objectives
+ Share Insights
+:
+Backlog health
+MTTR (by priority)
+Ticket Volume Analysis
+Blockers and Opportunities
+Backlog Health
+Starting on 7/6 we started to automatically capturing a weekly snapshot of the backlog. As of the week of 7/7 we are slightly above our goal, however it has been maintained around 12 for the last couple weeks.
+MTTR (by priority)
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=28340
+Mean Time to Resolution (MTTR) – 2025 YTD
+Highest Priority:
+ 1.5 days
+High Priority:
+ 2.5 days
+Medium Priority:
+ 4.1 days
+Low Priority:
+ 4.2 days
+In May, we experienced a temporary spike in MTTR for medium to highest priority tickets. Despite this, the number of tickets created in May and June remained relatively consistent, and both MTTR and ticket volume declined in the following month, indicating a return to normal performance levels.
+This fluctuation was largely due to reduced team capacity, as several integrations team members were on vacation throughout May. This led to a temporary backlog and slower resolution times.
+Overall we are meeting SLAs
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17890
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17891
+Since the beginning of the year, a total of 432 tickets have been reported in the integration’s space, highlighting various issues across different services:
+Bill Presentment
+ is the most frequently reported service, with 122 tickets. Among these, 
+31 tickets
+ are related to 
+PDF Extraction
+, accounting for 
+25%
+ of all Bill Presentment issues. This high percentage indicates that PDF Extraction is a critical area within Bill Presentment that requires attention. 
+Almost 1/3 (
+28%
+), of all integrations tickets are classified as additional information, which implies that these are mostly research conducted to answer questions.
+These insights reflect that Bill Presentment and File Processing are the critical areas for integrations and the ones producing most of the toil.
+Ticket Volume Analysis
+https://invoicecloud.atlassian.net/jira/dashboards/10393?maximized=17894
+In June, a total of 72 integration-related tickets were resolved. Of these, 22 were specifically related to file processing, and 16 to Bill Presentment; that would account for 31% and 22% of tickets respectively. 21% of the work for this month could be classified as research given the mitigation actions of additional information and lack of response. Only 5% of tickets were actual defects in our code, and 14% were request for code changes. This data indicates that most of the team's time was spent conducting code analysis to help CS navigate integrations for biller’s/SP.
+Blockers and Opportunities
+PDF linking has become an unnecessary bottleneck for our team, frequently consuming valuable time and computing resources. These tickets often require manual intervention from Dev Support (DS), slowing down resolution times and diverting focus from higher-impact work.
+To address this, we’re developing tools that will streamline the PDF linking process and reduce the volume of DS tickets. Our goal is to shift more ownership to Customer Support (CS) by enabling them to handle common PDF-related issues independently.
+Bursting Tool
+: Consider implementing a bursting tool that can split large PDF files into smaller, manageable segments. 
+PDF Manager (Idea)
+: A tool to service any PDF needs for billers. The idea would be to shift left to enable CS to manages any PDF requests.
+The overarching strategy is to steadily shift all PDF-related work left—from DS to CS—and ultimately to the billers themselves. By enabling billers to troubleshoot and resolve issues independently, we can significantly reduce ticket volume, improve turnaround times, and allow DS to focus on more complex and impactful engineering tasks.
+Action Items:
+Make the PDF burster available as soon as possible.
+Research AI Agent opportunities.
+ URL:/spaces/DS/pages/4467818497/Integrations+Insights+For+June+2025

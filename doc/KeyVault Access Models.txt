@@ -1,0 +1,92 @@
+In Azure Key Vault, 
+RBAC (Role-Based Access Control)
+ and 
+Access Policies (ACLs)
+ are two distinct models for controlling access to secrets, keys, and certificates. Here's a breakdown of the differences and when to use each:
+🔐 
+Access Policies (ACLs)
+Legacy model
+ for Key Vault access control.
+You explicitly define 
+who
+ (user, app, or service principal) can access 
+what
+ (keys, secrets, certificates) and 
+how
+ (get, list, set, delete, etc.).
+Managed 
+within the Key Vault itself
+.
+Limited to 
+up to 1024 access policy entries
+ per vault.
+Granular control
+ over specific operations (e.g., allow 
+get
+ but not 
+list
+).
+Use when:
+You need fine-grained control over specific operations.
+You're working with older Key Vaults or existing infrastructure using access policies.
+🛡️ 
+RBAC (Role-Based Access Control)
+Modern model
+ integrated with 
+Azure-wide RBAC
+.
+Permissions are granted via 
+Azure roles
+ (e.g., Key Vault Reader, Key Vault Secrets User).
+Managed 
+outside the Key Vault
+, at the 
+subscription/resource group/resource level
+.
+Supports 
+custom roles
+ and 
+role inheritance
+.
+Easier to manage at scale, especially in large organizations.
+Use when:
+You want centralized access management across Azure resources.
+You're using Azure AD groups or want to leverage role inheritance.
+You need to manage access at scale or automate via infrastructure-as-code.
+🆚 
+Comparison Table
+Feature
+Access Policies (ACLs)
+RBAC
+Scope
+Key Vault only
+Azure-wide
+Granularity
+Operation-level (e.g., 
+get
+)
+Role-level (e.g., Reader)
+Management Location
+Inside Key Vault
+Azure Portal / CLI / ARM
+Scalability
+Limited (1024 entries)
+Highly scalable
+Custom Roles
+❌ Not supported
+✅ Supported
+Integration with Azure AD
+Partial
+Full
+Recommended for new use?
+❌ No
+✅ Yes
+✅ 
+Best Practice
+For 
+new deployments
+, Microsoft recommends using 
+RBAC
+ for Key Vault access control. It aligns better with modern Azure governance and scales more effectively.
+Would you like help converting existing access policies to RBAC or setting up roles for a specific use case?
+ URL:/spaces/platform/pages/4661346333/KeyVault+Access+Models

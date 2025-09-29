@@ -1,0 +1,179 @@
+Runbook name
+ Project Escalation Process
+Description
+ 
+On this page
+none
+Change Log
+Date
+Author
+Version
+Description
+10/23/24
+Kinga Dobriban
+ 1.0
+ Created
+11/27/24
+Kinga Dobriban
+ 1.1
+ Updated
+Summary
+ The purpose of this document to outline project escalations for new biller launches:
+to ensure timely issue identification
+to define the types of events and issues that need escalating
+to define the escalation process, timing and communication
+Definitions
+Escalation
+: A situation that requires to be elevated in order to avoid a negative outcome; typically through a formal process to highlight an issue to management / responsible party.
+Issue
+: A problem that 
+has occurred
+ that could impede the project from meeting its objectives.
+Risk
+: A 
+potential
+ event or condition that may impact the project in the future.
+Escalation Reasons 
+Gain urgency 
+Example: The resolution can follow the typical process BUT needs to jump to the top of the priority list to avoid an adverse outcome
+Chart a new path/process
+ 
+Example: The situation is different from any encountered before and the established processes are not applicable or adequate. 
+Visibility and Awareness.
+ 
+Types of Problems to Escalate
+Critical Risk
+ – Significantly impacts the overall project (multiple areas such as scope, timeline, etc). May result in “Delivery Risk” status. 
+ 
+Examples:
+Biller doesn’t have necessary interfaces/modules for the IC integration and is not willing to obtain them
+There is no integration and an integration might not be built
+Biller is requesting a project pause or cancellation
+Note
+: By definition, a Critical Risk means a 
+red RAG
+ status, and 
+immediate
+ escalation for projects over $10K MRR. 
+Issues impacting the GL date 
+(Timeline is impacted)
+Examples:
+Dev work not completing on time
+Integration not released on time
+Underlying dependencies (CIS installation) delayed
+Note: 
+If your go live date is moving more than a month or is moving 
+out of the quarter
+, escalate to your manager. Set the 
+RAG to red.
+Scope Creep 
+(Scope is impacted)
+Examples:
+Customer is requesting add-ons, new features or integration changes that were initially not identified and are not part of the contract/SOW
+Note
+: If these are identified as showstoppers or critical deliverables for go-live, escalate internally. If the requests requires engineering work (e.g.: brand new feature), set the 
+RAG to red. 
+Compliance/Regulatory Issues
+Examples
+Customer is unwilling to sign required boarding paperwork (e.g: Caldwell County)
+Customer expresses PCI compliance concerns (e.g: Lakeville with BS&A Magtek swipers)
+Customer has underwriting trouble (American Samoa - a US territory - could not be boarded with Chase)
+Note: Set the 
+RAG to red
+ for go-live blockers.
+Resource / Capacity Impact
+Example
+Customer is requesting a phased approach resulting in a conversion (CIS platform or Engagement portal change) requiring an extended period of IC involvement / input from other departments
+Decision Making Delays 
+(Project governance issues)
+Example:
+Critical decisions are not made in a timely fashion by the biller (impacting timeline)
+Sudden departure of decision maker (treasurer retires, etc)
+Note: The RAG is 
+amber
+ or 
+red 
+depending on the impact on your project.
+Stakeholder engagement changes
+Example:
+Biller not responsive (doesn’t show up to calls, goes cold)
+Note: Escalate to the sales person. One missed call with no communication means 
+amber RAG
+, two missed calls 
+red RAG.
+Product issues / Bugs / Technical issues 
+(unintended or adverse functionality)
+Example:
+Biller is having issues staying connected to our FTP (IC firewall problem)
+Biller is not receiving any IC biller portal emails due to security factors (showstopper)
+Note: Depending how these impact your timeline, the RAG is 
+amber
+ or 
+red
+Escalation Steps
+Always start with trying to resolve the issue or by exploring workarounds. Use existing resources (confluence, Implementations slack channel) and reach out to the TC or Team Lead to work/triage the problem.
+Once it’s determined that the issue needs to be escalated, inform your manager or the PM on your project.
+Red
+ and
+ Amber
+ RAG statuses should be escalated. 
+RED
+ items will likely require immediate escalation.
+Treat projects with $10K+ MRR with increased sensitivity/urgency.
+Don’t forget to update the RAID log and project admin (RAG, Path to green, Status) as needed.
+Escalation Timing and Communication
+Evaluate the 
+Urgency 
+(Time-sensitivity)
+High
+ Urgency: must be addressed 
+immediately
+ to prevent catastrophic project failure or irreparable damage /  relationship harm. (e.g: issues on go-live date delaying go-live, live production impact such as account mapping problems or misfired emails, etc). 
+Medium
+ Urgency: issue is important but doesn’t need to be resolved immediately. (e.g: must be resolved by next autopay run, defined timeline, etc) 
+Next scheduled meeting
+, same week is sufficient.
+Low
+ Urgency: The issue is 
+routine
+ and can be handled during standard project discussions. No significant threat to the overall project.
+Low Urgency
+Medium Urgency
+High Urgency
+Communication Method
+Internal email, comment in Smartsheets tagging manager, next scheduled 1:1 are all fine
+File Jira ticket as needed
+Schedule a meeting to address the issue with all internal stakeholders.
+Provide details in writing (include jira, background, etc) in prep for meeting
+Slack/Call your manager, raise immediate awareness
+Set up Slack channel with all internal stakeholders, start zoom meeting for active problem solving
+Push for responses
+Timing
+Same or next week
+1-2 days / up to a week
+Immediately
+Action items
+Set RAG = Green 
+ /Amber 
+ 
+Set path to Green
+Update RAID log
+Set RAG = Amber 
+ /Red 
+ 
+Set path to Green
+Update RAID log
+Set RAG = Red 
+ 
+Set path to Green
+Update RAID log
+Escalation Best Practices
+Arrange a separate call or meeting to discuss the matter
+Keep the conversation focused on the subject at hand
+Do not bundle together multiple issues
+Share the information (background/context, severity, solution options attempted, project impact)
+Escalate to your manager or the person who can make the decision you need
+Don’t forget your project admin (
+RAG and Status
+)
+ URL:/spaces/Implementa/pages/3183116291/Project+Escalation+Process

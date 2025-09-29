@@ -1,0 +1,507 @@
+Objective:
+To evaluate and compare Auth0 and SecureAuth authentication brokers in terms of custom domain setup, API availability and analysis, and data retention, in order to determine the most suitable option for our authentication needs.
+Data Retention Comparison in Auth0 and SecureAuth:
+Authentication & Audit Logs
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Varies by subscription plan:
+Starter – 1 day
+B2C/B2B Essentials – 5 days
+Professional – 10 days
+Enterprise – 30 days
+Fully configurable via web.config(For On-Premise Deployments), admin console(For Cloud Deployments), or log rotation(For On-Premise or Custom Configurations) tools. No preset limits; depends on customer-defined policies.
+Types of Logs
+Authentication events (successful/failed logins), MFA attempts, API calls, admin actions, breach detections, system-level events.
+Audit logs, error logs, transaction records, debug logs, realm-level event logs, and system diagnostics.
+Log Export
+Real-time log streaming to Splunk, Datadog, AWS CloudWatch, Azure Event Hubs using 
+Log Streams
+ feature.
+Log export to SIEM platforms (e.g., Splunk, QRadar), syslog servers, or via manual/scheduled file transfer.
+Deletion
+Automatically deleted after the defined retention window unless externally streamed or archived.
+Deleted based on user-defined policies. Supports automatic or manual deletion and archiving.
+ 2. 
+User Profile Data
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Retained indefinitely unless manually deleted or the entire Auth0 tenant is removed.
+Retention is customer-controlled. Profiles can persist as long as required by internal policy.
+Types of Data
+Email, name, username, identity provider metadata, MFA info, login history, linked accounts.
+Similar identity and profile information, stored within the configured identity store (LDAP, SQL, etc.).
+Export
+Exportable via the Auth0 
+Management API
+ or user export extensions.
+Export via database tools, SecureAuth APIs, or direct access to backend storage (for on-prem setups).
+Deletion
+Profiles are removed when deleted manually or when the tenant is deprovisioned.
+User profiles are removed manually or after a grace period (typically 10 days post-account termination).
+ 3. 
+User Metadata (user_metadata / app_metadata)
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Stored as part of the user profile and retained as long as the profile is active.
+Same as profile data — retained indefinitely or per organization’s retention settings.
+Types of Data
+Custom user or application-specific data — preferences, roles, flags, org mappings, etc.
+Custom attributes within user objects; often used for access decisions or application-level logic.
+Export
+Available via the Management API or user exports.
+Exported as part of profile data or queried through SecureAuth’s API or database access.
+Deletion
+Deleted when the associated user profile is removed.
+Deleted when user account is removed, or metadata is manually purged.
+Sessions & Tokens
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Configurable per token (access, ID, refresh). Defaults: Access token – 1 hour, refresh token – customizable.
+Fully configurable session and token lifetimes; controlled via admin portal or scripting.
+Types of Data
+Access tokens, ID tokens, refresh tokens, session cookies.
+Session tokens, access tokens, JWTs, federation session IDs.
+Export
+Token values not exportable; metadata viewable via APIs.
+Session/token data is not typically exported, but session logs are stored and can be reported.
+Deletion
+Sessions expire automatically or are manually revoked via dashboard or API.
+Tokens and sessions expire per policy or are manually invalidated.
+ 5. 
+Security Data (e.g., Breach Detection)
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Stored in logs and follows the plan-based retention period (1–30 days).
+Security logs are retained per customer’s log policies.
+Types of Data
+Breached password detection, suspicious IPs, login anomalies, bot detections, user lockouts.
+Same: failed login patterns, MFA failures, blocked accounts, behavior analysis alerts.
+Export
+Exported via log streams to SIEMs or alerting systems.
+Exportable through syslog, file-based logs, or integration with external security platforms.
+Deletion
+Deleted after the log retention period unless logs are streamed externally.
+Deleted per user-configured retention lifecycle.
+Tenant / Realm Configuration
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Configuration retained indefinitely until tenant is deleted.
+Configuration is stored until realm/account is removed or admin deletes it.
+Types of Data
+Applications, connections, branding, rules, actions, policies, identity providers, hooks.
+Realm settings, authentication workflows, policy scripts, identity store config.
+Export
+Exportable using Auth0 Deployment Extension or Management API.
+Configuration can be backed up via admin tools or file exports (especially in on-prem deployments).
+Deletion
+Removed when tenant is deleted.
+Deleted manually or as part of decommissioning process.
+Email Templates & Notifications
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Stored with tenant settings and persist until updated or deleted.
+Stored with realm settings; retained until manually modified or removed.
+Types of Data
+Password reset, welcome, verification, MFA challenge emails.
+Same; templates for password policies, OTP delivery, welcome and recovery flows.
+Export
+Editable and viewable via dashboard; not natively exportable.
+Can be manually backed up by exporting configuration or file content.
+Deletion
+Deleted with tenant or updated via dashboard.
+Deleted manually or with realm deletion.
+Custom Scripts / Workflows
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Retained indefinitely unless removed by the administrator.
+Stored within the realm; persists until deleted by admin.
+Types of Data
+Rules, Actions, Hooks (serverless functions written in JavaScript or Node.js).
+Custom scripting, workflow policies, integration scripts (e.g., with LDAP, SAML, OAuth).
+Export
+Can be exported using Management API or backup extensions.
+Exportable via admin portal or directly from backend (on-prem).
+Deletion
+Removed manually through dashboard or API.
+Manually deleted by admin or removed with realm.
+Analytics & Monitoring Data
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Limited to log retention (1–30 days). For long-term analytics, external integration is required.
+Retention determined by logging infrastructure (e.g., Elastic, Splunk) integrated by the customer.
+Types of Data
+Dashboard usage, login trends, traffic stats, login success/failure rates.
+Same; includes system performance, user behavior, login attempts, and realm analytics.
+Export
+Export via log streams or Monitoring API to third-party tools.
+Export via integrated logging systems or file-based logging.
+Deletion
+Deleted with logs or as part of tenant termination.
+Managed per external tool or log retention policy.
+10. Backups & Disaster Recovery
+Aspect
+Auth0
+SecureAuth
+Retention Period
+Managed by Auth0 (cloud-managed). No access to direct backups unless exported manually.
+Customer-controlled; retention is defined per backup strategy (especially for on-prem environments).
+Types of Data
+Tenant configuration, user data (if exported), logs (if streamed).
+Realm settings, users, logs, policies, templates, workflows.
+Export
+Exportable via API, extensions, or third-party integrations (manual or automated).
+Exportable to secure storage via backup tools, scripts, or third-party solutions.
+Deletion
+Backups are deleted when the tenant is deleted or upon request.
+Deleted or rotated based on customer-defined retention policy.
+Auth0 Custom Domain and Related Features:
+Custom Domain Setup in Auth0
+Feature Access & Plan Requirements
+Custom domain support is only available on paid Auth0 plans — specifically starting from the Essentials Plan.
+Even if you're using a free tenant or trial, you’ll be required to add a valid credit card before enabling this feature.
+This is a fraud prevention and domain ownership validation step by Auth0.
+Where to Set Up the Custom Domain
+Navigate to your Auth0 Management Dashboard.
+Go to: Dashboard → Branding → Custom Domains
+This section allows you to define a custom-branded domain that replaces the default Auth0 domain (e.g., yourtenant.auth0.com) with a more familiar and trusted domain, such as:
+Ex: login.invoicecloud.com
+Adding the Custom Domain
+In the Auth0 UI, enter your desired custom login domain (e.g., login.invoicecloud.com).
+After submitting, Auth0 will provide a CNAME DNS record you need to configure in your DNS provider.
+DNS Configuration
+Example CNAME provided by Auth0: login.invoicecloud.com CNAME → yourtenant.cdn.auth0.com
+You must create this CNAME record in your DNS management system (e.g., GoDaddy, AWS Route 53, Cloudflare).
+This allows traffic to login.invoicecloud.com to be routed securely to Auth0’s infrastructure.
+SSL Certificate Provisioning
+Auth0 uses Let’s Encrypt to automatically generate and manage an SSL/TLS certificate for your custom domain.
+This process is automatic:
+No need to purchase or upload a certificate.
+Certificate is renewed automatically.
+Secure HTTPS is enforced.
+Domain Verification and Activation
+After DNS changes are made and have propagated (typically within minutes to a few hours), Auth0 will:
+Detect the CNAME record.
+Automatically verify domain ownership.
+Issue and bind the SSL certificate.
+Mark the domain status as “Ready” in the UI.
+Once marked “Ready,” the custom domain becomes live and usable across all authentication flows.
+Features and Benefits of Using a Custom Domain in Auth0
+Branded User Experience
+Instead of users seeing the default Auth0 domain (e.g., yourtenant.auth0.com), they are redirected to:https://login.invoicecloud.com
+This provides a trusted, professional login experience aligned with the InvoiceCloud brand.
+Enhances user confidence and supports phishing protection.
+Session & Cookie Isolation
+Authentication cookies are scoped to your custom domain (login.invoicecloud.com) rather than the shared Auth0 domain.
+This improves compatibility with browsers that enforce strict third-party cookie policies (e.g., Safari, Firefox, and mobile browsers).
+It reduces cross-origin risks and avoids login session problems in embedded browser environments.
+OAuth & OIDC Endpoint Mapping
+Once a custom domain is verified and activated, 
+all major Auth0 endpoints
+ are available under that domain:
+Endpoint
+Old (Default)
+New (Custom)
+Authorization
+https://yourtenant.auth0.com/authorize
+https://login.invoicecloud.com/authorize
+Login
+https://yourtenant.auth0.com/login
+https://login.invoicecloud.com/login
+Token Exchange
+https://yourtenant.auth0.com/oauth/token
+https://login.invoicecloud.com/oauth/token
+User Info
+https://yourtenant.auth0.com/userinfo
+https://login.invoicecloud.com/userinfo
+This ensures complete white labelling of the authentication flow.
+No end-user interaction with the auth0.com domain is required.
+Callback & Logout URLs Alignment
+Auth0 applications must be configured to accept callback and logout URLs that match your custom domain setup.
+Examples:
+Callback URL
+: https://biller.invoicecloud.com/auth/callback
+Logout URL
+: https://biller.invoicecloud.com/logout
+These URLs must be whitelisted in your Auth0 application settings.
+Ensures that redirection after login/logout functions properly and securely.
+Custom Domain Logging & Monitoring
+Auth0 logs all authentication activity, including requests routed through your custom domain.
+This includes:
+Successful logins
+Failed logins
+MFA challenges
+Token exchange
+These logs can be:
+Viewed in the Auth0 dashboard
+Streamed to external systems (e.g., Splunk, Datadog, Azure Log Analytics) 
+SecureAuth Custom Domain and Related Features:
+Custom Domain Setup in SecureAuth
+Feature Access & Plan Requirements
+Custom domain support is available for SecureAuth Identity Platform (Cloud) customers.
+This feature is not self-service and must be coordinated with the SecureAuth support or professional services team.
+Your account must be on a qualifying plan, and setup requires involvement from SecureAuth engineering or support.
+A valid SSL/TLS certificate and DNS configuration are prerequisites before activation.
+Where to Set Up the Custom Domain
+There is no self-service dashboard option for setting custom domains as in Auth0.
+You must work directly with SecureAuth’s support or onboarding team.
+Configuration is handled within the SecureAuth Cloud Identity Engine (CIAM) platform.
+Example custom domain: authz.invoicecloud.com
+Adding the Custom Domain
+Begin by choosing your desired domain (e.g., authz.invoicecloud.com) and create a request via SecureAuth support.
+SecureAuth will provide guidance for creating the required 
+CNAME record
+ pointing your custom domain to your SecureAuth tenant.
+Example: CNAME authz.invoicecloud.com → secureauth.yourtenant.cloudentity.com
+DNS Configuration
+You must add the provided CNAME record in your DNS provider (e.g., Cloudflare, AWS Route 53, GoDaddy).
+This allows SecureAuth’s infrastructure to handle authentication securely via your custom domain.
+Example DNS Entry: authz.invoicecloud.com CNAME secureauth.ciam.secureauth.com
+SSL Certificate Provisioning
+Unlike Auth0, SecureAuth does not use Let’s Encrypt by default for automatic certificate provisioning.
+You must provide a valid SSL certificate (wildcard or domain-specific).
+SecureAuth will install and manage this certificate manually or through its DevOps team.
+○ Certificate renewal must be coordinated with SecureAuth.
+○ Only HTTPS is supported—plain HTTP access is disallowed.
+Domain Verification and Activation
+Once the CNAME is live and the certificate is installed, SecureAuth will:
+○ Validate the DNS and TLS configuration.
+○ Enable the custom domain routing in your tenant.
+○ Mark the configuration as active for all login endpoints.
+Once verified, the domain becomes fully functional for use in all user authentication flows.
+Features and Benefits of Using a Custom Domain in SecureAuth
+Branded User Experience
+End users access the login page via your branded domain instead of the default SecureAuth domain.
+Example:
+From: secureauth.yourtenant.cloudentity.com
+To: https://authz.invoicecloud.com
+This ensures branding consistency and builds user trust.
+Session & Cookie Isolation
+Authentication session cookies are scoped to your custom domain, avoiding cross-domain issues.
+Critical for browsers with strict SameSite cookie policies like Safari and Firefox.
+Essential for applications using embedded browsers or iFrames (e.g., mobile apps, in-app browsers).
+OAuth & OIDC Endpoint Mapping
+ Once a custom domain is configured, OAuth 2.0 and OpenID Connect endpoints are available under your own domain:
+Endpoint
+Old (Default)
+New (Custom)
+Authorization
+https://secureauth.tenant.cloudentity.com/authorize
+https://authz.invoicecloud.com/authorize
+Login
+https://secureauth.tenant.cloudentity.com/login
+https://authz.invoicecloud.com/login
+Token Exchange
+https://secureauth.tenant.cloudentity.com/oauth/token
+https://authz.invoicecloud.com/oauth/token
+User Info
+https://secureauth.tenant.cloudentity.com/userinfo
+https://authz.invoicecloud.com/userinfo
+Enables complete white labeling of the authentication process.
+Eliminates dependency.
+Callback & Logout URLs Alignment
+Applications must define redirect URLs that align with your custom domain.
+Examples:
+○ Callback URL: https://biller.invoicecloud.com/auth/callback
+○ Logout URL: https://biller.invoicecloud.com/logout
+These URLs must be whitelisted in SecureAuth’s app configuration.
+Prevents unauthorized redirects and ensures proper flow control post-authentication.
+Custom Domain Logging & Monitoring
+All authentication traffic through the custom domain is logged.
+SecureAuth logs:
+○ Login attempts (success & failure)
+○ MFA events
+○ Authorization grants
+○ Token issuance and revocation
+Logs can be:
+○ Viewed in the SecureAuth admin dashboard
+○ Exported to SIEM tools such as Splunk, Elastic, Azure Sentinel, etc.
+Auth0 Management API Integration:
+Integrate the Auth0 Management API into the Biller Portal to support user creation and updates. Ensure that user data remains synchronized between the local user database and Auth0.
+Implementation Summary
+User Creation
+Utilized the Auth0 Management API to create users with required fields:
+email
+password
+connection
+given_name
+family_name
+username
+User Update
+Implemented user updates by:
+Searching for users by username (initial approach).
+Falling back to email-based search for higher reliability.
+Sending PATCH requests to update user profile fields. 
+Problems & Observations
+PATCH Method Not Available in .NET Framework 4.8
+Observation: HttpMethod.Patch is not available by default.
+Solution: Used new HttpMethod("PATCH") to construct PATCH requests. 
+Searching by Username
+Observation: Using the /api/v2/users endpoint with a username query only works if the Auth0 tenant supports usernames as login identifiers.
+Solution: Use /api/v2/users-by-email for reliable and consistent user lookup. 
+Cannot Update Username and Email Simultaneously
+Observation: Attempting to update both username and email in a single PATCH request results in the following error:
+"Cannot update username and email simultaneously", "errorCode": "operation_not_supported"
+Solution: Perform updates in two separate requests if both fields need to be changed. 
+Error Handling
+Observation: Auth0 provides descriptive error messages in the response body for failed requests.
+Best Practice: Always log the response content (e.g., updateJson) to aid in debugging and troubleshooting.
+Key Learnings
+Do not update both email and username in the same PATCH request.
+Always log or display Auth0 error responses for easier debugging.
+Use new HttpMethod("PATCH") in .NET Framework 4.8 to make PATCH requests.
+Prefer email-based search over username search for broader tenant compatibility. 
+SecureAuth API Integration - Summary
+Assess the feasibility of integrating SecureAuth’s API for user authentication and user listing.
+Setup Overview
+Token Endpoints Tried:
+/oauth2/token – Available
+/admin/oauth2/token – Not available (returns 404)
+OAuth2 Grant Type: client_credentials
+Scopes Requested: admin, identity_admin, identity_user_read
+User API Endpoint: /api/identity/default/admin/pools/{poolId}/users
+Config Location: Stored in Web.config and accessed via ConfigurationManager.AppSettings 
+Code Workflow
+Get Access Token:
+Send POST request with client ID, secret, grant type, and scopes
+Extract access_token from JSON response
+Call API:
+Use Authorization: Bearer <token> header
+Fetch user data from SecureAuth API
+Error Handling:
+Catch WebException, log and display response details 
+Key Findings
+Token Endpoint Access:
+/admin/oauth2/token not available in current tenant
+/oauth2/token works but may lack necessary admin scopes
+OAuth Client Setup:
+Must be enabled in SecureAuth
+Must support client_credentials grant
+Must be assigned proper scopes (e.g., admin)
+Tenant Limitations:
+Admin API access is often restricted in trial environments 
+Risks & Unknowns
+Admin-level API access may not be supported in your tenant
+Token endpoint or scope permissions might be restricted
+Requires SecureAuth support for clarity on tenant capabilities 
+Recommendations
+Check with SecureAuth:
+Is the admin token endpoint available?
+Are admin scopes supported in your tenant?
+If Supported:
+Validate client setup and scopes
+Use the correct token endpoint
+If Not Supported:
+Consider requesting enhanced access or using alternative methods 
+Difference Between Users Returned by SecureAuth API Endpoints
+This section explains the distinction between users returned by two similar SecureAuth API endpoints:
+https://localhost:8443/api/identity/default/admin/pools/{ipID}/users
+https://localhost:8443/api/identity/default/admin/b2b/pools/{ipID}/users
+ 
+Endpoint Overview
+Endpoint
+Description
+/admin/pools/{ipID}/users
+Retrieves users from a standard (internal) identity pool
+/admin/b2b/pools/{ipID}/users
+Retrieves users from a B2B (Business-to-Business) identity pool
+ 
+User Differences
+Feature
+/admin/pools/{ipID}/users
+/admin/b2b/pools/{ipID}/users
+User Type
+Internal (e.g., employees, admins)
+External (e.g., partners, contractors)
+Pool Type
+Standard or internal pool
+B2B (federated/external user) pool
+Authentication Source
+Internal (LDAP, SecureAuth DB, etc.)
+External IdPs (e.g., Azure AD, SAML, WS-Fed)
+User Management
+Managed within SecureAuth
+May be federated or synced from external sources
+Use Case
+Internal applications and systems
+External portals or partner collaboration platforms
+Expected Metadata
+Standard user attributes
+Federated claims (e.g., source domain, provider info)
+Recommendation
+Use the /admin/pools endpoint for listing users managed directly within your organization.
+Use the /admin/b2b/pools endpoint if your application supports external/partner user access via B2B identity pools.
+SecureAuth User Management – Key Endpoints
+A. List Users
+Method: GET
+Endpoint: /api/identity/default/admin/pools/{poolId}/users
+Description: Retrieves a paginated list of users from the specified identity pool.
+Parameters:
+page (optional): Page number for pagination.
+size (optional): Number of users per page.
+Response: JSON array of user objects. 
+B. Create User
+Method: POST
+Endpoint: /api/identity/default/admin/pools/{poolId}/users
+Description: Creates a new user in the specified identity pool.
+Request Body: JSON object with user details (e.g., username, password, email, attributes).
+Response: Confirmation of user creation. 
+C. Get User Details
+Method: GET
+Endpoint: /api/identity/default/admin/pools/{poolId}/users/{userId}
+Description: Retrieves detailed information about a specific user identified by userId.
+Response: JSON user object with attributes. 
+D. Update User
+Method: PUT
+Endpoint: /api/identity/default/admin/pools/{poolId}/users/{userId}
+Description: Updates user information for the specified user in the identity pool.
+Request Body: JSON object containing the updated user attributes.
+Response: Confirmation of update success or failure. 
+E. Delete User
+Method: DELETE
+Endpoint: /api/identity/default/admin/pools/{poolId}/users/{userId}
+Description: Deletes a user from the identity pool.
+Response: Confirmation of deletion. 
+F. User Password Reset
+Method: POST
+Endpoint: /api/identity/default/admin/pools/{poolId}/users/{userId}/password/reset/request
+Description: Initiates a password reset for the specified user.
+Request Body: Optional details such as reset method or notification options.
+Response: Confirmation of reset initiation.
+G. Get User Metadata
+Method: GET
+Endpoint:/api/identity/default/admin/pools/{poolId}/users/{userId}/metadata/{metadataType}
+Description: Retrieves metadata of a specified type for the given user in the specified identity pool.
+Use Case: Fetch specific custom or system-defined metadata associated with a user (e.g., preferences, tags, flags).
+Response:JSON object containing the requested metadata.
+H. Update User Metadata
+Method: PUT
+Endpoint:/api/identity/default/admin/pools/{poolId}/users/{userId}/metadata/{metadataType}
+Description: Updates existing metadata or adds new metadata for the specified user under the given metadata type.
+Request Body: JSON object representing the metadata values to update or create.
+Response: Confirmation of metadata update or creation.
+ Reference Documentation link for APIs:
+User Admin API:
+https://docs.secureauth.com/ciam-apis/identity.html
+ 
+SecureAuth CIAM Platform API’s: 
+https://docs.secureauth.com/ciam/en/apis.html
+ 
+ URL:/spaces/PE/pages/4324130849/Spike+-+PRISM-310+Comparison+of+Data+Retention+Custom+Domain+Setup+and+API+Capabilities+in+Auth0+and+SecureAuth

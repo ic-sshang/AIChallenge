@@ -1,0 +1,840 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+Release Date
+12/22/23
+Document status
+complete
+Green
+Document owner
+ 
+ 
+Solution engineer
+ 
+Knowledge Transfer
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .dat
+File Naming Convention: N/A 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path: D:\inetpub\ftproot\galvestoncountywcid1\ToInvoiceCloud\Invoices\UB\
+File Transfer Frequency: Weekly
+Field Mapping
+This integration will use the exact mapping for invoice file from Harligen Waterworks System design
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+Set by IC - Always ‘FH’
+File Header
+2
+BillerGuid
+N
+TRUE
+Set by IC
+File Header
+4
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+Set by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Set by IC
+File Header
+7
+RowType
+N
+TRUE
+Set by IC - Always ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+Set by IC
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Set by IC
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A - Set by IC - Use Account Number + Invoice Date
+Ex: 231-0074500-00720231019
+No dash between Account Number and Invoice Date
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+date of bill yyyymmdd
+yyyymmdd
+Position 145-152
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+due date yyyymmdd
+yyyymmdd
+Position 153-160
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+total-current-with-contribs
+Last two digits are decimal
+Detail Record Position 622-634
+13
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Please set the following message to Custom 1:
+ 
+“Current Period: ‘current-period-consumption’ Gallons
+Numeric (left padded with 0s)
+Detail Record Position 726-734
+9
+Invoice Header
+39
+Custom2
+Y
+FALSE
+t-prev-read-1
+Numeric, Last two digits are decimal
+Detail Record Position 701-709
+9
+Invoice Header
+40
+Custom3
+Y
+FALSE
+t-curr-read-1
+Numeric, Last two digits are decimal
+Detail Record Position 710-718
+9
+Invoice Header
+41
+Custom4
+Y
+FALSE
+cur-charge-1
+Numeric, Last two digits are decimal
+Detail Record Position 494-504
+11
+Invoice Header
+42
+Custom5
+Y
+FALSE
+cur-charge-2
+Numeric, Last two digits are decimal
+Detail Record Position 505-515
+11
+Invoice Header
+43
+Custom6
+Y
+FALSE
+cur-charge-3
+Numeric, Last two digits are decimal
+Detail Record Position 516-526
+11
+Invoice Header
+44
+Custom7
+Y
+FALSE
+cur-charge-4
+Numeric, Last two digits are decimal
+Detail Record Position 527-537
+11
+Invoice Header
+45
+Custom8
+Y
+FALSE
+cur-charge-5
+Numeric, Last two digits are decimal
+Detail Record Position 538-548
+11
+Invoice Header
+46
+Custom9
+Y
+FALSE
+t-total-due-w-penalty
+Numeric, Last two digits are decimal
+Detail Record Position 685-697
+13
+Invoice Header
+47
+Custom10
+Y
+FALSE
+service-from-date
+Date, yyyymmdd
+Detail Record Position 63-70
+8
+Invoice Header
+94
+Custom11
+Y
+FALSE
+service-to-date
+Date, yyyymmdd
+Detail Record Position 71-78
+8
+Invoice Header
+95
+Custom12
+Y
+FALSE
+service-address-description
+Varchar
+Detail Record Position 33-62
+30
+Invoice Header
+96
+Custom13
+Y
+FALSE
+current-period-consumption
+Numeric (left padded with 0s)
+Detail Record Position 726-734
+9
+Invoice Header
+97
+Custom14
+Y
+FALSE
+ser-code-label-6
+Varchar
+Detail Record Position 394-413
+20
+Invoice Header
+98
+Custom15
+Y
+FALSE
+cur-charge-6
+Numeric, Last two digits are decimal
+Detail Record Position 549-559
+11
+Invoice Header
+99
+Custom16
+Y
+FALSE
+ser-code-label-7
+Varchar
+Detail Record Position 414-433
+20
+Invoice Header
+100
+Custom17
+Y
+FALSE
+cur-charge-7
+Numeric, Last two digits are decimal
+Detail Record Position 560-570
+11
+Invoice Header
+101
+Custom18
+Y
+FALSE
+cur-charge-8
+Numeric, Last two digits are decimal
+Detail Record Position 571-581
+11
+Invoice Header
+102
+Custom19
+Y
+FALSE
+cur-charge-9
+Numeric, Last two digits are decimal
+Detail Record Position 582-592
+11
+Invoice Header
+103
+Custom20
+Y
+FALSE
+cur-charge-10
+Numeric, Last two digits are decimal
+Detail Record Position 593-603
+11
+Invoice Header
+104
+Custom21
+Y
+FALSE
+ser-code-label-1
+Varchar
+Detail Record Position 294-313
+20
+Invoice Header
+105
+Custom22
+Y
+FALSE
+ser-code-label-2
+Varchar
+Detail Record Position 314-333
+20
+Invoice Header
+106
+Custom23
+Y
+FALSE
+ser-code-label-3
+Varchar
+Detail Record Position 334-353
+20
+Invoice Header
+107
+Custom24
+Y
+FALSE
+ser-code-label-4
+Varchar
+Detail Record Position 354-373
+20
+Invoice Header
+108
+Custom25
+Y
+FALSE
+ser-code-label-5
+Varchar
+Detail Record Position 374-393
+20
+Invoice Header
+109
+Custom26
+Y
+FALSE
+ser-code-label-6
+Varchar
+Detail Record Position 394-413
+20
+Invoice Header
+110
+Custom27
+Y
+FALSE
+ser-code-label-7
+Varchar
+Detail Record Position 414-433
+20
+Invoice Header
+111
+Custom28
+Y
+FALSE
+ser-code-label-8
+Varchar
+Detail Record Position 434-453
+20
+Invoice Header
+112
+Custom29
+Y
+FALSE
+ser-code-label-9
+Varchar
+Detail Record Position 454-473
+20
+Invoice Header
+113
+Custom30
+Y
+FALSE
+ser-code-label-10
+Varchar
+Detail Record Position 474-493
+20
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+t-total-due-with-contribs
+Numeric, Last two digits are decimal
+Detail Record Position 659-671
+13
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+Set by IC - Always 42
+Invoice Header
+407
+PastDue
+Y
+FALSE
+t-arrears-for-account
+Numeric, Last two digits are decimal
+Detail Record Position 635-647
+13
+Invoice Header
+58
+RowType
+N
+TRUE
+Set by IC - Always 'CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+t-account-number-to-print
+Numeric
+Detail Record Position 2-19
+18
+Customer Record
+60
+CustomerName
+Y
+TRUE
+bill-to-name
+Varchar
+Detail Record Position 79-108
+30
+Customer Record
+61
+Address1
+Y
+FALSE
+bill-to-address-1
+Varchar
+Detail Record Position 109-138
+30
+Customer Record
+62
+Address2
+Y
+FALSE
+bill-to-address-2
+Varchar
+Detail Record Position 139-168
+30
+Customer Record
+63
+City
+Y
+FALSE
+bill-to-city-state-zip
+Varchar
+Detail Record Position 169-216
+48
+Customer Record
+64
+State
+Y
+FALSE
+bill-to-city-state-zip
+Varchar
+Detail Record Position 169-216
+48
+Customer Record
+65
+Zip
+Y
+FALSE
+bill-to-city-state-zip
+Varchar
+Detail Record Position 169-216
+48
+Customer Record
+70
+RowType
+N
+TRUE
+Set by IC - Always ‘ID’
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: txt
+File Naming Convention: N/A
+File Delimiter: Tilde “~”
+Specification: 
+Sample File: 
+SFTP File Path: D:\inetpub\ftproot\galvestoncountywcid1\ToInvoiceCloud\Adjustments\UB\	
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC - always AH
+File Header
+306
+BillerGuid
+N
+TRUE
+Set by IC
+File Header
+308
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+Set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+Set by IC
+File Header
+311
+RowType
+N
+TRUE
+Set by IC - Always AR
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+AccountNumber
+Ex: 001-0000024-001
+Position 1
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+N/A
+Numeric, Last two digits are decimal
+Ex: 54489(544.89)
+Position 2
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 (Balance Differential)
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller.  This payment export only includes invoice types 42 (utility) only. 
+ For biller 3780 Galveston County, a separate payment export for invoice type 63 Cloud Payments is generated.  This file must be saved in the following format:  3780_YYYYMMDDHHMMSS_ICPaymentsDeposits_YYYYMMDDHHMMSS.csv
+Updates on 11/20:
+For biller 3780 Galveston County, a separate payment export for invoice type 64 Cloud Payments is generated. This file will be saved as the same format. 
+File Extension: csv
+File Naming Convention: N/A
+File Delimiter: comma
+Specification: 
+File must have the header record like in the sample file
+Sample File:
+SFTP File Path: D:\inetpub\ftproot\galvestoncountywcid1\FromInvoiceCloud\Payments
+File Transfer Frequency: Daily
+Field Mapping
+Confirmation_Number and Payment_Type can be empty, but there had to be a comma for place holder.
+Name filed will be used as information only. The name on the bill is the three name field in the data base put together either last name + first name + middle name or first + middle +last depending on how the define the name as either a business or individual. 
+Field
+Data Type
+Character Limits
+Sample
+Values
+Confirmation_Number
+N/A
+Need a comma before the
+ 
+Payment_Amount for place holder
+Payment_Amount
+Char
+15
+310.41
+PaymentAmount as stored in IC
+Convenience_Fee
+Char
+15
+0
+ConvenienceFee as stored in IC
+Total_Amount
+Char
+15
+310.41
+PaymentAmount as stored in IC
+Payment_Type
+Char
+15
+Cloud Store or Utility
+Utility (Invoice type 42) or Cloud Store (Invoice Type 63 - Biller 3780 Galveston)
+Account_Number
+Char
+15
+060-0007598-001
+Pull from AccountNumber on Invoice
+Customer_First_Name
+Char
+30
+blank
+Need a comma before the Customer_Last_Name for place holder
+Customer_Last_Name
+Char
+30
+CESAR RODRIGUEZ
+Pull from CustomerName on Invoice 
+(Use full name since we don’t store them separately)
+Payment_Date_Time
+Char
+17
+MM/DD/YYYY
+PaymentDate as stored in IC
+Payment_Method_Type
+Char
+30
+CC, EFT, Check, Cash, etc.…
+PaymentType as stored in IC(it can be coded to anything )
+Payment/Lockbox File (Biller 3780 - Galveston County)
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller.  
+For biller 3780 Galveston County, a separate payment export for invoice type 63 Cloud Payments is generated.  This file must be saved in the following format:  3780_YYYYMMDDHHMMSS_ICPaymentsDeposits_YYYYMMDDHHMMSS.csv
+File Extension: csv
+File Naming Convention: N/A
+File Delimiter: comma
+Specification: 
+File must have the header record like in the sample file
+Sample File:
+SFTP File Path: D:\inetpub\ftproot\galvestoncountywcid1\FromInvoiceCloud\Payments
+File Transfer Frequency: Daily
+Naming Convention:  Include the word “Deposits” in the filename:  
+3780_YYYYMMDDHHMMSS_ICPaymentsDeposits_YYYYMMDDHHMMSS.csv
+Field Mapping
+Confirmation_Number and Payment_Type can be empty, but there had to be a comma for place holder.
+Name filed will be used as information only. The name on the bill is the three name field in the data base put together either last name + first name + middle name or first + middle +last depending on how the define the name as either a business or individual. 
+Field
+Data Type
+Character Limits
+Sample
+Values
+Confirmation_Number
+N/A
+Need a comma before the
+ 
+Payment_Amount for place holder
+Payment_Amount
+Char
+15
+310.41
+PaymentAmount as stored in IC
+Convenience_Fee
+Char
+15
+0
+ConvenienceFee as stored in IC
+Total_Amount
+Char
+15
+310.41
+PaymentAmount as stored in IC
+Payment_Type
+Char
+15
+Cloud Store or Utility
+Cloud Store (Invoice Type 63 - Biller 3780 Galveston)
+Account_Number
+Char
+15
+060-0007598-001
+Pull from AccountNumber on Invoice
+Customer_First_Name
+Char
+30
+blank
+Need a comma before the Customer_Last_Name for place holder
+Customer_Last_Name
+Char
+30
+CESAR RODRIGUEZ
+Pull from CustomerName on Invoice 
+(Use full name since we don’t store them separately)
+Payment_Date_Time
+Char
+17
+MM/DD/YYYY
+PaymentDate as stored in IC
+Payment_Method_Type
+Char
+30
+CC, EFT, Check, Cash, etc.…
+PaymentType as stored in IC(it can be coded to anything )
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: csv
+File Naming Convention: N/A 
+File Delimiter: comma
+Specification: 
+Sample File:
+SFTP File Path: D:\inetpub\ftproot\galvestoncountywcid1\FromInvoiceCloud\ChangeLogs
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Invoices are uploaded to SFTP in Galveston (Open Gov) format and imported as a BIF
+Data Flow - Adjustments
+Adjustments are uploaded to SFTP in Galveston (Open Gov) format and imported as a BAF
+Data Flow - Payment
+Payments are uploaded to SFTP in Galveston (Open Gov) format and imported by Biller. 
+Data Flow - Void
+CSR will manually void payment in Biller Portal and void payment in OpenGov
+Data Flow - ACH Reject
+When an ACH Reject occurs an email will be sent to the biller and they will manually remove the payment in OpenGov
+Data Flow - Change Log
+Change Log Files are uploaded to SFTP
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+CSRs will use Biller Portal to help with any issues
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-1862
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+12/08/2023
+Coding request for STW/OpenGov Integration (Batch)
+ 
+ITG-2733: New Request for 3780-Galveston County WCID #1
+07/18/2024
+Payment Export only includes invoice type 42 and biller 3780 Galveston is requesting 63 Cloud Store be added.
+Separate payment export file will be generated for 3780 Galveston for Cloud Payments
+Coding request for 3780 Galveston.
+ITG-3177
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Payment Export only includes invoice type 42 and biller 3780 Galveston is requesting 64 Cloud Store be added.
+Separate payment export file will be generated for 3780 Galveston for Cloud Payments
+Coding request for 3780 Galveston.
+ URL:/spaces/IM/pages/2859171935/STW+OpenGov+Technical+Design

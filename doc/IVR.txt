@@ -1,0 +1,168 @@
+IVR Tech documentation references CloudIVR.asmx in their call flow, but behind the scenes it resolves to the below endpoints.
+IVR Tech endpoints in use:
+System Available - 
+https://nsp.invoicecloud.com/portal/webservices/custom/ivrtechv1.asmx
+Advanced IVR Search - 
+https://nsp.invoicecloud.com/portal/webservices/custom/ivrtechv1.asmx
+Refresh History - 
+https://www.invoicecloud.com/api/v1/cp/invoice/{invoiceguid}/refreshhistory
+Summary - 
+https://www.invoicecloud.com/portal/webservices/CloudReporting.asmx
+Various Payments Call - 
+https://nsp.invoicecloud.com/portal/webservices/custom/ivrtechv1.asmx
+IVR Tech MyIIS Soap methods
+ValidWebLinkRequest
+(WebLinkReq As WebLink_Request, ByRef biller As clsBillers, ByRef validationMessage As String) As Boolean
+Validates the partner using clsUtilities.ValidateIvrPartner(WebLinkReq.PartnerGUID, WebLinkReq.PartnerKey).
+If the partner is not valid, sets validationMessage to "Unable To Authenticate Partner" and returns False.
+Validates the biller and product using ValidateBillerAndProduct(WebLinkReq.BillerGUID).
+If the biller and product are not valid, sets validationMessage to "Unable To Load Biller" and returns False.
+Validates the phone number for SMS using clsUtilities.TXTValidatePhoneNumberForSMS(WebLinkReq.CustomerPhoneNumber).
+If the phone number is not valid, sets validationMessage to "Invalid CustomerPhoneNumber" and returns False.
+If all checks pass, returns True.
+InvoiceExists
+(ByVal billerID As Integer, ByVal invoiceGUID As String, ByRef customerID As Integer, ByRef invoiceID As Integer) As Boolean
+Checks if invoiceGUID is a valid GUID using clsValidation.isValidGUIDv2(invoiceGUID).
+If invoiceGUID is valid, loads the invoice by the invoice GUID and biller ID using Invoices.LoadInvoiceByGUID(invoiceGUID, billerID).
+If the invoice exists, sets customerID and invoiceID to the customer ID and invoice ID of the invoice, respectively.
+Returns True if the invoice exists (i.e., invoiceID is not 0); otherwise, returns False.
+SendWebLink
+(ByVal Request As WebLink_Request) As WebLink_Response
+Validates the request data using ValidWebLinkRequest(Request, myBiller, validationMessage).
+If the data is not valid, returns a WebLink_Response with MessageSent set to False and Message set to validationMessage.
+Checks if the invoice exists using InvoiceExists(myBiller.BillerID, Request.InvoiceGUID, customerID, invoiceID).
+If the invoice does not exist, returns a WebLink_Response with MessageSent set to False and Message set to "Invoice Not Found".
+Sends an SMS using clsSMS.SendSMS(myBiller, Request.CustomerPhoneNumber, invoiceID, customerID, Request.InvoiceGUID).
+Logs the response using clsUtilities.WriteDebugLog("CloudIVR", "SendWebLink", 25, webProcessLogBody.ToString()).
+If the SMS is sent successfully, returns a WebLink_Response with MessageSent set to True and Message set to "Message Sent"; otherwise, returns a WebLink_Response with MessageSent set to False and Message set to "SMS Failure".
+ValidateBillerAndProduct
+(ByVal billerGUID As String) As clsBillers
+Loads the biller by the biller GUID using clsBillers.LoadBillerByGUID(billerGUID).
+Checks if the biller supports the product CloudIVRConnect using clsBillers.SupportsProduct(biller.BillerID, "CloudIVRConnect").
+If the biller supports the product, returns the biller; otherwise, sets the BillerID of the biller to 0 and returns the biller.
+AdvancedIVRSearch 
+Initialization
+: 
+The function starts by creating a new instance of clsBillers named myBiller and a StringBuilder for logging named log.
+Execution and Logging
+: 
+The function then calls clsUtilities.ExecuteAndLogMethod. This method is designed to execute a function and log its execution. It takes three functions as arguments:
+The first function simply returns myBiller.
+The second function generates a log string that includes the BillerID and BillerDBA of myBiller.
+The third function contains the main logic of the AdvancedIVRSearch function.
+Logging Request Parameters: 
+The third function starts by logging the properties of the Request object.
+Partner Validation: 
+It then validates the partner using the clsUtilities.ValidateIvrPartner function. If the partner is not valid, it logs the end of the validation process, sets the ErrorMessage property of the RETVAL object to "Unable to Authenticate Partner", and returns RETVAL.
+Biller and Product Validation: 
+If the partner is valid, it validates the biller and product using the ValidateBillerAndProduct function. If the biller is not valid, it sets the ErrorMessage property of the RETVAL object to "Unable to Load Biller".
+Processing Request: 
+If the biller is valid, it processes the request based on the SearchType property of the Request object. Depending on the SearchType, it executes different SQL queries using the clsDatabase.GET_DATASET_WITH_ROLLOVER or clsDatabase.GET_DATASET function.
+Search Type Cases
+AdvancedInvoiceSearchType.SearchByInvoiceGUID
+: 
+If the SearchType is "SearchByInvoiceGUID", the function constructs an SQL query to execute the stored procedure selInvoices with the BillerID and InvoiceGUID as parameters. The result of this query is stored in the DT DataTable. The EventFilter is set to INVOICE_GUID.
+AdvancedInvoiceSearchType.SearchByAdvancedUtilityCustomerNumberAndLocationNumber
+The SQL string is constructed to execute the stored procedure spIvrSearchByAcctNum. The query includes parameters for BillerID, InvoiceTypeID, and AccountNumber. The clsDatabase.SqlSafe method is used to sanitize the AccountNumber and CustomerNumber inputs to prevent SQL injection attacks.
+If the BillerID is not 644, a hyphen is appended to the AccountNumber parameter in the SQL query. 
+The CustomerNumber is appended to the AccountNumber parameter in the SQL query. This means that the AccountNumber parameter in the stored procedure expects a string in the format "AccountNumber-CustomerNumber".
+The virtualGroupGuidSql is appended to the SQL query. This Guid is used to tie together multiple invoice types for searching purposes if provided.
+The SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.
+The EventFilter is set to CUSTOMERNUMBER_WITH_LOCATIONNUMBER and indicates the type of search that was performed for logging or tracking purposes.
+ AdvancedInvoiceSearchType.SearchByAccountNumber
+The first part of the code checks if the CustomOptions property of the Request object contains the string "SPOTSYCUSTOM1". If it does, it modifies the AccountNumber property by inserting a hyphen at the 6th position and prepending the string "WTR-". 
+The Select Case statement performs different actions based on the BillerID of the myBiller object.
+If BillerID is 727 or 729, it calls the Arlington_IVR_Search method with myBiller and a sanitized (SqlSafe) AccountNumber as parameters. The result is assigned to the DataTable DT. The DataTable is cleared before the method call, and the start and end of the method call are logged.
+If BillerID is 1532 or 1591, it calls the SafetyInsurance_IVR_Search method with the same parameters and performs the same actions as described above.
+For all other BillerID values, it constructs an SQL query to execute the stored procedure spIvrSearchByAcctNum. The query includes parameters for BillerID, InvoiceTypeID, and AccountNumber. 
+If CustomOptions contains the string "DISPLAYACCOUNTNUMBER", an additional parameter DisplayAccountNumber is added to the SQL query. 
+The virtualGroupGuidSql is appended to the SQL query. 
+The DataTable DT is cleared, and the SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.
+ The first DataTable from the returned DataSet is assigned to DT.
+The EventFilter is set to ACCOUNT_NUMBER, which indicates the type of search that was performed for logging or tracking purposes.
+AdvancedInvoiceSearchType.SearchByInvoiceNumber
+: 
+If the SearchType is "SearchByInvoiceNumber", the function constructs an SQL query to execute the stored procedure spIvrSearchByInvNum with the BillerID, InvoiceTypeID, and InvoiceNumber as parameters. The result of this query is stored in the DT DataTable. The EventFilter is set to INVOICE_NUMBER.
+AdvancedInvoiceSearchType.SearchByAccountNumberAndInvoiceNumber
+: 
+It starts by constructing an SQL query to execute a stored procedure named spIvrSearchByAcctInvNum. 
+The SQL query is built up by appending various parameters to the base query string. These parameters include BillerID, InvoiceTypeID, AccountNumber, and BillerInvoiceNumber. The clsDatabase.SqlSafe method is used to sanitize the AccountNumber and InvoiceNumber inputs to prevent SQL injection attacks.
+If the CustomOptions property of the Request object contains the string "DISPLAYACCOUNTNUMBER", an additional parameter DisplayAccountNumber is added to the SQL query.
+The virtualGroupGuidSql is appended to the SQL query. This guid ties together multiple invoice types to search across.
+The SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.  The first DataTable from this DataSet is then assigned to DT.
+The EventFilter is set to ACCOUNTNUMBER_WITH_INVOICENUMBER, which indicates the type of search that was performed for logging or tracking purposes.
+AdvancedInvoiceSearchType.SearchByBillYearAndInvoiceNumber
+: 
+The first If statement checks if the string "TULARECUSTOM1" is present in the CustomOptions property of the Request object. If it is, the code inside the If statement is executed.
+Inside the If statement, a Try block is used to handle any exceptions that might occur. The CustomOptions property is converted to uppercase and the string "TULARECUSTOM1" is removed from it. Any double spaces in CustomOptions are replaced with a single space.
+The InvoiceNumber property of the Request object is reformatted. It's split into four parts, each three characters long, and these parts are joined together with hyphens.
+If an exception occurs during the execution of the Try block, it's caught and ignored. This means that if there's an error during the reformatting of InvoiceNumber or CustomOptions, the program won't crash, but it also won't provide any information about the error.
+After the If statement, there's a validation check for the BillYear property of the Request object. If BillYear is not null or empty and is not a numeric value, an error message is set in the RETVAL object and the function returns RETVAL.
+If BillYear is valid, an SQL query is constructed to execute the stored procedure spIvrSearchByYearInvNum. The query includes parameters for BillerID, InvoiceTypeID, BillYear, and InvoiceNumber. The clsDatabase.SqlSafe method is used to sanitize the BillYear and InvoiceNumber inputs to prevent SQL injection attacks
+The virtualGroupGuidSql is appended to the SQL query. This guid ties together multiple invoice types to search across.
+The SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.
+The EventFilter is set to BILLYEAR_WITH_INVOICENUMBER and indicates the type of search that was performed for logging or tracking purposes.
+AdvancedInvoiceSearchType.SearchByBillYearAndAccountNumber
+: 
+The first part of the code validates the BillYear property of the Request object. It checks if BillYear is not null or empty and if it's a numeric value. If BillYear is null, empty, or not numeric, an error message is set in the RETVAL object and the function returns RETVAL.
+If BillYear is valid, an SQL query is constructed to execute the stored procedure spIvrSearchByYearAcctNum. The query includes parameters for BillerID, InvoiceTypeID, BillYear, and AccountNumber. The clsDatabase.SqlSafe method is used to sanitize the BillYear and AccountNumber inputs to prevent SQL injection attacks.
+The PartialMatch parameter is set to 0 in the SQL query. This indicates that the search should return exact matches only.
+If the CustomOptions property of the Request object contains the string "DISPLAYACCOUNTNUMBER", an additional parameter DisplayAccountNumber is added to the SQL query.
+The virtualGroupGuidSql is appended to the SQL query. This guid ties together multiple invoice types to search across.
+The SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.
+The EventFilter is set to BILLYEAR_WITH_ACCOUNTNUMBER and indicates the type of search that was performed for logging or tracking purposes.
+AdvancedInvoiceSearchType.SearchByBillYearAndAccountNumberWithPartialMatch
+: 
+The first part of the code validates the BillYear property of the Request object. It checks if BillYear is not null or empty and if it's a numeric value. If BillYear is null, empty, or not numeric, an error message is set in the RETVAL object and the function returns RETVAL.
+If BillYear is valid, an SQL query is constructed to execute the stored procedure spIvrSearchByYearAcctNum. The query includes parameters for BillerID, InvoiceTypeID, BillYear, and AccountNumber. The clsDatabase.SqlSafe method is used to sanitize the BillYear and AccountNumber inputs to prevent SQL injection attacks.
+The PartialMatch parameter is set to 1 in the SQL query. This indicates that the search should return both exact and partial matches.
+If the CustomOptions property of the Request object contains the string "DISPLAYACCOUNTNUMBER", an additional parameter DisplayAccountNumber is added to the SQL query.
+The virtualGroupGuidSql is appended to the SQL query. This guid ties together multiple invoice types to search across
+The SQL query is executed using the clsDatabase.GET_DATASET_WITH_ROLLOVER method.
+The EventFilter is set to BILLYEAR_WITH_PARTIALACCOUNTNUMBER and indicates the type of search that was performed for logging or tracking purposes.
+AdvancedInvoiceSearchType.SearchByCustomerPhoneNumber
+: 
+If the SearchType is "SearchByCustomerPhoneNumber", the function constructs an SQL query to execute the stored procedure spIvrSearchByPhoneNumber with the BillerID, InvoiceTypeID, and CustomerPhoneNumber as parameters. 
+The result of this query is stored in the DT DataTable. The EventFilter is set to CUSTOMER_PHONE_NUMBER.
+AdvancedInvoiceSearchType.SearchByAccountNumberAndZip
+: 
+If the SearchType is "SearchByAccountNumberAndZip", the function constructs an SQL query to execute the stored procedure spIvrSearchByAccountNumberZip with the BillerID, InvoiceTypeID, AccountNumber, and Zip as parameters. 
+If the CustomOptions property of the Request object contains the string "DISPLAYACCOUNTNUMBER", an additional parameter DisplayAccountNumber is added to the SQL query.
+The result of this query is stored in the DT DataTable. The EventFilter is set to ACCOUNTNUMBER_WITH_ZIPCODE.
+Data Refresh
+: 
+After executing the SQL query, it checks if the returned DataTable has any rows. If it does, it sets the return values using the SetAdvancedSearchReturnValues function and processes the customer phone number if necessary.
+No Results Found
+: 
+If the DataTable does not have any rows, it sets the ErrorMessage property of the RETVAL object to "No results found".
+Exception Handling
+: 
+The function includes two nested Try...Catch blocks to handle any exceptions that occur during the execution of the function. It logs any exceptions that occur.
+Logging and Returning Result: 
+Finally, it logs the result of the search using the AdvancedSearchLog function and returns the RETVAL object.
+StoreCustomerPaymentMethod
+The function takes four parameters: PartnerGUID, PartnerKey, BillerGUID, and PaymentGUID. These are unique identifiers for the partner, biller, and payment method.
+The function begins by creating a new instance of clsBillers and a StringBuilder for logging.
+The function is wrapped in a clsUtilities.ExecuteAndLogMethod call, which is a utility method that executes the provided function and logs any exceptions that occur.
+The function first validates the PaymentGUID to ensure it's in the correct format. If it's not, an exception is thrown.
+The function then validates the partner using the PartnerGUID and PartnerKey. If the partner is valid, it proceeds to validate the biller and product using the BillerGUID.
+If the biller is valid, it constructs an SQL query to select payments for the given biller and payment GUID.
+The SQL query is executed and the result is stored in a DataTable. If the DataTable has rows, it means a payment method was found.
+The function then checks if the CustomerID is greater than 0. If it is, it loads the customer details using the CustomerID and BillerID.
+Depending on the PaymentTypeID, the function either decrypts the credit card number or the bank account number.
+If the payment type is a credit card, it validates the card type using its BIN (Bank Identification Number). If the card type is not allowed, an exception is thrown. If the card type is allowed, it stores the credit card as the new default payment method for the customer.
+If the payment type is ACH (Automated Clearing House), it stores the bank account as the new default payment method for the customer.
+If the payment type is neither credit card nor ACH, it ignores the payment method.
+If any exceptions occur during the execution of the function, they are caught and logged, and the function returns False.
+If the function executes successfully, it returns True.
+StoreCustomerPaymentMethodV2
+Validation: The function first validates the PaymentGUID to ensure it's in the correct format. If it's not, an exception is thrown.
+Partner Authentication: The function then validates the partner using the PartnerGUID and PartnerKey provided. If the partner is not valid, the function ends and logs the event.
+Biller Validation: If the partner is valid, the function validates the biller using the BillerGUID. If the biller is not valid, the function ends and logs the event.
+Payment Information Retrieval: If the biller is valid, the function executes a SQL query to retrieve the payment information associated with the BillerID and PaymentGUID.
+Customer Information Retrieval: If a payment record is found, the function retrieves the customer information associated with the CustomerID in the payment record.
+Payment Method Storage: Depending on the PaymentTypeID in the payment record, the function then stores the payment method. If the PaymentTypeID is 1, it's a credit card payment. The function decrypts the credit card number, validates the card type, and stores the credit card as the new default. If the PaymentTypeID is 2 or 4, it's an ACH payment. The function decrypts the bank account number and stores it as the new default.
+Payment Method GUID Retrieval: After storing the payment method, the function retrieves the GUID of the stored payment method and sets it in the storageResponse.
+Error Handling: If an exception occurs at any point during the execution of the function, the function catches the exception, sets RecordStored in storageResponse to False, and logs the exception.
+Return: The function returns storageResponse, which contains information about whether the payment method was stored successfully and the GUIDs of the stored payment methods.
+ URL:/spaces/ED/pages/2693169157/IVR

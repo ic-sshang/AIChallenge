@@ -1,0 +1,8 @@
+Add build validation policy to the main branch to ensure that the build pipeline runs
+Configure the DevOps integration for the project in SonarQube
+Open a PR to main branch. This should trigger a build from the PR rather than from a branch.
+note
+: if you have an existing PR, the validation won't show up, even if you update the PR. Maybe it would if you push a new commit - need to test this. Definitely shows up if you open a new PR.
+After the PR run completes, add the Sonar status check to the main branch’s policies.
+ 
+ URL:/spaces/platform/pages/3073638434/Configuring+SonarQube+PR+Gates

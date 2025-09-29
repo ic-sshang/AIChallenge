@@ -1,0 +1,59 @@
+note
+Also make sure to look at 
+Engineering Standards
+ .
+
+
+Also make sure to look at 
+Engineering Standards
+ .
+
+
+Whatever code you touch, you must write an integration or unit test.
+Eventually you would add new logic to legacy code but as long as you are inserting new well-tested code you won't have to unit test that part of the legacy code.
+Data Access Layer or any external call methods should have an integration test. Whatever object is responsible for this logic should be injectable and mockable, usually an interface.
+Service methods will usually utilize the DAL objects to perform business operations, therefore we should have a unit test for each method with the DAL objects mocked.
+All testing should be properly organized, and mimic the structure of our code, either by namespace or folder structure.
+Utilize what's already there.
+Framework
+Business
+TransactionService
+ReportingService
+HyperWalletService
+OnlineBankDirectService
+etc.
+DAL
+TransactionRepository
+ReportingRepository
+HyperWalletRepository
+OnlineBankDirectRepository
+etc.
+Models
+Enums
+PaymentType
+PaymentStatusType
+etc.
+Entities
+Requests
+Responses
+Model objects
+Interfaces
+We should have 1 per Service and Repository in order to make them injectable and mockable.
+All jobs and API services in the repo should have access to the Framework code, mainly the Business.
+Create new objects 
+IF
+:
+We need Models
+We are going to refactor a lot of old code and would like to toggle between old and new logic.
+We need to break down and encapsulate legacy code for easier testing, maintenance, and integration of new logic.
+We are implementing something completely new if we can't fit it in with our current infrastructure.
+Add internal comments to any complex logic - not all code is self-explanatory.
+Every new method created, or any method touched should have a proper summary.
+ 
+https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags
+ 
+Example – 
+Note
+Green
+ also from this example methods in the repository objects should be named the same as the stored proc they are calling.
+ URL:/spaces/ED/pages/2964521878/Guidelines+-+Making+Changes+to+ICPaymentProcessingAPI+Repo

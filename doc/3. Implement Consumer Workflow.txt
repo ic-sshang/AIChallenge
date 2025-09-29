@@ -1,0 +1,188 @@
+Overview
+This section will walk through the planning and design of command and event consumer types.
+Planning Steps
+Identify which Consumers are needed.
+Create an 
+IHandleMessages<T>
+ implementation.
+Register all dependencies.
+Review Setup & rightsizing
+1. Identify Consumers
+Now that we’ve wired up our producer, we can move over to the consumer side and begin to utilize the messages that our producers/publishers are producing/publishing! You may recall that we put together a diagram highlighting all of our cause & effect scenarios a couple of sections ago - let’s refer back to that as we’re getting started on our consumer workflows.
+2
+1
+0
+0
+4132077661
+4112810078
+1
+Untitled Diagram-1742304264573.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1742304264573.drawio
+0
+670.5
+574.4711230835471
+Note above that we have a handful of events that result in other services performing some kind of command behavior, internally. When we last left our Shopping Cart, we had just added a product into the cart - let’s focus in on the result of that event occurring.
+We can see that the 
+ProductService
+ is a consumer of the 
+ProductAddedToCart
+ event. Specifically, whenever that event occurs, the 
+ProductService
+ is going to 
+ReserveQuantity
+ to allocate some quantity of a product for the shopping cart. This means we will need a consumer for the 
+ProductAddedToCart
+ event to be created in the 
+ProductService
+ that is able to listen for and handle the event whenever it occurs. We could similarly introduce handlers for the other commands and events originating from our Shopping Cart service.
+While the example of the 
+ProductService
+ is used to demonstrate event-driven behavior here, there are likely better approaches to handling a problem like this in a real-world scenario; one example would be the 
+Reservation Pattern
+. We wouldn’t really want to commit our product inventory until an order has actually been placed and we would also want to make sure we have enough stock to fulfill what the user has added to their cart. 
+This is an example of a 
+distributed transaction
+ - where we are now coordinating state across multiple services. This will see us abandoning 
+ACID transactions in favor of BASE transactions.
+While, to some degree, we were a bit on our own with the producer implementation - Rebus offers the 
+IHandleMessages<T>
+ interface that supports automatic message handler registration. Classes implementing this interface will act as a listeners and handler for commands or events placed on the bus using 
+Send
+ or 
+Publish
+.
+Consumers can exist in the same project alongside producers/publishers, or they can be completely separated into different projects, effectively decoupling the message consumption from the production. Which approach to choose really depends on the use-case and to what degree the consumer will be required to scale. Consider that a high-traffic event consumer placed inside of an API project will require scaling the entire API project each time the message backlog is heavy enough to warrant a scaling event while a .NET Worker Service will only need to scale a simple console app with very little internal behavior outside of handling events. If there are any doubts, start with a simple, isolated consumer class local to the project that can be easily broken out into its own worker, if necessary.
+Let’s take a look at implementing Consumer behavior.
+2. Create an 
+IHandleMessages<T>
+ Implementation
+We previously identified just one consumer for our 
+ProductAddedToCart
+ event in the hypothetical 
+ProductService
+ - let’s see how the implementation of a consumer looks in that context.
+c#
+public ProductAddedToCartConsumer: IHandleMessages<ProductAddedToCart> {
+    private readonly ILogger<ProductAddedToCartConsumer> _logger;
+    private readonly IBus _messageBus;
+    private readonly IProductRepository _repository;
+    public ProductAddedToCartConsumer(IProductRepository repository, IBus messageBus, ILogger<ProductAddedToCartConsumer> logger) {
+        this._repository = repository;
+        this._messageBus = messageBus;
+        this._logger = logger;
+    }
+    
+    public async Task Handle(ProductAddedToCart @event) {
+   
+        // Use the properties from the incoming event to do some work.     
+        var product = await this._repository.GetById(@event.ProductId);
+        
+        // Execute the `ReserveQuantity` command against the Product
+        product.ReserveQuantity(@event.Quantity);
+        
+        await this._repository.Save();
+        
+        // If necessary, we could also publish an event here indicating that quantity was reserved.
+        await this._messageBus.Publish(new ProductQuantityReserved {
+          // Propagate the CorrelationId, Username, and Timestamp
+          CorrelationId = @event.CorrelationId,
+          Username = @event.Username,
+          Timestamp = @event.Timestamp,
+          
+          // Set other properties
+          ProductId = @event.ProductId,
+          ReservedQuantity = @event.Quantity,
+          RemainingQuantity = product.Quantity
+        });
+    }
+}
+Now, whenever a 
+ProductAddedToCart
+ event occurs in the system, we have a consumer that is able to consume the message off of the bus & perform some work with it. Once this handler finishes processing the message, it will be pulled off of the Service Bus queue & subsequent messages will continue to be processed in a FIFO manner.
+With this very simple consumer example in place, let’s move on to the wire-up.
+3. Register Dependencies
+Much like the Producer Workflow, there is a need to now register our consumer within the 
+Program.cs
+ or 
+Startup.cs
+ file to bootstrap it for use by the running service. 
+Refer back to the example from the beginning, if necessary
+ - 
+do
+ 
+note that we would be completing this wire up in a DIFFERENT service than we were previously, 
+ProductService
+.
+c#
+.AddRebus(cfg => 
+
+ // Add Logging for the Bus - this is using a console-based logger, others are available.
+ cfg
+ .Logging(l => l.ColoredConsole(minLevel: Rebus.Logging.LogLevel.Debug))
+ 
+// Configure Various Rebus Options to control behavior.
+.Options(o => {
+     // Sends messages to an `-error` queue for the service after 5 retry attempts.
+     o.RetryStrategy($"{messageConfiguration.RebusInputQueue}-error", 5);
+     
+     // Conventionalizes all of the topic names auto-created based on type name.
+     // `ProductAddedToCart` -> `product-added-to-cart`
+     o.UseKebabCaseTopicNames();
+})
+
+// Tells Rebus which Transport type to use - Azure Service Bus, RabbitMQ, Kafka, etc.
+.Transport(t => 
+  t.UseAzureServiceBus(azureServiceBusConnectionString, "my-kebab-case-service-name", new DefaultAzureCredential()))
+   .AutomaticallyRenewPeekLock()),
+    onCreated: async bus =>
+    {
+        await Task.WhenAll(
+          bus.Subscribe<ProductAddedToCart>()
+          // Add more message types as desired.
+        );
+    })
+    
+// Register our `IHandleMessage<T>` implementation.
+.AddRebusHandler<ProductAddedToCartConsumer>();
+There are a few things to highlight in the above example
+Each message handler in a project can be registered directly with the 
+IServiceCollection
+ by calling 
+.AddRebusHandler<THandleMessages>()
+ and providing the concrete type argument, 
+THandleMessages
+. Rebus will register these handlers internally and react to messages as they arrive on the bus.
+onCreated
+ is a callback method that is provided to the transport at registration. It will run asynchronously when the bus starts up and create the message 
+Subscriptions
+ for the given message type
+. 
+Note that there is a single 
+bus.Subscribe<TMessage>()
+ call provided - multiple messages can be added here - either manually or registered from an assembly by convention.
+ In the 
+.Options()
+ method - there is a 
+RetryStrategy
+ registered - in this case, we create a second queue for the service, which is identical but suffixed with 
+-error
+ - this will provide a location for any messages that produce exceptions or fail to process for whatever reason with a place to be dead lettered external from the primary consumption queue.
+There is one major piece of the registration which should not be overlooked and that is the 
+“my-kebab-case-service-name”
+ value. This value represents the name of an Azure Service Bus queue specific to the service owning message consumption.
+A vanilla pub/sub implementation with Azure Service Bus would typically involve publishing messages directly to topics and then having individual subscriptions for services that wish to consume those messages. However, a common pattern with some messaging SDKs is to use “topic exchange” - RabbitMQ uses this concept as a first-class feature and if you have any extended exposure with that particular message broker, this should feel a bit familiar.
+The idea is relatively simple - each consumer uses a queue, directly, for message consumption. When messages are published, they are sent to a topic corresponding to a specific message type - 
+product-added-to-cart
+, for example. Subsequently, each subscription to that message is configured such that it forwards all of the relevant messages to the queue that the consumer uses. 
+The intent of this is to establish a message routing topology that is used to ensure messages are always delivered where they are intended and help to avoid some common pub/sub pitfalls, like late subscribers.
+Here are more details on how 
+Rebus works with Azure Service Bus
+ - below is a visual representation of this concept, provided by the documentation.
+Rebus Azure Service Bus Model
+At this point, we have finished our Rebus consumer registration. When the consumer jobs starts up, either by running/debugging locally, or deploying out to a live environment - you should be able to observe the auto-creation of the Service Bus entities - topics, queues, and subscriptions.
+Summary
+In this section, we covered the wire-up of Rebus consumers and described how the SDK defines and manages message routing using Azure Service Bus. Once the consumer service has been wired up, it should be ready to start using! In subsequent sections, we’ll discuss in more detail, the application of a Helm chart to create the service and scaling behavior in Kubernetes, allowing us to process increasingly large volumes of messages as they are produced by external services.
+ URL:/spaces/PMK/pages/4279304511/3.+Implement+Consumer+Workflow

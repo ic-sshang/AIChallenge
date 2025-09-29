@@ -1,0 +1,72 @@
+Code-Generated Docs
+Description
+
+Test job for running UI tests on multiple browsers. Supported browsers are chrome, firefox, edge, and safari.
+
+Parameters
+Parameter
+Default
+Description
+sonarscan
+True
+run sonar scan. default is true
+projectName
+" "
+project name for sonarqube. default is empty string
+jobName
+" "
+job name. default is empty string
+dependsOn
+" "
+depends on. default is empty string
+testRepo
+" "
+test repo. default is empty string
+env
+" "
+environment variables. default is empty string
+tag
+" "
+tag to filter tests. default is empty string
+testFilter
+" "
+sets the filter directly to run only tests tagged with both smoke and foo i.e. Category=smoke&Category=foo. default is empty string
+nugetConfigPath
+" "
+path to nuget.config file. default is empty string
+threadCount
+-1
+number of threads to use for parallel test runs. default is -1
+pool
+" "
+pool to run the job in. default is empty string
+variables
+" "
+variables to pass to the job. default is empty string
+testproject
+**/*.csproj
+path to the test project file. default is **/*.csproj
+parallelTestRun
+True
+run tests in parallel. default is true
+sequentialTestRun
+False
+run tests in sequential. default is false
+populateXrayTestExecution
+False
+populate Xray test execution. default is false
+browsers
+" "
+browsers to run tests in.
+sendSlackNotification
+False
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/jira/get-fix-version.yaml
+../tasks/sonarqube/prepare-dotnet.yaml
+../tasks/sonarqube/analyze-and-publish.yaml
+ URL:/spaces/platform/pages/3635576981/jobs+test-multi-browser.yaml

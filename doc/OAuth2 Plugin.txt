@@ -1,0 +1,140 @@
+Plugin docs: 
+OAuth 2.0 Authentication - Plugin | Kong Docs
+The OAuth2 plugin can easily be applied at either or both the service (entire upstream / backend / microservice) and route (only on one specific endpoint) scope. To do this, in your tfvars file, add the following section to your route or service:
+oauth2 = {
+  config_json = "plugins/oauth2.json" # this should be the path to your plugin's config file
+}
+Here it is in context:
+kong_route_configurations = {
+  httpbin = {
+    backend_targets         = ["httpbin.org:443"]
+    backend_path            = "/anything/kong/to/httpbin"
+    healthcheck_active_path = "/anything/kong/to/httpbin"
+    routes = {
+      default = {
+        incoming_protocols = ["https", "http"]
+        incoming_hosts = [
+          "api-dev.invoicecloud-beta.com"
+        ]
+        incoming_paths         = ["/httpbin/v1"]
+        incoming_strip_path    = true
+        incoming_preserve_host = false
+        plugins = {
+          request_transformer_advanced = {
+            config_json = "plugins/httpbin-transformer.json"
+          }
+          oauth2 = {
+            config_json = "plugins/oauth2.json"
+          }
+        }
+      }
+    }
+  }
+}
+Here’s the simple configuration I used to test the oauth2 plugin:
+{
+    "enable_client_credentials": true
+}
+As you can see, I applied the plugin to the default route for httpbin. Once applied, when you try to hit the API, you get the following error:
+curl -i -X GET \
+ 'https://api-dev.invoicecloud-beta.com/httpbin/v1/get'
+
+# response:
+# {
+#   "error_description": "The access token is missing",
+#   "error": "invalid_request"
+# }
+The backend service, httpbin, has no authentication of its own. The oauth2 plugin is adding authentication as a requirement. As part of that, some routes get added to the endpoint where you’ve added the plugin.
+/oauth2/authorize
+The endpoint to the Authorization Server that provisions authorization codes for the 
+Authorization Code
+ flow, or the access token when the 
+Implicit Grant
+ flow is enabled. Only 
+POST
+ is supported.
+/oauth2/token
+The endpoint to the Authorization Server that provision access tokens. This is also the only endpoint to use for the 
+Client Credentials
+ and 
+Resource Owner Password Credentials Grant
+ flows. Only 
+POST
+ is supported.
+/oauth2_tokens
+The endpoint to the Authorization Server that allows creating new tokens. Useful on migrations (see below).
+/oauth2_tokens/:token_id
+The endpoint to the Authorization Server that allows reading, modifying and deleting access tokens.
+Now that we’ve applied the plugin, we need to provide a token to authenticate so that we can access our service. But where do we get a token? Hitting one of those new endpoints will do it. Assumes you already created a consumer in Kong and grabbed creds for it; will add details on how to go about doing that later.
+curl -i -X POST \
+   -H "Content-Type:application/json" \
+   -d \
+'{
+  "client_id": "Z0Wqr6wLFA2N8kcpGVmagu337BBTVL8T", 
+  "client_secret": "0SKkC8lQR3wHs6YZiJJH4SG2zQng5nCc", 
+  "grant_type": "client_credentials"
+}
+' \
+ 'https://api-dev.invoicecloud-beta.com/httpbin/v1/oauth2/token'
+ 
+# reponse:
+# {
+#   "token_type": "bearer",
+#   "expires_in": 7200,
+#   "access_token": "FK9NjZRRfm8a0QyW9E6dk8AtcU44VjXX"
+# }
+Now, we’ve got our token! Let’s use it to authenticate so that we can finally hit our API.
+curl -i -X GET \
+   -H "Authorization:Bearer FK9NjZRRfm8a0QyW9E6dk8AtcU44VjXX" \
+   'https://api-dev.invoicecloud-beta.com/httpbin/v1/get'
+Pretty simple – we just provide the bearer token as an auth header, and we’re set! Here’s the response from httpbin, which is just parroting back what we sent it. You can see that some headers get added to the request as it traverses through Kong. For example, 
+X-Consumer-Username
+ shows you the name of our consumer defined in Kong.
+{
+  "args": {
+    "itWorked": "true"
+  }, 
+  "data": "", 
+  "files": {}, 
+  "form": {}, 
+  "headers": {
+    "---Internal-Request-Id": "5ce7e92a-d621-4eb0-a1e6-744a95472a92", 
+    "Accept": "*/*", 
+    "Accept-Encoding": "gzip, br", 
+    "Accept-Language": "en-US,en;q=0.9", 
+    "Authorization": "Bearer FK9NjZRRfm8a0QyW9E6dk8AtcU44VjXX", 
+    "Cdn-Loop": "cloudflare; loops=1", 
+    "Cf-Connecting-Ip": "2a09:bac0:1000:16c::10:491", 
+    "Cf-Ipcountry": "US", 
+    "Cf-Ray": "902f8e536a1f00be-IAD", 
+    "Cf-Visitor": "{\"scheme\":\"https\"}", 
+    "Cookie": "aQ.plugin.registered=true; admin_session=AQEAXN4IrZs-3eOxYUZ2G1SljQ7trA3Qve68cEawB70OaQLVM4lnAAAAAACqAAAUUx_9P8nk9Ot3aChq7c7UCAIAwbGs8H2MnWZCb0G8jwoQmg", 
+    "Host": "httpbin.org", 
+    "Priority": "u=1, i", 
+    "Sec-Ch-Ua": "\"Microsoft Edge\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"", 
+    "Sec-Ch-Ua-Mobile": "?0", 
+    "Sec-Ch-Ua-Platform": "\"Windows\"", 
+    "Sec-Fetch-Dest": "empty", 
+    "Sec-Fetch-Mode": "cors", 
+    "Sec-Fetch-Site": "none", 
+    "Traceparent": "00-84b338dd2dbbc1b5f81e448f32636604-288f5549a5ec6f8c-01", 
+    "X-Amzn-Trace-Id": "Root=1-678936d5-7b9b1e46270b2f136bd889d3", 
+    "X-Appgw-Trace-Id": "982c5ee17faa20fc5bf9bda43a762972", 
+    "X-Consumer-Id": "5419828e-37eb-4c62-97ca-0d6047335ae4", 
+    "X-Consumer-Username": "testconsumer", 
+    "X-Credential-Identifier": "Z0Wqr6wLFA2N8kcpGVmagu337BBTVL8T", 
+    "X-Forwarded-Host": "api-dev.invoicecloud-beta.com", 
+    "X-Forwarded-Path": "/httpbin/v1/get", 
+    "X-Forwarded-Prefix": "/httpbin/v1", 
+    "X-Original-Host": "api-dev.invoicecloud-beta.com", 
+    "X-Original-Url": "/httpbin/v1/get"
+  }, 
+  "json": null, 
+  "method": "GET", 
+  "origin": "2a09:bac0:1000:16c::10:491,10.152.2.7, 10.152.88.153, 20.246.162.241", 
+  "url": "https://api-dev.invoicecloud-beta.com/anything/kong/to/httpbin/get?itWorked=true"
+}
+Other notes:
+You can add scopes in the plugin config if you want to use them in your application
+Seems like if you set something in the config, then remove it, it may not actually get returned to the default value in Kong – you may need to provide explicit values once you’ve set it once. Observed this behavior; seems like a provider bug
+ URL:/spaces/platform/pages/3908632583/OAuth2+Plugin

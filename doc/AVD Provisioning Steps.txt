@@ -1,0 +1,60 @@
+Clone the following 
+Repo
+Create a branch to track the updates for review
+git checkout -b update/${ticket_number}/${friendly-comma-separated-message}
+Navigate to the “groups” directory
+environments directory
+${environment}.tfvars
+Example: sbx.tfvars
+Locate the 
+avd_users or avd_admins
+ variable
+Add the users full Invoice Cloud email 
+example@invoicecloud.com
+ to the list
+save changes
+Run the following commands
+git add --all
+git commit -m "added ${username} avd
+git push
+Navigate to the the following 
+Pipeline
+Click “Run Pipeline”
+Select Branch that was created and pushed in previous steps
+Set deployment version, release candidate version and hotfix version accordingly
+Look at previous runs, if this is a new AVD for a user, up the hotfix by 1 digit for example
+Set Environment
+[npd]
+ for nonprod and 
+[prd]
+ for production
+Set region
+[pri]
+ or 
+[sec]
+Set user population
+[eus]
+ for East US as an example
+Click “Run”
+Ensure Terraform Plans are reviewed, and approvals are completed
+Navigate to relevant hostpool hp-${region}-${location}-avd${deployment_version}-${environment}
+Example: 
+hp-pri-eus-avd1-npd
+Click 
+Application Groups
+Click dag-${region}-${location}-avd${deployment_version}-${environment}
+Example: 
+dag-pri-eus-avd1-npd
+Click Assignments (manage)
+Click Add
+Find the username with the provided search bar
+Click Select
+Navigate back to the hostpool
+Click Total Machines
+Locate the AVD Virtual Machine created in the infrastructure provisioning steps
+Example: 
+avd-kcampbell
+Under the Assigned User column click Assign
+Select the User added from the earlier steps
+Click Assign
+ URL:/spaces/icinfradoc/pages/2804318218/AVD+Provisioning+Steps

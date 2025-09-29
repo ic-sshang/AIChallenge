@@ -1,0 +1,38 @@
+Currently Intune pushes Company Portal and user can install all programs needed from the portal. 
+Additional features for VS is needed manual install IE:
+Web development Tools
+ASP.net
+Created Access policy for AVD on the icappsettingsdevtest Key Vault needed secrets get permission
+AVD VNET/SNET needed access to the icappsettingsdevtest Key Vault 
+added the network through the firewall of the Key Vault by added the VNET of the AVD Network. 
+Azure.RequestFailedException: 'Client address is not authorized and caller is not a trusted service.
+Client address: 20.246.162.241
+Caller: appid=91ded0d5-d5b7-4db8-97f6-9580a52e7d14;oid=e07c196c-bdab-4250-9247-92c089a8dbd2;iss=https://sts.windows.net/6ee1d96e-4c90-42a8-be8a-f94078515d91/;xms_mirid=/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourcegroups/rg-pri-eus-avd1-npd/providers/Microsoft.Compute/virtualMachines/vm-avd-RHernandez1-pri-eus-avd1-npd;xms_az_rid=/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourcegroups/rg-pri-eus-avd1-npd/providers/Microsoft.Compute/virtualMachines/vm-avd-RHernandez1-pri-eus-avd1-npd
+Vault: icappsettingsdevtest;location=eastus
+Status: 403 (Forbidden)
+ErrorCode: Forbidden
+Content:
+{"error":{"code":"Forbidden","message":"Client address is not authorized and caller is not a trusted service.\r\nClient address: 20.246.162.241\r\nCaller: appid=91ded0d5-d5b7-4db8-97f6-9580a52e7d14;oid=e07c196c-bdab-4250-9247-92c089a8dbd2;iss=https://sts.windows.net/6ee1d96e-4c90-42a8-be8a-f94078515d91/;xms_mirid=/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourcegroups/rg-pri-eus-avd1-npd/providers/Microsoft.Compute/virtualMachines/vm-avd-RHernandez1-pri-eus-avd1-npd;xms_az_rid=/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourcegroups/rg-pri-eus-avd1-npd/providers/Microsoft.Compute/virtualMachines/vm-avd-RHernandez1-pri-eus-avd1-npd\r\nVault: icappsettingsdevtest;location=eastus","innererror":{"code":"ForbiddenByFirewall"}}}
+Headers:
+Pragma: no-cache
+x-ms-keyvault-region: eastus
+x-ms-client-request-id: 3b448ac1-ca78-4534-b259-0222303ec4ab
+x-ms-request-id: c14ed392-fd08-4189-be54-273b521f1289
+x-ms-keyvault-service-version: 1.9.1222.1
+x-ms-keyvault-network-info: conn_type=Ipv4;addr=20.246.162.241;act_addr_fam=InterNetwork;
+X-Content-Type-Options: REDACTED
+Strict-Transport-Security: REDACTED
+Content-Length: 753
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+Date: Thu, 25 Jan 2024 20:08:39 GMT
+Expires: -1
+'
+Needing Env Variables
+ENV VARS:
+IC_FTP_DIR=\\icwebsftppremium.file.core.windows.net\icftproot (get devtest, this is production)
+IC_ENV_TYPE=5
+IC_APPS_DIR= E:\Data\Apps
+IC_LOGS_DIR= E:\Data\Logs
+IC_APPDATA_DIR = E:\Data\AppData
+ URL:/spaces/icinfradoc/pages/3001876485/AVD+Onboarding+Issue+tracking

@@ -1,0 +1,554 @@
+Page Navigation
+Jira ticket 
+INT-1819
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Release Date
+8/23/2021
+Document status
+Complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Authentication
+:
+ 
+will be set using Advanced Setting 88
+A token is generated from an authentication URL. That token is then used as authentication for requests to the other endpoints.
+Test
+https://slot22.auth.ml.linkstaging.com/slot22/oauth/token
+Request Type: POST
+AUTH: Basic Auth
+username: invoiceCloud
+password: duolCeciovni
+Body Data: (Sent as x-www-urlformencoded)
+grant_type: client_credentials
+scope: billing:read account:read account:write payments:write
+Response contains access token which will be used as a Bearer Token. Token should be refreshed every “expires_in” minus 60 seconds.
+Mapping:
+Current version is still in use
+RTDR with correct JSON config - RefreshPastDue set to true to pull the “PastDue“ field from RTDR response “balanceOverdue“. 
+The given URL (slot22) is their dev environment and each biller will have a separate Subdomain for implementation.
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Account Balances
+We are currently ignoring these block flags during RTDR and have the customer update the blocked status in biller portal. All billers will need to start blocking payments on Invoice Cloud.
+allowPaymentCreditCard
+allowPaymentCheck
+JSON config - RefreshPastDue is configured to pull the “PastDue“ field from RTDR response “balanceOverdue“
+https://slot22.wsb.api.ml.linkstaging.com/slot22/accounts/{ID}/balances?billingGroupId={bgId}
+ID = AccountNumber
+BillingGroupID =
+ 
+Custom1 on bill
+http status 200 on success
+{
+    "balanceCurrent":  decimalAmount,
+    "balanceOverdue":  decimalAmount,
+     “balancePending”: decimalAmount,
+    
+"allowPaymentCreditCard":  boolean,
+    "allowPaymentCheck":  boolean
+}
+ID = AccountNumber
+BillingGroupID = InvoiceTypeID
+Balance Current = Balance Due
+If allowPaymentCreditCard = false or allowPaymentCheck = false then block that payment method (Ignored)
+If allowPaymentCreditCard or allowPaymentCheck = true then unblock if blocked (Ignored)
+Data Pump: Payment
+Post Customer Payments
+POST 
+https://slot22.wsb.api.ml.linkstaging.com/slot22/customers/payments
+JSON:
+InstallGroupType: 8
+BillerGUID : string
+PaymentDate : mm/dd/yyyy
+InvoiceNumber: int
+Approved: bool
+CustomerName: string
+CustomerAddress: string
+CustomerCity: string
+CustomerState: string
+CustomerZip: string
+PaymentGUID: string
+PaymentAmount: decimalAmount
+ (No convenience fee)
+PaymentDescription: string
+PaymentTypeID: int 
+(1 = Credit Card 2 = ACH. 
+3 = Credit Adj 4 = Easy Pay 5 = Check 6 = Cash 7 = Payment Disc 8 = Debit Adj 9 = Check 21 10 = Balance Forward 11 = Online Bank Direct 12 = Payment 13 = Auto Conveyance 14 = Pay Near Me 15 = PayPal 16 = PayPalCredit 17 = Venmo) If other payment source or value will have to be updated
+PaymentMessage: string
+BillerReference: string
+ConvenienceFee: decimal
+RemoteIP: string
+EmailAddress: string (Email address of the account that is logged in to be posted. If the account is not logged in (biller portal / one time payment they would like the email from the payment route posted back)
+AccountNumber: string
+InvoiceTypeID: field will be set to Custom1 from the bill being paid
+SourceChannel: int (1 for AgentConnect Payments, blank for all other payments)
+Response:
+200 = Success
+500 = failed
+Datapump Retry Logic
+If StatusCode = 500 (InternalServerError) and the ResponseContent = ‘429 Too Many Requests’  OR if StatusCode = 504 (Gateway TimeOut) the payment record will be retried up to 3x.  Muni-link checks the paymentGUID to ensure no duplicates are processed.
+Data Pump: Paperless / Autopay Enrollment
+Update Autopay/Ebill
+PUT 
+https://slot22.wsb.api.ml.linkstaging.com/slot22/accounts/{ID}/
+update
+ID = AccountID
+JSON: 
+updateType: “payment settings”
+updateField: “ebill” or “autopay”
+updateValue: boolean
+billingGroupID
+: Pull the most recent invoice of that invoicetypeid for that account and set from Custom1
+emailAddress - email address of user logged in making the change
+Response:
+200 = Success
+500 = failed
+Bill Linking
+Bill Print
+Returns the bill image as a base 64 string. 
+Note* the bill image is only available for in house printing currently. Any biller with SmartBill will need to do bill linking with them.
+GET 
+https://slot22.wsb.api.ml.linkstaging.com/slot22/bills/{bill_ID}
+Response: 200 success
+base64 string representing pdf
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: BIF
+File Transfer Frequency: Muni-Link will upload bills using UploadInvoiceFile in our BIF format. They stated they will upload about once a day, maybe 5 times a day max.
+Mapping provided by Muni-Link:
+Add JSON config to pull “PastDue” field from RTDR response “balanceOverdue“
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+rowType: InvoiceCloudIntegrationService.FILE_HEADER
+‘FH’
+File Header
+2
+BillerGuid
+Y
+TRUE
+billerGuid: InvoiceCloudIntegrationService.config [INVOICE_CLOUD_BILLER_GUID ]
+Set within WsAdmin for each biller
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+ID: AccountTransaction . ID
+The auto incremented database 'ID' from the table wsb_AccountTransaction that is linked to the cycle reading of all the bills sent.
+File Header
+4
+FileCreationDate
+Y
+TRUE
+date: AccountTransaction.date
+The 'date' field from the wsb_AccountTransaction record which was created when the cycle reading was posted
+File Header
+5
+InvoiceCount
+Y
+TRUE
+count: batchData.count
+Length of the array that holds the bills being sent
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+amount: batchData.amount
+Summation of each Bill.currentBillAmount
+File Header
+7
+RowType
+Y
+TRUE
+rowType: InvoiceCloudIntegrationService.INVOICE_HEADER
+Constant 'IH'
+Invoice Header
+8
+RecordType
+Y
+TRUE
+recordType: InvoiceCloudIntegrationService.INVOICE_RECORD_TYPE
+Constant 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+invoiceFormatGuid: InvoiceCloudIntegrationService.INVOICE_FORMAT_GUID
+Constant '740A84AB-CDA8-4FD7-86A4-BA8DA6CB7E1D'
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Billing . ID
+The auto incremented  database 'ID' from the table wsb_Billing
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+date: Billing.date
+The 'date' field from the wsb_Billing record
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+duedate: Billing.dueDate
+The 'dueDate' field from the wsb_Billing record
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+currentBillAmount: Billing.currentBillAmount
+The 'currentBilledAmount' field from the wsb_Billing record
+Invoice Header
+38
+Custom1
+Y
+FALSE
+BillingGroupID
+Originally billinggroupdid was set to invoicetypeid-100 but now it will be stored in the custom field on the bill to support a non 1:1 mapping between invoicetypeid and billing groupid
+93
+BalanceDue
+FALSE
+balanceDue: Billing.balanceDue
+The 'balanceDue' field from the wsb_Billing record
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+billingGroupId : Billing.billingGroupId
+100 + the numercal billingGroupId which the bill is tied to
+Invoice Header
+407
+PastDue
+FALSE
+pastDueBalance: Billing.pastDueBalance
+The 'pastDueBalance' field from the wsb_Billing record
+Add JSON config - RefreshPastDue to pull “PastDue” field from RTDR response “balanceOverdue“
+Invoice Header
+58
+RowType
+TRUE
+rowType: InvoiceCloudIntegrationService.CUSTOMER_ROW
+Constant 'CR'
+Customer Record
+59
+AccountNumber
+TRUE
+accountNumber
+The Account Number for which the bill is for. Derived from the service address, system configs, and the current accouts suffix. Linked by the current accounts database ID
+Customer Record
+60
+CustomerName
+TRUE
+name: Billing . Name
+The 'name' field from the wsb_Billing record
+Customer Record
+61
+Address1
+Y
+FALSE
+address1: Billing.address1 | Customer.address1
+Defaults to the 'address1' field from the wsb_Billing record, will be overwritten by the 'address1' field on the acc_Customer table if defined
+Customer Record
+62
+Address2
+FALSE
+address2: Billing.address2 | Customer.address2
+Defaults to the 'address2' field from the wsb_Billing record, will be overwritten by the 'address2' field on the acc_Customer table if defined
+Customer Record
+63
+City
+Y
+FALSE
+city: Billing.city | Customer.city
+Defaults to the 'city' field from the wsb_Billing record, will be overwritten by the 'city' field on the acc_Customer table if defined
+Customer Record
+64
+State
+Y
+FALSE
+state: Billing.state | Customer.state
+Defaults to the 'state' field from the wsb_Billing record, will be overwritten by the 'state' field on the acc_Customer table if defined
+Customer Record
+65
+Zip
+Y
+FALSE
+zip: Billing.zip | Customer.zip
+Defaults to the 'zip' field from the wsb_Billing record, will be overwritten by the 'zip' field on the acc_Customer table if defined
+Customer Record
+66
+Phone
+FALSE
+phoneNumber: Customer.phoneNumber
+The phoneNumber of the billTo customer tied to the bill. This could be Home, Mobile or Work based on the chosen primaryPhone type on the same customer object. If the primary definition is not set, or if the number for the chosen phone type is not set, it will default to the first valid phone number in order of Home, Mobile or Work
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+email: CustomerUser.email
+The 'email' field from the cus_CustomerUser record. It will not be sent if the account has not signed up for our portal payment system and may differ from a customer users email who views and pays this bill balance
+Customer Record
+409
+Active
+Y
+FALSE
+active: InvoiceCloudIntegrationService.CUSTOMER_ACTIVE
+Constant '1'
+Customer Record
+70
+RowType
+TRUE
+rowType: InvoiceCloudIntegrationService.INVOICE_DETAIL
+Constant 'ID'
+Invoice Detail
+71
+ProductID
+FALSE
+serviceTitle: ServiceControl.serviceTitle
+The 'title' field from the wsb_Service record being billed for. Bubbled up from the Service to the ServiceControl object which appends  '(Penalty)' or '(Interest)' if applicable (based on the 'type' of ServiceControl tied to the current BillingDetail)
+Invoice Detail
+72
+Description
+FALSE
+description: ServiceControl.description
+The 'description' field from the wsb_Service record being billed for. Bubbled up the Service to the ServiceControl object tied to the current BillingDetail
+Invoice Detail
+79
+LineItemTotal
+FALSE
+fullAmount: BillingDetail.fullAmount
+The summation of the fields 'amount', 'minimumAmount', and 'flatAmount' from the wsb_BillingDetail record being billed
+Invoice Detail
+Advanced Settings
+ng ID
+Description
+Value
+Is value unique per biller? (Y/N)
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+1
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+AllowPartialPayments
+On Biller by Biller basis, applied as BIF Customization
+AutoPayCollectionDate
+BalanceForward
+On Biller by Biller basis, applied as BIF Customization
+CreditCardServiceFee
+FirstNotifyRequestedDate
+On Biller by Biller basis, applied as BIF Customization
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+On Biller by Biller basis, applied as BIF Customization
+ThirdNotifyRequestedDate
+On Biller by Biller basis, applied as BIF Customization
+User Interaction and Design
+Data Flow - Invoice
+att1764196355
+1538555993
+1
+Invoices
+IM
+att1764425731
+att1764327445
+0
+Data Flow - Adjustments
+RTDR
+att1764065295
+1538555993
+1
+Adjustments
+IM
+att1764196360
+att1764655106
+0
+Data Flow - Payment
+att1764622344
+1538555993
+1
+Payments
+IM
+att1764327452
+att1764655111
+0
+Data Flow - Void
+Phase 1 - will be handled manually in both systems.
+Payment endpoint considered phase 2
+Data Flow - ACH Reject
+Phase 1 - will be handled manually in both systems.
+Payment endpoint considered phase 2
+Data Flow - Change Log
+Not yet needed - paperless / autopay updated through endpoint
+Data Flow - Bill Presentment
+att1764655116
+1538555993
+1
+Bill Presentment
+IM
+att1764622349
+att1764294667
+0
+Payer Experience
+Log on to Muni-Link portal + use IFrames or use one time payment route
+IFrames
+Open Invoices
+Autopay
+Paperless
+Pay by Text
+Payment Options
+Scheduled Payments
+Recurring Scheduled Payments
+Biller Experience
+att1764163600
+1538555993
+1
+CSR
+IM
+att1764294674
+att1764327467
+0
+Data Flow - Paperless / Autopay
+att1764458507
+1538555993
+1
+Accounts
+IM
+att1764622354
+att1764163588
+0
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UpdateUsername
+Used to update username when email is changed
+UpdateEmailAddress
+Email account information will be handled on Muni-Link platform and updating to IC through web service
+UploadInvoiceFile
+Uploading Invoices
+RemoteAuthentication
+SSO + Registering Accounts
+AgentConnect
+For CSR Experience
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-7865
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+01/09/2024
+PastDue field pulls from pastDueBalance: Billing.pastDueBalance
+Biller tries to utilize “PastDue“ field with RTDR response “balanceOverdue“
+Add JSON config - RefreshPastDue and set to true to pull “PastDue” field from RTDR response “balanceOverdue“. This is a JSON config that can be use for all Muni-Link billers.
+INT-6673
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+July 2023
+We were expecting Muni Link to pass block CC/ACH in RTDR
+Blocking of ACH/CC should be done in the IC biller portal
+RTDR was overwriting whatever block status was on account because we were expecting the status to be sent from Muni-Link.  They never completed their development work so RTDR was constantly passing a NON BLOCK status. The request is to remove that from RTDR and have customers block status in Biller Portal.
+INT-3475
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+June 2022
+Before for RTDR and Data Pump (Paperless / Autopay) the billing group id was being set from invoicetypeid -100. 
+Now it is being set to custom 1 on the bill
+This is so that the invoice type in IC can be set to something different than billing groupid + 100. This was needed for converting St. Charles
+INT-4164
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+July 2022
+Before Data Pump Payments was posting invoicetypeid using invoicetypeid-100
+It is now being set to custom 1 from the bill
+This is so that the invoice type in IC can be set to something different than billing groupid + 100. This was needed for converting St. Charles
+INT-3474
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+April 2022
+Invoice number was being cast to an int so if they sent any text or characters it would fail
+now strings can be accepted
+they needed to send over some bills with text in them like ‘PRIMING_123’
+INT-10410
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+July 2024
+Data pump occasionally receiving error 429 - Too Many Requests
+When errors occur, IC to have retry logic to retry errors.
+The retry logic is needed to keep biller systems updates with payments, autopay and paperless settings.
+ITG-3000
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Data pump retries are not happening when status codes are 401 and 504.  
+If StatusCode = 500 (InternalServerError) and the ResponseContect = ‘429 Too Many Rows’  OR if StatusCode = 504 (Gateway TimeOut) the payment record will be retried up to 3x. 
+Muni-link has de-duplicate logic by paymentGUID and these errors can be retried.
+ 
+St. Charles Custom Real Time Implementation
+Uploading Invoices (Muni-Link) (No Change needed on IC Side)
+ 
+Invoice Type 
+(Field 252): Muni-Link currently sends BillingGroupId for the invoice type field. For this customization Muni-Link will instead send invoicetype 1 (for ECM / Water) if the account starts with ‘92’, ‘93’, ‘94’, or ‘95’. For all other account numbers Muni-Link will set invoice type id to 42 (for Utility)
+Custom Field1 
+(Field 38): Custom1 is not currently being set by Muni-Link, for this customization this will be set to the BillingGroupID (which is expected to be the same for all bills on the portal)
+ 
+Real Time Data Refresh / Data Pump Autopay / Data Pump Paperless (Change needed on IC Side)
+ 
+Invoice Cloud currently subtracts 100 from the invoice type and sends that as BillingGroupId in the API calls to Muni-Link.
+For this customization Invoice Cloud will instead send the value in Custom Field 1 as the BillingGroupId value for Real Time Data Refresh and Data Pump
+ URL:/spaces/IM/pages/1538555993/Muni-Link+Technical+Design

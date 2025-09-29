@@ -1,0 +1,155 @@
+Page Navigation:
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Knowledge Transfer
+Gong Recording
+Summary
+Summary
+Details
+Software Partner Name
+Insurity
+Software Product Name
+Workmans Comp Express (WCXP)
+Software Cashiering System
+n/a
+Supported Versions
+Version 7.6 or later
+Version 7.6: IC embedded SSO screens and configure multiple invoice types (if needed). 
+CSRconnect available in 7.8 - release in mid-October 2020.
+No upgrade cost for updated release.
+Insurity does not charge for the 'license file' needed to integrate with IC.
+Integration Requirements and Pre-Requisites
+License File required and SOW (from Insurity sales). No additional cost to the client to use the IC integration.
+IC should setup a separate test portal for all Insurity billers to keep post go-live.
+Vertical
+Insurance
+Sample Biller Implementation
+Planning
+Test Portals
+IC Hosted Test Portal - 1707
+Partner Hosted Test Portal - Insurity doesn’t have a dedicated test environment that’s accessible by IC but is connected to 1707.
+Rules of Engagement
+Contact David VerCammen - 
+david.vercammen@insurity.com
+ at Insurity to get the Insurity point of contact for the client project.
+Timeline
+30-60 days
+Configuration
+Invoice Types
+*Multiple invoice types can be configured for Insurity WCXP billers: 164,165, etc.
+Invoice Type ID 164 will be for premiums.
+Invoice Type ID 165 has been defaulted for Audit Statements by Insurity. 
+NOTES: 
+Biller can use a different invoice type if 165 is already in use, but Insurity/biller will need to make sure to update Audit Statements to the new Invoice Type ID in the CIS. 
+Biller will need to determine if they want AutoPay active on this invoice type or not.
+If the biller has more than one line of business, they may need more than one audit statement invoice type (depends on how they deposit the money).
+Biller will need to setup all invoice types in Insurity.
+If an additional Invoice Type ID is needed, 166, etc., can be used.
+*All invoice types are in one BIF.
+Virtual Site
+Biller may use virtual site - search options would be their choice, based on what’s in the BIF.
+The biller will have some payers/businesses that have a recurring payment setup (monthly invoices) and some payers/businesses that have an on-demand setup (invoices created on-demand). Talk to the biller about what they offer (they likely offer both) and explain that for the payers/businesses that have an on-demand setup, they will not be able to use the virtual site to make payments (because invoices have not yet been created - that must be done through the Insurity Customer Portal). It’s up to the biller if they want to publish the virtual site URL - it’s important that they know what the experience will be like.
+Required Options
+ID
+Option Description
+Details
+74
+ENABLE Multiple Customer Login Functionality
+If enabled, the Biller will be able to use the Multiple Customer Login functionality in the Biller Portal as well as the Customer Portal. The Pay By Text and Autopay option will also be hidden through the payment route for non-authenticated sessions, and the use of saved method payments through the IVR will be disabled.
+Enable - required for integration
+78
+Customer Portal - Allow Co-owners
+If enabled, we will allow a set number of co-owners to be added to an account.
+Enable - required for integration
+79
+Customer Portal - Maximum Number of Co-owners per Account
+If co-owners are allowed, this sets the number of co-owners that can be added to an account.
+Set the value to 15
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates. 
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+). 
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Partner Coding Requirements
+What (IC Value)
+What (Partner Value)
+Provided To
+When
+BID 
+INVCLCODE - Invoice Cloud Biller Code
+Biller
+After license file installation 
+Invoice Format GUID 
+INVCLFGUID - Invoice Cloud Format GUID 
+Biller
+After license file installation 
+Biller Web service Key
+INVCLWGID - Invoice Cloud Web service Key
+Biller
+After license file installation 
+Biller GUID 
+INVCLBGUID - Invoice Cloud Biller GUID
+Biller
+After license file installation 
+Application API Key
+INVCLAPIK - InvoiceCloud API Key
+Biller
+After license file installation 
+Invoice Type ID 
+INVCLTYPD - Invoice Cloud Invoice Type ID for the company
+Biller
+After license file installation 
+FTP Credentials 
+INVCLFTPP - InvoiceCloud FTP Pass 
+INVCLFTPU - InvoiceCloud FTP User
+Biller
+After license file installation 
+Invoice Cloud Coding Requirements
+What
+Provided By
+ETA
+Details
+Invoice Data
+Biller
+Once the billers Insurity environment is all configured, the next time billing statements are run the file will generate and be sent to InvoiceCloud.
+Bill Images
+Biller
+Once the billers Insurity environment is all configured, the next time billing statements are run the bill images will be available for InvoiceCloud.
+The PDF extraction request can be submitted with the implementation coding request. A separate track is not needed.
+Web Service Domain (test and prod)
+Biller
+Once the billers Insurity environment is all configured, the biller can provide the domain for the web service URLs.
+Whitelisting IP Addresses
+Invoice Cloud
+Project Assignment 
+Depends if biller is on Premise or Cloud. If on Premise, they will need to handle all configs and whitelist our IP addresses.
+Contacts
+1500
+300
+ URL:/spaces/IM/pages/385187887/Insurity+WCXP+Implementation+Details

@@ -1,0 +1,77 @@
+NOT OFFICIAL - DRAFT
+SRE Integrations Team: Enhanced Ticket Resolution Documentation
+Overview
+Currently, when resolving Jira tickets, we select a mitigation label. However, these labels are not granular enough to capture the specific actions taken to resolve issues. To improve our documentation and provide more detailed insights, we propose using the 
+memo field 
+in Jira tickets to describe the mitigation actions taken. This approach will help us better understand and track the resolution process for various types of tickets.
+Types of Tickets
+In the Integrations space, there are five main Reported Services:
+DataPump
+RealTime Data Refresh
+File/Payment Export
+File Processing Tickets
+Bill Presentment
+Other
+Detailed Mitigation Actions
+General
+Submit INT Bug Item - 
+Bug found in code
+Change Request - 
+Biller/SP requested change
+Configured CRM
+DataPump Tickets
+Issue queueing DataPump
+Biller issues when processing API request
+RealTime Data Refresh Tickets
+Biller issues when processing API request
+Export Processing Tickets
+Export contains malformed data
+Generated Export
+File Processing Tickets
+Incoming file is malformed (unexpected characters or missing data)
+File is a duplicate
+Incorrect Biller action (e.g., dropping file in incorrect folder)
+Submit INT Bug Item
+:
+ Converting to BIF
+ 
+Ingesting BIF
+Bill Presentment Tickets
+Remote Linking Issues
+PDF not available by the entity we are sending the API request to (Print Vendor)
+PDF Extraction Issues
+PDF Unable to Burst (PDF is too big in size)
+PDFTemplate has XY marker issues
+PDFTemplate has regex issues
+Hard-Coded Values
+ICTemplates Issues
+Mapping of Template
+Implementation
+To implement this process, follow these steps:
+Identify the type of ticket
+: Determine which category the ticket falls into (DataPump, RealTime Data Refresh, Export Processing, File Processing, Bill Presentment).
+Document the mitigation actions
+: Use the 
+memo field 
+in Jira to write detailed descriptions of the actions taken to resolve the ticket. Refer to the list of mitigation actions provided above for guidance.
+Review and update
+: Regularly review the documented actions to ensure accuracy and completeness. Request to update the list of mitigation actions as needed to reflect new issues and resolutions.
+Example of Memo Field
+When documenting the mitigation actions in the memo field, use a comma-separated list of actions. For example:
+Submit INT Bug Item, Export was not generated
+Update List of Mitigation Actions
+Please reach out to the SRE Integrations Lead regarding a request to add a mitigation action to the list above.
+Goal
+The goal of this enhanced documentation process is to have better quality data for insight meetings. By providing more granular details on the mitigation actions taken, we can improve our understanding of recurring issues and develop more effective strategies for resolution.
+Alternate Proposal/New Goal
+In order to reduce insight data research we should continue with the idea of filling the memo or problem statement fields with Root Cause data for the issue presented on the ticket. Currently, we are typing brief messages. To further reduce research time, we can standardize this process by referencing a predefined list of potential root causes for all integration tickets.
+Below is a proposed list of Root Causes per general Affected Service:
+File Processing:
+Upload failure due to missing data
+Datapump:
+RTDR:
+File Exports:
+Bill Presentment:
+////////
+Keywords:
+ URL:/spaces/DS/pages/4198629382/SRE+Integrations+Team+Enhanced+Ticket+Resolution+Documentation

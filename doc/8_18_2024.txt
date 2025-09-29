@@ -1,0 +1,68 @@
+Summary of Changes
+App server patching
+Proxy Server Patching
+Web6 - 10 Patching
+Work for Mirza
+Start secondary firewalls and push config
+Delete the VNet that was created in Resource Group 
+AnsibleTest-Rob
+ named 
+InternalNetwork
+Pre-Steps
+In Sequence
+Put notification in DailyOps channels 
+ 
+ 
+Stop the Jobs - 
+Refer to Pre-maintenance steps related to Jobs here
+ 
+ 
+Execution Plan
+Change Candidates
+Install PowerShell Core on App and Proxy Servers 
+ 
+ and 
+ 
+App Server Patching 
+ 
+ 
+ 
+Proxy Server Patching 
+ 
+ 
+Web6 - 10 Patching 
+ 
+ 
+Work for Mirza TBD 
+ 
+ 
+https://invoicecloud.atlassian.net/servicedesk/customer/portal/9/INFRA-413
+ 
+Start secondary firewalls and push current config 
+  Secondary inbound did not push
+Delete the VNet that was created in Resource Group 
+AnsibleTest-Rob
+ named 
+InternalNetwork
+ so we can avoid any naming confusion in the future 
+ 
+PLAT-654: Delete the VNet that was created in Resource Group `AnsibleTest-Rob`
+Palo Production IP Whitelist (Postponed) 
+ 
+ 
+Test Plan
+Maintenance Test Execution - 08/11/2024 - Platform Engineering - Confluence (atlassian.net)
+First from QE: Smoke Test for 
+www.invoicecloud.com
+ & 
+my.invoicecloud.com
+ 
+Dev team - test manually test Proxy server and app server
+Post-Steps
+In Sequence:
+Start the Jobs - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+Post finished message in DailyOps channel 
+ 
+ URL:/spaces/icinfradoc/pages/3433791489/8+18+2024

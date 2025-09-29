@@ -1,0 +1,244 @@
+Pre Rules
+Name
+Location
+Tags
+Type
+Source Zone
+Source Address
+Source User
+Source Device
+Destination Zone
+Destination Address
+Destination Device
+Application
+Service
+Action
+Profile
+Options
+Target
+Rule Usage Rule Usage
+Rule Usage Apps Seen
+Days With No New Apps
+Modified
+Created
+[Disabled]  Inbound Block Rule
+AZ_IB_FWs
+[Disabled] none
+[Disabled] universal
+[Disabled]  any
+[Disabled]  Palo Alto Networks - Bulletproof IP addresses;[Disabled]  Palo Alto Networks - High risk IP addresses;[Disabled]  Palo Alto Networks - Known malicious IP addresses;[Disabled]  Palo Alto Networks - Tor exit IP addresses
+[Disabled]  any
+[Disabled]  any
+[Disabled]  any
+[Disabled]  any
+[Disabled]  any
+[Disabled]  any
+[Disabled]  any
+[Disabled]  Deny
+none
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+[Disabled] any
+-
+0
+-
+########
+########
+GeoBlock
+AZ_IB_FWs
+none
+universal
+Untrusted
+CN;KP;RU
+any
+any
+any
+any
+any
+any
+any
+Deny
+none
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+FTP
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+FTP_Ports
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+FTPPort21
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+tcp_21
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+All-Web
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+All-Web_Ports
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+SFTP-Port2021-FWD
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+tcp_2021
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+MCC-FTPS
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+MCC-SFTP
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+IC-SFTP
+AZ_IB_FWs
+none
+universal
+Untrusted
+any
+any
+any
+Trusted
+20.246.162.38
+any
+none
+tcp_2022
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+Temp-Segment-Test
+AZ_IB_FWs
+none
+universal
+Untrusted
+Rob_Chenault_Home_FIOS
+any
+any
+Trusted
+20.246.162.38
+any
+any
+tcp_4022
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+SFTP-22
+AZ_IB_FWs
+none
+universal
+Untrusted
+174.196.130.218_32
+any
+any
+Trusted
+20.246.162.38
+any
+none
+tcp_22
+Allow
+Profile Group: Alert-Only
+Traffic log sent at session end;Log Forwarding Profile setting: Forward-to-Panorama
+any
+Unused
+0
+-
+########
+########
+ URL:/spaces/icinfradoc/pages/2812903463/Security+AZ_IB_FWs

@@ -1,0 +1,115 @@
+  Application Overview
+Field
+Details
+Application Name
+ Biller Search API
+Version
+ 1.0.0.0
+Description
+ Biller text search API
+Primary Functionality
+ Provide fast text searching on large scale data 
+Key Features
+ Indexed search
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+John Whitworth
+Tech Lead
+Byron King
+Engineering Manager
+Sean Concannon
+Support Contact
+Sean Concannon
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+ c#
+Frameworks/Libraries
+ASP.Net, Azure.Search.Documents
+Database
+ 
+Key Vault
+ 
+Dependencies
+Direct
+Azure AI Search - Standard S1 
+(RBAC - Search Index Data Reader)
+Indirect
+Azure Storage Account - Table
+(Table(s) records used for index data sources)
+Code Repository Link
+ 
+https://dev.azure.com/invoicecloud/Biller/_git/BillerSearchAPI
+  Application Services
+Field
+Details
+Application Service Indicator
+biller-search-api
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+Create Application Service Vault
+False
+Grant Crypto Vault Access
+False
+Grant Environment Vault Access
+True
+Grant Cluster Vault Access
+True
+Grant ServiceBus Sender Access
+False
+Grant ServiceBus Receiver Access
+False
+Grant ServiceBus Data Owner Access
+False
+Grant IC Blob Storage Access
+False
+Grant PDF Extract Storage Account Access
+False
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Biller Shared DB Access
+False
+Biller Shared DB Access for QE
+False
+  Deployment Information
+Field
+Details
+Deployment Environment
+k8s Web Node
+Application Type
+Web API
+Outbound Network Ports
+ 443
+Inbound Network Ports
+ 8080
+PCI Scope
+No
+Environment Variables
+Name
+Description
+IC__AzureAiSearch__ApiUrl
+Endpoint for the Azure AI Search instance
+IC__AzureAiSearch__CustomerIndexName
+Azure AI Search index name for the customer documents
+IC__AzureAiSearch__InvoiceIndexName
+Azure AI Search index  name for the invoice documents
+IC__Jwt__Issuer
+JWT issuer, used for validation
+IC__Jwt__Audience
+JWT audience, used for validation
+IC__Jwt__SigningCertificate
+JWT RSA signing certificate
+  Web Ingress
+Field
+Details
+Health Endpoint (optional)
+ /health
+Suggested URL Root
+ 
+https://api.invoicecloud.com/biller/biller-search-api
+ URL:/spaces/ED/pages/4320460869/Biller+Search+API

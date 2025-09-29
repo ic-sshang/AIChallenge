@@ -1,0 +1,127 @@
+Runbook
+EMV Readers Set Up, Ordering and Network Authorization Testing
+Contents
+2
+Summary 
+Invoice Cloud has integrated with Bluefin to use their PayConex gateway to process in person EMV card reader transactions. The card readers are added in the CRM and use the service fee and terminal settings set for the POS source in the CRM.
+Please note, EMV readers require retail Merchant IDs. Your boarding will be aware of this and should provision a retail MID to match each standard e-commerce MID.
+General Product/Solution details managed by product here: 
+POSPay BlueFin/PAX Terminal General FAQ's | Guru (getguru.com)
+Recordings:
+Review for IMs to take over EMV tasks
+Successful Network Test for New Biller Go-Live
+note
+Project Review and Requirements
+
+
+Project Review and Requirements
+
+
+Steps
+Description
+Documentation
+Responsibility
+1
+Confirm processor is supported
+Bluefin only supports Chase, Fiserve, TSYS, FIS Worldpay, and Elavon. If a biller is currently Paya/Sage, they will need to get a Chase retail MID. Boarding would like to convert these billers entirely over to Chase so the project would go back to sales for that conversation.
+IM
+2
+Confirm integration - Biller Portal or CloudPay v2 (CPv2)
+The list of partners who have coded to CP v2 is managed by product. Please note this is not maintained regularly, so also refer to partner specific resources if you have a question on version or partner requirements
+If CloudPay v2: Confirm partner primary contact from biller/Confluence/Guru
+If Biller Portal: Confirm if the readers are being used with EBPP invoices.
+If No: no integration coding is required.
+If Yes: Confirm if integration has been scoped and submit JIRA if required. If integration has not been scoped create Change Request for research (refer to 
+EMV Jira Template.docx
+)
+PLEASE NOTE
+: The biller can use both CPv2 and Biller Portal if they are going live with multiple invoice types that have different partners. They will need to use the Biller Portal for those that have not coded and for the others ensure that their partner software version includes the calls for the CPv2 API.
+POSPay Partner Integration Status
+IM
+3
+Review EMV Cashier Proces on touch base
+Dedicate time on call with biller to review cashier steps to ensure they understand their EMV setup 
+NOTE: Billers need to understand if their CIS does not support EMV directly integrated. DON’T move forward with ordering if there are any questions.
+4
+Send EMV Kickoff email
+This email can be folded into an over all project kick off or as an independent message specific to the card readers. It should go out as early as possible to make sure that the IT team has time to make any required network changes. 
+Use the appropriate kick off templates and include the following attachments:
+Email Templates Folder Link
+The appropriate data flow screenshot for the integration type
+POSPay-Biller Portal Data Flow.bmp
+ 
+POSPay-Data Flow CPv2.bmp
+Bluefin Authorized IP, Ports and Services
+EMV Implementation Rundown.pdf
+IM
+5
+Confirm with Boarding that Biller is configured in Bluefin PayConex. Request devices be ordered and send alert email to biller.
+When Chase provides the new Retail MIDs and VARS, the boarding team submits this information to Bluefin to board test on the PayConex gateway. 
+Bluefin will confirm via email (logged in the boarding case) and the boarding rep will 
+Add the MIDs to the CRM
+Alert the IM that the EMV terminals are finalized
+Email Templates Folder Link
+IM
+6
+Order Card Readers from Bluefin
+The biller will need to confirm the shipping details (no PO Boxes) and the contact details for the primary custodian who will receive the devices. 
+The card readers should not be ordered more than 6 weeks before go-live. Early shipping can cause issues for the biller:
+Testing must be completed with 30 days of shipment. If the biller is not ready to test the initial warranty expires
+Devices are shipped with the latest updates, but must be online to receive future deployments. These are put on hold and must be manually requested if the readers are offline for more than 45 days.
+Once the task is requested the biller will receive the devices in 5-10 business days.
+This sub-tasks are managed by the Delivery Team due to the additional access required and follow the below steps
+Submit the PO request to the IC Procurement team
+Confirm Bluefin submits the shipment request to CDE and the card readers are added the Bluefin P2PE Portal
+https://invoicecloud.atlassian.net/wiki/x/AQBWww
+ 
+IM except Sub-task
+note
+EMV Set Up and Adding EMV Device in CRM 
+- 
+Delivery Tasks
+
+
+EMV Set Up and Adding EMV Device in CRM 
+- 
+Delivery Tasks
+
+
+The card reader details won’t be available until the order is processed by Bluefin and the readers are shipped.  IMs initiate this by requesting the delivery task and the Delivery team will complete the below steps. 
+The configuration requires access to the Bluefin P2PE and SaasConex portals.If you do have access to the Bluefin portal you can follow the configuration steps here: 
+Bluefin EMV Card Reader Implementation | Guru (getguru.com)
+Steps
+Description
+Documentation
+Responsibility
+1
+Confirm the biller has received the devices in the P2PE portal and named the devices
+Biller must enter location and card reader name(s). The “custodian” the biller confirmed for the reader’s delivery will receive their credential for the Bluefin P2PE. The full instructions are outlined in the kick-off email, the testing prep email and the 
+EMV Implementation Rundown.pdf
+. 
+I
+f the listed custodian for the biller says they have not received the email from Bluefin (or needs another contact added) you will need to send the full name, email and phone number to Delivery (
+delivery@invoicecloud.com
+). 
+Delivery
+2
+Confirm CRM settings for testing - 
+PRODUCT
+Confirm POSPay is set live
+Delivery
+3
+Confirm CRM settings for testing - 
+TERMINALS
+Bluefin MIDs 
+MUST 
+be set live during configuration. Set both Biller and IC Fee terminals live
+Delivery
+4
+Add card readers in CRM - 
+EQUIPMENT
+Delivery team will add every reader to CRM - Equipment tab
+Delivery
+5
+Confirm reader added to SaasConex
+Delivery will sign in to the Bluefin SaasConex portal to confirm the devices are added correctly and available 
+Delivery
+ URL:/spaces/Implementa/pages/3257204738/EMV+Readers+Implementation

@@ -1,0 +1,193 @@
+OKAY - finally. Let’s write some code.
+1. Create the Commands and Events
+Note, there is some slight variance with the 
+guidance given here.
+ Events or Commands are 
+Contracts
+ for communication between services - this means they often need to be exposed externally to other services. A common method of doing this is to publish one of the projects in your .NET solution as a NuGet package that contains these contracts for other services to utilize. 
+Create a 
+Contracts
+ project in your solution where you will maintain your commands and events. This project may also include other dependent objects such as 
+enum
+ 
+types
+, 
+settings, or DTO objects.
+ 
+Do NOT publish your core domain entities - these should remain internal to the service/codebase that is responsible for managing their state.
+ 
+You may also see a convention of using 
+Common
+, 
+Messages
+, or 
+Core
+ for this type of project. For consistency’s sake, 
+Contracts
+ will be the language used moving forward.
+# Folder Structures
+
+Project.Contracts
+    - Properties
+       - AssemblyInfo.cs # Statically expose the project's assembly for easy message registration.
+    - Commands
+      - AddProductToCart
+      - PlaceOrder
+    - Events
+       - ProductAddedToCart
+       - OrderPlaced
+    - Enumerations          # Enumerations that commands & events depend on
+        - ShippingSpeed
+        - PaymentMethod
+
+Let’s create our shopping cart commands using the C# 
+record
+ type for immutability - these are easy, we can declare them as inline records.
+c#
+public record AddProductToCart(string CorrelationId, Guid ShoppingCartId, Guid ProductId, int quantity);
+
+public record PlaceOrder(string CorrelationId, Guid ShoppingCartId, Guid CustomerId);
+Okay, now the corresponding events - let’s expand the declaration of these for better readability.
+c#
+public record ProductAddedToCart {
+    public string CorrelationId { get; init; }
+    public DateTime Timestamp { get; init; }
+    public string Username { get; init; }
+    public Guid ShoppingCartId { get; init; }
+    public Guid ProductId { get; init; }
+    public int Quantity { get; init; }
+    
+    public ProductAddedToShoppingCart(string correlationId, string userName, Guid productId, Guid shoppingCartId, int quantity) {
+      CorrelationId = correlationId;
+      Username = userName;
+      Timestamp = DateTime.UtcNow;
+      ShoppingCartId = shoppingCartId;
+      ProductId = productId;
+      Quantity = quantity;
+    }
+}
+
+// For use in the `OrderPlaced` event, OrderItem == ValueObject
+
+public readonly record struct OrderItem(Guid ProductId, int Quantity);
+
+public record OrderPlaced {
+    public string CorrelationId { get; init; }
+    public DateTime Timestamp { get; init; }
+    public string Username { get; init; }
+    public Guid CustomerId { get; init; }
+    public List<OrderItem> Items { get; init; } = new();
+    
+    
+    public OrderPlaced (string correlationId, string userName, 
+                        Guid customerId, IEnumerable<OrderItem> orderItems) {
+      CorrelationId = correlationId;
+      Username = userName;
+      Timestamp = DateTime.UtcNow;
+      CustomerId = customerId;
+      OrderItems.AddRange(orderItems);
+    }
+}
+2. Register the Producer/Publisher/Sender
+Now that we have some message types created, we can begin sending or publishing those messages using the Rebus SDK.
+Let’s look at the simplest possible implementation.
+c#
+# Program.cs
+
+// Other registration code
+.ConfigureServices((ctx, services) => {
+
+services
+   // Other Service Registrations
+  .AddRebus(cfg => 
+    cfg
+    .Transport(t => 
+      t.UseAzureServiceBusAsOneWayClient(connectionString, new DefaultAzureCredential())
+    )
+  )
+})
+With this registration code, we’ve added the Rebus SDK to our project and configured this particular service as a 
+One-Way Client
+ - meaning that it is configured only to 
+send
+ or 
+publish
+ messages. We don’t need to deal with any subscriptions or topic-related behavior on this side of things.
+3. Send Messages
+Once the endpoints have been configured, messages should now be ready for transport. There is still a need to wire up some behavior in order to send messages - let’s go ahead and knock that out using a simple application service.
+c#
+// IShoppingCartService.cs
+public interface IShoppingCartService {
+    Task AddProduct(AddProductToCart @command, CancellationToken cancelToken);
+    Task PlaceOrder(PlaceOrder @command, CancellationToken cancelToken);
+}
+
+// ShoppingCartService.cs
+public class ShoppingCartService {
+  
+  // The RebusBus - this is registered in the step above.
+  public IBus _messageBus;
+
+  public IShoppingCartRepository _repository;
+  public ShoppingCartService(IBus messageBus, IShoppingCartRepository repository) {
+     this._messageBus = messageBus;
+     this._repository = repository;
+  }
+  
+  public async Task AddProduct(AddProductToCart @command, CancellationToken cancelToken = new CancellationToken()) {
+      cancelToken.ThrowIfCancellationRequested();
+      
+      // Do some work.
+      var shoppingCart = this._repository.GetById(@command.ShoppingCartId);
+      shoppingCart.AddProduct(@command.ProductId);
+      
+      // 1. Send a command directly.
+      await this._bus.Send(@command);
+      
+      // OR
+      
+      // 2. Publish an event to a topic.
+      await this._bus.Publish(new ProductAddedToShoppingCart(@command.CorrelationId, "test@example.com", @command.ProductId, @command.ShoppingCartId, @command.Quantity));
+  }
+  
+   // PlaceOrder implementation excluded for brevity
+}
+4. Finish Service Registration & Wire Up to API
+With the service created, we now are capable of doing some amount of work and placing commands or events onto the bus - the last items to deal with on the publisher side are exposing the public REST API endpoints that utilize the service.
+c#
+// Program.cs
+/* This is registered as a Singleton because `IBus` is a singleton.
+*  Registering as `Transient` or `Scoped` will result in a captured context, 
+*  which will end up forcing a singleton instance since the `IBus` never goes out of scope. 
+*/ 
+builder.Services.AddSingleton<IShoppingCartService, ShoppingCartService>();
+
+// ShoppingCartController.cs
+[Route("api/[controller]")]
+public class ShoppingCartController {
+
+  private readonly IShoppingCartService _shoppingCart;
+  public ShoppingCartController(IShoppingCartService shoppingCart) {
+      this._shoppingCart = shoppingCart;
+  }
+  
+  [HttpGet]
+  public async Task<IHttpActionResult> AddProduct([FromBody] AddProductToShoppingCart @command) {
+      try {
+          await this._shoppingCart.AddProduct(@command);
+          return Ok();
+      }
+      catch {
+          return StatusCode(500);
+      }
+  }
+}
+Summary
+In this section, we walked through the creation and implementation of commands and events, registration and usage of both Rebus 
+Send
+ and 
+Publish
+ behaviors, and an end-to-end look at how everything fits together in an 
+ASP.NET
+ project. In the next few sections, we will cover the consumer side of things and see how consumers can be used as both command and event handlers.
+ URL:/spaces/PMK/pages/4279304492/2.+Implement+Producer+Workflow

@@ -1,0 +1,4115 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Summary:  
+Web Service URLS:
+DEV 
+https://waterwsdev.vbgov.com/service.asmx
+  
+TEST 
+https://waterwstest.vbgov.com/service.asmx
+   
+PROD 
+https://waterws.vbgov.com/service.asmx
+ 
+User Credentials for all services
+SOAP Header: User Credentials
+ 
+Description
+Type
+Length
+Comments
+1
+ 
+UserName
+String
+20
+Test: IC_TESTER
+Production: INVOICECLOUD
+2
+ 
+Password
+String
+20
+Test: IC_TESTER
+Production: 
+to be determined
+Additional Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+GetUtilitiesAccount
+Retrieves the latest account and balance information
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/GetUtilitiesAccount"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <GetUtilitiesAccount xmlns="https://waterws.vbgov.com/">
+      <accountNumber>string</accountNumber>
+      <source>string</source>
+    </GetUtilitiesAccount>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetUtilitiesAccountResponse xmlns="https://waterws.vbgov.com/">
+      <GetUtilitiesAccountResult>
+        <QueryStatus>string</QueryStatus>
+        <EffectiveDate>string</EffectiveDate>
+        <AccountNumber>string</AccountNumber>
+        <LastName>string</LastName>
+        <FirstName>string</FirstName>
+        <MiddleInitial>string</MiddleInitial>
+        <DueDate>string</DueDate>
+        <AmountDue>decimal</AmountDue>
+        <DelinquentAmount>decimal</DelinquentAmount>
+        <DelinquentDueDate>string</DelinquentDueDate>
+        <ReconnectionAmount>decimal</ReconnectionAmount>
+        <InstallmentAmount>decimal</InstallmentAmount>
+        <InstallmentDueDate>string</InstallmentDueDate>
+        <FullAccountBalance>decimal</FullAccountBalance>
+        <TotalBilledBalance>decimal</TotalBilledBalance>
+        <AccountCondition>string</AccountCondition>
+        <BlockACH>string</BlockACH>
+        <BlockCC>string</BlockCC>
+        <InvoiceList>
+          <![CDATA[<?xml version="1.0" encoding="utf-16"?>
+          <ArrayOfInvoice xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Invoice>
+              <InvoiceNumber>BILL0018132594</InvoiceNumber>
+              <DisplayInvoiceNumber>2024_01_23_BILL</DisplayInvoiceNumber>
+              <InvoiceDate>2024-01-23</InvoiceDate>
+              <DueDate>2024-02-13</DueDate>
+              <IH13_TotalAmountDue>19.23</IH13_TotalAmountDue>
+              <IH17_TotalDutyAmount>19.23</IH17_TotalDutyAmount>
+              <IH93_BalanceDue>19.23</IH93_BalanceDue>
+            </Invoice>
+          </ArrayOfInvoice>]]
+>
+        </InvoiceList>
+        <ServiceZipCode>23452</ServiceZipCode>
+      </GetUtilitiesAccountResult>
+    </GetUtilitiesAccountResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+SUCCESS
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = source parameter is not valid
+MISSING_ACCTNO
+ = account number not provided
+INVALID_ACCTNO
+ = account number is invalid format
+ACCT_NOTFOUND
+ = account not found
+ERROR
+ = internal error
+Parameters 
+mapping:
+AccountNumber
+ = IC AccountNumber
+DueDate
+ = Aging1 IH48 - due date of last bill
+AmountDue
+ = Aging2 IH49 - ending balance for last bill (needed for IVR)
+DelinquentAmount
+ = Aging3 IH50
+DelinquentDueDate
+ = Aging4 IH51 - due date of the last delinquent notice
+ReconnectionAmount
+ = Aging5 IH52
+InstallmentAmount
+ = Aging6 IH53 - next installment amount due
+InstallmentDueDate
+ = Aging7 IH54
+FullAccountBalance
+ = Aging8 IH55
+TotalBilledBalance
+ = Aging9 IH56
+InvoiceList.Invoice.IH93_BalanceDue
+ = BalanceDue IH93
+*Each invoice received should be updated
+AccountCondition
+ = CustomerVATNumber CR68
+BlockACH
+ = BlockPaymentsEFT CR357
+BlockCC
+ = BlockPaymentsCC CR356
+source
+ = always default to 
+IC
+IH17_TotalDutyAmount
+ = TotalDutyAmount IH17
+ServiceZipCode
+ should update ZIP on the customer record
+Data Pump: Payment
+RecordUtilitiesPayment
+Used to send payments over, not used to send Voided payments
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/RecordUtilitiesPayment"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <RecordUtilitiesPayment xmlns="https://waterws.vbgov.com/">
+      <accountNumber>string</accountNumber>
+      <paymentEntryDate>string</paymentEntryDate>
+      <paymentType>string</paymentType>
+      <amountPaid>decimal</amountPaid>
+      <paymentMessage>string</paymentMessage>
+      <transactionId>string</transactionId>
+      <paymentID>string</paymentID>
+      <autoPay>string</autoPay>
+      <paperless>string</paperless>
+      <source>string</source>
+      <Invoice_Num>string</Invoice_Num>
+      <Trans_AmountPaid>decimal</Trans_AmountPaid>
+      <Service_Fee>decimal</Service_Fee>
+    </RecordUtilitiesPayment>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <RecordUtilitiesPaymentResponse xmlns="https://waterws.vbgov.com/">
+      <RecordUtilitiesPaymentResult>string</RecordUtilitiesPaymentResult>
+    </RecordUtilitiesPaymentResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+Success
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = invalid 
+source
+ parameter
+MISSING_ACCTNO
+ = account number not provided
+INVALID_ACCTNO
+ = invalid account number format
+ACCT_NOTFOUND
+ = account not found
+INVALID_ENTRYTM
+ = 
+PaymentEntryTime
+ is incorrect format
+INVALID_PYMTTYPE
+ = 
+PaymentType
+ is not ACH, CC, or PAYP
+INVALID_AMOUNT
+ = 
+AmountPaid
+ is <= 0.00
+MISSING_TRANID
+ = 
+PaymentID
+ is not supplied
+MISSING_PYMTMSG
+ = 
+PaymentMessage
+ is not supplied
+PYMTID_EXISTS
+ = 
+PaymentID
+ already exists
+ERROR
+ = internal error
+Parameters mapping:
+accountNumber
+ = AccountNumber
+paymentEntryDate
+ = Date and Time payment was made (yyyy-MM-dd HH:mm:ss e.g. 2012-09-25 13:30:01)
+paymentType
+ 
+= 
+PaymentTypeID 1 CreditDebit → 
+CC
+PaymentTypeID 2 EFT → 
+ACH
+ 
+PaymentTypeID 11 OBD → 
+ACH
+*Send empty field if PaymentTypeID is anything else
+paymentMessage
+ = PaymentMessage e.g. 
+APPROVED 234548
+transactionID
+ 
+= ReceiptGUID
+amountPaid
+ 
+= PaymentAmount excluding service fees
+paymentID
+ = PaymentGUID
+autoPay
+ = if the 
+source
+ is AUTOPAY, this field is the same value as 
+paymentType
+ (
+ACH
+ or 
+CC
+), otherwise the field is empty
+paperless
+ = 
+Y
+ or 
+N
+ 
+source
+ =
+BILLER
+ = biller portal PaymentSourceID 2
+WEB
+ = customer portal PaymentSourceID 3
+PAYNOW
+ = Pay Now link in email; this comes over as PaymentSourceID 4 since shopping cart is enabled
+IVR
+ = one-time pay via IVR PaymentSourceID 10
+GUEST
+ = one-time payment with 
+multiple payments PaymentSourceID 14
+AUTOPAY
+ = autopay payment PaymentSourceID 15
+SKEDPYMT
+ = payment scheduled by payer PaymentSourceID 16
+MOBILE
+ = one-time payment on mobile device PaymentSourceID 20
+SKEDRECR
+ = recurring scheduled payment PaymentSourceID 22
+TEXT
+ = one-time payment via text PaymentSourceID 23
+*Send empty field if PaymentSourceID is anything else and we expect an invalid source error in response
+Invoice_Num
+ = InvoiceNumber
+Trans_AmountPaid
+ = total amount of the Receipt, excluding service fees
+Service_Fee
+ = service fee amount paid for the individual invoice (not the total Receipt-level fees)
+Data Pump: Void
+DeleteUtiltiesPayment
+IC will send void payments back to VBPU.
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/DeleteUtilitiesPayment"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <DeleteUtilitiesPayment xmlns="https://waterws.vbgov.com/">
+      <transactionId>string</transactionId>
+      <accountNumber>string</accountNumber>
+      <source>string</source>
+    </DeleteUtilitiesPayment>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <DeleteUtilitiesPaymentResponse xmlns="https://waterws.vbgov.com/">
+      <DeleteUtilitiesPaymentResult>string</DeleteUtilitiesPaymentResult>
+    </DeleteUtilitiesPaymentResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+Success
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = source parameter is not valid
+ACCT_NOTFOUND
+ = account not found
+MISSING_PYMTID
+ = 
+PaymentID
+ is not supplied
+PYMTID_NOTFOUND
+ = supplied 
+PaymentID
+ not found
+ERROR
+ = internal error
+Parameters Mapping:
+transactionId
+= ReceiptGUID of payment being voided
+accountNumber
+ = IC AccountNumber
+source
+ = always default to 
+IC
+Data Pump: Paperless Enrollment
+EnrollPaperless
+IC will send Paperless enrollments and unenrollments to back to VBPU.
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/EnrollPaperless"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <EnrollPaperless xmlns="https://waterws.vbgov.com/">
+      <accountNumber>string</accountNumber>
+      <emailAddress>string</emailAddress>
+      <enroll>boolean</enroll>
+      <disenrollReason>string</disenrollReason>
+      <source>string</source>
+    </EnrollPaperless>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <EnrollPaperlessResponse xmlns="https://waterws.vbgov.com/">
+      <EnrollPaperlessResult>string</EnrollPaperlessResult>
+    </EnrollPaperlessResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+Success
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = invalid 
+source
+ parameter
+ACCT_NOTFOUND
+ = account not found
+MISSING_EMAIL
+ = no email address provided
+ERROR
+ = internal error
+Parameters Mapping:
+accountNumber
+ = IC AccountNumber
+emailAddress
+ = IC Email Address
+enroll
+ = 1 to enroll, 0 to disenroll
+disenrollReason
+ = UNDELIVERABLE-invoiceNumber e.g. 
+UNDELIVERABLE-12345
+source
+ = always default to 
+IC
+Data Pump: AutoPay Enrollment and Payment Method Changes
+EnrollAutopay
+IC will send over autopay enrollments and unenrollments back to VBPU.
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/EnrollAutopay"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <EnrollAutopay xmlns="https://waterws.vbgov.com/">
+      <accountNumber>string</accountNumber>
+      <emailAddress>string</emailAddress>
+      <enroll>boolean</enroll>
+      <paymentType>string</paymentType>
+      <source>string</source>
+    </EnrollAutopay>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <EnrollAutopayResponse xmlns="https://waterws.vbgov.com/">
+      <EnrollAutopayResult>string</EnrollAutopayResult>
+    </EnrollAutopayResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+Success
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = invalid 
+source
+ parameter
+ACCT_NOTFOUND
+ = account not found
+MISSING_EMAIL
+ = no email address provided
+NOTELIG_*
+ = not eligible for autopay 
+PLEASE SEE SPECIFICATION ABOUT CUSTOM FUNCTIONALITY TO UNENROLL CUSTOMER FROM AUTOPAY
+NOTELIG_ACHBLOCK
+ = account cannot pay by ACH
+NOTELIG_CCBLOCKED
+ = account cannot pay by CC
+NOTELIG_CUTOFF
+ = account is disconnected
+NOTELIG_DELQ
+ = account has delinquent balance
+NOTELIG_PYAR
+ = account has a payment arrangement
+NOTELIG_PASTDUE
+ = account has a past due bill
+NOTELIG_DUETODAY
+ = account has a bill due today
+NOTELIG_LOAN
+ = account has a loan agreement
+NOTELIG_CASHONLY
+ = account is blocked for ACH payments by TRO
+ERROR
+ = unable to enroll/disenroll
+If
+ a customer signs up for Autopay, Invoice Cloud will enroll them immediately and send them an enrollment notification.  After enrollment, Invoice Cloud, using the DataPump, will call the EnrollAutoPay method of the VBPU Webservice.  When the webservice returns a response beginning with” NOTELIG“, Invoice Cloud will 
+immediately
+ disenroll the customer from Autopay and send the customer a disenrollment notification. 
+Payment method changes will use the same endpoint and request parameters to send the updated 
+paymentType
+.
+Parameters Mapping:
+accountNumber
+ = AccountNumber
+emailAddress
+ = EmailAddress
+enroll
+ = 1 to enroll, 0 to disenroll
+paymentType
+ = ACH or CC or empty value when unenrolling
+source
+ = always default to 
+IC
+Data Pump: Customer Changes
+SaveEmailAddress
+IC will send over email address changes to VBPU using this method.
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/SaveEmailAddress"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <SaveEmailAddress xmlns="https://waterws.vbgov.com/">
+      <accountNumber>string</accountNumber>
+      <oldEmailAddress>string</oldEmailAddress>
+      <newEmailAddress>string</newEmailAddress>
+      <emailUsage>string</emailUsage>
+      <source>string</source>
+    </SaveEmailAddress>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <SaveEmailAddressResponse xmlns="https://waterws.vbgov.com/">
+      <SaveEmailAddressResult>string</SaveEmailAddressResult>
+    </SaveEmailAddressResponse>
+  </soap:Body>
+</soap:Envelope>
+Response Codes:
+Success
+INVALID_USER
+ = username or password could not authenticate
+INVALID_SOURCE
+ = invalid 
+source
+ parameter
+INVALID_USAGE
+ = invalid 
+emailUsage
+ parameter
+ACCT_NOTFOUND
+ = account not found
+ERROR
+ = internal error saving email address
+Parameters Mapping:
+accountNumber
+ = AccountNumber
+oldEmailAddress
+ = empty if saving new email address, else use EmailAddress
+newEmailAddress
+ = EmailAddress - will be empty when deleting existing email
+emailUsage
+ =
+If account is enrolled in paperless, 
+emailUsage
+ = 
+PAPERLESS
+,
+Else if account is enrolled in autopay, 
+emailUsage
+ = 
+AUTOPAY
+,
+Else if account is registered, 
+emailUsage
+ = 
+PORTAL
+,
+Else if 
+ChangeRequestor
+ = 
+GUEST
+, 
+emailUsage
+ = 
+GUEST
+,
+Else 
+emailUsage
+ = 
+MISC
+source
+ = always default to 
+IC
+Bill Presentment
+GetInvoicePDF
+IC will call for a Bill PDF from each invoice record regardless of invoice type ID using this method.
+xml
+POST /service.asmx HTTP/1.1
+Host: waterwstest.vbgov.com
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "https://waterws.vbgov.com/GetInvoicePDF"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <UserCredentials xmlns="https://waterws.vbgov.com/">
+      <UserName>string</UserName>
+      <Password>string</Password>
+    </UserCredentials>
+  </soap:Header>
+  <soap:Body>
+    <GetInvoicePDF xmlns="https://waterws.vbgov.com/">
+      <invoiceNumber>string</invoiceNumber>
+      <source>string</source>
+    </GetInvoicePDF>
+  </soap:Body>
+</soap:Envelope>
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <GetInvoicePDFResponse xmlns="https://waterws.vbgov.com/">
+      <GetInvoicePDFResult>base64Binary</GetInvoicePDFResult>
+    </GetInvoicePDFResponse>
+  </soap:Body>
+</soap:Envelope>
+Parameters Mapping:
+invoiceNumber
+ = InvoiceNumber
+source
+ = always default to 
+IC
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .BIF
+File Naming Convention: 
+File Delimiter: Pipe |
+Specification: (See sample)
+Sample File:
+VBPU has coded to our BIF file format. See below for notes on custom fields and VBPU specific items.
+Please note that VBPU sends the .BIF file for regular bills, delinquent bills, adjustment notices, payment arrangements, cutoff invoices, $0 welcome invoice.  These drive a bill presentment and notification email that are also set in the BIF. 
+File Transfer Frequency:  Nightly push from VBPU
+Monthly Bill
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Sum of IH13 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New, U=Update, D=Deactivate 
+ 
+Each bill generated and approved by CVB at night will be included in the BIF with RecordType =N.  
+If a bill is corrected via WaterAdmin, once the corrections are approved, the bill will be re-sent with Record Type = ‘U’ 
+If a bill is cancelled in CVB (Banner/WaterAdmin), the bill will be re-sent with Record Type = D 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+BILL + BillID 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+ 
+ 
+12
+ 
+Invoice Due Date 
+Due date of the bill 
+ 
+ 
+13
+ 
+Total Amount Due 
+Total of current billed charges 
+SUM(uabopen_billed_chg) 
+ 
+ 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+SUM(uabopen_billed_chg)  
+This field will be updated with RTDR 
+(See RTDR)
+ This corresponds to the Banner bill balance.  
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Set this to Bill Approve date + 1 business day. This notification will always be sent out, regardless of balance or Autopay/Paperless Status. 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+This notification will not be sent if a customer is on AutoPay or if invoice balance (IH93) is $0.00. 
+VBPU will set this to 5 calendar days before the due date. 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+This notification will not be sent if a customer is on AutoPay or if invoice balance (IH93) is $0.00. VBPU will set this to 5 days after the due date. 
+ 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+SUM(uabopen_billed_chg) 
+This will be updated with RTDR IH93_BalanceDue which will reflect the remaining amount of the Orig Current Charges. 
+(See RTDR)
+ 
+94
+ 
+Custom11 
+Invoice Number for Display 
+ 
+YYYY_MM_DD_BILL where YYYY_MM_DD is the Bill Date 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+248
+ 
+AutopayCollectionDate 
+Autopay Collection Date 
+ 
+VBPU will set this NULL because we want IC to draft on Due Date.  
+VBPU has the option to use this field for Autopay override when needed. 
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+ 
+59
+ 
+Account Number 
+ 
+Customer Account Number 
+16 digit Banner account number 
+ 
+60
+ 
+Customer Name 
+ 
+Primary Account Name 
+ 
+ 
+61
+ 
+Address 1 
+ 
+Service Address 
+ 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed. 
+62
+ 
+Address 2 
+ 
+ 
+ 
+63
+ 
+City 
+ 
+Service Address City 
+ 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+ 
+Service Address State 
+ 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+ 
+Service Address Zip 
+ 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+ 
+VBPU will send the email address used for Paperless/eBill service 
+Not required 
+68
+ 
+CustomerVATNumber
+ 
+ 
+ 
+ 
+Account Condition 
+This value is being updated during RTDR. This will be used for Pendo messaging.   
+357
+ 
+Block Payments EFT 
+ 
+ 
+This is optional. This will be updated with RTDR. This corresponds to Pay By Check in Banner.   
+356
+ 
+Block Payments CC 
+ 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+373
+ 
+Display AccountNumber 
+ 
+Formatted account number 
+000-CCCCCC-0PPPPPP 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Delinquent Bills
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Sum of IH13 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New 
+ 
+ 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+DELQ+NoticeID 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+Delinquent Notice Date 
+ 
+12
+ 
+Invoice Due Date 
+Final Date of payment prior to shut off 
+Delinquent Notice Due Date (usually 15 days after) 
+ 
+13
+ 
+Total Amount Due 
+Delinquent amount due 
+ 
+ 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+Delinquent amount due 
+This field will be updated with RTDR IH17_TotalDutyAmount which will reflect the remaining amount of the Orig Delinquent Amount. 
+(See RTDR)
+ This corresponds to the Banner bill balance. 
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Notice Date + 1 business day 
+ 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+ 
+Notice Date + 10 This matches the Outbound Call that is made by Singo for VBPU 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+Third notification will not be sent for Delinquent notices 
+ 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+Delinquent amount due 
+ 
+94
+ 
+Custom11 
+Invoice Number for Display 
+ 
+ YYYY_MM_DD_DELINQUENT, where YYYY_MM_DD is the Delinquent Notice date. 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+59
+ 
+Account Number 
+Customer Account Number 
+16 digit Banner account number 
+60
+ 
+Customer Name 
+Primary Account Name 
+ 
+61
+ 
+Address 1 
+Service Address 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed. 
+62
+ 
+Address 2 
+ 
+ 
+63
+ 
+City 
+Service Address City 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+Service Address State 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+Service Address Zip 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+VBPU will pass the email address used for Paperless/ebill service 
+Not required 
+68
+ 
+CustomerVATNumber 
+VBPU will not pass value to CustomerVatNumber. Invoice Cloud will update using RTDR.
+ 
+Account Condition 
+This value is being updated during RTDR. This will be used for Pendo messaging.   
+357
+ 
+Block Payments EFT 
+ 
+This is optional. This will be updated with RTDR. This corresponds to Pay By Check in Banner 
+356
+ 
+Block Payments CC 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+373
+ 
+DisplayAccountNumber 
+Formatted account number 
+000-CCCCCC-0PPPPPP 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Adjustments
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Sum of IH13 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New 
+ 
+ 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+ADJ + notice ID 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+ 
+ 
+12
+ 
+Invoice Due Date 
+Due date of the bill 
+ 
+ 
+13
+ 
+Total Amount Due 
+Total of current billed charges 
+Ending Balance 
+Adjustment notice 
+Ending Balance 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+Ending Balance 
+This field will be updated by RTDR. 
+(See RTDR)
+ This corresponds to Banner bill balance. 
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Notice Date +1 business day 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+No 2nd notification for ADJ 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+No 3rd notification for ADJ 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+Ending Balance 
+This will be updated with Web Service IH93_BalanceDue which will reflect the remaining amount of the Orig Current Charges for all bills prior to adjustment notice. 
+(See WebServices)
+ 
+94
+ 
+Custom11 
+Invoice Number for display. 
+ 
+YYYY_MM_DD_ADJUSTMENT, where YYYY_MM_DD is the Adjustment Notice Date. 
+ 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+ 
+59
+ 
+Account Number 
+ 
+Customer Account Number 
+16 digit Banner account number 
+60
+ 
+Customer Name 
+ 
+Primary Account Name 
+ 
+61
+ 
+Address 1 
+ 
+Service Address 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed.
+ 
+62
+ 
+Address 2 
+ 
+ 
+ 
+63
+ 
+City 
+ 
+Service Address City 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+ 
+Service Address State 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+ 
+Service Address Zip 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+ 
+ 
+Not required 
+68
+ 
+CustomerVATNumber 
+ 
+ 
+Account Condition 
+This value is being updated during RTDR. 
+357
+ 
+Block Payments EFT 
+ 
+ 
+This is optional. This will be updated with RTDR. 
+356
+ 
+Block Payments CC 
+ 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Notes
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Payment Arrangements
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Sum of IH13 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New, U=Update,  
+ 
+First installment will be an N. Any installments after the 1
+st
+ installment will be a U. Defaulted and Canceled arrangements will be sent as an U 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+PYAR + NoticeID CVB needs to dummy up an ID for each arrangement. 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+Payment Arrangement Creation Date 
+ 
+12
+ 
+Invoice Due Date 
+Due date of the bill 
+Due date of installment. 
+First invoice will use first installment due date, updates will have the new installment due date 
+13
+ 
+Total Amount Due 
+Total of current billed charges 
+Full amount of arrangement at time of creation 
+This amount will never change 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+Installment Balance 
+This will be updated by RTDR with Remaining balance on current installment 
+(See RTDR)
+  
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Initial record: Payment Arrangement Create Date +1 
+ 
+ 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+Succeeding BIF updates: Set to Current Date when Due Date is changed to reflect next installment.   
+ 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+ VBPU will leave this null.  The 1
+st
+ notification should be updated for initial PYAR invoice. 2
+nd
+ notification will be set for succeeding installments. 
+ 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+Installment Balance 
+This will be updated by RTDR with Remaining balance of current installment 
+94
+ 
+Custom11 
+Invoice Number for Display 
+ 
+ YYYY_MM_DD_ PYMTARRNGMT, where YYYY_MM_DD is the arrangement creation date. 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+ 
+59
+ 
+Account Number 
+ 
+Customer Account Number 
+16 Digit Banner account number 
+60
+ 
+Customer Name 
+ 
+Primary Account Name 
+ 
+61
+ 
+Address 1 
+ 
+Service Address 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed. 
+62
+ 
+Address 2 
+ 
+ 
+ 
+63
+ 
+City 
+ 
+Service Address City 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+ 
+Service Address State 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+ 
+Service Address Zip 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+ 
+ 
+Not required 
+68
+ 
+CustomerVATNumber 
+ 
+ 
+Account Condition 
+This value is being updated during RTDR. 
+357
+ 
+Block Payments EFT 
+ 
+ 
+This is optional. This will be updated with RTDR. 
+356
+ 
+Block Payments CC 
+ 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+373
+ 
+DisplayAccountNumber 
+ 
+Formatted Account Number 
+000-CCCCCC-0PPPPPP 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Cutoff Invoices
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Sum of IH13 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New 
+ 
+ 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+XOFF + cutoff/bkck service order number 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+Cutoff/BKCK Order Need Date 
+ 
+12
+ 
+Invoice Due Date 
+Final Date of payment prior to shut off 
+Cutoff/BKCK Order Need Date  
+ 
+13
+ 
+Total Amount Due 
+Delinquent amount due 
+This will be the original cutoff amount from USALETD doorhanger or BKCK register 
+ 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+Amount Due for reconnection as of 10:30am 
+This field will be updated by RTDR 
+(See RTDR)
+  
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Day of BIF upload. This notification will always be sent out, regardless of balance or Autopay/Paperless Status. 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+ 
+Second Notification will not be sent for Cutoff’s. VBPU will leave this null. 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+Third Notification will not be sent for Cutoff’s. VBPU will leave this null. 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+Amount Due for Reconnection 
+ 
+94
+ 
+Custom11 
+Invoice Number for display 
+ 
+YYYY_MM_DD_CUTOFF, where YYYY_MM_DD is the Service Order Need Date 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+59
+ 
+Account Number 
+Customer Account Number 
+16 digit Banner account number 
+60
+ 
+Customer Name 
+Primary Account Name 
+ 
+61
+ 
+Address 1 
+Service Address 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed. 
+62
+ 
+Address 2 
+ 
+ 
+63
+ 
+City 
+Service Address City 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+Service Address State 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+Service Address Zip 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+ 
+Not required 
+68
+ 
+CustomerVATNumber 
+Account Condition 
+This value is being updated during RTDR. 
+357
+ 
+Block Payments EFT 
+ 
+This is optional. This will be updated with RTDR. 
+356
+ 
+Block Payments CC 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Welcome Invoices
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+1
+ 
+Row Type 
+Always FH 
+ 
+ 
+2
+ 
+Biller GUID 
+Provided by IC 
+ 
+ 
+4
+ 
+File Creation Date 
+Date/Time of file creation 
+ 
+ 
+5
+ 
+Invoice Count 
+Number of invoices in file 
+ 
+ 
+6
+ 
+Total Invoice Amount 
+Total of all invoices provided in file 
+ 
+Will always be 0 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+7
+ 
+Row Type 
+Always IH 
+ 
+ 
+8
+ 
+Record Type 
+N=New,  
+ 
+ 
+9
+ 
+Invoice Format GUID 
+Provided by IC 
+ 
+ 
+10
+ 
+Invoice Number 
+Must be unique 
+ 
+"WELC” + [Move-In Service Order#] 
+11
+ 
+Invoice Date 
+Date invoice is created/bill date for customer 
+ 
+Need Date of Move-In Order 
+12
+ 
+Invoice Due Date 
+Due date of the bill 
+ 
+Need Date of Move-In Order 
+13
+ 
+Total Amount Due 
+Total of current billed charges 
+$0 
+ 
+ 
+17
+ 
+TotalDutyAmount 
+Total Bill Balance  
+$0 
+ 
+20
+ 
+Allow Partial Payments 
+1 = Yes 2 = No 
+ 
+Always 1 
+23
+ 
+First Notify Request Date 
+Date new bill email notification should be sent 
+ 
+Current Date (1
+st
+ notification will be sent) 
+24
+ 
+Second Notify Request Date 
+Date second notification should be sent 
+ 
+2nd Notification will not be sent 
+ 
+25
+ 
+Third Notify Request Date 
+Date third notification should be sent 
+ 
+3rd Notification will not be sent 
+ 
+ 
+38
+ 
+Custom 1 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+39
+ 
+Custom 2 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+40
+ 
+Custom 3 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+41
+ 
+Custom 4 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+42
+ 
+Custom 5 
+Reserved to be used for custom e-mail verbiage 
+ 
+ 
+43
+ 
+Custom 6 
+ 
+ 
+ 
+44
+ 
+Custom 7 
+ 
+ 
+ 
+45
+ 
+Custom 8 
+ 
+ 
+ 
+46
+ 
+Custom 9 
+ 
+ 
+ 
+47
+ 
+Custom 10 
+ 
+ 
+ 
+93
+ 
+Balance Due 
+Total bill balance 
+$0 
+ 
+94
+ 
+Custom11 
+Invoice Number for display 
+ 
+YYYY_MM_DD_WELCOME where YYYY_MM_DD is the Move-In Date 
+95
+ 
+Custom 12 
+ 
+ 
+ 
+96
+ 
+Custom 13 
+ 
+ 
+ 
+97
+ 
+Custom 14 
+ 
+ 
+ 
+98
+ 
+Custom 15 
+ 
+ 
+ 
+99
+ 
+Custom 16 
+ 
+ 
+ 
+100
+ 
+Custom 17 
+ 
+ 
+ 
+101
+ 
+Custom 18 
+ 
+ 
+ 
+102
+ 
+Custom 19 
+ 
+ 
+ 
+103
+ 
+Custom 20 
+ 
+ 
+ 
+104
+ 
+Custom 21 
+ 
+ 
+ 
+105
+ 
+Custom 22 
+ 
+ 
+ 
+106
+ 
+Custom 23 
+ 
+ 
+ 
+107
+ 
+Custom 24 
+ 
+ 
+ 
+108
+ 
+Custom 25 
+ 
+ 
+ 
+109
+ 
+Custom 26 
+ 
+ 
+ 
+110
+ 
+Custom 27 
+ 
+ 
+ 
+111
+ 
+Custom 28 
+ 
+ 
+ 
+112
+ 
+Custom 29 
+ 
+ 
+ 
+113
+ 
+Custom 30 
+ 
+ 
+ 
+248
+ 
+AutopayCollectionDate 
+Autopay Collection Date 
+ 
+VBPU will set this NULL  
+  
+252
+ 
+Invoice Type ID 
+42 
+ 
+ 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+58
+ 
+Row Type 
+Always CR 
+ 
+ 
+59
+ 
+Account Number 
+ 
+Customer Account Number 
+16 digit Banner account number 
+60
+ 
+Customer Name 
+ 
+Primary Account Name 
+ 
+ 
+61
+ 
+Address 1 
+ 
+Service Address 
+ 
+Service Address will automatically populate during payment route if provided. Mailing address is not required to be passed. 
+62
+ 
+Address 2 
+ 
+ 
+ 
+63
+ 
+City 
+ 
+Service Address City 
+ 
+Not required, but will automatically populate during payment route if provided 
+64
+ 
+State 
+ 
+Service Address State 
+ 
+Not required, but will automatically populate during payment route if provided 
+65
+ 
+Zip 
+ 
+Service Address Zip 
+ 
+Not required, but will automatically populate during payment route if provided 
+67
+ 
+Email Address 
+ 
+VBPU will send the email address used for Paperless/eBill service 
+This will always be populated because VBPU will only send a $0 invoice for those enrolling in paperless. 
+68
+ 
+CustomerVATNumber
+ 
+ 
+ 
+ 
+Account Condition 
+This value is being updated during RTDR. This will be used for Pendo messaging.   
+357
+ 
+Block Payments EFT 
+ 
+ 
+This is optional. This will be updated with RTDR. This corresponds to Pay By Check in Banner.   
+356
+ 
+Block Payments CC 
+ 
+ 
+This is optional. This will be updated with RTDR.  This will correspond to a future field in Banner. 
+373
+ 
+Display AccountNumber 
+ 
+Formatted account number 
+000-CCCCCC-0PPPPPP 
+File Spec ID
+ 
+Description
+ 
+ 
+VBPU Field
+ 
+Notes
+ 
+70
+ 
+Row Type 
+Always ID 
+ 
+ 
+Email Delivery and Bounced File
+VBPU requires a regular export .csv files that indicates email delivery or bounce status of our email bill notification communications. 
+The reason for this file is when an email is not delivered, VBPU will then send a paper bill to the account holder. This action is triggered by the file.
+FILE NEEDS TO BE DELIVERED BY 5:15 PM EST
+Format: .csv
+Frequency: Nightly
+File Name: ICEmailStatus_YYYYMMDD.csv
+Delivery: SFTP
+Email Delivery and Bounced File Spec
+Field Name
+ 
+Description
+ 
+Format
+ 
+Current Date
+Date and Time when file is generated, Eastern time
+MM/DD/YYYY HH24:MI:SS
+Account Number
+ 
+Account number in IC database 
+  
+Invoice Number
+ 
+InvoiceNumber in IC database for which the 1st, 2nd or 3rd notification was sent 
+  
+Email Address
+ 
+EmailAddress which notification was sent to for the account 
+  
+Paperless
+ 
+1 – if enrolled in Paperless at time of Notification 
+0 – not enrolled in Paperless at time of Notification 
+  
+Notification Seq Number
+ 
+1 – for 1st notification 
+2 – for 2nd notification 
+3 – for 3rd notification 
+4 - for manual notifications
+  
+Sent Date
+Date and timestamp of when email first sent by IC, Eastern time
+MM/DD/YYYY HH24:MI:SS
+Delivery Date
+Date and timestamp when delivered to customer. 
+ KEEP NULL FOR NOW CURRENTLY NOT AVAILABLE
+Click Through Date
+ 
+Date payer clicks on “View Invoice or Pay Now” or “One-Click Pay” in 1st, 2nd or 3rd notifications 
+Base on click-through date and time stored in our database 
+Bounce Date
+Date and timestamp of when email has bounced from IC, Eastern time
+MM/DD/YYYY HH24:MI:SS
+Change Log File
+Invoice Cloud will provide a Changelog file to VBPU daily. This file will be used as a backup file to update any paperless, autopay, or email address changes that may have failed DataPump posting. This file should be delivered by 5:15pm Eastern Time each day since the information is needed during WaterAdmin nightly bill printing process. The file should not contain any updates that were sent in previous files. 
+Note: Only newly provided information will populate fields.  If there is no change, the field will be empty. 
+FILE NEEDS TO BE DELIVERED BY 5:15 PM EST
+Format: .csv
+Frequency: Nightly
+File Name: ICChangeLog_YYYYMMDD.csv
+Delivery: SFTP
+Change Log File Spec
+Field
+ 
+Data Type
+ 
+Character Limits
+ 
+Format
+ 
+Values
+ 
+Current Date
+ 
+Varchar  
+MM/DD/YYYY HH24:MI:SS 
+Current datetime of file creation, Eastern time
+Account Number
+Varchar
+30
+Account Number from IC database
+AP Enrollment Type
+ 
+Varchar 
+3 
+ 
+ACH
+ or 
+CC
+ if the customer has enrolled, empty if the customer has unenrolled
+AP Enrollment
+ 
+Datetime 
+  
+MM/DD/YYYY HH24:MI:SS 
+Date customer completed enrollment in AutoPay, Eastern time
+AP Disenrollment
+ 
+Datetime 
+  
+MM/DD/YYYY HH24:MI:SS 
+Date customer completed 
+disenrollment 
+in AutoPay, Eastern time
+Email
+ 
+Varchar 
+100 
+  
+Customer email address 
+Email Address change date
+ 
+Datetime 
+  
+MM/DD/YYYY HH24:MI:SS 
+Date email address was change on IC, Eastern time
+Paperless Enrollment
+ 
+Datetime 
+  
+MM/DD/YYYY HH24:MI:SS 
+Date customer completed enrollment in paperless, Eastern time
+Paperless Disenrollment
+ 
+Datetime 
+  
+MM/DD/YYYY HH24:MI:SS 
+Date customer disenrolled in paperless, Eastern time
+Paperless Change By
+String
+Source that triggered the change in enrollment status. This is the same value that is shown in the Paperless Signup History. 
+AP Change By
+String
+Source that triggered the change in enrollment status. This is the same value that is shown in the Autopay Signup History. 
+Treasurer’s Payment/Lockbox Post File
+File Summary/Purpose: City of Virginia Beach Treasurer’s Office (TRO) requires a daily file of payments received by the vendor so they can update their Cashiering system, after which, TRO will prepare a posting file that can be used to update Banner.
+File Extension: .POST
+File Naming Convention: COVBYYMMDD.POST
+File Delimiter: N/A fixed length
+Specification: 
+Included Payment Types:
+All Sources - see Payment Source Codes table in datapump for all VBPU codes to send in file
+Exclude voids and future dated scheduled payments.
+Sample File:
+SFTP File Path: 
+File Transfer Frequency: 
+One file per day, current vendor created the file around 10PM - this is TBD with VBPU. Current process is VBPU retrieves the file from the vendor SFTP at 5AM the following day.
+Field Mapping
+HEADER
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Vendor Code
+6
+ 
+IC
+2
+Filler
+1
+Blank space
+3
+Record Type
+1
+H
+4
+Filler
+1
+Blank space
+5
+Vendor Version Number
+8
+00000001
+6
+Client code
+15
+COVB
+7
+File Creation Timestamp
+14
+YYYYMMDDHHMMSS (Eastern time)
+DETAIL
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Record Type
+1
+D
+2
+Payment Sequence# in file
+9
+00000001
+3
+Payment Type
+1
+A = ACH
+C = Credit Card and Debit Card
+4
+Vendor Inst Code
+10
+BILLER
+ = biller portal PaymentSourceID 2
+WEB
+ = customer portal PaymentSourceID 3
+PAYNOW
+ = Pay Now link in email; this comes over as PaymentSourceID 4 since shopping cart is enabled
+IVR
+ = one-time pay via IVR PaymentSourceID 10
+GUEST
+ = one-time payment with 
+multiple payments PaymentSourceID 14
+AUTOPAY
+ = autopay payment PaymentSourceID 15
+SKEDPYMT
+ = payment scheduled by payer PaymentSourceID 16
+MOBILE
+ = one-time payment on mobile device PaymentSourceID 20
+SKEDRECR
+ = recurring scheduled payment PaymentSourceID 22
+TEXT
+ = one-time payment via text PaymentSourceID 23
+*Send empty field if PaymentSourceID is anything else
+5
+Vendor Site Code
+4
+IC + 2 spaces
+6
+Filler
+1
+Blank space
+7
+Account Number
+22
+CVB Account Number
+000CCCCCC0PPPPPP
+CCCCCC – customer#
+PPPPPP – premise#
+8
+Payment Amount
+12
+Implicit 2 decimals
+e.g. 000000008196 = $81.96
+9
+Payment Date and Time
+14
+Payment Entry Date and Time (Eastern time)
+YYYYMMDDHHMMSS
+ 
+10
+Fee Amount
+12
+Implicit 2 decimals
+e.g. 000000000175= $1.75
+11
+Filler
+1
+Blank space
+12
+Confirmation Number
+10
+Payment ID
+Right-aligned padded with 0 character
+e.g. 0004011293
+13
+Scheduled Payment Date
+8
+YYYYMMDD (Eastern time)
+Scheduled payments are not included so this will always be the same date as the YYYYMMDD portion of field #9.
+14
+Total Payment Amount
+12
+Total collected = Payment Amount + Fee Amount
+Implicit 2 decimals
+e.g. 000000008371= $83.71
+15
+Payment Message
+50
+IC Payment Message
+e.g. APPROVBED 234548
+This appears in the IC summary page after successful payment and also shows in the printed receipt. This is not unique.
+16
+Transaction ID
+36
+IC ReceiptGUID
+TRAILER
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Vendor Code
+6
+ 
+2
+Filler
+1
+Blank space
+3
+Record Type
+1
+T
+4
+Filler
+1
+Blank space
+5
+Vendor Version Number
+8
+ 
+6
+Client code
+15
+COVB
+7
+Total Payment Count
+9
+Number of detail records
+Right-aligned padded with 0 character
+E.g. 000000569
+8
+Total Payment Amount
+12
+Sum of Payment Amount in detail records
+Implicit 2 decimals
+Right-aligned padded with 0 character
+E.g. 000007208438 = $72,084.38
+ 
+A file should still generate even if there are no payments to report. File will consist of just the HEADER and TRAILER records.
+Treasurer’s Payment/Lockbox Returns File
+File Summary/Purpose: City of Virginia Beach Treasurer’s Office (TRO) requires a daily file of returned payments by the vendor so they can update their Cashiering system, after which, TRO will prepare a posting file that can be used to update Banner.
+File Extension: .RETURNS
+File Naming Convention: COVBYYMMDD.RETURNS
+File Delimiter: N/A fixed length
+Specification: 
+Included Payment Types:
+ACH Rejects 
+Credits - Both EFT/ACH and Credit Card refunds
+Chargebacks 
+Exclude voids and future dated scheduled payments.
+Sample File:
+SFTP File Path: 
+File Transfer Frequency: 
+One file per day, current vendor created the file around 10PM - this is TBD with VBPU. Current process is VBPU retrieves the file from the vendor SFTP at 5AM the following day.
+Field Mapping
+HEADER
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Vendor Code
+6
+ 
+2
+Filler
+1
+Blank space
+3
+Record Type
+1
+H
+4
+Filler
+1
+Blank space
+5
+Vendor Version Number
+8
+ 
+6
+Client code
+15
+COVB
+7
+File Creation Timestamp
+14
+YYYYMMDDHHMMSS (Eastern time)
+DETAIL
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Record Type
+1
+D
+2
+Payment Sequence# in file
+9
+00000001
+3
+Payment Type
+1
+A = ACH
+C = Credit Card
+4
+Vendor Inst Code
+10
+BILLER
+ = biller portal
+WEB
+ = customer portal
+PAYNOW
+ = Pay Now link in email; this comes over as PaymentID 4 since shopping cart is enabled
+IVR
+ = one-time pay via IVR
+GUEST
+ = one-time payment with multiple payments
+AUTOPAY
+ = autopay payment
+SKEDPYMT
+ = payment scheduled by payer
+MOBILE
+ = one-time payment on mobile device
+SKEDRECR
+ = recurring scheduled payment
+TEXT
+ = one-time payment via text
+5
+Vendor Site Code
+4
+IC + 2 spaces
+6
+Filler
+1
+Blank space
+7
+Account Number
+22
+CVB Account Number
+000CCCCCC0PPPPPP
+CCCCCC – customer#
+PPPPPP – premise#
+8
+Payment Amount
+12
+Implicit 2 decimals
+e.g. 000000008196 = $81.96
+9
+Payment Date and Time
+14
+Payment Entry Date and Time (Eastern time)
+YYYYMMDDHHMMSS
+10
+Fee Amount
+12
+Implicit 2 decimals
+e.g. 000000000175= $1.75
+11
+Filler
+1
+Blank space
+12
+Filler
+10
+Blank space
+13
+Scheduled Payment Date
+8
+When payment should be applied – current vendor allows future payment dates, InvoiceCloud will not be sending the schedule payments to this field. 
+We will send payment date in format YYYYMMDD (Eastern time)
+.
+14
+Total Payment Amount
+12
+Total collected = Payment Amount + Fee Amount
+Implicit 2 decimals
+e.g. 000000008371= $83.71
+15
+Return Reason
+40
+For ACH Returns: List return codes, e.g. R02,R03,R16, etc.
+Other values:
+ATM Chargeback
+CC Chargeback
+CC Refund
+16
+Customer First Name
+15
+Will be blank - first and last name will be combined into field #17
+17
+Customer Last Name
+65
+ First and last name combined
+18
+Billing Street Address
+40
+Address associated with the Payment method
+19
+Billing City
+25
+Address associated with the Payment method
+20
+Customer Phone
+15
+Phone associated with the Payment method
+21
+Email Address
+128
+Email Address associated with the Payment method
+22
+Payment Message
+50
+IC Payment message
+e.g. APPROVED 234548
+This appears in the IC summary page after successful payment and in the printed receipt.
+23
+Transaction ID
+36
+IC ReceiptGUID
+ACH Return Reason Codes
+Code
+Reason
+R02
+Account Closed
+R03
+No Account/Unable to Locate Account
+R04
+Invalid Account Number
+R08
+Payment Stopped or Stop Payment on Item
+R10
+Customer Advises Not Authorized
+R12
+Branch sold to another DFI
+R14
+Representative payee deceased or unable to continue in that capacity
+R15
+Beneficiary of account holder deceased
+R16
+Account Frozen
+R29
+Corporate customer advises not authorized
+Note: Please include all return codes IC receives from Chase Paymentech, VBPU is expecting these and is OK to receive
+ 
+TRAILER
+ record:
+Field#
+Field Name
+Max Length
+Description
+1
+Vendor Code
+6
+ 
+2
+Filler
+1
+Blank space
+3
+Record Type
+1
+T
+4
+Filler
+1
+Blank space
+5
+Vendor Version Number
+8
+ 
+6
+Client code
+15
+COVB
+7
+Total Payment Count
+9
+Number of detail records
+Right-aligned padded with 0 character
+E.g. 000000569
+8
+Total Payment Amount
+12
+Sum of Payment Amount in detail records
+Implicit 2 decimals
+Right-aligned padded with 0 character
+E.g. 000007208438 = $72,084.38
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+Site configuration
+ 
+Please see attached design document for specific site configurations for Virtual Site grids and Customer Portal grids.  VBPU has several custom fields mapped to these grids at their request.
+Virtual Site configurations
+Public-facing Search screen and Search Results screen
+Customer Portal grids
+Invoice Types
+Invoice Types
+42 - 
+Monthly Bills
+Virtual Site
+42 - 
+Monthly Bills 
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+2
+Paperless check box default
+Off
+51
+Adjustment Import - Balance Differential - Override 24 Payment Check
+On
+56
+Pay By Text DBA
+VBPU
+61
+RTDR - Block Payments on RTDR Failures
+On
+63
+Customer Portal - View Open Invoices - Single selection only
+On
+64
+RTDR - Override 6 Hour Previous RTDR Check
+On
+66
+Enable Stored Payment Method via IVR
+On
+74
+ENABLE Multiple Customer Login Functionality
+On
+78
+Allow Co-owners
+On
+133
+Enable Consolidated Payment Receipts in Shopping Cart
+On
+146
+Total Balance (All Accounts) shows for Linked Accounts
+Sum of Aging 8
+153
+DO NOT USE - RTDR Option 64 - Refresh Rate Limit
+360
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Questionnaire - BIF customization
+AllowPartialPayments
+Yes
+AutoPayCollectionDate
+Set in BIF by VBPU
+FirstNotifyRequestedDate
+Set in BIF by VBPU
+InvoiceDate
+Set in BIF by VBPU
+InvoiceDueDate
+Set in BIF by VBPU
+InvoiceFormatGuid
+Assigned by IC 
+InvoiceTypeID
+Set in BIF (42)
+SecondNotifyRequestedDate
+Set in BIF by VBPU
+ThirdNotifyRequestedDate
+Set in BIF by VBPU
+Pendo - Account Condition Messaging
+Invoice Cloud will display static messages to specific VBPU payors based on an Account Condition. Account Condition will be stored in the CustomerVATNumber on the Invoice Cloud customer record and updated with RTDR. Invoice Cloud will have messaging for at least nine different account conditions. These conditions are reflected in the table below.  The message verbiage and the screens in which these messages will appear will be determined throughout the implementation process. 
+Pendo messages will be displayed upon first log in and will be shown continuously until acknowledged. 
+Pendo Messaging
+Priority 
+Message Code 
+Account Condition 
+Headline 
+Final Message Text  
+1 
+BLOCKALL 
+Blocked Acct: 
+When BlockACH = Y AND  
+BlockCC = Y 
+ACCOUNT CANNOT PAY ONLINE 
+  
+This account is not eligible to pay online. Payment must be made at the City Treasurer’s Office. For a list of City Treasurer’s Office locations, visit 
+virginiabeach.gov/pu-payments (https://pu.virginiabeach.gov/customer-service/about-your-bill/pay-your-bill)
+ 
+2 
+PULLMTR 
+Pulled Meter 
+METER IS PULLED 
+The water meter for this account has been pulled. Please pay the Total Amount listed on your Pulled Meter Letter using the “Other Amount” option on any recent bill. Please note that paying online will delay reinstallation. Please call us at 757-385-4631 after payment is made to have your meter reinstalled. 
+  
+3 
+INACTIVE 
+Inactive Account 
+INACTIVE ACCOUNT 
+This account is inactive. Please pay all outstanding bills.  
+4 
+PYAR 
+Payment Arrangement 
+ACCOUNT HAS A PAYMENT ARRANGEMENT 
+This account has an active payment arrangement. Failure to pay your payment arrangement installment and new bill balance by the due date may result in disconnection of water service. Your PYMTARRNGMT bill indicates the next installment amount and when it is due. This account is not eligible to enroll in Autopay and will be immediately disenrolled upon signup.  
+5 
+XO 
+Disconnected 
+SERVICE IS DISCONNECTED 
+Water service for this account has been disconnected. The Amount Due listed on your CUTOFF bill must be paid prior to service reconnection. This account is not eligible to enroll in Autopay and will be immediately disenrolled upon signup.  
+6 
+DELQ 
+Delinquent 
+ 
+when an account has a Delinquent Invoice in the “Recent Bills” 
+  
+Uabopen last delq days = 54 exists for the account 
+ACCOUNT IS DELINQUENT 
+This account has a delinquent balance. Please pay the Amount Due listed on your DELINQUENT bill before the Due Date to avoid water service disconnection. This account is not eligible to enroll in Autopay and will be immediately disenrolled upon signup.  
+7 
+PYARDFLT 
+Eligible for Cutoff 
+ 
+Last pyar is defaulted and Uabopen last delq days= 1 exists 
+ACCOUNT IS ELIGILBE FOR CUTOFF 
+The payment arrangement on this account has been cancelled. This account is now eligible for service disconnection. Please call us at 757-385-4631 for your required payment amount. 
+ 
+8 
+BLOCKACH 
+No ACH 
+CUSTOMER CANNOT PAY WITH BANK ACCOUNT 
+This account is not eligible to pay using a bank account. This account is not eligible to enroll in Autopay using a bank account and will be immediately disenrolled upon signup. 
+9 
+BLOCKCC 
+No Credit Card 
+CUSTOMER CANNOT PAY WITH CREDIT CARD 
+This account is not eligible to pay using a credit card, Google Pay, Apple Pay, or PayPal. This account is not eligible to enroll in Autopay using a credit card and will be immediately disenrolled upon signup. 
+10 
+LOAN 
+Loan 
+ACCOUNT HAS A LOAN 
+This account has an active loan. This account is not eligible to enroll in Autopay and will be immediately disenrolled upon signup. 
+Screenshots
+User Interaction and Design
+Data Flow - Adjustments
+Adjustments will come from RTDR to VBPU’s GetUtiltiesAccount webservice back to VBPU’s Water Admin system.
+att2724691987
+2579693569
+1
+VBPU Adjustments
+att2724429861
+IM
+att2724954133
+0
+Data Flow - Invoices
+VBPU had two systems in play for Invoice data to flow to InvoiceCloud:
+Hansen Banner - this the system of record for utility invoices and controlled by the City of Virginia Beach Treasurer’s Office. As bill cycles are generated by the Treasurer's Office, invoice data flows to the VBPU Water Admin system.
+Water Admin - This is a middle layer created by VBPU for passing invoice data to IC and for the VBPU customer service team to field questions.  Payers can create a registration in the public facing side of Water Admin to view and pay their bill.  
+https://pu.virginiabeach.gov/customer-service/online-services
+ 
+att2724331590
+2579693569
+1
+VBPU Invoices
+att2725085200
+IM
+att2724790311
+0
+Data Flow - Customer Update
+IC send email address updates to VBPU Water Admin via datapump using the SaveEmailAddress webservice.
+att2724495402
+2579693569
+1
+VBPU Customer Updates 2
+att2724790319
+IM
+att2725150738
+0
+Customer updates to name, address and email will come from BIF uploads from VBPU’s Water Admin.
+att2725085206
+2579693569
+1
+VBPU Customer Updates 1
+att2725052449
+IM
+att2725412867
+0
+Data Flow - Payment
+InvoiceCloud will deliver two nightly files to VBPU Treasurer’s office via IC Hosted SFTP - the POST file containing regular payments, and the RETURNS file containing ACH rejects, chargebacks and refunds. These files are consumed by iNovah and then passed to the Hansen Banner system.
+att2725150744
+2579693569
+1
+VBPU payments 2
+att2724790331
+IM
+att2724790325
+0
+Payment records are datapumped back to VBPU Water Admin using their RecordPayment webservice. 
+att2724331598
+2579693569
+1
+VBPU Payment 1
+att2724364334
+IM
+att2724691993
+0
+Data Flow - Void
+Payment voids are datapumped back to VBPU using their DeletePayment webservice. Since voids will not settle, these are not populated to the POST file for the Treasurer’s Office.
+att2725052457
+2579693569
+1
+VBPU Void
+att2724593693
+IM
+att2724757879
+0
+Data Flow - ACH Reject
+Data Flow - Change Log
+Changes to enrollments in Paperless and Autopay are datapumped back to VBPU. InvoiceCloud will apply custom code when one InvoiceType is enrolled for Paperless to apply to all three per account.
+VBPU enrollments to Paperless will occur in their WaterAdmin portal and will be communicated to IC via (require additional details from team).
+att2724036685
+2579693569
+1
+VBPU Enrollment
+att2725150750
+IM
+att2724495409
+0
+Data Flow - Bill Presentment
+Bill PDF images are presented to the payer by InvoiceCloud and are called from the GetInvoicePDF webservice. The same webservice is used for all three InvoiceTypes.  VBPU had three separate bill PDF layouts. IC will call for the PDF using the account and invoice number which will present the correct PDF to the payer
+att2724954142
+2579693569
+1
+VBPU Bill Presentment
+att2724036691
+IM
+att2725052464
+0
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+N/A - discussed for future enhancement
+Biller Experience
+VBPU Clerks will operate in their current Water Admin portal and also have IC Biller Portal available for payment investigation and other Biller Portal activities.  Payments will be processed from the IC Biller Portal.
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoice
+UpdateCustomerPaperlessStatus
+UpdateCustomerAutopaystatus
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+INT-10486
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+7/22/2024
+There is no a clear indicator that a change was made through a one-time payment.
+Posting email changes for the GUEST usage type when email addresses are used in the one-time payment route.
+When making a One-Time Payment, EmailUsage in EmailChangeRequest is set to  “GUEST”. 
+When changing an email in a biller portal for a customer with no paperless, not registered, and no autopay, the EmailUsage in EmailChangeRequest is set to  “MISC”.
+ URL:/spaces/IM/pages/2579693569/Virginia+Beach+Public+Utilities+Technical+Design+Custom

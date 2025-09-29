@@ -1,0 +1,1064 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .csv
+File Naming Convention: 
+File Delimiter: comma (,)
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Column Index
+Record Type
+1
+RowType
+TRUE
+FH
+File Header
+2
+BillerGuid
+TRUE
+FH
+File Header
+3
+ThirdPartyFileReference
+FALSE
+FH
+File Header
+4
+FileCreationDate
+TRUE
+FH
+File Header
+5
+InvoiceCount
+TRUE
+FH
+File Header
+6
+TotalInvoiceAmount
+TRUE
+FH
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+Invoice Header
+11
+InvoiceDate
+TRUE
+Payment Box Name 1
+17
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+Payment Box Data 1
+18
+Invoice Header
+13
+TotalAmountDue
+TRUE
+Invoice Header
+38
+Custom1
+FALSE
+Return name
+Name of the return location
+1
+Invoice Header
+39
+Custom2
+FALSE
+Return address 1
+Address 1 of the return location
+2
+Invoice Header
+40
+Custom3
+FALSE
+Return address 2
+Address 2 of the return location
+3
+Invoice Header
+41
+Custom4
+FALSE
+Return city
+City of the return location
+4
+Invoice Header
+42
+Custom5
+FALSE
+Return state
+State of the return location
+5
+Invoice Header
+43
+Custom6
+FALSE
+Return zip
+Zip of the return location
+6
+Invoice Header
+44
+Custom7
+FALSE
+Service Message 1
+Only contains the string: 
+”For Billing Inquiries:”
+7
+Invoice Header
+45
+Custom8
+FALSE
+Service Message 2
+Contains a phone number starting with “CALL “ and the phone number combined.
+8
+Invoice Header
+46
+Custom9
+FALSE
+Service Message 3
+PLACE HOLDER NAME IS: Statement Date
+9
+Invoice Header
+47
+Custom10
+FALSE
+Payment Box Name 1
+Only contains the string: 
+“Statement Date”
+17
+Invoice Header
+93
+BalanceDue
+FALSE
+Invoice Header
+94
+Custom11
+FALSE
+Payment Box Data 1
+Invoice Date
+18
+Invoice Header
+95
+Custom12
+FALSE
+Payment Box Name 2
+CONCATENATE(“Due By “ + Invoice Due Date)
+19
+Invoice Header
+96
+Custom13
+FALSE
+Payment Box Data 2 
+20
+Invoice Header
+97
+Custom14
+FALSE
+Payment Box Name 3
+CONCATENATE(“Due After “ + Invoice Due Date)
+21
+Invoice Header
+98
+Custom15
+FALSE
+Payment Box Data 3
+22
+Invoice Header
+99
+Custom16
+FALSE
+Recipient name 2
+23
+Invoice Header
+100
+Custom17
+FALSE
+Payment Section - Title
+Only contains the string: 
+“Pay This Amount”
+24
+Invoice Header
+101
+Custom18
+FALSE
+Payment Section - Row 1 Text
+CONCATENATE(“On or Before “ + Balance Due/Total Amount Due)
+25
+Invoice Header
+102
+Custom19
+FALSE
+Payment Section - Row 1 Amount
+26
+Invoice Header
+103
+Custom20
+FALSE
+Payment Section - Row 2 Text
+CONCATENATE(“After “ + Invoice Date)
+27
+Invoice Header
+104
+Custom21
+FALSE
+Payment Section - Row 2 Amount
+28
+Invoice Header
+105
+Custom22
+FALSE
+Account Summary Section - Title
+Account Summary (May have Prefix added to the end)
+29
+Invoice Header
+106
+Custom23
+FALSE
+Account Summary Section - Row 1 Text
+30
+Invoice Header
+107
+Custom24
+FALSE
+Account Summary Section - Row 1 Amount
+31
+Invoice Header
+108
+Custom25
+FALSE
+Account Summary Section - Row 2 Text
+32
+Invoice Header
+109
+Custom26
+FALSE
+Account Summary Section - Row 2 Amount
+33
+Invoice Header
+110
+Custom27
+FALSE
+Account Summary Section - Row 3 Text
+34
+Invoice Header
+111
+Custom28
+FALSE
+Account Summary Section - Row 3 Amount
+35
+Invoice Header
+112
+Custom29
+FALSE
+Account Summary Section - Row 4 Text
+36
+Invoice Header
+113
+Custom30
+FALSE
+Account Summary Section - Row 4 Amount
+37
+Invoice Header
+114
+Custom31
+FALSE
+Service Summary Section - Title
+38
+Invoice Header
+115
+Custom32
+FALSE
+Service Summary Section - Row 1 Text
+39
+Invoice Header
+116
+Custom33
+FALSE
+Service Summary Section - Row 1 Amount
+40
+Invoice Header
+117
+Custom34
+FALSE
+Service Summary Section - Row 2 Text
+41
+Invoice Header
+118
+Custom35
+FALSE
+Service Summary Section - Row 2 Amount
+42
+Invoice Header
+119
+Custom36
+FALSE
+Service Summary Section - Row 3 Text
+43
+Invoice Header
+120
+Custom37
+FALSE
+Service Summary Section - Row 3 Amount
+44
+Invoice Header
+121
+Custom38
+FALSE
+Service Summary Section - Row 4 Text
+45
+Invoice Header
+122
+Custom39
+FALSE
+Service Summary Section - Row 4 Amount
+46
+Invoice Header
+123
+Custom40
+FALSE
+Service Summary Section - Row 5 Text
+47
+Invoice Header
+124
+Custom41
+FALSE
+Service Summary Section - Row 5 Amount
+48
+Invoice Header
+125
+Custom42
+FALSE
+Service Address Title
+49
+Invoice Header
+126
+Custom43
+FALSE
+Service Address 1  
+50
+Invoice Header
+127
+Custom44
+FALSE
+Service Address 2
+51
+Invoice Header
+128
+Custom45
+FALSE
+Graph1 X1,Graph1 X2,Graph1 X3,Graph1 X4,Graph1 X5,Graph1 X6,Graph1 X7,Graph1 X8,Graph1 X9,Graph1 X10,Graph1 X11,Graph1 X12,Graph1 X13,
+CONCATENATE(52 + "," + 53 + "," + 54 + "," + 55 + "," + 56 + "," + 57 + "," + 58 + "," + 59 + "," + 60 + "," + 61 + "," + 62 + "," + 63 + "," + 64) Comma seperated w/o spaces
+52,53,54,55,56,57,58,59,60,61,62,63,64,
+Invoice Header
+129
+Custom46
+FALSE
+Graph1 Y1, Graph1 Y2, Graph1 Y3, Graph1 Y4, Graph1 Y5, Graph1 Y6, Graph1 Y7,
+CONCATENATE(65 + "," + 66 + "," + 67 + "," + 68 + "," + 69 + "," + 70 + "," + 71 + ",") Comma seperated w/o spaces
+65,66,67,68,69,70,71,
+Invoice Header
+130
+Custom47
+FALSE
+Graph2 X1, Graph2 X2, Graph2 X3, Graph2 X4, Graph2 X5, Graph2 X6, Graph2 X7, Graph2 X8, Graph2 X9, Graph2 X10, Graph2 X11, Graph2 X12, Graph2 X13
+CONCATENATE(78 + "," + 79 + "," + 80 + "," + 81 + "," + 82 + "," + 83 + "," + 84 + "," + 85 + "," + 86 + "," + 87 + "," + 88 + "," + 89 + "," + 90 + ",") Comma seperated w/o spaces
+78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+Invoice Header
+131
+Custom48
+FALSE
+Graph2 Y1, Graph2 Y2, Graph2 Y3, Graph2 Y4, Graph2 Y5, Graph2 Y6, Graph2 Y7
+CONCATENATE(91 + "," + 92 + "," + 93 + "," + 94 + "," + 95 + "," + 96 + "," + 97 + "," +) Comma seperated w/o spaces
+91,92,93,94,95,96,97,
+Invoice Header
+132
+Custom49
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom50
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom51
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom52
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom53
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom54
+FALSE
+Message 1
+This is a user-entered message.
+Makes up Message 1
+104
+Invoice Header
+133
+Custom55
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom56
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom57
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom58
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom59
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom60
+FALSE
+Message 2
+Upto 5 lines may be printed.  Not sure how long each line can be before it causes wrap-around issues.
+Makes up Message 2
+105
+Invoice Header
+133
+Custom61
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom62
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom63
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom64
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom65
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom66
+FALSE
+Message 3
+Makes up Message 3
+106
+Invoice Header
+133
+Custom67
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom68
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom69
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom70
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom71
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom72
+FALSE
+Message 4
+This is line 4
+Makes up Message 4
+107
+Invoice Header
+133
+Custom73
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+133
+Custom74
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+133
+Custom75
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+133
+Custom76
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+133
+Custom77
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+133
+Custom78
+FALSE
+Message 5
+And line 5
+Makes up Message 5
+108
+Invoice Header
+319
+Echo1
+FALSE
+Message 1
+103
+Invoice Header
+320
+Echo2
+FALSE
+Message 2
+104
+Invoice Header
+321
+Echo3
+FALSE
+Message 3
+105
+Invoice Header
+322
+Echo4
+FALSE
+Message 4
+106
+Invoice Header
+323
+Echo5
+FALSE
+Message 5
+107
+Invoice Header
+324
+Echo6
+FALSE
+Detail Col Heading 1
+108
+Invoice Header
+325
+Echo7
+FALSE
+Detail Col Heading 2
+109
+Invoice Header
+326
+Echo8
+FALSE
+Detail Col Heading 3
+110
+Invoice Header
+327
+Echo9
+FALSE
+Detail Col Heading 4
+111
+Invoice Header
+328
+Echo10
+FALSE
+Detail Col Heading 5
+112
+Invoice Header
+329
+Echo11
+FALSE
+Detail Col Heading 6
+113
+Invoice Header
+330
+Echo12
+FALSE
+Detail Col Heading 7
+114
+Invoice Header
+331
+Echo13
+FALSE
+Detail Col Heading 8
+115
+Invoice Header
+332
+Echo14
+FALSE
+Budget customer account status message
+357
+Invoice Header
+333
+Echo15
+FALSE
+Id# (Account number)
+358
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account Number Data (Customer Number)
+Int
+Customer’s Account Number
+16
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Recipient name
+String
+Customer’s Name
+10
+Customer Record
+61
+Address1
+Y
+FALSE
+Recipient address 1
+String 
+Customer’s Address 1
+11
+Customer Record
+62
+Address2
+Y
+FALSE
+Recipient address 2
+String
+Customer’s Address 2
+12
+Customer Record
+63
+City
+Y
+FALSE
+Recipient city
+String
+Customer’s City
+13
+Customer Record
+64
+State
+Y
+FALSE
+Recipient state
+String
+Customer’s State
+14
+Customer Record
+65
+Zip
+Y
+FALSE
+Recipient zip
+String
+Customer’s Zip
+15
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+Customer Number
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+Total Owned
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+NA - IC grabs Balance Differential from database. 
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Transaction Type
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Current Date
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+NA - IC grabs Newest from database AdjustmentsToIC.MatchMethodTypes
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: 
+Field
+Starting Column
+Character Limits
+Comment
+Customer#
+1
+10
+Valid customer# is required
+Payment Amount
+11
+10
+Payment amount greater than $0.00.  Decimal required, no commas or $ signs.
+Payment Type
+21
+10
+Cash, Check, Charge.  Default used if blank or no match in UB found
+Payment Date
+31
+10
+Default used if blank.  mm/dd/yyyy
+Reference Number
+41
+10
+Optional, numeric
+Comment
+51
+30
+Optional
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/1672610044/Power+Manager+Technical+Design

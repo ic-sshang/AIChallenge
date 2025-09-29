@@ -1,0 +1,200 @@
+Library Name:
+ IcReactWebify
+Purpose
+Converts React components into standard Web Components (Custom Elements) usable in plain HTML or any frontend framework.
+Overview
+IcReactWebify
+ is a lightweight library that bridges modern React components with the Web Components standard. It allows React-based design systems or widgets to be embedded in any frontend environment—vanilla JS, Angular, Vue, or legacy applications—without directly bundling React.
+The library supports both Shadow DOM and Light DOM rendering, automatic attribute-to-prop transformation, and React event forwarding to native DOM events.
+Features
+Feature
+Description
+Framework Agnostic
+Use React components in any frontend framework (Angular, Vue, etc.)
+Shadow DOM Toggle
+Enable/disable style encapsulation with Shadow DOM (
+open
+, 
+closed
+, or off)
+Attribute Prop Mapping
+Maps HTML attributes to React props with automatic type transformation
+JSON Prop Support
+Pass complex props using JSON strings in attributes
+DOM Lifecycle Hooks
+Hooks into Web Component lifecycle to manage React rendering
+Custom Events
+Forward React events to native DOM events (e.g., 
+onClick
+ to 
+click
+)
+External React Injection
+React and ReactDOM can be provided externally to avoid version mismatches
+Installation
+From Azure Artifacts Feed
+Add the feed to your 
+.npmrc
+:
+registry=https://pkgs.dev.azure.com/invoicecloud/Payer/_packaging/nmp-test-feed/npm/registry/
+always-auth=true
+Login with Personal Access Token (PAT):
+npm login --registry=https://pkgs.dev.azure.com/invoicecloud/Payer/_packaging/nmp-test-feed/npm/registry/
+Install:
+npm install icreactwebify
+How to Use
+Define Your React Component
+typescript
+// HelloWorld.tsx
+import React from 'react';
+
+interface HelloWorldProps {
+  name: string;
+}
+
+const HelloWorld: React.FC<HelloWorldProps> = ({ name }) => {
+  return <div>Hello, {name}!</div>;
+};
+
+export default HelloWorld;
+
+Register the Web Component
+typescript
+tsx
+import React from 'react';
+import * as ReactDOMClient from 'react-dom/client';
+import HelloWorld from './HelloWorld';
+import { IcReactWebify } from 'icreactwebify';
+
+IcReactWebify('hello-world', HelloWorld, {
+  React: React,
+  ReactDOM: ReactDOMClient,
+  shadow: 'open',
+  props: { name: 'string' }
+});
+
+You can now use 
+<hello-world name="John"></hello-world>
+ in any HTML page.
+Options
+Option
+Type
+Default
+Description
+React
+typeof React
+Required
+React instance to render the component
+ReactDOM
+typeof ReactDOM
+Required
+ReactDOM Client (provides 
+createRoot
+)
+shadow
+'open' | 'closed' | undefined
+undefined
+Whether to use Shadow DOM or Light DOM
+props
+Array<keyof Props> | Record<string,Type>
+[]
+Maps HTML attributes to React props
+events
+Array<keyof Props> | Record<string,Config>
+[]
+Maps React event props to DOM events
+Supported Prop Types
+IcReactWebifyType
+Description
+string
+Direct string value
+number
+Parses string to number
+boolean
+Parses 
+'true'
+ / 
+'false'
+ to boolean
+json
+Parses a JSON string into an object
+Consuming the Component
+Simple Usage
+html
+html
+<hello-world name="John"></hello-world> 
+With JSON Props
+typescript
+tsx
+IcReactWebify('user-card', UserCard, {
+  React: React,
+  ReactDOM: ReactDOMClient,
+  shadow: 'open',
+  props: { user: 'json' }
+});
+html
+html
+<user-card user='{"name":"Alice","age":30}'></user-card> 
+Dist File Integration
+Bundle your usage code like this:
+typescript
+ts
+// index.ts
+import { IcReactWebify } from '../dist/types/index';
+import HelloWorld from './HelloWorld';
+
+IcReactWebify('hello-world', HelloWorld, {
+  React: React,
+  ReactDOM: ReactDOMClient,
+  shadow: 'open',
+  props: {
+        name: "string",
+   },
+});
+
+Then expose it via CDN:
+html
+html
+<script src="https://cdn.example.com/components/hello-world.js"></script>
+<hello-world name="World"></hello-world> 
+Web Component Lifecycle Support
+Lifecycle Hook
+Behavior
+connectedCallback
+Mounts the React component
+attributeChangedCallback
+Re-renders on prop/attribute change
+disconnectedCallback
+Unmounts the React component cleanly
+Advanced Usage
+Updating Props Programmatically
+js
+js
+const el = document.querySelector('hello-world'); 
+el.setAttribute('name', 'Jane'); 
+Conditional Shadow DOM
+typescript
+ts
+IcReactWebify('hello-world', MyComponent, {
+  React: React,
+  ReactDOM: ReactDOMClient,
+  shadow: undefined,
+  props: { name: 'string' }
+});
+Use Light DOM to allow global styles to apply directly.
+Limitations
+Props must be serializable as string attributes. Use 
+'json'
+ for objects or arrays.
+Event forwarding must be explicitly defined via 
+events
+.
+Dynamic slotting, portals, or React context sharing across the DOM boundary are not supported.
+Summary
+IcReactWebify
+ offers a clean, modular, and framework-agnostic way to transform your React components into embeddable web components. Ideal for:
+Micro-frontend architectures
+Design systems shared across apps
+Embeddable widgets and SDKs
+Legacy and cross-framework applications
+ URL:/spaces/PE/pages/4397367562/ICReactwebify

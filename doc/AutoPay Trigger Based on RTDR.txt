@@ -1,0 +1,100 @@
+ 
+Overview
+This document proposes a new feature that gives billers the option to defer AutoPay runs when Real-Time Data Refresh (RTDR) fails. Currently, AutoPay proceeds even if RTDR fails to return a balance. This can lead to unwanted collections or inaccuracies. The proposed feature introduces retries on RTDR failure and only proceeds with AutoPay if RTDR succeeds.
+However, when RTDR fails, we’re faced with two choices — both with consequences. Let’s walk through both scenarios:
+Scenario 1: We Collect the Payment (even without updated balance)
+✔️ Payer avoids late fees, penalties, or service disruptions
+❌ There’s a risk the collected amount is incorrect
+🔄 Biller may need to issue a refund or adjust future bills
+Scenario 2: We Do Not Collect the Payment
+❌ Payer may be late, face penalties, or have service interrupted
+❌ Biller must reach out manually to collect missed payment
+🧾 Recovery becomes harder, especially if payer is unaware
+While both have drawbacks, 
+Scenario 2 (not collecting payment) creates a more serious impact
+ on the payer and adds operational burden for the biller. That’s why our current system attempts to collect even if RTDR fails.
+Some billers prefer accuracy over risk. To support flexibility:
+We are proposing this feature as optional
+It can be enabled per biller based on their risk appetite and business preference
+Existing RTDR-Related Configuration Options
+Before proposing the new AutoPay-related enhancement, it’s important to clarify the current capabilities tied to RTDR:
+🔹 Option 61: RTDR - Block Payments on RTDR Failures
+Description: For billers with RTDR, if enabled, if the RTDR encounters an error and is unable to retrieve the current balance, the customer will not be allowed to make a payment.
+This option is 
+Off
+ by default
+AutoPay is not included in the scope of this option.
+🔹 Option 64: RTDR - Override 6 Hour Previous RTDR Check
+Description: For Billers with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh.
+This option is 
+Off
+ by default
+AutoPay is not included in the scope of this option either.
+🎯 Objective
+Provide billers with greater control over AutoPay behavior.
+Prevent collection of potentially outdated or inaccurate balances.
+Introduces retries for Autopay on RTDR failure
+Clarify the scope of Option 61 and Option 64 by stating that autopay is not included in these options.
+Notify user on failure even after retries.
+ 
+Proposed Flow
+Must Have:
+ Push all pending autopay due to RTDR failure to manual queue
+Move to manual queue due to RTDR failure
+Should Have: 
+Introduce a retry logic on RTDR failure before initiating AutoPay.
+Retry logic on RTDR failure before initiating AutoPay.
+🧩 Key Scenarios
+Customer Type
+AutoPay Enrolled
+Balance
+RTDR Status
+AutoPay Action
+A
+✅ Yes
+$10
+✅ Success
+✅ Collect payment
+B
+✅ Yes
+$10
+❌ Failure
+🔁 Retry -Move to manual queue
+C
+✅ Yes
+$0
+❌ Failure
+🔁 Retry -Move to manual queue
+D
+❌ No
+$5
+❌ / ✅
+❌ Not applicable
+⚙️ Configuration Behavior
+A new biller-level configuration option will control this behavior.
+Default: OFF (AutoPay will continue as today)
+When enabled, AutoPay will only proceed if RTDR succeeds.
+Retry for Autopay on RTDR failure
+Must Have: 
+Push all pending autopay due to RTDR failure to manual queue
+Should Have:
+ Introduce a retry logic on RTDR failure before initiating AutoPay. Retry attempts and duration will be defined during implementation/discovery.
+Notify biller or player if Autopay fails even after all the attempts
+Must Have: 
+Connect with Autopay Failure Report(subscription required for biller) in the biller portal
+Could have:
+ Notify via email to biller. (for Payer, we don’t have any template)
+📊 Metrics to Track
+To evaluate the impact and behavior:
+% of AutoPay runs defer due to RTDR failure - DB request
+Average retry attempts before success
+Time delay between first attempt and successful RTDR (not valid for Must Have approach)
+Number of successful autopay payments after retry vs deferred runs - DB request
+Refund rate comparison (pre vs post feature adoption) X- no way to measure
+🧠 Open Questions
+How many times should RTDR retry? Is there a max duration (e.g., until EOD)?
+What should be the retry interval?
+Do we notify the biller/payer when AutoPay is defer?(+1)
+Should there be logging or alerting (internal) when retries exhaust without success? (newRelic can be used)
+Do we want to allow a different behavior for $0 balances?(-1)
+ URL:/spaces/PE/pages/4461002814/AutoPay+Trigger+Based+on+RTDR

@@ -1,0 +1,238 @@
+Why
+To build a robust Insurance Vertical, we must meet biller demands for critical operational processes not currently offered with our product.  These are contractual requirements to support Texas Farm's go-live and ensure they will be a reference for other Insurance billers, which is a $222K MRR revenue SNI for InvoiceCloud and being a premier partner with Guidewire and Zenzar. 
+Audience
+Insurance Carriers 
+- Our clients who take political action contributions (PAC) for affiliated organizations. 
+Insurance policy holders
+ - Payers using InvoiceCloud to pay their policies that want to contribute to the PACs. 
+High-level Approach
+There are three input mechanisms for PAC contributions. 
+Inline  - Optional $5 contribution made when policyholders are paying their membership dues
+Autopay  - Allows policyholders to make an optional $5 contribution for their membership autopay setup. 
+Cabinet level - Allows policyholders to make optional contributions above $5 via a separate website outside the payment route. 
+Phase 1 will include inline contributions only. The autopay and cabinet contributions are expected to be included in subsequent phases.  
+Based on scoping during the sales cycle, we expect to build the inline PAC contribution functionality on top of the inline donations feature. We created inital figma documents for the workflow. 
+Solution Alignment
+Figma: 
+https://www.figma.com/proto/fKstadK37F3OBAsUfPNa6P/Virtual-Site-Demo?page-id=3%3A74&type=design&node-id=21-4826&viewport=81%2C385%2C0.07&t=iVk6zv5Pg0cyG3FB-1&scaling=min-zoom&starting-point-node-id=3%3A76
+ There are comments from UI/UX on this figma as well 
+Mobile Figma: 
+https://www.figma.com/proto/fKstadK37F3OBAsUfPNa6P/Virtual-Site-Demo?page-id=235%3A767&type=design&node-id=263-1751&t=eZCmZwNDPK70KGFP-0&scaling=scale-down&starting-point-node-id=263%3A1751
+ 
+ 
+EBPP-14882
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Key Features: 
+ 
+Ability to launch a payment from Texas Farm Bureau website or anywhere link is embedded for members to pay their membership and optional AGFUND contributions. Support from Texas Farm will be required to update the existing redirects. 
+Ability to make an optional $5 AGFUND contribution in line with the membership payments. The contribution amount will be fixed. 
+Portal will adhere to PAC contribution requirements, including: 
+No corporate cards/corporate memberships are allowed for AGFUND contributions. 
+EBPP-16538
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Member must elect to contribute or not. (No default) 
+If a member chooses to contribute to AGFUND, the payment flow must collect information about the contributor including the name and address. The information must be entered in a free flow form and can not be prepopulated from the integration. 
+Contributor information must be available as a report in the biller portal. 
+The contributor must agree to the AGFUND contribution attestation before processing the payment. Attestation will certify that the contributor uses a personal card, is a U.S. citizen, is not a federal contractor, and is at least 18 years of age. 
+The page must display TXFB provided information about AGFUND before the user makes a selection and if the user decides to contribute. 
+Required language: 
+“
+Verbiage pending approval 1/26/24
+“The Texas Farm Bureau AGFUND, is organized for political purpose in both state and federal elections. The amount of voluntary contribution to AGFUND found on this page ($5.00) is merely a suggestion, and your contribution may be more or less than the suggestion. Contributions are subject to prohibitions and limitations of federal law. Texas Farm Bureau and your county Farm Bureau will not favor, disadvantage, retaliate, or take reprisal against any person by reason of the amount of the person's contribution to, or decision not to contribute to, AGFUND.
+ 
+Contributions or gifts to AGFUND are not tax deductible, Federal law requires us to use our best efforts to collect and report the name, mailing address, occupation and name of employer of an individual whose contributions exceed $200 in a calendar year. State law requires the reporting of the name and address for all contributions made electronically, and for contributions over $10 in a reporting period, we will also report the principal occupation or job title, and employer.
+ 
+Corporate contributions are prohibited. If you would like to make a contribution more than $5, please visit the AGFUND website 
+www.txfbagfund.org
+.” 
+The payment flow must display the text, “member dues are not refundable.” 
+The payments with an AGFUND donation will process as 2 transactions (one for AGFUND, and one for membership). Only the membership transaction will have a convenience fee applied. 
+Payer must be in good standing
+Payer must be making a membership payment to make a PAC donation
+The portal will block the AGFUND contribution option for new and delinquent, and corporate memberships. Texas Farm Bureau will need to provide a status indicator to enable this functionality.
+The portal screens will have the ability to add fixed custom text. 
+Invoice Cloud will work collaboratively with Texas Farm Bureau to make voluntary AGFUND contributions more successful, including, if so desired by Texas Farm Bureau, the inclusion of “pop up” screens if contributions are not elected by the member, or other similar, legally compliant methods of solicitation. 
+TXFB Contract for reference: 
+https://invoicecloud.app.box.com/file/1332024392650
+ 
+Walk through the FIGMAs. We need to ask about language for when payments post, does it show for all?  
+ Changes for Figma:
+Make sure AGFund is always capitalized to AGFUND
+Add free form field for AGFUND name and address field
+Can we add the free form field for name and address to this screen below as well as the T&C’s for AGFUND 
+Need updated language for yellow box here:
+PAC questions:
+Can we add a checkbox to confirm if the person paying is the same name as person paying and the one making the donation on the same page as the payment method screen, if yes, do not offer the free form boxes and allow user to check a box to fill in the cardholder name, if no, then open up the free form box for the payer to enter the name of the person who donates.
+ 
+Adding under Yes I’ll Contribute add T&C’s if the user chooses yes:
+Have to display and be reportable (donor information)
+Biller Report- modify donations report?
+Biller Portal Page
+Open Questions:
+Will TFB use Agent Connect with SAML SSO 
+Yes, at this time but design is still pending
+Will TFB use Agent Connect with IFrame
+Yes, at this time but design is still pending
+Will TFB use CPV2 with IFrame
+Yes, at this time but design is still pending
+Pay By Text- Is this a go live blocker? 
+EBPP-16496
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+This has not come up with TXFB
+When do they need to start UAT testing?
+Right now, we have 6 months budgeted for this work, which is the longest pole in the tent. We need to revise the estimated development time so the team can work out the subsequent schedule. 
+When is their go live date? 
+October 19
+When will we have a final design and sign off with TFB for PAC 
+W
+e asked Texas for signoff by mid-March. 
+Will these new pages flow through IFrame? 
+Yes, at this time but design is still pending
+Will TFB send us a membership flag so we don’t have to handle that on our end?
+Yes, TXFB will send a eligibility flag, we need to design what that looks like with them. 
+Will TFB utilize CPV2 for scheduled payments 
+Unknown, we should check with Roman. 
+Will TFB utilize Agent Connect and allow a partial payment amount to be changed or do they require us to only show the amount passed over by them
+Unknown, we should check with Roman.
+Do we currently allow payments past the due date provided by a biller?
+Unknown, we should check with Roman.
+Do we have the ability to offer this:
+Ability to allow for multiple payment types for one customer for the same bill - The service allows multiple payment types from one customer for the same bill when partial payments are allowed. Credit/debit card and e-check (ACH) can be run separately and an unlimited number of remittance types can be used. For example, a customer can pay part of a bill with a checking account, another part with a credit card and the remainder with a second credit card of a different type.
+Unknown, we should check with Roman.
+Does OBD pose any challenges?
+They don’t have OBD enabled for membership, so no.  
+By adding the free form box for name and address for the PAC contribution; we will pass that data back to TFB,  do we need to store that data on the IC side for future reference/auditing purposes?
+It does not need to be passed back to TXFB, but it needs to be reportable. 
+Success Metrics to track
+Texas Farm committed to its internal stakeholders that the move to InvoiceCloud will not negatively impact the adoption of its PAC contribution. We will monitor this metric as part of the rollout. 
+Payer NPS 
+Payer Adoption vs. IC benchmark 
+On-time go-live 
+Biller satisfaction/referenceability 
+Jira Issues
+https://invoicecloud.atlassian.net/issues/?jql=(text%20~%20%22texas%20farm*%22%20or%20summary%20~%20%22texas%20farm*%22)%20and%20project%20in%20(EBPP)%20and%20status%20in%20(Backlog,%20Blocked,%20Canceled,%20%22Design%20Review%22,%20Grooming,%20%22In%20Review%22,%20%22In%20Scope%22,%20%22Pending%20Review%22,%20%22Pending%20Triage%22,%20%22Product%20Triage%22,%20Design-InProgress,%20Design-Vetting,%20%22In%20Design%22,%20%22In%20Progress%22,%20New,%20%22Ready%20for%20Dev%22,%20%22Tech%20Lead%20Review%22,%20%22CRC%20Review%22)%20ORDER%20BY%20created%20DESC
+Launch Readiness
+Target Date
+Milestone
+Description
+Exit Criteria
+Status
+ 
+ Discovery
+ 
+ Final Biller Sign Off
+ 
+ 
+ Technical Design
+ 
+ 
+ 
+ 
+ UI/UX Design
+ 
+ 
+ 
+ 
+Product Stories / Epics Defined
+ 
+ 
+ 
+ 
+Prioritization of Stories
+ 
+ 
+ 
+ 
+ Internal Testing
+ 
+ 
+ 
+ 
+Phased demo to biller
+ 
+ 
+ 
+ 
+ UAT Testing
+ 
+ 
+ 
+ 
+ Deployment
+ 
+ 
+ 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+ Y
+ PAC will need to be added to the BOF as an option. (in progress) 
+Sales
+Do you need sales enablement materials?
+ Y
+ TBD - should check with Sales 
+Marketing
+Does this impact marketing?
+ N
+ 
+Training
+Do you need to update support content or training?
+ Y
+ Potentially need to update functionality due to customization work- training, In The Know, Technical Documentation
+Implementations
+Changes to questionnaire
+ Y
+ We need to ensure these are boarded/set up in the CRM correctly. 
+Delivery
+Set up and Enablement
+ N
+ 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+ N
+ 
+Support
+Biller questions and support
+ Y
+ Included in updated training, In The Know, Documentation
+Legal
+Are there potential legal ramifications?
+ Y
+ Pay By Text product change
+PAC donations page- how we manage new political contribution versus Donation
+Compliance
+Are there potential compliance ramifications?
+Y
+Pay By Text product change
+PAC donations page
+Reconciliations
+Questions from billers about charges
+N 
+ 
+ 
+Auto Pay including PAC is in Phase 2- when is that expected?
+ 
+OUT OF SCOPE for Phase 1
+Texas Farm – Discovery for Autopay PAC Contributions  Internal notes from Eng. discussion 1/8/24 
+The desire is to build the functionality on top of the donation’s functionality.  
+The preference is for TXFB to be the system of record for PAC donations with auto-pay so that it is not a unique situation where IC is the SOR for one item only.  
+We will need to tie the donations to a specific invoice type. AKA PAC contributions are allowed for membership but not insurance.  
+Need the ability to make PAC contributions in the one-time pay route, in the customer portal and added onto the auto-pay enrollment.  
+Need the ability to opt, before auto-pay running.  
+What frequency?  
+How many notifications?  
+Is there a time-out? AKA period after the notification but before auto-pay runs  
+Three entry pieces for opt-in – CAB level page, inline donations, and autopay 
+Best practice for who is the system of record.  
+$5 contributions only 
+ URL:/spaces/PRODUCT/pages/3025502211/Texas+Farm+Bureau+One+Pager+WIP

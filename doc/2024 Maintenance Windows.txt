@@ -1,0 +1,161 @@
+January
+1/21/2024
+1/28/2024
+February
+2/11/2024
+2/25/2025
+March
+3/10/2024
+3/24/2024
+April
+4/14/2024
+App server (appservers,skybot,pdfextract) patching
+4/28/2024
+Apply NonProd Cloudflare config to 
+invoicecloud.com
+:
+Remove 
+devtest
+ from Cloudflare 
+invoicecloud.com
+ DNS Zone.
+Remove 
+cert
+ from Cloudflare 
+invoicecloud.com
+ DNS Zone.
+Run Kong_Infrastrcuture Cloudflare pipeline stage to deploy 
+invoicecloud.com
+ Records for URLs that route traffic to NonProd DevTest VMs.
+May
+5/5/2024
+Abandoned due to Redis Cache Incident
+5/19/2024
+Palo License
+SQL Private endpoint in PRD PRI and SEC Network Lanes
+Azure Functions VNET integration
+App server patching
+June
+6/9/2024
+Barracuda to Kong Routing Migration
+Delete VNet 
+EndPointTest
+July
+7/7/2024
+App Gateway Rollout - 
+this change was rolled back
+, see 
+specific confluence article for details
+Barracuda to App Gateway Migratiom
+7/14/2024
+Barracuda to App Gateway Switch
+GoDaddy DNS Entry switch to go thru Cloudflare for the following hostnames:
+icg-reporting.invoicecloud.com
+icg-boarding.invoicecloud.com
+icg-payments.invoicecloud.com
+ncf.invoicecloud.com
+web1 thru 10
+test1sms
+7/28/2024
+App server patching
+Update 
+stratus.invoicecloud.com
+ App Gateway Configuration to allow for sticky sessions
+Scale down Minimum App Gateway Instances to 4
+Deletes Scheduled for 7/28/2024 - Platform - Confluence (atlassian.net)
+Turn off West Palo Alto Firewall VMs
+August
+8/11/2024
+Add a Tooling Spoke with a new Tooling AKS Cluster to route that traffic thru the Firewall
+Forward App Gateway Access Logs to NewRelic in PRD & delete PRD Log Analytics Workspace
+Install PowerShell Core on Web Servers Web1 thru Web5
+Web Server Patching on Web1 thru Web5
+Install PowerShell Core on MCC Servers
+MCC Server Patching
+Add my2 thru my10 in GoDaddy and Cloudflare
+Delete the Barracuda WAF VMs
+Deallocate the Barracuda Firewall VMs
+SSO regression/preview DNS additions for GoDaddy and Cloudflare
+SSO regression/preview routes deployed to Prod Application Gateway
+SSO regression/preview for 
+invoicecloud.com
+ Private DNS Zone
+Delete Unused Resource Groups
+Delete the VNet that was created in Resource Group 
+AnsibleTest-Rob
+ named 
+InternalNetwork
+ so we can avoid any naming confusion in the future
+Remove 
+ftp3
+ from GoDaddy
+8/18/2024
+Install PowerShell Core on App and Proxy Servers
+App Server Patching
+Proxy Server Patching
+Web6 - 10 Patching
+Work for Mirza TBD
+Start secondary firewalls and push config
+Delete the VNet that was created in Resource Group 
+AnsibleTest-Rob
+ named 
+InternalNetwork
+ so we can avoid any naming confusion in the future
+September
+9/8/2024
+Remove 
+sms2.invoicecloud.com
+ from GoDaddy, Cloudflare, Private DNS, and App Gateway Routing
+Update Prod Kong Route Configurations
+Add Kong to Prod Network Route 
+Reduce the minimum Production App Gateway instance count from 4 to 3
+Unpeer InternalNetwork from NonProd/DevTest Network
+Scale down 
+redis-east-billerportal-prod
+ to P2 from P4
+Install .Net 8 runtime on production app servers
+Server Patching
+Delete Resource Group 
+rg-east-akstooling-legacyapps
+Delete Resource Group 
+RG-Kubernetes
+Delete Resource Group 
+RG-Network-Midwest
+Delete Resource Group 
+rg-redispvetest-vasant
+Delete Redis Cache 
+redis-east-appinfra-cluster-nonprod
+9/22/2024
+Uncheck the 
+Trusted Azure Resources Exception
+ in Prod SQL Servers: 
+ic-db-east-server1
+, 
+ic-db-west-server1
+ 
+Fix Private DNS Zone Recordset for 
+api.invoicecloud.com
+ to point to Kong Cluster instead of Payer Cluster 
+Minor update to App Gateway Payer NextGen Portal UI HTTPS Redirect Configuration. 
+Delete old Barracuda Firewall VMs, NICs, and Disks as they have been deallocated for over a month 
+Delete really old Barracuda Resource Groups that are just a collections of NICs, Disks, Public IPs, NSGs, LBs with No Backends in the Backend Pool, and a Route Table with no attached Subnets. 
+Delete 
+AnsibleTest-Rob
+ Resource Group since we should not be running Test or POC Workloads in 
+Primary-Subscription
+ since it should be considered solely a Production PCI Zone/Subscription.
+Patch production servers 
+Remove IC-App* from `production` ADO Environment
+October
+10/6/2024
+10/20/2024
+App server patching
+November
+11/3/2024
+11/17/2024
+App server patching
+December
+12/8/2024
+12/15/2024
+App server patching
+ URL:/spaces/icinfradoc/pages/3162079249/2024+Maintenance+Windows

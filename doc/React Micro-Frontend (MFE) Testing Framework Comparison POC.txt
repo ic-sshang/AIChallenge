@@ -1,0 +1,114 @@
+Objective
+The goal of this document is to present a proof of concept (POC) and comparative analysis of popular testing tools for React applications. Based on this, we propose adopting Jest + React Testing Library (RTL) as the default testing strategy for the new and expanding MFE architecture.
+Testing Tools Compared
+Tool                       
+Type                    
+Features                      
+Pros                                
+Cons
+ 
+Jest + React Testing Library (RTL)
+ 
+Unit + Integration
+DOM testing, easy-to-read tests, works well with hooks
+Easy setup, good community support, focuses on behavior over implementation
+ 
+Slightly verbose with few complex DOM states
+ 
+ 
+ 
+Enzyme
+ 
+ 
+ 
+Unit
+ 
+Component rendering (shallow, mount), lifecycle methods access
+ 
+ 
+ 
+Closer access to component internals
+Not actively maintained, limited support for React 18+, shallow rendering is anti- pattern
+ 
+ 
+Cypress
+ 
+E2E +
+Component Testing
+Browser-based UI testing, supports interaction
+ 
+Great for full UI testing, real browser environment
+ 
+Slower than unit tests, higher setup overhead
+ 
+Playwright / Puppeteer
+ 
+E2E
+Headless browser automation
+Fast, scriptable, supports multiple browsers
+ 
+Best suited for E2E, not unit testing
+Why Choose Jest + React Testing Library
+Alignment with MFE Goals: RTL encourages writing tests from the user’s perspective — perfect for isolated, consumer-facing MFE components.
+Future-Proof: Enzyme is no longer officially maintained and lacks support for new React features like Suspense and Concurrent Mode.
+Community & Ecosystem: Jest + RTL are the industry standard for React unit/integration tests. Maintained by the React community and used by Facebook, Airbnb, etc.
+Speed and Simplicity: Jest is fast, provides snapshot testing, and works out-of-the-box with React Testing Library.
+Sample Code Demonstration
+SampleComponent.tsx
+typescript
+import React from "react";
+
+interface SampleComponentProps {
+  title?: string;
+}
+
+const SampleComponent: React.FC<SampleComponentProps> = ({ title = "Hello, World!" }) => {
+  return (
+    <div>
+      <h1>{title}</h1>
+      <p>This is a sample component rendering basic HTML using TypeScript and React.</p>
+      <button onClick={() => alert("Button clicked!")}>Click Me</button>
+    </div>
+  );
+};
+SampleComponent.test.tsx
+typescript
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import '@testing-library/jest-dom';
+import SampleComponent from "./SampleComponent";
+
+describe("SampleComponent", () => {
+  it("renders the default title and paragraph", () => {
+    render(<SampleComponent />);
+    expect(screen.getByText("Hello, World!")).toBeInTheDocument();
+    expect(screen.getByText(/sample component/i)).toBeInTheDocument();
+  });
+
+  it("renders a custom title when provided", () => {
+    render(<SampleComponent title="Custom Title" />);
+    expect(screen.getByText("Custom Title")).toBeInTheDocument();
+  });
+
+  it("shows alert when button is clicked", () => {
+    window.alert = jest.fn();
+    render(<SampleComponent />);
+    fireEvent.click(screen.getByText("Click Me"));
+    expect(window.alert).toHaveBeenCalledWith("Button clicked!");
+  });
+});
+
+Attached Snapshots
+·       We can easily visualize the output of the component in debug console. (which makes it more efficient compared to others as it’s testing end UI instead of only focusing on unit testing.)
+Sample test cases using Jest + RTL
+Additional Benefits
+Snapshot Testing: Catch unintended UI changes with Jest snapshots.
+Code Coverage: Jest easily provides coverage reports to ensure test completeness.
+Mocking & Isolation: Jest mocks modules and APIs efficiently, supporting isolated unit tests.
+Proposed Strategy
+AdoptJest+ReactTestingLibraryforallMFEcomponentunitandintegrationtests.
+Conclusion
+Jest + React Testing Library is the most maintainable, scalable, and developer-friendly choice for testing our React MFE architecture moving forward. It strikes a balance between test clarity, coverage, and future readiness.
+Recommendation
+: Approve and standardize Jest + RTL as our default testing stack for MFE React projects.
+ URL:/spaces/PE/pages/4397498593/React+Micro-Frontend+MFE+Testing+Framework+Comparison+POC

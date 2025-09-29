@@ -1,0 +1,65 @@
+1
+7
+Batch close
+Batch close will bundle the transactions for that day and send it to the processor. If the batch close did not close billers will not get the payment even though the transaction is approved.
+Purpose:
+[In one sentence, explain the purpose of this Card. 
+Example: How to service customers who call in with a billing question.
+]
+Related Topics:
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+Context:
+[In one sentence, explain the appropriate way to use this Card's knowledge so the user knows how it relates to the above purpose.]
+How To Check
+Payments are bundled and get mapped to terminal depending on what payment source is used.
+Transaction type is set to the submitter. If it’s single transaction it will go to normal terminal. 
+If it’s split transaction it will go to IC service fees terminal
+Batches are closed in the following ways
+Auto close hour - Batches will close within the selected auto close hour
+Custom close - If custom close box is selected system will exclude the biller from selected auto close hour and will instead be closed at the specified custom time
+payments were stuck in a settling status can be rolled back from CRM tool
+>negative batch reset → Select the appropriate batch and do the reset
+Settling status will contain negative batch ID. Depending on the negative digit we can identify the status
+Batch close scheduler
+- Runs every minute 
+It will grab upcoming batch close jobs 
+It will schedule jobs and call batch close processor  
+It will check if there are any custom jobs to be closed 
+Batch close processor 
+– It handles biller level stuff 
+Batch close by frontend 
+Batch close by module 
+Can view azure function logs for any sort of issues. 
+It triggers an exception for instance 
+It will show if query is failed. 
+Azure function will send out an error email 
+We can query using Biller ID and operation ID as shown below
+Click on biller missing settled batches
+It will show every biller that is missing settled batches
+There is one subtle difference with some of the batch close for NCR, bluefin, and some old OBD there is no connection to the processor, we just mark the payments as settlement because they have a setup for the batch close time automatically on their end.
+Common reasons for batch close failure
+Team use test billers  or “live” biller so they can run live test payments when needed. They are false alert and can be ignored.
+1. Auto close Job
+Payment processor is down or Multi shard call failed. If these are failed job will stop and we need to restart.
+2. Custom close job
+Azure functions will fail 
+If scheduler 1 won’t run properly job will not kick off 
+We should use rerun application that we used to send them all up 
+Application name: 
+Batch close processor rerun
+ 
+Provide the biller ID to rerun the job 
+Questions to Answer
+Check if the batch run was successful.
+If the batch close are stuck immediate reason would be payment experts and errors on reconciliation
+Using API successful response we mark the payments settled. If there is failure in response we will have to do manual intervention. It will be rolled back and in the next run it will pick it up 
+Did the job which failed to run yesterday was picked up in current slot?
+OpsGenie and NewRelic Alerts 
+Slack notification channel - #batchclose-audit
+Alert will be triggered from opsgenie
+Please check opsgenie to see if anyone has acknowledged alert and then escalate the issue
+Engagement and Escalation [Insert Process Here]
+each out to team
+ URL:/spaces/DS/pages/2543288326/Batch+close+Job

@@ -1,0 +1,76 @@
+Virtual Machine Analysis
+IC-QA-Proxy1 (10.0.17.4)
+Is this VM being used?
+Based upon the traffic analysis, it is determined that this VM is not being used and can be deleted.
+Turn off on Monday 4/1/2024 by 
+ 
+Delete on 5/1/2024 by 
+ if no issues.
+IC-QA-Proxy2 (10.0.17.5)
+Is this VM being used?
+Based upon the traffic analysis, it is determined that this VM is not being used and can be deleted.
+Turn off on Monday 4/1/2024 by 
+ 
+Delete on 5/1/2024 by 
+ if no issues.
+IC-QA-Proxy3 (10.0.17.8)
+All DevTest Web VMs are mapped to this one.  Can this VM be moved to one of the DevTest Networks to get it in the proper NonProd Network Lane?
+Yes it can be moved and Event Sentry coverage parity is not needed becuase this will move into NonProd lane which is not subject to PCI.
+Change the NIC Subnet association. 
+ and 
+ 
+Change the Subscription and Resource Group association.  
+ and 
+ 
+Update the DevTest Web VMs 1 to 14 HOSTS file updating the 
+ICSERVICES
+ entry.  
+ 
+Update the DevTest App Servers 1 and 2 HOSTS file updating the 
+ICSERVICES
+ entry. 
+ 
+Have QA Regression done for the DevTest Web Servers.  
+ 
+Schedule move for 9 AM on Wednesday 4/10/2024 by 
+ and 
+ 
+IC-QA-Web1 (10.0.16.4)
+Is this VM being used?
+Based upon the traffic analysis, it is determined that this VM is not being used and can be deleted.
+Turn off on Monday 4/1/2024 by 
+ 
+Delete on 5/1/2024 by 
+ if no issues.
+IC-QA-Web2 (10.0.16.5)
+Is this VM being used?
+Based upon the traffic analysis, it is determined that this VM is not being used and can be deleted.
+Turn off on Monday 4/1/2024 by 
+ 
+Delete on 5/1/2024 by 
+ if no issues.
+IC-Proxy-Test1 (10.0.9.100)
+Developer used VM, will need to be moved to DevTest Networks to get it in the proper NonProd Network Lane?
+IC-App-Test1 (10.0.6.100)
+Is this VM being used?
+IC-Selenium1 (10.0.5.10)
+Is this VM being used?
+IC-Selenium3 (10.0.5.9)
+Is this VM being used?
+IC-SonarQube1 (10.0.2.13)
+Is this VM being used?
+IC-JitBitWeb1 (10.0.13.4)
+Is this VM being used?
+IC-JitBitWeb2 (10.0.13.5)
+Is this VM being used?
+Storage Account Analysis
+icserverdiagnostics
+34 Terabytes of Table Storage used
+App Service Environment
+ASE-East2
+QA-Proxy Analysis
+Traffic from QA-Proxy servers to 10.0.0.0/8:
+Traffic from 10.0.0.0/8 to QA-Proxy servers:
+Link to raw data:
+QA Servers to 10-0-0-0.xlsx
+ URL:/spaces/platform/pages/3133866002/PCI+4.0+-+Architecture+Decision+Record

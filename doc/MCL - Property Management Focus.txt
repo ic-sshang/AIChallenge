@@ -1,0 +1,283 @@
+Area
+Problem
+Solution Approach
+MoSCoW
+Product Gaps: Payer
+Users 
+override email addresses 
+and gain access to payment methods that do not belong to them
+Transfer Ownership Operation in the Biller Portal and Customer Portal
+SPAM-375
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PRISM-303
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MUST HAVE
+Red
+ 
+Q4 2025
+Yellow
+ 
+User Registration Issues
+System does not require unique email addresses for logins using the email auth type (60 out of 220 MCL Billers)
+Add Unique Login Email Constraint
+SPAM-399
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MUST HAVE
+Red
+ 
+Q4 2025
+Yellow
+Product Gaps: Biller
+Lack of operations from the Biller Portal for non-Account Owner users
+Biller Portal Customer User Management
+must have
+Red
+ 
+q1 2026
+Green
+ 
+Product Gaps: Biller
+Unable to identify Owner versus Tenant in our system
+Biller Portal Customer User Management
+Biller Login Tags-Label 
+SPAM-402
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+must have
+Red
+ 
+q1 2026
+Green
+ 
+Product Gaps: Biller
+Can only see Payment Method for Account Owner. Cannot distinguish which Payment Method belongs to all other users.
+Cannot add Payment Methods to non-Owner users in the Biller Portal.
+Biller Portal Customer User Management
+SPAM-400
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+must have
+Red
+ 
+q1 2026
+Green
+ 
+User Registration Issues
+The 1st person to register assumes Account Owner role
+Registration occurs without authorizing user type
+Biller Portal Customer User Management
+Challenge Registration Existing Payment Methods
+Biller Invites-Link For a Login Type 
+must have
+Red
+ 
+q1 2026
+Green
+ 
+Needs research & discussion
+Product Gaps: Payer
+Registration occurs without verifying payment methods
+Payer UX Updates
+SPAM-74
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+must have
+Red
+ 
+Q1 2026
+Green
+ 
+COMMITTED
+Blue
+Product Gaps: Payer
+Last 4 digits of payment method are visible to all users on an account when viewing AutoPay not just the payment method owner
+Payer UX Updates
+must have
+Red
+ 
+Q4 2025
+Yellow
+ 
+File Imports – Email Updates
+Imports update email addresses for Account Owners that should not be updated
+Invoice imports update emails differently depending on CRM options (Biller Option 108)
+Admin/BIF imports lack oversight.
+Need to get research on how many billers use the BIF to update existing email address
+Need an import tool specific to email imports or updates – behavior needs to be defined
+If email address is the username you can’t do this without validating
+MUST HAVE
+Red
+ 
+Q4 2025
+Yellow
+ 
+Account Linking/Unlinking
+Email changes cascade to all logins tied to linked accounts; the login has the email address, so if you change it, it will change for any account the login is tied to. This is intended behavior that might need to be re-defined.
+Not sure how we can resolve this.  A single login is what drive the link and an update would be on that login and reflected where login details are displayed.
+Could be solved by using a ownership transfer.  The new account would hold the new email address
+Unclear on the problem - seems to be intended behavior
+Account Linking/Unlinking
+Changes to default payment method apply to all linked accounts; where the login payment method is being used only
+Needs more research / testing in the UI
+Unclear on the problem - seems to be intended behavior
+Account Linking/Unlinking
+Unlinking account from the Biller Portal will remove AutoPay and Paperless
+Test functionality in the Customer Portal
+Need to capture the use case.  Perhaps this is a ownership transfer need and not a unlink issue
+must have
+Red
+ 
+q1 2026
+Green
+ 
+Account Linking/Unlinking
+It is difficult to identify owner or parent accounts vs tenant or child accounts in both the Biller and Customer Portals
+Biller Portal Customer User Management
+Payer UX Updates
+must have
+Red
+ 
+q1 2026
+Green
+ 
+Account Linking/Unlinking
+Linked accounts will group saved payment methods together without validation or approval process
+Challenge Registration Existing Payment Methods
+Test functionality in the Customer Portal
+Test functionality in the Biller Portal
+TBD
+ 
+Product Gaps: Payer
+When registering an account, if an email address exists on the customer record, it is pre-populated on the registration page when the customer is registering their account.
+Payer UX Updates
+Stop pre-populating email addresses on all registration pages
+SPAM-69
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+must have
+Red
+ 
+Q4 2025
+Yellow
+Product Gaps: Payer
+Pay by Text is at the Account Level and cannot be set by individual users
+Store phone numbers at the user level
+Pay by Text set at the user level
+This is on SPARK 2026 roadmap
+EBPP-916
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MUST HAVE
+Red
+ 
+2026
+Green
+ 
+Product Gaps: Payer
+Paperless is at the Account Level and cannot be set by individual users
+If the landlord wants a paper bill and the tenant does not and both are Owners on the account, and Paperless is selected by either that will be the setting for the entire account and no one receives a paper bill. 
+Note: This can be an issue with CIS integration partners as well. Bill Print vendor costs. Do we send 3 paper bills to the same address scenario
+Need to research
+Should align with CIS/integrations – connect with Albert & team
+If you are the one who registers Paperless, only you can edit it in the future?
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/4884449?selectedIssue=EPD-106
+ 
+CONSIDERTAION
+Purple
+ 
+2026
+Green
+ 
+Product Gaps: Biller/Payer
+Not all emails are sent to all users and it is difficult to see which users received which email notifications
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/4884449?selectedIssue=EPD-344
+ 
+SPAM-303 not a priority
+Might be similar to: 
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/8176012?selectedIssue=EPD-244&issueViewSection=comments
+ 
+ 
+tbd
+ 
+Account Linking/Unlinking
+Accounts are sometimes linked improperly.
+Accounts remain linked after unregistration processes and users can gain access to accounts that do not belong to them (Scenario is with AUS + Wichita + SSO)
+SPAM-410
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MUST HAVE
+Red
+ 
+Q1 2026
+Green
+ 
+We need a default, consistent behavior followed across the platform 
+(this needs to be defined)
+First we course correct to ensure consistent behaviors are followed across the platform
+Then the ability to offer different “flavors” for certain situations or vertical-specific behaviors
+S&S Issues
+Product Gaps
+Option 22 + McLogin + SSO creating problematic Account Owners
+Need to research:
+SPAM-188
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM-412
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Need to ensure this is not broken on the Integration/S&S side
+must have
+Red
+ 
+quarter tbd
+ 
+Registration (API)
+The REST Register Custom API call used by SSOs to register an account responds with a “Customer already exists” error message without actually registering the customer. 
+Update API call so that SSO registration overwrites the 
+temp login
+. 
+What API call? 
+See document
+ #4
+Product Gaps: Biller
+No logging exists in the biller portal Customer History or the CRM customer history for username changes. This makes troubleshooting around issues with username changes extremely difficult.
+Add username change logging.
+See document
+ #3
+Inconsistent Behavior
+Biller Option 43
+ “
+REMOVED - Biller Portal - Remove Email Address
+” in the Biller Portal no longer works as originally intended. It is now controlled by Biller Portal permissions.
+Option 43 should be operational in the CRM and it should override any Biller portal permissions able to be set by the Biller.
+If Option 43 is enabled, no Biller Portal users should be able to remove email address. 
+If Option 43 is not enabled, the option is available based on Biller Portal user perms.
+See document
+ #2
+This is NOT related to MCL and is a Biller user perm. Need to discuss with Biller team and CSM or Alliance manager involved.
+Product Gap: Biller
+Biller Option 42 “
+Biller Portal - Edit Email Address
+” behavior changed and prevents Billers from updating both the email address and courtesy email address from being edited.
+Option 42
+ should prevent only the primary email address on an account from being editable and it should override any biller portal permission for editing the primary email address field.
+See document
+ #1
+q4 2025
+Yellow
+ 
+ URL:/spaces/EA/pages/4630544425/MCL+-+Property+Management+Focus

@@ -1,0 +1,104 @@
+Background
+The Biller Portal code base has been separated from the monolithic application into it’s own application. This allows us to make changes faster and other good stuff..
+Scope of Change
+NEW LOGGED IN URL (my.invoicecloud.com)
+After logging in, the Biller user will be redirect to a new URL that will now include a subdomain “MY”
+CURRENT: https://www.invoicecloud.com/portal/BillerWelcome.aspx
+CURRENT: https://www.invoicecloud.com/(billername)/BillerWelcome.aspx
+NEW: https://my.invoicecloud.com/(same as before)
+Daily code merges until full production rollout
+IC developers will on a daily basis merge any code changes to the new application branch
+We want to minimize how long we have to do this, thus, the faster we get this done the better
+Update all Demo Portals to redirect to the new subdomain in early February
+Update Production to redirect as a slow rollout starting in late February
+Update Pendo with new URL scheme
+No Changes
+Biller Login Page URL: 
+https://www.invoicecloud.com/portal/BillerLogin.aspx
+Bookmarks do not need to change
+Biller Login Landing Page Design
+SessionID remains in the URL
+E.g., https://www.invoicecloud.com/(billername)/
+(S(tokv3oysmuxtreloun4wepvi))
+/BillerWelcome.aspx 
+Still won’t make it easy to do deeplinking
+Communication Plan & Messaging
+Timeline
+
+
+
+
+1
+
+
+complete
+
+
+Meet with Product Marketing to confirm plan and times 
+
+
+
+
+
+
+2
+
+
+incomplete
+
+
+Send out Email message to Billers on  
+
+
+
+
+
+
+3
+
+
+incomplete
+
+
+Add Pendo popup to announce change and provide a test URL to ensure it will load properly 
+
+
+
+
+
+
+
+
+4
+
+
+incomplete
+
+
+Bill to confirm if Engineering can create a test URL
+
+
+
+
+
+
+5
+
+
+incomplete
+
+
+Allie to work on Pendo message & content
+
+
+
+
+Benefits / Key Points
+Automatic redirects, no need to update bookmarks
+Slow rollout starting 
+  It may take up to 4 weeks for you to see the change to the new URL
+Internal changes to improve our efficiency
+As we continue to improve our processes, there is a new URL
+FAQ
+What happens if I click or have a bookmark with the old link? You will be automatically be redirected
+ URL:/spaces/PRODUCT/pages/2130280463/Biller+Portal+Redeployment+-+2022

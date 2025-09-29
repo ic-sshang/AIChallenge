@@ -1,0 +1,447 @@
+Release Notes 2025-05-20
+
+
+MC_RPPS - Use Decimal Comparison in ObdAutoMatchHandler
+
+
+
+
+Improved Accuracy
+: By implementing decimal comparison in the OBD AutoMatch Handler, we've enhanced the precision of financial calculations, ensuring you receive the most accurate results. 
+
+
+Enhanced Performance
+: These changes streamline processes related to auto-matching, resulting in faster operation times and a smoother user experience. 
+
+
+Better Testing Framework
+: Updates to unit tests bolster the reliability of the code, contributing to a more stable platform that you can trust for your operations.
+
+
+Code Quality Improvement
+: Refactoring the code enhances maintainability, helping our developers quickly implement future enhancements and fix issues with ease.
+
+
+
+
+We’re excited to bring you these updates that foster accuracy and speed in your transactions!
+
+
+CLONE - New IC Admin Role That Has All The Permissions (CreateAzureBiller and ICCRM)
+
+
+
+
+Introduction of @ICUser Parameter: Enhances internal user management in SQL commands for better access control and streamlined processes.
+
+
+Default IC Support Role Setup: Simplifies user role configurations, ensuring that support teams can focus on assisting customers more efficiently.
+
+
+Updated Biller User Role Permissions: Expands functionality for users with IC Admin roles, empowering them with greater capabilities to manage billing processes.
+
+
+New ICAdmin Role Added: Provides comprehensive permissions for administrative tasks, boosting productivity and ensuring smooth operational workflows.
+
+
+Enhanced Permissions Logic for IC Support Role: Improves clarity and alignment of user permissions, leading to a more intuitive user experience.
+
+
+
+
+These updates are designed to enhance your experience by providing more robust user roles and permissions, resulting in improved efficiency and security in managing internal processes!
+
+
+New IC Admin Role That Has All The Permissions (CreateAzureBiller and ICCRM)
+
+
+
+
+Introduction of the Unassigned Role
+ - Users can now benefit from improved role management with a newly added Unassigned role, simplifying permission processes.
+
+
+Updated Role Assignments
+ - Enhanced clarity as the role assignment has shifted from IC Support to IC Admin, ensuring users have the permissions they need for effective operations.
+
+
+Enhanced Biller User Role Permissions
+ - With added error handling and unit tests, the BillerUserRolePermissions is now more robust, enhancing overall reliability.
+
+
+Improved Deployment Process
+ - Multiple updates to 
+deploy.yaml
+ lead to a smoother deployment experience, making setup quicker and easier.
+
+
+Optimized Permissions Control
+ - The IC Admin Role now has expanded permissions, empowering users with comprehensive access for increased productivity. 
+
+
+
+
+Get ready to take advantage of these exciting updates that streamline your user experience!
+
+
+Virtual Site - VBPU Modal Interactivity Enhancement
+
+
+
+
+Accessibility Fixes Added
+: We've implemented essential accessibility features to ensure all users can navigate and interact with our site effortlessly, promoting inclusivity.
+
+
+Modal Redesign
+: The modal has been moved into the 
+cphBodyRight
+ placeholder, improving its visibility and user interaction, leading to a smoother experience on the website.
+
+
+Performance Boost
+: Enhancements to the modal will streamline processes, contributing to faster loading times and a more responsive interface.
+
+
+
+
+We're excited for you to experience these improvements and enhance your interaction with our platform!
+
+
+MyIIS - CustomerGroupMakePaymentConfirmation Page Enhancements
+
+
+Key Changes
+
+
+
+
+Adjusted printing settings to remove overflow constraints, ensuring that print receipts display correctly for multiple invoices.
+
+
+Users can now enjoy a seamless printing experience, where all paid invoices are shown on a single, easy-to-read page.
+
+
+
+
+Unlink MCL Customers Without Password - Merge Backend and UI
+
+
+
+
+Streamlined MCL Integration: The backend is now seamlessly integrated with the UI for MCL, enhancing the overall user experience and providing a smoother workflow.
+
+
+Simplified Customer Account Management: Users can unlink MCL customer accounts without needing a password, saving time and reducing frustration.
+
+
+Updated UI Components: Improved control components make it easier for users to navigate and manage linked accounts effectively.
+
+
+
+
+Enjoy these enhancements that bring ease and efficiency to your account management process!
+
+
+CTP - Remove Unused Code And Clean Up WebService
+
+
+
+
+Streamlined WebService Code:
+ We’ve cleaned up and removed unused code, enhancing overall performance and reducing the likelihood of bugs.
+
+
+Improved Integration Tests:
+ Updates to integration tests ensure more reliable and accurate testing, which leads to a smoother user experience.
+
+
+Optimized Processing Time:
+ With the cleanup, the transaction processing will be faster, resulting in quicker responses for users.
+
+
+
+
+We are excited about these improvements that contribute to a more efficient and seamless experience for you!
+
+
+CTP - Move ACH Request and Responses
+
+
+
+
+Upgraded Libraries
+: Enhanced system performance with upgrades to 
+IC.Database
+ (version 
+1.0.9225.25620
+), 
+IC.Interfaces
+ (version 
+2.3.3.4
+), and 
+Serilog
+ (version 
+2.12.0
+). 
+
+
+
+
+Benefit: Improved reliability and security of our transactions.
+
+
+
+
+
+
+New ACH Request/Response Classes
+: Introduced new classes for ACH credit and void requests and responses. 
+
+
+
+
+
+
+Benefit: Streamlined ACH transaction processing for better user experience.
+
+
+
+
+
+
+Code Refactoring
+: Moved ACH-related requests and responses to dedicated files (
+IC_ACH_Credit_Request.vb
+, 
+IC_ACH_Void_Request.vb
+, 
+IC_ACH_Credit_Response.vb
+, and 
+IC_ACH_Void_Response.vb
+).
+
+
+
+
+
+
+Benefit: Easier maintenance and improved code organization, leading to faster updates in the future.
+
+
+
+
+
+
+Test Suite Updates
+: Implemented enhancements and reverts in the test suite.
+
+
+
+
+Benefit: Ensuring robust testing coverage for dependable functionality.
+ 
+
+
+
+
+We believe these updates will significantly enhance your experience with our services!
+
+
+CTP - Move CNP Request and Responses
+
+
+
+
+Merge and rebuild operations
+ - Streamlined the system processes for a smoother functionality.
+
+
+Uncommented and reverted tests
+ - Improved the robustness of our testing framework, enhancing reliability and confidence in updates.
+
+
+Refined codebase
+ - Removed miscellaneous functions, optimizing performance and maintainability.
+
+
+Updated payment processor models
+ - Enhanced compatibility with Payment Processors such as PayPal, ensuring a broader scope of seamless payment options.
+
+
+Improved request and response handling
+ - Focused on CNP requests and responses for faster transaction processing and more reliable service.
+
+
+
+
+These updates aim to provide you with a more efficient and reliable experience, making transactions smoother than ever!
+
+
+Update Biller Option 158 for Virtual Site
+
+
+Key Changes
+
+
+
+
+Enhanced Visual Clarity:
+ The “Return to Homepage” link is now hidden on the virtual site, creating a cleaner user experience.
+
+
+Streamlined Navigation:
+ Logic for displaying the return link has been simplified, making it easier for users to navigate without confusion.
+
+
+New Biller Option Added:
+ Biller Option 158 has been integrated into the confirmation page, providing more flexibility and functionality for billing options.
+
+
+
+
+Enjoy a smoother experience with these updates that prioritize your navigation and clarity!
+
+
+WNI - N/A - CloudStore Update Release Notes
+
+
+
+
+Enhanced Return Link Visibility Logic: We improved the visibility logic for return links, ensuring a more streamlined user experience by hiding the redundant "Return to Home" screens. This leads to a cleaner navigation path for users during their shopping journey!
+
+
+Updated Biller Option 158: Biller Option 158 has been updated to enhance usability by removing unnecessary options, allowing for a more focused and efficient checkout process.
+
+
+
+
+Enjoy the smoother experience with these updates!
+
+
+WNI - CloudStore Update: Enhanced User Navigation
+
+
+
+
+Improved navigation clarity:
+ The return link after checking for an existing URL is now hidden, helping users stay focused on their current tasks.  
+
+
+Refined user experience:
+ The "Go to Homepage" link is now hidden in the virtual site, ensuring a cleaner interface without distractions.  
+
+
+Smoother process flow:
+ Logic for return link visibility has been simplified, making the navigation process more intuitive for users.  
+
+
+Updated confirmation page options:
+ The addition of Biller Option 158 enhances the choices available during the confirmation process, providing users with greater flexibility.  
+
+
+
+
+These changes are designed to create a smoother and more efficient experience for all users!
+
+
+Chase Processing Alternate API URL
+
+
+
+
+Optimized Codebase:
+ Reverted unnecessary changes to improve code stability for seamless transactions.
+
+
+Enhanced Reliability:
+ Added retry mechanisms across various spots to ensure smoother payment processing, reducing the chance of failures.
+
+
+Streamlined Testing:
+ Adjusted unit tests for clarity, promoting a clear focus on effective application performance.
+
+
+Improved Exception Handling:
+ Cleaned up code by removing troublesome exceptions, leading to a more robust processing experience. 
+
+
+
+
+These updates are designed to deliver a faster and more reliable transaction experience!
+
+
+CTP Updates - CRM Configuration - Card Testing
+
+
+
+
+Added default parameters to applyRisk:
+ Streamlines the risk application process, making it easier for users to configure and manage settings.
+
+
+Introduced cached risk parameters to the sale processor:
+ Enhances processing speed by reducing redundant calculations, leading to quicker transaction handling.
+
+
+Commented out problematic asserts:
+ Improves stability and reliability, ensuring smoother operation during testing phases. 
+
+
+
+
+We hope you enjoy these enhancements!
+
+
+Unlink MCL Customers Made Easier!
+
+
+
+
+Enhanced User Account Management: We've streamlined the user account management functionality, allowing for a smoother and more efficient user experience!
+
+
+Improved Unlinking Process: Users can now unlink MCL customers without needing a password, simplifying account management significantly.
+
+
+Updated Dialogs for Clarity: New dialog messages have been implemented for unlinking and unregistering MCL customers, ensuring users understand the actions they are taking.
+
+
+UI and BackEnd Integration: Merging the BackEnd with the UI enhances performance and improves the overall interaction between components, making the platform faster and more responsive. 
+
+
+
+
+Experience these exciting improvements today and enjoy a more user-friendly environment!
+
+
+CRM Configuration - Card Testing
+
+
+
+
+Enhanced Messaging: Improved messages for better clarity and user experience.
+
+
+Updated Biller Products: Updated product list for a more diverse selection.
+
+
+Improved User Interface: Refined UI elements for a more intuitive navigation and engagement.
+
+
+Optimized Limits: Adjusted limits for better performance and usability.
+
+
+Final Alignment Adjustments: Ensured consistent formatting and layout for a polished look.
+
+
+Status Updates: Current status messages provide timely information for users.
+
+
+Merge Updates: Consolidated updates for improved functionality and stability across modules.
+
+
+
+
+Enjoy these enhancements designed to streamline your experience and provide clearer communication!
+ URL:/spaces/PE/pages/4337827903/Release+Notes+-+EBPP+-+2025-05-20

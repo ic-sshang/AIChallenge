@@ -1,0 +1,11 @@
+To bring it back up after restart
+Login to server from your company laptop
+ssh 
+username@172.212.102.64
+You can find the username in Bitwarden
+Run these commands
+cd hat.sh
+forever start -c "npm start" ./
+Test at 
+https://file.invoicecloud.com
+ URL:/spaces/platform/pages/3971153958/HatSH+-+file.invoicecloud.com

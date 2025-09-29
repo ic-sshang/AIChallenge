@@ -1,0 +1,148 @@
+Purpose and Scope
+The domain provisions the application’s compute layer: a scalable set of Azure VMs running our web tier. It integrates with Key Vault for secrets injection and uses managed identities for secure access.
+Detailed Architecture
+Overview of Managed Identities for each VM
+Terraform Implementation
+hcl
+# Ensure VM identity can read KV secrets
+resource "azurerm_role_assignment" "key_vault_admin" {
+  scope                = azurerm_key_vault.key_vault.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = element(var.managed_identities, 0)  # first MI
+}
+
+# Create one or more VMs via reusable module
+module "web_servers" {
+  for_each = toset(
+    var.environment == "dev"
+      ? var.web_server_identifiers
+      : [for i in range(1, var.web_server_count + 1) : tostring(i)]
+  )
+  source   = "git@ssh.dev.azure.com:v3/invoicecloud/Platform/terraform-azurerm-virtual-machine//?ref=1.8.0"
+
+  depends_on = [azurerm_role_assignment.key_vault_admin]
+
+  providers = {
+    azurerm          = azurerm
+    azurerm.keyvault = azurerm
+  }
+
+  instance               = lower(each.value)
+  application_short_name = "web"
+  deployment_version     = var.deployment_version
+  environment            = var.environment
+
+  size                    = var.web_server_size
+  publisher               = var.source_publisher
+  offer                   = var.source_offer
+  sku                     = var.source_sku
+  version                 = var.source_version
+
+  os_disk_size            = var.os_disk_size
+  os_disk_caching         = var.os_disk_caching
+  os_disk_type            = var.os_disk_type
+  enable_accelerated_networking = var.enable_accelerated_networking
+
+  source_image_id               = var.source_image_id
+  use_source_image_id           = true
+  managed_identity_resource_group = var.managed_identity_resource_group
+  managed_identities              = var.managed_identities
+
+  local_admin_user_config = local.local_admin_user_config
+}
+
+output "vm_private_ips" {
+  value       = { for k, vm in module.web_servers : k => vm.vm_private_ips }
+  description = "Map of each web VM’s private IP address"
+}
+Key Inputs and Outputs
+Name
+Type
+Description
+var.web_server_identifiers
+list(string)
+VM identifiers (dev only)
+var.web_server_count
+number
+VM count (non-dev)
+var.web_server_size
+string
+VM SKU (e.g. 
+Standard_DS2_v2
+)
+var.source_publisher
+string
+Marketplace image publisher
+var.source_offer
+string
+Marketplace image offer
+var.source_sku
+string
+Marketplace image SKU
+var.source_version
+string
+Marketplace image version
+var.source_image_id
+string
+Custom image ID (when using a shared image)
+var.os_disk_size
+number
+OS disk size in GB
+var.os_disk_caching
+string
+OS disk caching policy (
+ReadWrite
+, etc.)
+var.os_disk_type
+string
+OS disk type (
+Premium_LRS
+, etc.)
+var.enable_accelerated_networking
+bool
+Enable Azure accelerated networking
+var.managed_identity_resource_group
+string
+RG containing user-assigned MIs
+var.managed_identities
+list(string)
+User-assigned managed identity IDs
+local.local_admin_user_config
+object
+Admin username/password config
+Output
+Description
+module.web_servers.vm_private_ips
+Map of each VM’s private IP address
+Security & Access Controls
+VMs use 
+user-assigned managed identities
+ to fetch secrets from Key Vault. No credentials in code. 
+Role assignment scoped to Key Vault with the least-privilege “Key Vault Secrets User” role.  
+NSGs (via spoke-vnet module) restrict inbound traffic to only required ports (e.g. 80/443).
+Operations and Runbook
+terraform init
+terraform plan -var-file=env/${var.environment}.tfvars
+terraform apply -var-file=env/${var.environment}.tfvars
+Verify VM provisioning in Azure Portal.
+To rotate admin password: update 
+local.local_admin_user_config.password
+, then re-run apply.
+Troubleshooting:
+VM stuck provisioning → check subnet’s NSG and available IPs. 
+Cannot retrieve secret → confirm role assignment and Key Vault firewall settings.
+Links & References
+VM module: [terraform-azurerm-virtual-machine |
+https://dev.azure.com/invoicecloud/Platform/_git/terraform-azurerm-virtual-machine]
+ 
+Confluence labels: 
+infra
+ 
+compute
+ 
+web-vms
+ 
+terraform
+ 
+Deployment pipeline: 
+ URL:/spaces/platform/pages/4264820741/Compute+Web+VMs

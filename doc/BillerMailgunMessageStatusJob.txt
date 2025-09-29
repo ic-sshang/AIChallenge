@@ -1,0 +1,59 @@
+Introduction
+A console job designed to run in either Skybot or a Kubernetes container that polls the Mailgun events API for delivered events and updates the MailTracking.DeliveredDate column accordingly.
+Running the Job
+The job requires no parameters but will accept some to control the behavior. It makes use of the Microsoft.Extensions.Configuration packages and follows its conventions. All parameters can be specified as either (in order from lowest to highest priority) appsettings.json entires, environment variables or command line parameters. The following parameters are accepted:
+Job.BillerIds: an array of Biller IDs to exclusively consider.
+Parameter form: 
+--Job:BillerId:0=123 --Job:BillerId:1=234 ... --Job:BillerId:n:345
+Job.StartTimeUtc: The UTC DateTime that defines the start of the time window to query for events.
+Parameter form: 
+--Job:StartTimeUtc="1/1/2024 4:00:00 AM"
+ (any string that parses to a DateTime is acceptable for the value)
+Job.EndTimeUtc: The UTC DateTime that defines the end of the time window to query for events.
+Parameter form: 
+--Job:EndTimeUtc="1/1/2024 12:00:00 PM"
+ (any string that parses to a DateTime is accpetable for the value)
+Job.OffsetSecondsFromLastRun: Defaults to 60. The overlap in seconds with the most recent end time to have been queried when the start time is not explicitly specified.
+Parameter form: 
+--Job:OffsetSecondsFromLastRun=120
+Job.MaxParallelism: Defaults to 10. The number of Billers to process concurrently.
+Parameter form: 
+--Job:MaxParellelism=1
+Job.InsertBufferThreshold: Defaults to 2500. The number of events that are queued in memory before they get flushed to the staging table.
+Parameter form: 
+--Job:InsertBufferThreshold=10000
+Operational Details
+Unless otherwise specified, the job will first query the master db for all active Billers.
+It will then iterate over this list, first checking if Biller Option 156 - Quiet Hours Schedule Send Times for 1st, 2nd and 3rd Invoice Notifications is enabled.
+Only Billers with the option enabled will be further processed.
+A time window to query is then calculated for the Biller.
+The Mailgun Events API is queried. This API will return a max of 300 events per page and the pages must be evaluated until the end is reached.
+All events are staged to a staging table in the database and a stored procedure is called that updates the MailTracking from the events in the staging table.
+The time window to query is by default based on the run with the most recent end date. The normal situation is to overlap the start of the window by 1 minute with the end of the last window. This is to ensure that any delay in events occurring to being being reported by mailgun does not result in missed events. The end of the window is the time that processing for each Biller began. The runs are recorded in the JobStatus table. If there are no previous runs recorded, the start of the UTC day is used as the start date.
+Build and Deploy
+The build is currently targeting Skybot. There are unit tests for the core logic and the solution will be SonarScanned as part of the build.
+The deploy, also currently targeting Skybot, requires some secrets be available:
+ClientID
+: This is Managed Identity ID the job will run under and is required for database access.
+MailgunAPIPrivateKey
+: This is the API key used to authenticate requests the Mailgun API.
+These secret values will be injected into 
+appsettings.json
+ file at deploy time. Should these secret values change, a redeploy would be required to update the deployed settings.
+Process Diagram
+2
+1
+0
+0
+3573317681
+3572006938
+1
+BillerMailgunMessageStatusJob.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+BillerMailgunMessageStatusJob.drawio
+0
+921.0000000000001
+1032.0000000000005
+ URL:/spaces/ED/pages/4057268240/BillerMailgunMessageStatusJob

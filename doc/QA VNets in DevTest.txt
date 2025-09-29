@@ -1,0 +1,407 @@
+3
+4
+false
+list
+false
+Network Issues Diagram
+1
+0
+0
+2837610497
+2837479425
+1
+qa-vnet-web.drawio
+2
+0
+2
+https://invoicecloud.atlassian.net/wiki
+qa-vnet-web.drawio
+0
+pQa6FFjuynzxIuluKsIQ 1
+711
+auto
+top
+1
+481
+Actions to Fix Networking Issues
+Actions to fix QA Vnets in DevTest , 
+do the Green items before
+ Maintenance Window (we define the maintenance window since this is NonProd impact).
+Create 3 new Route Tables, one for each of the VNets mentioned below:
+vnet-east-infra-common-app-dev
+vnet-east-infraQAcommon-dev
+vnet-east-infraQA1to6-dev
+Add the following Routes to each Route Table:
+InternalNetwork
+: 10.0.0.0/18 => 10.211.2.254
+centralindia-avd
+: 10.20.0.0/23 => 10.211.2.254
+vnet-east-akstooling-legacyapps
+: 10.150.0.0/19 => 10.211.2.254
+vnet-east-infraQAcommon-dev
+: 10.31.0.0/16 => 10.211.2.254
+vnet-east-infraQA1to6-dev
+: 10.32.0.0/16 => 10.211.2.254
+vnet-east-infra-common-app-dev
+: 10.33.0.0/16 => 10.211.2.254
+vnet-pri-hub2
+: 10.211.0.0/16 => 10.211.2.254
+vnet-sec-hub2
+: 10.212.0.0/16 => 10.211.2.254
+vpng-pri-hub2-sbx
+: 172.16.3.0/24 => 10.152.2.254
+vnet-pri-proxy1-sbx
+: 10.167.0.0/16 => 10.152.2.254
+vnet-pri-proxy1-dev
+: 10.196.0.0/16 => 10.152.2.254
+vnet-pri-hub2-sbx
+: 10.152.0.0/16 => 10.152.2.254
+Ensure Palo Firewall in NonProd and PRD has firewall rules to allow the following Address CIDRs to communicate between themselves:
+10.31.0.0/16
+10.32.0.0/16
+10.33.0.0/16
+Replace the Route Table association for each VNet and contained Subnets:
+vnet-east-infra-common-app-dev => rt-vnet-east-infra-common-app-dev
+vnet-east-infraQAcommon-dev => rt-vnet-east-infraQAcommon-dev
+vnet-east-infraQA1to6-dev => rt-vnet-east-infraQA1to6-dev
+Remove the listed Peerings for each VNet:
+vnet-east-infra-common-app-dev
+InternalNetwork
+AD-Network-East
+vnet-east-infraQAcommon-dev
+vnet-east-infra-common-proxy-dev
+vnet-east-infraQA1to6-dev
+vnet-east-infraQAcommon-dev
+InternalNetwork
+AD-Network-East
+vnet-east-infraQA1to6-dev
+vnet-east-infra-common-app-dev
+vnet-east-akstooling-dev
+vnet-east-infraQA1to6-dev
+InternalNetwork
+AD-Network-East
+vnet-east-infraQAcommon-dev
+vnet-east-akstooling-dev
+Test Plan
+CreateAzureBiller run the skybot job in QA.  Ask 
+ if she will be available or if she can show someone how to run if she is not available.
+deploy an app to web devtest 4 and 10 (
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=1088
+)
+deploy an app to app devtest2 (
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=1817
+)
+deploy an app to app devtest1 (
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=85717
+)
+make sure devtest8 is still externally available at 
+cert.invoicecloud.com
+make sure devtest14 is still externally available at 
+devtest.invoicecloud.com
+run automated tests against web devtest 4 and 10 (
+https://dev.azure.com/invoicecloud/QA_Src/_build?definitionId=919
+)
+tests take biller shard as a parameter. you need to configure the domain that shard's running on in the CRM, then kick off the tests against the shard
+Error from CreateAzureBiller
+Below is the error log from the CreateAzureBiller run that identified the Networking Issue outlined in the article above.
+Network Error from CreateAzureBiller
+Job Started . . . :  09/26/2023 09:52:18 CDT
+Job Name  . . . . :  STAGING-CreateAzureBiller
+Job ID  . . . . . :  1267
+Job Description . :  This job will get kicked off by the CRM and will create a biller on the Azure datacenter.
+Job Parameters  . :  
+Run Number  . . . :  1147972
+Agent Environment :  Apps_Login
+Agent Name  . . . :  APP-VM1QA2_VM-APP-QA2
+Agent Owner . . . :  APP-VM1QA2$
+Agent OS  . . . . :  Windows NT (unknown) 10.0
+Agent Relmod  . . :  R04M011170906
+Server Name . . . :  www.invoicecloud.com:7472
+
+Starting process with command: bin\Win32\RobotTermSocket64.exe  "icskybotdevtestagent@invoicecloud.com"  1695739938272 C:\Windows\system32\cmd.exe
+
+ Password:
+Microsoft Windows [Version 10.0.17763.4851]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+E:\Program Files (x86)\Help Systems\Automate Schedule Agent>E:
+"E:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20230926.095218.616: %Errorlevel%
+
+E:\Program Files (x86)\Help Systems\Automate Schedule Agent>COMPLETED_CMDID_20230926.095218.616: 0
+
+E:\Program Files (x86)\Help Systems\Automate Schedule Agent>cd \Data\Apps\
+"E:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20230926.095218.725: %Errorlevel%
+
+E:\Data\Apps>COMPLETED_CMDID_20230926.095218.725: 0
+
+E:\Data\Apps>CreateAzureBiller\CreateAzureBiller.exe
+"E:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20230926.095218.976: %Errorlevel%
+[09:52:40 ERR] Triggered By: ConnectToHub. 
+System.AggregateException: One or more errors occurred. ---> System.Net.Http.HttpRequestException: An error occurred while sending the request. ---> System.Net.WebException: Unable to connect to the remote server ---> System.Net.Sockets.SocketException: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 10.31.0.18:443
+   at System.Net.Sockets.Socket.InternalEndConnect(IAsyncResult asyncResult)
+   at System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)
+   at System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- End of inner exception stack trace ---
+   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)
+   at System.Net.Http.HttpClientHandler.GetResponseCallback(IAsyncResult ar)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   at CreateAzureBiller.CreateAzureBillerHub.ConnectToHub(String hubName) in C:\agent\A2\_work\68\s\CreateAzureBiller\CreateAzureBillerHub.vb:line 13
+---> (Inner Exception #0) System.Net.Http.HttpRequestException: An error occurred while sending the request. ---> System.Net.WebException: Unable to connect to the remote server ---> System.Net.Sockets.SocketException: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond 10.31.0.18:443
+   at System.Net.Sockets.Socket.InternalEndConnect(IAsyncResult asyncResult)
+   at System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)
+   at System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- End of inner exception stack trace ---
+   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)
+   at System.Net.Http.HttpClientHandler.GetResponseCallback(IAsyncResult ar)
+   --- End of inner exception stack trace ---<---
+[09:52:40 ERR] Triggered By: SendUpdate. 
+System.InvalidOperationException: Data cannot be sent because the connection is in the disconnected state. Call start before sending any data.
+   at Microsoft.AspNet.SignalR.Client.Connection.Send(String data)
+   at Microsoft.AspNet.SignalR.Client.Hubs.HubProxy.Invoke[TResult,TProgress](String method, Action`1 onProgress, Object[] args)
+   at Microsoft.AspNet.SignalR.Client.Hubs.HubProxy.Invoke(String method, Object[] args)
+   at CreateAzureBiller.CreateAzureBillerHub.SendUpdate(String progressMessage, Int32 progressCount) in C:\agent\A2\_work\68\s\CreateAzureBiller\CreateAzureBillerHub.vb:line 32
+[09:52:40 INF] Triggered By: Main. Message: Biller Shard ID does not exist in the table. New Biller Creation has failed. 
+[09:52:40 ERR] Triggered By: SendUpdate. 
+System.InvalidOperationException: Data cannot be sent because the connection is in the disconnected state. Call start before sending any data.
+   at Microsoft.AspNet.SignalR.Client.Connection.Send(String data)
+   at Microsoft.AspNet.SignalR.Client.Hubs.HubProxy.Invoke[TResult,TProgress](String method, Action`1 onProgress, Object[] args)
+   at Microsoft.AspNet.SignalR.Client.Hubs.HubProxy.Invoke(String method, Object[] args)
+   at CreateAzureBiller.CreateAzureBillerHub.SendUpdate(String progressMessage, Int32 progressCount) in C:\agent\A2\_work\68\s\CreateAzureBiller\CreateAzureBillerHub.vb:line 32
+
+E:\Data\Apps>COMPLETED_CMDID_20230926.095218.976: 1
+
+E:\Data\Apps>exit
+
+Process exited with value: 0
+Job ended at 09/26/2023 09:52:40 CDT
+Job terminated due to failure of command 1: CreateAzureBiller\CreateAzureBiller.exe
+Command return code did not match passing return codes: 0
+NAT Gateway used by 
+vnet-east-infraQA1to6-dev
+The 
+vnet-east-infraQA1to6-dev
+ does have 
+KeyVault
+ and 
+SQL
+ Service Endpoints configured.
+We want to get rid of the NAT Gateway and replace Egress for all of the QA VNets in DevTest to use the Palo PRD PRI Firewall which would change the Source Public IP Address of traffic coming out of the QA VNets in DevTest.
+IP Address of NAT Gateway: 
+52.249.254.34
+IP Addresses of PRD PRI Palo Firewall
+40.76.112.210
+40.76.236.105
+172.174.107.217
+Analysis of all Legacy KeyVaults and SQL Servers in 
+Primary
+ and 
+DevTest
+ Subscriptions:
+Legacy Key Vaults in Primary
+cmddkvoomqixpimjduq
+Allow public access from all networks, but seems to be broken
+devictest
+Allow public access from all networks
+devtest132754601
+Allow public access from all networks
+devtest1474a8519
+Allow public access from all networks
+DevTest15506
+Allow public access from all networks
+DevTest52290
+Allow public access from all networks
+ExternalAppSettings
+Allow public access from specific virtual networks and IP addresses
+Does have
+ 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule as well
+A bunch of others VNet rules
+Does have
+ rule for 
+vnet-east-infraQA1to6-dev
+ NAT Gateway IP Address
+Does NOT have
+ rule(s) for PRD PRI Palo Firewall IPs
+A Bunch of other IP Rules
+IC-Certificates
+Allow public access from all networks
+ic-dw-stageanalytics-kv
+Allow public access from all networks
+icDBKeyVault
+Allow public access from all networks
+ICKeyVaultEast
+Allow public access from all networks
+jesuslab1474a2953
+Allow public access from all networks
+JesusLab19063
+Allow public access from all networks
+keyvault-eastus-app-prd
+Allow public access from specific virtual networks and IP addresses
+5 Subnets from InternalNetwork (ic-proxy, ic-dev-proxy, ic-apps, termserver, publicfacing)
+keyvault-eastus-web-prd
+Allow public access from specific virtual networks and IP addresses
+5 Subnets from InternalNetwork (ic-proxy, ic-dev-proxy, ic-apps, termserver, publicfacing)
+keyvault-eastus-web-prv
+Allow public access from specific virtual networks and IP addresses
+3 Subnets from InternalNetwork (ic-proxy, termserver, publicfacing)
+keyvault-eastus-web-reg
+Allow public access from specific virtual networks and IP addresses
+4 Subnets from InternalNetwork (ic-dev-proxy, ic-apps, termserver, publicfacing, ic-dev-web)
+4 IPs (20.102.115.105, 20.75.169.55, 20.75.169.116, 20.75.169.54)
+QALab27031
+Allow public access from all networks
+QALab35546
+Allow public access from all networks
+qalab3e79e4675
+Allow public access from all networks
+QALAB5042
+Allow public access from all networks
+robc3528821124
+Allow public access from all networks
+WebWest
+Allow public access from all networks
+windchill-vault
+Allow public access from all networks
+Legacy Key Vaults in DevTest
+icappsettingsdevtest
+Allow public access from specific virtual networks and IP addresses
+Does have 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule
+A bunch of others
+Does NOT have
+ Rule for 
+vnet-east-infraQA1to6-dev
+ NAT Gateway
+Does NOT have
+ Rule(s) for PRD PRD Palo Firewall
+A Bunch of other IP Rules
+keyvault-eastus-app-1
+Allow public access from specific virtual networks and IP addresses
+Does NOT have 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infraqacommon-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infra-common-app-dev
+ VNet Allow Rule
+Does have
+ 
+internalnetwork
+ VNet Rule for Subnets (ic-apps, termserver)
+No IP Rules
+keyvault-eastus-pxy-dt6
+Allow public access from specific virtual networks and IP addresses
+Does NOT have 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infraqacommon-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infra-common-app-dev
+ VNet Allow Rule
+Does have
+ 
+internalnetwork
+ VNet Rule for Subnets (ic-apps, termserver)
+No IP Rules
+keyvault-eastus-web-dt1
+Allow public access from specific virtual networks and IP addresses
+No VNet Rules
+1 IP Rule (76.224.172.125)
+keyvault-eastus-web-dt2
+Allow public access from specific virtual networks and IP addresses
+No VNet Rules
+No IP Rules
+keyvault-eastus-web-dt3
+Allow public access from specific virtual networks and IP addresses
+No VNet Rules
+No IP Rules
+keyvault-eastus-web-dt6
+Allow public access from specific virtual networks and IP addresses
+Does have 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infraqacommon-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infra-common-app-dev
+ VNet Allow Rule
+Does have
+ 
+internalnetwork
+ VNet Rule for Subnets (ic-apps, termserver, ic-dev-proxy, ic-proxy)
+Legacy SQL Server in Primary
+edj23f245c7b46f4c8d8d477
+Selected Networks
+No VNets
+6 IP Addresses (96.233.114.243, 12.91.73.74, 166.171.187.231, 108.56.194.31, 71.184.205.38, 75.131.146.210)
+ic-db-east-server1
+Selected Networks
+11 Subnets, all in InternalNetwork
+No IP Addresses
+ic-db-elasticjobs-east
+Selected Networks
+No VNets
+1 IP Address (52.188.219.82)
+ic-db-west-server1
+Selected Networks
+No VNets
+3 IP Addresses (52.188.219.82, 72.70.32.52, 75.131.146.210)
+ic-dw-east-server1
+Selected Networks
+7 Subnets, all in InternalNetwork
+6 IP Addresses (137.135.82.40, 13.68.141.91, 52.188.219.82, 52.168.149.199, 40.117.232.240, 75.131.146.210)
+ic-gateway-east
+Selected Networks
+10 Subnets, all in InternalNetwork
+6 IP Addresses (137.135.82.40, 13.68.141.91, 52.188.219.82, 52.168.149.199, 40.117.232.240, 75.131.146.210)
+ic-gateway-west
+Selected Networks
+No VNets
+No IP Addresses
+ic-ssis-east-server1
+Selected Networks
+No VNets
+2 IP Addresses (173.76.229.114, 68.189.252.234)
+icdbtestserver
+Selected Networks
+1 VNet, EndPointTest
+No IP Addresses
+oomqixpimjduq-dbserver
+Selected Networks
+No VNets
+7 IP Addresses
+Legacy SQL Server in DevTest
+ic-dbstage-east-server1
+Selected Networks
+No VNets
+7 IP Addresses
+ic-dbtest-east-server1
+Selected Networks
+Does have 
+vnet-east-infraQA1to6-dev
+ VNet Allow Rule
+Does have 
+vnet-east-infraqacommon-dev
+ VNet Allow Rule
+Does NOT have
+ 
+vnet-east-infra-common-app-dev
+ VNet Allow Rule
+7 Subnets from InternalNetwork
+1 Subnet from Datalore AKS Trial
+No IPs
+ic-dbtest-west-server1
+Selected Networks
+No VNets
+3 IPs (20.75.169.54, 20.75.169.55, 20.75.169.116)
+ URL:/spaces/icinfradoc/pages/2837479425/QA+VNets+in+DevTest

@@ -1,0 +1,274 @@
+Application Discovery
+Configurations
+It has 2 configurations:
+Host.json
+{
+  "queues": {
+    "maxPollingInterval": 500,
+    "visibilityTimeout": "00:10:00",
+    "batchSize": 16,
+    "maxDequeueCount": 1,
+    "newBatchThreshold": 8
+  },
+  "functionTimeout": "00:10:00"
+}
+Appsetting.json
+[
+  {
+    "name": "BluefinApiKey",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=BluefinAccessKey)"
+  },
+  {
+    "name": "BluefinAccountID",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=BluefinAccountID)"
+  },
+  {
+    "name": "BluefinApiKeyProd",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=BluefinAccessKeyProd)"
+  },
+  {
+    "name": "BluefinAccountIDProd",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=BluefinAccountIDProd)"
+  },
+  {
+    "name": "AzMessageQueue-EmailQueue",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=AzMessageQueue-EmailQueue)"
+  },
+  {
+    "name": "DBLIVE-NAME",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBLIVE-NAME)"
+  },
+  {
+    "name": "DBLIVE-CATALOG",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBLIVE-CATALOG)"
+  },
+  {
+    "name": "DBPERFLOGGING-NAME",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBPERFLOGGING-NAME)"
+  },
+  {
+    "name": "DBPERFLOGGING-CATALOG",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBPERFLOGGING-CATALOG)"
+  },
+  {
+    "name": "DBLIVE",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBLIVE)"
+  },
+  {
+    "name": "DBPERFLOGGING",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBPERFLOGGING)"
+  },
+  {
+    "name": "DBDYNAMIC",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=DBLIVE)"
+  },
+  {
+    "name": "BatchCloseProcessorKey",
+    "slotSetting": true,
+    "value": "**BatchCloseProcessorKey**"
+  },
+  {
+    "name": "BatchCloseByModuleKey",
+    "slotSetting": true,
+    "value": "**BatchCloseByModuleKey**"
+  },
+  {
+    "name": "BatchCloseByFrontEndKey",
+    "slotSetting": true,
+    "value": "**BatchCloseByFrontEndKey**"
+  },
+  {
+    "name": "GatewayUrl",
+    "slotSetting": true,
+    "value": "**GatewayUrl**"
+  },
+  {
+    "name": "AppName",
+    "slotSetting": true,
+    "value": "**AppName**"
+  },
+  {
+    "name": "UseManagedIdentity",
+    "slotSetting": true,
+    "value": "false"
+  },
+  {
+    "name": "AzMessageQueue-DevApp",
+    "slotSetting": true,
+    "value": "@Microsoft.KeyVault(VaultName=**VaultName**;SecretName=AzMessageQueue-DevApp)"
+  },
+  {
+    "name": "Demo",
+    "slotSetting": true,
+    "value": "**Demo**"
+  },
+  {
+    "name": "BatchCloseProcessorQueueStorageName",
+    "slotSetting": true,
+    "value": "**BatchCloseProcessorQueueStorageName**"
+  },
+  {
+    "name": "BatchCloseSyncQueueStorageName",
+    "slotSetting": true,
+    "value": "**BatchCloseSyncQueueStorageName**"
+  },
+  {
+    "name": "BatchCloseFrontEndQueueStorageName",
+    "slotSetting": true,
+    "value": "**BatchCloseFrontEndQueueStorageName**"
+  },
+  {
+    "name": "BatchCloseModuleQueueStorageName",
+    "slotSetting": true,
+    "value": "**BatchCloseModuleQueueStorageName**"
+  }
+
+]
+BatchCloseSyncQueueStorageName
+ key from above not being used anywhere
+Environment Variables:
+Name
+Scope
+Notes
+BluefinApiKey
+APP
+BluefinAccountID
+APP
+BluefinApiKeyProd
+APP
+BluefinAccountIDProd
+APP
+AzMessageQueue-EmailQueue
+APP
+DBLIVE
+APP
+BatchCloseProcessorKey
+APP
+BatchCloseByModuleKey
+APP
+BatchCloseByFrontEndKey
+APP
+GatewayUrl
+APP
+AppName
+APP
+UseManagedIdentity
+APP
+AzMessageQueue-DevApp
+APP
+Demo
+APP
+IC_ENV_TYPE
+IC.BatchClose
+Library uses this value to determine the email domain when sending emails.
+BluefinApiKey
+BluefinAccountID
+BluefinApiKeyProd
+BluefinAccountIDProd
+AzMessageQueue-EmailQueue
+DBLIVE
+BatchCloseProcessorKey
+BatchCloseByModuleKey
+BatchCloseByFrontEndKey
+GatewayUrl
+AppName
+UseManagedIdentity
+AzMessageQueue-DevApp
+Demo
+Deployment Pipeline Configuration
+The deployment pipeline will perform FileTransforms to the appsettings.json based on the environment. Two environments are part of the SDLC; DevTest and Production.
+Variable Groups used
+DevTest
+DevTest
+Service Configuration - DevTest
+Portals-NonProd
+Production
+Production
+Service Configuration - Production
+Portals-Prod
+If there is a matching alias of an application setting or connection string, the value will be transformed and overwritten by the variable value. 
+Currently VaultName is getting transformed
+AzureKeyVault is used to fetch configuration values and this retrieval is done at deployment time not at code run time.
+DevTest - icappsettingsdevtest
+Production - ExternalAppSettings
+There are 2 deployment pipelines currently.
+Deployment.yaml
+Demo-Deployment.yaml
+Both are replacing and hardcoding some appsetting values in the pipeline.
+Dependencies
+IC.Gateway
+ICAzureMessageQueue
+IC.BatchClose
+IC.Database
+IC.Database.Authentication.AzureFunctions
+IC.ServiceProxies
+Databases
+Database connectivity is done using the 
+IC.Database
+ library and the implementation
+ 
+is in 
+Factory.cs
+ and DatabaseHandler.cs which uses a 
+DatabaseProxy
+ object to talk to the database. Under the hood 
+IC.Database
+ grabs a connection string from the Key Vault depending on the defaultDatabase property set for the 
+DatabaseProxy
+object.
+defaultDatabase used: DBLIVE
+External Services
+AzureQueues-
+Queues used in the repo:
+batchclose-processor
+batchclose-module
+batchclose-frontend
+sage-batch-sync-queue
+Note- Azure queue names are being referred from 2 places. This needs to be consulted and brought under 1 source of truth.
+1. AppSettings
+2. BatchCloseQueueName.cs 
+QueueName is being fetched like below at many places. Need to understand the exact reasoning behind the same.
+var queueName = Tools.Factory.KeyVaultClient.GetSecret("Demo").ToString().Equals("1") ? BatchCloseQueueName.FrontEndDemo.GetDescription() : BatchCloseQueueName.Frontend.GetDescription();
+This queueName is hardcoded in the code
+sage-batch-sync-queue
+Logging
+Using Microsoft.Extensions.Logging.ILogger which is writing to console. The current implementation is in LogHandler.cs
+Logger configuration is injected from azure portal. Logs are being sent to application insights and new relic.
+Application Versioning
+No versioning is implemented.
+The pipeline is not implementing semantic versioning yet.
+Health Checks
+Health check is not implemented
+Regression Tests
+Regression tests to be implemented
+Health Check Enhancements
+Identified Components
+he following are components that have been identified as a necessary configuration, service, or dependency that should be health checked against.
+Environment Settings
+Application Settings
+Azure Key Vault Access
+Database Connectivity
+Azure Queue Connectivity
+Logging functionality
+Proposed Health Check Logic 
+Add Http Trigger and do below mentioned activities:
+Check configuration and environment values
+Database Connectivity “select 1”
+Check Queue Connectivity by checking queue size length
+Add Logging
+Send proper status code in the http response
+200 status code (healthy)
+503 status code (unhealthy)
+ URL:/spaces/EN/pages/3014295687/ICBatchCloseProcessor+-+ADTE

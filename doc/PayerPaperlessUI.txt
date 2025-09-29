@@ -1,0 +1,105 @@
+Field
+Details
+Application Name
+PayerPaperlessUI
+Version
+1.0
+Description
+Payer paperless React MFE 
+Primary Functionality
+Provided the user interface for managing paperless configuration for user
+Key Features
+MFE built using react
+  Application Overview
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Bill Hughes
+Tech Lead
+Shanki Vaidhya
+Engineering Manager
+Shanki Vaidhya
+Support Contact
+Dhruv Rastogi/ Bala Nageswarrao Bhuvanagiri
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+Typescript, Javascript
+Frameworks/Libraries
+React19
+Database
+N/A
+Key Vault
+N/A
+Dependencies
+Design System, PayerPaperlessService, PayerAuthService
+Code Repository Link
+https://dev.azure.com/invoicecloud/Payer/_git/PayerPaperlessUI
+ 
+  Application Services
+Field
+Details
+Notes
+Application Service Indicator
+payer-paperless-ui
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+Create Application Service Vault
+False
+Grant Crypto Vault Access
+False
+Grant Environment Vault Access
+False
+Grant Cluster Vault Access
+False
+Grant ServiceBus Sender Access
+False
+Grant ServiceBus Receiver Access
+False
+Grant ServiceBus Data Owner Access
+False
+Grant IC Blob Storage Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant PDF Extract Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Biller Shard DB Access
+False
+Biller Shard DB Access for QE
+False
+Only utilized by Tooling Cluster Workload for now so likely your Workload will not need it.
+  Deployment Information
+Field
+Details
+Cluster
+ 
+Payer
+ 
+Deployment Node
+k8s Web Node
+Application Type
+Web UI
+Outbound Network Ports
+Inbound Network Ports
+80
+PCI Scope
+No
+What is the intended audience for this application?
+External users (customers, partners, or the public)
+Environment Variables
+  Web Ingress (optional for Web and API workloads)
+Field
+Details
+Health Endpoint
+/health
+Suggested URL Root
+www.invoicecloud.com/payer/payer-paperless-ui
+ URL:/spaces/ED/pages/4511498496/PayerPaperlessUI

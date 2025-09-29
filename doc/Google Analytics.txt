@@ -1,0 +1,38 @@
+Currently used version of Google Analytics: Universal Analytics
+Latest version of Google Analytics: Google Analytics 4
+ 
+Example of GA Properties
+Event hierarchy:
+Category
+Action
+Label (optional)
+Value (numerical only)
+Custom dimensions (limit of 20 per property)
+ 
+Rate limiting:
+By Property: 10 million hits/month
+By user: 200,000 hits/day
+By session: 500 hits/session
+Client side: We begin with a pool of 20 hits that replenish at a rate of 2 hits/second
+ 
+Universal Analytics Event Documentation: 
+https://developers.google.com/analytics/devguides/collection/gtagjs/events
+ 
+When possible, try to use built in Google Analytics events: 
+https://developers.google.com/analytics/devguides/collection/gtagjs/events#default_google_analytics_events
+ 
+Current Implementation:
+Add new script to page requiring analytics
+Listen to Javascript event that can capture a corresponding GA action
+Send Google Analytics event with appropriate event parameters
+ 
+POC Branch: 
+EBPP-2538-GAClickTrackingPOC
+ 
+Further research:
+Category/Action Amount Limits
+Server-side tagging: May require Google Analytics 4
+Track sequences of events: possibly no code needed and can be done through reporting (
+https://www.getelevar.com/analytics/how-to-use-custom-sequence-segments-in-google-analytics/#:~:text=What%20is%20a%20Sequence%20Segment,apply%20to%20your%20standard%20reports
+)
+ URL:/spaces/PE/pages/2172878862/Google+Analytics

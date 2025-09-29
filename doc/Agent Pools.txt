@@ -1,0 +1,82 @@
+Note
+: this content is script-generated. Please do not update it directly. To get updated content, run the script, which is included under the table.
+Name
+ID
+Description
+Default                        
+  1 
+No description                                                                                                           
+IC-Azure                       
+  7 
+No description                                                                                                           
+Azure Pipelines                
+ 20 
+No description                                                                                                           
+IC-Azure2019                   
+ 27 
+Windows Server 2019 Agent                                                                                                
+aci-basedpool                  
+ 36 
+No description                                                                                                           
+Agents of Quality              
+ 43 
+Contains the old Selenium agent, which we now use to execute legacy tests.                                               
+sbx-agents                     
+ 47 
+Linux agent containers running in the non-production tooling cluster. Used to run functional tests and deploy some workloads, including batch jobs, anything running in Kubernetes, and Terraformed infrastructure. Don't let the name fool you - this is the non-production Kubernetes agent pool, not just a sandbox. 
+prd-agents                     
+ 48 
+Linux agent containers running in the primary production tooling cluster. Used to run functional tests and deploy some workloads, including batch jobs, anything running in Kubernetes, and Terraformed infrastructure. 
+prd-sec-agents                 
+ 50 
+Not currently in use, as our secondary production environment is not running. Linux agent containers running in the secondary production tooling cluster. Used to run functional tests and deploy some workloads, including batch jobs, anything running in Kubernetes, and Terraformed infrastructure. 
+windows-docker-agents          
+ 52 
+VM agents running Docker. The sole purpose of these agents is to build Windows Docker images.                            
+linux-docker-agents            
+ 53 
+VM agents running Docker. The sole purpose of these agents is to build Linux Docker images.                              
+agent-image-creation-test      
+ 55 
+To be deleted. Used to test build of base Windows agent image. No longer in use.                                         
+non-prod-windows-agents        
+ 56 
+No description                                                                                                           
+prod-windows-agents            
+ 57 
+Production Build Agents                                                                                                  
+Content Generation Script
+from azure.devops.connection import Connection
+from msrest.authentication import BasicAuthentication
+from os import environ
+from requests import get
+
+# Personal Access Token (PAT) and organization URL
+personal_access_token = environ['AZURE_DEVOPS_PAT']
+organization_url = 'https://dev.azure.com/invoicecloud'
+
+# Create a connection to the org
+credentials = BasicAuthentication('', personal_access_token)
+connection = Connection(base_url=organization_url, creds=credentials)
+
+task_agent_client = connection.clients_v7_1.get_task_agent_client()
+
+agent_pools = task_agent_client.get_agent_pools()
+print(f"| {'Name':30s} | {'ID':3s} | {'Description':120s} |")
+print(f"| {'-'*30} | {'-'*3} | {'-'*120} |")
+for pool in agent_pools:
+    if not pool.is_legacy:
+        description_response = get(f"https://dev.azure.com/invoicecloud/_apis/distributedtask/pools/{pool.id}/poolmetadata", auth=("", personal_access_token))
+        match description_response.status_code:
+            case 200:
+                description = description_response.text
+            case 404:
+                description = "No description"
+            case _:
+                print("Unexpected error occurred. Exiting.")
+                print(f"pool details:\n\t{pool}")
+                print(f"response ({description_response.status_code}):\n\t{description_response.text}")
+                exit(1)
+        print(f"| {pool.name:30s} | {pool.id:3n} | {description:120s} |")
+
+ URL:/spaces/platform/pages/3391094909/Agent+Pools

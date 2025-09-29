@@ -1,0 +1,3 @@
+Log Query Example
+( time_generated geq '2025/01/22 05:51:10' and time_generated leq '2025/01/22 05:51:25') and ( addr.src in '10.0.6.8' or addr.src in '10.0.3.52' ) and ( app eq 'net.tcp' ) and ( addr.dst in '10.0.6.8' or addr.dst in '10.0.3.52' )
+ URL:/spaces/platform/pages/3981606951/Palo+Alto

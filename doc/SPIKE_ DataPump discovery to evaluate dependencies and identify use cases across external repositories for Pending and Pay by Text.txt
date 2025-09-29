@@ -1,0 +1,342 @@
+Based on your requirement and the uploaded documents, here's a 
+draft structure for your Confluence document
+ on the 
+Data Pump Spike Analysis for "Pending" and "Pay by Text" transaction types
+.
+📌 DataPump Spike Analysis — Pending & Pay By Text
+✅ Objective
+This document summarizes the spike analysis performed for two DataPump transaction types:
+Pending
+ - 12
+Pay By Text
+ - 11
+The objective is to understand flow, dependencies, request/response structures, and document this insight to support future implementation or debugging activities.
+🧾 DataPump Overview
+DataPump
+ is a synchronization framework by Invoice Cloud that sends transactional data (such as payments, status changes, enrollments, etc.) to Biller CIS/Core Systems via Web Service APIs after events occur in Invoice Cloud.
+1️⃣ Transaction Type: 
+Pay By Text
+📋 Flow Summary
+This feature needs to be enabled from CRM for specific billed.
+🔁 Technical Workflow
+User Registration By Biller Portal
+Biller log in via Biller Portal and Search > Customers > Enter Customer details to search > Edit Customer Profile > click on Pay-by-text Tab  > Signup for Pay by text > Enter phone number > save changes
+Phone number is validated and stored.
+Confirmation sent via Esendex → User replies 
+OK
+.
+Then Esendex invokes our SMS api controller 
+PayController.vb - Repos
+then it marks PendingRegistration bit to 0 in sms.CustomerSMSMode
+When click save changes
+User Registration by Customer Portal
+Users log in via Customer Portal and click into Pay By Text.
+Phone number is validated and stored.
+Confirmation sent via Esendex → User replies 
+OK
+.
+Then Esendex invokes our SMS api controller 
+PayController.vb - Repos
+then it marks PendingRegistration bit to 0 in sms.CustomerSMSMode.
+When user clicks on register
+SPs Involve
+insCustomerSMSMode    
+This sp adds data into sms.CustomerSMSMode and dbo.DataPump  by keeping DataPumpTypeId = 11
+sql
+/****** Object:  StoredProcedure [SMS].[insCustomerSMSMode]    Script Date: 7/21/2025 3:14:54 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER    PROCEDURE [SMS].[insCustomerSMSMode]	
+(
+	@ChangeRequestorID int = 1
+	,@CustomerID int 
+	,@SMSModeID int 
+	,@SMSPhoneNumber nvarchar(12)
+	,@PendingRegistration bit = 0
+	,@RegRequestDate DateTime = NULL
+	,@Registered bit = 0
+	,@LoginID int 
+	)
+AS
+BEGIN
+
+	SET NOCOUNT ON
+
+	INSERT INTO sms.CustomerSMSMode
+		(
+		CustomerID
+		,SMSModeID
+		,SMSPhoneNumber
+		,PendingRegistration
+		,RegRequestDate
+		,Registered
+		,LoginID
+		)
+	SELECT
+		@CustomerID
+		,@SMSModeID
+		,@SMSPhoneNumber
+		,@PendingRegistration
+		,@RegRequestDate
+		,@Registered
+		,@LoginID
+
+	--Create tmp table to hold new values
+	CREATE TABLE #tmp(FieldName varchar(50),NewValue varchar(100))
+
+	--Add records to the tmp table (new values)
+	INSERT INTO #tmp SELECT 'SMSModeID',@SMSModeID
+	INSERT INTO #tmp SELECT 'SMSPhoneNumber',@SMSPhoneNumber
+	INSERT INTO #tmp SELECT 'PendingRegistration',@PendingRegistration
+	INSERT INTO #tmp SELECT 'RegRequestDate',@RegRequestDate
+	INSERT INTO #tmp SELECT 'Registered',@Registered
+	INSERT INTO #tmp SELECT 'LoginID',@LoginID
+
+	--Add a records to the change logs for each field so that we can track the initial registration request date
+	INSERT INTO dbo.ChangeLogs
+	(
+		ChangeRequestorID
+		,FKID
+		,ChangeDate
+		,TableName
+		,FieldName
+		,OldValue
+		,NewValue
+	)
+	SELECT 
+		@ChangeRequestorID
+		,@CustomerID
+		,[dbo].[CST_GetDate]()
+		,'CustomerSMSMode'
+		,FieldName
+		,''
+		,NewValue
+	FROM
+		#tmp t
+
+	DROP TABLE #tmp
+
+	--Datapump the Changes if Configured
+	DECLARE @BillerID INT
+	SELECT @BillerID = BillerID FROM dbo.Billers
+
+	IF EXISTS (SELECT 1 FROM dbo.BillerDataPumpConfig WHERE PayByTextChange = 1)
+		BEGIN
+			INSERT INTO dbo.DataPump (BillerID, DataPumpTypeID, FKID, OptionalSetting)
+				SELECT
+					@BillerID
+					, 11
+					, @CustomerID
+					, 0
+		END
+END
+
+updCustomerSMSMode
+This sp adds data into sms.CustomerSMSMode and dbo.DataPump  by keeping DataPumpTypeId = 12 first then make it 11
+sql
+/****** Object:  StoredProcedure [SMS].[updCustomerSMSMode]    Script Date: 7/22/2025 8:02:55 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [SMS].[updCustomerSMSMode]
+	(
+	@ChangeRequestorID int
+	,@CustomerID int
+	,@SMSModeID int = NULL
+	,@SMSPhoneNumber nvarchar(12) = NULL
+	,@PendingRegistration bit = NULL
+	,@RegRequestDate DateTime = NULL
+	,@Registered bit = 0
+	,@LoginID INT = NULL
+	)
+
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @Updates Table
+	(
+	CustomerID int
+	,OldSMSModeID varchar(25)
+	,NewSMSModeID varchar(25)
+	,OldSMSPhoneNumber varchar(25)
+	,NewSMSPhoneNumber varchar(25)
+	,OldPendingRegistration varchar(25)
+	,NewPendingRegistration varchar(25)
+	,OldRegRequestDate varchar(25)
+	,NewRegRequestDate varchar (25)
+	,OldRegistered varchar(25)
+	,NewRegistered varchar(25)
+	,OldLoginID VARCHAR(25)
+	,NewLoginID VARCHAR(25)
+	)
+
+	UPDATE
+		sms.CustomerSMSMode
+	SET
+		SMSModeID = COALESCE(@SMSModeID,SMSModeID)
+		,SMSPhoneNumber = COALESCE(@SMSPhoneNumber,SMSPhoneNumber)
+		,PendingRegistration = COALESCE(@PendingRegistration,PendingRegistration)
+		,RegRequestDate = COALESCE(@RegRequestDate,RegRequestDate)
+		,Registered = COALESCE(@Registered,Registered)
+		,LoginID = COALESCE(@LoginID, LoginID)
+	OUTPUT
+		inserted.CustomerID
+		,Deleted.SMSModeID
+		,inserted.SMSModeID
+		,deleted.SMSPhoneNumber
+		,inserted.SMSPhoneNumber
+		,deleted.PendingRegistration
+		,inserted.PendingRegistration
+		,deleted.RegRequestDate
+		,inserted.RegRequestDate
+		,deleted.Registered
+		,inserted.Registered
+		,Deleted.LoginID
+		,Inserted.LoginID
+	INTO
+		@Updates
+	WHERE
+		CustomerID = @CustomerID
+
+	--Datapump the Changes if Configured
+	DECLARE @BillerID INT
+	SELECT @BillerID = BillerID FROM dbo.Billers
+
+	DECLARE @DataPumpID INT = 0
+	IF EXISTS (SELECT 1 FROM dbo.BillerDataPumpConfig WHERE PayByTextChange = 1)
+		BEGIN
+			INSERT INTO dbo.DataPump (BillerID, DataPumpTypeID, FKID, OptionalSetting)
+				SELECT
+					@BillerID
+					, 12
+					, @CustomerID
+					, 1
+
+			SELECT @DataPumpID = SCOPE_IDENTITY()
+		END
+
+	INSERT INTO
+		ChangeLogs (ChangeRequestorID,FKID,ChangeDate,TableName,FieldName,OldValue,NewValue,DataPumpID)
+
+	SELECT 
+		@ChangeRequestorID,CustomerID,[dbo].[CST_GetDate](),'CustomerSMSMode', Right(OriginalVal,LEN(OriginalVal)-3) AS FieldName,OldVal, NewVal, @DataPumpID
+	FROM (
+		SELECT 
+			CustomerID
+			,OldSMSModeID,NewSMSModeID
+			,OldSMSPhoneNumber,NewSMSPhoneNumber
+			,OldPendingRegistration,NewPendingRegistration 
+			,OldRegRequestDate,NewRegRequestDate	
+			,OldRegistered,NewRegistered
+			,OldLoginID,NewLoginID
+		FROM @Updates) U
+	UNPIVOT
+		(OldVal FOR OriginalVal IN (OldSMSModeID,OldSMSPhoneNumber,OldPendingRegistration,OldRegRequestDate,OldRegistered,OldLoginID)) as unpvt
+	UNPIVOT
+		(NewVal FOR ChangedTo IN (NewSMSModeID,NewSMSPhoneNumber,NewPendingRegistration,NewRegRequestDate,NewRegistered,NewLoginID)) as unpvt2
+	WHERE 
+		RIGHT(OriginalVal,LEN(OriginalVal)-3) = RIGHT(ChangedTo,LEN(ChangedTo)-3)
+		AND OldVal <> NewVal
+
+	IF EXISTS (SELECT 1 FROM dbo.BillerDataPumpConfig WHERE PayByTextChange = 1)
+		BEGIN
+			UPDATE
+				dp
+			SET
+				dp.DataPumpTypeID = 11
+			FROM
+				dbo.DataPump AS dp
+			WHERE
+				dp.DataPumpID = @DataPumpID
+				AND dp.DataPumpTypeID = 12
+		END
+END
+•	Insert occurs when the CustomerSmsMode record for the customer does not exist and the user 
+        is signing up for Pay By Text (chkSMSSignUp.Checked is True).
+  During Insertion Inserts immediately with Type ID 
+11
+ •	Update occurs when the CustomerSmsMode record for the customer already exists (regardless
+         of whether the user is signing up or removing).
+Here First inserts with Type = 
+12
+ (Pending), then updates to 
+11
+Notification Job
+Based on balance and 
+FirstNotifyRequestedDate
+, system sends invoice notification via SMS.
+SMS contains either:
+Payment summary → user replies 
+PAY
+ using default payment method.
+Payment link → user visits Customer Portal and pays manually.
+Payment Execution
+SMS response hits 
+/sms/pay/payerresponse/{BillerGuid}
+ endpoint.
+Handler processes payment through CTP API (e.g. Credit Card, ACH).
+Confirmation receipt sent via Esendex.
+ 📁 Source Code & Repos
+Repos involved
+: 
+MyIIS - Repos
+ : It contains Biller Portal, Payer Portal
+SmsNotifications - Repos
+ :  It is a sky bot job which sends SMS via Esendex to payers.
+ 
+Sms - Repos
+ : This an API which invoke by Esendex to recive response that sent by payer via SMS 
+ICCRM - Repos
+ : Fron CRM we Enable Pay-By-Text for particular biller.
+AscendEX (Esendex)
+ for SMS sending & confirmations
+SMS Api
+: For receiving customers response.
+2️⃣ Transaction Type: 
+Pending
+🔍 Description
+Type ID:
+ 
+12
+Label:
+ 
+Pending
+State Level:
+ Transitional
+Used In:
+ 
+updCustomerSMSMode
+ stored procedure
+Promoted To:
+ 
+11
+ (PayByText) after successful update and logging
+🔁 Flow
+When 
+[SMS].[updCustomerSMSMode]
+ runs:
+A 
+DataPump
+ record is first inserted with 
+DataPumpTypeID = 12
+.
+Once 
+changes are logged
+, and all steps complete successfully, the ID is 
+immediately promoted to 
+11
+ (PayByText)
+.
+🔐 
+📌 Expected Outcome
+Analysis documented in this Confluence page.
+Repos, flows, and dependencies identified.
+Awareness of Pending state flow and handling clarified.
+🔗 References
+Pay By Text
+ 
+ URL:/spaces/PE/pages/4494131202/SPIKE+DataPump+discovery+to+evaluate+dependencies+and+identify+use+cases+across+external+repositories+for+Pending+and+Pay+by+Text

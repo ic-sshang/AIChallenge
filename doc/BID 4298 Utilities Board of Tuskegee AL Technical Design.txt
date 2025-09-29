@@ -1,0 +1,580 @@
+Summary
+: This Technical Design only captures changes made to 
+Utilities Board of Tuskegee AL
+ in Q3 2025 for PDF TEMPLATE Jira Request. The early Technical Design is not documented at this time for this specific biller specifically, but the SP design can be found at the Incode Integration Technical design here: 
+InCode Technical Design
+ .
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/SA/queues/custom/87/SA-1331
+ 
+ITR
+Document status
+In Progress
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+File Mapping
+InCode - Utility Invoices - XML
+File Extension: XML
+File Naming Convention: 
+File Delimiter: tab
+Specification: 
+Sample File: 
+File Transfer Frequency: 
+InCode - Utility Invoices - XML Field Mapping
+Invoice Record:
+IC FileSpecID
+Legend ID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+IC Logic
+Record Type
+1
+RowType
+TRUE
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+TRUE
+NA
+NA
+.RecordTypes.N
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+"
+UB
+-" & 
+AccountNumber
+ & 
+InvoiceDate 
+(“MMddyyyy“)
+Invoice Header
+11
+InvoiceDate
+TRUE
+Bill_dt
+Bill date
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+Due_dt
+Payment due date.
+Invoice Header
+13
+TotalAmountDue
+TRUE
+Due
+Account balance after billing. Or total amount due on this bill
+Invoice Header
+38
+Custom1
+FALSE
+Drf_cst
+Is the customer on bank draft (ACH - automatic payment withdrawal from bank) or not. Possible values: Y, N, C - Credit Card.
+Invoice Header
+39
+Custom2
+FALSE
+Cst_cls
+Abbreviated customer class. Ex: Commercial, Residential, etc.
+Invoice Header
+40
+Custom3
+FALSE
+Email
+Customer email address.
+Invoice Header
+41
+Custom4
+FALSE
+L_p_dt
+Last payment date.
+Invoice Header
+42
+Custom5
+FALSE
+L_p_amt
+Last payment amount received from the customer – whether it was a day ago or 6 months ago
+Invoice Header
+43
+Custom6
+FALSE
+L_b_amt
+Last bill amount. This is not the same as Previous Balance as it only contains last month’s current charges.
+Invoice Header
+44
+Custom7
+FALSE
+T_pmts
+Total payments received since last billing.
+Invoice Header
+45
+Custom8
+FALSE
+T_adjs
+Total adjustments since last billing.
+Invoice Header
+46
+Custom9
+FALSE
+T_amp_adjs
+Total AMP adjustments
+Invoice Header
+47
+Custom10
+FALSE
+T_pens
+Total penalties since last billing.
+Invoice Header
+Custom11
+FALSE
+arrear
+Total outstanding balance before this bill.
+Invoice Header
+Custom12
+FALSE
+Age_1
+1 month aging category amount
+Invoice Header
+Custom13
+TRUE
+Age_2
+2 month aging category amount.
+Custom14
+Age_3
+3 month aging category amount.
+Custom15
+Age_4
+4 month aging category amount.
+Custom16
+T_cut
+Total cutoff charges since last billing
+Custom17
+Winter_avg
+Water winter average. Only for custom programs.
+Custom18
+Dep_app
+Total deposits since last billing.
+Custom19
+Refunds
+Total refunds since last billing
+Custom20
+Bill_copy
+The bill copy number. If an account is setup to print two copies of the bill, the first bill will have a 1 and the second will have a 2 in Bill_copy.
+Custom21
+St_no
+Street #. Ex: 1422.
+Custom22
+St_nm
+ Street name. Ex: Main St.
+Custom23
+St_un
+ Street unit/apt #. Ex: 77
+Custom24
+Statement_group
+Statement group from INV-21209
+Custom25
+B_attn
+Bill attention to
+Custom26
+B_a1
+Billing address line 1
+Custom27
+B_a2
+– Billing address line 2.
+Custom28
+F_bill
+– Indicates whether it is a final bill or not. Possible values: Y, N, L – Landlord
+Custom29
+S_fr_dt
+Service from date
+Custom30
+S_to_dt
+Service to date
+Custom31
+Drft_dt
+– Bank draft date for bank draft customers only.
+Custom32
+Pen_dt
+Date when penalty will apply if amount due in not paid by then.
+Custom33
+Net
+Total current month’s charges.
+Custom34
+Tax
+Total tax on current month’s charges
+Custom35
+Dep
+Deposit refunded/credited
+Custom36
+Pen
+Projected penalty.
+Custom37
+Due_pen
+Account balance after penalty applied if customer doesn’t pay the balance by Pen_dt
+Custom38
+Disc
+Discount on total bill. Only for custom programs
+Custom39
+Disc_dt
+Date to pay by for discount to be applied. Only for custom programs.
+Custom40
+Amp_amt
+Average monthly payment amount for AMP customers.
+Custom41
+Amp_b_net
+Actual balance for AMP customers. Settlement amount if customer is finaled/account closed. Current balance +/- Reserve
+Custom42
+Amp_resv
+Total reserve for AMP customers. Running balance of actual balance minus Amp amount.
+Custom43
+T_b_mtr
+Total current metered charges
+Custom44
+T_b_nmtr
+Total current non-metered charges.
+Customer Record:
+IC FileSpecID
+Legend ID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+59
+AccountNumber
+TRUE
+No
+Customer Record
+60
+CustomerName
+TRUE
+Name
+Customer Record
+61
+Address1
+FALSE
+Ssa
+Strung service address. Ex: 1422 Main St. # 77.
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+FALSE
+B_city
+Billing address city.
+Customer Record
+64
+State
+FALSE
+B_st
+Billing address state
+Customer Record
+65
+Zip
+FALSE
+Zn
+Billing address zip.
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Email
+Customer email address.
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+Invoice Detail: 
+Record
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+IC Logic
+Record Type
+ProductID
+Description
+NA
+Service
+83
+CustomField1
+Ty
+Type of service. Ex: meter, non-meter.
+CustomField2
+Cd
+Service code.
+CustomField3
+L_des
+Long service description. 
+Limited to 25 characters
+CustomField4
+S_des
+Short service description
+CustomField5
+Serv_code
+Service code
+CustomField6
+R_tbl
+Rate table
+CustomField7
+Days
+# of days service is billed for.
+CustomField8
+Est
+Indicates whether the read was estimated or not. Possible values: “ ” for No and “Y” for Yes
+CustomField9
+Pr_read
+Previous meter reading
+Metered Only
+CustomField10
+Cr_read
+Current meter reading.
+Metered Only
+CustomField11
+Usage
+Usage/consumption of service.
+CustomField12
+Chg
+Charge for consumption of service. Summary of all Amt’s + Base.
+CustomField13
+Tax
+Tax on service
+CustomField14
+Fa
+Fuel adjustment
+CustomField15
+T_chg
+Total charge on service: Chg + Tax + Fa.
+CustomField16
+Prorated
+If service has been prorated or not. Possible values: Y, N.
+CustomField17
+Base
+Total base charge for service
+CustomField18
+First_Base
+Base charge for the first unit.
+CustomField19
+Addl_Base
+Additional base unit charge if Unit/M_unt > 1. Part of Base.
+CustomField20
+Amt
+$ amount charged for step. Quan * Rate.
+CustomField21
+Quan
+Quantity used/# of units.
+CustomField22
+Rate
+Rate charged for step
+CustomField23
+S_type
+Type of rate table code.
+Nonmeter Only
+CustomField24
+Cntrs
+# of containers. Ex: how many garbage containers the customer is paying for
+Nonmeter Only
+CustomField25
+Cub_ft
+Container’s amount in cubit feet
+Nonmeter Only
+CustomField26
+Step
+Which step in rate table service is calculated at
+Nonmeter Only
+CustomField27
+Unit
+# of dwelling units. Possible values: 1 or above. Ex: 1 would indicate a single family residence.
+Nonmeter Only
+CustomField28
+M_no
+Meter #
+Metered Only
+CustomField29
+M_scl
+Scale multiplier on a meter
+Metered Only
+CustomField30
+M_size
+Meter size
+Metered Only
+CustomField31
+Est
+Indicates whether the read was estimated or not. Possible values: “ ” for No and “Y” for Yes.
+Metered Only
+CustomField32
+ Duplicate of CustomField9
+Pr_read
+Previous meter reading
+Metered Only
+CustomField33
+ Duplicate of CustomField10
+Cr_read
+Current meter reading.
+Metered Only
+CustomField34
+Mtr_Usage
+Usage/consumption of meter.
+Metered Only
+CustomField35
+F_fact
+Fuel factor
+Metered Only
+CustomField36
+Pr_read_date
+Previous meter reading date
+Metered Only
+CustomField37
+Cr_read_date
+Current meter reading date
+Metered Only
+CustomField38
+Keeps track of the number of <Step> elements for the <Service>
+CustomField39
+Keeps track of the number of <Service> elements for the <Account>
+CustomField40
+M_unt
+Metered Only
+CustomField41
+Y
+F
+<BILL_COMMENTS>
+comments that will be displayed in message center box on PDF Template
+Invoice Detail
+Bill Presentment (Template Detail)
+ Incode Template for Biller Utilities Board of Tuskegee AL
+Code Repository: ICTemplates
+InvoiceFormatGUIDID:
+ TBD
+InvoiceFormatGUID
+: TBD
+Template Description: 
+Incode Template for Biller Utilities Board of Tuskegee AL
+PDF Template details for new PDF Template which come from using existing template from another biller and modifying:
+Change #
+Old value on template attached or change description
+New value after new template created
+1
+Wheeling water logo on attached template
+use attached logo above on new template
+2
+WHEELING MUNICIPAL SERVICES
+1500 CHAPLINE STREET, ROOM 112
+WHEELING, WV 26003
+Utilities Board of Tuskegee
+204 W Lee Street
+Tuskegee, Alabama 36083
+3
+WATER BILL
+LEAVE BLANK
+4
+OFFICE HOURS
+MONDAY - FRIDAY
+8:30 AM - 5:00 PM
+Business Hours
+Monday - Thursday
+7:00a.m. - 5:00 p.m.
+5
+PHONE: (304) 234-3762
+Customer Service
+334-720-0731
+334-720-0735
+6
+www.wheelingwv.gov
+https://yourubt.com
+ 
+7
+All text in the MESSAGE CENTER BOX
+CustomField41(newly populated field included in intmod
+8
+All text under the MAKE CHECKS PAYABLE TO Box
+Utilities Board of Tuskegee
+204 W Lee Street
+Tuskegee, Alabama 36083
+9
+Map CustomField41 from invoice file to database
+comments will populate the MESSAGE CENTER BOX
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/4579459084/BID+4298+Utilities+Board+of+Tuskegee+AL+Technical+Design

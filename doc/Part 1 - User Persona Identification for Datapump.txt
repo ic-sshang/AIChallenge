@@ -1,0 +1,287 @@
+This document outlines the solution for User Persona Identification for AutoPay Changes through DataPump.
+Worked On By:
+Assignees 
+Bruno Saenz
+Michael Maldonado
+Katelyn Espinoza
+DB engineers 
+Michael Thorpe
+QA 
+Dolly Tyagi
+H N Gagan
+Reporter 
+Krissi Klein
+Joel Kennedy
+Related Items: 
+EBPP-23342
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-23972
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-22830
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24390
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25061
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24500
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24845
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24740
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25093
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25092
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25124
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25256
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance 
+To address the compliance requirement for insurance billers to obtain written consent from Payers for any changes to autopay setups, we identified a critical issue: the current system only records the type of change requestor (ChangeRequestorID) but not the specific user (UserFKID) who made the change. This limitation hinders compliance and accurate record-keeping. Southern Farm raised this issue, highlighting the need for a solution.
+To resolve this, we implemented a comprehensive solution. We added support for various user personas, such as Biller, Customer, Cloud Employee, and different AgentConnect roles (CSR, Agent, Customer, Other, Live Agent), each assigned a unique identifier. Integration updates included adding user persona support in AgentConnect, storing usernames with unique IDs, and updating requests to include these IDs. MyIIS was updated to pull user personas, and the system was modified to include AgentConnect users.
+We also updated the Biller Portal to include user persona support for autopay enrollment and payment method changes across various dialogs, ensuring comprehensive tracking and compliance. 
+DataPump flags need
+Problem
+As an insurance biller, obtaining written consent from a Payer for any changes to their autopay setup is a compliance requirement to prevent policy cancellations. However, the current system only records the type of change requestor (ChangeRequestorID) and not the specific user (UserFKID) who made the change. This lack of detailed information prevents the integration from sending the specific user details, which is crucial for compliance and accurate record-keeping.
+To address this issue, we needed to enhance the system to include the user who enrolled in or made changes to the autopay setup. The solution involved updating various configurations and integrating user personas across different platforms to ensure comprehensive tracking and compliance.
+Solution
+All User Personas:
+User Persona
+ChangeRequestorID
+UserFKID
+Biller
+1
+BillerUserID
+Customer
+2
+LoginID
+Cloud Employee
+3
+EmployeeID
+AgentConnect CSR
+14
+ExternalUserID
+AgentConnect Agent
+15
+ExternalUserID
+AgentConnect Customer
+16
+ExternalUserID
+AgentConnect Other
+17
+ExternalUserID
+AgentConnect Live Agent
+18
+ExternalUserID
+AgentConnect
+ 
+EBPP-22830
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24390
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AgentConnect has multiple different personas as shown below. 
+AgentConnect Users
+Agent
+Customer
+CSR
+Live Agent
+Other
+To better track each type of user, we implemented the following:
+AgentConnect Integration: Added support for user personas 
+ExternalUsers Table
+: Stores usernames and tags them with a unique ID (ExternalUserID) to identify users.
+AgentConnectRequest Update
+: Added ExternalUserID to the AgentConnectRequest within the AgentConnect repository.
+Automatic User Insertion
+: When a new agent makes a request and has never accessed the API, they are automatically inserted into the database.
+MyIIS Integration
+: Updated AgentConnect within MyIIS to pull user personas.
+ChangeRequestor.vb Update
+: Added AgentConnect users to the ChangeRequestor.vb class.
+Class Refactoring
+: Refactored the AutopayRequest and UpdateAutoPayResponse classes
+Interfaces
+:
+IAgentConnectSession
+: Fetches the current user and checks if an AgentConnect session exists.
+IExternalUserRepository
+: Fetches the user persona by username.
+ISessionWrapper
+: Fetches the session variable.
+Models
+:
+AgentConnectUserPersona
+: Contains ExternalUserID and user log name.
+UserPersona
+: Contains ChangeRequestorID and UserFKID (not just for AgentConnect).
+ExternalUserRepository Class
+: Returns the AgentConnectUser by username.
+AgentConnectSessionWrapper Service
+: Abstracts the 
+GetCurrentUser
+ and checks if an AgentConnect session exists from the 
+IAgentConnectSession
+ interface.
+SessionWrapper Service
+: Retrieves the session variable using 
+ISessionWrapper
+.
+UserPersonaManager Service
+: Contains business logic for user personas and retrieves the user persona.
+ICRestAPI
+EBPP-25061
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24500
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-24845
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Added mcl.insCustomerAutoPayV2 & mcl.updCustomerAutoPayV2
+:
+Returns the changelogIDs for the autopay change.
+Added logic to revert to the original logic if the biller is multi-invoice or not on version 3 of Customer Portal controller, preventing changelogs from being inserted into DataPump.
+API Versioning
+:
+Added versioning to ICRESTAPI.
+Introduced a new CustomerPortalV3Controller.
+Added new error responses specific to V3.
+ChangelogIDs Support
+:
+Added support for ChangelogIDs to be inserted into the insDataPump stored procedure call.
+Updated initial changelogs to include the DataPumpID, linking the DataPump record of the change to the user persona stored in the changelog.
+ICRESTAPI User Persona Support
+:
+Integrated user persona support into MyIIS with the following updates for payment method changes on the AutoPay.aspx page:
+API versioning of ICRESTAPI requests.
+Modified InsertDataPump function to support the insertion of ChangelogIDs.
+Added user persona support for payment method changes.
+Changed ICRESTAPI autopay request from V2 to V3.
+MyIIS
+EBPP-24740
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25093
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25256
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+With MyIIS now supporting version 3 of the AutoPay ICRESTAPI request and the updated stored procedure now available, we can extend user persona changes to additional areas where AutoPay changes are made:
+AutoPay Enrollment and Unenrollment
+:
+Implemented on the AutoPay.aspx page.
+Customer Portal
+:
+AutoPay enrollment for the payment route.
+Virtual Site
+:
+AutoPay enrollment for the payment route.
+Invoice Type Setting #10
+:
+AutoPay enrollment when this setting is off.
+When an email is sent, and the user clicks the confirmation button, the customer is enrolled in AutoPay on the AutoPayConfirm.aspx page.
+BillerPortal
+EBPP-25092
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-25124
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Another area that needed User Persona support was the Biller Portal that had several areas that needed it. Added user persona support for autopay enrollment and unenrollment changes for the following:
+Conveyance Dialog
+Ensure Payment Method Dialog
+AutoPay Dialog
+Customer Activation Dialog
+Unregister Dialog
+Biller Customer Profile Dialog
+Unlink Customer Dialog
+Added user personal support for autopay payment method changes for the following:
+AutoPay Dialog
+Ensure Payment Method Dialog
+Testing Procedures
+The testing procedure for these items were pretty similar. The differences were the area in which we were enrolling, unenrolling, and changing the payment method such as payment route, AutoPay page, Biller Portal etc. 
+Call the following SQL queries for the user persona being test before testing has begun so that we can see the most recent data.
+Biller User
+select * from mcl.CustomerLogins where CustomerID=52337380 --Used to get LoginID
+select * from mcl.Customers where CustomerID=52337380 --Used to get Customer Info
+select top 20* from ChangeLogs order by 1 desc --Get most recent ChangeLogs
+select top 6* from DataPump order by 1 desc --Get most recent DataPump records
+select * from tblChangeRequestor where ChangeRequestorID = 1 --Verify ChangeRequestorID
+select * from BillerUsers where BillerUserID=522 --Get Biller User Info
+Customer
+select * from mcl.CustomerLogins where CustomerID=52337380 --Used to get LoginID
+select * from mcl.Customers where CustomerID=52337380 --Used to get Customer Info
+select * from mcl.Logins where LoginID=52321111 --Verify LoginID exists
+select top 8* from ChangeLogs order by 1 desc --Get most recent ChangeLogs
+select top 5* from DataPump order by 1 desc --Get most recent DataPump records
+select * from tblChangeRequestor where ChangeRequestorID = 2 --Verify ChangeRequestorID
+
+Cloud Employee
+select * from mcl.CustomerLogins where CustomerID=52337380 --Used to get LoginID
+select * from mcl.Customers where CustomerID=52337380 --Used to get Customer Info
+select top 10* from ChangeLogs order by 1 desc --Get most recent Changelogs
+select top 10* from DataPump order by 1 desc --Get most recent DataPump records
+select * from tblChangeRequestor where ChangeRequestorID = 3 --Verify ChangeRequestorID
+--select * from Employees where EmployeeID=760 --Get Employee Info ONLY works in DB Master
+Agent Connect User
+select * from mcl.CustomerLogins where CustomerID=52337380 --Used to get LoginID
+select * from mcl.Customers where CustomerID=52337380 --Used to get Customer Info
+select top 8* from ChangeLogs order by 1 desc --Get most recent Changelogs
+select top 8* from DataPump order by 1 desc --Get most recent DataPump Records
+select * from tblChangeRequestor where ChangeRequestorID = 15 --Verify ChangeRequestorID
+select * from ExternalUsers where ExternalUserID=34 --Used to get External User Info
+Navigate to where the user intends to make AutoPay changes and make the change. Here are some examples of pages where this can be done:
+Customer Portal
+Payment Route
+Biller Portal
+Once AutoPay change is made, execute the SQL queries once more and review data
+Customer Example
+In this example, we see in the ChangeLogs that the ChangeRequestorID = 2(Customer) so then the UserFKID will be the LoginID. Note that the DataPumpID column in the Changelogs is an actual record in the DataPump table.
+Biller User Example
+In this example, we see in the ChangeLogs that the ChangeRequestorID = 1(Biller) so then the UserFKID will be the BillerUserID. Note that the DataPumpID column in the Changelogs is an actual record in the DataPump table.
+Cloud Employee Example
+In this example, we see in the ChangeLogs that the ChangeRequestorID = 3(Cloud Employee) so then the UserFKID will be the EmployeeID. Note that the DataPumpID column in the Changelogs is an actual record in the DataPump table.
+AgentConnect User Example
+In this example, we see in the ChangeLogs that the ChangeRequestorID = 15(Agent Connect User) so then the UserFKID will be the ExternalUserID. Note that the DataPumpID column in the Changelogs is an actual record in the DataPump table. All types of AgentConnect Users will use the ExternalUserID.
+ 
+ 
+ URL:/spaces/PE/pages/4107370612/Part+1+-+User+Persona+Identification+for+Datapump

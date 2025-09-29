@@ -1,0 +1,78 @@
+none
+Introduction:
+ICSSOAuthentication is a streamlined application that utilizes SAML SSO authentication to connect seamlessly with the InvoiceCloud website. By simplifying the login process, ICSSOAuthentication enhances user convenience and security. It enables secure access to InvoiceCloud, a comprehensive platform for managing invoices and payments, providing a seamless and productive experience for individuals, businesses, and organizations.
+Resources:
+“MasterClass - SAML“ in EngageSmart University
+Key Features:
+SAML
+ (Security Assertion Markup Language) is a security 
+standard
+ used to exchange identitydate
+SAML v2.0 is the most common standard to enable SSO with web apps today.
+SAML SSO
+ works by transferring a user’s identity from one place (the identity provider) to another (the service provider). This is done through an exchange of digital signed XML documents.
+SAML SSO 
+still relies on the “Remote Authentication” API to complete the SSO experience.
+Prerequisite:
+You would first need to create an account at 
+https://dev-390385.okta.com/
+To create an account, please get with your tech lead to get an invite to your email. Make sure to request permissions to be able to manage the applications.
+under Applications > click “Invoice Cloud Demo“
+Using 
+BID 1505
+ (
+InvoiceCloud - Marcus
+) or a biller setup with dev okta on CRM(Products → Cloud SSO Connect), pick a biller account that doesn’t have any emails attached to it.
+We need to assign the biller account to you in Okta. Click the edit button beside your email.
+under Invoice Cloud Demo > Assignments > People
+Paste the account number, enter the role “Owner” and hit Save.
+Depending on whether you are testing locally or in a different domain. Make sure the SAML setting matches the URL you want to hit. (Leverage PIM on Azure for temporary admin permissions to edit your HOST file on AVD to redirect 
+sso.invoicecloud.com
+ to your specific Devtest server if needed)
+Under InvoiceCloud Demo > General > SAML Settings
+example localhost (local development):
+https://localhost:44392/saml_callback
+example 
+sso.invoicecloud.com
+ (deployed to an environment):
+https://sso.invoicecloud.com/saml_callback
+If you want to edit. Hit edit and change it here.
+https://localhost:44392/saml_callback
+When changing the URL. Leave the Audience URL to sso!!!
+You are ready to test (I think)!
+How to Test:
+Keep in mind that this is the URL format
+{domain}/saml/{billerguid}?Deeplinkid=8&account={accountnumber}&ViewMode={ViewMode}
+Examples:
+https://test1.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=8&account=10-2014-995&ViewMode=0 
+https://test1.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=8&account=10-2014-995&ViewMode=1&CssUrl=https://www.invoicecloud.com/ssotest/sso-gmp.css 
+https://test1.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=8&account=10-2014-995&ViewMode=2
+Field Definitions: 
+Deeplinkid is the RedirectID 
+BillerGUID can be found in the CRM using BillerID 1505.
+Use the account number attached to your Okta account.
+Pulled from ICDocumentations
+Testing during local development:
+Refer to the steps above for the Okta dev instance setup before proceeding. (Steps are the same whether you are within non-prod or prod network lanes only thing that changes is you will need to setup against a non-prod or prod biller and Okta SAML settings depending on your URL)
+Pull ICSSOAuthentication
+Make your code changes then build, and test locally.
+Ensure the Okta dev instance is configured for localhost as previously mentioned.
+Visit your constructed ICSSOAuthentication URL using your test biller and biller account (
+https://localhost:44392/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=10-2012-2063&ViewMode=0
+)
+ Sign in to your Okta and verify successful redirect according to your Deeplinkid
+Testing against a deployed environment:
+Refer to the steps above for the Okta dev instance setup before proceeding. (Steps are the same whether you are within non-prod or prod network lanes only thing that changes is you will need to setup against a non-prod or prod biller and Okta SAML settings depending on your URL)
+Deploy ICSSOAuthentication to your environment(s).
+Ensure the Okta dev instance is configured for your URL as previously mentioned. (Feel free to use the host file if you want to avoid changing Okta settings)
+Visit your constructed ICSSOAuthentication URL using your test biller and biller account (
+https://sso.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=10-2012-2063&ViewMode=0
+)
+ Sign in to your Okta and verify successful redirect according to your Deeplinkid
+Example URLs:
+Note: Refer to the steps above for the Okta dev instance setup before using these URLs. (Steps are the same whether you are within non-prod or prod network lanes only thing that changes is you will need to set up against a non-prod or prod biller and Okta SAML settings depending on your URL) 
+https://devtest3.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=10-2012-2063&ViewMode=0
+https://sso.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=10-2012-2063&ViewMode=0
+https://sso.invoicecloud.com/saml/f3aab0bc-159a-481d-927c-62b22e618bd4?Deeplinkid=1&account=
+10-2012-2063&ViewMode=0
+ URL:/spaces/ED/pages/2769158145/How+to+test+ICSSOAuthentication

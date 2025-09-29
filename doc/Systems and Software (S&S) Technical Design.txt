@@ -1,0 +1,1731 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+N/A
+ITR
+N/A
+Release Date
+N/A
+Document status
+Complete
+Green
+Document owner
+ 
+Solution engineer
+N/A
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+SystemsAndSoftware (Version 1) 
+: API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+TEST BASE URL (for all integrations): Unique to Biller
+PROD BASE URL (for all integrations): Unique to Biller
+API Authentication Method: SSL Certificates
+:info:
+atlassian-info
+#B3D4FF
+SystemsAndSoftwareQueueProcessing
+ legacy project makes use of this version in place of 
+DataPump
+Key Configurations
+Configuration
+Description
+Example
+DataPump Management - DataPump Type
+Sets the configuration for posting request. This will point to SandSQueueProcessing for payments, paperless, and autopay.
+Advanced Settings - S&S Certificate
+Sets the creditials and filename for the certification used through S&S web services. Standard for V1 and V2.
+Advanced Settings - S&S payConnect
+Endpoints used for SandSQueueProcessing post requests.
+Advanced Settings - S&S cisService
+Endpoints used for SandSQueueProcessing updates for accounts.
+Advanced Settings - SSO Login/Logout
+Endpoints used for SSO functionality.
+SSO Authenication
+Process Name
+Description
+Parameters
+Return Values
+ICRedirect.SandSRegistration
+Validate a 
+billerGUID
+and token containing the username.
+Checks if we have an existing RemoteAuthenticationGUID token.
+If existing, validate the 
+token
+from the request. Update and sync linked accounts to the master customerID.
+If not, 
+register 
+token
+with vendor and sync 
+accounts
+.
+If no login exists, then create one from token1 from the request. Check for 
+accounts
+that exists in our system. Define the master account and update 
+email
+address for the account group. Update with username from 
+token2
+. 
+Register token if first time to vendor.
+token1 = blank
+token2 = webconnect username
+accountList = pipe-delimited list of accounts
+fName = first name
+lName = last name
+email = email address
+ICRedirect.SandS
+Validate the hash from the request and check if the account exists in our system. Sync customers accounts.
+If its the first time , register the token with the vedor.
+Define the master account, and redirect to the customer portal.
+Hash = from Vendor
+Token1 = initially 
+Token2 = username
+LandingPa
+AccountList = sorted pipe-delimited list of accounts
+fName 
+lName
+Email
+AllowChecks = y unless cash only
+AllowCreditCards = y unless any cards flagged on set of accounts
+The AllowChecks and AllowCreditCard flags will be ignored by Invoice Cloud.   RTDR (version 1) will be used to set any block flags specific to the account(s) that are passed within this call.
+An Advanced Settings will determine if these flags should be ignored so it can be rolled out by biller as needed.
+CssUrl
+ViewMode
+SSOMode = default = classic, 2 = embedded
+MyIIS.MakePaymentRedirect
+sands/MakePaymentRedirect
+Verify hash and redirect to one-time payments. Check for existing account/invoice number or create one through the payment route.
+amountdue
+ACCNO
+HASH
+AllowChecks
+AllowCreditCards
+PAYERNAME
+CSRID
+INVOICETYPEID
+BILLERGUID
+MyIIS.CustomerPortalRedirect
+sands/CustomerPortalRedirect
+Validate remote auth token and existing customer account, redirect to customer portal.
+RemoteAuthenticationToken
+MyIIS.CustomerPaperlessRedirect
+sands/CustomerPaperlessRedirect
+Verify hash and existing account number. If the accountNumber does not existing, create one with paperless information  and redirect to the customer portal.
+AMOUNTDUE
+ACCNO
+HASH
+AllowChecks
+AllowCreditCards
+PAYERNAME
+CSRID
+MyIIS.CustomerAutoPayRedirect
+sands/CustomerAutoPayRedirect
+Verify hash and existing account numbers. If not account exists, then create one with the autopay information and redirec to the customer portal.
+AMOUNTDUE
+ACCNO
+HASH
+AllowChecks
+AllowCreditCards
+PAYERNAME
+CSRID
+Web Service Endpoint:
+ 
+http://integration.enQuesta.com/payconnect
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+StratusWebServices: Invoices
+HarrisSystemsAndSoftware
+S&S sends a raw file and calls a IC custom web service to convert the file to a BIF.
+PartnerGUID as string
+PartnerKey as string
+BillerGUID as string
+WebServiceKey as string
+Filename as string
+FileBytes as bytes[]
+Success as boolean
+LastError as string
+FileName as integer
+FileSize as integer
+LastError as string
+RTDR: Balance Update V1
+CisServiceService.
+AccountSummaryResult
+S&S Refreshes all accounts linked to the owner of the customer that was passed.
+Balances forward old invoices.
+Create a new invoice if the account has no invoice and a balance is returned.
+AccountNumbers (String Array)
+StatusCode 
+(string)
+AccountSummary 
+(string array)
+CashOnlyCode (string)
+ccEligible (string)
+StatusCode != “1”
+Success = 0
+Else
+Success = 1
+Update Block Payments
+BlockEFT 
+: 
+cashOnlycode 
+> 0
+UnBlockEFT 
+: 
+cashOnlyCode 
+< 0
+BlockCC
+: 
+ccEligible 
+= false
+UnBlockCC
+: 
+ccEligible 
+= true
+Update Invoices Per Account
+Create New Invoice 
+IC.InvoiceID
+ = AccountSummary.InvoiceID/defalt
+Block Payment Methods?
+CC
+Yes
+ACH
+Yes
+Cash Only
+Yes
+SystemsAndSoftwareQueueProcssing:
+ 
+Payment - V1
+SystemsAndSoftwareSemcoPayConnect.PayConnectServiceService
+.
+postDetailedPayment
+Get the semco certification, create the request and post payment.
+token 
+(String) = 
+adv setting 26 (27 for demo billers)
+accountNumber 
+(String)
+paymentAmount 
+(String)
+processingDate = 
+(Now) +- X hours +- X days (hours and days decided by biller in code)
+postMarkDate (Date) + 12 hours = 
+daterecadded + 1 hour
+receiptNumber (Integer) = 
+paymentID
+authorizationId (String) = 
+paymentID
+batchNumber (Integer) = 
+hard coded 5 digit S&S value
+description (String) = 
+paymentTypeDesc
+operatorNumber (Short) = 
+hardcoded 3-5 digit S&S value
+paymentType (Short) =
+ 3
+paymentSource (String) = 
+“IC”
+paymentForm (Short) =
+ hardCoded two digit S&S value
+checkNumber (Integer) =
+ 0
+arInvoiceNumber (Integer) = 
+0
+arInvoiceDate (Date) = 
+dateRecAdded
+arInvoiceSequence (Integer) =
+0 
+Status Code (
+string
+)
+StatusMessage (
+string
+)
+Payment Record
+StatusCode = 0
+IC.Success = 1
+StatusCode != 0
+IC.Success = 0
+IC.Message = StatusMessage
+Include Credits & Chargebacks?
+Credits?
+Yes
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+Yes
+Includes OBD Reversal?
+No - (default)
+SystemsAndSoftwareQueueProcssing:
+Void - V1
+Voids are hard-coded in MyIIS and are not dependent on the void check in Datapump Management.
+SystemsAndSoftwareSemcoPayConnect.PayConnectServiceService
+.
+voidDetailedPayment
+Get Semo Certificate, check the payment record:
+Approved = false 
+paymentMessage = “Voided”
+If paymentAmount < 0
+PaymentAmount * -1
+ token (String)
+ accountNumber (String)
+ paymentAmount (String)
+ processingDate (Date) +12 hours
+ postMarkDate (Date) + 12 hours
+ operatorNumber (Short)
+ originalReceiptNumber (Integer)
+ receiptNumber (Integer)
+ authorizationId (String)
+ batchNumber (Integer)
+ paymentSource (String)
+ paymentForm (Short)
+ description (String)
+Status Code (
+string
+)
+StatusMessage (
+string
+)
+Payment Record
+StatusCode = 0
+IC.Success = 1
+StatusCode != 0
+IC.Success = 0
+IC.Message = StatusMessage
+SystemsAndSoftwareQueueProcssing:
+Paperless Enrollment- V1
+SystemsAndSoftwareSemcoPayConnect.PayConnectServiceService
+.
+changeEBPPEnrollments
+Get Semo Certificate, send the account number and paperless status
+eBilleBillField (Boolean)
+accountNumberField (String)
+emailAddressField (String)
+enrollmentMessageField (String)
+enrollmentResultField (Integer)
+paperBillField (Boolean)
+Status Code (
+string
+)
+StatusMessage (
+string
+)
+Payment Record
+StatusCode = 0
+IC.Success = 1
+StatusCode != 0
+IC.Success = 0
+IC.Message = StatusMessage
+Advanced Setting 35 (Service Version)
+Contains 
+PAPERLESSMCL
+Send Account by 
+IC.LoginID
+Else
+Send Account by
+ IC.CustomerID
+SystemsAndSoftwareQueueProcssing
+ : 
+Autopay Enrollment- V1
+SystemsAndSoftwareSemcoPayConnect.PayConnectServiceService.
+setRecurringFlag
+Get Semo Certificate, send the account number, autopay status.
+token (String)
+accountNumber (String)
+paymentSource (String)
+paymentMode (Integer)
+recurringStatus (Integer)
+Status Code (
+string
+)
+StatusMessage (
+string
+)
+Payment Record
+StatusCode = 0
+IC.Success = 1
+StatusCode != 0
+IC.Success = 0
+IC.Message = StatusMessage
+Bill Presentment
+SystemsAndSoftware4.0
+ : 
+ICRTDR.clsSystemsAndSoftware
+CisServiceService.
+BillImageResult
+http://integration.client.soa.framework.enQuesta.com/common
+Get Semco Certificate, send the a request to retrieve the PDF image bytes.
+PDF Remote Linking - 
+enQuesta web service. SystemsAndSoftware4.0 holds a call to ICRTDR which retrieves PDFs on matching invoice dates.
+transactionId (String) = 
+“InvoiceCloud”
+accountNumber (String)
+billDate (Date) = 
+InvoiceDate
+billImage (Byte Array)
+failure (string)
+billImage = null
+IC.errorMessage
+ = 
+failure
+IC.Sucess
+ = 
+false
+else
+return 
+billImage 
+(convert from bytes to PDF)
+IC.Sucess
+ = 
+true
+SystemsAndSoftware (Version 2) : API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+API Authentication Method: Semco X509Certificate2
+Renewal process: file-based certification used with Advanced Setting 83 and 84
+This version implements 
+Datapump
+ for posting request.
+SSO Authenication
+Process Name
+Description
+Parameters
+Return Values
+SystemsAndSoftware4.0.
+RemoteAuthenication
+Validates the email and password to create 
+a 
+GUID Token that will be added to the IC Database. This is referenced in MyIIS by an webservice call to SandS4.0.
+WebService
+:
+https://www.invoicecloud.com/webservices/systemsandsoftware
+/RemoteAuthentication
+PartnerGUID (string)
+PartnerKey (string)
+BillerGUID (string)
+WebServiceKey(string)
+EmailAddress (string)
+Password (string)
+Success (boolean)
+RemoteAuthenicationToken (GUID)
+LastError (string)
+Valid User
+Create token and save to database
+Else
+return “
+Unable to Authenticate Customer
+”
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update V2
+XML Based Request/Response
+MultiSpeakRequestMsgHeader
+.GetAccountsByAccountIDs
+RTDR Service Version is NOT “CIS“
+MultiSpeakRequestMsgHeader
+.GetAccountSummariesByAccountIDs
+Get semco certificatation and refresh invoices per accountNumber
+GetAccountsByAccountIDs
+ArrayOfAccountID
+objectGUID :
+ IC.AccountNumber
+GetAccountSummariesByAccountIDs
+ArrayOfAccountID
+objectGUID :
+ IC.AccountNumber
+xml
+<ns9:account objectGUID=\"15049300\"
+    xmlns:ns9=\"http://www.multispeak.org/V5.0/commonArrays\">
+    <ns2:billedPastDue currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:billedPastDue>
+    <ns2:lastNoticeAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">720.39</ns2:lastNoticeAmount>
+    <ns2:noticeAmountRemaining currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:noticeAmountRemaining>
+    <ns2:currentFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">true</ns2:currentFlag>
+    <ns2:lastUpdateDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-09T07:33:45.542-07:00</ns2:lastUpdateDate>
+    <ns2:cashOnlyFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">false</ns2:cashOnlyFlag>
+    <ns2:blockCreditCardFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">false</ns2:blockCreditCardFlag>
+    <ns2:autopayFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">NORMAL PAYMENTS</ns2:autopayFlag>
+    <ns2:delinquentDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-02T00:00:00.000-07:00</ns2:delinquentDate>
+    <ns2:pastDueBalance currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:pastDueBalance>
+    <ns2:customerID xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns3:objectGUID xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">63243</ns3:objectGUID>
+    </ns2:customerID>
+    <ns2:serviceLocations xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns2:serviceLocation>
+            <ns2:locationInformation>
+                <ns2:address1>27310 MCBEAN PKY</ns2:address1>
+                <ns2:address2>LMD T46 (12520)</ns2:address2>
+                <ns2:postalCode>91354</ns2:postalCode>
+                <ns2:city>VALENCIA</ns2:city>
+                <ns2:county>LOS ANGELES</ns2:county>
+                <ns2:subdivision>PKWY</ns2:subdivision>
+                <ns2:block>3</ns2:block>
+                <ns2:lot></ns2:lot>
+                <ns2:state>CALIFORNIA</ns2:state>
+            </ns2:locationInformation>
+            <ns2:contactInfo>
+                <ns3:extensions xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                    <contactName>CITY OF SANTA CLARITA</contactName>
+                </ns3:extensions>
+                <ns2:addressItems>
+                    <ns3:addressItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:address>
+                            <ns3:address2>23920 VALENCIA BLVD STE 295</ns3:address2>
+                            <ns3:city>VALENCIA</ns3:city>
+                            <ns3:state>CA</ns3:state>
+                            <ns3:postalCode>91355</ns3:postalCode>
+                        </ns3:address>
+                        <ns3:addressType>Mailing</ns3:addressType>
+                    </ns3:addressItem>
+                </ns2:addressItems>
+                <ns2:otherContactInformation>
+                    <ns3:otherContactItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:infoType>Back Flow Letter </ns3:infoType>
+                        <ns3:addressItem>
+                            <ns3:address>
+                                <ns3:address1>23920 VALENCIA BLVD STE 260</ns3:address1>
+                                <ns3:city>VALENCIA</ns3:city>
+                                <ns3:state>CA</ns3:state>
+                                <ns3:postalCode>91355</ns3:postalCode>
+                            </ns3:address>
+                        </ns3:addressItem>
+                        <ns3:contactName>
+                            <ns2:lastName>CITY OF SANTA CLARITA</ns2:lastName>
+                        </ns3:contactName>
+                        <ns3:phoneNumbers>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902200</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"HOME\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>1</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902224</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>2</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011592489</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102919</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902228</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554372</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103459</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011864093</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103666</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102268</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                        </ns3:phoneNumbers>
+                    </ns3:otherContactItem>
+                    <ns3:otherContactItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:infoType>Back Flow Letter </ns3:infoType>
+                        <ns3:addressItem>
+                            <ns3:address>
+                                <ns3:address1>23920 VALENCIA BLVD STE 260</ns3:address1>
+                                <ns3:city>VALENCIA</ns3:city>
+                                <ns3:state>CA</ns3:state>
+                                <ns3:postalCode>91355</ns3:postalCode>
+                            </ns3:address>
+                        </ns3:addressItem>
+                        <ns3:contactName>
+                            <ns2:lastName>CITY OF SANTA CLARITA</ns2:lastName>
+                        </ns3:contactName>
+                        <ns3:phoneNumbers>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902200</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"HOME\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>1</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902224</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>2</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011592489</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102919</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902228</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554372</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103459</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011864093</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103666</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102268</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                        </ns3:phoneNumbers>
+                    </ns3:otherContactItem>
+                </ns2:otherContactInformation>
+            </ns2:contactInfo>
+            <ns2:serviceNotes>
+                <ns2:supplementalNote>
+                    <ns2:noteType>REPORT CODE</ns2:noteType>
+                    <ns2:noteSubtype>AFFILIATION</ns2:noteSubtype>
+                    <ns2:noteValue>NON AFFILIATED</ns2:noteValue>
+                </ns2:supplementalNote>
+                <ns2:supplementalNote>
+                    <ns2:noteType>REPORT CODE</ns2:noteType>
+                    <ns2:noteSubtype>STOP SHUT BILL RESET</ns2:noteSubtype>
+                    <ns2:noteValue>BILLING RESET TO OFF</ns2:noteValue>
+                </ns2:supplementalNote>
+            </ns2:serviceNotes>
+        </ns2:serviceLocation>
+    </ns2:serviceLocations>
+    <ns2:accountStatus xmlns:ns2=\"http://www.multispeak.org/V5.0\">Active</ns2:accountStatus>
+    <ns2:paymentDueDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-02T00:00:00.000-07:00</ns2:paymentDueDate>
+    <ns2:lastPaymentDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-08-15T13:38:31.000-07:00</ns2:lastPaymentDate>
+    <ns2:lastPaymentAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">-793.26</ns2:lastPaymentAmount>
+    <ns2:billDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-08-24T00:00:00.000-07:00</ns2:billDate>
+    <ns2:shutOffDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-11-02T00:00:00.000-07:00</ns2:shutOffDate>
+    <ns2:calculatedCurrentBillAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">910.04</ns2:calculatedCurrentBillAmount>
+    <ns2:calculatedCurrentBillDateTime xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-09T07:33:45.542-07:00</ns2:calculatedCurrentBillDateTime>
+    <ns2:lastBillAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">694.95</ns2:lastBillAmount>
+    <ns2:serviceAgreements xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns2:serviceAgreement>
+            <ns2:extensions>
+                <meterNumber>     1104381</meterNumber>
+            </ns2:extensions>
+            <ns2:comments>WATER</ns2:comments>
+            <ns2:description>WA</ns2:description>
+            <ns2:serviceLocationID>
+                <ns3:objectGUID xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">52970000</ns3:objectGUID>
+            </ns2:serviceLocationID>
+            <ns2:servicePointID otherServiceType=\"LANDSCAPE\" serviceType=\"Water\">15049300_3_52970000</ns2:servicePointID>
+            <ns2:revenueClass>PUBLIC AUTHORITY</ns2:revenueClass>
+        </ns2:serviceAgreement>
+    </ns2:serviceAgreements>
+</ns9:account>"
+account
+accountNumber
+calculatedCurrentBillAmount = 
+IC.balanceDue
+Advanced Setting 35:
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Advanced Setting 131: 
+{SystemsAndSoftware": {"RTDRRequest": "ACCOUNTSUMMARIESBYACCOUNTIDS"
+}}
+Advanced Setting 35 is “MULTISPEAK”
+Advanced Setting 81 is NOT “CIS”
+Datapump
+: 
+Payments - V2
+ 
+svcSNS_v2.
+ChangePaymentTransactions
+Get semco certificate and an ArrayOfPaymentTransaction and return status code and response of post payment.
+accountID = 
+IC.Accountnumber
+eventDescription=
+“Void This Now” (if void)
+“ChangeTransaction”
+accountIDType = 
+"UtilityAccountID"
+processingDate=
+Current Time + Hour and Day Offset
+Hour offset is timezone offset from adv setting 13 (split by ~ first index)
+Day offset determined by current day of the week from adv setting 13. (
+DE(1,0)
+)
+If day offset is in the adv setting use that
+None in the settings, use default “DE” value.
+processingDateSpecified = 
+true
+paymentAction=
+“Void” (if void)
+“Post”
+paymentContainer=
+creditCardPayment
+cashPayment
+eCheckPayment
+authorizationCode =
+if void, get original DPID from payment
+DatapumpID
+paymentType = 
+"3"
+paymentSource = 
+"IC"
+operatorNumber = 
+adv setting 12
+batchNumber = 
+adv setting 64, otherwise use defaults
+receiptNumber = authorizationCode
+(DPID)
+Void
+originalReceiptNumber
+isVoid = True
+Payment
+paymentDate
+paymentDateSpecified
+isVoid = False
+errorCode.replyCodeCategory
+detailedString
+errorCode.replyCodeCategory= 0
+IC.Success = 1
+errorCode.replyCodeCategory= 0
+IC.Success = 0
+IC.Message = detailedString
+Advanced Setting 35
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Datapump
+ Autopay -V2
+svcSNS_v2.
+ChangeRecurringPaymentConfigurtion
+Get semco certificate and post autopay status.
+ArrayOfRecurringPaymentConfiguration
+Value = 
+0
+cancellationDate 
+Autopay = false
+cancellationDateSpecified 
+Autopay = false
+cancellationAction 
+Autopay = false
+paymentMode
+“CHECK”
+“CREDITCARD”
+transactionID = 
+“0”
+configurationAction
+autorizationAction (autopay = true)
+AutopayRegDate
+configurationAction (autopay = false)
+BillerCurrentTime
+AuthorizationDate = AutoPayRegDate
+dateInEffect = 
+BillerCurrentTime
+AutorizationMode = 
+0
+accountID =
+ IC.AccountNumber
+paymentSource =
+”IC”
+errorCode.replyCodeCategory
+detailedString
+errorCode.replyCodeCategory= 0
+IC.Success = 1
+errorCode.replyCodeCategory= 0
+IC.Success = 0
+IC.Message = detailedString
+Advanced Setting 35
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Datapump
+ Paperless - V2
+svcSNS_v2.
+ChangeNotificationSubscription
+Get semco certificate and post paperless subscription status.
+notificationSubscription
+notificationDeliveryMethods
+1
+ (paperless)
+0
+(paperless = false)
+emailAddress (
+CustomerRow
+)
+notificationType =
+ 0 
+(Bill)
+accountID = 
+IC.AccountNumber
+requestID = 
+DataPumpID
+errorCode.replyCodeCategory
+detailedString
+errorCode.replyCodeCategory= 0
+IC.Success = 1
+errorCode.replyCodeCategory= 0
+IC.Success = 0
+IC.Message = detailedString
+Advanced Setting 35
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Datapump
+Payments - V2 (iNovah)
+XML Based Request
+iNovah.
+AddTransaction
+Fields in API Method:
+strSecurityKey
+strPaymentOrigin
+xmlTransaction
+Get semco certificate and post payment.
+xml
+    <Transaction>
+        <ForeignID></ForeignID>
+        <Payment>
+        <PaymentCode></PaymentCode>
+<!--If BillerID = 2924 Or BillerID = 2922 -->
+        <Invoice></Invoice>
+<!--Else-->
+        <PaymentCustom><CF_ICloudInvoiceNumber></CF_ICloudInvoiceNumber></PaymentCustom>
+<!-- -->        
+        <AccountNumber></AccountNumber>
+        <PaymentAllocation>
+        <AllocationCode></AllocationCode>
+        <Amount></Amount>
+        </PaymentAllocation>
+        <PaymentTotal></PaymentTotal>
+        </Payment>
+
+    <Tender>
+       <TenderCode></TenderCode>
+         <Amount></Amount>
+         <ReferenceCode></ReferenceCode>
+         <TenderCardInfo>
+             <AuthorizationCode></AuthorizationCode>
+         </TenderCardInfo>
+<--OBD, ACH-->
+       <CheckAccountNumber></CheckAccountNumber>
+       <CheckRoutingNumber></CheckRoutingNumber>
+       <RoutingCheckDigit></RoutingCheckDigit> 
+       <-- -->
+     </Tender> 
+ </Transaction>
+Return Code
+LongErrorMessage
+ReturnCode != “Success” AND LongErrorMessage = “the security key passed in is either invalid or has expired“
+IC.Success = 0
+ReturnCode != “Success”
+IC.Success = 0
+Return Code = “Success”
+IC.Success = 1
+Advanced Setting 35
+MULTISPEAK AND BillerID 
+(806,805,2922,2924)
+Version2
+Blue
+ 
+Else (no MULTISPEAK)
+Version1
+Purple
+ 
+Bill Presentment
+GetBillImage
+PDF Remote Linking
+Get Semco certificate and return PDF bytes
+accountID (String)
+InvoiceNumber (String)
+ArrayOfBillImage (billImage)
+fileContent (Byte Array)
+ArrayOfBillImage != null or ArrayOfBillImage Count = 0
+return 
+fileContent
+IC.Success
+ = true
+Else
+IC.Success
+ = false
+IC.ErrorMessage
+ = “
+PDF not found
+”
+Advanced Setting 35
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings
+ RTDR: Balance Update V2
+XML Based Request/Response
+MultiSpeakRequestMsgHeader
+.GetAccountsByAccountIDs
+RTDR Service Version is NOT “CIS“
+MultiSpeakRequestMsgHeader
+.GetAccountSummariesByAccountIDs
+Get semco certificatation and refresh invoices per accountNumber
+Advanced Setting 35:
+MULTISPEAK
+Version2
+Blue
+ 
+Else
+Version1
+Purple
+ 
+Advanced Setting 131: 
+{SystemsAndSoftware": {"RTDRRequest": "ACCOUNTSUMMARIESBYACCOUNTIDS"
+}}
+Advanced Setting 35 is “MULTISPEAK”
+Advanced Setting 81 is NOT “CIS”
+[SA-654] City of Nashville, Metro (2924) - JIRA (atlassian.net)
+ 
+Use 
+accountStatus
+ value to block ACH & CC payments for an account.
+Active
+ = unblock payments
+Inactive
+ = block ACH & CC payments
+This function needs to be able to be turned on/off per S&S biller via advanced settings
+Request
+GetAccountsByAccountIDs
+ArrayOfAccountID
+objectGUID :
+ IC.AccountNumber
+GetAccountSummariesByAccountIDs
+ArrayOfAccountID
+objectGUID :
+ IC.AccountNumber
+Response
+xml
+<ns9:account objectGUID=\"15049300\"
+    xmlns:ns9=\"http://www.multispeak.org/V5.0/commonArrays\">
+    <ns2:billedPastDue currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:billedPastDue>
+    <ns2:lastNoticeAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">720.39</ns2:lastNoticeAmount>
+    <ns2:noticeAmountRemaining currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:noticeAmountRemaining>
+    <ns2:currentFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">true</ns2:currentFlag>
+    <ns2:lastUpdateDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-09T07:33:45.542-07:00</ns2:lastUpdateDate>
+    <ns2:cashOnlyFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">false</ns2:cashOnlyFlag>
+    <ns2:blockCreditCardFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">false</ns2:blockCreditCardFlag>
+    <ns2:autopayFlag xmlns:ns2=\"http://www.multispeak.org/V5.0\">NORMAL PAYMENTS</ns2:autopayFlag>
+    <ns2:delinquentDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-02T00:00:00.000-07:00</ns2:delinquentDate>
+    <ns2:pastDueBalance currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">0.0</ns2:pastDueBalance>
+    <ns2:customerID xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns3:objectGUID xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">63243</ns3:objectGUID>
+    </ns2:customerID>
+    <ns2:serviceLocations xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns2:serviceLocation>
+            <ns2:locationInformation>
+                <ns2:address1>27310 MCBEAN PKY</ns2:address1>
+                <ns2:address2>LMD T46 (12520)</ns2:address2>
+                <ns2:postalCode>91354</ns2:postalCode>
+                <ns2:city>VALENCIA</ns2:city>
+                <ns2:county>LOS ANGELES</ns2:county>
+                <ns2:subdivision>PKWY</ns2:subdivision>
+                <ns2:block>3</ns2:block>
+                <ns2:lot></ns2:lot>
+                <ns2:state>CALIFORNIA</ns2:state>
+            </ns2:locationInformation>
+            <ns2:contactInfo>
+                <ns3:extensions xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                    <contactName>CITY OF SANTA CLARITA</contactName>
+                </ns3:extensions>
+                <ns2:addressItems>
+                    <ns3:addressItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:address>
+                            <ns3:address2>23920 VALENCIA BLVD STE 295</ns3:address2>
+                            <ns3:city>VALENCIA</ns3:city>
+                            <ns3:state>CA</ns3:state>
+                            <ns3:postalCode>91355</ns3:postalCode>
+                        </ns3:address>
+                        <ns3:addressType>Mailing</ns3:addressType>
+                    </ns3:addressItem>
+                </ns2:addressItems>
+                <ns2:otherContactInformation>
+                    <ns3:otherContactItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:infoType>Back Flow Letter </ns3:infoType>
+                        <ns3:addressItem>
+                            <ns3:address>
+                                <ns3:address1>23920 VALENCIA BLVD STE 260</ns3:address1>
+                                <ns3:city>VALENCIA</ns3:city>
+                                <ns3:state>CA</ns3:state>
+                                <ns3:postalCode>91355</ns3:postalCode>
+                            </ns3:address>
+                        </ns3:addressItem>
+                        <ns3:contactName>
+                            <ns2:lastName>CITY OF SANTA CLARITA</ns2:lastName>
+                        </ns3:contactName>
+                        <ns3:phoneNumbers>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902200</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"HOME\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>1</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902224</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>2</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011592489</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102919</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902228</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554372</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103459</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011864093</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103666</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102268</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                        </ns3:phoneNumbers>
+                    </ns3:otherContactItem>
+                    <ns3:otherContactItem xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">
+                        <ns3:infoType>Back Flow Letter </ns3:infoType>
+                        <ns3:addressItem>
+                            <ns3:address>
+                                <ns3:address1>23920 VALENCIA BLVD STE 260</ns3:address1>
+                                <ns3:city>VALENCIA</ns3:city>
+                                <ns3:state>CA</ns3:state>
+                                <ns3:postalCode>91355</ns3:postalCode>
+                            </ns3:address>
+                        </ns3:addressItem>
+                        <ns3:contactName>
+                            <ns2:lastName>CITY OF SANTA CLARITA</ns2:lastName>
+                        </ns3:contactName>
+                        <ns3:phoneNumbers>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902200</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"HOME\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>1</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902224</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>2</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011592489</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102919</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011902228</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554372</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103459</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011864093</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"CORPORATE\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011554909</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"OTHER\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Voice</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011103666</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                            <ns3:phoneNumber>
+                                <ns3:phone>
+                                    <ns3:localNumber>0011102268</ns3:localNumber>
+                                </ns3:phone>
+                                <ns3:phoneType otherKind=\"Cell Phone\">Other</ns3:phoneType>
+                                <ns3:phoneKind>Cell</ns3:phoneKind>
+                                <ns3:priorityOrder>3</ns3:priorityOrder>
+                            </ns3:phoneNumber>
+                        </ns3:phoneNumbers>
+                    </ns3:otherContactItem>
+                </ns2:otherContactInformation>
+            </ns2:contactInfo>
+            <ns2:serviceNotes>
+                <ns2:supplementalNote>
+                    <ns2:noteType>REPORT CODE</ns2:noteType>
+                    <ns2:noteSubtype>AFFILIATION</ns2:noteSubtype>
+                    <ns2:noteValue>NON AFFILIATED</ns2:noteValue>
+                </ns2:supplementalNote>
+                <ns2:supplementalNote>
+                    <ns2:noteType>REPORT CODE</ns2:noteType>
+                    <ns2:noteSubtype>STOP SHUT BILL RESET</ns2:noteSubtype>
+                    <ns2:noteValue>BILLING RESET TO OFF</ns2:noteValue>
+                </ns2:supplementalNote>
+            </ns2:serviceNotes>
+        </ns2:serviceLocation>
+    </ns2:serviceLocations>
+    <ns2:accountStatus xmlns:ns2=\"http://www.multispeak.org/V5.0\">Active</ns2:accountStatus>
+    <ns2:paymentDueDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-02T00:00:00.000-07:00</ns2:paymentDueDate>
+    <ns2:lastPaymentDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-08-15T13:38:31.000-07:00</ns2:lastPaymentDate>
+    <ns2:lastPaymentAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">-793.26</ns2:lastPaymentAmount>
+    <ns2:billDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-08-24T00:00:00.000-07:00</ns2:billDate>
+    <ns2:shutOffDate xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-11-02T00:00:00.000-07:00</ns2:shutOffDate>
+    <ns2:calculatedCurrentBillAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">910.04</ns2:calculatedCurrentBillAmount>
+    <ns2:calculatedCurrentBillDateTime xmlns:ns2=\"http://www.multispeak.org/V5.0\">2022-09-09T07:33:45.542-07:00</ns2:calculatedCurrentBillDateTime>
+    <ns2:lastBillAmount currencyCode=\"USD\"
+        xmlns:ns2=\"http://www.multispeak.org/V5.0\">694.95</ns2:lastBillAmount>
+    <ns2:serviceAgreements xmlns:ns2=\"http://www.multispeak.org/V5.0\">
+        <ns2:serviceAgreement>
+            <ns2:extensions>
+                <meterNumber>     1104381</meterNumber>
+            </ns2:extensions>
+            <ns2:comments>WATER</ns2:comments>
+            <ns2:description>WA</ns2:description>
+            <ns2:serviceLocationID>
+                <ns3:objectGUID xmlns:ns3=\"http://www.multispeak.org/V5.0/commonTypes\">52970000</ns3:objectGUID>
+            </ns2:serviceLocationID>
+            <ns2:servicePointID otherServiceType=\"LANDSCAPE\" serviceType=\"Water\">15049300_3_52970000</ns2:servicePointID>
+            <ns2:revenueClass>PUBLIC AUTHORITY</ns2:revenueClass>
+        </ns2:serviceAgreement>
+    </ns2:serviceAgreements>
+</ns9:account>"
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+1
+S&S Production cisService URL
+Y
+2
+S&S Demo/Train cisService URL
+Y
+3
+SSO Customer Login URL
+Y
+4
+Customer Portal Session Expire - Close Window?
+1
+N
+5
+Customer Portal Home Button Redirect
+1
+N
+6
+Customer Portal - Suppress Change Email
+1
+N
+12
+Datapump Payments Endpoint/WebService Username
+ 
+vERSION 2
+Blue
+ 
+Y
+13
+Datapump Payments Endpoint/WebService Password
+ 
+vERSION 2
+Blue
+ 
+Y
+23
+SSO Customer LogOff Url
+Y
+24
+S&S Production payConnectSevice URL
+Y
+25
+S&S Demo/Train payConnectServiceKey
+Y
+26
+S&S Production payConnectServiceKey 
+Y
+27
+S&S Demo/Train payConnectServiceKey
+Y
+29
+RemoteAuthenticationWS - Create Customer
+1
+Y
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+0
+Y
+35
+ServiceVersion
+PAPERLESSMCL
+ 
+vERSION 1
+Purple
+ 
+PAPERLESSMCL
+|
+SENDOBDREVERSAL
+ 
+vERSION 1
+Purple
+ 
+MultiSpeak
+ 
+vERSION 2
+Blue
+ 
+Y
+81
+RTDR ServiceVersion
+CIS
+ 
+Version1
+Purple
+ 
+Past due implemented
+Red
+ 
+ Y (Currently set with Metro)
+83
+S&S Certificate Filename
+Y
+84
+S&S Certificate Password
+Y
+85
+S&S TLS Version
+Y
+131
+JSON Configuration 
+{SystemsAndSoftware": {"RTDRRequest": "ACCOUNTSUMMARIESBYACCOUNTIDS"
+}} 
+MultiSpeak
+ 
+vERSION 2
+Blue
+ 
+For Bids(679,727,2485), JSON Config was added to resolve RTDR failures on 8.20.25 related to specific S&S API updates.
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+in BIF
+AutoPayCollectionDate
+in BIF
+BalanceForward
+in BIF
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+in BIF
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+in BIF
+LocationReference
+in BIF
+MinimumAmountDue
+in BIF
+PaymentExpirationDate
+in BIF
+PaymentExpirationMessage
+in BIF
+PromptPayExpirationDate
+in BIF
+RegistrationValue
+in BIF
+SecondNotifyRequestedDate
+in BIF
+ThirdNotifyRequestedDate
+in BIF
+Steps to Reproduce for billers converting from S&S V1 to V2:
+*Before conversion, note: 
+If the biller is a DEMO ACCOUNT (Not Live), no need to wait for Maintenance Window. If the biller is LIVE and ACTIVE, please do not proceed with these steps if their Maintenance Window is not up, and get with the IM to find out when you can proceed with the following steps. Make sure to read every step thoroughly BEFORE taking action on any of the steps. 
+In the Profile section in the CRM, change Partner ID from S&S to “Test”
+Check BillerDataPump and check if DataPumpTypeID = 2, if so, remove BillerDataPump from the biller’s shard (Create an ITR to remove BillerDataPump using SP “exec delBillerDataPump @BillerID=BID”). Once their record is removed from Data Services, go to DataPump Management and change their DataPump profile to “Invoice Cloud” and place their DataPump on “Hold”. Hit Save. Then take the biller off of “Hold” then hit Save again. This helps ensure we update and create their DataPump profile to include the Invoice Cloud profile, not the S&S profile.
+*
+ An alternate method is updating the DataPump profile from “S&S” to “Invoice Cloud”, we can take note of all of the previous DataPump configurations in DataPump Management (via screenshot), then remove all of the configurations in DataPump Management, hit Save, change their profile to “Invoice Cloud”, and then reapply their previous DataPump configurations back into the Datapump Management. This “trick” deletes the BillerDataPump record for S&S when the biller has no DataPump configurations in DataPump Management.
+Remove S&S Advanced Settings 1, 2, 24, 25, 26, & 27 from BID in the CRM. 
+*
+ Optional add Service Version if the biller is MultiSpeak (Get with IM about this). 
+Update the Advanced Settings to include the new DataPump settings for S&S V2 DataPump. The SystemsAndSoftwareQueueProcessing (SASQP) repo will have the values needed to update each advanced setting. Here’s how we should update the following Advanced Settings:
+Advanced Setting 8 
+- Endpoint is given by IM.
+Advanced Setting 11 
+- Endpoint is given by IM.
+Advanced Setting 12
+ - This value is equal to the biller’s operator number which can be found by looking up the Biller’s ID in the SASQP repo and finding the case statement in the code that holds the operator number. Below is an example of where the TEST and PROD operator Number exists for BID 686. 
+Advanced Setting 13 
+- This value is created by looking up the Biller’s ID in the SASQP repo and finding how the maintenance period is handled when the biller was using S&S V1. 
+a. Below is an example of the value and format of Advanced Setting 13.
+EXAMPLE: 
+1~23:00:00~MO(2,1)|TH(4,3)|FR(4,3)|SA(3,3)|SU(2,2)|DE(2,1)
+
+FORMAT OF EXAMPLE:
+TimeZoneOffset~CurrentDayCloseDateTime~DayAddFactors(Formatted As "DAY(NextDayAddFactor,CurrentDayAddFactor|DAY(NextDayAddFactor,CurrentDayAddFactor|etc ...")
+b. Below is an example of how we can find the values to create the Advanced Setting 13.
+Advanced Setting 14
+ - Endpoint is given by IM.
+Advanced Setting 17
+ - Endpoint is given by IM.
+Advanced Setting 64, 65, or 104
+- This value is created by looking up the Biller’s ID in the SASQP repo and finding the PaymentTypeID Case statement containing CC, ACH, or CASH support. 
+a. Below is an example of the value and format of these Advanced Settings:
+EXAMPLE: 
+64 - DataPump Payments CC Codes - 0(81)|10(83)|19(87)|21(85)
+65 - DataPump Payments ACH Codes - 0(80)|10(82)|19(86)|21(84)
+
+FORMAT OF EXAMPLE:
+PaymentSourceID1(S&SPaymentFormCode1)|PaymentSourceID2(S&SPaymentFormCode2)|etc ...
+b. Below is an example of how we can find the values to create the Advanced Setting 13. Note: “Web CC” payment Codes will start with “0” as the PaymentSourceID. “0” represents “Default” when the PaymentSourceID is not checking for a specific ID in the case statement. 
+Example of Completed Advanced Settings:
+Change the Partner ID back to “Systems and Software” in the Profile section and hit Save. 
+6. Complete! 
+User Interaction and Design
+Data Flow - Invoice
+att2417852427
+2365292545
+1
+SS Invoices
+IM
+att2418049030
+att2417328155
+0
+Data Flow - Adjustments 
+S&S uses both RTDR and Adjustment files to update balances. Both flows are outlined below.
+att2417983498
+2365292545
+1
+SS RTDR Balances
+IM
+att2416312353
+att2417885213
+0
+att2417197094
+2365292545
+1
+SS balance adjustments- files
+IM
+att2417491986
+att2417328161
+0
+Data Flow - Payment
+att2418114568
+2365292545
+1
+SS Payments
+IM
+att2417721357
+att2418114563
+0
+Data Flow - Void
+Voids are manually processed in IC and S&S depending on each billers policies.
+Data Flow - ACH Reject
+ACH Rejects are processed in S&S based on each billers' individual policies.
+Data Flow - Change Log
+att2416410655
+2365292545
+1
+SS Changelogs
+IM
+att2417360916
+att2417950733
+0
+Data Flow - Bill Presentment
+att2416312358
+2365292545
+1
+SS Images
+IM
+att2417688624
+att2416803878
+0
+Payer Experience
+Payers will access Invoice Cloud from WebConnect or SIlverBlaze (SSO).
+Biller Experience
+Billers will access Invoice Cloud from the standard IC Biller Portal. S&S billers have a “CSR Search” enabled in the biller portal that does not exist for other billers.
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Uploading Invoice Files
+UploadAdjustmentFIle
+Uploading Adjustment Files
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-2675
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/02/2021
+Add past due to 
+RTDR
+for v1. This is used for Metro and biller with 
+advanced setting 81
+ = 
+CIS
+ 
+INT-3835
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+05/10/2022
+CardNumber type casting empty value causing error when sending an EFT payment through Datapump (v2).
+Add validation before attempting to type case the first digits in the cardNumber to determine the card type.
+INT-7309
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/24/2023 
+S&S reporting their database processor pool filled up and they received out of memory errors for SEMCO. They found an instance of getAccountsByAccountIds being called with too many accounts.
+Reduce the threads are processing and lower API traffic to stop memory errors for SEMCO.
+Added function for RTDR to refresh using AccountSummariesByAccountIDs. This can be used by any System and Software biller using the config in Biller Advanced Setting 131.
+ 
+ITG-3198
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+11/25/24
+When SSO iframe is used with a list of accounts, the blocked flag is blocking all the accounts within the string passed.
+When a list of accounts is passed, there is not a current way to block only one account within the array of accounts passed.  A new version will be created to ignore the blocked flags (AllowChecks, AllowCreditCard).  The correct blocking of accounts will then occur when RTDR is called.
+An Advanced Setting will be created to determine if the blocked flags (AllowCreditCard and AllowChecks) should be ignored within the iframe redirect.  This will allow this to be rolled out to a single biller as needed.
+Product Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+EBPP-11501
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-23440
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+5/21/23
+We initially worked on this item for BIDs 309 & 284. The database logic was added to BID 309. The biller has not been able to test successfully their requirement and therefore refuses to offer paypal as a payment option for any payer and they wanted to add an additional test BID for testing.
+Ability use all of TEST bids to confirm that when a payer is enrolled in Semco’s paperless program, the paypal option should be disabled.
+So that users can confirm that Semco paperless billers will not see a paypal option listed as a method of payment.
+SEMCO wants to complete testing prior to turning on PayPal as an option for payment for customers.
+Acceptance Criteria:
+Scenario 1:
+Given a payment is attempted to be made in the customer portal for BID 3123
+When Semco paperless is confirmed
+then the biller should not see a paypal option listed as a payment method.
+Scenario 2:
+Given a payment is attempted to be made in the customer portal for BID 3123
+When Semco paperless is NOT enabled
+then the biller should see the paypal option listed as a payment method.
+EBPP-2737
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8/2/22
+the PayPal option is displayed on all accounts.
+When a customer is enrolled in e-billing by SEMCO, which is identified in our system as paperless enrollment, we want to suppress the PayPal option.
+SEMCO uses their own billing system and has provided requirements as to when the PayPal option should be displayed to the payer. Payers will not see PayPal as a payment option unless the following criteria has been met. If they meet all of the requirements below, PayPal will not be listed as a payment option for the payer.
+Payment must be made on a SEMCO BID.
+Payer must be blocked from CC
+Payer has to be paperless on atleast one invoice type
+Semco’s paypal logic is tied to their paperless settings because Semco uses their own paperless billing system. This request was based on their pricing structure and ebilling status. They absorb some of the costs so they did not want them to be able to pay via CC.
+ URL:/spaces/IM/pages/2365292545/Systems+and+Software+S+S+Technical+Design

@@ -1,0 +1,51 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+INT-4573
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+INT-5184
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Release Date
+11/2022
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+n/a
+Salesforce SOW
+n/a
+Knowledge Transfer
+n/a
+File Mapping - Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer Cloud Store payment data from IC to the biller. File ONLY include ‘Cloud Store - Consumer Initiated’ transactions (any payments they take at the counter that are ‘Cloud Store - Biller Initiated' don’t need to be in the file).
+File Extension: CSV
+File Naming Convention: BID_TRANSFER_MMDDYYYY
+File Delimiter: ,
+Specification: N/A - mapping below
+Sample File: 
+SFTP File Path: N/A - File delivery will be via email on the batch close notification
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Values
+Payment Date/Time
+M
+/DD/YYYY H:MM:SS [A/P]M
+Payment Category
+“P” or “R”
+Value populated based on selection from the Payment Category dropdown:
+“P” = Add Funds to Account 
+“R” = Permit Renewal
+Customer ID/Drivers License
+Value populated with input in “Customer ID/Driver’s License” field
+Payment Amount
+Payment Amount (no service fee)
+Permit Number
+Value populated with input in “Permit Number” field. This could also be blank but there needs to be a placeholder so that the export knows its at the end of file.
+ URL:/spaces/IM/pages/2406350849/BID+3122+City+of+Bristol+Technical+Design

@@ -1,0 +1,289 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+In Progress
+Yellow
+ 
+Document owner
+ 
+Knowledge transfer
+https://us-21061.app.gong.io/call?id=2162863163468542631
+ 
+VERTEXONE CIS BILLERS HAVE MULTI USER AND SSO.  PLEASE PLAN THE CONVERSION PROCESS VERY CAREFULLY WITH THE CONVERSION TEAM
+VERTEX ONE BILLERS NEED **
+Unsubscribe
+** link added to 1st, 2nd, 3rd, notifications
+Summary
+Summary
+Details
+Software Partner Name
+VertexOne
+Software Product Name
+VertexOne CIS
+There is also a stand alone customer portal product that can be in use called VXEngage.  This will be documented in a separate confluence page HERE.  All VertexOne CIS implementations will use VXEngage portal to show Invoice Cloud iFrames.  
+Software Cashiering System
+N/A
+Supported Versions
+All
+Integration Requirements and Pre-Requisites
+N/A
+Vertical
+GUB
+Sample Biller Implementation
+Carrolton BID 2732
+Planning
+Test Portals
+IC Hosted Test Portal - BID 3314 VertexOne TEST
+Partner Hosted Test Portal - Yes.  All VertexOne CIS customers will utilize their VXEngage portal.  This is a generic portal that IMs can come in and navigate and familiarize themselves with the look of the portal and where IC screens are located.  
+https://vxengage-sit.vertexone.app/
+ 
+Password 
+DO NOT CHANGE PASSWORD  
+PW-Vertex1!
+Biller Test Portal - Required
+Rules of Engagement
+Upon assignment reach out to Joshua Pierson at VertexOne for introduction.  Joshua will provide the VXO PM for scheduling kickoff call.
+YOU MUST EMAIL JOSH DO NOT ATTEMPT TO CALL
+Once Joshua has identified the VXO PM on the project the IC IM needs to provide VXO with Smartsheet access to the schedule, UAT, and dashboard.  
+Timeline
+Estimated timeframe to complete implementation - 90 days 
+Configuration
+Invoice Types
+Utility 42
+Virtual Site
+Virtual Site not in use.  Customer will log in through VXEngage portal.   IC IM needs to configure terminals and other appropriate settings in CRM.  For guest payment VXEngage uses CPV2.  
+Customer Portal Authentication Type
+Username with Password
+Required Options
+NOTE THIS INTEGRATION USES MULTIUSER.  PLEASE ENABLE MULTIUSER AND CO OWNERS IN CRM.  
+ID
+Option Description
+Details
+64
+RTDR - Override 6 Hour Previous RTDR Check
+For Billers with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh.
+VXO requires this to be turned 
+ON
+42
+Biller Portal - Edit Email Address
+By default, changes to the email address are allowed. Unchecking this will make the Email Address field in the Biller Portal as read-only.
+This option is 
+On
+ by default
+VXO requires this to be turned 
+OFF
+111
+Payments update Past Due amount
+Update Past Due amount when making a payment through Invoice Cloud.
+This option is 
+Off
+ by default
+VXO requires this to be turned 
+ON
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+INVOICE TYPE 47
+Payment Route
+ - Custom Text for Pay Full Invoice Field
+Add the descriptor in the text box “Pay Balance”
+INVOICE TYPE 60
+Payment Route
+ - Custom Text for Pay Past Due Field
+Add the descriptor in the text box “Pay Last Invoice Amount”
+34
+AutoPayBalanceDue 
+- Lesser or Balance Due or InitialBalanceDue
+VXO requires this to be turned 
+ON
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Upon request
+VertexOne does not have payment plans, budget billing, etc.  Final bills will be treated as normal bills and will come over in the Invoice File.  
+Payment File
+Partner
+N/A
+Even though the integration has DataPump for Payments VXO requires a nightly payment file in their spec to be delivered.  No sample file is needed for coding.  
+Bill Presentment 
+Biller
+Upon Request
+No integration standard - unique to each biller
+RTDR API 
+CRM Setting 8 RTDR EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint BALANCE UPDATE.  This maps to Advanced Setting #8 in CRM
+RTDR Passcode (test)
+CRM Setting 10 RTDR Key or Password if Applicable
+Partner
+Upon Request
+VXO will provide a SUBSCRIPTION KEY.  This maps to Advanced Setting #10 in CRM
+RTDR API (prod)
+CRM Setting 8 RTDR EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint BALANCE UPDATE.  This maps to Advanced Setting #8 in CRM
+RTDR Passcode (prod)
+CRM Setting 10 RTDR Key or Password if Applicable
+Partner
+Upon Request
+VXO will provide a SUBSCRIPTION KEY.  This maps to Advanced Setting #10 in CRM
+DataPump Payments API (test)
+CRM setting 11 DataPump Payments EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls his API endpoint PAYMENTS.  This maps to Advanced setting #11 in CRM
+DataPump Passcode (test)
+CRM setting 13 DataPump Payments EndPoint/WebService Password
+Partner
+Upon Request
+VXO will provide a SUBSCRIPTION KEY.  This maps to Advanced Setting #13 in CRM
+DataPump Payments API (prod)
+CRM setting 11 DataPump Payments EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint PAYMENTS.  This maps to Advanced setting #11 in CRM
+DataPump Passcode (prod)
+CRM setting 13 DataPump Payments EndPoint/WebService Password
+Partner
+Upon Request
+VXO will provide a SUBSCRIPTION KEY.  This maps to Advanced Setting #13 in CRM
+DataPump Paperless API (test)
+CRM setting 14 DataPump Paperless EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint Paperless Enrollment. This maps to Advanced setting 14 in CRM
+DataPump Paperless API (Prod)
+CRM setting 14 DataPump Paperless EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint Paperless Enrollment. This maps to Advanced setting 14 in CRM
+DataPump AutoPay API (test)
+CRM setting 17 DataPump AutoPay EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint Autopay.  This maps to Advanced Setting #17 in CRM
+DataPump AutoPay API (prod)
+CRM setting 17 DataPump AutoPay EndPoint/WebService URL
+Partner
+Upon Request
+VXO calls this API endpoint Autopay.  This maps to Advanced Setting #17 in CRM
+Payment Codes 
+Codes are standard.  Not configurable per biller. 
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+Project Assignment 
+BID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Format GUID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key TEST
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Application API Key Test
+Partner
+Project Assignment
+Located in Biller Portal
+Biller GUID PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Application API Key PROD
+Partner
+Project Assignment
+Located in Biller Portal
+Invoice Type ID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+SFTP Credentials
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller Portal Support User
+Partner
+Project Assignment 
+Vertex One will designate a resource to have access to IC biller portal TEST.  They will not be allowed Production access. 
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Joshua Pierson 
+Joshua.Pierson@vertexone.net
+N
+ URL:/spaces/IM/pages/2745401597/VertexOne+CIS+Implementation+Details

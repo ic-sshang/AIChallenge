@@ -1,0 +1,21 @@
+The NFG PDF linking process requires 2 files in order to be manually processed:
+a Bill File, provided by NFG (typically named BILLYYYYMMDD.txt)
+an Index File, provided by print vendor Matrix (typically named NFG-YYYYMMDD.dat)
+Since the files are uploaded via FTP, they will usually be inside of a zipped file (.ZIP), this is key to note for the following steps if it is necessarry to locate the file in our servers.
+If these files have been uploaded before via the standard production file import/upload process the Biller is set up for, they can be found in the file backups across various servers. 
+To find where the files are located, query the following on the Biller sharded database (shard2613):
+For Bill file: 
+SELECT * FROM BillerFileUploadV2 WHERE FileName = 'BILLYYYYMMDD.txt' ORDER BY 1 DESC
+For Index file: 
+SELECT * FROM BillerFileUploadV2 WHERE FileName = 'NFG-YYYYMMDD.ZIP' ORDER BY 1 DESC
+The “Machine“ column in the resulting rows will be the server where the files can be found.
+Once the files are retrieved, the repository for the application needed to be ran will need to be cloned. Using Visual Studio in the Bastion servers, clone & open the BillerPDFRemoteLinkingReferenceProcessing project. Verify the project is running on the “main“ branch, no other changes need to be made to the project.
+Steps to linked PDFs:
+Place the index file in 
+icftproot\MatrixPrinter\ToInvoiceCloud\2613
+Placed the Bill file in 
+icftproot\MatrixPrinter\ToInvoiceCloud\2613\Bill
+Run BillerPDFRemoteLinkingReferenceProcessing project locally to link the invoices.
+Once application is done running, use the database to confirm the invoice records uploaded on the day in question contain a PdfToken and PdfFilename. 
+Once confirmed, use the BillerPortal to verify the PDFs are viewable for the invoices and the data on the PDFs are correct and pertain to the correct customer.
+ URL:/spaces/DS/pages/2897052029/National+Fuel+Gas+PDF+Linking

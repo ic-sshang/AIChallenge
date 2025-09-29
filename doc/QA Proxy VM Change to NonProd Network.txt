@@ -1,0 +1,147 @@
+3
+6
+false
+default
+list
+true
+Plan
+Restore 
+IC-QA-Proxy3
+ to 
+IC-QA-Proxy1-Dev
+ and 
+IC-Proxy-Test1
+ to 
+IC-ProxyTest1-Dev
+ 
+ 
+Add existing MIs from old VMs to new VMs 
+ 
+Update the DevTest VMs 14 hosts file entry for 
+ICSERVICES
+ to the new IP Address of 
+IC-QA-Proxy1-Dev
+ and run Smoke tests for 
+devtest.invoicecloud.com
+ 
+ 
+Update the DevTest VMs 1 thru 13 hosts file entry for 
+ICSERVICES
+ to the new IP Address of 
+IC-QA-Proxy1-Dev
+ 
+ 
+Update the the Host file on App Servers 
+vm-app-vm1qa1
+ and 
+vm-app-vm1qa2
+ 
+ 
+Turnoff old Servers 
+IC-QA-Proxy3
+, 
+IC-QA-Proxy2
+ , 
+IC-QA-Proxy1
+, 
+IC-Proxy-Test1
+, 
+IC-QA-Web1
+, 
+IC-QA-Web2
+ 
+ 
+Update the Computer Names for 
+IC-QA-Proxy3-Dev
+ and 
+IC-ProxyTest1-Dev
+ 
+ 
+Ensure ADDS Login for 
+IC-QA-Proxy3-Dev
+ and 
+IC-ProxyTest1-Dev
+IC-QA-Proxy3-Dev
+ 
+ 
+IC-ProxyTest1-Dev
+ 
+ 
+Install the AzDo Agents on 
+IC-QA-Proxy3-Dev
+ and 
+IC-ProxyTest1-Dev
+IC-QA-Proxy3-Dev
+ 
+ 
+IC-ProxyTest1-Dev
+ 
+ 
+Add the same Tags on the new 
+devtest
+ Environment Resources as the previous VMs 
+ 
+IC-QA-Proxy3
+proxy
+QALab3
+IC-Proxy-Test1
+ICProxyTest1
+Up SKU 
+IC-QA-Proxy3-Dev
+  to 
+D4s_V3
+ 
+ 
+Run the pipeline for all 4 Proxy Services to ensure the latest of each Proxy Repo gets deployed to 
+IC-QA-Proxy1-Dev
+ and 
+IC-ProxyTest1-Dev
+ successfully.
+IC-QA-Proxy1-Dev
+Pipelines - Run icdatabaseservice_1.0.6 (azure.com)
+ 
+ 
+Pipelines - Run icbusinessservice_1.0.3 (azure.com)
+ 
+ 
+Pipelines - Run 20240521.1 (azure.com)
+ 
+ 
+Pipelines - Run 20240521.15 logs (azure.com)
+ 
+ 
+IC-ProxyTest1-Dev
+Pipelines - Run icdatabaseservice_1.0.6 (azure.com)
+Pipelines - Run icbusinessservice_1.0.3 (azure.com)
+Pipelines - Run icrtdrservice_1.0.57 (azure.com)
+Run Regression tests for 
+devtest.invoicecloud.com
+Biller Portal 
+ 
+Customer Portal 
+ 
+Virtual Site 
+ 
+CRM 
+ 
+IC Rest API 
+ 
+Diagram
+1
+0
+3209330801
+3209887849
+true
+IC-QA-Proxy3-Move.drawio
+2
+6
+https://invoicecloud.atlassian.net/wiki
+IC-QA-Proxy3-Move.drawio
+0
+1eZ4jDAyRey4UfmpxQgO 1
+941
+auto
+top
+1
+592
+ URL:/spaces/platform/pages/3209887849/QA+Proxy+VM+Change+to+NonProd+Network

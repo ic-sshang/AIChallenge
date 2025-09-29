@@ -1,0 +1,362 @@
+Summary
+Company
+NLC Insurance
+Industry/Vertical
+Insurance
+Website
+NLC Insurance - Home
+Guidewire Version
+GW Billing Center V10.2.3 
+GW Policy Center V10.2.3 
+GW Customer Engage
+Agent ( NLC Home grown solution )
+Legacy System - SDS system
+Solutions Engineer
+ 
+Integration Manager
+ 
+Invoices
+Legacy System 
+ 
+Customer Response
+How many active policies currently processed in the legacy system ?
+<Discovery 02/05/2025>
+~ 1000 policies in SDS (legacy system) for commercial only.
+InvoiceType - 165
+SDS policy number sample – There is no standard policy number representation for SDS. Any policy number that doesn’t fall under step 1.a can be treated as SDS policy number Guidewire policy numbers - 10 digit alpha numeric with 9
+th
+ digit representing the product code with the exception of BOP -  For eg., 26000100H0 – Homeowners,  26000100A0 – PersonalAuto, 26000100D0 – DwellingFire, 26000100P0 – Personal Umbrella, BP00000100 – Businessowners (The first 2 letters represents BOP Policy)   
+How many active policies currently processed in GW ? 
+<Discovery 02/05/2025>
+Remaining lines of business are all in Guidewire except the 1000 ( convert on renewal to new business policies) in SDS.
+Are you doing "convert on renewal" and till what time are you performing this process,  And when is this legacy system rolling off?
+<Discovery 02/05/2025>
+Convert on renewal as New Business policies. New policy numbers are generated in GW, this will enable direct billing from GW without correlation to the legacy policy numbers.
+Are they any LOBs ( Personal - Auto, Personal - Home, Commercial, Small business) still exclusively run on the legacy system ?
+<Discovery 02/05/2025>
+Commercial LOB is in SDS only. 
+What is the expectation for the NLC legacy policies will you code to the GW BC OOBT accelerator - Invoice or Billing data,  Bill Presentment , Real Time on balances, Data pump -  Payment, 
+autopay, paperless, pay-by-text
+, void, refunds, reject, chargeback? 
+<Discovery 02/05/2025>
+NLC will use the OOBT BIF format for SDS system policies
+GW will use the OOBT v10 Accelerator BIF format for all current policies.
+Data Pump - 
+Payments, Voids, Refund, Reject, Chargeback
+Autopay enrollment, Paperless enrollment status updates
+Pay-By-text updates
+Does your agent still write business in the legacy system  or only on GW ?
+<Discovery 02/05/2025>
+Agents continue to take payments on the SDS system via Payment processor hosted portal - Next meeting planning on a demo from NLC team 
+Does your agent / call center - CSRs help your insured make payments in the legacy system or only on GW ?
+<Discovery 02/05/2025>
+Current processor has a portal 
+Can your policy holders still pay online via GW and legacy are there different portals ? 
+<Discovery 02/05/2025>
+No different portal
+What kind of portals do you have on the legacy system to serve the policy holders?
+<Discovery 02/05/2025>
+Current processor has a portal where Insured and Agents are enabled to make payments. This would be a solution IC needs to present for the current implementation of NLC ( SSO connect)
+Guidewire BC - Invoice Billing
+Internal Notes
+Response/Decision Date
+Invoice Type/Business Type
+Insurance Type 1
+Insurance - 164
+GW Format IC Biller Invoice File (BIF)
+Review/Discuss Default Fields and Values -
+Guidewire Accelerator Technical Design
+ 
+<Discovery 3 - 02/11/2025>
+Reviewed the BIF format with NLC and agreed to utilize the current OOBT BIF format from GW BC Accelerator
+Is there an indicator in the file for SDS vs GW ? is this needed for reconciliation
+sftp ( batch ) for SDS and GW ( OOBT)
+<Discovery 3 - 02/11/2025>
+Policy Numbers are different between the systems
+Account/Policy Numbers
+Internal Notes
+Response/Decision Date
+What is the unique identifier in your system Policy Number or Account Number ? 
+<Discovery 2 - 02/05/2025>
+Guidewire policy numbers - 10 digit alpha numeric with 9
+th
+ digit representing the product code with the exception of BOP -  For eg., 26000100H0 – Homeowners,  26000100A0 – PersonalAuto, 26000100D0 – DwellingFire, 26000100P0 – Personal Umbrella, BP00000100 – Businessowners (The first 2 letters represents BOP Policy)
+What is the frequency of the installments from 1. SDS 2. GW BC  ?
+<Discovery 2 - 02/05/2025>
+Yes, these installments will be sent as part of BIF file for both SDS ( IC - 165)  and GW BC (IC - 164). Frequency depends on payment plan – Monthly installments are sent once in 18 days. Non monthly installments are sent once in 25 days applicable for both GW and SDS
+ Do you have a field for Past Due balances?
+<Discovery 3 - 02/11/2025>
+No
+How is billing handled? Is it at the Policy level or Account level ? 
+(This will decide on what the IC unique identifier/account number will be) 
+<Discovery 3 - 02/11/2025>
+Policy level
+Are there any Duplicate invoices between the different systems SDS vs GW ?
+ If yes, we need to determine the impact to   IC import?
+ 
+<Discovery 2 - 02/05/2025>
+There is no possibility of duplicate policy numbers between SDS and GW BC
+ 
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision Date
+How Balance Updates are handles with IC
+ 
+Review Default Fields and Values - 
+Guidewire Accelerator Technical Design
+ 
+  
+<Discovery 2 - 02/05/2025>
+sample response : “ Setting 8 :  RTDR EndPoint/WebService URL”
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision Date
+How Autopay, Paperless, PaybyText are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Accelerator Technical Design
+ 
+PaybyText is currently being worked on to be added to the Accelerator
+ 
+<Discovery 2 - 02/05/2025>
+Autopay enrolled on IC will be datapumped back to GW BC.
+GW BC will not be enrolling in Autopay.
+PayByText - Discovery 3
+Payments from IC
+Payments from Invoice Cloud
+ 
+Description
+ 
+Response/Decision Date
+How Payments are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Accelerator Technical Design
+ 
+ 
+<Discovery 2 - 02/05/2025>
+GW BC OOBT accelerator
+How Non Approved Payments (Rejects, 
+Chargebacks
+, Voids, Credits) are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Accelerator Technical Design
+ 
+The Verbiage/Code sent by IC is customizable via Advanced Setting
+<Discovery 2 - 02/05/2025>
+Datapump
+Bill Presentment
+Bill Presentment
+  
+Response/Decision Date
+Bill Presentment with PDF Linking
+ 
+Review Default Fields and Values - 
+Guidewire Accelerator Technical Design
+ 
+Payer Experience
+General Questions
+ Internal Notes
+  
+Response/Decision Date
+How do your customers make payments today?
+ 
+<Discovery 2 - 02/05/2025>
+Review recording
+What are the customer touchpoints between your billing system and the current payment solution
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 1. GW Billing Center - user role (CSR ) 
+No payment method information is shown to the CSR.  
+ 2. GW Policy Center - user role ( Agent and Insured )
+ 3. GW Customer Engage - user role ( Insured )
+  4. NLC portal
+ 
+What are all the payment methods accepted by your system today?
+ 
+<Discovery 2 - 02/05/2025>
+Per SOW 
+How do your customers access the payment system today?
+ 
+<Discovery 2 - 02/05/2025>
+Insured make payments on the NLC company's website. 
+Customers can access the payment page without logging in, but they need to enter their email address and password to access their specific policies and make payments.
+What additional payment features are important to your customers?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Ability for the payment method to be entered only by the insured and not accessible to the CSRs
+Restrict Agents to view only their associated policies using the IC system
+Can I get a walk-through of the Payer / customer experience? Who should I contact to schedule that?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Review recording
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Yes SAML redirect is used
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+<Discovery 3 -  >
+What part of the user experience will be through your UI and what part of the User experience will be through ours?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Review recording
+Will you need balance forward or is each invoice paid separately?
+ 
+ 
+Do you need multi user login?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Yes
+How will existing users be migrated?
+ 
+ 
+<Discovery 3 -  >
+No
+Do you need IVR payments?
+     If so, what is the unique identifier your customers would use?
+ 
+ 
+<Discovery 3 -  >
+Yes
+Do you want to offer 'Pay By Text'? 
+ 
+ 
+<Discovery 3 -  >
+Yes
+CSR/Agent Experience
+General
+Internal Notes
+  
+Response/Decision Date
+Do you have CSR and agents? 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Yes
+How do CSRs / Agents access and use the system today?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Review recording
+How will this functionality be done on Invoice Cloud:  (Biller Portal, AgentConnect)
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Agent Connect
+Do your CSR and agents process payments over the phone?
+ 
+ 
+<Discovery 3>
+Yes
+Can CSR and agents process payments by using a customer's stored payment method?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Yes
+Do CSR and agents assist customers with self service activities like Paperless / Autopay 
+/ Pay by Text
+? 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Yes - Autopay, Paperless, Schedule payments
+Do some CSR and agents need different permissions than others?  
+ 
+ 
+<Discovery 2 - 02/05/2025>
+ 
+Role based access to view their own list of policies
+IF YES:
+ 
+ 
+What type of payments are accepted (eg. Cash, Check, Card): 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Per SOW AMEX needs validation
+Do you use a separate system/software for counter payments and if so what software? 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+No
+How do you accept cash payments? 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+No
+How do you accept credit card payments?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Yes
+How do you accept paper checks? 
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Out of scope
+Check payment method will be out of scope for this integration. @Matangi please confirm – Physical Check is out of scope for this integration
+Do you use a check scanner?
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Out of scope
+Check payment method will be out of scope for this integration. @Matangi please confirm – Physical Check is out of scope for this integration
+SAML SSO
+<Discovery 3  - 02/11/2025 >
+Need to understand if the SAML assertion XML can be basic auth or bearer token ( IC - does not support inherently on SAML XML)
+Insurance Specifics
+Considerations
+ Internal Notes
+   
+Response/Decision Date
+How are quote payments captured?  Is the billing account number or policy number known at this time?  If yes, consider creating the account before a BIF arrives or creating one on the fly.  If no, consider using the Customer Renewal function later to move the Quote Number over to the actual billing/policy number.
+ 
+  
+<Discovery 2 - 02/05/2025>
+GW PolicyCenter
+Agent payments - do the agents need to act on the behalf of the policyholder for payments?  If yes, consider using Agent Connect with LoginGUID
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Yes
+Agency payments - do the agency pay with their own agency payment method?  If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  In order to prevent long lists of linked accounts, it is recommended to link the account to the user and unlink after the transaction is complete.
+ 
+ 
+<Discovery 2 - 02/05/2025>
+Yes
+How are renewals handled - will the billing system call our Customer Renewal API? (i.e., does the policy/account number change every policy term? If so, call the API)
+ 
+ 
+<Discovery 2 - 02/05/2025>
+No
+Is multi-user required?  Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.
+ 
+ 
+<Discovery 2 - 02/05/2025>
+No
+Tell us about how your quote system works and the issuance process of quotes/policies
+ 
+ 
+<Discovery 2 - 02/05/2025>
+GW PolicyCenter
+How many phases will there be for go live?
+<Discovery 2 - 02/05/2025>
+April End Go-live for GW Systems
+ URL:/spaces/IM/pages/3928915997/NLC+Insurance+Guidewire+Discovery

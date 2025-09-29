@@ -1,0 +1,122 @@
+Overview
+This spike evaluates integrating 
+SecureAuth
+ with 
+Okta as a federated Identity Provider (IdP)
+ for InvoiceCloud employees to access the Biller Portal via 
+Single Sign-On (SSO)
+.
+Two integration approaches were investigated:
+✅ 
+OIDC with private_key_jwt
+✅ 
+SAML 2.0
+Both were tested successfully. The chosen approach is 
+OIDC with private_key_jwt
+, aligning with InvoiceCloud’s existing identity federation strategy.
+Integration Pattern
+When using OIDC, SecureAuth integrates with Okta by dynamically creating an application in Okta for 
+each application registered in SecureAuth
+.
+Per-application rules are managed in Okta.
+SecureAuth requires a 
+service application in Okta
+ with 
+okta.apps.manage
+ and 
+okta.groups.read
+ scopes.
+This ensures a seamless experience for users logging in to multiple applications.
+Chosen Approach: OIDC with private_key_jwt
+Prerequisites
+Okta developer account with admin access.
+Service application registered in Okta.
+Public/Private key pair (PEM format for private key).
+SecureAuth workspace with authentication providers enabled.
+Step 1: Register Okta Service Application
+In 
+Okta Admin Console
+, go to:
+Applications → Applications → Create App Integration
+Select:
+Sign-in method
+: OIDC
+Application type
+: Service
+Configure authentication method as 
+private_key_jwt
+.
+Generate a key pair. Upload the 
+public key
+ to Okta.
+Save the following details for later:
+Client ID
+Okta domain
+Step 2: Grant Required Scopes
+Navigate to: 
+Applications → YOUR_APP → Okta API Scopes
+Grant the following:
+okta.apps.manage
+okta.groups.read
+
+This allows SecureAuth to create and manage downstream applications on behalf of InvoiceCloud.
+Step 3: Configure SecureAuth Connection
+In SecureAuth, go to:
+Authentication → Providers → Create Connection
+Select 
+Okta
+ template.
+Fill in details:
+Parameter
+Value
+Name
+InvoiceCloud-Okta-OIDC
+Domain
+dev-123456.okta.com
+ (replace with actual domain)
+Client ID
+{your_client_id}
+Client Private Key
+PEM format private key
+Example PEM private key snippet:
+-----BEGIN PRIVATE KEY-----
+MIIBVAIBADANBgkqhkiG9w0BAQEFAASC...
+-----END PRIVATE KEY-----
+
+(Optional) Enable 
+Authentication context caching
+ and configure TTL.
+Save and apply changes.
+Step 4: Test Authentication Flow
+Initiate login via SecureAuth.
+SecureAuth redirects to Okta for authentication.
+Okta returns 
+ID Token
+ and 
+Access Token
+.
+SecureAuth validates tokens and establishes session.
+Optional Path: SAML 2.0
+SAML was tested successfully but is 
+not natively optimized
+ in SecureAuth. Use only if OIDC is not viable.
+Create a SAML application in Okta.
+Configure 
+ACS URL
+ and 
+Entity ID
+ from SecureAuth.
+Map SAML assertions to SecureAuth attributes.
+Exchange Metadata URL between SecureAuth and Okta.
+Security Considerations
+Rotate PEM key pairs regularly.
+Enforce MFA policies in Okta.
+Restrict API scopes to 
+minimum required
+.
+Next Steps
+Creating Okta federation for all tenants
+Storing PEM keys and URL identifiers in key vaults
+References
+SecureAuth Docs: OIDC with Okta
+ URL:/spaces/PE/pages/4582080515/Spike+Integration+of+CRM+with+SecureAuth+and+Okta+for+Employee+SSO+Access+to+Biller+Portal

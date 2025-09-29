@@ -1,0 +1,313 @@
+none
+Platform changes planned
+Palo Alto FW licensing Update
+SQL Server PVE
+Azure Functions VNET integrations
+App Server monthly patching
+Pre-Steps
+Schedule Palo Alto resource to be on the call (
+Stopping the Jobs - 
+Refer to Pre-maintenance steps related to Jobs here
+Putting up the maintenance page
+Put notification in DailyOps channel
+Execution
+Parallel activities:
+Phase 1:
+Palo Alto License refresh & testing afterwards - 
+ and 
+ 
+Function upSKU - 
+ 
+App Sever update - 
+ 
+Phase 2: (wait until Palo Alto change is finished and tested)
+SQL PVE - 
+ 
+Run Smoke Test 
+ 
+VNET integration 
+ 
+Phase 3:
+Full regression cycle
+Palo Alto FW licensing Update
+Steps
+#
+Step
+Owner
+Appx. Duration
+Status
+1
+Verify that Palo Alto tech has joined the call
+Rob C
+1 Minute
+Planned
+2
+Migrate Panorama to Flex licensing
+ 
+Rob C
+30 Minutes
+Planned
+3
+Verify that we can push a temp rule to current firewalls
+Rob C
+5 Minutes
+Planned
+4
+Migrate firewalls to Flex licensing via Panorama
+Rob C
+10 Minutes
+Planned
+5
+Verify that we can push a temp rule to current firewalls
+Rob C
+5 Minutes
+Planned
+6
+Run smoke tests on production firewalls and manual testing of internal traffic
+Amit S
+30 Minutes
+Planned
+Testing Plan
+Push temp rule between migration of Panorama and after migration of firewalls.
+Run smoke tests on production firewalls and manual testing of internal traffic
+Identify application test cases , exercising all 4 paths of network traffic
+North South (Inbound) - Smoke test
+South North (outbound) - RTDR or Datapump 
+ to follow up with 
+East/West - 
+ 
+Roll Back Plan
+Items which cannot be rolled back
+Palo Flex license conversion- <description>
+Mitigation Plan
+Resolve it with PaloAlto tech on call
+SQL Server PVE
+Technical Details
+Using Terraform create a Network Interface Card (NIC) and a database privatelink Azure DNS record in New Gen Hub. Link the private DNS zone to the Vnet Integration Spoke Vnet so DNS will translate properly to the NIC that was created during the Private Endpoint creation.
+Steps
+#
+Step
+Owner
+Appx. Duration
+Status
+Run Hub_Infrastructure Terraform to create Azure SQL Private Endpoints
+ 
+15 Minutes
+Run Vnet_Integration_Infrastructure to link database private zone to Vnet Integration Vnet
+ 
+5 Minutes
+Testing Plan
+Verify Private Endpoints are created successfully (manual verification in portal)
+Roll Back Plan
+Items which cannot be rolled back
+ -None
+Rollback steps
+Vnet Integration Remove
+Azure Functions ASP Upgrades
+Note: ASP-IC-QueuePurgeRequest-ec1c5 did not support Elastic Premium 1, we pivoted to use Premium 1 V3.
+APP SERVICE PLAN
+Original SKU
+New SKU
+ASP-IC-GeneratePaypalTestDispute-32ab
+Dynamic
+Elastic Premium 1
+ASP-IC-QueueBlobsToDelete-e947
+Dynamic
+Elastic Premium 1
+ASP-RGDevApps-b479
+Dynamic
+Elastic Premium 1
+ASP-RGDevApps-b879
+Dynamic
+Elastic Premium 1
+ASP-RGICGatewayDB-878c
+Dynamic
+Elastic Premium 1
+ASP-RGICGatewayDB-b4ce
+Dynamic
+Elastic Premium 1
+ASP-RGDevApps-a565
+Dynamic
+Elastic Premium 1
+ASP-RGDevApps-bc84
+Dynamic
+Elastic Premium 1
+ASP-RGDevApps-bcbf
+Dynamic
+Elastic Premium 1
+ASP-IC-QueuePurgeRequest-e1c5
+Dynamic
+Premium 1 V3
+Azure Functions VNET integrations
+5/19 (Phase 1)
+NAME
+APP SERVICE PLAN
+BillerBankChangedProcessor
+ASP-RGDevApps-b879
+IC-DeleteBlob
+ASP-IC-DeleteBlob-750c
+IC-GeneratePaypalTestDispute
+ASP-IC-GeneratePaypalTestDispute-32ab
+IC-GW-ImportDSDR
+ASP-RGICGatewayDB-878c
+IC-GW-SettlementImport
+ASP-RGICGatewayDB-b4ce
+IC-QueueBlobsToDelete
+ASP-IC-QueueBlobsToDelete-e947
+IC-QueuePurgeRequest
+ASP-IC-QueuePurgeRequest-e1c5
+ICBatchCloseProcessorDemo
+ASP-RGDevApps-b479
+ICGenerateAgentReport
+ASP-RGDevApps-bcbf
+ICUserInviteQueueNet6
+ASP-RGDevApps-9674
+ImportDSDR
+ImportDSDRPlan
+DatabaseAutomation
+icSQL-AzFunctionPremiumV2
+fnComputeBillerRevenue2
+IC-ElasticPremiumPlanP2
+fnICG-Aging
+IC-ElasticPremiumPlanP2
+fnICG-ICBatchFeeRecon
+IC-ElasticPremiumPlanP2
+fnICG-ICBatchRecon
+IC-ElasticPremiumPlanP2
+fnICG-ICTransactionRecon
+IC-ElasticPremiumPlanP2
+fnICGHyperWalletFeesPayoutRecon
+IC-ElasticPremiumPlanP2
+fnICGHyperWalletPayoutRecon
+IC-ElasticPremiumPlanP2
+func-securevaultaccesstest
+plan-secure-functions
+IC-DB-ArchiveDB
+icSQL-AzFunctionPremiumV2
+IC-DB-BoardingAutomation
+icSQL-AzFunctionMonitorV2
+IC-DB-DWResidualData
+icSQL-AzFunctionMonitorV2
+IC-DB-FileImportMonitor
+icSQL-AzFunctionMonitorV2
+IC-DB-FileImportStarter
+icSQL-AzFunctionPremiumV2
+IC-DB-FinMod
+icSQL-AzFunctionPremiumV2
+IC-DB-ImportAdjustment
+icSQL-AzFunctionPremiumV2
+IC-DB-ImportFiles
+icSQL-AzFunctionPremiumV2
+IC-DB-ImportInvoice
+icSQL-AzFunctionPremiumV2
+IC-DB-LoadMasterTables
+icSQL-AzFunctionMonitorV2
+IC-DB-Maintenance
+icSQL-AzFunctionPremiumV2
+IC-DB-MeterUsage
+icSQL-AzFunctionMonitorV2
+IC-DB-MonitorBalFwd
+icSQL-AzFunctionMonitorV2
+IC-DB-MonitorPDF
+icSQL-AzFunctionMonitorV2
+IC-DB-MonitorPreloadRelease
+icSQL-AzFunctionMonitorV2
+IC-DB-PDFLinking
+icSQL-AzFunctionPremiumV2
+IC-DB-ShardMap
+icSQL-AzFunctionPremiumV2
+IC-DB-UtilityFunctions
+icSQL-AzFunctionPremiumV2
+IC-DW-ImportAct10
+icSQL-AzFunctionPremiumV2
+ICBatchCloseProcessor2
+ASP-DevAppsPremiumPlan
+Functions not moving during maintenance window
+NAME
+APP SERVICE PLAN
+fnComputeBillerRevenue
+EastUSPlan
+ICBatchCloseProcessor
+EastUSPlan
+ICChaseTransactionProcessor
+EastUSPlan
+ICEmailQueue
+EastUSPlan
+ICEmailQueue-QA
+EastUSPlan
+ICEngineeringMgmtMonitor
+EastUSPlan
+ICFTPExportProcessor
+ASP-RGDevApps-8cfa
+ICOAuthTokenProcessor
+EastUSPlan
+ICProcessNotifier
+EastUSPlan
+ICTestAzureFunction
+EastUSPlan
+ICUserInvitesQueue
+EastUSPlan
+ICWebServiceLoggingProcessor
+EastUSPlan
+ImportFileInShard
+EastUSPlan
+PacketCaptureApp
+EastUSPlan
+IC-GW-CreateSettlement,
+rg-ic-sql-functions
+IC-DB-ApplyUserAccess,
+rg-ic-sql-functions
+Steps
+#
+Step
+Owner
+Appx. Duration
+Status
+Run SKU Upgrade script for Azure Functions not on Premium
+ 
+15 Minutes
+Run Create Vnet Integration script for all Azure Functions
+ 
+30 Minutes
+Testing Plan
+Run Function Health Checks where applicable
+Coordinate with Function owners for additional verification by running each function if necessary to verify connectivity to SQL, Key Vaults, etc.
+Identify performance impact , if any, for moving functions from Consumption Plan to App Service Plan - 
+ 
+ 
+Http triggerred functions - 
+Batch close processors
+ to with 
+ 
+Roll Back Plan
+Items which cannot be rolled back
+Azure Functions upgraded from Compsution plan to App Service Plan
+Mitigation Plan
+Leave Azure Function upgrade from Consumption to App Service Plan in place
+Rollback steps
+Rollback Script
+ 
+App Server monthly patching
+Steps
+#
+Step
+Owner
+Appx. Duration
+Status
+Testing Plan
+Overall Testing Plan
+Regression Test
+Post-Steps
+Stopping the Jobs  - 
+Refer to Post-maintenance steps related to Jobs here
+Removing the maintenance page
+Post in finished message in DailyOps channel
+Support team:
+  626-716-4709
+ 703-328-1233
+ 971-998-8279
+ 508-353-2563
+ 
+ 956-530-6901
+ 956-280-3441
+ URL:/spaces/icinfradoc/pages/3240132635/19th+May+2024

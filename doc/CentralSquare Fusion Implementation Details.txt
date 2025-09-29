@@ -1,0 +1,189 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+Done
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+Naviline CentralSquare
+Software Product Name
+Fusion
+Fusion Webservices
+Software Cashiering System
+N/A
+Using the IC biller portal for all in person payments
+Supported Versions
+All
+Only one version in use at this time
+Integration Requirements and Pre-Requisites
+Need to request from the biller appkey and appID for their Naviline webservice
+Vertical
+GUB
+Sample Biller Implementation
+BID 2754 City of Leavenworth
+First biller on CentralSquare RealTime Solution
+Planning
+Test Portals
+IC Hosted Test Portal
+Partner Hosted Test Portal-No
+Biller Test Portal - Required-No
+Rules of Engagement
+When reaching out to the biller to schedule kickoff call please request a copy of appkey and appID for their Naviline webservice and the base URL.  Also provide SFTP info.
+Example of test url- 
+https://fusion.lvnwater.org:4443
+Central Square: Autopay Conversion
+For all new Central Square implementations, the Implementation Manager (IM) 
+must tell the biller to remove converted autopay's from their Central Square system
+. InvoiceCloud (IC) will manage these going forward.
+If autopay information isn't removed from Central Square:
+Billers 
+must manually delete pending payments
+ in Central Square after 
+each
+ billing cycle (even multiple cycles a month).
+Only after this step can billers delete bank files from processing out of Central Square.
+Crucially, not following this process leads to a high risk of double drafting accounts.
+Timeline
+60-90 days
+Configuration
+Invoice Types
+1 Water
+Virtual Site
+None
+Required Options
+ID
+Option Description
+Details
+64
+RTDR - Override 6 Hour Previous RTDR Check
+For Billrs with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh
+Turn this setting ON
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Biller
+Upon Request
+Data is specific to each biller
+Adjustment File
+N/A
+Captured in RTDR
+Payment File
+N/A
+Captured in DataPump
+Bill Presentment
+Biller or Print Vendor
+Upon Request
+ First biller utilizing a template but PDF extraction is supported
+RTDR API
+Biller
+Upon Request
+This is specific to each biller and is known to biller as appID and appkey
+RTDR Passcode
+Biller
+Upon Request
+This is specific to each biller and is known to biller as appID and appkey
+DataPump API (same as RTDR API)
+N/A
+ 
+DataPump Passcode (same as RTDR Passcode)
+N/A
+ 
+SSO URL
+Biller
+Upon Request
+First biller Leavenworth utilizing Watersmart
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+N/A
+Project Assignment 
+BID
+N/A
+Project Assignment 
+Invoice Format ID
+N/A
+Project Assignment 
+Invoice Format GUID
+N/A
+Project Assignment 
+Biller GUID TEST
+N/A
+Project Assignment 
+WebService Key TEST
+N/A
+Project Assignment 
+Biller GUID PROD
+N/A
+Project Assignment 
+WebService Key PROD
+N/A
+Project Assignment 
+Invoice Type ID
+N/A
+Project Assignment 
+Products Biller Signed Up For
+N/A
+Project Assignment 
+Biller Contact Information
+N/A
+Project Assignment 
+Contacts
+Michael Morley 
+mike.morley@gmail.com
+Mike is a consultant under contract with InvoiceCloud and can answer any questions around Naviline/CentralSquare and will bill for his time
+Migration Details
+Central Square: Autopay Conversion
+For all new Central Square implementations, the Implementation Manager (IM) 
+must tell the biller to remove converted autopay's from their Central Square system
+. InvoiceCloud (IC) will manage these going forward.
+If autopay information isn't removed from Central Square:
+Billers 
+must manually delete pending payments
+ in Central Square after 
+each
+ billing cycle (even multiple cycles a month).
+Only after this step can billers delete bank files from processing out of Central Square.
+Crucially, not following this process leads to a high risk of double drafting accounts.
+Common Errors/Situations
+List any errors that have occurred during previous implementations.  Ex-Data Pump often times out for CIS 
+Common Questions from Billers
+Ex-ACH/Chargebacks through Data Pump?
+Lessons Learned
+Any knowledge gained through previous implementations of other billers
+Conversion Details
+Any notes necessary for conversion team.  Ex-SSO with Multi User
+ URL:/spaces/IM/pages/2181039189/CentralSquare+Fusion+Implementation+Details

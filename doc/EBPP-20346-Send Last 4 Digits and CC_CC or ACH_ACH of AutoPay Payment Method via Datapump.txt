@@ -1,0 +1,66 @@
+Worked On By:
+Bruno Saenz (Assignee MyIIS development)
+Luis Navarro (Assignee CRM development)
+Heather Blood (Database Engineer)
+Rob Hoerning (Test Engineer)
+HNGagan (QA)
+Charla Hawthorne (Reporter)
+Related Items:
+EBPP-20346
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-20786
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-20865
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-18594
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At A Glance:
+Biller 4037 - Texas Farm Bureau
+ is requesting InvoiceCloud to send updates when an autopay payment method changes through the
+ Customer Portal
+ via DataPump sending the last 4 digits of the new payment method, before this enhancement the system was already sending updates for autopay sign-up and payment method type change for instance changing from an 
+ACH/bank account accoun
+t to a credit card number. Now updates will be sent including the last 4 digits of the newly assigned payment meth
+od
+ also when accounts are changed, this can be changing an 
+ACH 
+account for a different one, or having a credit card assigned and changing it for a different 
+credit card
+ as well.
+This feature required updates on two main modules, the MyIIS and the CRM systems.
+CRM Updates:
+The CRM has the DataPump management 
+page
+, from which all DataPump configurations are managed. We can locate the configurations for the 
+Autopay
+ payments setup, there will be two main configurations:
+AutoPayPaymentMethodChange(Yellow)
+AutoPayPaymentDetailChange(Green)(New Enhacement)
+The AutoPayPaymentMethodChange setting enables or disables updates when a new autopay sign-up occurs or when the payment method changes (e.g., from ACH to credit card, or vice versa).
+The AutoPayPaymentMethodDetailChange setting enables or disables updates(which includes the last 4 digits of the newly assigned payment meth
+od
+) when there are changes to the details of the payment method (e.g., switching from one ACH account to another, or from one credit card to a different one).
+Since these two configurations depend on each other, the following test case matrix was used to facilitate understanding and testing of the new enhancement:
+CRM updates code updates can be found in this 
+pull request
+.
+MyIIS Updates:
+MyIIS reads the DataPump configuration stored in the database and, based on the test case matrix, determines whether a DataPump update should be sent and executes it accordingly.
+The code changes for this business logic can be found in this 
+pull request
+.
+How to Test:
+Testing for this item consists of a user modifying the
+ autopay payment method through the MyIIS system
+, the system should send updates for the following scenarios via DataPump. The user must know that combinations for the ‘AutoPayPaymentMethodChange’ and the ‘AutoPayPaymentDetailChange’ settings will define whether the DataPump is generated based on the previous case’s Matrix.
+An example of when both settings are enabled and the user performs an ACH payment method detail update is described next:
+Adding a visual reference on how to test:
+ URL:/spaces/PE/pages/3589308440/EBPP-20346-Send+Last+4+Digits+and+CC+CC+or+ACH+ACH+of+AutoPay+Payment+Method+via+Datapump

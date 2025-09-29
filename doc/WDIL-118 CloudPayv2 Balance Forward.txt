@@ -1,0 +1,87 @@
+Item link: 
+WDIL-118
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Requesting Biller(s): Texas Mutual Insurance (BID: 4351)
+Use Case:
+ Currently, CloudPay v2 does not account for BIF customizations and does not balances forward the previous invoice. As a result, when balance forward integrations are used, CloudPay v2 invoices may remain open with an outstanding balance—particularly in cases where the biller or CIS system does not reconcile or clean up prior invoices.
+We would like to request an enhancement to ensure that CloudPay v2 properly incorporates BIF customizations and supports balance forward logic to prevent discrepancies in invoice status.
+Findings:
+Pre-grooming notes:
+Just like Shannon mentioned 
+here
+ the CPv2 process does apply the Balance Forward flag in the invoice record, but the Balance Forward process does 
+not
+ pick these particular invoices up because it is expecting a file.
+We’ll need to discuss the solution further with Data Services as they oversee the Balance Forward process.
+Possibly need a Spike item to fully understand all the use cases and to find the best solution considering that the Balance Forward process is overseen by Data Services and it may live in a Logic app now (
+it used to be driven by a stored procedure
+).
+Helpful links:
+https://dev.azure.com/invoicecloud/Database_Src/_git/IC-DB-MonitorBalFwd?path=/IC-DB-MonitorBalFwd/BalFwd_MonitorTT.cs
+https://dev.azure.com/invoicecloud/Database_Src/_git/IC-BillerShard?path=/IC-BillerShard/dbo/Stored%20Procedures/Procs1/selBalanceForwardBillers.sql&_a=contents&version=GBmaster
+Latest findings (8/13/25): 
+We found an area in the ICRedirect repo that has Balance Forward functionality that appears very promising for the request in question. We may need to test it out to confirm that it is still functional. If it is, adding the same functionality to CPv2 should enable Balance Forward functionality via CPv2.
+ICRedirect Balance Forward link
+Looking into the SP used in the ICRESTAPI (
+spBalanceFoward
+) we already have the information needed in context, NewInvoiceID (
+link here
+ which happens before creating the response message) and CustomerID. Also we need to test with both InvoiceTypeSetting 13 enabled and disabled. 
+Request body update
+It looks like the change needs to be global per request, meaning that every invoice passed in a single request with this new flag on will be enabled for Balance Forward changes, because of this I think the format for the new parameter/flag should follow the same principle that we did for 
+WDIL-29
+ creating a new class called: 
+BypassPaymentRestrictions
+ that will hold different flags that allows to override/set values in the BIF files; in this case the 
+EnableBalanceForward
+ flag
+json
+wide
+760
+{
+    "CREATECUSTOMERRECORD": true,
+    "CUSTOMERS":[
+        {
+            "ACCOUNTNUMBER": "TestingDude1",
+            "NAME": "The Dude",
+            "ADDRESS": "609 Venecia Ave",
+            "CITY": "Testville",
+            "STATE": "CA",
+            "ZIP": "55555",
+            "EMAILADDRESS": "test@test.com",
+            "INVOICES":[
+                {
+                    "INVOICENUMBER": "TestingDude1-01",
+                    "TYPEID": 8,
+                    "BALANCEDUE": 100.00,
+                    "DUEDATE": "07/16/2025",
+                    "INVOICEDATE": "07/30/2025",
+                    "CCSERVICEFEE": 2.00,
+                    "ACHSERVICEFEE": 1.00
+                },
+                {
+                    "INVOICENUMBER": "TestingDude1-02",
+                    "TYPEID": 42,
+                    "BALANCEDUE": 100.00,
+                    "DUEDATE": "07/16/2025",
+                    "INVOICEDATE": "07/30/2025",
+                    "CCSERVICEFEE": 2.00,
+                    "ACHSERVICEFEE": 1.00
+                }
+            ]
+        }
+     ],
+    "AllowSwipe": true,
+    "AllowCCPayment": true,
+    "AllowACHPayment": true,
+    "ReturnURL": "",
+    "PostBackURL": "",
+    "BillerReference": "",
+    //Updates
+    "BypassPaymentRestrictions" : {
+        "EnableBalanceForward" : true
+    }
+}
+ URL:/spaces/PE/pages/4573397001/WDIL-118+CloudPayv2+Balance+Forward

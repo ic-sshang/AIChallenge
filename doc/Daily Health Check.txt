@@ -1,0 +1,116 @@
+There are a few different types of health checks such as liveliness and readiness probes, to deeper ones such as canary requests to test the correctness of a business function in production.
+Basic Health Checks:
+All applications should at least have liveliness and readiness probes. For more information about them, see this document: 
+Liveness and Readiness Probes
+Who is testing?
+Embedded SREs are responsible for monitoring the jobs during the workweek, and during the weekend the personnel on-call will monitor the jobs. Currently, we are running Health Checks for the following scrum teams:
+Team SPAM
+Wicked Tendies
+Billing Me Softly 
+What are we testing? 
+The aim of a health check is to provide insight into the current “health” of your system.
+Such as: 
+Is the service running? Is the service able to communicate with its dependencies such as the database? If a queue is involved in asynchronous work, is the count staying close to 0? or is work stacking up?
+Health checks should have as little impact on the system as possible. The lower the impact a check has, the more often it can be run without adding a noticeable load. The more often it can run, the more likely it will find issues before your customers.
+The following functions are checked for the respective scrum teams:
+Product Owner
+Product/Function
+Run by
+Time
+Health Check Completion Report
+Team SPAM
+Agent Connect
+SRE for the week run manually.
+SRE  reviews the logs at 8:00 AM CT every work day.
+A log is sent to #spamhealthcheck slack channel.
+AutoPay
+FlexPay
+AP/SP Reminders
+AutoPay Multi Invoice
+CSR Connect
+Recurring Scheduled Payments
+Scheduled Payments
+Scheduled Payments Multi Invoice
+Donations
+Paperless
+Pay By Text
+Cloud Payments (v1+v2)
+Cloud Store - Biller
+Cloud Store - Payer
+High Volume AutoPay
+Limited Card Acceptance
+Wicked Tendies 
+ICG_BillerBankChangedProcessing_TerminalBanks_Recon
+Wicked Tendies' (WT) Health Check job runs automatically. eSRE review the job runs 
+3 times per work day at 9 AM, 12 PM, and 4:30 PM.
+3 logs are sent to #wt-health-check slack channel.
+ICG_CassApplySchedulerLedgerEntries_Recon
+ICG_CassBankActivityImport
+ICG_ChargebacksCountByDate_Recon
+ICG_PayPalDsdrRecordCountsByDate_Recon
+Audit_CassDepositReconciliation_Recon
+AchRejectsCountByDate_Recon
+DigitalWalletPaymentCountByDate_Recon
+PayPalPaymentCountByDate_Recon
+CheckBillerSettledBatches_Report
+EmailQueueProcessor_EmailSentCount_Recon
+ChaseGlobalBin_Recon
+ChasePCL3FileImport_Recon
+PinlessDebitBinFileImport_Recon
+ChaseChargebacks_Recon
+ChaseNocs_Recon
+ChaseRejects_Recon
+ICG_CassFileRecieptProcessing_Recon
+ICG_NachaFileCreation
+ICG_OneBatchFiles_Recon
+Billing Me Softly
+Biller Report Generator
+SRE for the week reviews the log
+8:30 AM per work day
+A log is sent to #bms-billing-me-softly-scrumteam slack channel.
+Biller Report Scheduler
+Cloud Connect WS
+IC Kiosk API
+MC_RPPS
+MC_RPPS Import
+Remote Authentication SOAP
+ICGenerateAgentReport
+Daily Biller Mgt Report Email
+ICDocumentation
+Upload WS Report File
+Create Azure Biller
+Upload WS Report Files
+MyIIS Cloud Store BP
+Cloud POS Pay
+Payer Reject Processing
+Monthly Outbound Campaign
+Ach Reject Blocking
+Email Queue Processing
+When are we testing?
+Team SPAM 
+executes the SQL queries for Health Check once per workday at 8 AM.
+ 
+Wicked Tendies'
+ (WT) Health Check job runs automatically 3 times per work day at 9 AM, 12 PM, and 4:30 PM. These times are after critical jobs have finished processing.
+Billing Me Softly
+ runs the Health Check app manually once per workday at 8:30 AM. 
+Next steps, when Health Check fails…
+Team SPAM:
+If the job fails the initial action is to send a message in 
+#team-spam
+ slack channel and review the logs. Depending on the issue, the team reconfigure settings or make an EBPP/DS item to resolve.
+Wicked Tendies:
+If the job fails the initial action is to send a message in 
+#wt-health-check
+ slack channel and review the logs.
+After the log information is reviewed there are the steps:
+Rerun the Health Check
+If the Health Check is successful after the second attempt, no additional steps are required
+If the rerun fails after the second run, create a DS item and inform the Wicked Tendies team that the issue is under review, and share the DS item. Consult and Escalate as per the criticality of the issue.
+Billing Me Softly:
+If the job fails the initial action is to send a message in 
+#bms-billing-me-softly-scrumteam
+ slack channel and review the logs.
+For example, if a skybot job failed the team would carry further investigation to check what caused the failure. 
+Then a DS item is created to address the issue. 
+ URL:/spaces/DS/pages/2884239470/Daily+Health+Check

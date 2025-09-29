@@ -1,0 +1,33 @@
+As we continue to run security scans (pentesting) we need to follow a few steps before any third party or vendor can run these scans. Once all these steps have been completed the information can be shared to the security Team (Zach Howlett) and he can help assist sharing that information. 
+1. We need to identify their IPs so that we can add to the recaptcha allowedIPs list. We need this so that they can get past the captcha and properly scan our site. You can reference a Jira like so 
+EBPP-12076
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+  where one of the delivery teams (or Dev Support) can do the change. 
+2. The tester’s usually provide an email address where we can then setup some accounts with a username and password in the 
+devtest.invoicecloud.com
+ environment. As of 5/12/2023 the only approved area for scanning is 
+devtest.invoicecloud.com
+ as it is a mirror of production but utilizes the test database and would not affect production. 
+3. Typically we create 3 different accounts.
+Payer/Customer account with their provided email - Login Page for Payer/Customer: 
+https://devtest.invoicecloud.com/portal/2/Site.aspx?G=b8aa13fe-ac69-4885-93cc-0359fd0b5cb4
+  - The URL would vary depending on the biller that was setup for testing. 
+Biller User Account as Support User with their provided email - Biller user would login on the following page: 
+https://devtest.invoicecloud.com/portal/billerlogin.aspx
+  - This URL would be the same for any test biller. 
+Biller User Account as a regular User (Support User unchecked) - Biller user would login on the following page: 
+https://devtest.invoicecloud.com/portal/billerlogin.aspx
+ 
+4. How to create a payer/customer account: 
+Locate Biller Tech Vendor Evaluation in DevTest. As of now we will continue to use the same biller as this biller isn’t used by developers. 
+Locate a customer with invoices and that is already registered (if none register one with your email) 
+Update the email address to that customer account with the tester’s email address. 
+Reset the user’s password where the tester will then receive an email to update their password. 
+5. How to create a Biller User account:
+  1. Locate Biller Tech Vendor Evaluation in DevTest. 
+  2. Select biller in CRM and navigate to the Biller Users section. 
+  3. Create a biller user with the email address provided. (Note: If you need an admin account select “Support        User”) 
+  4. Tester will receive an email to set the password for the new account. 
+ 
+ URL:/spaces/ED/pages/2700345362/Security+Testing

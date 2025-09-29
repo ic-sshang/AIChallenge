@@ -1,0 +1,57 @@
+Release Notes 2025-05-29
+
+
+[NR-Error]-Analyze -Object of type 'System.DBNull' cannot be converted to type 'System.Nullable'
+
+
+
+
+Improved Logging: We’ve enhanced our logging functionality to capture instances of DBNull, ensuring you receive clearer insights without unnecessary noise. This leads to better diagnostics and less confusion! 
+
+
+Code Optimization: By reverting specific log lines, we reduce clutter in New Relic, resulting in more streamlined monitoring and performance metrics.
+
+
+Error Handling Enhancement: We've made adjustments to how we handle the DBNull value, providing more robust error feedback. This means fewer interruptions and smoother user experiences! 
+
+
+
+
+Enjoy these enhancements that make your interactions more efficient and insightful!
+
+
+[NR-Error]-Analyze- Newtonsoft.JsonReaderException in McLogin REST API
+
+
+
+
+Improved Variable Management: Unused variables have been removed, leading to cleaner code and enhanced maintainability.
+
+
+Streamlined Logic: Refactored the 
+GetPaymentId
+ method to reduce complexity, providing a more efficient process for developers.
+
+
+Enhanced Error Handling: Implemented checks for 
+JArray
+ and 
+JObject
+ types, improving reliability in payment ID retrieval.
+
+
+Added Unit Tests: New tests have been created for the 
+UserCreditCardController
+, ensuring functionality is robust and well-validated.
+
+
+Updated JSON Handling: Modified the PayId JSON type to ensure accurate content type checking, enhancing integration reliability.
+
+
+Merged Updates: Integrated the latest changes from the main branch to ensure that all improvements and fixes are up-to-date.
+
+
+
+
+These enhancements make the application more efficient, reliable, and easier to maintain—ensuring a better experience for developers and users alike!
+ URL:/spaces/PE/pages/4363386999/Release+Notes+-+SR+-+2025-05-29

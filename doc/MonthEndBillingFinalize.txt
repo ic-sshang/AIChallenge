@@ -1,0 +1,8 @@
+Overview
+Job Configuration
+The job is run by users of the CRM.   It has a Skybot job configuration but it is not designed to be run via the Skybot scheduler.   Instead it is invoked via a call to the IC Business Service from the CRM.  This call will set a transient ENVIRONMENT variable 
+MONTHENDCONFIGID
+.  The presence of 
+MONTHENDCONFIGID
+ allows the business logic in the job to run.
+ URL:/spaces/ED/pages/3443621893/MonthEndBillingFinalize

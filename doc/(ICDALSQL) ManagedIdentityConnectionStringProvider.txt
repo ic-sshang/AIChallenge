@@ -1,0 +1,51 @@
+ManagedIdentityConnectionStringProvider Class
+Namespace
+IC.Net.DataAccess.MsSql
+Summary
+The ManagedIdentityConnectionStringProvider class provides a connection string provider that adds a managed identity components to the connection string.
+Constructors
+ManagedIdentityConnectionStringProvider(string clientId)
+Initializes a new instance of the ManagedIdentityConnectionStringProvider class using the specified client ID.
+Parameters
+clientId (
+string
+): The client ID for the managed identity.  If the client ID is empty or NULL then the provider will use the default managed identity of the running process.
+ManagedIdentityConnectionStringProvider(string clientId, IConnectionStringProvider connectionStringProvider)
+Initializes a new instance of the ManagedIdentityConnectionStringProvider class using the specified client ID and connection string provider.  Managed identity components will be removed and added to the existing connection string provided by the provider parameter. 
+Parameters
+clientId (
+string
+): The client ID for the managed identity.
+connectionStringProvider (IConnectionStringProvider): The connection string provider.
+Methods
+GetConnectionString()
+Gets the connection string with the managed identity.
+Returns
+string
+: The connection string with the managed identity.
+Remarks
+The ManagedIdentityConnectionStringProvider class uses a lazy initialization pattern to construct the connection string only when it is first accessed. This ensures that the connection string is not created until it is needed.
+Example Usage With App Specific Client ID
+c#
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+    "YourCID", 
+	new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure;")
+);
+
+var database = new Database(connectionStringProvider);
+.
+.
+.
+database.Dispose();
+Example Usage For Default Identity ( and for k8s Workload Identity)
+c#
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+    new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure;")
+);
+
+var database = new Database(connectionStringProvider);
+.
+.
+.
+database.Dispose();
+ URL:/spaces/ED/pages/3874881628/ICDALSQL+ManagedIdentityConnectionStringProvider

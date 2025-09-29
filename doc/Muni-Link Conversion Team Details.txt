@@ -1,0 +1,95 @@
+Description
+Things to Know when converting a biller to Muni-Link real-time integration, including authentication setup, ACH handling, and batch close alignment.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+This document outlines the process for converting a biller to Muni-Link, a multi-user software integration. The conversion includes updates to authentication methods, ACH processing through InvoiceCloud, and alignment of batch close settings. It also addresses data update procedures and considerations for invoice type handling and historical bill image retention.
+ Process
+Definitions
+ACH
+: Automated Clearing House; electronic payment processing system.
+Authentication Type
+: The method used to verify user identity during login.
+Batch Close
+: The time at which daily transaction batches are finalized.
+Invoice Type ID
+: Identifier used to distinguish between different invoice categories.
+OBD
+: Online Bill Display; feature allowing users to view and manage bills online.
+SOW
+: Statement of Work; formal document outlining project deliverables and timelines.
+Key Responsibilities
+CSM
+: Open add-on opportunity for autopay conversion if ACH is handled in-house or by a third party.
+Data Services
+: Update authentication type and username fields in production environments.
+Delivery Team
+: Handle autopay conversion process.
+Project Manager
+: Confirm batch close time matches Muni-Link settings.
+Quality Assurance
+Biller
+: Confirm understanding that historical bill images will not be retained post-conversion.
+Data Services
+: Validate that authentication type is correctly set to “Username with Password.”
+Project Manager
+: Ensure batch close time is aligned with Muni-Link’s default (typically midnight local time).
+Roles
+CSM (Customer Success Manager)
+: Manages client communication and opens necessary opportunities.
+Data Services
+: Executes backend updates and data queries.
+Delivery Team
+: Implements technical aspects of the conversion.
+Project Manager
+: Oversees the conversion timeline and ensures process alignment.
+Procedure
+ACH Handling
+Who
+: CSM, Delivery Team
+Confirm all ACH must go through InvoiceCloud.
+If ACH is handled in-house or via a third party:
+CSM opens an add-on opportunity.
+Delivery Team manages the autopay conversion.
+Authentication Setup
+Who
+: Data Services
+For test portals: Set authentication to “Username with Password.”
+For production:
+Open a JIRA request to update usernames using the following query:
+Update AuthenticationTypeID to 2 (“Username with Password”).
+Batch Close Configuration
+Who
+: Project Manager
+Confirm that the IC Batch Close time (CRM > Profile tab) matches Muni-Link’s default (usually midnight local time).
+Invoice Type ID Handling
+Who
+: Delivery Team
+If the same account number is used for multiple invoice type IDs:
+Apply additional advanced settings.
+If OBD is enabled, instruct the biller to manually allocate payments.
+Bill Image Retention Notice
+Who
+: Project Manager
+Inform the biller that:
+Bill images will not be converted.
+Historical bill images will not be retained post-conversion.
+IC will not present bill images until the next billing cycle.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4470210596/Muni-Link+Conversion+Team+Details

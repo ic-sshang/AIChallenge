@@ -1,0 +1,21 @@
+Definition
+A Jira status that indicates that the item needs to be reviewed or is currently being reviewed by one or more peers or tech leads. The review will consist of making sure that the design and logic of the code match the deliverables on the Jira item description. 
+Process: 
+Peer Review:
+Move your item from In Progress to Tech Lead review.
+Request a reviewer in the #idev-support Slack channel (or via direct message).
+Add the reviewers as “Optional Reviewers” on the item’s associated Pull Request.
+Reviewers will review the design and logic of the code and add in-line comments on the PR as needed.
+The developer will address comments by making changes and Resolving the comments. 
+If changes are made on the PR, the tester must retest the item and the Reviewer must review the PR again. 
+Once all changes have been made and the PR has been approved, the Reviewer should move the item to CRC Review. 
+Tech Lead Review
+[To Be filled out]
+Testing
+Relevant Fields
+Jira status field: 
+Engineering Tab:
+Fill out the “Pull Request” field in the Engineering tab so the Reviewer can find your code. 
+Testing Tab:
+Fill out the “Test Engineer” portion of this tab. The reviewer will fill out the “Test/Code Review” field. 
+ URL:/spaces/DS/pages/2584903688/Tech+Lead+Review

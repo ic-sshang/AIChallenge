@@ -1,0 +1,162 @@
+2
+4
+false
+list
+false
+Sprint 1:: 20 points
+1. Switch to Enterprise Mode to enable Developer Portal::  1  [Complete]
+Use the License mode 
+ or 
+ please get the License Key from Kong Support portal.
+Save in file and run the following command to mount the License Key into a Secret
+EBPP-11546
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+kubectl create secret generic kong-enterprise-license --from-file=license=license.json -n kong --dry-run=client -o yaml | kubectl apply -f -
+2. Switch Services to Private/Internal Load Balancer::  2  [Complete]
+Use the same annotation as the Load Balancer.
+EBPP-11971
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+3. Switch to external Postgres DB::  5  [Complete]
+Use the Database config settings explained in the following link:  
+https://docs.konghq.com/gateway/latest/reference/configuration/#database
+ 
+Set the ENV’s in the Helm Chart as shown in the following link:  
+https://github.com/Kong/charts/blob/main/charts/kong/values.yaml#L85
+ 
+EBPP-11972
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+4. Private DNS Zone recordsets::  2  [Complete]
+EBPP-11968
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+5. Migrate the Helm and Kubectl commands into IaC::  2  [Complete]
+EBPP-11546
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+6. Familiarize ourselves with helm values.yaml file::  5  [Complete]
+https://github.com/Kong/charts/tree/main/charts/kong/example-values
+ 
+EBPP-11546
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+7. Set up SSL/TLS Certs::  3  [Complete]
+EBPP-11774
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Sprint 2:: 9 points
+1. Remove 
+Quickstart
+ nomenclature from the Kong Deployment K8s Resources:: 1  [Complete]
+EBPP-12180
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+2. Enable the use of 
+api{.lower_environment}.invoicecloud.com
+ hostname for API Routing:: 8  [In-Progress]
+EBPP-12181
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Sprint 3:: 13 Points
+1. Add Multiple Availability Zone AKS Deployment to Terraform Module:: 2  [Complete]
+EBPP-12054
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+2. Add Kong Application Node Pool to the Kong AKS Cluster:: 1  [Complete]
+EBPP-12479
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+3. Seed Kong Kubernetes Secrets in KeyVault via IaC for 
+kong-config-secret
+:: 1  [Complete]
+EBPP-12480
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+4. Create DevTest Deployer Service Principal:: 1  [Complete]
+EBPP-11758
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+5. Add Kong Team Groups to the Kong AKS Cluster mapping Team Personas to AKS Roles:: 1  [Complete]
+EBPP-12506
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+6. Deploy Kong to Primary Region in DevTest Environment:: 3  [Complete]
+EBPP-11857
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+7. Add users to the DEV Instance via ClickOps:: 1  [Complete]
+ and 
+ 
+EBPP-12583
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+8. Add NewRelic Agent to Kong Clusters:: 1  [Complete]
+EBPP-12584
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+9. Global Plugin to get metrics from Kong for Zipkin:: 2  [Complete]
+EBPP-12585
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Sprint 4
+1. POC using Secret Provider Class for Kong ENV Secret References:: 2 [Complete]
+EBPP-12725
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+2. Add MailGun Key Vault for each Environment:: 1 [Complete]
+EBPP-12769
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+3. Add RBAC to App Service Deployer Service Principals:: 2
+EBPP-12586
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+4. Make direct route from Kong to Payer Cluster to avoid Palo Alto hop in between:: 3
+EBPP-12587
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+5. Create a Database Backup Strategy for Kong Postgres DB:: 3
+EBPP-11855
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+6. Add RBAC for Kong Team Specific AAD Groups to RG, Postgres SQL DB, and AKS Cluster:: 1 [Complete]
+EBPP-11832
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+7. Create Kong_Infrastructure Deployer PRD Service Principle via Global_AAD Repo:: 1 [Complete]
+EBPP-11759
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+8. Deploy Kong_Infrastructure to PRD PRI and SEC Region:: 1 [In-Progress]
+EBPP-11858
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ URL:/spaces/icinfradoc/pages/2700902408/Kong+Sprints

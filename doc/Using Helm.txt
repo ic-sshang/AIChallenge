@@ -1,0 +1,141 @@
+Overview
+This guide will provide a high-level guide of the 
+helm
+ CLI and some basic use examples. This guide will not cover Helm chart development, but it will cover the process of pushing a chart to a container registry and installing it to a cluster.  Helm is “the package manager of Kubernetes” and makes it much easier to work with Kubernetes, especially in the case of multi-resource deployments.
+Manual application of individual Kubernetes objects can easily be done with the 
+kubectl
+ CLI - however, many workload deployments will contain namespaces, pod definitions, services/ingresses, CRDs, secrets, etc. Manually applying each and every one of these resources and subsequently troubleshooting them on an individual basis quickly becomes cumbersome and error prone. This is where Helm steps in to fill the gap. Helm allows multiple resources to be bundled together in a “chart” which are often composed in such a way that they allow for customization and extension. Charts, like containers, are published to a remote repository - whether public or private - and are typically “installed” into a cluster with user-provided values. 
+Prerequisites
+Install 
+Helm
+ - on Windows, it is highly recommended to use one of the supported package managers. At the time of writing, these are 
+choco
+, 
+winget
+, and 
+scoop
+.
+Keep the Helm documentation handy - this guide will only cover very basic use of this tool
+Azure Container Registry
+Assuming you have created a chart locally and you wish to deploy it for testing you will need to first publish the chart to a container registry. For our use case, Azure Container Registry is the target chart repository.
+As with most processes involving Azure resources, we will begin by running the 
+az login
+ command.
+bash
+# Run az login - this will open an SSO prompt external to your terminal.
+C:\> az login
+Once you are logged in, select the subscription you intend to use, and ensure that you know which Azure Container Registry instance you will be working with. With those details in mind, we will need to login to the container registry using the 
+az acr
+ command.
+bash
+# This will login to ACR - but there are some extra steps needed.
+C:\> az acr login --name acrglbimages1sbx --expose-token
+
+# This approach is recommended to avoid the necessity of multiple copy/paste
+# operations for subsequent commands
+C:\> $TOKEN=$(az acr login --name acrglbimages1sbx --expose-token --output tsc --query accessToken)
+Using 
+--expose-token
+ with 
+az acr login
+ will output a JWT that will be required for authenticating with additional CLI tools - Helm & Docker (or Podman).
+For example - once we’ve stored the above in a variable, 
+$TOKEN
+, we can subsequently login to the registry via Helm like so:
+bash
+# Login to ACR using the Helm package manager.
+C:\> helm registry login acrglbimages1sbx.azurecr.io --username 00000000-0000-0000-0000-000000000000 --password $TOKEN
+Once logged into the container registry, you will be able to push and pull charts.
+Pushing and Pulling Charts
+If you have developed a chart locally, you will need to push it to the registry before applying it to a remote cluster. Helm charts are treated similar to container images in that they are tagged and individually versioned. Unlike containers, the chart version and name are configured local to the chart and do not require a 
+tag
+ step. Rather, each Helm chart contains a 
+Chart.yaml
+ file that indicates the chart’s name + version information.
+yaml
+# Chart.yaml - additional fields excluded.
+apiVersion: v2
+name: my-helm-chart
+version: 1.0.0
+ 
+# The 'version' field can accommodate kebab-case string values, as well.
+# make sure to use quotations around the version number in this case.
+Once you are satisfied with a chart you are developing locally - you can package it using 
+helm package
+ and push it to the registry by utilizing 
+helm push
+ 
+bash
+# Package the chart
+C:\> helm package .\charts\my-chart
+Successfully packaged chart and saved it to: my-chart-1.0.0.tgz
+
+# Push the chart to the Azure Container Registry.
+C:\> helm push my-chart-1.0.0.tgz oci://acrglbimages1sbx.azurecr.io/helm
+Pushed: acrglbimages1sbx.azurecr.io/helm/my-chart:1.0.0
+Digest: sha256:<hash-value>
+  A couple of things to note in the above example - first, the container registry is prefixed with 
+oci://
+ - this indicates the target is an 
+Open Container Initiative
+ compliant registry. Second, the container registry is suffixed with 
+/helm
+ - charts pushed to a remote container registry 
+should
+ follow this type of convention - 
+/helm
+ or 
+/charts
+ are both commonly used - our implementation specifically will use 
+/helm
+, such that the chart created above will be visible in the container registry as 
+helm/my-chart:1.0.0
+.
+Pulling a chart down locally will allow you test its installation with different values - for instance, if you want to deploy a container you’ve developed locally using an existing chart or if you want to apply the chart with custom settings, examples being KEDA scaling thresholds, app settings, health check debounces, or resource utilization.
+bash
+# Pull a helm chart locally.
+C:\> helm pull oci://acrglbimages1sbx.azurecr.io/helm/my-chart:1.0.0
+Installing Charts
+Helm will use the active 
+kubectl
+ context for any operations that are run from this point forward - review the 
+Using the kubectl CLI
+ documentation for a refresher on managing the Kubernetes context locally using 
+kubectl
+.
+Developed Helm charts are typically packaged with a 
+values.yaml
+ file that is applied by default and contains settings that can be overridden either using the 
+--set
+ command or by directly applying a 
+yaml
+ file using the 
+helm
+.
+bash
+# Install a Helm chart using local yaml files.
+C:\> helm install <appName> helm/my-chart:1.0.0 -f values.yaml -f overrideValues.yaml
+
+# Install a Helm chart, passing values manually.
+C:\> helm install <appName> helm/my-chart:1.0.0 --set name=my-app --set someOtherValue=my-value
+In the above example, a Helm chart is installed to the target cluster - 
+-f values.yaml
+ applies a set of configuration values to the chart from a local yaml file - the second file passed, 
+-f overrideValues.yaml
+, will override anything that was passed in the initial 
+values.yaml
+ file. 
+helm install
+ will follow this convention for any additional files provided as arguments, with values taking precedence from left to right.
+Equivalently, the second example above demonstrates how values are manually applied using 
+--set <key>=<value>
+ - these also will be applied with precedence being given to rightmost values.
+Helm charts can also be uninstalled using the following command:
+bash
+# Uninstall an installed Helm chart.
+C:\> helm uninstall <appName>
+Running this command will remove any resources deployed by the chart - this is a much simpler path than manually removing each individual resource.
+Resources
+Helm | Helm
+Store Helm Charts in Azure Container Registry - Azure Container Registry | Microsoft Learn
+ URL:/spaces/PMK/pages/4298113046/Using+Helm

@@ -1,0 +1,70 @@
+Overview
+Date Created:
+ August 21, 2025
+Author:
+ 
+ , 
+ 
+Status:
+ Open
+Priority:
+ High
+Problem Description
+The PayFac project currently lacks a reliable mechanism to track the status of transactions once they are sent to the Customer Integration System (CIS). This creates visibility gaps for both internal teams and Billers, making it difficult to confirm whether transactions have been successfully processed, are pending, or have failed.
+Context
+InvoiceCloud serves as the PayFac, enabling Billers to process customer payments through the platform. Once a payment is initiated, InvoiceCloud posts the transaction details to each Biller’s CIS system for reconciliation and downstream processing. Currently, there is no standardized or automated method for receiving confirmation or updates from these CIS systems. This results in limited transparency for Billers, the PayFac operations team, and customer support when attempting to verify the final status of payments.
+Impact
+The lack of transaction-level status tracking between InvoiceCloud and Biller CIS systems creates significant funding and reconciliation challenges. Since the Biller’s CIS serves as the system of record for their services, funding transactions that have not been confirmed as successfully posted introduces a risk of misalignment. A Biller may not recognize or accept a payment that InvoiceCloud has already funded, creating disputes and potential financial exposure.
+Additionally, discrepancies arise when the data in the Biller’s CIS does not match the reports provided through the InvoiceCloud Biller Portal. This inconsistency complicates reconciliation efforts for Billers, increases operational friction, and reduces trust in the platform’s financial accuracy. Without reliable transaction status tracking, InvoiceCloud cannot fully implement a “good funds” model that ensures only approved, aged, and posted transactions are included in funding batches.
+Stakeholders
+Product Team
+ – Responsible for defining requirements and prioritizing enhancements to transaction tracking and funding logic.
+Engineering Team
+ – Owns the design and implementation of transaction-level status tracking, integrations with CIS systems, and updates to the Biller Portal.
+Billers
+ – Directly impacted by reconciliation accuracy and funding reliability, as their CIS serves as the system of record for their services.
+Customer Support
+ – Relies on accurate transaction data to respond to Biller inquiries and resolve discrepancies efficiently.
+Constraints or Considerations
+Payment Record Tracking Changes
+ – The payments table (SQL) must be updated to record whether each payment was sent to the CIS. This requires additional code changes across the platform to ensure the new field is consistently populated, maintained, and leveraged in downstream processes.
+Batching Process Changes
+ – The current batching logic simply aggregates approved payments for daily settlement. With the PayFac model, batching must evolve to include only those payments that have been approved, meet funding delay criteria, and are confirmed as posted in the Biller’s CIS.
+Success Criteria
+The business has determined and documented a clear approach for addressing CIS transaction status tracking. This may involve changes to batching logic, modifications to the Payments table (e.g., new columns to capture CIS status), or an alternative solution agreed upon by stakeholders.
+The chosen approach determines what payments are included in funding batches.
+The solution provides consistent, accurate visibility for Billers, Product, Engineering, and Customer Support, reducing reconciliation gaps and disputes.
+The decision and design are communicated across relevant teams, with implementation planned in a way that balances technical feasibility, operational efficiency, and regulatory requirements.
+Related Documentation
+(Placeholder: Add links to Confluence pages, Jira tickets, or external references here)
+Solutions Identified
+Option 1
+Option 2
+Option 3
+Description
+No payment delivery tieback to transaction (data pump failures reside in data pump view)
+Capture the payment delivery status and tie it back to the payment. Use it for “DISPLAY ONLY” 
+(funding criteria still based on actual payments, not payment delivery)
+Capture the payment delivery status (if bypassing option2) and add an option to use payment delivery status for Funding Criteria 
+(this includes the ability to go from option 2 to option 3 once available)
+Compared to Current
+Same as current
+New
+New
+LOE
+N/A
+Medium
+Large
+Risks
+None, this is how IC works today
+Gap for PSN billers
+Fills gap for PSN billers and *potentially enhances the experience for IC billers 
+*assumption not validated
+Benefits & Value
+Allows IC to remain the system of record for payments within a given period and give the biller increased visibility to any payment that may not have been delivered to their CIS.
+Billers have the option to only receive funding for payments that match what was posted to their CIS system. This model is currently in place for PSN billers who want to use the CIS for reconciliation. 
+Workaround(s)
+Data pump reporting in biller portal
+Statement Reconciliation Report will include details on the status of the payment delivery attempt 
+Statement Reconciliation Report will include details on the status of the payment delivery attempt 
+ URL:/spaces/EA/pages/4596138001/Problem+Statement+Tracking+the+Status+of+Each+Transaction+Sent+to+the+CIS

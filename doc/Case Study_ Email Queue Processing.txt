@@ -1,0 +1,146 @@
+Email Queue Processing has proven to be a challenge when it comes to unit testing. The application is high risk therefore depending on the changes it may be best to tackle small changes at a time for refactoring or focusing on making the new changes in a better state to easily test. 
+We will be focusing on this PR as it did lead to a change failure and is a good example of one of the most common changes in Email Queue Processing 
+Pull Request: 
+https://dev.azure.com/invoicecloud/Src/_git/EmailQueueProcessing/pullrequest/28276
+Pull Request Changes: 
+As you can see a core area was modified but contained no unit testing. This area “
+GetProcessingItemRequirements
+" is one of the core methods for each email queue item that tends to have a substantial amount of code with business logic to replace values on the email templates. In most cases due to deadlines, the teams will continue to add code to the very long method which adds to the tech debt and increases complexity when refactoring or attempting to test any logic within that method. 
+Increase code complexity or Lines of Code
+Dont
+Break apart new code into its own method or class. 
+Do
+This PR did attempt to clean up and create new methods although it still retained database dependencies making this very difficult to test. 
+The suggested approach to increase test code coverage is to remove the dependency on the database. 
+Ex: Most email queues inherit off the 
+EmailQueueBaseProxy
+ which does supports DI for the database. Here we are creating a new constructor that allows us to remove the database dependency. 
+New methods were then updated to support these new changes. 
+With the above changes, we can now test our new code changes without any database dependencies. In this particular scenario, we are able to hit 100% code coverage on these new changes. 
+PR For Reference - 
+https://dev.azure.com/invoicecloud/Src/_git/EmailQueueProcessing/pullrequest/28373
+Imports EmailQueueProcessing
+Imports IC.Database.Databases
+Imports IC.EmailQueue
+Imports IC.Logins
+Imports Moq
+
+<TestClass()>
+Public Class ChaseBatchCloseNotificationsTests
+
+    Private _databaseMock As Mock(Of DatabaseHandlerV1)
+    Private _repositoryMock As Mock(Of IRepository)
+
+    Private _queue As ChaseBatchCloseNotificationsQueue
+
+    <TestInitialize()>
+    Public Sub Initialize()
+        _databaseMock = New Mock(Of DatabaseHandlerV1)
+        _repositoryMock = New Mock(Of IRepository)
+
+        'Here we are able to use the new constructor and mock the database 
+        'allowing us to not rely on the database depencendy and test our business logic
+        _queue = New ChaseBatchCloseNotificationsQueue(_databaseMock.Object)
+    End Sub
+
+
+    <TestMethod()>
+    Public Sub SetAmexEmailTemplate_ShouldSetOptBlueTemplate_WhenAmexLiveAndOptBlueAndCCTerminalExists()
+        'Arrange
+        Dim dataTable = New DataTable
+        dataTable.Columns.Add(New DataColumn("BillerID"))
+        dataTable.Columns.Add(New DataColumn("FKID"))
+        dataTable.Columns.Add(New DataColumn("Parameters"))
+        dataTable.Columns.Add(New DataColumn("EmailSubject"))
+        dataTable.Columns.Add(New DataColumn("EmailRecipient"))
+        Dim dRow As DataRow = dataTable.NewRow()
+
+        dRow("BIllerID") = 500
+        dRow("Parameters") = "test"
+        dRow("FKID") = 500
+
+        Dim eqpTable As New EmailQueueTableCollection(billerID:=500)
+        Dim package As New EmailQueueDataPackage(dRow, eqpTable)
+
+        Dim emailTemplate = "defaultTemplate.htm"
+        Dim settledBatchDT = New DataTable()
+        settledBatchDT.Columns.Add("paymenttypeid")
+        settledBatchDT.Columns.Add("terminalID")
+        settledBatchDT.Rows.Add(1, 123)
+
+        _databaseMock.Setup(Function(db) db.GET_DATATABLE(It.IsAny(Of String), It.IsAny(Of Integer))).Returns(settledBatchDT)
+
+        Dim terminalDT As New DataTable()
+        terminalDT.Columns.Add("AmexLive", GetType(Boolean))
+        terminalDT.Columns.Add("AmexProgramTypeID", GetType(Integer))
+        Dim terminalRow As DataRow = terminalDT.NewRow()
+        terminalRow("AmexLive") = True
+        terminalRow("AmexProgramTypeID") = AmexProgramType.OptBlue
+        terminalDT.Rows.Add(terminalRow)
+
+        _databaseMock.Setup(Function(db) db.GET_DATATABLE("exec tps.selTerminals @TerminalID=123", 500)).Returns(terminalDT)
+
+
+        'Act
+        _queue.SetAmexEmailTemplate(package, emailTemplate)
+
+
+        'Assert
+        Assert.AreEqual("InvoiceCloud_BatchClose_Chase_OptBlue.htm", emailTemplate)
+
+
+    End Sub
+
+    <TestMethod()>
+    Public Sub SetAmexEmailTemplate_ShouldSetOptBlueTemplate_WhenAmexLiveAndOptBlueAndACHTerminalExists()
+        'Arrange
+        Dim dataTable = New DataTable
+        dataTable.Columns.Add(New DataColumn("BillerID"))
+        dataTable.Columns.Add(New DataColumn("FKID"))
+        dataTable.Columns.Add(New DataColumn("Parameters"))
+        dataTable.Columns.Add(New DataColumn("EmailSubject"))
+        dataTable.Columns.Add(New DataColumn("EmailRecipient"))
+        Dim dRow As DataRow = dataTable.NewRow()
+
+        dRow("BIllerID") = 500
+        dRow("Parameters") = "test"
+        dRow("FKID") = 500
+
+        Dim eqpTable As New EmailQueueTableCollection(billerID:=500)
+        Dim package As New EmailQueueDataPackage(dRow, eqpTable)
+
+        Dim emailTemplate = "defaultTemplate.htm"
+        Dim settledBatchDT = New DataTable()
+        settledBatchDT.Columns.Add("paymenttypeid")
+        settledBatchDT.Columns.Add("terminalID")
+        settledBatchDT.Rows.Add(2, 123)
+
+        _databaseMock.Setup(Function(db) db.GET_DATATABLE(It.IsAny(Of String), It.IsAny(Of Integer))).Returns(settledBatchDT)
+
+        Dim terminalDT As New DataTable()
+        terminalDT.Columns.Add("AmexLive", GetType(Boolean))
+        terminalDT.Columns.Add("AmexProgramTypeID", GetType(Integer))
+        terminalDT.Columns.Add("ModuleParameters", GetType(String))
+        Dim terminalRow As DataRow = terminalDT.NewRow()
+        terminalRow("AmexLive") = True
+        terminalRow("AmexProgramTypeID") = AmexProgramType.OptBlue
+        terminalRow("ModuleParameters") = "test"
+        terminalDT.Rows.Add(terminalRow)
+
+        _databaseMock.Setup(Function(db) db.GET_DATATABLE("exec tps.selTerminals @TerminalID=123", 500)).Returns(terminalDT)
+
+        _databaseMock.Setup(Function(db) db.GET_DATATABLE("exec tps.selTerminals @PaymentTypeID=1, @ModuleID=3", 500)).Returns(terminalDT)
+
+        'Act
+        _queue.SetAmexEmailTemplate(package, emailTemplate)
+
+
+        'Assert
+        Assert.AreEqual("InvoiceCloud_BatchClose_Chase_OptBlue.htm", emailTemplate)
+
+
+    End Sub
+End Class
+
+SonarQube Results
+ URL:/spaces/ED/pages/3492315137/Case+Study+Email+Queue+Processing

@@ -1,0 +1,181 @@
+note
+Executive summary
+OBD Migration 2023
+
+
+Executive summary
+OBD Migration 2023
+
+
+Vision
+Migrate any remaining billers to CASS with the least amount of issues related to Funding and/or reconciliation. 
+Strategies
+Plan of Action below: 
+Prioritize known issues and start to complete P1 - P# level items
+Identify any gaps and/or issues that have not been created in 
+Jira 
+sheet. (create new Jira items as needed)
+Identify all manual processes done by the team and get created in Jira 
+Identify the level of priority for all items created on #2 & #3
+ How we execute
+Execution plan
+Follow Strategies and commit to completing all P1-P# level items. 
+Jira Items.xlsx
+ 
+Migration Schedule
+Date IC Receives Funding
+# Billers To Be Migrated
+9/6/2023
+50 billers
+9/19/2023
+75 billers
+10/3/2023
+100 billers
+Include VIP/Risk
+10/17/2023
+100 billers
+Include VIP/Risk
+10/24/2023
+177 billers
+Include VIP/Risk
+What we're 
+not
+ doing
+It is equally important to state what you are not doing for clarity and alignment. List the items that were discussed but did not make the list of priorities.
+Risks and mitigations
+Risks
+Impact
+Mitigation
+Resolution
+Documentation
+Returns not processing 
+High
+Red
+  8/1/2023 - 4 transactions for a total of 3 customers 
+Chris will create a single file manually and then upload through FTP 
+8/1
+https://invoicecloud.atlassian.net/l/cp/1emZF9yX
+ 
+Reversal & Returns Ledger Date
+High
+Red
+  All returns from 7/27 to 7/31
+BMS team will fix issue - 
+EBPP-13440
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+8/1 code change was deployed on MC_RPPS process. EBPP-13440
+OBD Batch Failed
+High
+Red
+  2 OBD batches failed due to SP issue that was rolled out for other payment types (braintree)
+Adrian worked with Kelsey to fix the SP issue so that the changes didn’t apply for OBD batches
+N/A
+Staging Ledger Details
+3 returns didn’t get picked up on the 
+SpPromoteLedgerBalanceDetail
+SP. These returns were imported on a weekend so thinking there is something missing. 
+Reran the process so that these 3 returns got picked up and had their ledger balance date set. 
+N/A
+Nacha File Process Delayed
+low
+Yellow
+  - Nacha file was created 15 minutes after its normal scheduled run which led to an extra batch being included. 
+Job was held on skybot after a recent deployment. Released job on skybot and kicked off Step-1. The root cause was related to a failure with deploying a dot net 6 application to test1 server. Infra team added missing Net dependency so that future deployments wouldn’t fail for this process. 
+N/A
+Fiserv Returns
+Low - Fiserv returns imported on Saturdays should have their ledger date be 2+ business days from the following Monday or Business Day. 
+No action needed as it doesn’t occur often. Jira item created to fix the business day logic for Returns imported for Fiserv on Saturdays. 
+N/A
+CassBankActivity Failed
+Low - Process failed to import bank activity files which delayed payments from getting to gateway for recently migrated billers. 
+Root cause was related to the test payments. Job does send a job failure alert but opsgenie alert wasn’t configured. 
+As of 8/15/23 we created a new alert to notify the team. 
+8/15 alert was created to notify team when process fails. 
+EBPP-13590 is in progress. ETA 8/25
+Cass Processes - Schedule
+ 
+Created document to show schedule of jobs 
+Nacha File Process Delayed
+Low - 8/23/23 - Filed was created with $0 amounts
+Team reset funding batches and re-ran the process to create the new file. 
+8/24 - 
+EBPP-13821
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Item has been created to resolve issue
+Double Funding for RPPS Batches
+Medium - 09/06/23 - 3 billers were funded twice during migration from August.
+Team created funding batch to debit billers
+09/06 - Jira - 
+EBPP-14050
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Double Funding for AutoMatched Payments
+High - 09/12/23 - Multiple billers were funded twice during their migration 
+Team is going to create funding batch to debit billers. 
+09/18 Jira - 
+EBPP-14176
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+EBPP-14193
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Missing ACH Reject 
+Medium - 09/13/23 - 
+Missing reject from Cass + not showing up in OBD Unrecovered Returns report
+Team researched and identified that we never received the record. 
+Finance reached out to Cass and confirmed the issue was on their end. Pending reject from Cass
+Fiserv/Rpps Return Incorrect Ledger Date
+Medium - 09/12/23 - 
+Returns showed up a day later on OBD Ledger Report
+No action needed as records were processed. Team identified root cause and created an item to fix the issue.  
+EBPP-14141
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Cass Process will now alert if there are any pending records but final fix will be on Jira posted above. 
+NOC incorrect debits
+09/15 - 2 rejects were debited from ledger causing discrepency on ledger
+Pending action items from Finance Team
+EBPP-14215
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Missing Rejects
+10/2 - Rejects were missing for BID 856 which led to reconciliation issues
+Working session with Finance to identify funding batches
+Identified that rejects were coming in as NOCs instead of R Codes. CASS confirmed an issue on their end. Pending update 10/11
+Fiserv Bank Activity Recipient Names
+10/4 - 4 bank activity recipient names not following BID - Format
+OBD Cass run will continue to process valid recipients and trigger an alert
+Boarding team reaches out to Fiserv to get items correct. (Fixed on 10/10/)
+OBD Batch Failed to Close
+10/11 - 1 Biller with two OBD terminals did not have their second terminal close
+CS confirmed we should let the batch close on its own on the next scheduled time. 
+Created bug item to address the issue. EBPP-14729
+Issue was related to process would fail on closing first batch and did not attempt to close the second batch. 
+Cass Nacha Summary Email not sent
+10/30 - Email wasn’t sent with sum amounts of Nacha files
+Team reviewed the process and shared the details through slack 
+Created a bug item to address issue with SP being called too many times. Team also added alerting on a gap related to not marking batches as funded. 
+EBPP-15097
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Open questions and next steps
+Question
+Next step
+Owner
+Date of resolution
+SP Rollout for the productionID
+Verify with Wicked Tendies and DDS team
+ 
+8/1/203
+ Appendix
+List all supporting material and data.
+ URL:/spaces/EN/pages/2783477782/Online+Bank+Direct

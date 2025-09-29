@@ -1,0 +1,33 @@
+How to Capture a Memory Dump
+Before anything else, make sure the server from which you’re pulling the memory dump is 
+pulled from rotation
+.
+ Capturing a memory dump does not seem to have any impact, but we’re better safe than sorry.
+Another note: 
+treat memory dumps as sensitive information!
+ They’ll often contain Payer information, possibly including unencrypted credit card info.
+RDP into the server
+Run 
+Task Manager
+ as an admin
+Navigate to the 
+Details
+ tab
+Ensure the column 
+Command Line
+ is included in the view (may need to right click and add the column)
+Find the 
+w3wp.exe
+ process where 
+Command Line
+ includes the target app pool’s name
+Right click this process and hit 
+Create Dump File
+This will output a 
+dmp
+ file to your user’s folder on the C: drive. 
+Don’t leave it there! 
+Copy/upload the file wherever you need it to be, then 
+permanently delete it 
+from the server.
+ URL:/spaces/platform/pages/4054482948/VM+Memory+Analysis

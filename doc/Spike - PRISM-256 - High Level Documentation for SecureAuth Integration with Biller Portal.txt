@@ -1,0 +1,315 @@
+SecureAuth SSO Login Implementation in Biller Portal
+Overview
+The 
+SecureAuth SSO (Single Sign-On)
+ login implementation in the 
+Biller Portal
+ project enables users to authenticate using 
+OAuth 2.0 protocol
+ provided by SecureAuth. This integration spans across UI layers, backend logic, and application configuration.
+The flow begins from 
+BillerLogin.aspx
+Authentication is handled in 
+SecureAuthCallback.aspx.vb
+Successful logins redirect to 
+BillerWelcome.aspx
+High-Level System Architecture
+Flow Diagram
+Components Involved
+1. 
+UI Components
+BillerLogin.aspx
+Hosts the “Continue with SecureAuth” button
+Event: 
+btnSecureAuthLogin_Click
+ in 
+BillerLogin.aspx.vb
+SecureAuthCallback.aspx
+Handles the OAuth callback
+Processes the code and retrieves user information
+BillerWelcome.aspx
+Post-login landing page
+2. 
+Backend Logic
+🔹 BillerLogin.aspx.vb
+Responsibility
+: Redirect user to SecureAuth login URL
+Key Function
+:
+vbnet
+Protected Sub btnSecureAuthLogin_Click(sender As Object, e As EventArgs)
+    Dim clientId As String = ConfigurationManager.AppSettings("SecureAuth.ClientId")
+    Dim redirectUri As String = ConfigurationManager.AppSettings("SecureAuth.RedirectUri")
+
+    Dim authUrl As String = "https://invoicecloud.us.connect.secureauth.com/invoicecloud/default/oauth2/authorize" &
+                            "?response_type=code" &
+                            "&client_id=" & clientId &
+                            "&redirect_uri=" & HttpUtility.UrlEncode(redirectUri) &
+                            "&scope=openid profile email"
+
+    Response.Redirect(authUrl)
+End Sub
+🔹 SecureAuthCallback.aspx.vb
+Responsibility
+:
+Exchange authorization code for access token
+Retrieve user info
+Match user to biller
+Initialize session
+Redirect to 
+BillerWelcome.aspx
+Key Functions
+:
+Exchange Code for Token
+vbnet
+Private Function ExchangeCodeForToken(code As String, lblStatus As Label) As String
+    Dim tokenUrl As String = ConfigurationManager.AppSettings("SecureAuth.TokenUrl")
+    Dim clientId As String = ConfigurationManager.AppSettings("SecureAuth.ClientId")
+    Dim clientSecret As String = ConfigurationManager.AppSettings("SecureAuth.ClientSecret")
+    Dim redirectUri As String = ConfigurationManager.AppSettings("SecureAuth.RedirectUri")
+
+    Dim postData As String = "grant_type=authorization_code" &
+                             "&code=" & HttpUtility.UrlEncode(code) &
+                             "&redirect_uri=" & HttpUtility.UrlEncode(redirectUri) &
+                             "&client_id=" & HttpUtility.UrlEncode(clientId) &
+                             "&client_secret=" & HttpUtility.UrlEncode(clientSecret)
+
+    Dim client As New System.Net.WebClient()
+    client.Headers(HttpRequestHeader.ContentType) = "application/x-www-form-urlencoded"
+
+    Dim response As String = client.UploadString(tokenUrl, postData)
+    Dim json As JObject = JObject.Parse(response)
+    Return json("access_token").ToString()
+End Function
+Retrieve User Information
+vbnet
+Private Function GetUserInfo(accessToken As String) As JObject
+    Dim userInfoUrl As String = ConfigurationManager.AppSettings("SecureAuth.UserInfoUrl")
+    Dim request As HttpWebRequest = CType(WebRequest.Create(userInfoUrl), HttpWebRequest)
+    request.Method = "GET"
+    request.Headers.Add("Authorization", "Bearer " & accessToken)
+
+    Dim response As HttpWebResponse = CType(request.GetResponse(), HttpWebResponse)
+    Using streamReader As New StreamReader(response.GetResponseStream())
+        Dim result As String = streamReader.ReadToEnd()
+        Return JObject.Parse(result)
+    End Using
+End Function
+Authenticate Biller
+vbnet
+Dim a_BILLER As New Biller
+a_BILLER = a_BILLER.GetBillerDetailsByEmailAndUsername(email)
+🔹 Biller.vb
+Responsibility
+: Fetch biller details by matching email and optionally username
+Key Function
+:
+vbnet
+Public Function GetBillerDetailsByUsernameAndEmail(ByVal username As String, Optional ByVal email As String = "") As Biller
+    Dim biller As New Biller
+    Dim sql As String = ""
+    Dim ds As New DataSet
+
+    Try
+        ' Build SQL query to fetch user details
+        sql = "exec selBillerUsers @Username='" & Database.SqlSafe(username) & "'"
+        If Not String.IsNullOrWhiteSpace(email) Then
+            sql &= ", @EmailAddress='" & Database.SqlSafe(email) & "'"
+        End If
+
+        ' Execute the query
+        ds = Database.GET_DATASET(sql, 0)
+
+        ' Check if a matching record is found
+        If ds.Tables(0).Rows.Count > 0 Then
+            Dim userRow = ds.Tables(0).Rows(0)
+
+            ' Load the corresponding Biller object
+            biller = LoadBillerByBillerID(userRow("BillerID"))
+
+            ' Populate additional user details
+            biller.BillerAdminUser = userRow("UserFullName").ToString()
+            biller.BillerAdminUserID = Convert.ToInt32(userRow("BillerUserID"))
+            biller.BillerAdminUserGUID = userRow("BillerUserGUID").ToString()
+            biller.BillerAdminUsername = userRow("Username").ToString()
+            biller.BillerAdminUserEmailAddress = userRow("EmailAddress").ToString()
+        Else
+            ' No matching record found
+            biller.BillerID = 0
+        End If
+    Catch ex As Exception
+        ' Log the exception and return an empty Biller object
+        SL.Log.Error(ex, "Error in GetBillerDetailsByUsernameAndEmail. Username: {Username}, Email: {Email}", username, email)
+        biller.BillerID = 0
+    End Try
+
+    Return biller
+End Function
+3. 
+Configuration
+Web.config – Key Entries
+vbnet
+<appSettings>
+    <add key="SecureAuth.ClientId" value="${SecureAuth.ClientId}" />
+    <add key="SecureAuth.ClientSecret" value="${SecureAuth.ClientSecret}" />
+    <add key="SecureAuth.RedirectUri" value="${SecureAuth.RedirectUri}" />
+    <add key="SecureAuth.TokenUrl" value="${SecureAuth.TokenUrl}" />
+    <add key="SecureAuth.UserInfoUrl" value="${SecureAuth.UserInfoUrl}" />
+</appSettings>
+ Protocols & Standards
+OAuth 2.0 (Authorization Code Grant)
+Used for secure delegated access
+HTTPS
+Ensures secure communication between application and SecureAuth endpoints
+Technical Flow Summary
+Step
+Description
+1
+User clicks login button → Redirect to SecureAuth
+2
+SecureAuth sends authorization code to 
+SecureAuthCallback.aspx
+3
+Authorization code is exchanged for an access token
+4
+User info is fetched using access token
+5
+Email matched to biller from DB
+6
+Session initialized with biller info
+7
+User redirected to 
+BillerWelcome.aspx
+Security Considerations
+Secure Storage
+Store secrets in 
+Web.config
+Use 
+aspnet_regiis
+ to encrypt sensitive config sections
+HTTPS Communication
+Enforced for all SecureAuth API calls
+Session Management
+Session variables are securely initialized after login
+SecureAuth OAuth 2.0 Client Configuration for Biller Portal
+This section outlines the configuration of the OAuth 2.0 client created in SecureAuth for integrating IAM authentication, Single Sign-On (SSO), and Multi-Factor Authentication (MFA) with the Biller Portal (Web Forms application).
+Use Case
+The client facilitates OAuth 2.0-based secure login flows using the Authorization Code Grant, enabling:
+Secure user authentication using UID as login identifier
+Seamless SSO experience
+Support for MFA using MS Authenticator
+Role-based access control through claims
+🔧 Client Configuration Overview
+Field
+Value
+Client Name
+BillerPortal_OAuth2_Client
+Client ID
+{SecureAuth.ClientId}
+Client Secret
+(Confidential - stored securely in server config)
+Client Type
+Confidential
+Response Type
+code
+Grant Type
+Authorization Code
+Redirect URI
+https://localhost:62300/SecureAuthCallback.aspx
+Post Logout Redirect URI
+https://localhost:62300/BillerLogin.aspx
+Login Identifier
+UID (configured under Identity Mapping)
+Token Expiry
+Access Token: 3600s, Refresh Token: 30 days (configurable)
+Scopes Enabled
+Scope
+Purpose
+openid
+Required for OpenID Connect protocol support
+profile
+Provides basic user profile attributes
+email
+Grants access to email and email_verified claims
+introspect_tokens
+Allows backend verification of token validity
+revoke_tokens
+Enables programmatic revocation of access/refresh tokens
+Optional Enhancements Configured
+Dynamic Client Registration
+: Not enabled
+PKCE
+: Not required as this is a server-side confidential client
+MFA Enforcement
+: Enabled via policy tied to the realm
+Email Verification Bypass
+: Temporarily disabled for users with duplicate email values during PoC
+Custom Attribute Creation
+Custom User Attributes
+In SecureAuth platform, user custom attributes, which can be either editable by the users themselves or exclusively modifiable by administrators, are represented through the concept of Identity Schemas.
+Identity Schemas
+Technically, Identity Schema is represented with a JSON schema that determines how the payload and metadata objects conveying user data must be structured in the Identity APIs. We have two types of Identity Schemas:
+Payload schema
+ - Used to define and validate the payload structure of user-related requests (for example, the presence of user's first name and last name).
+Metadata schema
+ - Used to define and validate the metadata structure of user-related requests. Metadata is read-only from the user's perspective. Parameters marked as 
+hidden: true
+ in the schema are hidden from users calling the Self Get User Profile endpoint.
+SecureAuth platform provides system Identity Schemas for payload and metadata—those schemas are assigned to Identity Pools by default and cannot be modified or deleted. Below is the payload schema with added 
+username
+, 
+email
+, 
+first name
+, 
+last name
+, and 
+custom
+ attributes in a schema named 
+IC_Schema
+:
+json
+{
+  "properties": {
+    "first_name": {
+      "description": "First Name",
+      "type": "string",
+      "minLength": 1
+    },
+    "last_name": {
+      "description": "Last Name",
+      "type": "string",
+      "minLength": 1
+    },
+    "username": {
+      "description": "Username",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "description": "User schema with username",
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "first_name",
+    "last_name",
+    "username"
+  ]
+}
+MFA Setup
+To enhance authentication security, we successfully implemented Multi-Factor Authentication (MFA) using two distinct second-factor (2FA) methods:
+Email OTP (One-Time Password)
+ as the secondary authentication factor.
+MFA application (Microsoft Authenticator)
+ as an alternative 2FA method, which also effectively handled the scenario where multiple users had distinct usernames but shared the same email address.
+During validation, MFA was configured and successfully tested across three separate devices, each assigned to a unique user. Each device generated distinct OTPs corresponding to its respective user identity, ensuring authentication integrity and preventing cross-user credential conflicts.
+The implementation validates SecureAuth's ability to:
+Generate unique OTPs per user-session across different devices.
+Associate authentication flows correctly, even when multiple users share an email.
+Maintain MFA resilience across varied environments without credential overlap.
+Limitations and Known Constraints
+SecureAuth restricts creation of users with the same verified email across multiple accounts. To allow duplicate emails for PoC, we manually left email unverified during user creation.
+Session state in the app must be maintained carefully (see 
+cookieless="false"
+ recommendation in web.config).
+ URL:/spaces/PE/pages/4299849784/Spike+-+PRISM-256+-+High+Level+Documentation+for+SecureAuth+Integration+with+Biller+Portal

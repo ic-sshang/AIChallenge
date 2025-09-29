@@ -1,0 +1,129 @@
+Problem Alignment
+Project 
+Appcues on Payer Site
+Objective 
+Introduce Appcues analytics and workflows on the payer site to deliver an enhanced payer user experience and provide insights to internal teams to ultimately drive payer adoption and conversion.
+Status 
+In Development
+Green
+Jira
+https://invoicecloud.atlassian.net/browse/EBPP-2210
+ 
+Target Release Date 
+TBD
+Team 
+PF Changes 
+The Problem
+We currently don’t have supportive tooling to enhance product adoption nor do we have a fast testing framework on the payer site. While we do have consumer metrics with Google Analytics the metrics are click based and Google Analytics doesn’t provide product adoption tooling. Additionally with our limited development capacity we are restrained from delivering quick UX payer wins and do not have a way to effectively test these changes. Therefore on the payer site we are limited by both resources, testing mechanics, and readily available tools to enhance the payer experience and ultimately conversions.  
+Why: How do we know this is a real problem and worth solving?
+We have Pendo surveys and onboarding established on the biller side and from using this we have seen insights by gathering more specific user behavior analytics and detailed NPS scores. In using Pendo we have also benefited from its easy to implement and low development effort. We don’t have any assistive user experience tools and in depth analytics on the payer side and in order to improve payer conversion to autopay and paperless we need better insights. From the learnings on the biller side, both in the results and implementation, we think we have an opportunity to implement a better user experience, better leverage our development resources while testing and gathering more metrics on the payer experience. 
+Audience: Who are we building for?
+We are building this for the payers to provide a more 
+helpful, frictionless, educational
+ paying experience that guides them to sign up for more assistive paying features (paperless and autopay) that will also ultimately align with IC’s business goals.  
+Additionally data gathered from the payer’s actions through Appcues will also help internal decision makers, product, and engineering to help inform decisions to improve payer conversion, and growth. 
+Supporting Resources and Research
+Use Case Review: Shelby working on, Brainstorm with CSM team July 21
+Core Metrics Current: In Review
+Biller Site Pendo Implementation: 
+https://invoicecloud.atlassian.net/browse/EBPP-1121
+ 
+High-level Approach
+By implementing Appcues not only will we gather further payer analytics but we also have the opportunity to easily starting testing into ways to drive product adoption, specifically of paperless and autopay. Our high level approach is to implement Appcues with: 
+Beginning strategy for initial guides/flows to improve payer adoption. Core use cases we want to build are: 
+customer portal Test 1 - TBD 
+customer portal Test 2 - TBD 
+virtual site Test 1 - TBD 
+mobile example Test - TBD 
+Start a testing practice on the payer site by releasing each above core use case to a biller in each vertical and comparing results (paperless and autopay signs ups) against a similar biller in the same vertical without the Appcues use case on. 
+Our learnings from each test will inform future payer analysis and segmentation so we can make more effective guides/flows and further develop a testing practice. 
+Success
+How do we know if we’ve solved this problem?
+We will know we are successful when we have useable data of payer’s experience that product and R&D can use to make decisions to grow payer conversion. To know if we are close to achieving this we will track: 
+results from beginning strategy of guides/flows being
+Interaction with Appcues workflow →  sign up for autopay 
+Interaction with Appcues workflow → sign up for paperless
+Interaction with Appcues workflow on virtual site → registration
+Interaction with Appcues workflow on mobile → TBD
+Data we can gather from Appcues and bespoke data we send is useable
+We will monitor if biller NPS improves. We will monitor if outreach to support (calling the biller’s support, or email declines)
+Solution Alignment
+Key Features
+Incorporating Appcues in payer facing site with little IC engineering effort 
+Report of the metrics in Appcues 
+Creation of payer facing guides strategy around the below use cases:
+User enrolling in autopay
+Users enrolling in paperless
+Users conducting single payment
+Users on mobile  
+Key Flows  
+customer portal Test 1 - As a user I want an assistive guide to help me sign up for autopay. 
+customer portal Test 2 - As a user I want to know the benefits of signing up for paperless. 
+Modal is in Appcues, to alert a user when they are unchecking paperless or about to leave from the checkout flow.
+virtual site Test 1 - As a user I want an assistive guide to encourage me to register.
+mobile example test -As a user I want…TBD.
+Data to be collected based off the above use cases is WIP listed in 
+https://invoicecloud.atlassian.net/browse/EBPP-2243
+ 
+Questions and Next Steps
+Do we want to segment any messaging to a particular group of users? Assuming if we don’t have these we first want to introduce a flow/ onboarding that will give us a baseline for users to see how they convert to build segments? Or launch a couple different flows based on current users? 
+Can we only apply this within the payer portal? Can we add event tracking to payer email notifications? Payer SMS?
+Can we execute a payer NPS campaign in Appcues (we have access to this feature and would be interesting to see from payer’s perspective but is it branded towards Invoice Cloud or the Biller)
+What data does Appcues gather? What do we need custom gathered?
+Do we want to execute biller specific campaigns? Where from CSM/product could we learn that these could be applied in the biller portal? 
+For particular verticals are there any specific payer pain points we can solve with Appcues? CSM did ask about Appcues ability to alter a test for a particular vertical (example: some billers call the invoice a “bill”, others a “bill”). Additionally are there any struggles on payer site for particular verticals (harder to do X on   insurance vertical etc)? 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+ N
+ 
+Sales
+Do you need sales enablement materials?
+ N
+ 
+Marketing
+Does this impact marketing?
+ N
+ 
+Training
+Do you need to update support content or training?
+ N
+ 
+Implementations
+Changes to questionnaire
+ N
+ 
+Delivery
+Set up and Enablement
+ ?
+ 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+ N
+ 
+Support
+Biller questions and support
+ Y
+We will need some documentation for payer support if launching this on the payer site and payers have questions. If launching on the biller site we may need this tailored for the billers as well. 
+Legal
+Are there potential legal ramifications?
+ Y
+ 
+Reconciliations
+Questions from billers about charges
+ N
+ 
+ For Results on Global Sweepstakes go to: 
+Global Sweepstakes Results
+ Page instead. 
+false
+User Stories 
+Label = “Appcues”
+System JIRA
+labels = Appcues
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+ URL:/spaces/PRODUCT/pages/1821999122/Appcues

@@ -1,0 +1,76 @@
+In production
+Email queue processing - Skybot jobs
+Email queue processing  - Azure batch jobs
+Email queue processor - Real time
+For Testing (DevTest)
+Email queue processing - Skybot jobs 
+Email queue processing  - Azure batch jobs
+2
+1
+0
+0
+3005317193
+3001450637
+1
+Untitled Diagram-1706558616268.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1706558616268.drawio
+0
+781
+752.5
+Email Queue Processing 
+This application process emails based on schedule where it pulls the email to be processed from EmailQueue table → process email template → send email to recipient 
+We have two places to tests EQP.exe (SkyBot and Azure Batch)
+SkyBot 
+(
+Login » Automate Schedule
+ )- In production most of the EmailQueueType jobs are configured but few in devtest. So we might have to configure EmailQueueType jobs in devtest skybot based on our testing requirements. We can have two approaches to test EQP
+Integration Test 
+Seed a row directly in database EmailQueue table for EmailQueueType we are testing 
+Execute relevant Email Queue Type Skybot job from our test automation
+Wait until skybot job is finished
+Validate EmailSentDate, Subject and Email Content from EmailQueue should be processed
+E2E Test
+Trigger the email queue from UI function test to seed row in database EmailQueue table for EmailQueueType we are testing 
+Execute relevant Email Queue Type Skybot job from our test automation
+Wait until skybot job is finished
+Validate EmailSentDate, Subject and Email Content from EmailQueue should be processed
+Azure Batch - 
+ (
+ICBatchTest - StandardNotificationScheduler
+) We need to check with dev team what EQTypes we need to test and we have configure for devtest since it is only configured to test 1 EQType
+Integration Test 
+Seed a row directly in database EmailQueue table for EmailQueueType we are testing 
+Execute relevant Email Queue Type Azure Job Schedule
+Wait until job is finished
+Validate EmailSentDate, Subject and Email Content from EmailQueue should be processed
+E2E Test
+Trigger the email queue from UI function test to seed row in database EmailQueue table for EmailQueueType we are testing 
+Execute relevant Email Queue Type Azure Job Schedule from our test automation
+Wait until job is finished
+Validate EmailSentDate, Subject and Email Content from EmailQueue should be processed
+Email Queue Processor
+This application process emails based on queue mechanism and process emails real time. 
+DevTestEmailQueue - 
+SB-EmailQueue 
+There are only several email queue types it processes 
+ResendACHRejectEmail
+, 
+ResendCCExpirationEmail
+, 
+SendPasswordResetEmail
+, and many 
+Test Emails from the Biller Portal*
+For testing this in devtest we can only do integration test where we can seed the email to the queue from unit test. From UI Portal we do not have implementation to send emails to prod and devtest queue. It always sends to prod email queue. 
+* List of email queue type IDs for test queues that are triggered by AZ function (in the “testemailqueue”): 
+12, 17, 18, 13, 14, 15, 16, 20, 22, 24, 26, 31, 34, 35, 43, 45, 48, 51, 53, 56, 58, 60, 62, 64, 66, 68, 70, 80, 85, 86, 87, 90, 92, 95, 96
+… and a few more
+Useful Links
+How To Test Email Queue Processor
+Create an Email Template
+Creating an EmailQueueType
+Running Email Queue Processing
+EmailQueueProcessing - Deployments, Monitoring, and more
+ URL:/spaces/ED/pages/3001450637/Email+Queue+Processing+Processor+for+Test+Automation

@@ -1,0 +1,66 @@
+Overview
+Daffon/Milsoft  works by making a single service call to the printer. The url in Advanced Setting 20 is used with the parameters ‘PROCESSING_TYPE’, ‘ACCOUNT_NUMBER’, and ‘SUB’. Depending on the Remote PDF Service Version used in Advanced Setting 119, ‘BCTR’, ‘LDMO’ and ‘PRINT_FORM’ may also be sent. Mappings of these values as well as the available Remote PDF Service Versions can be found here: 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/361234436/Daffron-Milsoft+Technical+Design#Bill-Presentment
+ 
+Printer/Biller Requirements
+There are two required settings and one optional setting for Daffron/Milsoft implementations. 
+Name
+ Value
+Endpoint Sample
+https://{billerSpecific}:8495/eprint
+Remote Pdf Service Version Sample
+1-4
+JSON Configuration Sample (optional)
+json
+{
+  "PdfConfig":{"BCTRModifier":"ValueAfterDash"}
+}
+Integration Summary
+In the Integration Summary page, make sure you're under the specific Invoice Type that needs to be configured then, and add or modify the InvoiceFormatGUID in the BIF Customizations.
+Click 
+here
+ to learn on how to add or edit a BIF Customization.
+For this setup, search and add the 
+Daffron - PDF Remote Link
+ template for this configuration.
+Advanced Settings
+Daffron/Milsoft requires the following Advanced Settings: 
+Advanced Setting 20 - Remote PDF EndPoint/Web Service URL
+Advanced Setting 119 - Remote PDF Service Version 
+The available service versions can be found here: 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/361234436/Daffron-Milsoft+Technical+Design#Bill-Presentment
+ 
+Note: If Custom9 has "INV" or "EBIL", the code will force use of Remote PDF Service Version 2 for that invoice regardless of the version setup in the Advanced Setting 119.
+The following Advanced Setting is optional:
+Advanced Setting 131 - JSON Configuration 
+See description in 
+Advanced Setting 131
+Click 
+here 
+to learn more about Advanced Settings.
+Click 
+here 
+on how to add or edit Advanced Settings.
+Use the chart below to add the Advanced Settings based on the Biller/Printer requirements.
+Advanced Setting
+Value
+20
+https://{billerSpecific}:8495/eprint
+119
+4 
+131
+json
+{
+  "PdfConfig":{"BCTRModifier":"ValueAfterDash"}
+}
+Advanced Setting 131 
+Advanced Setting 131 contains a configurable set of datapoints in JSON. For more information about understanding JSON go to this website for more info: 
+https://www.w3schools.com/js/js_json_intro.asp
+ 
+Some implementations will require IC to only pass the value after the “-” in Custom10 for the Bill Control Number. If this setup is required, the configuration to enter looks like this:
+json
+{
+  "PdfConfig":{"BCTRModifier":"ValueAfterDash"}
+}
+Setup is complete when all of the configurations have been set.
+ URL:/spaces/IM/pages/4267868161/Daffron+Milsoft+PDF+Remote+Link+guide

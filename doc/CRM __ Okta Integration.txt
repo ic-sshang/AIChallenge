@@ -1,0 +1,154 @@
+This article explains the CRM Okta Integration and the processes related to SAML (Security Assertion Markup Language) as is related to this 
+integration
+.
+Generic SAML Authentication Flow
+SAML Authentication Flow
+Okta/CRM SAML Authentication Flow
+SP (Service Provider) is the CRM
+IDP (Identity Provider) is Okta
+Description of steps
+1. CRM Accessed from Browser
+User starts SP Initiated Flow
+The URL used to access the CRM has been unchanged and remains the same URL (https://www.invoicecloud.com/crm/AdminLogin.aspx). When the URL is accessed if the user is accessing the CRM in a prod environment, the URL will redirect to an Okta sign in page where the user can use Okta to sign into the CRM.
+2
+. SP Initiated Flow
+ (Begi
+nning from CRM)
+SAML Request initi
+ation (Redirecting to Okta sign in)
+After the CRM is accessed from the browser, a SAML Request is made. The SAML login page is appended to the subdomain that is retrieved from the existing URL. This new URL contains the location where the IdP should send its response back to (
+SamlLogin.aspx
+). The new URL is passed in the request along with the destination URL that contains the Okta sign-in page. This request then redirects the user to the destination URL (Okta). 
+:dev-icon-white:
+f0a79168-386a-4231-8563-0a29814d8f52
+:dev-icon-white:
+#DEEBFF
+CRM establishes Okta as the IdP in the web.config file.  This will be modified in step 4
+3. IdP Initiated Flow
+ (Beginning/ Continuing from Okta)
+User Identification and Authentication
+The Identity provider (Okta) is not only in charge of providing the user’s identity to the CRM, but also making sure that the user is an authorized Okta user with permission to access the CRM.   
+By the end of the rollout of this feature all Okta Users will gain access to the IC - CRM (Production) app within their Okta portal.
+ 
+4.
+ 
+Once the user signs in and is authenticated, their identity information is written on an assertion. This Assertion is then sent to the CRM.
+Developer Notes
+The IdP is then re-established by the CRM, overriding the previously mentioned Web.Config file IdP initiation.  This is done in order to establish further IdP options (i.e. a security certificate) due to the limited IdP configurability provided by the Web.Config file. 
+5. Recep
+tion and handling of the assertion
+Once the CRM receives the assertion, it is then scanned for its contents. These contents contain identifying information such as the username, department, first name, etc. The contents of the assertion are then used to locate and authenticate the user credentials in order to validate the user is an employee.
+6-7.
+ 
+ Upon successful authentication, a user session is created. The user is then redirected to the CRM home page.
+Developer Notes
+Okta Certificate: Assertion security
+In order to combat bad actors that may try to send their own SAML assertion, a certificate is needed. This certificate is used as a unique identifier to ensure that the response was sent by the correct IdP (Okta).  The certificate may be accessed from the Okta-Developer site under Applications → Applications → ICCRM → Sign-On → SAML signing certificate. Any new certificate must be added to the KeyVault to enable a proper reception of the assertion. 
+Any difference in the certificate will result in an error. 
+Deserialization: How assertion contents are accessed
+Upon receiving the assertion, the contents, which are in XML format, are deserialized into a class. This enables easy access to the attributes, which are then used to authenticate the user. Attributes may be accessed by: 
+vbnet
+'initialize the message as a Reponse
+Dim resultingMessage As OktaSamlResponse.Response = CType(serializer.Deserialize(rdr), OktaSamlResponse.Response)
+'retrieve attribute value from class directly
+Dim username As String = resultingMessage.Assertion.Subject.NameID.Value
+'retrieve attribute from class by search 
+Dim attribute As Type = resultingMessage.Assertion.GetAttributeByName("Desired Attribute")
+New Employee sign-in attempt
+If the employee attempting to sign in is new, the employee is added to the database using the credentials provided by the assertion. Any departments that do not exist in the CRM database are added. The employee is then assigned to that department and signed in successfully. 
+Employee sign-in flow
+Employee sign-in flow
+Troubleshooting
+This section is used to reference logs used throughout the implementation for troubleshooting purposes.
+For easy access to the logs described below the following New Relic Dashboard was created.  
+CRM Login Activity Dashboard
+Log Type
+New Relic Log Search
+Employee Sign-ins:
+Used to validate that an employee was signed into the CRM using Okta
+none
+message: "*Saml Login, Employee username:*"
+Error With Assertion:
+This is an error log that will be thrown when the user is trying to sign into CRM with Okta but something goes wrong with reading the SAML assertion
+none
+message: "*Error in SamlLogin, SAML Assertion:*"
+New Employee:
+Used to validate when a newly created employee is successfully signed into the CRM using Okta
+none
+message: "*Saml Login after Employee creation, Employee username:*"
+New Department:
+Used to validate when a new department is created and added to the DB
+none
+message: "*New Department added to Department Table, DepartmentDesc:*"
+Department Assigned to Employee:
+Used to validate when a employee gets assigned to the department they come in from Okta
+none
+message: "*Employee assigned to new Department, Employee username:*"
+AuthSupport Variable:
+This is an error log that will be thrown if something is wrong with the AuthSupport bit (will cause the wrong login page to be displayed)
+none
+message: "*CRM Admin Login: AuthSupport Bit is NULL or EMPTY for Okta login, AuthSupport:*"
+Okta Redirect:
+Used to validate when the redirect to the okta sign in was successful (reflects nothing going wrong displaying the Okta sign in page)
+none
+message: "*Redirect to Okta Login Occurred*"
+Database Log Table
+Sign in Attempts are logged to table dbo.UserSignInActivity. This will help audit login activity and help identify failures. Failures will result in the error message being logged into the database.
+UserName
+UserSignInTime
+EmployeeID
+IsSuccess
+FailReason
+AuthTypeId
+string
+date/time
+int
+bit
+string
+fkid
+AuthType contains an fkid for another table dbo.tblAuthType that has the values below. As we transition to Okta, we will continue to support legacy CRM sign-ins. After migration, there should be little-to-no use of legacy authentication. 
+Type (int)
+Description(string)
+1
+“Legacy”
+2
+“Okta”
+Log Type
+DB Log Search
+User Sign in table logs:
+Use to view the entire table of user sign in attempts, both successful and unsuccessful
+SELECT * FROM UserSignInActivity ORDER BY UserSignInTime DESC;
+Unsuccessful Sign in logs:
+Use to view an entire list of all unsuccessful sign in attempts in order of most recent to oldest. IsSuccessful=0 means failure
+SELECT * FROM UserSignInActivity WHERE IsSuccess=0 ORDER BY DateRecAdded DESC;
+Successful Sign in logs:
+Use to view an entire list of all successful sign in attempts in order of most recent to oldest. IsSuccessful=1 means success
+SELECT * FROM UserSignInActivity WHERE IsSuccess=1 ORDER BY DateRecAdded DESC;
+Successful Okta Sign Ins:
+Use to view a list of successful Okta sign ins in order of most recent to oldest. AuthTypeId=2 (Okta Sign in)
+SELECT * FROM UserSignInActivity WHERE IsSuccess=1 AND AuthTypeId=2 ORDER BY DateRecAdded DESC;
+Unsuccessful Okta Signs:
+Use to view a list of unsuccessful Okta sign ins in order of most recent to oldest. AuthTypeId=2 (Okta Sign in)
+SELECT * FROM UserSignInActivity WHERE IsSuccess=0 AND AuthTypeId=2 ORDER BY DateRecAdded DESC;
+Successful Legacy Sign Ins:
+Use to view a list of successful Legacy sign ins in order of most recent to oldest. AuthTypeId=1 (Legacy Sign in)
+SELECT * FROM UserSignInActivity WHERE IsSuccess=1 AND AuthTypeId=1 ORDER BY DateRecAdded DESC;
+Unsuccessful Legacy Sign Ins:
+Use to view a list of unsuccessful Legacy sign ins in order of most recent to oldest. AuthTypeId=1 (Legacy Sign in)
+SELECT * FROM UserSignInActivity WHERE IsSuccess=0 AND AuthTypeId=1 ORDER BY DateRecAdded DESC;
+FAQ
+Where can I view CRM sign in history?
+The history for Okta CRM sign ins can be found in new relic by doing the search for the
+ Employee Sign-ins
+ log that can be found in the Troubleshooting section above.
+Is there an Okta test environment?  If so, what do I need to know?
+Yes, there is an Okta test 
+environment, it is located at 
+https://dev-390385.okta.com/
+. Please see your manager if the need for elevated access in the test environment arises. 
+What should we do if Okta is down?
+If Okta is down and making the CRM inaccessible, a simple fix is to change the AuthSupport bit for the prod environment to the legacy bit, which will allow users to sign into the CRM using the standard username and password.
+In case of emergency, set the AuthTypeID value in the variable group for production to 1 and redeploy CRM. This will reenable legacy while still including Okta if available. 
+Are certificates being used and if so when do they expire?
+Yes, we use a certificate that is used to verify the SAML assertion. The current certificate is set to expire in 10 years for our test Okta environment, but if needed a new certificate can be easily generated and added to KeyVault. For more information look at section 6-7 under the developer notes.
+ URL:/spaces/EN/pages/2854879414/CRM+Okta+Integration

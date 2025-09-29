@@ -1,0 +1,76 @@
+Oveview
+Environment variable values are stored in Azure Devops library groups.  There are groups for a target environment.
+Sandbox
+: pyrprtl-sbx
+Development
+: pyrprtl-dev
+Production
+: pyrprtl-prd
+Applications hosted in k8s read their environment variables from the k8s CSI secret provider which get its values from a environment/application/instance specific Azure Key Vault.  There are pipelines that will take the environment ADO library values and copy them to the environment/application/instance Azure Key Vault.
+Adding A New Environment Variable
+Example environment variable 
+REACT_APP_BRANDING_SERVICE_URL
+Add the new variable to ADO library groups
+Edit the source code file 
+.devops/seed-keyvault.yaml
+Add a new Key Vault secret (remove underscores from the key) using the new the ADO library variable as the source
+.....
+jobs:
+- deployment: ${{ parameters.env }}_${{ parameters.instance }}
+.....
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - script: |
+.....              
+              az keyvault secret set --name REACTAPPBRANDINGSERVICEURL --vault-name $key_vault_name --value "$(REACT_APP_BRANDING_SERVICE_URL)"
+.....             
+Edit the source code file 
+.helm/pyrprtl/templates/secret-provider-class.yaml
+Add a new CSI secret using the new the Key Vault secret as the source
+.....
+spec:
+.....
+  secretObjects:
+    - secretName: db-secret
+      data:
+.....       
+       - key: REACTAPPBRANDINGSERVICE
+          objectName: REACTAPPBRANDINGSERVICE
+.....
+  parameters:
+.....
+    objects: |
+      array:
+ 
+......      
+        - |
+          objectName: REACTAPPBRANDINGSERVICEURL
+          objectType: secret
+......  
+Edit the source code file 
+.helm/pyrprtl/templates/development.yaml
+Add the new environment variable (add underscores back to the key) using the CSI secret provier as the source
+.....
+spec:
+.....
+  template:
+.....
+    spec:
+.....
+      containers:
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+.....
+          env:
+.....
+            - name: REACT_APP_BRANDING_SERVICE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: REACTAPPBRANDINGSERVICEURL
+                  optional: false
+.....
+
+Run the Key Vault seed pipeline for the target environment, this must be done before you deploy the Payer Portal build to a target environment cluster
+ URL:/spaces/EN/pages/2809069587/Payer+Portal+1.5+React+Environment+Variables

@@ -1,0 +1,159 @@
+Environment Variables Excerpt
+Post-Provisioning
+These vary between environments and must be set after deployment
+See 
+the dump of environment variables from the production web servers as of 2025-01-28
+Pending Decisions
+Variable
+Value
+Notes
+GIT_TERMINAL_PROMPT
+0
+Investigating to see if we actually need Git before adding
+PSExecutionPolicyPreference
+Unrestricted
+This seems dangerous to set on production servers
+Variables We Set
+New Relic
+Note: these don’t perfectly match what we have in production today. The production servers also don’t match each other. These are the typical values from New Relic’s documentation. There are other variables which may be set as part of New Relic configuration.
+See 
+the docs from New Relic
+ as well as 
+New Relic .NET Agent Nuget Package
+ 
+Variable
+Value
+Notes
+COR_ENABLE_PROFILING
+1
+Enables profiling for dotnet framework
+COR_PROFILER
+{71DA0A04-7777-4EC6-9643-7D28B46A8A41}
+GUID for the New Relic Dotnet Framework Profiler
+COR_PROFILER_PATH
+C:\path\to\netframework\NewRelic.Profiler.dll
+Path to New Relic Dotnet Framework Profiler
+CORECLR_ENABLE_PROFILING
+1
+Enables profiling for dotnet core
+CORECLR_PROFILER
+{36032161-FFC0-4B61-B559-F6C5D41BAE5A}
+GUID for the New Relic Dotnet Core Profiler
+CORECLR_PROFILER_PATH
+C:\path\to\netcore\NewRelic.Profiler.dll
+Path to New Relic Dotnet Core Profiler
+Invoice Cloud
+Note that the values provided are for production. Many will need to change depending on environment.
+Variable
+Value
+Notes
+DisableRecaptcha
+0
+Set to true to disable recaptcha for the apps running on the server
+IC_APPDATA_DIR
+E:\Data\AppData
+Used by apps to find files
+IC_APPS_DIR
+E:\Data\Apps
+Used by apps to find files
+IC_ENV_TYPE
+2
+Used to control logic in apps, i.e. 
+if IC_ENV_TYPE == 2:
+  run_chase_payment()
+else:
+  mock_run_chase_payment()
+IC_FTP_Base_DIR
+D:\inetpub\ftproot\
+Used by apps to find files
+IC_FTP_DIR
+\\icwebsftppremium.file.core.windows.net\icftproot
+Used by apps to find files
+IC_LOGS_DIR
+E:\Data\Logs
+Used by apps to find files
+IC_PDF_InvoicesByExtractionPending
+\\10.0.6.5\InvoicesByExtractionPending
+Used by apps to find files
+IC_PDF_InvoicesByFilenamePending
+\\10.0.6.5\InvoicesByFilenamePending
+Used by apps to find files
+Full Variable Dump + Notes
+---
+pending decision:
+  # this seems kinda scary to have set on a production server...
+  PSExecutionPolicyPreference: "Unrestricted" 
+  # ensures git does not prompt for username and password
+  # do we need git on these servers? why clone code? may need for deployment pipelines
+  GIT_TERMINAL_PROMPT: "0" 
+
+default variables (no action required):
+  ComSpec: "C:\\Windows\\system32\\cmd.exe" # default variable; disregard
+  OS: "Windows_NT" # default variable; disregard
+  Path: "C:\\Program Files (x86)\\Micros..." # default variable; disregard
+  PATHEXT: ".COM;.EXE;.BAT;.CMD;.VBS;.VBE..."	# default variable; disregard 
+  POWERSHELL_DISTRIBUTION_CHANNEL: "MSI:Windows Server 2016 Datac..."	# set during powershell 7 install
+  PROCESSOR_ARCHITECTURE: "AMD64" # default variable; disregard
+  PROCESSOR_IDENTIFIER: "Intel64 Family 6 Model 106 St..." # default variable; disregard
+  PROCESSOR_LEVEL: "6" # default variable; disregard
+  PROCESSOR_REVISION: "6a06" # default variable; disregard
+  PSModulePath: "C:\\Windows\\system32\\config\\sy..." # default variable; disregard
+  TMP: "C:\\Windows\\TEMP" # default variable; disregard
+  TEMP: "C:\\Windows\\TEMP"	# default variable; disregard
+  windir: "C:\\Windows" # default variable; disregard
+  USERNAME: "IC-WEB1$" # default variable; disregard
+  ProgramData: "C:\\ProgramData" # default variable; disregard
+  ProgramFiles: "C:\\Program Files" # default variable; disregard
+  ProgramFiles(x86): "C:\\Program Files (x86)" # default variable; disregard
+  ProgramW6432: "C:\\Program Files" #default variable; disregard
+  ALLUSERSPROFILE: "C:\ProgramData"	# default variable; disregard
+  APPDATA: "C:\\Windows\\system32\\config\\sy..." # default variable; disregard
+  CommonProgramFiles: "C:\\Program Files\\Common Files" # default variable; disregard
+  CommonProgramFiles(x86): "C:\\Program Files (x86)\\Common..." # default variable; disregard
+  CommonProgramW6432: "C:\\Program Files\\Common Files" # default variable; disregard
+  LOCALAPPDATA: "C:\\Windows\\system32\\config\\sy..." # default variable; disregard
+  USERPROFILE: "C:\\Windows\\system32\\config\\sy..."	# default variable; disregard
+  USERDOMAIN: "INVOICECLOUD" # default variable; disregard
+  PUBLIC: "C:\\Users\\Public"	# default variable; disregard
+  SystemDrive: "C:" # default variable; disregard
+  SystemRoot: "C:\\Windows" # default variable; disregard
+  TF_BUILD: "True" # auto-set because dump was run in devops pipeline; didn't realize this was ADO-related so didn't scrub sooner
+
+custom variables:
+  New Relic:
+    # new relic vars - https://docs.newrelic.com/docs/apm/agents/net-agent/other-installation/understanding-net-agent-environment-variables/
+    # looks like we haven't actually set them up correctly following the docs
+    # I've provided the documented typical values, not the ones currently on our servers
+    # refer to the docs as you 
+    
+    # these variables are for dotnet framework profiling
+    COR_ENABLE_PROFILING: "1"
+    COR_PROFILER: "{71DA0A04-7777-4EC6-9643-7D28B46A8A41}"
+    COR_PROFILER_PATH: "C:\\Program Files\\New Relic\\.NET Agent\\netframework\\NewRelic.Profiler.dll" # path to dll may be different depending on install
+    # these variables are for dotnet core profiling
+    CORECLR_ENABLE_PROFILING: "1"
+    CORECLR_PROFILER: "{36032161-FFC0-4B61-B559-F6C5D41BAE5A}"
+    CORECLR_PROFILER_PATH: "C:\\Program Files\\New Relic\\.NET Agent\\netcore\\NewRelic.Profiler.dll" # path to dll may be different depending on install
+  Invoice Cloud:
+    # custom variables that alter our application behavior
+    DisableRecaptcha: "0" # pretty sure this is an IC variable
+    IC_APPDATA_DIR: "E:\\Data\\AppData" # IC variable
+    IC_APPS_DIR: "E:\\Data\\Apps"	# IC variable; set on the 9 that don't have IC_APPS
+    IC_ENV_TYPE: "2" # IC variable
+    IC_FTP_Base_DIR: "D:\\inetpub\\ftproot\\" # IC variable
+    IC_FTP_DIR: "\\\\icwebsftppremium.file.core...."	# IC variable
+    IC_LOGS_DIR: "E:\\Data\\Logs" # IC variable
+    IC_PDF_InvoicesByExtractionPending: "\\\\10.0.6.5\\InvoicesByExtracti..." # IC variable; only on 5 servers 
+    IC_PDF_InvoicesByFilenamePending: "\\\\10.0.6.5\\InvoicesByFilename..." # IC variable; only on 5 servers
+
+do not set:
+  Java:
+    JAVA_HOME: "C:\\Progra~2\\Java\\jre1.8.0_231" # java is no longer neede
+  Chocalatey:
+    # looks like this is only installed on 1 server; do not set unless we decide to install choco
+    ChocolateyInstall: "C:\\ProgramData\\chocolatey" # only on 1 server
+  Azure Monitor:
+    AzureMonAgentClientLocation: "C:\\Packages\\Plugins\\Microsoft..."	# only on 1 server - seems old + turns up no google results
+  Invoice Cloud:
+    IC_APPS: "E:\\Data\\Apps" # IC variable; only set one one server - pretty sure this is just a mistake and should be  `IC_APPS_DIR` like the other 9
+ URL:/spaces/platform/pages/3949854739/Environment+Variables

@@ -1,0 +1,50 @@
+Description:
+The ICEventNewRelic call causes high response times in RTDR when NewRelic is not reachable. The timeout of this method is not properly implemented and thus is ignored.
+Can the serilog library that logs to a file before uploading to New Relic do custom events?
+If not, what’s the effort to make this call asynchronous to prevent it from becoming a bottleneck in the future?
+Source: 
+ICRTDR/clsUtils.vb
+ 
+Solution: 
+According to GitHub Copilot, to prevent client.SendEventData() from blocking the main process, we can make the call asynchronous. In 
+VB.NET
+, this typically means using Task.Run or converting the method to Async/Await if the underlying library supports it. 
+Here is a sample code provided.
+' Instead of blocking call:
+' client.SendEventData()
+
+' Make it asynchronous:
+Task.Run(Sub()
+    Try
+        client.SendEventData()
+    Catch ex As Exception
+        ' Optionally log the failure to Serilog or a file
+        SL.Log.Error("NewRelic event send failed: {0}", ex.ToString())
+    End Try
+End Sub)
+Effort:
+Minimal if you just wrap the call in Task.Run as above
+If we want more robust handling (e.g., retries, cancellation, queueing), you may need a background worker or a producer/consumer pattern. 
+A background worker is a separate thread or task that runs in the background, allowing your main application to stay responsive. 
+A producer/consumer pattern is a design where one part of our code (the producer) creates work items (like events to send), and another part (the consumer) process them, often in the background. Typically, you use a thread-safe queue: the producer adds items to the queue, and the consumer takes items from the queue and processes them. 
+In our case, the main code (producer) would enqueue New Relic events, the background worker (consumer) would dequeue and send them asynchronously, This prevents slow network calls from blocking your main logic. An example of this is in the following:
+' Producer: add event to queue
+eventQueue.Enqueue(eventData)
+
+' Consumer: background task
+While True
+    If eventQueue.Count > 0 Then
+        Dim eventData = eventQueue.Dequeue()
+        client.SendEventData(eventData)
+    End If
+    Thread.Sleep(100) ' avoid busy wait
+End While
+For the gotchas, here are the following:
+If SendEventData is not thread-safe, ensure only one thread calls it at a time
+Exceptions in the ground task won’t crash your main thread, but we should log them. 
+If you need to guarantee delivery, consider queueing events and retrying failed sends. 
+Summary:
+Seri log: Logs to file, not custom NR events
+Async effort: Low for basic non-blocking, higher for robust delivery. 
+Recommendation: use Task.Run for non-blocking, and log failures for diagnostics.
+ URL:/spaces/PE/pages/4555342385/BIF-220+Can+we+make+the+Custom+Events+NewRelic+call+in+RTDR+asynchronous+or+accomplish+the+same+with+Serilog+library

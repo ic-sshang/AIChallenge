@@ -1,0 +1,192 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+Custom Web Services
+Includes indicator/dates for: partial payments, balance forward, bill expiration, email notification dates & autopay dates
+S&S uses custom web services to upload the invoice file. 
+Please see note below on the custom invoice creation. 
+Adjustments/Balances
+BAF
+RTDR API Method (V1):
+ AccountSummaryResult
+RTDR API Method (V2):
+ GetAccountsByAccountIDs
+RTDR
+S&S provides 2 endpoints (CIS Service and PayConnect Service) which will cover RTDR, Data Pump, and Bill Presentment.
+S&S sends both a BAF and utilizes RTDR. RTDR will overwrite any information sent in the BAF.
+We have a set of web services for RTDR that are custom to S&S. The web service docs for S&S cannot be found on our doc site.
+We will perform a RTDR each time S&S makes a "jump" into IC. During RTDR, we will check to see if we have an invoice for the account number that is passed in the custom URL. If we do not have an invoice or customer record for that particular account number, we will create them "on the fly" based on the information that is returned from our RTDR call.
+https://www.invoicecloud.com/integrations/Redirect/SSO/SandS.aspx
+Each night, S&S billers perform "system maintenance", which includes taking a backup of their entire enQuesta system. During this time, the S&S web services (RTDR and Data Pump) are both unavailable. To mitigate any payment posting issues, we hardcode a window of time per biller, that we will not send transactions through the data pump or RTDR. Once the window is over we will begin sending transactions again. This will need to be asked by the IM during Implementation and sent to IT with the Coding information.
+Payments
+SystemsAndSoftwareQueueProcessing Payments API Method (V1): postDetailedPayment
+Data Pump API Method (V2): 
+ChangePaymentTransactions
+Data Pump
+S&S provides 2 endpoints (CIS Service and PayConnect Service) which will cover RTDR, Data Pump, and Bill Presentment.
+S&S has their own Data Pump called S&S Queue Processing. Their Data Pump has special functionality that queues payments for all S&S billers. 
+Each night, S&S billers perform "system maintenance", which includes taking a backup of their entire enQuesta system. During this time, the S&S web services (RTDR and Data Pump) are both unavailable. To mitigate any payment posting issues, we hardcode a window of time per biller, that we will not send transactions through the data pump or RTDR. Once the window is over we will begin sending transactions again. This will need to be asked by the IM during Implementation and sent to IT with the Coding information.
+When we post payments through the data pump, we also send the batch date. Depending on the timing, we will add days as necessary so the posting date is based on the next business day. Upon batch close, we will add an additional day to transactions being posted, so they show in a separate batch in enQuesta (CIS). Most S&S billers have specific batch numbers, tender types, and dates to add logic for the Data Pump. Please consult Implementation project files for specifics on each biller. 
+ACH Rejects Posting
+Biller Portal
+Manual 
+The Biller manually posts ACH rejects in enQuesta (CIS) based on ACH Rejects in the Biller Portal. 
+Void
+Supported
+Biller Portal - Manual (enQuesta versions 4.0, 4.5, 4.7)
+Data Pump (enQuesta versions 5 and 6)
+enQuesta versions 4.0, 4.5, 4.7: The biller runs a Void in Invoice Cloud and manually posts to enQuesta (CIS). 
+enQuesta versions 5 & 6: Voids passed through Data Pump
+Change Log - AutoPay Enrollment
+SystemsAndSoftwareQueueProcssing Autopay API Method (V1): setRecurringFlag
+DataPump Autopay API method:
+ (V2): ChangeRecurringPaymentConfigurtion
+Data Pump
+Change Log - Paperless Enrollment
+SystemsAndSoftwareQueueProcessing Paperless API Method (V1): changeEBPPEnrollments
+DataPump Paperless API method (V2):
+ ChangeNotificationSubscription
+Data Pump
+Change Log - Phone Number
+Not Supported
+N/A
+Change Log - Email Address
+Not Supported
+N/A
+Bill Images 
+PDF Linking - Supported
+PDF Extraction - Supported
+Template - Not Supported
+Bill Image PDF Remote Link API Method (V1): BillImageResult
+Bill Image PDF Remote Link API Method: GetBillImage
+S&S provides 2 endpoints (CIS Service and PayConnect Service) which will cover RTDR, Data Pump, and Bill Presentment.
+The integration supports PDF Linking. If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller. Template is not supported.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Supported
+Only supported if biller uses our Online Bank Direct Product. 
+This product would be used if municipalities allowed coordinating bill pay with customers banks. A payer will setup a recurring payment or autopay using their bank account and the bank sends over the paper check via FiServ to be applied to the customers account in IC.
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+This is used for ad hoc non-invoice payments. Biller would have to manually update payment in their CIS and IC doesn’t send CloudStore payments through the data pump.
+CSRConnect
+Not Supported
+No longer implemented - applies to legacy integrations only. 
+EMV
+Supported*
+*For Biller Portal payments only
+IVR
+Supported
+S&S has a relationship with Selectron. Most S&S billers will have Selectron IVR that is integrated with enQuesta. Selectron will code to our IVR payment web services, using Utility Search 2.
+Each biller that has a relationship with Selectron will provide a contact for IC to work with.
+S&S will include any necessary paperwork to Selectron for the coding change for IC to process payments
+Kiosk
+Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Handled by partner based on SSO criteria. 
+       Multi-User Log In
+Required (for Lite)*
+*Referred by S&S as “Lite”, during the SSO, S&S will pass IC tokens that allow login. Along with the tokens, they will pass all of the accounts that should be associated with that particular sign in. This allows billers to have multiple people registered to the same account. This functionality is only part of the "McLogin" (Multi-user) project in IC. Any biller not using “Lite” will not have Multi-User Login. 
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Required
+S&S billers almost always use SSO. We have custom links that "jump" customers from WebConnect to IC, based on the instance name. WebConnect is the legacy SSO. S&S is encouraging billers to upgrade to SilverBlaze/Capricorn. 
+SilverBlaze is S&S’s new Portal Solution. The product that SilverBlaze offers is called Capricorn. We support an Embedded iFrame with Capricon. 
+We have a set of web services for SSO that are custom to S&S. The web service docs for S&S cannot be found on our doc site.
+In June 2019 we went live with new SSO web services that allow S&S to create a token with IC. IC no longer stores the username or password for any user, and S&S "controls" all credentials for logging in. During the SSO, S&S will pass IC tokens that allow login. Along with the tokens, they will pass all of the accounts that should be associated with that particular sign in. This allows billers to have multiple people registered to the same account. This functionality is only part of the "McLogin" (Multi-user) project in IC.
+AutoPay Collection Date
+Supported
+BIF includes indicator/dates for autopay dates.
+Batch Closure
+Supported
+Custom
+Invoice Cloud Batch Closure times must match S&S batch closure times. 
+When we post payments through the data pump, we also send the batch date. Depending on the timing, we will add days as necessary so the posting date is based on the next business day. Upon batch close, we will add an additional day to transactions being posted, so they show in a separate batch in enQuesta (CIS).
+Bill Processor
+Not Supported
+No longer implemented
+Billing Options 
+       Balance Forward
+Required
+BIF includes indicator/dates for balance forward
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Updated through RTDR. Advanced setting 32 is also configured to ensure the block payments flags are not in set in IC by a biller portal user, and only updated via RTDR.
+Conveyance
+Not Supported
+Data Conversions
+Supported
+Invoice Cloud will work with S&S on any user registration conversions. Payment method conversions are not recommended for S&S integrations due to the large volume of old/incorrect data that is typically stored with the billers previous vendor. 
+Email Notification Schedule
+Supported
+BIF includes indicator/dates for email notification. S&S will put the notification dates in the BIF that they code to. 
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Supported*
+*Typically not used.
+Minimum Payment
+Supported*
+*S&S would send in BIF. Typically not used.
+Paperless
+Supported
+Partial Payments
+Supported
+BIF includes indicator/dates for partial payments. 
+Past Due Payments
+Not Supported
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+N/A
+IDTech SRED Key
+N/A
+Ingenico EMV
+N/A
+Other EMV Devices
+N/A
+ URL:/spaces/IM/pages/2365292660/Harris+Systems+and+Software+S+S+Integration+Software+Details

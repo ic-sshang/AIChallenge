@@ -1,0 +1,42 @@
+1
+6
+false
+default
+list
+false
+Overview
+This set of articles describe the Azure AD Groups the InvoiceCloud Cloud Infrastructure team has created and manages.
+The general pattern preferred and implemented by the InvoiceCloud Infrastructure and Platform team is to follow the pattern of a set of 3 AAD Groups (Admin, Developer, Reader) per Environment, which enable access to Azure Resources within each specific Environment.
+Management
+InvoiceCloud currently uses Azure DevOps as a Source Code Management and Deployment Management platform.  Below are the Azure DevOps resources related to the NextGen Azure Active Directory Group provisioning and management.
+Repo
+https://dev.azure.com/invoicecloud/Systems_Src/_git/Global_AAD
+Deployment Pipeline
+https://dev.azure.com/invoicecloud/Systems_Src/_build?definitionId=1338
+Variable Group
+globalaad-groups-infrastructure
+Environments
+globalaad-groups-sbx
+globalaad-groups-dev
+globalaad-groups-iat
+globalaad-groups-qar
+globalaad-groups-xat
+globalaad-groups-npd
+globalaad-groups-prd
+Terraform State Management
+InvoiceCloud currently uses Terraform Cloud Workspaces configured with the 
+Local
+ Execution Mode to host Remote State files per Environment.  Below are the Terraform Cloud Workspaces related to the Global Azure Active Directory Group provisioning and management.
+Workspaces
+Deployment Version 1
+globalaad-groups-infrastructure-sbx-1
+globalaad-groups-infrastructure-dev-1
+globalaad-groups-infrastructure-iat-1
+globalaad-groups-infrastructure-qar-1
+globalaad-groups-infrastructure-xat-1
+globalaad-groups-infrastructure-prd-1
+Specific Group Sets
+1
+true
+0
+ URL:/spaces/icinfradoc/pages/2479423489/Next+Gen+Azure+AD

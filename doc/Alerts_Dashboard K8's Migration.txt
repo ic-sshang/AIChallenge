@@ -1,0 +1,294 @@
+We need to make sure we are aware of alerts and dashboards that will break as we migrate to K8’s.
+Dashboards and Alerts at most risk are those that reference any of these legacy props in their queries: 
+New Relic Infrastructure & APM Agent: Legacy vs K8 Comparison - Proxy Spoke - Confluence (atlassian.net)
+References to legacy APM props in Terraform:
+there are a few dashboards and alerts configured through terraform already.  Some of these
+utilize properties that are going away. Mostly ‘entity.guid’ is used, but also “apmApplicationNames”
+terraform search results
+"Path","LineNumber","needle"
+"sre-integration-tier1-valet\dash_templatefile.tf","7","entity.guid"
+"sre-integration-tier1-valet\dash_templatefile.tf","17","entity.guid"
+"sre-integration-tier1-valet\dash_templatefile.tf","26","entity.guid"
+"sre-integration-tier1-valet\dash_templatefile.tf","36","entity.guid"
+"sre-integration-tier1-valet\dash_templatefile.tf","46","entity.guid"
+"sre-integration-tier1-valet\variables.tf","28","entity.guid"
+"sre-integration-tier1-valet\variables.tf","51","entity.guid"
+"sre-integration-tier1-valet\variables.tf","74","entity.guid"
+"sre-integration-tier1-valet\variables.tf","97","entity.guid"
+"sre-integration-tier1-valet\variables.tf","120","entity.guid"
+"sre-platform-tier1-valet\dash_templatefile.tf","7","entity.guid"
+"sre-platform-tier1-valet\dash_templatefile.tf","17","entity.guid"
+"sre-platform-tier1-valet\dash_templatefile.tf","26","entity.guid"
+"sre-platform-tier1-valet\dash_templatefile.tf","36","entity.guid"
+"sre-platform-tier1-valet\dash_templatefile.tf","46","entity.guid"
+"sre-platform-tier1-valet\variables.tf","28","entity.guid"
+"sre-platform-tier1-valet\variables.tf","51","entity.guid"
+"sre-platform-tier1-valet\variables.tf","74","entity.guid"
+"sre-platform-tier1-valet\variables.tf","97","entity.guid"
+"sre-platform-tier1-valet\variables.tf","120","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","7","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","17","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","26","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","36","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","45","entity.guid"
+"sre-product-tier1-valet\dash_templatefile.tf","54","entity.guid"
+"sre-product-tier1-valet\variables.tf","29","entity.guid"
+"sre-product-tier1-valet\variables.tf","52","entity.guid"
+"sre-product-tier1-valet\variables.tf","75","entity.guid"
+"sre-product-tier1-valet\variables.tf","98","entity.guid"
+"sre-product-tier1-valet\variables.tf","121","entity.guid"
+"sre-product-tier1-valet\variables.tf","144","entity.guid"
+"sre-product-tier2-valet\dash_templatefile.tf","7","entity.guid"
+"sre-product-tier2-valet\dash_templatefile.tf","18","entity.guid"
+"sre-product-tier2-valet\variables.tf","28","entity.guid"
+"sre-product-tier2-valet\variables.tf","52","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","18","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfvars","53","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfvars","88","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfvars","123","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfvars","158","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfvars","18","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfvars","53","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfvars","88","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfvars","123","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfvars","158","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","18","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","53","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","88","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","123","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","158","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfvars","193","apmApplicationNames"
+"sre-product-tier2-valet\terraform.tfvars","18","apmApplicationNames"
+"sre-product-tier2-valet\terraform.tfvars","54","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfvars","14","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","22","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","26","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","30","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","34","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","38","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","49","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","57","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","61","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","65","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","69","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","73","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","84","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","92","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","96","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","100","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","104","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","108","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","119","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","127","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","131","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","135","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","139","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","143","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","154","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","162","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","166","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","170","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","174","entity.guid"
+"sre-integration-tier1-valet\terraform.tfvars","178","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","14","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","22","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","26","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","30","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","34","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","38","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","49","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","57","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","61","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","65","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","69","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","73","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","84","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","92","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","96","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","100","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","104","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","108","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","119","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","127","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","131","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","135","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","139","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","143","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","154","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","162","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","166","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","170","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","174","entity.guid"
+"sre-platform-tier1-valet\terraform.tfvars","178","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","14","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","22","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","26","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","30","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","34","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","38","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","49","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","57","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","61","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","65","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","69","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","73","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","84","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","92","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","96","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","100","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","104","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","108","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","119","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","127","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","131","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","135","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","139","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","143","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","154","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","162","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","166","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","170","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","174","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","178","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","189","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","197","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","201","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","205","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","209","entity.guid"
+"sre-product-tier1-valet\terraform.tfvars","213","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","14","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","22","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","26","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","30","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","34","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","38","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","50","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","58","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","62","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","66","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","70","entity.guid"
+"sre-product-tier2-valet\terraform.tfvars","74","entity.guid"
+"sre-integration-tier1-valet\terraform.tfstate","54","apmApplicationNames"
+"sre-platform-tier1-valet\terraform.tfstate","54","apmApplicationNames"
+"sre-product-tier1-valet\terraform.tfstate","54","apmApplicationNames"
+"sre-product-tier2-valet\terraform.tfstate","54","apmApplicationNames"
+"sre-integration-tier1-valet\terraform.tfstate","54","entity.guid"
+"sre-platform-tier1-valet\terraform.tfstate","54","entity.guid"
+"sre-product-tier1-valet\terraform.tfstate","54","entity.guid"
+"sre-product-tier2-valet\terraform.tfstate","54","entity.guid"
+"global-integration-alert\terraform.tfstate","57","entity.guid"
+"global-integration-alert\terraform.tfstate","120","entity.guid"
+"global-integration-alert\terraform.tfstate","183","entity.guid"
+"global-product-alert\terraform.tfstate","57","entity.guid"
+"global-product-alert\terraform.tfstate","120","entity.guid"
+"global-product-alert\terraform.tfstate","183","entity.guid"
+entities of interest:
+ICDatabaseService
+Alerts
+https://onenr.io/0MRNKgJv5jn
+ (not impacted)
+https://onenr.io/0nQx5yMEGwV
+ (impacted - hostname)
+https://onenr.io/08jqgLa20wl
+ (impacted - hostname)
+Dashboards
+https://onenr.io/0oR8bmoW5QG
+ (impacted - uses hostname)
+https://onenr.io/0EjOp2Lp5Q6
+ (impacted - uses apmApplicationNames, host)
+https://onenr.io/0VRVX92W6Qa
+ (not impacted)
+https://onenr.io/0PwJEJ3dDQ7
+ (impacted - uses hostname)
+https://onenr.io/0MR2b7WD0RY
+ (impacted - uses applicationName and machine)
+https://onenr.io/0oR87A64owG
+ (impacted- uses hostname)
+By team:
+SRE Dashbords:
+overview: 
+https://onenr.io/0MRNKOyKqjn
+https://onenr.io/0MR2b7WD0RY
+tier 1 
+infra:  
+https://onenr.io/0VjYxlbvqR0
+integration: 
+https://onenr.io/0VjYxlbaXR0
+platform: 
+https://onenr.io/0dQeb7KEowe
+product: 
+https://onenr.io/0gR7bEAJawo
+critical jobs: 
+https://onenr.io/0ZQWYLMexRW
+task scheduler: 
+https://onenr.io/0bRm6MVyWjy
+Wicked Tendies:
+jobs that throw high priority alerts when they fail on Automate (
+These go directly to OpsGenies):
+ChaseDFRImportChain
+CassNachaFileCreation-Step1
+CassNachaFileCreation-Step2
+CassFileReceiptProcessing
+CassApplyScheduledLedgerEntries
+CassBankActivityImport
+PayPalDaily jobs
+CloudTransactionProcessing
+Dashboard: 
+https://onenr.io/0MRNKMdB5jn
+Alerts:
+https://onenr.io/0LwGqpJLzj6
+https://onenr.io/0BQr0AelERZ
+https://onenr.io/0oR8bVEnYQG
+https://onenr.io/0MRNKMdPKjn
+https://onenr.io/0ERzzrnNdRr
+Team SPAM
+EmailQueueProcessing
+Alerts: 
+https://onenr.io/0PwJExnOpQ7
+https://onenr.io/02wddoWA9wE
+https://onenr.io/0oQDan787wy
+Auto Payment Controller
+Alerts: 
+https://onenr.io/0EjOpEneGQ6
+Billing Me Softly:
+BillerReportGenerator 
+BillerReportScheduler 
+CloudConnectWS 
+DailyBillerMgtReportEmail 
+ICKioskAPI 
+Alerts:
+https://onenr.io/0EjOpBvn8Q6
+https://onenr.io/0vjAPEM8KRP
+MC_RPPS 
+MC_RPPS_Import 
+MyIIS 
+Alerts:
+https://onenr.io/0LRExmMkrwa
+recaptcha
+https://onenr.io/0ERPNX3GaQW
+https://onenr.io/0vwBePMKVQp
+https://onenr.io/0LRExmMkrwa
+EmailQueueProcessing 
+ICRemoteAuthenticationAPI 
+RemoteAuthentication 
+Digital Possums:
+potential gaps
+RTDR
+Data Pump
+Stratus Web Service
+We'll Do it Live:
+Alerts:
+https://onenr.io/02R5b511mjb
+Platform Team:
+CTR+ALT+ELITE: 
+Dashboard: 
+https://onenr.io/0dQebDK2Wwe
+Alerts:
+https://onenr.io/08jqgLa20wl
+Build Breakers:
+Dashboard: 
+https://onenr.io/0MRNKZyz2jn
+Next Gen Payer Exp:
+ 
+might be ok already
+ URL:/spaces/DS/pages/2827714826/Alerts+Dashboard+K8+s+Migration

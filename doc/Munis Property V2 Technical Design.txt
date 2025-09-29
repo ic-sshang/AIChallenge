@@ -1,0 +1,936 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+Release Date
+Document status
+DRAFT
+Document owner
+Solution engineer
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+X
+X
+TEST BASE URL (for all integrations): 
+PROD BASE URL (for all integrations): 
+API Authentication Method: Basic / OAuth (1/2) / API Key / Web service key
+Renewal process: URL for renewal token, etc.
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Data Pump: Payment
+Included Payment Types:
+ACH Rejects 
+(specify if C-Code Rejects included)
+Credits 
+Chargebacks 
+(specify any special handling for sending negative values with a dash indicator or other)
+Payment Code Mapping:
+Credit Card = 
+Visa =
+Mastercard = 
+Discover = 
+AmericanExpress =
+PayPal =
+Venmo =
+ACH = 
+OBD = 
+IVR = 
+Payment Source ID - Payment Source Description: 
+1 - Web Services
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Data Pump: Void
+Included Payment Types:
+ACH Rejects 
+(specify if C-Code Rejects included)
+Credits 
+Chargebacks 
+(specify any special handling for sending negative values with a dash indicator or other)
+Payment Code Mapping:
+Credit Card = 
+Visa =
+Mastercard = 
+Discover = 
+AmericanExpress =
+PayPal =
+Venmo =
+ACH = 
+OBD = 
+IVR = 
+Payment Source ID - Payment Source Description: 
+1 - Web Services 
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Data Pump: ACH Reject 
+Included Payment Types:
+ACH Rejects 
+(specify if C-Code Rejects included)
+Credits 
+Chargebacks 
+(specify any special handling for sending negative values with a dash indicator or other)
+Payment Code Mapping:
+Credit Card = 
+Visa =
+Mastercard = 
+Discover = 
+AmericanExpress =
+PayPal =
+Venmo =
+ACH = 
+OBD = 
+IVR = 
+Payment Source ID - Payment Source Description: 
+1 - Web Services 
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Data Pump: Paperless Enrollment
+Data Pump: AutoPay Enrollment and Payment Method Changes
+Data Pump: Customer Changes
+Bill Presentment
+Bill Presentment (Template Detail)
+Sample Template: 
+Mapping:
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+Biller SFTP File Path: 
+File Transfer Frequency: 
+File Format Name: 
+File Split Details:
+InvoiceCloud SFTP File Path: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+Invoice Header
+11
+InvoiceDate
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+Invoice Header
+13
+TotalAmountDue
+TRUE
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+Invoice Header
+35
+CustomerShipState
+FALSE
+Invoice Header
+36
+CustomerShipZip
+FALSE
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+40
+Custom3
+FALSE
+Invoice Header
+41
+Custom4
+FALSE
+Invoice Header
+42
+Custom5
+FALSE
+Invoice Header
+43
+Custom6
+FALSE
+Invoice Header
+44
+Custom7
+FALSE
+Invoice Header
+45
+Custom8
+FALSE
+Invoice Header
+46
+Custom9
+FALSE
+Invoice Header
+47
+Custom10
+FALSE
+Invoice Header
+93
+BalanceDue
+FALSE
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+Invoice Header
+346
+BillerBillYear
+FALSE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+TRUE
+Customer Record
+60
+CustomerName
+TRUE
+Customer Record
+61
+Address1
+FALSE
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+FALSE
+Customer Record
+64
+State
+FALSE
+Customer Record
+65
+Zip
+FALSE
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+83
+CustomField1
+FALSE
+Invoice Detail
+84
+CustomField2
+FALSE
+Invoice Detail
+85
+CustomField3
+FALSE
+Invoice Detail
+86
+CustomField4
+FALSE
+Invoice Detail
+87
+CustomField5
+FALSE
+Invoice Detail
+88
+CustomField6
+FALSE
+Invoice Detail
+89
+CustomField7
+FALSE
+Invoice Detail
+90
+CustomField8
+FALSE
+Invoice Detail
+91
+CustomField9
+FALSE
+Invoice Detail
+92
+CustomField10
+FALSE
+Invoice Detail
+208
+CustomField11
+FALSE
+Invoice Detail
+209
+CustomField12
+FALSE
+Invoice Detail
+210
+CustomField13
+FALSE
+Invoice Detail
+211
+CustomField14
+FALSE
+Invoice Detail
+212
+CustomField15
+FALSE
+Invoice Detail
+213
+CustomField16
+FALSE
+Invoice Detail
+214
+CustomField17
+FALSE
+Invoice Detail
+215
+CustomField18
+FALSE
+Invoice Detail
+216
+CustomField19
+FALSE
+Invoice Detail
+217
+CustomField20
+FALSE
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+Biller SFTP File Path: 
+File Transfer Frequency:
+File Format Name: 
+File Split Details: 
+InvoiceCloud SFTP File Path:
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Invoice Update File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+File Format Name: 
+File Split Details: 
+InvoiceCloud SFTP File Path:
+Field Mapping
+Customer Update File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+File Format Name: 
+File Split Details: 
+InvoiceCloud SFTP File Path:
+Field Mapping
+Conveyance File
+File Summary: 
+File Extension: 
+File Naming Convention: 
+Specification: N/A
+Sample File: 
+File Delimiter: 
+Frequency: 
+SFTP File Path: 
+File Format Name: 
+File Split Details: 
+InvoiceCloud SFTP File Path:
+Field Mapping
+IC File Spec ID
+IC Field
+Required (T/F)
+Biller Field Name
+Biller Field Description
+Record Type
+358
+RowType
+TRUE
+N/A - Always ‘CH’
+N/A
+Conveyance File Header (CH)
+359
+BillerGUID
+TRUE
+N/A - IC generated value
+N/A
+Conveyance File Header (CH)
+360
+ThirdPartyFileReference
+FALSE
+Conveyance File Header (CH)
+361
+FileCreationDate
+TRUE
+N/A - IC generated using current date
+N/A
+Conveyance File Header (CH)
+362
+ConveyanceCount
+TRUE
+N/A - IC generated using Record Count in file
+N/A
+Conveyance File Header (CH)
+363
+RowType
+TRUE
+N/A - Always ‘CC’
+N/A
+Conveyance Record (CC)
+364
+CurrentAccountNumber
+TRUE
+ 
+Conveyance Record (CC)
+365
+NewAccountNumber
+FALSE
+ 
+Conveyance Record (CC)
+411
+LinkNewAccount
+FALSE
+N/A
+Conveyance Record (CC)
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specifications: 
+Included Payment Types:
+Payment Channels (CC, ACH, OBD, etc)
+ACH Rejects 
+(specify if C-Code Rejects included)
+Credits 
+Chargebacks 
+(specify any special handling for sending negative values with a dash indicator or other)
+Declines
+Voids
+Payment Code Mapping:
+Credit Card = 
+Visa =
+Mastercard = 
+Discover = 
+AmericanExpress =
+PayPal =
+Venmo =
+ACH = 
+OBD = 
+IVR = 
+Payment Source ID - Payment Source Description: 
+1 - Web Services
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Sample File:
+SFTP File Path:
+File Transfer Frequency: 
+(Add notes for if Daylight Savings needs to be accounted for and how to handle a payment file if no payments have been made - blank file or no file or other)
+File Format Name: 
+IF_MunisV2_Property_Lockbox - BID
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+{
+    "MunisConfig": {
+        "DetailReferenceConfig": {
+            "PaymentTypes": {
+                "ACH": "ACH",
+                "CreditCard": "CC"
+            },
+            "PaymentSources": {
+                "AutoPay": "AP",
+                "Default": "1P"
+            }
+        }
+    }
+}
+PaymentTypes also accepts a Default value.
+ JSON Configuration in Advanced Setting 131:
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: (Add note if DLS needs to be accounted for)
+File Format Name: 
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Sizing
+361d618a-3c04-40ad-9b27-3c8ea6927020
+4
+Category is not empty
+a794a9fe-4e85-4248-a369-5876c06e7984
+table
+166
+167
+182
+168
+65,134,163,171
+361d618a-3c04-40ad-9b27-3c8ea6927020
+4
+Category is not empty
+a794a9fe-4e85-4248-a369-5876c06e7984
+table
+166
+167
+182
+168
+65,134,163,171
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+Technical Specifications
+ URL:/spaces/IM/pages/3189014529/Munis+Property+V2+Technical+Design

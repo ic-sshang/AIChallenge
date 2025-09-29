@@ -1,0 +1,616 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+12817
+Document status
+completed
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer 
+https://invoicecloud.box.com/s/hai81a2sgrsmmbg6i7qwuuzyn35gori0
+ 
+API Documentation
+note
+URLs given are just an example and will change per Biller.
+
+
+URLs given are just an example and will change per Biller.
+
+
+Authentication Details
+1800
+Authentication
+A token is retrieved from amazon web services.
+URL
+https://ddptest.auth.us-east-1.amazoncognito.com/oauth2/token
+Method
+POST
+Content-type
+ application/x-www-form-urlencoded
+Authorization Header Parameters
+Authorization-Type
+Basic
+Password
+ear0snupv0ftvbmtkagb3nv4cqp6cgbpgmfo63vbrol5l7phut1
+Username
+1c7igefseabh1au7l90ljkufqd
+Request Body Parameters
+grant_type
+'client_credentials'
+client_id
+1c7igefseabh1au7l90ljkufqd
+scope
+'invoice-cloud-services/exec'
+API Details
+1800
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+invoices
+Return information on the account invoices
+balFwdScope query parameter is case sensitive
+ICLATEST, LATESTDAILY, LATEST, or ALL are balFwdScope options. 
+ICLATEST – returns just 1 invoice, the latest
+LATESTDAILY – Returns all invoices for the last 12 months. Service returns the actual invoice balance of the latest invoice due on any given day. Service returns $0 balance for any invoices due the same day but is not the latest for that day.
+ALL – returns all invoices in the last 12 months
+GET
+ 
+https://mo.ddpmo.delphicloud.org/invoice-services/accounts/{accountNumber}/invoices?balFwdScope=ICLATEST
+Authorization: Bearer Token
+note
+{accountNumber} is replaced with IC AccountNumber within URL
+
+
+{accountNumber} is replaced with IC AccountNumber within URL
+
+
+[
+    {
+        "fmBillId": 0639041359,
+        "invoiceNumber": "0579072",
+        "invoiceDate": "2021-07-07",
+        "invoiceDueDate": "2021-08-01",
+        "invoiceAmount": "2308",
+        "invoiceOpenBalance": "2308",
+        "accountNumber": "936599N",
+        "customerName": "Johnson M.D., James",
+        "clientId": "BR106899",
+        "pdfToken": "not requested"
+    }
+]
+invoiceopenbalance = IC Balance Due
+We currently do not use the invoiceAmount field. 
+Data Pump: Paperless Enrollment & Autopay
+payments
+Post a change to paperless or AutoPay
+PUT 
+https://norcal.ddp.delphicloud.org/invoice-services/accounts/{accountNumber}/invoices/settings
+Authorization:
+ Bearer Token
+Parameter: 
+userId (same as authentication username)
+Body:
+{"customerId": "string","customerName": "string","emailAddress": "string","isAutoPay": "string","isPaperlessOpted": "string"}
+{
+  "body": {},
+  "statusCode": "100 CONTINUE",
+  "statusCodeValue": 0
+}
+Data Pump: Payment
+settings
+Post a Payment to an account
+POST 
+https://<domain>/invoice-services/accounts/{accountNumber}/payments
+Authorization:
+ Bearer Token
+Parameter: 
+userId (same as authentication username)
+Body:
+{
+  "invoiceNumber": "string",
+  "paymentDate": "yyyy-mm-dd",
+  "paymentAmount": 0,
+  "referenceNumber": "string",
+  "paymentMethod": "string",
+  "paymentChannel": "string"
+}
+if Cloud Store Payment:
+ 
+If the Payment Source is 12 or 13 (CloudStore Biller Initiated or CloudStore Customer Initiated), the request below shall be used. 
+POST
+ 
+https://<domain>/invoice-services/accounts/{accountNumber}/payments
+Body: 
+{
+  "invoiceNumber": "string",
+  "paymentDate": "yyyy-mm-dd",
+  "paymentAmount": 0,
+  "referenceNumber": "string",
+  "paymentMethod": "string",
+  "paymentChannel": "string",
+  "addlPaymentInfo1": "string",
+  "addlPaymentInfo2": "string",
+  "addlPaymentInfo3": "string",
+  "addlPaymentInfo4": "string"
+}
+{
+  "body": {},
+  "statusCode": "100 CONTINUE",
+  "statusCodeValue": 0
+}
+Default Cloud Store Fields: 
+Cloud Store Payments:
+We will use the Cloud Store Payment Source (12 and 13) to determine which payments to use the Second Request Body with and add the additional fields.  
+We are adding addlPaymentInfo1, addlPaymentInfo2, addlPaymentInfo3, and addlPaymentInfo4 as a new field to the current Data Pump request for Cloud Store payments. 
+You will make sure to use a non-null value for {accountNumber} in the URL. Whether it is ClientId or some other value that you know will never be null, it makes no difference to us
+.
+In the JSON,
+paymentMethod, paymentChannel, addlPaymentInfo1, addlPaymentInfo2, addlPaymentInfo3, and addlPaymentInfo4. They are all optional in the JSON model.
+Payment Methods are currently set to Standard Payment Methods of IC by default 
+0(ICACH)
+Payment Channel is currently set to Standard Payment Channels of IC by default 
+0(ICONETIME)
+invoiceNumber
+ = Invoice Cloud Invoice Number (Optional)
+paymentDate 
+= Date the payment was processed
+paymentAmount 
+= 'Amount' field in the Cloud Store
+referenceNumber
+ 
+= The same amount being entered for the current reference number 
+"PaymentReference"
+. The PaymentReference is used to relate all payments that were made during the same transaction. For example, the customer decided to pay all three invoices in the same transaction causing all three payments connected to their respective invoice to have the same PaymentReference. This PaymentReference is generated by ChasePaymentechthrough the response we receive.  
+paymentMethod 
+= 
+PaymentTypeID
+ (optional
+)
+paymentChannel will contain a value that we will use to detect that a payment is a Cloud Store payment.
+: currently we are using 
+PaymentSourceID
+ - we will need to set this to the Cloud Store Invoice Type ID to differentiate between Cloud Store Payments. 
+addlPaymentInfo1 = ClientID field on Cloud Store
+addlPaymentInfo2 = InsuredName field on Cloud Store
+addlPaymentInfo3 = Quote Number or 
+Tail Policy Number
+ (depending on what Cloud Store is being used, this will be the number field)
+addlPaymentInfo4 = Blank for now (optional)
+PDF Remote Linking
+render
+Get Bill Image with PDF Token
+GET 
+https://norcal.ddp.delphicloud.org/document-services/documents/subsystem/{subsystemId}/documents/{documentId}/render
+Authorization: Bearer Token
+documentid is the pdf token in the BIF
+bill image / bitstream
+Modifications
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Data Pump: Payment
+settings
+Post a Payment to an account
+POST 
+https://<domain>/invoice-services/accounts/{accountNumber}/payments
+Authorization:
+ Bearer Token
+Parameter: 
+userId (same as authentication username)
+Body:
+{
+  "invoiceNumber": "string",
+  "paymentDate": "yyyy-mm-dd",
+  "paymentAmount": 0,
+  "referenceNumber": "string",
+  "paymentMethod": "string",
+  "paymentChannel": "string",
+  “ccOrBankInfo”: “”,
+  “paymentAuthorizationCode”: “”
+
+}
+if Cloud Store Payment:
+ 
+If the Payment Source is 12 or 13 (CloudStore Biller Initiated or CloudStore Customer Initiated), the request below shall be used. 
+POST
+ 
+https://<domain>/invoice-services/accounts/{accountNumber}/payments
+Body: 
+{
+  "invoiceNumber": "string",
+  "paymentDate": "yyyy-mm-dd",
+  "paymentAmount": 0,
+  "referenceNumber": "string",
+  "paymentMethod": "string",
+  "paymentChannel": "string",
+  “ccOrBankInfo”: “”,
+  “paymentAuthorizationCode”: “”,
+  "addlPaymentInfo1": "string",
+  "addlPaymentInfo2": "string",
+  "addlPaymentInfo3": "string",
+  "addlPaymentInfo4": "string"
+}
+{
+  "body": {},
+  "statusCode": "100 CONTINUE",
+  "statusCodeValue": 0
+}
+Default Cloud Store Fields: 
+Cloud Store Payments:
+We will use the Cloud Store Payment Source (12 and 13) to determine which payments to use the Second Request Body with and add the additional fields.  
+We are adding addlPaymentInfo1, addlPaymentInfo2, addlPaymentInfo3, and addlPaymentInfo4 as a new field to the current Data Pump request for Cloud Store payments. 
+You will make sure to use a non-null value for {accountNumber} in the URL. Whether it is ClientId or some other value that you know will never be null, it makes no difference to us
+.
+In the JSON,
+paymentMethod, paymentChannel, addlPaymentInfo1, addlPaymentInfo2, addlPaymentInfo3, and addlPaymentInfo4. They are all optional in the JSON model.
+Payment Methods are currently set to Standard Payment Methods of IC by default 
+0(ICACH)
+Payment Channel is currently set to Standard Payment Channels of IC by default 
+0(ICONETIME)
+invoiceNumber
+ = Invoice Cloud Invoice Number (Optional)
+paymentDate 
+= Date the payment was processed
+paymentAmount 
+= 'Amount' field in the Cloud Store
+referenceNumber
+ 
+= The same amount being entered for the current reference number 
+"PaymentReference"
+. The PaymentReference is used to relate all payments that were made during the same transaction. For example, the customer decided to pay all three invoices in the same transaction causing all three payments connected to their respective invoice to have the same PaymentReference. This PaymentReference is generated by ChasePaymentechthrough the response we receive.  
+paymentMethod 
+= 
+OasisPaymentTypeCode
+eg: IC-2
+Oasis Payment Type Code
+|
+IC Payment Type
+IC-1	        Credit Card = 1
+IC-2	EFTCheck = 2 
+IC-3	CreditAdj = 3    
+IC-4	EasyPay = 4
+IC-5	Check = 5
+IC-6	Cash = 6
+IC-7	PaymentDisc = 7
+IC-8	DebitAdj = 8
+IC-10	BalanceForward = 10
+IC-11	OnlineBankDirect = 11
+IC-12	Payment = 12
+IC-13	AutoConveyance = 13
+IC-14	PayNearMe = 14
+IC-15	PayPal = 15
+IC-16	PayPalCredit = 16
+IC-17	Venmo = 17
+paymentChannel will contain a value that we will use to detect that a payment is a Cloud Store payment.
+: currently we are using 
+PaymentSourceID
+ - we will need to set this to the Cloud Store Invoice Type ID to differentiate between Cloud Store Payments. 
+If Cloud Store Source (12 or 13) then keep the current logic for paymentChannel values
+If not then:
+paymentChannel= 
+ICONETIME
+ or 
+ICAUTOPAY
+Where 
+ICONETIME
+1 - Web Services
+2 - Biller Portal
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+14 - Shopping Cart
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+ICAUTOPAY
+15 - Auto Pay
+22 - Recurring Scheduled Payment
+ccOrBankInfo = 
+If CC then pass CC type + last 4 digits of CC
+eg: “VISA-9654”
+If ACH then pass bank account type + last 4 digits of bank account
+eg: “Savings-8765”
+paymentAuthorizationCode = IC Payment Message
+eg: “783657”
+This highlight value
+addlPaymentInfo1 = ClientID field on Cloud Store
+addlPaymentInfo2 = InsuredName field on Cloud Store
+addlPaymentInfo3 = Quote Number or 
+Tail Policy Number
+ (depending on what Cloud Store is being used, this will be the number field)
+addlPaymentInfo4 = Blank for now (optional)
+File Mapping
+Invoice File
+File Extension: BIF
+File Naming Convention: 
+{IC_BID}_{datetime}.BIF
+File Delimiter: |
+Specification: IC File Spec
+Sample File: 
+Field Mapping
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+n/a
+File Header
+2
+BillerGuid
+Y
+TRUE
+n/a
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+n/a
+example
+:
+INV_20210705200003.60333169679505654461352682355489480041.txt
+File Header
+4
+FileCreationDate
+Y
+TRUE
+n/a
+MM/DD/YYYY
+File Header
+5
+InvoiceCount
+Y
+TRUE
+n/a
+int
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+n/a
+decimal
+File Header
+7
+RowType
+Y
+TRUE
+n/a
+Invoice Header
+8
+RecordType
+Y
+TRUE
+n/a
+Static value 'R'
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+static value provided by IC
+n/a
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+invoiceNumber
+NNNNNNN
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+invoiceDate
+YYYY-MM-DD
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+invoiceDueDate
+YYYY-MM-DD
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+invoiceAmount
+decimal
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+n/a
+Static value '1'
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+n/a
+Static value ‘164’
+Invoice Header
+339
+PDFToken
+Y
+FALSE
+pdf_token
+example:
+3637687197.3637687284.-1
+Invoice Header
+58
+RowType
+Y
+TRUE
+n/a
+Static value ‘CR’
+Customer Record
+59
+AccountNumber
+TRUE
+account_no
+Varies per Client
+Customer Record
+60
+CustomerName
+TRUE
+customer_name
+Customer Record
+61
+Address1
+FALSE
+address_line1
+Customer Record
+62
+Address2
+FALSE
+address_line2
+Customer Record
+63
+City
+FALSE
+city
+Customer Record
+64
+State
+FALSE
+state_code
+Customer Record
+65
+Zip
+FALSE
+zipcode +zip_plus_four
+Customer Record
+67
+EmailAddress
+FALSE
+eml
+100
+Customer Record
+194
+BalanceForward
+Y
+FALSE
+4/12/23 - Will be included moving forward
+20
+AllowPartialPayments
+Y
+FALSE
+4/12/23 - Will be included moving forward
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+64
+DataPump Payments CC Code	
+Invoice Type ID will be sent in the Payment Channel for Cloud Store Real Time Integration for Oasis/Delphi to differentiate between Cloud Store payments
+68(InvoiceTypeID)|69(InvoiceTypeID)
+Y
+65
+DataPump Payments ACH Code	
+Invoice Type ID will be sent in the Payment Channel for Cloud Store Real Time Integration for Oasis/Delphi to differentiate between Cloud Store payments
+68(InvoiceTypeID)|69(InvoiceTypeID)
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+Generally not needed
+AllowPartialPayments
+in BIF
+AutoPayCollectionDate
+on biller questionnaire 
+BalanceForward
+on biller questionnaire 
+CreditCardServiceFee
+on biller questionnaire 
+FirstNotifyRequestedDate
+on biller questionnaire 
+LateFeeDate
+on biller questionnaire 
+SecondNotifyRequestedDate
+on biller questionnaire 
+ThirdNotifyRequestedDate
+on biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+1800
+Data Flow - Adjustments
+1800
+Data Flow - Payment
+1800
+Data Flow - Change Log
+1800
+Data Flow - Bill Presentment
+1800
+Payer Experience
+1800
+SSO?
+Biller Experience
+1800
+Billers will use the IC Biller Portal
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadvbUnicodeB64InvoiceFileQueued & UploadInvoice
+Upload Invoice(s)
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+Technical Detail
+INT-5386
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Cloud Store payments were not included in the Data Pump
+Include Cloud Store payments to the Data Pump for ease of use
+Adding new fields to the API call to capture information on Cloud Store payments
+[ITG-3702] Fw: IC Payments and associated fees - JIRA
+TBD
+By default, the paymentamount on this integration includes the sum of the transactionamount (balance due) and the convenience fee. Biller NIP (4251, 4266) does not want the convenience fee included in the value being sent back to Oasis.
+Return only the transaction amount in the paymentamount field being data pumped back to Oasis. 
+There was already conditional logic in the module, so the required change was simple
+Customer request
+File: clsDelphi.v
+b
+Function: GetDelphiRequestObject()
+Previous code statement: “Case 2172, 2060”
+Changed to:  “Case 2172, 2060, 4251, 4266”.
+ URL:/spaces/IM/pages/218726468/Delphi+Oasis+Technical+Design

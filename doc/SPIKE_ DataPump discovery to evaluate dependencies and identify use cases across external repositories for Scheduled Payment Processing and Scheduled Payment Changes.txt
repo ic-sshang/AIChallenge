@@ -1,0 +1,91 @@
+1.Scheduled Payment Processing:
+Datapumptypeid=9
+payment processing is handled through scheduled payments to customers. Payments can be scheduled via either the biller portal or the customer portal.
+2.Azure Batch Job:
+As part of the autopay chain process, this scheduled batch job is processed using Azure Batch Processing.
+There are multiple batch jobs that are executed as part of the AutoPay
+ScheduledPaymentBalanceCheck
+RecurringScheduledPaymentsGenerator
+ScheduledPaymentProcessing
+ScheduledPaymentProcessingMultiInvoice
+3.Stored Procedures:
+insScheduledPayments
+This are the stored proc is inserting the record in Data pump
+4.Depended on repositories:
+Repo  Name
+Repo Link
+ScheduledPaymentProcessing
+Module1.vb - Repos
+MyIIS
+CloudPaymentReview.aspx.vb - Repos
+AutoPayChainDataStager
+ScheduledPaymentRepository.cs - Repos
+Biller Portal
+ScheduledPaymentRepository.cs - Repos
+FlexpayAutoEnrollScheduleGenerator
+Utilities.cs - Repos
+ Reference doc:
+Scheduled Payments - Processing - SRE - Confluence
+1.Scheduled Payment Changes:
+Datapumptypeid=10
+Step 1:
+Enable scheduled payments using either the 
+Biller Portal
+ or 
+Customer Portal
+.
+Step 2:
+Modify existing payment details—such as the 
+payment date
+ or 
+cancel scheduled payments
+2.Stored Procedures:
+insScheduledPaymentHistory
+This are the stored proc is inserting the record in Data pump
+Dependencies:
+3.Depended on repositories:
+Repo Name
+Repo Link
+AutoPaymentProcessing
+clsUtilities.vb - Repos
+ScheduledPaymentProcessingMultiInvoice
+ScheduledPaymentProcessingMultiInvoice - Repos
+MYIIS
+ChangeScheduledPaymentDate.aspx.vb - Repos
+ScheduledPaymentProcessing
+ScheduledPaymentProcessing - Repos
+AutoPaymentsProcessingMultiInvoice
+AutoPaymentsProcessingMultiInvoice - Repos
+BillerPortal
+BillerSyncHistoryDataPump.aspx.vb - Repos
+Test Plan – Scheduled Payment Process Flow
+To verify that scheduled payments can be enabled and modified successfully via the biller or customer portal, and that corresponding invoice updates and database changes occur as expected.
+Test Steps:
+Step 1: Enable Scheduled Payment
+Enable a scheduled payment for any customer using either the 
+Biller Portal
+ or 
+Customer Portal
+, selecting either a 
+future date
+ or the 
+current date
+ for payment initiation.
+Step 2: Execute Batch Job
+Run the appropriate batch job to process the scheduled payment.
+Step 3: Verify Results
+Check if the invoice associated with the customer has been updated accordingly.
+Confirm that the relevant records are populated correctly in the 
+Data Pump
+ table.
+Step 4: Modify Scheduled Payment
+Modify the existing scheduled payment details—such as the 
+payment date
+ or 
+payment method
+—and save the changes.
+Step 5: Re-Verify
+Validate that the modifications are successfully reflected in the invoice and database.
+Attaching the test evidence.
+ 
+ URL:/spaces/PE/pages/4494327824/SPIKE+DataPump+discovery+to+evaluate+dependencies+and+identify+use+cases+across+external+repositories+for+Scheduled+Payment+Processing+and+Scheduled+Payment+Changes

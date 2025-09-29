@@ -1,0 +1,58 @@
+Environment tasks
+Establish public hostname for Production in GoDaddy and Cloudflare as 
+api.invoicecloud.com
+EBPP-18585
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Add or Update Production Barracuda Routes for Payer NextGen UI and APIs
+Update 
+www.invoicecloud.com/portal/ui/*
+ Barracuda Route IP Target
+EBPP-18593
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Add 
+api.invoicecloud.com
+ Barracuda Route IP Target
+EBPP-18586
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Remove Payer V2 
+apibeta
+ hostname support from GoDaddy, Cloudflare, and Barracuda
+EBPP-18587
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delete DV2 of the Payer Spoke Infrastructure from all Environments
+EBPP-17597
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+App Deployment tasks
+Update the Hostnames expected in the Payer NextGen V3 Web Helm Charts to remove 
+prd
+ from the hostnames.
+EBPP-18566
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Done for OTP by 
+ on 
+migrate-cluster-v3
+ branch
+Update prod  with appropriate myiis code
+Deploy release code into Prod
+Testing tasks
+Prod (manual/auto) test – QE?
+Automated tests from where?
+Observability
+Logs (at least prod) in Newrelic? 
+Yes
+Related Articles
+Routing Mapping - 15PE - Engineering - Confluence (atlassian.net)
+V3 Migration Burndown - 15PE - Engineering - Confluence (atlassian.net)
+ URL:/spaces/platform/pages/3168501827/Production+Deployment+Rollout

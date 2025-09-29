@@ -1,0 +1,102 @@
+Questions to ask for each item:
+
+
+
+
+130
+
+
+incomplete
+
+
+What are the Affected Services?
+You need to determine which processes are the item affects and note them under the Affected Services area of the item.  This is a requirement by IC but not the Jira System.
+
+
+
+
+
+
+131
+
+
+incomplete
+
+
+Who is the Biller?
+Knowing the biller at the start can automatically indicate the severity of the Item.  We know that some billers need more attention then others and knowing the biller will trigger what severity to start the item as you continue to review.
+
+
+
+
+
+
+132
+
+
+incomplete
+
+
+Who is the Software Partner
+Knowing the software partner also allows you to start thinking about the severity of the item.  At this level you must ask yourself if the change that is needed going to affect all billers that fall under the Software Partner or just one biller.  This helps determine what severity the item needs to be placed in.  The item could also be affecting multiple billers with the same partner which would raise the severity of the item.
+
+
+
+
+
+
+133
+
+
+incomplete
+
+
+Integration Level?
+This indicates the capacity of MRR we receive for each Biller.  The more MRR the higher the importance of the item.  Level 0 are largest billers and level 5 are smaller billers.  Level 0 have more precendence over level 5 billers when it comes to severity.
+
+
+
+
+
+
+134
+
+
+incomplete
+
+
+Number of affected shareholders for the item?
+How many Billers are affected? How many customers are affected?  If the number is greater than 1 you must start thinking that the severity need to increase.
+
+
+
+
+
+
+135
+
+
+incomplete
+
+
+Does the item contain all relevant information needed to do the research requested?
+Do we have sample accounts, invoices, files, and screenshots. All are valid examples of data we would need to research most of our items.  Sometime you might need multiple data from the submitter.  The Triage reviewer must be able to distinguish that the provided information will be able to help solve the problem.
+
+
+
+
+Triage Instructions:
+1.) Understand the item and its content.
+2.) Understand and assign the affected services in the section of the Jira Item.
+3.) Assign Severity
+If Number of affected shareholders for the item? is greater than 1 than we should start  considering applying a severity of high for the item.
+If the item indicates problems with having customers payment processing, we should be thinking of assigning a severity of high.
+       If the problem indicates a file upload failure, indicate the issue as the HIGHEST priority.
+5.) Assign the Label Field
+If Does the item contain all relevant information needed to do the research requested? is no then place a label of CS_Review in the Labels field, and assign the assignee
+Else
+Leave Blank
+6.) Change Status to pending
+7.) Move on to the next item
+The following is a flow chart of the triage process:
+ URL:/spaces/DS/pages/2428436481/Triage+Checklist

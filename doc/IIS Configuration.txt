@@ -1,0 +1,339 @@
+Pre-Provisioning
+Includes configuration of IIS sites, their bindings, app pools, and virtual applications. Does not include deployment of applications.
+Proposed New Configuration
+Proposed New Configuration
+ includes removal of dead or duplicate applications and creation of a separate app pool for each application.
+Additionally, the proposal updates 
+www2.invoicecloud.com
+ to 
+www.invoicecloud.com
+ (and does the same for SMS) – just cleaning up old junk.
+Biller Virtual Sites in Use: 
+ 
+Current Configuration
+Note: all bindings are for both port 80 and port 443
+internal.invoicecloud.com
+Bindings
+internal.invoicecloud.com
+ 
+Virtual Applications
+/
+ (pool: 
+internal.invoicecloud.com
+)
+/apps/ICReCaptchaAPI
+ (pool: 
+reCaptcha
+)
+/apps/skynet
+ (pool: 
+internal.invoicecloud.com
+)
+/apps/skynet2
+ (pool: 
+skynet2
+)
+my.invoicecloud.com
+Bindings
+my.invoicecloud.com
+ 
+my{server number}.invoicecloud.com
+ 
+Virtual Applications
+/
+ (pool: 
+my.invoicecloud.com
+)
+/portal
+ (pool: 
+BillerPortal
+)
+sms2.invoicecloud.com
+Bindings
+sms.invoicecloud.com
+ 
+sms2.invoicecloud.com
+ 
+Virtual Applications
+/
+ (pool: 
+sms.invoicecloud.com
+)
+sso.invoicecloud.com
+Bindings
+sso.invoicecloud.com
+ 
+Virtual Applications
+/
+ (pool: 
+sso.invoicecloud.com
+)
+stratus.invoicecloud.com
+Bindings:
+stratus.invoicecloud.com
+ 
+Virtual Applications
+/
+ (pool: 
+stratus.invoicecloud.com
+)
+www2.invoicecloud.com
+Bindings
+invoicecloud.com
+ncf.invoicecloud.com
+nsp.invoicecloud.com
+www.invoicecloud.com
+ 
+www2.invoicecloud.com
+www3.invoicecloud.com
+www4.invoicecloud.com
+ 
+ic-web{server number}.invoicecloud.com
+web{server number}.invoicecloud.com
+stage1.invoicecloud.com
+cedarcity.invoicecloud.com
+greensboro.invoicecloud.com
+greensborotest.invoicecloud.com
+Virtual Applications
+/
+ (pool: 
+www.invoicecloud.com
+)
+/AgentConnectAPI
+ (pool: 
+API
+)
+/anaheimca
+ (pool: 
+SandS_4.0
+)
+/anaheimcatest
+ (pool: 
+test
+)
+/api
+ (pool: 
+API
+)
+/arlingtontx
+ (pool: 
+SandS_4.0
+)
+/arlingtontxtest
+ (pool: 
+portal4.0
+)
+/atlantaga
+ (pool: 
+SandS_4.0
+)
+/atlantagatest
+ (pool: 
+test
+)
+/augustageorgia
+ (pool: 
+SandS_4.0
+)
+/augustageorgiatest
+/azusaca
+ (pool: 
+SandS_4.0
+)
+/azusacatest
+ (pool: 
+test
+)
+/cawar
+ (pool: 
+SandS_4.0
+)
+/cawartest
+ (pool: 
+test
+)
+/cirrus-insurance
+ (pool: 
+API
+) 
+/cityofsantaanaca
+ (pool: 
+SandS_4.0
+)
+/cityofsantaanacatest
+ (pool: 
+test
+)
+/cityofventura
+ (pool: 
+SandS_4.0
+)
+/cityofventuratest
+ (pool: 
+test
+)
+/clarksvillegasandwater
+ (pool: 
+SandS_4.0
+)
+/clarksvillegasandwatertest
+ (pool: 
+test
+)
+/cloudpaymentsapi
+ (pool: 
+API
+)
+/crm
+ (pool: 
+CRM
+)
+/documentation
+ (pool: 
+documentation
+)
+/dwsdmi
+ (pool: 
+SandS_4.0
+)
+/dwsdmitest
+ (pool: 
+test
+)
+/emvapi
+ (pool: 
+API2
+)
+/epb
+ (pool: 
+SandS_4.0
+)
+/epbtest
+ (pool: 
+test
+)
+/freeportny
+ (pool: 
+SandS_4.0
+)
+/freeportnytest
+ (pool: 
+test
+)
+/ICPDF
+ (pool: 
+test
+)
+/integrations/redirect
+ (pool: 
+portal4.0
+)
+/kioskapi
+ (pool: 
+API
+)
+/portal
+ (pool: 
+portal4.0
+)
+/RemoteAuthenticationAPI
+ (pool: 
+API2
+)
+/remotelinking
+ (pool: 
+remotelinking
+)
+/sandstest
+ (pool: 
+test
+)
+/semco
+ (pool: 
+SandS_4.0
+)
+/semcotest
+ (pool: 
+test
+)
+/shreveportla
+ (pool: 
+SandS_4.0
+)
+/shreveportlatest
+ (pool: 
+test
+)
+/sms
+ (pool: 
+sms.invoicecloud.com
+)
+/southcoastwaterdistrict
+ (pool: 
+SandS_4.0
+)
+/southcoastwaterdistricttest
+ (pool: 
+test
+)
+/ssoAuth
+ (pool: 
+SSOAuthentication
+)
+/stratuswebservices
+ (pool: 
+stratus
+)
+/templates
+ (pool: 
+templates
+)
+/tunnelapi
+ (pool: 
+API
+)
+/tupperlakeny
+ (pool: 
+SandS_4.0
+)
+/tupperlakenytest
+ (pool: 
+test
+)
+/valenciawaterca
+ (pool: 
+SandS_4.0
+)
+/valenciawatercatest
+ (pool: 
+test
+)
+/webservices/BSASoftwareProcessing
+ (pool: 
+wsRemoteAuth_4.0
+)
+/webservices/CloudConnectWS
+ (pool: 
+portal4.0
+)
+/webservices/CloudConnectWS_Dev1
+ (pool: 
+test
+)
+/webservices/private/ctp
+ (pool: 
+API
+)
+/webservices/remoteauthentication
+ (pool: 
+wsRemoteAuth_4.0
+)
+/webservices/systemsandsoftware
+ (pool: 
+wsRemoteAuth_4.0
+)
+/wolfeboronh
+ (pool: 
+SandS_4.0
+)
+ URL:/spaces/platform/pages/3959455762/IIS+Configuration

@@ -1,0 +1,274 @@
+none
+note
+Overview
+
+
+Overview
+
+
+Preparation phase for project Go-Live.
+Project Roles
+Name
+Team
+1
+Conversion Manager (CM)
+Conversions
+2
+Project Manager (PM)
+Conversions
+3
+Solution Engineer (SE/IT)
+Information Technology
+4
+Integrations Project Manager (IT)
+Information Technology
+5
+Delivery Specialist (DS)
+Implementations
+6
+Biller
+Biller
+Change Log
+Change Details
+Date
+Author
+Version
+Description
+Process Steps
+Process steps and task owners.
+Category
+Step
+Description
+Required?
+Responsible
+1
+Integration Coding (Prod)
+Integration Coding Form
+Complete Integration Coding Form
+If Applicable
+PM
+2
+Integration Coding
+Datapump Jira information
+If the BID contains hardcoded datapump logic, include a note to that effect in the coding Jira
+Yes
+PM
+3
+Integration Coding
+Jira Submission
+Submit the Jira (ITG) for coding and presentment to IC IT
+Yes
+PM
+4
+Go Live Prep
+Email Template Review
+Ask/remind the biller to review the email templates (emails like notifications that go out to the customer). 
+If there are any changes, the biller must provide IC with the verbiage, OR they can make the changes in the Biller Portal. 
+(This 
+was mentioned 
+to the biller in the Post Kick-Off Checklist)
+If Applicable
+PM
+5
+Go Live Prep
+Email Recipient Review
+Ask/remind the biller to review email recipients on Biller Portal>Email Management>Email Recipients. 
+(This 
+was mentioned
+ to the biller in the Post Kick-Off Checklist)
+If Applicable
+PM
+6
+Go Live Prep
+One Time Scheduled Payment Reminder
+Inform the biller that one-time scheduled payments on existing CIS invoices will not run once we convert the invoices from the old to the new CIS.
+If Applicable
+PM
+7
+Go Live Prep
+Maintenance Window
+Activate Maintenance Window on Production BID (Enable data pump hold if applicable)
+If Applicable
+PM
+8
+Go Live Prep
+Coding/Presentment
+IT Completes Coding & Presentment
+Yes
+PM/IT
+9
+Go Live Prep
+New Invoice Type ID
+If Invoice Types are changing, submit a DBR Jira Item for Data Services to move data to the new Invoice Type ID
+If Applicable
+PM
+10
+Go Live Prep
+Integration Summary
+Verify/Update the Integration Summary in CRM to reflect changes
+Verify/Update Salesforce to reflect a change to CIS
+Yes
+PM/IT
+11
+Autopay and Paperless
+Enrollment
+Paperless and Autopay Enrollment (transmit via file) - Submit a DBR Jira Item to Data Services to generate a list of paperless/autopay enrollments
+If Applicable
+PM
+12
+Autopay and Paperless
+Send report
+Send report to Biller/CIS/Print Vendor accordingly
+If Applicable
+PM
+13
+Autopay and Paperless
+Flags/Data Pump
+Paperless and Autopay Enrollment (transmit via Data Pump)
+Submit a DBR Jira Item to Data Services to push the current paperless/autopay registration flags to the CIS. Be sure to include the correct Invoice Type IDs.
+If Applicable
+PM
+14
+Autopay and Paperless
+Change Logs
+Configure Change Log transmission for paperless and autopay - Check comments. Reference the questionnaire for the answers to the questions in the comments.
+If Applicable
+PM
+15
+Checklist (Prod)
+Testing
+Complete End-to-End Testing Checklist in Prod.
+Yes
+PM
+16
+Account Number Conversion
+OBD and Changing Account Numbers
+If the biller uses OBD and Account Numbers are changing, open a Boarding Case to make the appropriate changes to Fiserv/RPPS.
+If Applicable
+PM
+17
+Account Number Conversion
+Obtain Active Account Number Report
+Submit a Data Services Request (DBR) Jira Item to obtain a report of all active Account Numbers on record.
+If Applicable
+PM
+18
+Account Number Conversion
+Account Number mapping
+Send the report to the CIS vendor to complete the mapping of the newly assigned account number. 
+If Applicable
+PM
+19
+Account Number Conversion
+Convert Account Numbers
+Submit a Data Services Request (DBR) Jira Item to convert the Account Number to the new format according to CIS provided mapping file.
+If Applicable
+PM
+20
+Account Number Conversion
+Verify Account Number formats
+Once DBR is completed, PM verifies new account formats via lookup and invoice file review.
+If Applicable
+PM
+21
+Invoice Conversions
+Legacy CIS
+Convert legacy CIS invoices to new CIS.
+Use the Biller Portal to validate the invoice and account numbers during the maintenance window.
+Search old invoice files in biller portal, open a few accounts, they should show the new account number.
+AND
+Use cross ref file, search customer name from file, confirm accounts are correct.
+Confirm paperless and autopay registrations are still current on a few accounts.
+Yes
+PM
+22
+CRM Configuration Setup (Prod)
+Invoice Types
+Configure Invoice Type Options (Prod)
+Yes
+PM
+23
+CRM Configuration Setup (Prod)
+Virtual Site
+Set up Virtual Site (Prod).
+Yes
+PM
+24
+CRM Configuration Setup (Prod)
+Configure CRM
+Configure CRM (Prod).
+Yes
+PM
+25
+CRM Configuration Setup (Prod)
+Biller Portal users
+Set up Biller Portal users (Prod).
+Yes
+PM
+26
+CRM Configuration Setup (Prod)
+Option 84
+Enable Web Service Logging on Test BID, if necessary (Option 84)
+If Applicable
+PM
+27
+Terminal IDs
+Linking Invoice Types
+Link Invoice Types to correct Credit/Debit & ACH terminals, add MAX Caps, and add IC Service Fee terminal.
+If Applicable
+PM
+28
+IVR Inbound Changes (Prod)
+Request configuration
+Email IVR Tech Support with a list of detailed changes needed to Biller's IVR configuration.
+If Applicable
+PM
+29
+IVR Inbound Changes (Prod)
+Complete configuration
+IVR Tech completes the requested changes.
+If Applicable
+PM
+30
+IVR Inbound Changes (Prod)
+Testing
+Test IVR changes - Verify success response.
+If Applicable
+PM
+31
+Pre-Go Live Checklist
+Activities Checklist
+Completes Pre-Go Live Activities Checklist.
+If Applicable
+PM
+32
+Maintenance Window
+Deactivate
+Deactivate the Maintenance Window.
+Yes
+PM
+33
+Virtual Site
+Account Number verification
+Verify the Virtual Site account lookup is displaying the converted account numbers.
+Yes
+PM
+34
+Post-Go Live Checklist
+Activities Checklist
+Completes Post-Go Live Activities Checklist.
+Yes
+PM
+35
+Audit
+SOX Audit 
+Open a task for Finance to audit revenue settings
+If Applicable
+PM
+36
+Closure
+Close Project
+Close the project and set the status to Complete
+Yes
+PM
+ URL:/spaces/Implementa/pages/3240624133/CP4+-+GoLive+Prep+and+Post+GoLive

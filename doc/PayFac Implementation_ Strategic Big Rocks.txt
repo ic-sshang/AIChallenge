@@ -1,0 +1,171 @@
+This document outlines the high-level priorities—or 
+"big rocks"
+—for implementing a PayFac solution integrated with the Chase Commerce Platform. The initiative targets key business outcomes: faster onboarding, streamlined reconciliation, tokenization, and account validation. Each big rock incorporates tailored Non-Functional Requirements (NFRs) to ensure a robust system. Prioritization and sequencing will be determined collaboratively with stakeholders based on business needs and technical dependencies.
+"Big rocks" are strategic, overarching themes critical to the success of the PayFac implementation. They are not granular tasks but high-level focus areas that will be decomposed into actionable work items for the architecture and engineering teams.
+none
+Strategic Big Rocks
+1. Integration with Chase Commerce Platform
+Serves as the core of the PayFac system, enabling payment processing, screening, reporting, and onboarding via Chase’s APIs.
+Architecture Team
+:  
+Define technical specs for the 
+IC Chase Screening API
+, including rate limits, error handling, retry policies, and integration with its own datastore to store screening profiles.  
+Research integration with the 
+Chase Commerce Platform Screening API
+, determining data flow and how to enforce/validate screening calls (e.g., embedding screening values like submerchant descriptors in payment auth).  
+Define tech specs for the 
+IC Chase Payment Processing API
+, to pull data from the CTP, convert it into Chase-compatible requests, and embed screening data where required.  
+Research integration with the 
+Chase Commerce Platform Direct Payments API
+, mapping CTP data flows for credit card and ACH payments.  
+Investigate 
+Chase Onboarding API
+ specs to support the onboarding wizard.  {if this is a need}
+Research, design, and define a 
+tokenization approach
+ to ensure secure, scalable implementation, integrating with payment processing workflows.  
+Prototype 
+tokenization and account validation
+ components for security and scalability testing, ensuring PCI compliance. {account validation can be a potential phase 2}
+Engineering Team
+:  
+Develop the 
+IC Chase Screening API
+ with resiliency, integrating with the Chase Commerce Platform Screening API.  
+Develop the 
+IC Chase Payment Processing API
+ with retry/timeout mechanisms and avoiding direct CTP integration due to its brittleness.  
+Implement integration with the 
+Chase Commerce Platform Reporting API
+ using scalable, paginated queries for transaction details and balances.  
+Create the 
+IC Chase Onboarding API
+ to support the onboarding wizard.  {Is the wizard still on the table?}
+Integrate 
+tokenization and account validation
+ with secure, PCI-compliant storage, linking to the IC Chase Payment Processing API. 
+Key NFRs
+:  
+Resilience
+: Gracefully handle API failures.  
+Scalability
+: Support high transaction volumes.  
+Security
+: Safeguard sensitive payment data.
+2. Funding and Settlement
+Ensures flexible and efficient payment settlement across payment types (credit card, ACH, OBD), supporting the funding engine for payment processing and streamlined reconciliation.
+Architecture Team
+:  
+Design the funding engine leveraging Biller shards as the source of truth for payment data.  
+Finalize the NACHA file generation strategy (single consolidated file vs. individual files per biller), ensuring idempotent file creation, and define descriptors and biller identification in files.  
+Define integration with 
+JP Morgan Treasury Services
+, including retry logic for fault tolerance and FTP delivery specs.  
+Research integration with the 
+Chase Commerce Platform Reporting API
+ for funding-related data (e.g., ACKs, rejects, payback, TSR wire).  
+Plan ACH processing workflows outside the Chase Commerce Platform, including debit logic using owned bank accounts for resilience.
+Engineering Team
+:  
+Build per-biller funding jobs (Biller Funding Job) to pull data from Biller shards, calculate funding, and send instructions to the 
+IC Chase Funding API
+, with idempotent retries.  
+Develop the 
+IC Chase Funding API
+ with scalable storage, duplicate detection, and hold/stop functionality for risk management.  
+Implement the 
+IC Chase Funding Job
+ to aggregate instructions, generate NACHA files (per finalized strategy), and deliver to JP Morgan Treasury Services with failover mechanisms.  
+Add ACH debit logic to funding jobs, resilient to timeouts/disruptions, using owned bank accounts for external ACH processing.
+Key NFRs
+:  
+Idempotency
+: Prevent duplicate transactions.  
+Fault Tolerance
+: Maintain reliable processing during disruptions.  
+Scalability
+: Handle peak processing demands efficiently.
+3. Risk Management and Compliance
+Reduces financial risk and ensures adherence to regulatory standards, including robust reject handling and real-time risk assessment.
+Architecture Team
+:  
+Define 
+reject handling processes
+, including notification timelines, funding strategies (e.g., fund before/after receiving funds), and biller bank account configurations (e.g., dual accounts for deposits/withdrawals).  
+Design 
+funding instruction flagging/holding logic
+ for real-time risk assessment (e.g., stopping funding if underwater accounts).  
+Explore scalable configurations for managing biller bank accounts, ensuring reject handling preserves data integrity.  
+Compile compliance requirements (e.g., PCI DSS) with immutable audit logs for Chase API interactions.
+Engineering Team
+:  
+Implement 
+reject processing
+ within funding jobs, storing rejects in Biller ahards with transactional consistency and triggering funding adjustments (e.g., pulling money back from billers).  
+Build 
+hold/stop functionality
+ in the IC Chase Funding API to manage high-risk instructions.  
+Develop scalable, tamper-proof 
+audit logging mechanisms
+ for all Chase API calls and funding decisions.
+Key NFRs
+:  
+Auditability
+: Maintain comprehensive, tamper-proof logs.  
+Data Integrity
+: Ensure consistent, accurate data across systems.  
+Resilience
+: Enable real-time risk assessments and responses.
+4. Customer Experience
+Enhances onboarding and reconciliation, driving biller satisfaction and adoption through a faster onboarding wizard and simplified reporting system.
+Architecture Team
+:  
+Design the 
+onboarding wizard workflow
+ integrated with the Chase Onboarding API to handle sign-ups (confirm product vision with stakeholders).  
+Design 
+KYC and external screening integrations
+, reviewing PSN’s current setup for alignment with PayFac needs.  
+Define system requirements for a 
+biller reporting system
+, supporting low-latency retrieval from Biller shards and Chase files, including reconciliation for multi-source deposits.  
+Plan 
+UI/UX designs
+ for onboarding and reporting, scalable for concurrent users.
+Engineering Team
+:  
+Build the customer-facing 
+onboarding wizard
+ with real-time calls to the IC Chase Onboarding API and robust retry mechanisms.  
+Develop the 
+biller reporting system
+ using optimized, scalable queries for reconciliation across payment types (credit card, ACH, OBD).  
+Implement 
+reconciliation logic
+ for multi-source deposits with fault tolerance to ensure data consistency.
+Key NFRs
+:  
+Low Latency
+: Deliver fast reporting and real-time interactions.  
+High Availability
+: Ensure uptime during peak usage.  
+Scalability
+: Support growing user base.
+5. Biller Migrations 
+Once enough functionality is available through the new PayFac model to support a subset of billers, we will need to migrate billers in an efficient and thoughtful manner.
+Next Steps
+Architecture Team
+:  
+Prioritize discovery and design sessions to resolve unknowns
+Deliver a comprehensive high-level architecture document with API contracts, data flow diagrams, and risk mitigation strategies.
+Engineering Team
+:  
+Begin building foundational components (e.g., IC Chase Screening API, IC Chase Onboarding API) based on finalized designs.  
+Collaborate with the Architecture team to translate specs into actionable user stories.
+Product and Stakeholders
+:  
+Collaborate on prioritizing big rocks based on business goals and dependencies (e.g., Chase integrations).  
+Regularly review and adjust priorities as discoveries are made and requirements evolve.
+ URL:/spaces/EA/pages/4164354144/PayFac+Implementation+Strategic+Big+Rocks

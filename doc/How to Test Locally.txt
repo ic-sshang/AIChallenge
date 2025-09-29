@@ -1,0 +1,74 @@
+ Overview
+This document provides step-by-step guidance on how to:
+Acquire an authorization token from the 
+BillerReportingAPI
+.
+Use the token to authorize requests in the 
+BillerReportingChatAPI
+.
+Execute test queries on both APIs.
+Configure the projects to run in MyIIS.
+Update configuration files for local testing.
+ Instructions
+1. Obtain the Authorization Token
+Run the BillerReportingAPI
+ locally.
+Navigate to the following URL (replace 
+{BillerGUID}
+ and 
+{BillerUserGUID}
+ with your own values):
+https://localhost:7181/api/v1/token?billerGuid={BillerGUID}&billerLoginGuid={BillerUserGUID}
+This endpoint will return a 
+Bearer token
+, which is required to authorize requests to the 
+BillerReportingChatAPI
+.
+2. Authorize the BillerReportingChatAPI
+Run the BillerReportingChatAPI
+ locally.
+Open Swagger UI, typically at:
+https://localhost:7074/swagger/index.html
+Locate the 
+Authorize
+ button (or Authorization field) in Swagger.
+Paste the token obtained from the BillerReportingAPI into the 
+Bearer
+ token field in the format.
+Once authorized, you can use the 
+/api/v1/queries
+ endpoint to test queries on the 
+BillerReportingChatAPI
+.
+3. Execute Queries in the BillerReportingAPI
+Go to the GraphQL UI for the BillerReportingAPI, typically at:
+https://localhost:7181/graphql/ui/
+Paste the token acquired above in the connection settings
+Paste your GraphQL query into the request section.
+Important
+: If you have any extra symbols (e.g., colons or parentheses) that are not part of valid GraphQL syntax, remove them before sending the request.
+4. Running in MyIIS
+If you need to run these services under MyIIS, update the relevant URLs in the 
+web.config
+ file within the 
+BillerPortal
+ project:
+<add key="BillerAIReportingAPIUrl" value="https://localhost:7181/graphql" />
+<add key="BillerAIReportingChatAPIUrl" value="https://localhost:7074/api/v1/queries" />
+Going to the BillerPortal > Reports > AI Report Generator. You can search your query and step through the BillerReportingChatAPI and the BillerReportingAPI.
+Important Notes:
+In BillerReportingChatAPI, make sure to change the API URL of the graphql to your localhost in the appsettings.Development.config
+"GraphQl": {
+  "ApiUrl": "https://localhost:7181" // this one
+},
+FAQ:
+How does the API know what BillerID to use?
+One of the claims in the token is the billerguid. 
+Summary
+By following these steps—acquiring the token from the 
+BillerReportingAPI
+, authorizing the 
+BillerReportingChatAPI
+ in Swagger, executing GraphQL queries, and updating the configuration files as needed—you can effectively test both services in your local or IIS environment.
+If you encounter any issues or have additional questions, please consult your development team or reference the existing documentation for further troubleshooting steps.
+ URL:/spaces/ED/pages/3991273492/How+to+Test+Locally

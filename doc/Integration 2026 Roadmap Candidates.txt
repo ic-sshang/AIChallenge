@@ -1,0 +1,471 @@
+Title
+Integration 2026 Roadmap Candidates
+Discussed On
+Theme: 
+Build seamless and frictionless integration with little to no involvement from Integration Engineers.
+Purpose
+The purpose of this document to capture the potential 2026 Roadmap items for Integration team i.e. BIF. This document will be used to document the initial ideas for each potential roadmap item.
+Potential Roadmap Items
+List of all the potential 2026 roadmap items
+items
+Potential Initiatives
+Problems / Idea
+Why?
+Power Score
+Very High/High/Medium/Low/Very Low
+ 
+ 
+Stratus File Processor (SFP)
+File Processing Modernization
+Biller File Split (BFS) Scalability 
+BFS is a sub process 
+of incoming file processing.
+ 
+ inside of SFP
+.
+Strategic Importance:
+Improved scalability to meet current and future capacity needs
+Consistent user experience
+Urgency Time to Market:
+High
+Incremental Business $:
+Ease of Development: 
+High effort
+Power Score: High
+Stratus File Processor (SFP) Scalability 
+Single-Threaded File Processing
+The current system operates in a single-threaded manner, 
+where an influx of high volume from one biller is significantly delaying processing for multiple other billers.
+ 
+where a raw file processing failure for one biller can impact others, leading to a cascading backlog across multiple file processing tasks. This architecture limits fault isolation and affects overall system throughput and reliability.
+Micro services
+Breakdown SFP
+Breakdown BFS
+Breaking down the existing SFP and BFS (into micro services) to make it more Re-Usability and improve the performance of the service. 
+Centralize error messaging across all integrations and upload methods
+Consistent business rule application to invoice creation across all inputs (BIF customizations, balance forwarding, etc.)
+NEED MORE DETAILS?
+Biller File Troubleshooting - Phase 3
+Final phase
+Support for modernization changes and final round of feedback.
+ 
+Real Time Data Refresh (RTDR)
+RTDR Modernization
+RTDR Modernization
+Each integration has it’s own error messaging and is not consistent. Also, it is difficult to identify the source of the error (on our end or the SPs end) without manual intervention from Engineering.
+Meaningful 
+and consistent 
+error messaging in case of RTDR failure 
+across all integrations
+Strategic Importance:
+Shorten time to go-live
+Consistent user experience
+Urgency Time to Market:
+Low
+Incremental Business $:
+Ease of Development: 
+High Effort
+Power Score: Medium
+RTDR Implementation 
+Implementation of RTDR 
+for a new integration
+ is not smooth and would require Integration engineer
+Low code RTDR implementation
+A self-serve model which 
+SE/
+IM/CS can create/manage RTDR implementation.
+IMs or Solutions Engineering team will know the XML path for attributes to be referenced and update the IC systems, a mapping tool or mechanism will allow them to implement RTDR without coding (high level idea) 
+ 
+Stratus Client Modernization
+(Desktop APP)
+Stratus Client UI enhancement 
+UI is 10+ years old.
+Strategic Importance:
+Ease of integration
+Improved recovery and self-service
+Operational cost reduction
+Security Improvements
+Urgency Time to Market:
+High
+Incremental Business $:
+Ease of Development:
+High Effort
+Power Score:
+High
+Capability for InvoiceCloud CS/IM to run the task remotely  
+It will be helpful in running for delivering payment export in case of payment export job failure due to batch closure issues. 
+As of today, Integration Engineers is involved to the process of re-delivery of the file.
+Installer update
+Building of the app version in use is done on specific machine (old machine with older dependencies), it is an Operational cost for the company for maintaining the machine.  
+Auto Update
+The current version is use is very old, and could be vulnerable
+As an immediate step repo scans are needed to find any vulnerability and fix it. 
+ 
+File Conversion (RAW to BIF Mapping)
+ 
+Each time a new biller is onboarded, custom code implementation is required to map the biller's raw data file to the InvoiceCloud BIF (Biller Integration Format) specification. This requires coding effort, increases dependency on engineering resources.
+SEs already create a mapping document that the developers use to convert RAW files to known file types.
+A low-code solution could allow the SE to configure the file instead and reduce repeated work/effort from Engineering to support the new file.
+Strategic Importance:
+Shorten time to go-live
+Urgency Time to Market:
+Low
+Incremental Business $:
+Ease of Development: 
+High Effort
+Power Score:
+Low
+ 
+Payment Export
+High Dependency on Batch Closure:
+The payment export process is tightly coupled with batch closing activities, making it vulnerable to any delays or failures in batch execution.
+Lack of Retry Mechanism:
+There is currently no automated retry process for payment exports in the event of batch failures (process in totality), which can lead to missed or delayed exports.
+Limited Operational Flexibility During Incidents:
+In major incident scenarios—such as failed batch closures or export failures—Client Services (CS) lacks the ability to re-run the export process independently and must rely on Integration Engineers for manual intervention.
+Current process is Failure-Prone
+The current process is vulnerable to failures during batch closure or database-level 
+incidents
+ export operations
+, often requiring manual intervention.
+Protentional Enhancements
+Auto Re-run Logic:
+Implement a rule where the payment export process automatically re-runs upon successful batch closure—regardless of whether it’s a regular or recovery scenario.
+End-Stage Integration:
+Redesign the process so that payment export becomes the final step of batch closure, ensuring completeness and reliability.
+Event-Driven File Placement:
+Shift from scheduled jobs to a file event-driven model for placing payment exports, improving responsiveness and reducing delays.
+Recovery Functionality (Phased):
+Introduce recovery capabilities:
+Manual Healing:
+ CS can trigger exports on demand via CRM or on behalf of billers (e.g., Stratus).
+Auto Healing:
+ System automatically re-runs failed exports without CS intervention.
+PayFac Support
+PayFac changes will impact batch closures and payment exports will need to be updated to support the new model.
+Why This Initiative Matters
+This is currently one of the most frequent 
+incident
+ 
+recovery
+ categories.
+Heavy dependency on batch closure 
+timing
+ forces Integration teams into the mitigation process.
+Lack of UI or features for CS to re-run exports makes the process inefficient and not scalable.
+Strategic Importance:
+Recovery resiliency
+PayFac Support
+Urgency Time to Market:
+Medium
+Incremental Business $:
+Ease of Development:
+High Effort
+Power Score:
+Medium
+PDF Linking 
+Monitoring/Alerting
+Lack of observability 
+Poor user experience
+Failures in PDF extraction can disrupt invoice linking, which directly impacts the automated notification workflow and delays payment reminders to customers/payers which can also be considered as late payments or no payments on InvoiceCloud platform. These issues often arise from uncommunicated changes to PDF templates that were baselined during implementation. 
+Protentional Enhancements
+Ensure Reliable Notification Workflow:
+Prevent PDF extraction failures to maintain proper invoice-to-PDF linking and ensure uninterrupted dispatch of payment reminder emails.
+Visual indicators in form of new feature or any other means to let biller portal users (or any other biller persona) know about unlinked invoices 
+The biller portal currently has PDFMonitor and PDFHistory we will need to research what information or tools would benefit Billers.
+Report on biller portal / CRM to let biller users and Client Services (CS) alerted about non linking on PDFs before the 1st email notification. 
+The only info currently is in the Invoice File Search, which shows that pdfs are unlinked and won’t send email notifications, and the biller can manually force to send out notifications without PDFs. Information per invoice in the biller portal on why the notification was not sent.
+Establish 
+PDF
+ 
+Template
+ Change Governance:
+Implement a formal process for identifying and notifying InvoiceCloud of any changes to PDF 
+templates
+ post-implementation.
+We currently have metrics on Extraction failures. Additional data could be added such as self healing markers created and usage of current markers.
+ThStrategic Importance:
+Medium
+Urgency Time to Market:
+Medium
+Incremental Business $:
+Ease of Development:
+High Effort
+PDF Extraction Enhancements
+Impact of PDF Extraction Failures:
+PDF extraction failures can prevent invoices from being linked to their corresponding pdf, disrupting the notification workflow and halting the dispatch of first, second, and third payment reminders to payers.
+Template Change Without Notification:
+These failures occur due to changes in the PDF template that was originally baselined during implementation, without InvoiceCloud being notified of the updates. 
+Same point as last item on the initiative above.
+Need for Marker Refactoring:
+The current codebase includes a large number of legacy markers, many of which are no longer in use. There is no mechanism to identify active markers, resulting in inefficient processing as the system loops through all existing markers. This is the action 
+Recommended Action:
+Refactoring is needed to streamline marker usage, improve processing efficiency, and introduce a tracking mechanism for active markers to enhance maintainability and performance. 
+Failures in PDF extraction can disrupt invoice linking, which directly impacts the automated notification workflow and delays payment reminders to customers/payers which can also be considered as late payments or no payments on InvoiceCloud platform. These issues often arise from uncommunicated changes to PDF templates that were baselined during implementation. Additionally, the presence of outdated markers and lack of visibility into active ones leads to inefficient processing and increased system load. Without proper refactoring and tracking, maintainability becomes challenging and the risk of recurring failures increases. Addressing these problems is essential to improve reliability, performance, and operational efficiency.
+Protentional Enhancements
+Leverage AI for Adaptive PDF Extraction:
+Integrate AI-based extraction models that can dynamically adapt to changes in PDF templates, reducing manual intervention and improving resilience. 
+This can be its own initiative
+Ensure Reliable Notification Workflow:
+Prevent PDF extraction failures to maintain proper invoice-to-PDF linking and ensure uninterrupted dispatch of payment reminder emails.
+Visual indicators in form of new feature or any other means to let biller portal users (or any other biller persona) know about failed extractions. 
+Report on biller portal / CRM to let biller users and Client Services (CS) alerted about extraction failure.
+Establish Template Change Governance:
+Implement a formal process for identifying and notifying InvoiceCloud of any changes to PDF templates post-implementation.
+Refactor Marker Logic:
+Clean up legacy markers in the codebase by removing unused entries and optimizing the logic to improve processing efficiency.
+Introduce Marker Usage Tracking:
+Develop a mechanism to identify and monitor active markers to support better maintainability and reduce technical debt.
+Optimize Extraction Performance:
+Streamline the extraction process by limiting operations to relevant markers, reducing unnecessary system load.
+Strategic Importance:
+High
+Urgency Time to Market: 
+Medium
+Incremental Business $:
+Ease of Development:
+High Effort
+PSN Invoice Template 
+Migration
+PSN uses crystal reports for their invoice template.
+There are ~ 1000 of templates which will require changes
+Leveraging proprietary tools for extraction/migration.
+Strategic Importance:
+Unknown
+Urgency Time to Market:
+Unknown
+Incremental Business $:
+Ease of Development:
+High
+Leveraging or build AI tool for extraction/migration
+PDF Extraction User Experience
+Extraction marker configuration is complex to the end user.
+Simplify the setup to configure a new extraction in order to reduce the number of ITGs submitted to the BBQ team.
+Developers spend time with no code work for new implementations that use PDF extraction.
+Strategic Importance:
+Medium
+Urgency Time to Market:
+Low
+Incremental Business $:
+Ease of Development:
+Medium
+Remote Linking INT360
+Basic Setup For existing Printer remote linking.
+Strategic Importance:
+Urgency Time to Market:
+Incremental Business $:
+Ease of Development:
+Remote Linking Configurable Integration
+No code integration for remote linking software partners/printers
+Strategic Importance:
+Urgency Time to Market:
+Incremental Business $:
+Ease of Development:
+DataPump V2
+Modernize Datapump application using latest technologies to increase the scalability
+Strategic Importance: High, Modernize the app with primary focus on scalability.
+Urgency Time to Market: Medium
+Incremental Business $: May bring new Insurance billers who need real time data.
+Ease of Development: Very high effort.
+IC Template Literal Conversion & 
+CRM Integration
+Current effort. Not a 2026 roadmap candidate?
+Many IC templates used for invoices have hardcoding, and if any change is required then it has to go via release process
+Identify all the hard coding to literals and make save in database
+Make all the literals update via CRM 
+We want to work on this initiative because any time a new request is raised, Intergration team needs to be involved which requires team to 
+Analyze the request
+Code change and Raise DBR request
+Code change has to go through release process 
+The total cycle time is hug as it has to follow the whole SDLC process and involvement of integration team. 
+If all the hardcoding is converted to literals and saved in database, and all are made configurable via CRM then
+No release is needed 
+No involvement of Integration engineer to code
+A self-serve tool for CS/IM
+Strategic Importance:
+Urgency Time to Market:
+Incremental Business $:
+Ease of Development:
+Initiatives Details
+ 
+sfp
+Stratus File Processor (SFP)
+The 'Stratus File Processor' is Invoice Cloud's proprietary system that normalizes the incoming invoice data and converts it to a standardized 'BIF' (Biller Invoice File) format. This allows Invoice Cloud to process invoice files in various formats like Excel, XML, or CSV from different billing systems, such as utilities, taxes, insurance, etc. The Stratus system takes the source files provided by the billing systems and converts them to the standardized BIF format, which makes the data easier to read and understand.
+High level Flow
+2
+1
+0
+0
+4555374902
+4552097839
+1
+SFP.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+SFP.drawio
+0
+612
+412
+ 
+Go to Top
+  Problem Areas
+Potential Area
+Problems / Idea
+Why?
+1
+Stratus File Processor
+(SFP)
+Biller File Split (BFS) Scalability 
+2
+Stratus File Processor (SFP) Scalability 
+Current system is single threaded, raw file processing failure for one biller impacts the other which results file processing backlog. 
+3
+Micro services
+Breakdown SFP
+Breakdown BFS
+Breaking down the existing SFP and BFS (into micro services) to make it more Re-Usability and improve the performance of the service. 
+NEED MORE DETAILS?
+ 
+Real Time Data Refresh (RTDR) 
+RTDR
+RTDR - Real Time Data Refresh, is a very extensively used functionality to get a real-time data update from the Biller via web service calls. The primary purpose of RTDR was to refresh the customer data before it is accessed however it has evolved over a period of time and new functionality was added to RTDR. 
+High Level Flow
+2
+1
+0
+0
+4555342316
+4552097839
+1
+RTDR.drawio
+5
+5
+https://invoicecloud.atlassian.net/wiki
+RTDR.drawio
+0
+942
+382
+  Problem Areas
+Potential Area
+Problems / Idea
+Why?
+1
+Real Time Data Refresh (RTDR)
+RTDR Modernization
+Meaningful error messaging in case of RTDR failure
+2
+RTDR Implementation 
+Implementation of RTDR is not smooth and would require Integration engineer
+Low code RTDR implementation
+A self-serve model which IM/CS can create/manage RTDR implementation.
+IMs or Solutions Engineering team will know the XML path for attributes to be referenced and update the IC systems, a mapping tool or mechanism will allow them to implement RTDR without coding (high level idea) 
+ 
+Go to Top
+ Stratus Client Modernization 
+client
+The Stratus client provides a flexible and efficient way for billers to manage their file uploads and downloads, ensuring smooth integration. 
+High Level Flow
+2
+1
+0
+0
+4555604495
+4552097839
+1
+Stratus Client.drawio
+4
+4
+https://invoicecloud.atlassian.net/wiki
+Stratus Client.drawio
+0
+782
+374.9000000000001
+ Problem Areas
+Potential Area
+Problems / Idea
+Why?
+1
+Stratus Client Modernization
+(Desktop APP)
+Stratus Client UI enhancement 
+2
+Capability for InvoiceCloud CS/IM to run the task remotely  
+It will be helpful in running for delivering payment export in case of payment export job failure due to batch closure issues. 
+As of today, Integration Engineers is involved to the process of re-delivery of the file.
+3
+Installer update
+Building of the app version in use is done on specific machine (old machine with older dependencies), it is an Operational cost for the company for maintaining the machine.  
+4
+Auto Update
+The current version is use is very old, and could be vulnerable
+As an immediate step repo scans are needed to find any vulnerability and fix it. 
+ 
+Go to Top
+ File Conversion (RAW to BIF Mapping) 
+conversion
+In order to receive the data from biller or CIS systems, InvoiceCloud has to code as per the raw data file of billers. This requires integration team to make the code changes to map the data elements of Biller’s raw file to InvoiceCloud’s file format. 
+ Problem Areas
+Potential Area
+Problems / Idea
+Why?
+1
+File Conversion (RAW to BIF Mapping)
+Code implementation is needed every time a new biller is onboarded 
+2
+Capability for InvoiceCloud CS/IM to run the task remotely  
+It will be helpful in running for delivering payment export in case of payment export job failure due to batch closure issues. 
+As of today, Integration Engineers is involved to the process of re-delivery of the file.
+3
+Installer update
+Building of the app version in use is done on specific machine (old machine with older dependencies), it is an Operational cost for the company for maintaining the machine.  
+4
+Auto Update
+The current version is use is very old, and could be vulnerable
+As an immediate step repo scans are needed to find any vulnerability and fix it. 
+ 
+Go to Top
+ Payment Export 
+export
+Payment export is an InvoicCloud internal process it is a key part of batch close operations for billers using payment file exports. Upon batch closure, payment files are automatically generated, delivered via standard methods like FTP or Stratus, and stored in a centralized SharePoint folder. In case of delays or failures, IT or Client Services may manually generate or modify these files. Users can access and download exports through CRM, and files can also be attached to batch close notifications. Custom batch close timings in CRM help align exports with specific biller needs.
+High Level Flow
+2
+1
+0
+0
+4564123827
+4552097839
+1
+Payment Export.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Payment Export.drawio
+0
+1532.0000000000002
+511.9999999999999
+ Problem Areas
+Potential Area
+Problems / Idea
+Why?
+1
+Payment Export
+Highly dependent on batch closing activity
+No retries of payment export process in case of batch failures
+In case of major incidents when payment export failed or batch closure failed, CS cannot re-run the process and require Integration engineers to manage the exports
+The current process is prone to failure is case of batch closure failure or export failure (at database level), current process can be enhanced to 
+Rule of thumb: Auto re-run whenever batch closure is completed, irrespective of regular scenario or failure/recovery scenario
+Make payment export to be an end stage of completion of batch closure
+Make placement of file event drive (file event) rather than scheduled job driven
+In case of incident or process failure, build a recovery functionality (in phases)
+Manual healing: CS will run the job on demand from CRM and on behalf of biller (in case of stratus) 
+Auto healing: System re-runs' the task on behalf of CS/biller user
+Why should consider this initiative?
+Currently this is the most frequent incident item.
+Heavily dependent on batch closure, which forces the integration team to be part of mitigation plan i.e. re-run exports. 
+As there is no feature or UI for CS to re-run the tasks, they are heavily dependent on engineering team. 
+(NOT SELF-SERVE)
+ 
+ 
+Go to Top
+ URL:/spaces/PRODUCT/pages/4623040513/Integration+2026+Roadmap+Candidates

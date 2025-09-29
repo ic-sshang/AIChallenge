@@ -1,0 +1,315 @@
+1
+6
+false
+default
+list
+true
+These changes were rolled back on 7/7/2024 around 9 PM Eastern Time due to PSN not supporting either the TLS Version or the TLS Ciphers or both supported by App Gateway when making call to the ICG API Endpoints.
+Options moving forward:
+Update the App Gateway TLS Version or Cipher Profile or both
+Switch the ICG Public Network path to go thru Cloudflare as it is in NonProd Environments which PSN use for their Regression Testing (Cert IC Environment) and ensure that our Cloudflare 
+invoicecloud.com
+ 
+DNS Zone supports the TLS Version or Cipher Profile required by PSN
+Platform changes planned
+Barracuda to App Gateway
+ switchover in Production Network Lane
+Pre-Steps
+In Sequence
+Put notification in DailyOps channel 
+ 
+ 
+First Run the Load Against existing Network Stack (Barracuda) for 10 minutes for 2,100 Virtual Users 
+ 
+ 
+Stop the Jobs - 
+Refer to Pre-maintenance steps related to Jobs here
+ 
+ 
+ 
+Put up the maintenance page
+Execution Plan
+Parallel activities:
+Enable all 
+Prod NewRelic Alerts for App Gateway
+ 
+ 
+ or 
+ 
+Scale Up Production App Gateway Instances 
+ 
+ 
+EBPP-18621
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Tests that can be run on the Web Servers
+ after the Host File Entry is Changed
+EBPP-17938
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+EBPP-19777
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Turn off the 
+Apple slash dot
+ 
+skip
+ Cloudflare WAF Rule 
+ 
+ 
+Update Host Files on the Web Servers to point to App Gateway IP Address instead of Barracuda 
+ 
+ 
+Testing Plan
+Parallel activities:
+Run the following set of K6 tests to test functional connectivity:  
+prod - Repos (azure.com)
+ 
+ 
+ 
+Run the following PowerShell based tests to test functional connectivity: 
+prod - Repos (azure.com)
+ 
+ 
+ 
+MCC UI and IC Web Servers to MCC Web Services Testing 
+ 
+ 
+ 
+ 
+Tests that can be run on the Web Servers
+ after the Host File Entry is Changed
+Run Regression testing for
+ 
+www.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for
+ 
+my.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for 
+icg-payments.invoicecloud.com
+ 
+ 
+The data might not work in Prod
+No Prod Coverage
+Can run 
+qa-regression
+ tests
+ 
+Run Regression testing for 
+icg-boarding.invoicecloud.com
+ 
+No Coverage in either Prod or 
+qa-regression
+ 
+Run Regression testing for 
+icg-reporting.invoicecloud.com
+ 
+ 
+www.invoicecloud.com
+ Regression testing will cover in CRM
+Run Regression testing for 
+sms2.invoicecloud.com
+ 
+ 
+No Coverage
+Look for traffic patterns for this and if no traffic found remove with the other GoDaddy and Cloudflare DNS pruning planned for this year.
+ to send 
+ Traffic data
+ looking into 
+sms
+ and 
+sms2
+7/7 - TC - Although sms and sms2 subdomain traffic appears to be just test traffic I did confirm we are getting traffic through our PayByText product which uses 
+www.invoicecloud.com/sms
+ as base url.
+Run Regression testing for 
+sso.invoicecloud.com
+ 
+ 
+May have some manual testing options 
+ 
+Validate it from the traffic side of things in NewRelic or App Gateway Metrics
+Follow up with 
+ 
+Manual testing for 
+stratus.invoicecloud.com
+ 
+ 
+Simple Page Load
+7/7 - TC - Webpage loads
+Run Regression testing for 
+www.invoicecloud.com/stratuswebservices/stratus.asmx
+ 
+ 
+ and 
+ and 
+ 
+Run Regression testing for 
+qa-regression.invoicecloud.com
+Run UI Portal Regression tests
+Run Regression testing for preview.invoicecloud.com
+Not concerned
+Run Regression testing for UI and API Tests for Payer Next Gen 
+ 
+Maintenance Test Execution - 07/07/2024 - Platform Engineering - Confluence (atlassian.net)
+ 
+Test to ensure cannot access 
+*.invoicecloud.com/.well-known/apple-developer-merchantid-domain-association.txt
+ from public device 
+ 
+Can still access at 
+invoicecloud.com/.well-known/apple-developer-merchantid-domain-association.txt
+ 
+ 
+Run ApplePay manual Test in Production 
+ 
+Load Testing via JMeter Scripts run in Azure Load Testing instance exercising 3 scenarios: CRM, Biller Portal, Customer Portal 
+ 
+Run Load Test Again with App Gateway in the Network Stack for 10 minutes for 2,100 Virtual Users
+ 
+Confirm Barracuda has no Traffic after the change 
+ 
+ or 
+ 
+Check to ensure no 404 are not showing up unexpected via Access Log turn on and shipping those logs to Log Analytics Workspace 
+ 
+ 
+Regression Test Results
+Prod Results
+Cloud Store: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160206&view=results
+Virtual site: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160212&view=results
+Customer portal: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160211&view=results
+IC rest api: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160207&view=results
+Biller portal: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160202&view=results
+test-icpayment processing - 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=160217&view=ms.vss-test-web.build-test-results-tab
+QA Results
+Cloud Store: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160225&view=results
+Customer portal: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160227&view=results
+Virtual site:
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160228&view=results
+Biller portal: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160224&view=results
+ic rest api: 
+https://dev.azure.com/invoicecloud/QA_Src/_build/results?buildId=160231&view=results
+Test-ic payment processing api: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=160232&view=results
+Roll Back Plan
+Route the Traffic back to Barracuda WAF Load Balancer 
+ 
+ 
+Revert back Host file entries on the Web Servers, switching the App Gateway IP out for the previous Barracuda Load Balancer IP 
+ 
+ 
+Remove the
+ www1.mcc.net 
+Host file entry on all Web Servers 
+ 
+Post-Steps
+Start the Jobs  - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+ 
+Removing the maintenance page
+Post finished message in DailyOps channel 
+ 
+ 
+Deallocate the Barracuda WAF VMs
+ 
+Monitoring Task Force
+We would like to organize a Monitoring Task for at least the first week after the cutover to monitor the Metrics coming in with a morning call and an afternoon call to go thru the Metrics and determine if any changes to the App Gateway instance count configuration or changes to the Alerts need to be made and then execute those changes.
+Create Dedicated Slack Channel
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Maintenance Window Support Team
+App Gateway SME:  
+ 
+ 
+Palo Alto SME:  
+ 
+ 
+Cloudflare SME:  
+ 
+  or 
+ 
+ 
+Operations Team Representative: 
+ 
+Main Regression Tester: 
+ 
+ 
+Payer Next Gen Regression Tester: 
+ 
+ 
+ApplePay Tester: 
+ 
+ 
+SRE Representative: 
+ 
+ 
+Skybot Jobs SME: 
+ and 
+ 
+ 
+InvoiceCloud Web App SME: 
+ 
+  and 
+ 
+ 
+MCC Web App SME: 
+ 
+ 
+Stratus Web App SME: 
+ and 
+ 
+ 
+Payer NextGen SME: 
+ 
+ and 
+ 
+ 
+ICG SME: 
+ 
+ 
+SMS SME: 
+ 
+ 
+SSO SME: 
+ 
+ 
+ URL:/spaces/icinfradoc/pages/3300098049/7+7+2024+App+Gateway+Go-Live

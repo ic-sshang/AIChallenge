@@ -1,0 +1,87 @@
+Step 1 - Transport method
+Check if the biller/software partner sends IC files through FTP, Stratus or Web Services
+This can be confirmed by checking on the CRM in Stratus Managment or FTP Management 
+If the biller is using Web Services you will need to check if option 84 is on then you can check the Web Services logs
+Web Services Logs
+Step 1.1 - If Transport Method is FTP or Stratus
+The next step is to find what machine the file was processed in
+If the file was sent to IC through FTP or Stratus you can use the 
+StratusFileProcessor 
+ table in the ic_perflogging database.
+--	ic_perflogging
+SELECT * FROM StratusFileProcessor WHERE BillerID=0 AND filename like '%%' ORDER BY StratusFileProcessorID DESC
+For this ticket 
+DS-7658
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ I searched the 
+StratusFileProcessor
+ table where biller id is 3820 and found what machine was used to process the file and if it was cancelled
+Now that we know what machines were used, we can go look for the logs in the servers.
+The logs in the App servers will be in APP server > EDataLogs at the bottom
+The logs in the Web servers will be in Web server > CDataLogs at the bottom
+In the database, for my example, we can see that the file was processed by Web5, App7 and App8
+All three most likely contain the same log but you can check them all to make sure
+In my example I will look at the logs in Web5 > CDataLogs
+In the database I can see that the file was attempted to be processed on 07/26/2024 so I will look for the logs from that day
+It is recommended that you copy the file and save it to your local machine as these logs will only be available for a month and will be deleted after a month
+When you have the file, you can go ahead and search for the StratusFileProcessorID that belongs to the record on the 
+StratusFileProcessor
+ table in the 
+ic_perflogging
+ database
+Duplicate File Error
+In this case the StratusFileProcessorID is 
+2765345
+[7/26/2024 10:34:07 AM] - MachineName: IC-WEB5 - LogMessage: Starting - BillerID: 3820 - FileType: INVOICES - Filename: CRM_INVOICE_FILE_UPLOAD.csv
+[7/26/2024 10:34:07 AM] - MachineName: IC-WEB5 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 120 - SQL: 'exec updStratusFileProcessor @StratusFileProcessorID = 2765345 , @BillerID = 3820 , @BillerDBA = 'Village of Peoria Heights IL' , @UploadTypeID = 1 , @MachineName = 'IC-WEB5' , @FileName = 'BIF_3820_819_20240726103310_10.211.82.9_CRM_INVOICE_FILE_UPLOAD.csv' , @StartedDate = '7/26/2024 10:34:07 AM''
+[7/26/2024 10:34:07 AM] - MachineName: IC-WEB5 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 300 - SQL: 'exec selStratusFileProcessor @StratusFileProcessorID = 2765345'
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LogMessage: File will be moved to Errors - Filepath: E:\Data\AppData\Files\In\StratusPending\Invoices\BIF_3820_819_20240726103310_10.211.82.9_CRM_INVOICE_FILE_UPLOAD.csv - NewFilepath: E:\Data\AppData\Files\In\Errors\\Files\In\Errors\BIF_3820_819_20240726103310_10.211.82.9_CRM_INVOICE_FILE_UPLOAD.csv
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LogMessage: File was moved to Errors  folder - FilePath: E:\Data\AppData\Files\In\StratusPending\Invoices\BIF_3820_819_20240726103310_10.211.82.9_CRM_INVOICE_FILE_UPLOAD.csv
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 120 - SQL: 'exec updStratusFileProcessor @StratusFileProcessorID = 2765345 , @BillerID = 3820 , @BillerDBA = 'Village of Peoria Heights IL' , @UploadTypeID = 1 , @MachineName = 'IC-WEB5' , @FileName = 'BIF_3820_819_20240726103310_10.211.82.9_CRM_INVOICE_FILE_UPLOAD.csv' , @StartedDate = '7/26/2024 10:34:07 AM' , @CanceledDate = '7/26/2024 10:34:11 AM''
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 300 - SQL: 'exec selStratusFileProcessor @StratusFileProcessorID = 2765345'
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LogMessage: Ending - BillerID: 3820 - FileType: INVOICES - Filename: CRM_INVOICE_FILE_UPLOAD.csv - Success: BAD - TotalTimeElapsed: 00:00:03.8036223
+[7/26/2024 10:34:11 AM] - MachineName: IC-WEB5 - LastError: DUPLICATE FILE MD5 HASH D57F573ABB60B5CF0460C35DE73A4048
+For this example, we see a common case where the file failed to process because the file is a duplicate, meaning the file has already been uploaded and successfully processed before.
+If it is intended to upload a duplicate file, and the original file was deactivated, then you can advise to reactivate the file or reactivate the file yourself if the reporter does not have permissions. Another solution would be to add a space at the end of the file. This would change the MD5 hash of the file and will allow for the file to be uploaded.
+Invalid Cast Exception
+Another common issue is the file not having the correct data in the correct place.
+This error can occur when a file is missing a date or a currency value
+The following example is from 
+DS-7772
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Biller 2820-Rockingham County had an issue with their file not uploading on 08/07/2024
+I went to the 
+ic_perflogging
+ database and found the 
+StratusFileProcessorID
+ which I then used to find the log in the file
+This log was found in APP8 > EDataLogs > StratusProcessor_2024_08_07.txt
+[8/7/2024 1:04:33 PM] - MachineName: IC-APP8 - LogMessage: Starting - BillerID: 2820 - FileType: INVOICES - Filename: August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt
+[8/7/2024 1:04:33 PM] - MachineName: IC-APP8 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 120 - SQL: 'exec updStratusFileProcessor @StratusFileProcessorID = 2798514 , @BillerID = 2820 , @BillerDBA = 'Rockingham County VA' , @UploadTypeID = 1 , @MachineName = 'IC-APP8' , @FileName = 'BIF_2820_720_20240807130206_10.0.6.11_August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt' , @StartedDate = '8/7/2024 1:04:33 PM''
+[8/7/2024 1:04:33 PM] - MachineName: IC-APP8 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 300 - SQL: 'exec selStratusFileProcessor @StratusFileProcessorID = 2798514'
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LogMessage: File will be moved to Errors - Filepath: E:\Data\AppData\Files\In\StratusPending\Invoices\BIF_2820_720_20240807130206_10.0.6.11_August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt - NewFilepath: E:\Data\AppData\Files\In\Errors\\Files\In\Errors\BIF_2820_720_20240807130206_10.0.6.11_August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LogMessage: File was moved to Errors  folder - FilePath: E:\Data\AppData\Files\In\StratusPending\Invoices\BIF_2820_720_20240807130206_10.0.6.11_August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 120 - SQL: 'exec updStratusFileProcessor @StratusFileProcessorID = 2798514 , @BillerID = 2820 , @BillerDBA = 'Rockingham County VA' , @UploadTypeID = 1 , @MachineName = 'IC-APP8' , @FileName = 'BIF_2820_720_20240807130206_10.0.6.11_August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt' , @StartedDate = '8/7/2024 1:04:33 PM' , @CanceledDate = '8/7/2024 1:05:41 PM''
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LogMessage: SFP SQL - BillerID: 0 - Timeout: 300 - SQL: 'exec selStratusFileProcessor @StratusFileProcessorID = 2798514'
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LogMessage: Ending - BillerID: 2820 - FileType: INVOICES - Filename: August Bills.49807d2c-e095-4f2f-9739-018b43d00c16.txt - Success: BAD - TotalTimeElapsed: 00:01:08.1731973
+[8/7/2024 1:05:41 PM] - MachineName: IC-APP8 - LastError: Error creating BifFile on line - 0   System.InvalidCastException: Conversion from string "" to type ''Double'' is not valid. ---> System.FormatException: Input string was not in a correct format.
+   at Microsoft.VisualBasic.CompilerServices.Conversions.ParseDouble(String Value, NumberFormatInfo NumberFormat)
+   at Microsoft.VisualBasic.CompilerServices.Conversions.ToDouble(String Value, NumberFormatInfo NumberFormat)
+   --- End of inner exception stack trace ---
+   at Microsoft.VisualBasic.CompilerServices.Conversions.ToDouble(String Value, NumberFormatInfo NumberFormat)
+   at IC.Stratus.Framework.Integrations.Software.MunisV2.MunisV2_Invoices_UB_XML_v2.getTotalAmountDue(DataSet ds)
+   at IC.Stratus.Framework.Integrations.Software.MunisV2.MunisV2_Invoices_UB_XML_v2.getIHRow(DataSet dsData)
+   at IC.Stratus.Framework.Integrations.Software.MunisV2.MunisV2_Invoices_UB_XML_v2.CreateInvoices(FileHeader FH, String[] dataLines)
+   at IC.Stratus.Framework.Integrations.BIF.BifFileFromTxt.CreateBifString(Int32 BillerID, String BillerGuid, String BillerFilePrefix, String FilePath)
+   at IC.Stratus.Framework.Integrations.BIF.BifFileBase.ToBif(Int32 BillerID, String BillerGuid, String BillerFilePrefix, String FilePath)
+
+The error on the logs show that we are attempting to get a value, which is most likely Total Amount Due, and the value may not be there, or it may be incorrectly formatted.
+If the file is small and can be skimmed through, the issue may be easy to spot.
+Files may be millions of lines and there may just be a problem with one or two lines. To find and confirm the issue, and if you have access to the code. You can clone the 
+Stratus Web Services
+ repo, go to the place of the error and set a try catch where you think the code is breaking according to the error log. You can then put a break point in the catch and run the code.
+ URL:/spaces/DS/pages/3491463202/File+Processing+Issues

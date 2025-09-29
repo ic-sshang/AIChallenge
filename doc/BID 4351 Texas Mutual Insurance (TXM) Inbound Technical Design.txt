@@ -1,0 +1,332 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+Implementation/Integration SharePoint: 
+https://invoicecloud360.sharepoint.com/:f:/r/sites/IC-Implementations/Shared%20Documents/FS%20Team/TXM?csf=1&web=1&e=A9YPDU
+Solutions Design Document: 
+ 
+API Documentation
+Data Synchronization Integration
+Guidewire Cloud Native default integration is used for Texas Mutual Insurance. The only difference from the default integration is that they will be sending only most recent invoice for RTDR balances due to them using Balance Forward. 
+Default integration can be reviewed here: 
+https://invoicecloud.atlassian.net/wiki/x/AQCCtg
+ 
+Bill Presentment
+Solution Details (API or Non-API)
+1800
+PDF Linking 
+(If not used, Mark N/A)
+API Endpoint Name
+Description
+Specifications
+Request
+Response
+Modifications
+API Endpoint Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+User Experience Integration
+This section documents the initial, recommended user experience design for this integration. Since user experience integration uses Invoice Cloud web services that are available to a Biller, it’s possible for the Biller to change at any time without notifying Invoice Cloud after Go-Live how they use our web services.
+Registered users will log in through the TMO portal with SAMLSSO. The SSO URL will redirect users to the InvoiceCloud registered user experience and payment path pages, such as paperless preference, saved payment methods, open bills, etc. The integration with the Policy Holder will be done through iFrames for the payment path with CloudPayv2. All account management pages with SAML SSO will be done through a new tab due to security concerns. 
+TXM will be using Cloud Pay v2 for one-time payments on the registered route and using SAMLSSO for account management. Authentication token will be used to process one-time payments with CloudPayv2. LoginGUID will not be stored in TXM system due to security concerns and this value will be retrieved with the webservice call: Retrieve Users. TXM is going to use InvoiceCloud Registration API with the LoginGUID as the password before the user accesses Cloud Pay v2 to process a payment so that the forced SAML SSO redirect is not required.  
+Single Sign On
+Purpose/Summary: SAML SSO account management pages will be used. The connection/registration will occur with a temp password with registration webservice call first. The password will be updated with the LoginGUID to allow SAML redirect/iFraming to occur later on. 
+Configuration
+1800
+SAML Configuration
+User Stories:
+1800
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Workflow
+Cloud Payments V2
+Purpose/Summary:
+Sample Request:
+Additional Details
+1800
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+PostBackURL
+False
+BillerReference
+False
+ViewMode
+True
+CssUrl
+False
+Customers
+True
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+DisplayAccountNumber
+False
+Name
+False
+Address
+False
+City
+False
+State
+False
+Zip
+False
+EmailAddress
+False
+Invoices
+False
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+TypeID
+False
+InvoiceDate
+False
+DueDate
+False
+BalanceDue
+False
+CCServiceFee
+False
+ACHServiceFee
+False
+MinimumAmountDue
+False
+AllowPartialPayments
+False
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+AllowEMV
+False
+EMVDeviceID
+False
+EMVLocationID
+False
+CashierName
+False
+AllowCCPayment
+False
+AllowACHPayment
+False
+CreateCustomerRecord
+False
+RemoteAuthenticationToken
+False
+PageLoadOverride
+False
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+AllowRegisterAccount
+Optional
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+AllowRemove
+Optional
+AllowViewRelated
+Optional
+AllowRemindMe
+Optional
+User Stories:
+1800
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Workflow
+Accessing payment page as a registered/login experience (New User)
+Create Customer Record
+Retrieve Users
+Register User
+Retrieve Users
+Update Password
+RemoteAuthentication
+CloudPaymentsAPI/v2
+Accessing payment page as a registered/login experience (Existing User)
+CreateCustomerRecord
+Retrieve Users
+RemoteAuthentication
+CloudPaymentsAPI/v2
+Additional WebServices
+Additional WebServices
+1800
+API Name
+API Use/Purpose
+User Stories:
+1800
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+File Mapping
+Invoice File
+Texas Mutual Insurance will utilize the out of the box Guidewire Billing Center which will include the REST OAuth2.0 webservice for uploading invoices. The REST endpoints will be added to the Accelerator by Nov 5, 2025.  
+The OOTB accelerator creates the invoice file per billed invoice data available on BC with the current invoice due and the total amount due on the premium. The balance update API will update these values accordingly when the account is being accessed. Changes can also be made to the accelerator when creating the BIF to send the current due as (past due + current due).  
+Cloud Pay v2 will be used to process payments on InvoiceCloud registered policy holder experience with the invoice number matching what was sent via BIF.  
+The below payment types do have invoices available on TXM, however, they are not invoices that have been created and are available on Billing Center. For the time being, these invoices will be created on the fly with Cloud Pay v2.  
+Online Payroll Reporting 
+New Business Quotes 
+Renewal Quotes 
+Return Commissions 
+Default integration can be reviewed here: 
+https://invoicecloud.atlassian.net/wiki/x/AQCCtg
+ 
+Advanced Settings
+Setting ID
+Required/Optional/N/A
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+Biller Invoice File (BIF) Customizations
+For features that need to be set through BIF Customization, please make sure “Apply Global BIF Customizations” setting is turned on under Invoicing on the CRM. 
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF Customization
+AutoPayCollectionDate
+BIF Customization
+BalanceForward
+BIF Customization
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF Customization
+InvoiceDate
+BIF
+InvoiceDueDate
+BIF
+InvoiceFormatGuid
+BIF
+InvoiceTypeID
+BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization
+ThirdNotifyRequestedDate
+BIF Customization
+User Interaction and Design
+Figma Workflow for User Experience (Agent and Customer): 
+https://www.figma.com/board/0qOc3WJLAjQ80kEJHVOpuw/Texas-Mutual?node-id=60-4843&t=wRKLhHcg7SSUwGWR-1
+ 
+Data Flow - Invoice
+1800
+Default Guidewire Accelerator is used to create and send invoices via webservices. 
+Data Flow - Adjustments
+1800
+Default Guidewire Accelerator is used to update balances via RTDR. 
+Data Flow - Payment
+1800
+Default Guidewire Accelerator is used to send payments via Data Pump. 
+Data Flow - Void
+1800
+Default Guidewire Accelerator is used to send voids via Data Pump. 
+Data Flow - ACH Reject
+1800
+Default Guidewire Accelerator is used to send ACH Rejects via Data Pump. 
+Data Flow - Change Log
+1800
+Default Guidewire Accelerator is used to send Paperless, Autopay and Pay by Text enrollment via Data Pump. 
+Data Flow - Bill Presentment
+1800
+PDF Remote linking will be used for Bill Presentment. This will be handled with the default Guidewire Accelerator. Bill Presentment will be released in Phase 2. 
+Payer Experience
+1800
+SAML SSO will be used for account management. CloudPayv2 will be used for both Guest and Registered payment experience. For registered users, CloudPayv2 will include the Authentication Token for stored payment methods.  
+Agent Experience
+1800
+For Day 1/Phase 2, Cloud Pay v2 will be used to process quote payments by creating invoices on the fly and processing payments on existing premium invoices. Agents will have their own registered login with an authentication token.  
+In the future, AgentConnect could be integrated with TXM to redirect the agent directly from TXM into the account they are managing in InvoiceCloud without the need to log into the Insured Account.  
+Biller Experience
+1800
+Biller Portal will be used for any accounting and management purposes for TXM CSRs. 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/4384358416/BID+4351+Texas+Mutual+Insurance+TXM+Inbound+Technical+Design

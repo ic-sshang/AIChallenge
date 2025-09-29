@@ -1,0 +1,476 @@
+Page Navigation:
+Jira tickets
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+Solution engineer
+ 
+Summary
+: This Technical Design only captures changes made to City of Norwich CT in Q3 2025. The early Norwich CT Technical Design is not documented at this time.
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to Norwich 
+File Extension: txt
+File Naming Convention: “ICPayments_LessBillerPortal_YearMonthHourMinuteSecond” (ex. ICPayments_LessBillerPortal-20220423230638.txt). 
+File Delimiter: Fixed Position
+Specification: NA
+Sample File
+Specifications:
+CC Payment Export File:
+SFTP File Path: “D:\inetpub\ftproot\qds\” & “TownCode999” - ex. BID-2896, Invoice Files to IC File Path is set to “D:\inetpub\ftproot\qds\TownCode002\ToInvoiceCloud\InvoiceFiles” (Note: Please review 
+Quality Data Systems (QDS) Implementation Details
+  to set the TownCode folder to the SFTP File Path.)
+Field Mapping
+Field
+DataType
+Character Limits
+Format
+Clause
+Values
+Comments
+Record Type
+Header Dataline Record Type
+String
+1
+Text
+"B"
+Biller Header Prefix
+Header
+Header Empty Spaces
+String
+3
+Text
+"   "
+3 Empty Spaces
+Header
+Header Current Date
+String 
+8
+Date
+09/31/2099
+Date Format: MMddyyyy 
+Header
+Header Constant String
+String
+4
+Numeric
+"0001"
+Constant string for Header line
+Header
+HEADER DATALINE EXAMPLE
+String
+16
+Text
+NA
+Example: "B   
+07252021
+0001
+"
+Header Dataline Example
+Header Example
+Detail Dataline Record Type
+String
+1
+Text
+"P"
+Biller Detail Prefix 
+Detail
+Detail Constant String
+String
+4
+Numeric
+"0001"
+Constant string for Detail line
+Detail
+Year
+String 
+8
+Date
+2020
+Custom 1 = Date Format: yyyy
+Detail
+Bill Type
+String
+2
+Numeric
+"03"
+Custom4 = Bill Type (Similar to InvoiceTypeID). Custom4 is converted to a Int16 which removes any leading 0’s in the Custom4. Then Int16 gets converted to a string as “3” or “4”. 
+Detail
+Bill Number
+String
+7
+Numeric
+"1234567"
+Bill Number is unique to biller.
+Detail
+Payment Amount
+String
+12
+Text
+X + PaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of PaymentAmount
+Detail
+Payment Date
+String
+8
+Date
+01/01/2099
+Date Format: MMddyyyy 
+Detail
+Empty Spaces
+String
+3
+Text
+"   "
+3 Empty Spaces
+Detail
+Add Custom7
+String
+39
+Text
+CONCATENATE(Character_Fill(Custom7, " ", 39, "R")
+If InvoiceTypeID = 7 or 8 AND If Custom7 is not empty,then Detail + Values
+Detail
+Add Custom1 when InvoiceTypeID = 7, 8
+String
+Text
+InvoiceTypeID = 7 or 8
+CONCATENATE(
+Custom1
+(Year) + "0" + Custom4(BillType)+ Character_Filling(
+Custom10
+, "0", 7, "L"))
+If InvoiceTypeID = 7 or 8 AND If Custom7 is empty, then Detail + Value
+Detail
+Add Custom83
+String
+Text
+InvoiceTypeID <> 7 or 8
+CONCATENATE(Character_Fill(Custom83, " ", 39, "R")
+If InvoiceTypeID = 33 AND If Custom83 is not empty,then Detail + Values
+Detail
+Add Custom1 when InvoiceTypeID = 33
+String
+Text
+InvoiceTypeID = 83
+CONCATENATE(
+Custom1
+(Year) + (
+MV or MS
+) + Character_Filling(
+Custom10
+, "0", 7, "L"))
+NOTE: MV if Custom4 = 3, MS if Custom4 = 4. At the end, this value gets added to Detail if InvoiceTypeID = 33 And Custom83 is empty. If conditions are met, then Detail = Detail + Value
+Detail
+Add AccountNumber when InvoiceTypeID is NOT 7, 8, or 33
+String
+Text
+InvoiceTypeID <> 7,8, or 83
+Character_Filling(AccountNumber, " ", 39, "R")
+If InvoiceTypeID is NOT 7,8, or 33, then we add the AccountNumber to the detail. Detail = Detail + Value
+Detail
+Return CC
+PaymentExportDataLineCollection
+1
+Numeric
+If PaymentTypeID = 1
+1
+Return PaymentExportDataLineCollection("CC", Detail) if PaymentTypeId = 1
+Detail
+Return ACH
+PaymentExportDataLineCollection
+1
+Numeric
+If PaymentTypeID <> 1
+Return PaymentExportDataLineCollection("CC", Detail) if PaymentTypeId is not 1
+Detail
+DETAIL DATALINE EXAMPLE ONLY
+String
+79
+Text
+Various by InvoiceTypeID
+Example = “P
+0001
+2020
+3
+0314680
+000000014400
+07242021
+   
+2020
+MV
+0009629
+                          "
+Detail Dataline Example. Various by InvoiceTypeID.
+Detail Example
+CC Footer Dataline Record Type Prefix (StringBuilder for CC)
+String
+1
+Text
+SplitPaymentFile = True
+"T"
+Biller Footer Prefix 
+Trailer
+CC Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = True
+"0001"
+Constant string for Footer line
+Trailer
+CC Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = True
+"          "
+10 Empty Spaces
+Trailer
+CC Footer FileVolumeCC
+String
+12
+Numeric
+SplitPaymentFile = True
+X + CCPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of CCPaymentAmount 
+Trailer
+CC Footer Current Date
+String
+8
+Date
+SplitPaymentFile = True
+01/01/2099
+Date Format: MMddyyyy 
+Trailer
+CC GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = True
+"G"
+Biller Gfooter Prefix
+Trailer
+CC Gfooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = True
+"              "
+14 Empty Spaces
+Trailer
+CC Gfooter FileVolume CC
+String
+12
+Numeric
+SplitPaymentFile = True
+X + CCPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of CCPaymentAmount 
+Trailer
+CC GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = True
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+ACH Footer Dataline Record Type Prefix (StringBuilder for ACH)
+String
+1
+Text
+SplitPaymentFile = True
+"T"
+Biller Footer Prefix 
+Trailer
+ACH Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = True
+"0001"
+Constant string for Footer line
+Trailer
+ACH Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = True
+"          "
+10 Empty Spaces
+Trailer
+ACH Footer FileVolumeACH
+String
+12
+Numeric
+SplitPaymentFile = True
+X + ACHPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of ACHPaymentAmount 
+Trailer
+ACH Footer Current Date
+String
+8
+Date
+SplitPaymentFile = True
+01/01/2099
+Date Format: MMddyyyy 
+Trailer
+ACH GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = True
+"G"
+Biller Gfooter Prefix
+Trailer
+ACH Gfooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = True
+"              "
+14 Empty Spaces
+Trailer
+ACH Gfooter FileVolumeACH
+String
+12
+Numeric
+SplitPaymentFile = True
+X + ACHPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of ACHPaymentAmount 
+Trailer
+ACH GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = True
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+NonACH/NonCC Footer Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = False
+"T"
+Biller Footer Prefix 
+Trailer
+NonACH/NonCC Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = False
+"0001"
+Constant string for Footer line
+Trailer
+NonACH/NonCC Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = False
+"         "
+10 Empty Spaces
+Trailer
+NonACH/NonCC Footer FileVolume
+String
+12
+Numeric
+SplitPaymentFile = False
+X + FIlePaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of all PaymentAmounts in file. 
+Trailer
+NonACH/NonCC Footer Current Date
+String
+8
+Date
+SplitPaymentFile = False
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+NonACH/NonCC GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = False
+"G"
+Biller Footer Prefix 
+Trailer
+NonACH/NonCC GFooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = False
+"              "
+10 Empty Spaces
+Trailer
+NonACH/NonCC GFooter FileVolume
+String
+12
+Numeric
+SplitPaymentFile = False
+X + FIlePaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of all PaymentAmounts in file. 
+Trailer
+NonACH/NonCC GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = False
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+Return retval
+PaymentExportFileTrailerCollection
+Object
+Returns Payment Export File Trailer
+This makes up the last 2 lines of a payment split file for QDS
+Trailer
+TRAILER DATALINE EXAMPLE ONLY (CC)
+String
+35 (Footer) + 35 (GFooter) = 70
+Text
+CC Payments
+Example: 
+”T
+0001
+          
+000001194516
+07252021
+”
+”G              
+000001194516
+07252021
+”
+Similiar to ACH Payments, this is how the Trailer is formated.
+Trailer Example
+TRAILER DATALINE EXAMPLE ONLY (ACH)
+String
+35 (Footer) + 35 (GFooter) = 70
+Text
+ACH Payments
+Example: 
+"T
+0001
+          
+000007707586
+07252021
+"
+”G              
+000007707586
+07252021
+"
+Similiar to CC Payments, this is how the Trailer is formated.
+Trailer Example
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+TBD
+file format included all settled payment sources
+exclude “biller portal” payments (paymentsourceid = 2)
+biller is currently taking in person and over phone payments, then manually importing payments, but then having to delete those payments because they are include in export file causing extra work for biller
+ URL:/spaces/IM/pages/4569432065/BID+4544+City+of+Norwich+CT+Technical+Design

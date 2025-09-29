@@ -1,0 +1,56 @@
+ICFTPExportProcessor Monitor Failure Alert:
+Description: This is an alert, to notify us that an 
+FTP export task(s) for a biller(s) has run into an issue
+ somewhere along the line.
+These alerts are coming in from a skybot job called ICFTPExportProcessorMonitor.
+This job is tasked with checking the StratusExportProcessor table in the Perf_Logging shard in the prod database. Every hour, this job runs and looks at the last hour of records in the table and if it, finds any that were not successful, it reports them, and we get the alert.
+The alert will look like this:,
+Here you can see that the title and that we have one Biller (4346) with one failed payment export.
+With this information we know 
+the biller and the kind of export
+ that failed.
+To
+ check the logs to see how this export failed
+, we can go to the Azure Portal to review the logs in the 
+Application Insights for the ICFTPExportProcessor
+ Azure Function. (This is the serverless function that pulls the export tasks, calls StratusWebServices and drops the exported files in the correct FTP directories)
+In 
+KQL mode
+, we can see the query that we want to run on the logs. 
+Selecting all traces where message contains the biller ID since the last 24 hours
+ should show the Azure Function events that happened.
+9 times out of 10, the Timer Trigger event that happened right at a fifteen minute mark (here, that was at 1:30) is 
+not
+ the culprit of the failure since the queue message was triggered and the error happened based on logging in the Perf_logging shard table (StratusExportProcessor). The timer trigger inserts that record. So, 
+the failure happened in the Queue trigger
+ part of the Azure Function is what we focus on.
+Expanding the trace allows us to see the OperationID
+ (which is a GUID). Right-click the value and copy it to your clipboard.
+We can 
+use this GUID to see all of the traces
+ that happened for that event, and there, we should be able 
+to see the exception
+ using this query to see traces where OperationID is the GUID that we just got.
+Run this query
+ now to see the events that transpired
+traces
+| where operation_Id == '[Operation_IdGUID]'
+Expand the “Queue Trigger Function Exception” 
+trace and now you are able 
+to see the exception
+ that caused the export to fail.
+Now that we know the exception, we now 
+have an idea of how to move forward
+ to resolve the alert. In this example, you can see the error was some kind of communication error connecting to stratus. If that was the case, then we can either 
+manually export the payment
+ and drop the file
+ in the billers FTP folder
+.
+If the export ran into an 
+exception because of the export code
+, then we should 
+figure out the bug and attempt to manually export
+ with a bug fix. After that we should 
+create a Jira item to complete the bug fix
+ in production to prevent the error from happening again.
+ URL:/spaces/IM/pages/3783065601/ICFTPExportProcessor+-+DD

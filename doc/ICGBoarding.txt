@@ -1,0 +1,94 @@
+ICGBoarding is a skybot job that consumes the ICGatewayFile to load new billers into the IC Gateway.  
+Technical Information
+Repository
+: 
+ICGBoarding
+ 
+Software Type
+:  Skybot Job, Terminal Application
+Logging Location
+: New Relic - “ICGBoarding”
+Owners
+: Wicked Tendies / Braintree Team
+Executable
+ICGBoarding.exe
+Command Line Options
+None
+Environment Options
+Variable Name
+Description
+Usage
+IC_APPDATA_DIR
+The Root Application Data Directory
+/ICGBoardingFiles is appended, and this is the location where the application searches for files.
+Class Diagram
+1
+0
+2805497859
+2625699841
+1
+ICGBoarding.drawio
+1
+0
+1
+https://invoicecloud.atlassian.net/wiki
+ICGBoarding.drawio
+0
+C5RBs43oDa-KdzZeNtuy WIyWlLk6GJQsqaUBKTNV-1
+745
+auto
+top
+1
+631
+Process Workflow
+The process starts when the executable is launched.  It will configure itself to search the directory specified in the 
+IC_APPDATA_DIR 
+environment variable inside of the 
+ICGBoardingFiles 
+folder.  For example if the IC_APPDATA_DIR is set to
+ 
+\\file-server\share1
+, then the application will search the directory 
+\\file-server\share1\ICGBoardingFile.
+ProgramManager
+ProgramManager
+After the path has been configured the application immediately invokes the 
+ProgramManager
+ calling the 
+ProcessFiles
+ method passing in the directory constructed eariler.  Once started the process looks for files in this directory.  If it finds no files it will report “No files to processs…” and exit.  However, if files are found it will look at the file name.  If the lower-cased file name starts with “ic” then it will invoke the 
+ICBoardingFileProcessor
+.  If the lower-cased file name starts with “psn” it will invoke the 
+PSNBoardingFileProcessor
+.  In the event the file name doesn’t start with either “psn” or “ic” the process will error with the message “Invalid Filename”.
+ICBoardingFileProcessor
+ICBoardingFileProcessor
+TBA
+ICBoardingFileProcessor:ProcessBoardingFile  - Activty Diagram
+2
+1
+0
+0
+2804351013
+2625699841
+1
+Untitled Diagram-1692906604538.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1692906604538.drawio
+0
+747
+943
+PSNBoardingFileProcessor
+PSNBoardingFileProcessor
+Top Level - Activity Diagram
+Invoice Cloud File Process - Activity Digram
+PSN File Process - Activity Diagram
+ 
+TBA
+Related
+Braintree Boarding Process
+ 
+More Info 
+ URL:/spaces/ED/pages/2625699841/ICGBoarding

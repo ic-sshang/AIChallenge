@@ -1,0 +1,185 @@
+📘 Real-Time Data Refresh (RTDR) in AutoPay
+ Definition and Purpose
+Real-Time Data Refresh (RTDR)
+ in the AutoPay system is a mechanism that ensures customer billing and balance data is refreshed immediately before processing AutoPay transactions.
+Purpose
+:
+Validate that customer balances and billing data are up-to-date before attempting automated payments.
+Reduce the risk of processing payments on stale or incorrect account data.
+Capture the latest biller/customer state, particularly when balances may change frequently.
+2. When and Where RTDR is Triggered
+RTDR is triggered in 
+ProcessBiller
+ when the biller has 
+RealTimeDataRefresh enabled
+ (
+mainDT.Rows(0)("RealTimeDataRefresh") = 1
+).
+The workflow:
+ProcessBiller
+ checks the 
+RealTimeDataRefresh
+ flag for the biller.
+If enabled:
+Calls 
+GetBillerAutoPayList(dateToRun, True)
+ to retrieve candidate customers for refresh.
+Deduplicates customers to one refresh per unique 
+CustomerID
+.
+Runs 
+parallel RTDR calls
+ for each customer using 
+IC.Threading.MultiThreadProcessor
+.
+Each call invokes 
+RealTimeDataRefresh(customerID, ...)
+.
+If RTDR is enabled but returns 
+no data
+, the method exits early and no AutoPay payments are processed.
+3. Services and Components Involved
+Application Layer Components
+ProcessBiller
+ → orchestrates the workflow.
+RealTimeDataRefresh
+ → method that manages retries, error handling, and interprets responses.
+RTDR_Biller_Details
+ / 
+RTDR_Biller_AVG
+ → models to collect metrics and performance stats.
+External Services
+Tunnel API
+ (
+TunnelAPIProxy.RefreshCustomer
+)
+Endpoint: 
+/services/v1/rtdr/refresh-customer
+Request: 
+{ BillerID, CustomerID, SourceID = 2 }
+Response: 
+RefreshCustomerResponse
+ with flags 
+Success
+, 
+BalanceChanged
+.
+Infrastructure
+Serilog
+ for logging.
+New Relic agent annotations for transaction tracing.
+Internal threading library 
+IC.Threading.MultiThreadProcessor
+ for parallel RTDR calls.
+4. Configurations and Flags
+Database / Config Fields
+RealTimeDataRefresh
+ (bit/flag in biller table, read via 
+mainDT.Rows(0)("RealTimeDataRefresh")
+).
+BillerOption.IncludeOutstandingInvoicesForAutoPay
+ (option 106) → affects payment stage, not RTDR directly, but is checked in the same workflow.
+Application Settings
+IC_TUNNELAPI_URL
+ → configuration entry for Tunnel API base URL.
+Thread Configurations
+RTDRThreads
+ → controls max concurrent RTDR calls.
+Dynamically adjusted by 
+CalculateNumberOfThreads()
+.
+5. Limitations, Known Issues, Edge Cases
+isMitigated Always True
+In 
+RealTimeDataRefresh
+, 
+isMitigated
+ is always set to 
+True
+, making it hard to distinguish between handled errors and true successes.
+Balance Change Dependency
+RTDR is only considered “successful” if both 
+Success = True
+ and 
+BalanceChanged = True
+. If balance did not change, the call returns 
+False
+ even though data was refreshed successfully.
+6. Present Scenario
+Even if RTDR fails, the process continues with AutoPay (both in scheduled job runs and reruns/manual queue).
+The manual rerun is only for the autopay and not for the RTDR.
+RealTimeDataRefresh
+ currently returns:
+   True → RTDR succeeds and balance changes.
+   False → RTDR fails or balance does not change.
+   However, this Boolean result is not used to prevent AutoPay. It is only written to logs (
+Serilog
+).
+There is no automated rerun for autopay. It is run manually by on-call engineers who receive failure information in emails.
+Below are the parameters which are used for the manual rerun for autopay:
+rerun
+=1 (denotes true condition for the rerun), 
+startindex
+=5 (index number for the autopay processing job in autopay chain),
+billerid
+=25141 (biller specific ids) 
+recordfailures
+=1 (can be 0 or 1 depending on whether recording failure is needed or not)
+Present flow of Autopay
+7. Proposed Scenario
+Pass the 
+manual_run
+ flag into 
+ProcessBiller(mainDT)
+. This flag is set to 
+True
+ for reruns, based on the value of the environment variable 
+rerun
+.
+Store the biller’s preference in a table as column field: allow AutoPay when RTDR fails, or skip it.
+Create a table named 
+RTDRFailures
+ with columns such as 
+AutoPayRunTime
+, 
+InvoiceID
+, and other required fields.
+Possible Scenarios with Code Changes:
+RTDR fails in a scheduled AutoPay job
+Inside the thread for a given 
+CustomerID
+, if 
+RealTimeDataRefresh 
+returns False, record an entry in 
+RTDRFailures
+ (with runtime and invoice details).
+Use the combination of manual_run and biller preference:
+For scheduled runs → follow the biller’s preference (skip or allow AutoPay if RTDR fails).
+RTDR fails in a rerun
+Inside the thread for a given 
+CustomerID
+, if 
+RealTimeDataRefresh
+ returns 
+False
+, record an entry in 
+RTDRFailures
+.
+Use the combination of manual_run and biller preference:
+If it’s a rerun and the biller chooses to ignore RTDR failures → AutoPay will run.
+If it’s a rerun and the biller does not want to ignore RTDR failures → AutoPay will still run (because rerun overrides RTDR).
+For scheduled runs → follow the biller’s preference (skip or allow AutoPay if RTDR fails).
+Apart from the parameters which are already used in scheduled job run and manual rerun, we can introduce another parameter 
+rtdrfailures 
+(say) which can be passed as 1 in case of reruns and it can be used to let the control know that we need to check the 
+RTDRFailures
+ table for 
+InvoiceID
+’s for which rtdr failed.
+The control would try to rerun 
+RealTimeDataRefresh
+ , and if it fails this time as well then we can use value of 
+rtdrfailures
+ and biller’s preference to decide if we want to proceed with autopay or not.
+Proposed flow for Autopay
+ URL:/spaces/PE/pages/4674781574/How+RTDR+works+in+AutoPay+and+Understand+Technical+architecture

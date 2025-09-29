@@ -1,0 +1,326 @@
+Summary
+Company
+Massachusetts Property Insurance Underwriting Association (MPIUA)
+Industry/Vertical
+Insurance
+Website
+Registered: 
+https://insuredportal.mpiua.com/register
+ 
+Guest: 
+https://apps.mpiua.com/payment/#/make-payment
+ 
+Agent: 
+https://apps.mpiua.com/agent#/login
+ 
+Software + Version
+Solutions Engineer
+ 
+Integration Manager
+ 
+CSR/Agent Experience
+General
+Internal Notes
+  
+Response/Decision
+Date
+How do CSRs / Agents access and use the system today?
+ How will this functionality be done on Invoice Cloud:  (Biller Portal, AgentConnect, CPV2)?
+MPIUA does not have internal agents. CSRs are internal MPIUA employees and they will work through the Biller Portal. Agents are third-party (not MPIUA employees) agents and will work through AgentConnect.
+Can clerks/agents process payments by using a customer's stored payment method?
+One-time Payment URL from AgentConnect does not show stored payments unless you are using CPV2 with Auth Token. 
+CSRs will not take payments. Agents will take payments through Agent connect but not with stored payment methods.
+Do clerks/agents assist customers with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+ 
+This will be primarily managed by the insured but agents should be able to assist with that. CSRs are there to help the insured users but will not act on their behalf.
+Do some clerks/agents need different permissions than others? (please explain)
+ 
+MPIUA CSRs will work in the biller portal with two tiers of permissions; admins and individual CSRs. Specific group permissions TBD.
+Do clerks/agents accept payments at the counter (in-person)? 
+ 
+Yes, but it is not routed through their portal’s payment page. This is accepted as cash or check and a manual deposit made towards the account.
+IF YES:
+Review options in biller portal/agent connect/Cloud Pay V2
+ 
+Do you use a separate system/software for counter payments and if so what software? 
+ 
+ 
+When accepting credit card payments, is a card reader used?  EMV or Swipe?
+ 
+Just check or cash - no cards.
+Do agents need to act on the behalf of the policyholder for payments? 
+ If yes, consider using Agent Connect without a LoginGUID.
+Yes
+Does the agency pay with their own agency payment method (using the Agents bank to pay a policy of an insured customer)? 
+If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  
+Remote Authentication API must be used to register the agency in a specified user role.
+In order to prevent long lists of linked accounts (register), it is recommended to link the account to the user and unlink (unregister) after the transaction is complete.  
+Additional Notes
+ 
+ 
+Payer Experience
+General Questions
+ Internal Notes
+  
+Response/Decision
+Date
+How do your customers make payments today?
+Can you demo how customers make payments today?  
+Homegrown one-time payment page
+- ACH only
+- Only method for online payment
+- InsuredPortal and agent portal all route to one-time payment page
+How do your customers access the payment system today?
+ 
+Sign into homegrown portal
+What are all the payment methods accepted by your system today?
+ 
+ACH only
+Are there any payment methods not available today that are requested by your customers?
+CCs are a future consideration - ACH only for now
+What additional payment features are important to your customers?
+ 
+Autopay, and potentially scheduled payments
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ 
+CloudSSOConnect will be used for the registered customer experience
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+Is multi-user needed?  
+Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.  The Remote Authentication can be used to register these accounts.
+Multi-user is not needed. Only one email address can be attached to an account in MPIUA’s system.
+What part of the user experience will be through your UI and what part of the User experience will be through Invoice Cloud?
+ 
+Users will go from MPIUA into IC’s virtual site via ‘Pay My Bill’ route for guest/unregistered payments. The registered/signed-in experience will be embed CloudSSOConnect iFrames.
+How will existing users be migrated?
+ 
+Through customer records in BIFs.
+Do you need to link accounts?
+ 
+ Multiple accounts for one user
+Yes, insured customers can have multiple policies (i.e. accounts). MPIUA’s system “links” policies/accounts when they are registered to the same email.
+Do you need IVR payments?
+ 
+Not at this time - potentially a future consideration.
+Do you want to offer 'Pay By Text'? 
+ 
+Not at this time - potentially a future consideration.
+Additional Notes
+ 
+ 
+Invoices
+Invoice Types
+Internal Notes
+Response/Decision
+Date
+Invoice Type/Business Type
+Examples:  Premium (monthly policy payment), Membership (some insurance companies require a membership fee to get a policy with them - charged annually).  
+There are not separate invoice types.
+If Multiple types, can services be billed separately?
+Do customers receive one invoice with multiple policies or separate invoices?  If not on the same invoice, separate invoice types are needed
+Insured customers with multiple policies will receive separate invoices for each policy but because the policies are not of different types, separate invoice types are not necessary.
+Invoice Functionality
+Internal Notes
+Response/Decision
+Date
+How often are bills produced?
+Daily, Weekly, Monthly, Quarterly, Semi-Annually, Annually etc.
+Insured customers are invoiced monthly. That being said, when MPIUA issues a new policy, all eight invoices (exactly eight per policy, always) are generated. MPIUA has the concept of 
+OPEN
+ and 
+PENDING
+ invoices that determines which of the eight invoices is the current invoice. 
+IC Biller Invoice File (BIF) 
+preferred method
+Review Specs
+Integrator File (if not using IC BIF)
+Review Specs
+Is there an indicator in the file for each service type?
+These will be separate invoice types in IC
+How is Integrator File Formatted?
+XML, CSV, Pipe, Print Spool, etc.
+How are changes made to an existing bill?  Is there a separate file for updates to an existing bill?
+For example, need to modify due date, notification dates, auto-pay date, etc.
+How can IC tell if it is a new invoice Vs a change to an existing invoice.
+Based on the fields that need to be updated, this might require a BIF or IUF.
+Are you able to customize data sent in the files?
+If a change is needed to a custom file, can this be done?
+Tell us about how your quote system works and the issuance process of quotes/policies
+ Invoice
+ 
+Tell us about how you handle your cancellation and rewrite process? Does a new Policy/Account/Invoice gets created for the insured? 
+MPIUA does not issue quotes because they are a “last resort insurer” (their words).
+How are quote payments captured?  Is the billing account number or policy number known at this time? 
+If yes, consider creating the account before a BIF arrives or creating one on the fly.  If no, consider using the Customer Renewal function later to move the Quote Number over to the actual billing/policy number.
+Policy number is available at time of first invoice creation. No payments are made prior to issuing a policy.
+How are renewals handled - will the billing system call our Customer Renewal API? (i.e., does the policy/account number change every policy term? If so, call the API)
+Policy number does not change
+Invoice Functionality
+Internal Notes
+Response/Decision
+Date
+Does your system produce unique invoice numbers?
+If yes, are these numbers printed on bills, would customers recognize these numbers? If no, what combination of values can we use to create a unique number per invoice?
+Unique IDs are created but mostly kept behind the scenes. The insured customer would not recognize the invoice ID but it is printed on the invoice PDF.
+How are balances calculated per invoice? (Explain Balance Forward and Open Billing)
+total balance on most recent invoice or balance available on multiple invoices
+Invoices are created all at the same time - user must pay off each invoice to within $10 of the amount due or the policy is cancelled.
+Are fees (late fees, penalties, interest, etc.) added to the invoice or the account?
+No late fees or penalties
+Do you have a field for Past Due balances?
+If invoice is paid within $10 of the amount due, that invoice is considered paid and the policy will not be cancelled. That <$10 amount past due does not roll into future invoices and IC will not need to handle it.
+Are there any Duplicate invoices?
+     If yes, which bill should IC import?
+No duplicates
+Is there a minimum required payment amount different than the current monthly balance?
+This is typically the balance due and not used in Insurance.
+No
+Account/Policy Numbers
+Internal Notes
+Response/Decision
+Date
+Are Account/Policy Numbers unique per person? (Do you have customer numbers?)
+Policy numbers are unique even if held by the same insured customer.
+How is billing handled? Policy Based, Account Based or Both? 
+This is used to decide on what the IC unique identifier/account number will be.  If Policy based,  we typically use the Policy as the account number.
+Billing is policy based.
+Under what circumstances would Account Numbers change?
+Account numbers might change if they are renewed.  If its the same person we suggest linking accounts or using customer renewal API.
+Account/policy numbers do not change
+Do you expire previous bills so that payments cannot be made after a certain time? In what scenario(s)?
+Invoices can be paid on until a policy cancellation is in effect. If a policy invoice is not considered paid, a cancellation is issued, but the cancellation doesn’t go into effect for another several days.
+How is autopay currently handled?
+Autopay is not currently offered.
+How will you communicate block payments to Invoice Cloud (CC or ACH)?
+They currently block “bad” bank account numbers that have resulted in past rejected payments but in the context of IC, they will not block ACH payments. CC payments will not be accepted at all.
+File Transfer
+Internal Notes
+Response/Decision
+Date
+Is there an automated process to produce the file? 
+Files should be sent to IC any time there is a new billing
+Nightly file to create all invoices.
+Which method will be used SFTP or Webservice?
+SOAP Web services can only be used when coding to Invoice Cloud BIF specification.
+SFTP
+Additional Notes
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision
+Date
+What is the best way for IC to update balances? An API is preferred to allow IC to connect to your system to obtain the most recent balance.  
+ 
+Invoice Cloud prefers using an API to connect to the external system to obtain real time balances.  This is referred to as RTDR (real time data refresh)?
+API
+API: 
+(RTDR - Real-time Data Refresh) Does the API allow balance to be pulled by invoice or by full account balance?
+Both, we can get balance due for the monthly invoice and total amount due for the full policy amount.
+API:
+  Will the API reflect the balance including any late fees, etc.?
+MPIUA does not issue late fees.
+Files Needed
+If an API cannot be provided, the following files are needed to keep balances updated.
+IC Adjustment File (BAF)
+Review specs
+Integrator file (if not using IC BAF)
+Can you customize what is produced in the file?  Can invoice number be added if not present?
+Requirement:  If a bill is paid outside of Invoice Cloud and the balance is now zero, the adjustment file must include this information.
+Will the file contain the adjusted balance or only the adjustments amount for each invoice?
+Balance differential verses fixed adjustment
+How often can Adjustments be sent?
+ 
+Adjustment File must be sent a minimum of 1x per day
+ 
+Additional Notes
+ 
+ 
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision
+Date
+Invoice Cloud sends Autopay, Paperless, Customer Registrations, Pay by Text, Email Changes is there an API to allow these changes?
+ Invoice Cloud Datapump
+MPIUA will need paperless enrollment updates but they do not need autopay changes.
+What type of email changes are expected?  
+Registered customer email address, unregistered customer email address, one time payment email address (payer).
+Registered customers will not update email address in IC. MPIUA does not need emails stored through the unregistered/one-time payment routes.
+If no, What format should we send these items to you? (Prompt for sample file)
+ 
+From CIS
+ 
+ 
+Invoice Cloud updates blocking of ACH/CC (cash only) customers in real time. Can this status be included in your API balance response (RTDR)?
+ 
+MPIUA will only accept ACH payments so they will not be sending block flags at the customer level. The only exception to this rule is, 
+potentially
+, to block insured customers from paying on a cancelled policy - TBD.
+If no, IC Customer Update File (CUF) is preferred.
+ Review IC CUF Spec
+If no, Billers must manually update blocked payments via biller portal
+ 
+ 
+Additional Notes
+Payments from IC
+Payments from Invoice Cloud
+Internal Notes
+ 
+Response/Decision
+Date
+Would you be able to receive an API call to your system when payments are made in Invoice Cloud (Datapump)?
+They will stand up an endpoint to receive payment records via data pump.
+Can the API also be used to send ACH Rejects/Voids/Chargebacks/Credits
+Chargebacks/credits not applicable - no CC
+ACH undecided on data pump vs daily file - they currently download a file from the bank and store it in their system where it gets picked up by an automated process
+Rejects will be sent in a custom nightly file in the same file format, or as close to it, that they currently use.
+Voids - will likely be a nightly file
+Refunds - TBD whether refunds will be allowed.
+Are there specific GL codes that must be used?
+They will send us a copy of their existing bank file
+Are additional fields available in the API to submit a reference number?
+Reference number would be used to pass a Payment GUID.  The payment GUID must be validated in the event a duplicate payment is sent in error.  If a payment GUID is on file already, the second payment would be blocked (error).
+Is a ReceiptGUID required?
+Payment GUIDs are generated for each payment made for each invoice.  A ReceiptGUID can contain multiple payments for different invoices and are representative of a transaction.
+ReceiptGUID may make sense for customers paying invoices on multiple policies at once.
+If no, would you be able to receive a file to your system when payments are made?
+ 
+What file format should we send this information to you? (request for sample file)
+ 
+Additional Notes
+ 
+Bill Presentment
+Bill Presentment
+Internal Notes
+ 
+Response/Decision
+Date
+Do you produce your own bill images or do you use a print vendor?
+ 
+CIS generates and stores PDFs.
+Could we get a sample of the bill?
+ 
+Yes
+Does the print vendor have a web service we can call to retrieve bills?
+ 
+Yes, REST API in their system for bill presentment within their portal that they could open up to us.
+If no, do you (or the print vendor) have the ability to send us bills (PDFS) as individually named files?
+ 
+If individual files are not provided, are PDFs readable?  What information is included on the PDF so they can be linked to a customers bill?
+PDF is generated for every invoice, when the invoice is moved into the 
+OPEN
+ status in their system.
+How is info exchanged so that paperless customers are not sent physical invoices?
+ 
+MPIUA is/was working on their own in-house paperless offering but is currently always sending paper invoices for all 
+OPEN
+ invoices.
+Does the bill contain a bill number or any unique identifier? 
+ 
+No unique invoice identifier on PDF. Policy number is on invoice PDFs but a policy will have up to eight invoices over the life of the policy.
+Additional Notes
+ 
+ URL:/spaces/IM/pages/3688038412/MPIUA+Discovery

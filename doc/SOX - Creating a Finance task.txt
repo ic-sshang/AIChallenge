@@ -1,0 +1,58 @@
+Runbook 
+SOX - Creating a Finance task
+Description
+Open a task for Finance to audit revenue settings
+Contents
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+Summary
+The purpose of this process is to inform Finance that a Biller is live and that they need to audit the financial settings (fees, pricing, terminals, etc.,) so that there is one extra validation after Boarding did extensive QA before going live. This extra step is to comply with NACHA requirements and ensure accuracy.
+This task also will be triggered by the Delivery team or when a change is made to a biller after going live, if the change impacts any financial of the client: fees, pricing, terminals, new invoice type.
+note
+Process
+
+
+Process
+
+
+Steps
+Description
+Role Responsible
+1
+Open Salesforce
+Go to Tasks and select “New task”. Select Standard and click next.
+ 
+IM
+2
+Assigned To
+Assign to Finance Queue 
+IM
+3
+Set Type
+Enter Type = Go Live Review (Finance)
+IM
+4
+Related To: Accounts (Billers Account)
+Related to (The biller). Salesforce defaults to “Search Account Scores” Change dropdown to “Accounts” then locate the Billers account. 
+ 
+ 
+IM
+5
+Subject
+Enter Subject = Action Item
+IM
+6
+Due Date
+Due Date = Go-Live Date
+IM
+7
+Task Description / Save
+Comments = BID# [Biller Name] Post Go-Live Review - SOX Review
+Then Click Save
+IM
+ URL:/spaces/Implementa/pages/3264020481/SOX+-+Creating+a+Finance+task

@@ -1,0 +1,141 @@
+Runbook name
+Encryption Process 
+Description
+Encryption Process, steps, taking points. Data encryption for billers and Encryption for emails to billers. 
+On this page
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+Talking Points
+Here are some key talking points about AES 256-bit encryption:
+Definition and Origin
+:
+AES (Advanced Encryption Standard) is a symmetric encryption algorithm established by the U.S. National Institute of Standards and Technology (NIST) in 2001
+AES-256 refers to the use of a 256-bit key for encryption, making it one of the most secure encryption methods available
+Security
+:
+AES-256 is considered virtually impenetrable due to its large key size, which makes brute-force attacks computationally infeasible
+It is resistant to all known practical attacks, including those by quantum computers, making it a preferred choice for securing sensitive data
+Usage
+:
+Widely adopted by governments, financial institutions, and security-conscious organizations worldwide
+Used in various applications, including VPNs, encrypted messaging apps, and secure file storage.
+Performance
+:
+While AES-256 provides high security, it requires more computational power compared to AES-128 and AES-192
+Despite this, it remains efficient and is implemented in hardware and software solutions globally
+Symmetric Encryption
+:
+AES-256 is a symmetric-key algorithm, meaning the same key is used for both encryption and decryption
+This requires secure key management practices to ensure the key remains confidential
+Block Cipher
+:
+AES operates on fixed-size blocks of data (128 bits) and uses a series of transformations to encrypt the data
+It involves multiple rounds of processing, with AES-256 using 14 rounds to ensure robust encryption
+Section 4.2.2 of 
+Invoice Cloud’s Security Policy
+ can be found below. The Security Policy governs the type of data being handled and how it may be stored and shared.
+The definitions provided dictate the level of sensitivity for the information being handled. Guidelines for data handling based on these information categories are as follows:
+If the data contained in a message document is considered Confidential, that document must be password protected wherever it is stored and encrypted when in transit using Outlook's Encryption tool or secure upload links.
+Examples of documents containing Confidential Data are those that include passwords, encryption keys, cardholder data and bank account information.
+If the data contained in a message or document is considered Sensitive, the document or email must be encrypted using Microsoft Outlook encryption, password protection on documents, and/or use of secure upload links.
+Examples of documents containing Sensitive Data include payer Personally Identifiable Information (or “PII”) such as name, address, account number, etc.
+If the data contained in a message or document is considered Private, the document or email may only be shared internally with Invoice Cloud staff.
+Examples of documents containing Private Data include Invoice Cloud Intellectual Property, policies and procedure documentation, and internal metrics.
+If the data contained in a message or document is considered Public, it is unlikely to require encryption of any kind. When in doubt, ask the IC Human Resources Department to confirm the data you are handling is considered public.
+4.2.2 Information Categories
+❑	Confidential - applies to the most sensitive business information which is intended strictly for use within Invoice Cloud. Unauthorized disclosure could seriously and adversely impact the company, stockholders, business partners, and/or its customers. Examples of confidential information include passwords, encryption keys, cardholder data, bank account information, internal IP addresses, etc.
+❑	Sensitive - Applies to less sensitive business information which is intended for use within Invoice Cloud. Unauthorized disclosure could adversely impact the company, its stockholders, its business partners, and/or its customers. Examples of sensitive information include internal market research, audit reports, payer personally identifiable information (PII), etc.
+❑	Private - Applies to personal information which is intended for use within Invoice Cloud.  Unauthorized disclosure could adversely impact the company and/or its employees.  Examples of private information include policies and procedures, procedure metrics, intellectual property, etc.
+❑	Public - Applies to all other information which does not clearly fit into any of the above three classifications. Unauthorized disclosure isn’t expected to seriously or adversely impact the company. Any release of this information must be authorized by Invoice Cloud Human Resources Department.
+Email Encryption 
+In Microsoft outlook you can encrypt an email very simply. From the receiver's side it will just have a note saying "this message is encrypted"
+Use case: 
+When sending emails containing information that should be kept confidential. 
+For example:
+Passwords and usernames to get to file sharing or other applications.
+Passwords to access documents containing payer records.
+Any email containing biller or payer information in plain text.
+Steps
+Description 
+Screenshots
+1
+Click Options
+When replying to a message, or creating a new message, click "Options" in the message window's task bar.
+2
+Select Encrypt dropdown button
+Set Permission on this item:
+Select option from dropdown window. 
+3
+Select "Encrypt-Only"
+From the dropdown menu select the “Encrypt-Only”
+4
+Send Email
+Note: 
+You can also select other controls here such as ensuring the receiver cannot forward this email to anyone, or that only someone at Invoice Cloud can view or edit your email after its delivered. You can only select one option though, it's usually best to just select encrypt only. This allows the receiver to forward this email, but the message would still be encrypted if they did.
+Excel Encryption
+In Microsoft Excel, you can encrypt a file easily. From the recipient's side, they will need to enter the password to access the encrypted content.
+Use Case:
+When handling sensitive information that needs to be protected. 
+For example:
+Passwords and Usernames: Encrypt Excel files containing login credentials for file sharing or other applications.
+Confidential Documents: Secure documents with payer records by encrypting them in Excel.
+Sensitive Emails: Encrypt Excel files containing biller or payer information before sending them via email.
+Steps
+Description
+Screenshots
+1
+Open the Excel 
+Open your Excel file that you want to protect.
+2
+Click - File 
+Click on the "File" tab in the top-left corner.
+3
+Select - Info
+Select "Info" from the menu on the left.
+4
+Click - Protect Workbook
+Click on "Protect Workbook" to open a dropdown menu.
+5
+Select - Encrypt with Password
+Choose "Encrypt with Password" from the options.
+6
+Enter Password
+Enter your desired password in the pop-up window and click "OK".
+7
+Confirm Password
+Re-enter the password to confirm it and click "OK" again.
+Note:
+The Excel file is now password protected. Please ensure you remember the password, as it will be required to access the file in the future. If you need to share the password, you must do so by calling the recipient to provide it verbally. 
+Data Encryption 
+There are two ways to have you biller or software partner encrypt the data conversions files. One uses an IC site with a URL and the other is using PKE which an encryption key is required. See the documents below. 
+Remember: 
+All data files must be encrypted
+. Invoice Cloud suggests using a secure and friendly encryption processes below, but we can also handle private/public keys and drop files via SFTP.
+Examples of what needs to be encrypted.
+Username with Passwords for customer registration.
+Autopay with payment methods 
+Any file that contains personal information, payment methods, passwords, SSN etc.…
+Process
+Steps
+Description
+Document
+1
+IC File Encryption 
+URL 
+https://file.invoicecloud.com/
+ For the IC encryption site.
+Encrypting the data conversions file document
+2
+Encryption using PKE 
+If your Biller requires the use of Public Key Encryption, please review this document and send it to the Biller. Request the PGP Key in your data conversions Jira.  
+Encryption PKE 
+3
+NOTE
+To ensure a smooth process, the biller should coordinate with the implementation manager to confirm any specific file requirements before proceeding with encryption.
+ 
+ URL:/spaces/Implementa/pages/3950182423/Encryption+Styles+and+Process

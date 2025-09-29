@@ -1,0 +1,688 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+ 
+Solution Architect
+ 
+API Documentation
+Integrator Web Services
+The guidewire Billing Center url: 
+http://10.0.26.4:8976/bc/BillingCenter.do
+Username: su
+Password: gw
+API Authentication Method: Basic Auth
+Postman Collection: 
+ 
+Postman Collect (Outbound + Pay by Text): 
+ 
+Real Time Data Refresh
+API Details
+Balance Update
+IC Use
+Partner API Name
+Request
+Response
+Specifications
+RTDR: Balance Update
+BalanceEnquiry
+Returns account balances
+Authorization
+: username:password
+Username: su
+Password: gw
+POST
+ 
+http://10.0.26.4:8790/api/gw/getbalanceenquiry
+{
+  "AccountNumber": "12345678901234",
+  "DisplayAccountNumber": "74839282"
+}
+Status: Balance Enquiry Successful
+Message: User Message
+"{\"Invoices\":
+[{
+\"AdHoc\":false,
+\"Amount\":\"615.00 usd\",
+\"AmountDue\":\"615.00 usd\",
+\"EventDate\":\"2024-05-01\",
+\"InvoiceNumber\":\"1000000094\",
+\"InvoiceStreamName\":\"Monthly\",
+\"PaymentDueDate\":\"2024-05-26\",
+\"PublicID\":\"bc:SlxaSAnNZMWqPZyAtuNAI\",
+\"Status\":\"Billed\"
+}],
+\"Message\":\"Request Processed\",
+\"Status\":\"Success\",
+\"TotalAmountDue\":\"615.00 usd\"
+}"
+AccountNumber
+DisplayAccountNumber
+TotalAmountDue (Monetary): IC Total Amount Due
+InvoiceStreamName - (Not used with IC) 
+Adhoc: adhoc details - (Not used with IC) 
+PaymentDueDate: IC Due Date
+Amount (Monetary): IC Total Amount Due
+AmountDue (Monetary): IC Balance Due
+EventDate: IC Invoice Date
+InvoiceNumber: IC Invoice Number
+PublicID - (Not used with IC) 
+Data Pump: Payment
+PaymentsNotification
+ Posts a payment/credit to GW system
+Authorization
+: username:password
+Username: su
+Password: gw
+POST 
+http://10.0.26.4:8790/api/gw/addpaymentnotification
+{
+  "AccountNumber": "1000000007",
+  "AltPhoneNumber": "603-294-3083",
+  "BillingAddress": "SanthoshFS",
+  "City": "SanthoshFS",
+  "CustomerName": "SanthoshFS SanthoshFS",
+  "DisplayAccountNumber": "1000000007",
+  "EmailAddress": "SanthoshFS@SanthoshFS.com",
+  "InvoiceNumber": "1000000046",
+  "PaymentAmount": 100.00,
+  "PaymentChannel": "string",
+  "PaymentDate": "04/01/2024",
+  "PaymentGUID": "21041fa9-0a84-4ce6-91c0-d783fc053861",
+  "PaymentType": "2",
+  "PhoneNumber": "603-294-3083",
+  "State": "CA",
+  "Zip": "03801"
+}
+{
+    "Success": " Payment Notification set successfully ",
+    "Message": “Success***************”
+}
+
+Optional fields need to be removed completely from the call in order to proceed. 
+AccountNumber
+BillingAddress: IC AddressLine1
+PaymentDate
+City
+CustomerName
+DisplayAccountNumber
+EmailAddress
+PaymentGUID
+PaymentType (int) 
+1- CC
+2- ACH
+PaymentChannel: IC Payment Source Description
+PhoneNumber (Optional)
+Data Pump: Void, ACH Reject, Credit/Refund, Chargeback
+PaymentsNotification
+ Posts a payment/credit to GW system
+Authorization
+: username:password
+Username: su
+Password: gw
+POST 
+http://10.0.26.4:8790/api/gw/addpaymentnotification
+{
+  "AccountNumber": "1000000007",
+  "AltPhoneNumber": "603-294-3083",
+  "BillingAddress": "SanthoshFS",
+  "City": "SanthoshFS",
+  "CustomerName": "SanthoshFS SanthoshFS",
+  "DisplayAccountNumber": "1000000007",
+  "EmailAddress": "SanthoshFS@SanthoshFS.com",
+  "InvoiceNumber": "1000000046",
+  "PaymentAmount": 100.00,
+  "PaymentChannel": "string",
+  "PaymentDate": "04/01/2024",
+  "PaymentGUID": "21041fa9-0a84-4ce6-91c0-d783fc053861",
+  "PaymentType": "2",
+  "PhoneNumber": "603-294-3083",
+  "ReversalReason": "xyz",
+  "State": "CA",
+  "Zip": "03801"
+}
+"{\"Message\":\"Payment Notification saved successfully\",
+\"PaymentGUID\":\"21041fa9-0a84-4ce6-91c0-d783fc053861\",
+\"Success\":\"Success\"}"
+
+Due to the Reversal Reasons being custom per biller, we will be using Advanced Settings to update future billers that do not use the default codes provided in the accelerator. 
+Included Payment Types:
+ACH Rejects 
+Credits 
+Chargebacks 
+PaymentAmount = Amount Rejected/Voided
+PaymentDate = Reject/Void Date
+Reject Codes: 
+ReversalReason: 
+accountclosed: Account Closed - UNUSED
+returnedcheck: Returned Check = IC Rejects
+modification: Payment Modification - Chargeback
+moved: Payment Moved - UNUSED
+internal: Associated Disbursement or Void = IC Credit and Void
+void_acc: void/reversed - UNUSED
+Data Pump: Paperless Enrollment
+PaperlessPreference
+Authorization
+: username:password
+Username: su
+Password: gw
+POST 
+http://10.0.26.4:8790/api/gw/setpaperlesspref
+{
+  "AccountNumber": "1000000011",
+  "EmailID": "praveen@invoice.com",
+  "PaperLess": true
+}
+Status: PaperLess preference set Successfully
+{
+    " Status ": " PaperLess preference set Successfully "
+    “Message”: “Success
+}
+AccountNumber
+EmailID: IC Email Address
+PaperLess: true/false
+Data Pump: AutoPay Enrollment and Auto Pay Payment Method Changes
+AutoPayNotification
+Authorization
+: username:password
+Username: su
+Password: gw
+POST 
+http://10.0.26.4:8790/api/gw/setautopaynotification
+{
+  "AccountNumber": "1000000011",
+  "AddressLine1": "Adams123",
+  "AutoPay": true,
+  "BankAccountNumber": "12345678901234",
+  "CardNumber": "4111111111111111",
+  "City": "Jhon",
+  "CustomerName": "John AdamsS",
+  "DisplayAccountNumber": "1000000011",
+  "EmailAddress": "john@test.com",
+  "PaymentGUID": "2a3be945-33e3-42f4-8683-c130701e0534",
+  "CustomerGUID": "2a3be945-33e3-42f4-8683-c130701e0534",
+  "PaymentType": 2,
+  "State": "GA",
+  "Zip": "31036"
+}
+Success: AutoPay status set successfully
+Message: User Message
+{
+    "Success": " AutoPay status set successfully ",
+    "	Message": “Success***************”
+}
+When AutoPay status is false and Payment Type is 0. The PaymentGUID, CustomerGUID, BankAccountNumber is made optional
+When AutoPay status is  True . The PaymentGUID, CustomerGUID, BankAccountNumber (Last 4 digits) and PaymentType = 1 is sent in the request.
+When AutoPay status is  True  . The PaymentGUID, CustomerGUID, CardNumber (Last 4 digits) and PaymentType =  2 is sent in the request.
+AccountNumber: IC Account Number
+AddressLine1: IC AddressLine1
+AutoPay: True/false
+BankAccountNumber: Last 4 Digits (Used for ACH Payments only) 
+if Autopay = False, then field will not be used
+CardNumber: Last 4 Digits (Used for CC Payments only) 
+if Autopay = False, then field will not be used
+CustomerName
+DisplayAccountNumber
+EmailAddress
+PaymentGUID: of the PaymentMethod being used for autopay
+PaymentType (int) 
+1- ACH
+2- CC
+if Autopay = False, then PaymentType = 0
+Bill Presentment
+FetchInvoiceDocument
+Authorization
+: username:password
+Username: su
+Password: gw
+POST 
+http://10.0.26.4:8790/api/gw/fetchinvoicedocument
+{
+  "BillingID": "3000000029",
+  "InvoiceNumber": "1000000094"
+}
+Content: String	
+DocumentType: String
+MimeType: String - Contains mime type of the document
+"{\"Content\":\"[B@53ba0bcb\",
+\"DocumentType\":\"1000000094\",
+\"MimeType\":\"text/plain\"}"
+BillingID: AccountNumber
+InvoiceNumber: IC Invoice Number
+Data Pump: Pay by Text Enrollment
+PayByText
+Bearer Token is used for PayByText authentication.
+Token Request: 
+scope: cpcastle.iginvoicecloud.dev.execute
+client_secret: T11KWCOIf2pgwmkt4q6QvSKenewq5JSpWJajEoxmqbuH8rWiK9LCOKlYDAn2sZWZ
+client_id: 0oa1c7e9u1yRvtAo8358
+grant_type: client_credentials
+POST 
+https://guidewire-hub.okta.com/oauth2/aus11vix3uKEpIfSI357/v1/token
+PayByText Request: 
+POST 
+https://cpcastle-castle-dev-iginvoicecloud.api.zeta3-andromeda.guidewire.net/api/paybyText
+{
+  "AccountNumber": "1000381752",
+  "PaybyText": false,
+  "PhoneNumber": "571-123-4578"
+}
+Token Response: 
+{
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "access_token": "eyJraWQiOiJBMFdwYTM1dFctMHRpajlETDl4MUFsNzE1TFdOS3J5cXhkNUhxb3BvQ2FrIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnptLVNSLXlITUxDd1dla2UzWGtFb3c1WDU0QnEwTjJ1RkN5d1d4bGE1bmsiLCJpc3MiOiJodHRwczovL2d1aWRld2lyZS1odWIub2t0YS5jb20vb2F1dGgyL2F1czExdml4M3VLRXBJZlNJMzU3IiwiYXVkIjoiR3VpZGV3aXJlIiwiaWF0IjoxNzM0MzI0NTkzLCJleHAiOjE3MzQzMjgxOTMsImNpZCI6IjBvYTFjN2U5dTF5UnZ0QW84MzU4Iiwic2NwIjpbImNwY2FzdGxlLmlnaW52b2ljZWNsb3VkLmRldi5leGVjdXRlIl0sInRlbmFudF9pZCI6Imd1aWRld2lyZS1odWIiLCJzdWIiOiIwb2ExYzdlOXUxeVJ2dEFvODM1OCJ9.pG1CwWFuIMhYdOcbfuUteL-pLASdHG9yBy8N_swBdkqW0XsUbs4nIJ9R_CAsSvMR4qauA5Mpz5GtsLzn8oFbANgQpgsj5w1Vu6s8N_NphxYsPrpZauNdVeT5bfh9bjaWuqKKfzAfe8fvVdvoA8Cul-uNvET88SvDsgUnQjFb2yyEbPdGEGZt_wg1ZplVP4hbBm018c-6lsOrUZxS37iiQVJaFKdsq6ZxTU-HuD1FwWGzB73jJf0UNysgWhYeFMkkeZht6IRwMWtr4W4M7k4g5X83FdfuudEj5slp_YXPCdK-SMQQFbGMqb5IVgDqp_9xlwOOvle4ZIO0khrK8zhndw",
+  "scope": "cpcastle.iginvoicecloud.dev.execute"
+}
+PayByText Response: 
+"{\"Message\":\"Request Processed\",\"Status\":\"Success\"}"
+Pay By Text: True/False Boolean Flag
+Phone Number: Phone Number entered for Pay by Text (String)
+ 
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Single Sign On
+Purpose/Summary:
+Configuration
+SSOConnect Details
+SAML Configuration
+ 
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .BIF
+File Naming Convention: standard (BID_MMDDYYYYHHMMSS.BIF)
+File Transfer Frequency: Multiple times per day as policies are generated.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+ 
+ 
+ 
+File Header
+2
+BillerGuid
+Y
+TRUE
+ 
+ 
+ 
+File Header
+3
+ThirdPartyFileReference
+ 
+FALSE
+ 
+ 
+ 
+File Header
+4
+FileCreationDate
+Y
+TRUE
+sysdate
+ 
+ 
+File Header
+5
+InvoiceCount
+Y
+TRUE
+ 
+ 
+ 
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+invoice.amount
+ 
+ 
+File Header
+7
+RowType
+Y
+TRUE
+ 
+ 
+ 
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N= New D=Deactivate U=Update R=Rewrite if exists
+New - Send new if there are new invoices created for subsequent changes (2nd policy or changing pay plan from Full Pay to Monthly/Quaterly - consider record type R if new billed invoice is created)
+Update - Update to existing invoice due to new policies/changes
+Rewrite - GW rewrite/reinstate
+Deactivate - 1. For cancellations and send only with status as Cancelled or Scheduled 
+Cancellation.GW
+ should not send for Pending Cancellation. Once deactivated, biller to take payments from insured through collections or late pay.
+For Non-Renew if there was a billed invoice for renewal transaction.
+ 
+ 
+Invoice Header
+9
+InvoiceFormatGuid
+ 
+TRUE
+ 
+ 
+ 
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+invoice.invoicenumber
+ 
+*Downpayments have temp invoice numbers
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BillingDate
+ 
+ 
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+ 
+We do not show cancellation effective date/reinstatement date.
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+DueTotal
+ 
+ 
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+ 
+ 
+ 
+Invoice Header
+21
+MinimumAmountDue
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+23
+FirstNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+24
+SecondNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+25
+ThirdNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due Amount in UI
+ 
+ 
+Invoice Header
+194
+BalanceForward
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+248
+AutoPayCollectionDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+252
+InvoiceTypeID
+ 
+TRUE
+ 
+ 
+ 
+Invoice Header
+317
+PaymentExpirationDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+318
+PaymentExpirationMessage
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+345
+BillerInstallmentNumber
+Y
+FALSE
+ 
+ 
+Indicating the priority between billed invoice vs adhoc invoice.
+Scheduled billed Invoice to be series 1,2,3,4,X
+Adhoc invoices to be incremented
+ 
+375
+Active
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+407
+PastDue
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+59
+AccountNumber
+Y
+TRUE
+BillingID
+ 
+ 
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Direct BIll - Billing Contactname
+Agency Bill - AgencyName/OrganizationName
+ 
+ 
+Customer Record
+61
+Address1
+Y
+FALSE
+ 
+Full Address is one field in GW
+ 
+Customer Record
+62
+Address2
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+63
+City
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+64
+State
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+65
+Zip
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+66
+Phone
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+356
+BlockPaymentsCC
+ 
+FALSE
+ 
+ 
+ 
+Customer Record
+357
+BlockPaymentsEFT
+ 
+FALSE
+ 
+ 
+ 
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+BillingAccoutNumber -DirectBill 
+ProducerCode -AgencyBill
+ 
+ 
+Customer Record
+70
+RowType
+Y
+TRUE
+ 
+ 
+ 
+Invoice Detail
+ 
+Invoice Types
+Invoice Types
+164 
+Virtual Site
+Yes
+Outbound Integration
+Use case
+Agent Commission and Premium Refund
+Core System
+Workers Comp with Guidewire Accelerator
+Integration
+API Payable API ( V1 version )
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+Yes
+AutoPayCollectionDate
+Yes
+BalanceForward
+Yes
+CreditCardServiceFee
+Yes
+FirstNotifyRequestedDate
+Yes
+InvoiceDate
+Yes
+InvoiceDueDate
+No
+InvoiceFormatGuid
+Yes
+SecondNotifyRequestedDate
+Yes
+ThirdNotifyRequestedDate
+Yes
+User Interaction and Design 
+ 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/4045144254/Texas+Mutual+Insurance+GW+Technical+Design

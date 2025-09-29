@@ -1,0 +1,27 @@
+WinSCP FIX – AZURE SFTP over port 2022
+If a user is connecting over SFTP using WinSCP please make sure they disable this feature in the GUI
+Disable the feature in WinSCP
+WinSCP has a setting enabled by default that transfers files larger than 100kb to a temporary file name (with the 
+.filepart
+ extension) and then renames the file. The original file transfer is being recognized as an upload and it’s moving the file before WinSCP has a chance to rename the file. The easiest fix is to disable this feature in WinSCP.
+The feature can be disabled in WinSCP:
+Click 
+Options > Preferences
+.
+In the 
+Preferences
+ dialog box, click to expand the 
+Transfer 
+node, then click 
+Endurance
+.
+Under 
+Enable transfer resume/transfer to temporary filename for
+, click 
+Disable
+.
+Click 
+OK 
+to save the changes.
+﻿
+ URL:/spaces/platform/pages/4642603064/WinSCP+Fix+for+SFTP

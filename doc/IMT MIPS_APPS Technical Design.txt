@@ -1,0 +1,717 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+NA
+ITR
+13233
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Solution engineer
+NA
+Salesforce SOW
+NA
+Knowledge Transfer
+BOX URL
+ 
+API Documentation
+base URL : 
+https://webpayments.imtapps.com/<<id>>/api/
+Authentication: Username & Password - Provides a cookie to complete the desired call
+Note: Advanced Setting 105 is no longer used, historically when active IC would route single invoice BIFs from UploadInvoiceFile to UploadInvoice. Functionality still exists if needed but currently IMT calls UploadInvoice directly.
+Additional Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR/Datapump/PDFLinking
+sessions
+Creates a session with an IC username and password. returns a cookie used for the other requests.
+Endpoint: 
+https://auth.imtapps.com/<<id>>/api/sessions/
+Method: POST
+ContentType = "application/vnd.api+json"
+{
+    "data": {
+        "id": "string",
+        "type": "sessions",
+        "attributes": {
+            "password": "<<password>>",
+            "username": "<<username>>"
+        }
+    }
+}
+Response: json object. We do not parse the response, instead we search the cookies returned for the authorization, which is used on all other requests.
+RTDR/Datapump/PDFLinking
+sessions close
+Closes the current session after RTDR or Datapump finishes.
+Endpoint: 
+https://auth.imtapps.com/<<id>>/api/sessions/
+<<username>>
+Method: DELETE
+req.ContentType = application/vnd.api+json
+req.CookieContainer
+ =<<cookie>>
+Parsed but not used.
+RTDR: Balance Update
+payments-due
+Get current due
+EndPoint: 
+../payments-due/?filter[policy_number]={AccountNumber}
+Method: GET
+Content-Type: application/vnd.api+json
+Request: We pass in AccountNumber as the policy_number
+Response: json object, we extract the balance due from 'current_due'
+Response: json object, we extract the balance due from 'current_due'
+Full example response:
+json
+{
+  "data": [
+    {
+      "type": "payments-due",
+
+      "id": "41703",
+
+      "attributes": {
+        "cc_fee": "0",
+
+        "transaction_fee": "0",
+
+        "partial_payment": false,
+
+        "payment_types": ["CC"],
+
+        "redirect_url": "",
+
+        "payment_vendor": "invoicecloud",
+
+        "creation_time": "2024-09-03T15:37:51-05:00",
+
+        "pending_payment_amount": "686.70",
+
+        "pending_payment_date": "2024-11-06T15:45:23.333851Z",
+
+        "allow_pay_full": false,
+
+        "cc_fee_percent": "0",
+
+        "transaction_fee_percent": "0",
+
+        "redirect_id": "24a83e03-8e77-40ed-b4c8-89a6f4acdd70",
+
+        "last_update_time": "2024-11-18T11:05:28.339032-06:00",
+
+        "policy_number": "20240903",
+
+        "current_due": "1675.00",
+
+        "total_unpaid": "1675.00",
+
+        "last_name": "SMITH",
+
+        "first_name": "JESSICA",
+
+        "first_name_2": "",
+
+        "last_name_2": "",
+
+        "first_name_3": "",
+
+        "last_name_3": "",
+
+        "zip_code": "50265-0000",
+
+        "downpayment": false,
+
+        "bill_date": "2024-09-01",
+
+        "due_date": "2024-09-23",
+
+        "company_name": "JESSICA'S MUTUAL INSURANCE ASSOCIATION",
+
+        "address_one": "4445 CORPORATE DRIVE",
+
+        "address_two": "",
+
+        "address_three": "",
+
+        "city": "WEST DES MOINES",
+
+        "state": "IA",
+
+        "account_number": "",
+
+        "policy_type": "CUSTOM FARM (RC 54)",
+
+        "policy_type_code": "CU",
+
+        "policy_status": "",
+
+        "email": "",
+
+        "agency": "001",
+
+        "agency_name": "MCMURRAY INSURANCE AGENCY",
+
+        "transaction_type": "New Business",
+
+        "notice_type": "Premium",
+
+        "pay_plan": "Annual",
+
+        "bill_mode": "Direct Bill",
+
+        "allow_payments": true
+      }
+    }
+  ]
+}
+
+In the RTDR response IMT will send a list in ‘payment_types’ where:
+If both payment methods, CC and ACH, are blocked, the list would be empty. Example: ‘payment_types’: []
+If CC is blocked, the list would only contain ACH. Example: ‘payment_types’: ["ACH"]
+If ACH is blocked, the list would only contain CC. Example: ‘payment_types’: ["CC"]
+If no payments are blocked, the list would contain both "ACH", "CC". Example: ‘payment_types’: ["ACH", "CC"]
+-This is configurable for each biller with advanced setting 131-
+JSON Config: {"RTDRConfig": {"UpdateBlockedFlags": true}}
+Data Pump: Payment
+DataPump Payments
+EndPoint: 
+../payments/
+Method: POST
+Content-Type: application/vnd.api+json
+Request: We build a json object as follows
+	data{
+		type = payments (Hardcoded)
+		id = AccountNumber
+		attributes {
+			id = AccountNumber
+			payment_method = CC/ACH
+			entity_identifier = AccountNumber
+			site_fee = 0.00 (Hardcoded)
+			bill_amount_paid = PaymentAmount - ConvenienceFee
+			total_paid = PaymentAmount
+			interest_paid = 0 (Hardcoded)
+			approval_code = First 8 characters of the PaymentMessage
+			transaction_id = BillerID&PaymentID
+			first_name = CustomerName (We parse out the first name)
+			last_name = CustomerName (We parse out the last name(s))
+			address_1 = Address1
+			address_2 = Address2
+			city = City
+			state = State
+			zip_code = Zip
+			phone = Phone
+			email = EmailAddress
+			raw_payment = 0 (Hardcoded)
+			sort = passed as empty
+		}
+	}
+Response:
+Fail DP if the API call returns an exception.
+id = AccountNumber
+payment_method = CC/ACH
+entity_identifier = AccountNumber
+site_fee = 0.00 (Hardcoded)
+bill_amount_paid = PaymentAmount - ConvenienceFee
+total_paid = PaymentAmount
+interest_paid = 0 (Hardcoded)
+approval_code = First 8 characters of the PaymentMessage
+transaction_id = BillerID&PaymentID
+first_name = CustomerName (We parse out the first name)
+last_name = CustomerName (We parse out the last name(s))
+address_1 = Address1
+address_2 = Address2
+city = City
+state = State
+zip_code = Zip
+phone = Phone
+email = EmailAddress
+raw_payment = 0 (Hardcoded)
+sort = passed as empty
+Data Pump: Paperless Enrollment
+Settings
+Change Paperless setting
+DataPump Paperless:
+EndPoint: 
+../settings/{AccountNumber}/
+Method: PATCH
+Content-Type: application/vnd.api+json
+Request: We include the accountnumber in the endpoint, and we build a json object as follows
+	data{
+		type = policy-settings (Hardcoded)
+		id = AccountNumber
+		attributes{
+			id = AccountNumber
+			paperless = True/False
+			policy = AccountNumber
+			sort = passed as empty
+		}
+Response:
+Fail DP if the API call returns an exception.
+Data Pump: AutoPay Enrollment
+DataPump AutoPay:
+EndPoint: 
+../settings/{AccountNumber}/
+Method: PATCH
+Content-Type: application/vnd.api+json
+Request: We include the accountnumber in the endpoint, and we build a json object as follows
+	data{
+		type = policy-settings (Hardcoded)
+		id = AccountNumber
+		attributes{
+			id = AccountNumber
+			bill_mode = autopay/direct
+			policy = AccountNumber
+			sort = passed as empty
+		}
+	}
+Response:
+Fail DP if the API call returns an exception.
+Data: Remote PDF Linking
+Bills
+Retrieve PDF
+Endpoint: 
+https://webpayments.imtapps.com/3401/api/bills/{policy_number}/
+Request: We pass in AccountNumber as the policy_number
+File Mapping
+Invoice File
+File Extension: bif
+File Naming Convention: n/a
+File Delimiter: pipe
+Specification: IC
+Sample:  
+File Transfer Frequency: On demand
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Record Type
+1
+RowType
+Y
+TRUE
+n/a - always FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+n/a - provided by IC
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Date file was created
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Total amount of invoices in the file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Total invoice amount in the file
+File Header
+7
+RowType
+Y
+TRUE
+IC Value
+Invoice Header
+8
+RecordType
+Y
+TRUE
+'R' - Static
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+IC Value
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Policy ID
+AcctNum-YYYY-MM-DD
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Date
+mm/dd/yyyy
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+mm/dd/yyyy
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Amount Due
+Money
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+IC Value - '1'
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+IC Value - ‘252’
+Invoice Header
+58
+RowType
+Y
+TRUE
+IC Value
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer ID
+Int
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Policy Holder
+string
+Customer Record
+70
+RowType
+Y
+TRUE
+IC Value
+Invoice Detail
+72
+Description
+Y
+FALSE
+Static Value - ‘Insurance’
+Invoice Detail
+Site configuration 
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+IMT Spectrum can integrate with Invoice Cloud with Customer Portal/Virtual Site or newly added functionality of SSOConnect.
+SSO Integration
+Purpose/Summary: Cloud SSO Connect is Invoice Cloud’s Implementation of a Single Sign On into the Invoice Cloud portal. This feature allows Billers and/or Partners to create a seamless experience for the Customer between Partner/Biller and Invoice Cloud systems, while keeping the scope of PCI compliance at a minimum for Partners and Billers.
+Multiuser is available to be used and preferred by IMT Spectrum however, if a biller is not interested in using .Multiuser functionality, it is not a requirement to have this turned on.  
+SSOConnect is handling registration and login setup with tokenized passwords. IMT will update passwords when the user first logs in by matching the email address. If they cannot match the email address, IMT will be create a different/new login. In this case, all settings autopay/paperless/pay by text will have to be re-entered.
+IMT confirms policy owner information ahead of creating any registrations to make sure the correct person is accessing the policy and login.
+SSOConnect Values
+Field
+Required
+Comments
+Partner Specification
+RemoteAuthenticationToken
+Yes
+Token is provided from Remote Authentication Web Service.
+Token is provided from Remote Authentication Web Service.
+ViewMode
+Yes
+Value is required to identify how the Customer is accessing the Invoice Cloud pages.
+Always 
+0
+ = Redirect
+RedirectID
+Yes
+Value is required to be able to redirect the Customer to the requested page. See full list: 
+How to setup Cloud SSO Connect (REST) | Field Definitions
+1
+ = Customer Portal Recent Bill Listing
+2
+ = Customer Portal Paperless Settings
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+11
+ = Customer Portal Pay by Text Enrollment
+9
+ = Customer Portal Scheduled Payments Listing
+10
+ = Customer Portal Recurring Scheduled Payments Listing
+CSSUrl
+No
+ReturnUrl
+No
+When this value is provided, the customer will be redirected to the provided url after clicking the sign out button.
+N/A
+Workflow
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample 
+User Registration
+User navigates to IMT portal and registers through the IMT portal. After registration, logged in user makes a payment. 
+Assumptions:
+SSOConnect is handling registration and login setup with tokenized passwords. IMT will update passwords when the user first logs in by matching the email address. If they cannot match the email address, IMT will be create a different/new login. In this case, all settings autopay/paperless/pay by text will have to be re-entered.
+IMT confirms policy owner information ahead of creating any registrations to make sure the correct person is accessing the policy and login.
+Requirement:
+LogintypeID (REST- Remote Authentication- Register Accounts) is always = 1
+Check to see if account exists in invoice cloud and if it is registered.
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist:
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+CloudSSO iFrame
+Managed Scheduled Payments
+A registered user is logged in to IMT portal and navigates to IC screen to  update or cancel a scheduled payment.
+Assumption:
+User is already registered and authenticated
+IMT redirects to Scheduled Payments screen
+CloudSSOConnect (redirect 9 = Customer Portal Scheduled Payments Listing)
+Paperless Enrollment
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll paperless option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Customer Portal Paperless Settings screen
+CloudSSOConnect (redirect 2 = Customer Portal Paperless Settings
+)
+AutoPay Enrollment
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll autopay option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Customer Portal AutoPay Settings screen
+CloudSSOConnect (redirect 3 = Customer Portal AutoPay Settings
+)
+Manage Payment Methods
+A registered user is logged in to IMT portal and navigates to IC screen to store, update or remove payment methods.
+Assumption:
+User is already registered and authenticated
+IMT redirects to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+Pay by Text
+A registered user is logged in to IMT portal and navigates to IC screen to enroll or unenroll pay by text option
+Assumption:
+User is already registered and authenticated
+IMT redirects to Payment Methods screen
+CloudSSOConnect (redirect 11 = Customer Portal Pay by Text Enrollment)
+Advanced Settings
+Note: Most IMT’s have the same domain, the only change is the username for each Biller. It is possible the domain can change (for ex. UAT environments)
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+Provided by IMT
+Y - If Advanced Setting 81 is set to MULTIENVIRONMENT, there will be two values in the Advanced Setting, separated by a '|'
+9
+RTDR Username if Applicable
+Provided by IMT
+Y
+10
+RTDR Key or Password if Applicable
+Provided by IMT
+Y
+11
+DataPump Payments EndPoint/WebService URL
+Provided by IMT
+Y - If Advanced Setting 81 is set to MULTIENVIRONMENT, there will be two values in the Advanced Setting, separated by a '|'
+12
+DataPump Payments EndPoint/WebService Username
+Provided by IMT
+Y
+13
+DataPump Payments EndPoint/WebService Password
+Provided by IMT
+Y
+14
+DataPump Paperless EndPoint/WebService URL
+Provided by IMT
+Y
+15
+DataPump Paperless EndPoint/WebService Username
+Provided by IMT
+Y
+16
+DataPump Paperless EndPoint/WebService Password
+Provided by IMT
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+Provided by IMT
+Y
+18
+DataPump AutoPay EndPoint/WebService Username
+Provided by IMT
+Y
+19
+DataPump AutoPay EndPoint/WebService Password
+Provided by IMT
+Y
+20
+Remote PDF EndPoint/WebService URL
+Provided by IMT
+Y - If Advanced Setting 81 is set to MULTIENVIRONMENT, there will be two values in the Advanced Setting, separated by a '|'
+21
+Remote PDF EndPoint/WebService Username
+Provided by IMT
+Y
+22
+Remote PDF EndPoint/WebService Password
+Provided by IMT
+Y
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+Dependent on if Advanced Setting 131 is True
+Y
+81
+RTDR Service Version
+MULTIENVIRONMENT
+Y - This Advanced Setting is only used when an IMT biller needs IC to post to two endpoints (based on InvoiceTypeID - sample biller: BID 2984) 
+INT-3593
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+88
+Secondary RTDR EndPoint/WebService URL
+Provided By IMT - this endpoint is the one used for authentication.
+Y
+105
+Batch Single Invoice Imports
+0
+Advanced Setting 105 is no longer used, historically when active IC would route single invoice BIFs from UploadInvoiceFile to UploadInvoice. Functionality still exists if needed but currently IMT calls UploadInvoice directly.
+131
+ JSON Config
+ {"RTDRConfig": {"UpdateBlockedFlags": true}}
+or
+{"RTDRConfig": {"UpdateBlockedFlags": false}}
+Y - If 131 is true then also turn on advanced setting 32.
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+on biller questionnaire 
+AutoPayCollectionDate
+on biller questionnaire 
+BalanceForward
+on biller questionnaire 
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+on biller questionnaire 
+InvoiceDate
+in BIF
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+on biller questionnaire 
+PaymentExpirationMessage
+on biller questionnaire 
+PromptPayExpirationDate
+on biller questionnaire 
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+on biller questionnaire 
+ThirdNotifyRequestedDate
+on biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+For RTDR, IC calls the Sessions API first to authenticate, receiving a token and creating a session on IMT’s side, then we use that token to do the actual request. after we are done we call the authentication once again to close the session before finishing.
+Data Flow - Payment
+For Datapump, IC calls the Sessions api first to authenticate, receiving a token and creating a session on IMT’s side, then we use that token to do the actual request. after we are done we call the authentication once again to close the session before finishing.
+Data Flow - Change Log
+For Datapump, IC calls the Sessions api first to authenticate, receiving a token and creating a session on IMT’s side, then we use that token to do the actual request. after we are done we call the authentication once again to close the session before finishing.
+Data Flow - Bill Presentment
+For PDF Linking, IC calls the Sessions api first to authenticate, receiving a token and creating a session on IMT’s side, then we use that token to do the actual request. after we are done we call the authentication once again to close the session before finishing.
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Integration can also be setup to use SSOConnect with IMT. This will depend on the Biller’s preference. 
+Biller Experience
+Billers access their IC Biller portal for management of Payer accounts & settings.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoice
+Upload APPS MIPS Invoices on-demand
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+[INT-12326] - Platform Integration - JI[INT-12326] - Platform Integration - JIRA
+12/12/2024
+RTDR did not block payments
+In the RTDR response IMT will send a list in ‘payment_types’ where:
+If both payment methods, CC and ACH, are blocked, the list would be empty. Example: ‘payment_types’: []
+If CC is blocked, the list would only contain ACH. Example: ‘payment_types’: ["ACH"]
+If ACH is blocked, the list would only contain CC. Example: ‘payment_types’: ["CC"]
+If no payments are blocked, the list would contain both "ACH", "CC". Example: ‘payment_types’: ["ACH", "CC"]
+IMT would like to block payments
+ 
+INT-3593
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+June 2022
+RTDR and Data Pump only post to one endpoint for all invoice types
+Allow RTDR and Data Pump to multiple endpoints, based on InvoiceTypeID
+Biller has two instances of IMT MIPS/APPS and needs information accessed/posted to different endpoints based on the InvoiceTypeID
+ URL:/spaces/IM/pages/1436910024/IMT+MIPS+APPS+Technical+Design

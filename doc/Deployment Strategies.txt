@@ -1,0 +1,238 @@
+In Kubernetes, 
+Deployment Strategies
+ define how updates to your application are rolled out when you change the pod template (e.g., new image version, environment variables, etc.). The two main strategies are 
+RollingUpdate
+ and 
+Recreate
+.
+1
+6
+false
+none
+list
+true
+1. 
+RollingUpdate
+ (default)
+This is the 
+default and most commonly used
+ strategy.
+🔄 How it works
+Gradually replaces old pods with new ones.
+Ensures 
+zero downtime
+ by keeping some old pods running while new ones are starting.
+Controlled by:
+maxUnavailable
+: How many pods can be unavailable during the update.
+maxSurge
+: How many extra pods can be created temporarily during the update.
+✅ Example
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+
+This means:
+At most 1 pod can be unavailable during the update.
+At most 1 extra pod can be added temporarily.
+ Valid Formats
+You can use either:
+Integer values
+ (e.g., 
+1
+)
+Percentage values
+ (e.g., 
+"25%"
+)
+2. 
+Recreate
+This strategy 
+terminates all existing pods
+ before creating new ones.
+🔁 How it works
+Deletes all old pods first.
+Then creates new pods.
+Downtime is likely
+, but it's simpler and sometimes necessary (e.g., when old and new versions can't run side-by-side).
+✅ Example
+strategy:
+  type: Recreate
+
+🧠 When to Use Which?
+Strategy
+Use When…
+RollingUpdate
+You want zero downtime and can run old and new versions together.
+Recreate
+You need to avoid version conflicts, or the app can't handle multiple versions running at once.
+ Pod Disruption Budget Affects
+A 
+Pod Disruption Budget (PDB)
+ can affect a 
+Rolling Deployment
+ in Kubernetes, especially when the deployment involves 
+voluntary disruptions
+ like updates or scaling.
+🔍 What is a Pod Disruption Budget?
+A 
+PDB
+ defines the minimum number or percentage of pods that must remain available during voluntary disruptions. It helps ensure high availability during operations like:
+Rolling updates
+Node drains
+Manual pod deletions
+🧠 How PDB Interacts with Rolling Deployments
+During a 
+RollingUpdate
+, Kubernetes gradually replaces old pods with new ones. If a PDB is in place, it can 
+limit how many pods can be disrupted (terminated) at once
+, which directly affects the pace of the rollout.
+✅ Example Scenario
+You have a deployment with 5 replicas.
+Your PDB specifies 
+minAvailable: 4
+.
+During a rolling update, Kubernetes wants to replace pods one by one.
+It can only terminate 
+1 pod at a time
+, because terminating more would violate the PDB.
+⚠️ Implications
+Slower rollout
+: The deployment may proceed more slowly to respect the PDB.
+Blocked rollout
+: If the number of available pods drops below the PDB threshold (e.g., due to node issues), the update may be paused.
+Coordination needed
+: Ensure your 
+maxUnavailable
+ in the deployment strategy and your PDB settings are aligned.
+✅ Best Practice
+Tune your 
+maxUnavailable
+ in the deployment and 
+minAvailable
+ in the PDB to balance 
+availability
+ and 
+deployment speed
+.
+Example:
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: my-app-pdb
+spec:
+  minAvailable: 4
+  selector:
+    matchLabels:
+      app: my-app
+
+ 
+maxSurge
+ and 
+maxUnavailable
+ vs Pod Disruption Budget
+🔧 
+maxSurge
+ and 
+maxUnavailable
+ (Deployment Strategy)
+Purpose
+: Control how many pods are added or removed 
+during a rolling update
+.
+Scope
+: Applies only to 
+rolling updates
+ triggered by changes to the Deployment (e.g., new image).
+Use when
+:
+You want to control 
+deployment speed
+ and 
+availability
+ during updates.
+You want to allow temporary over-provisioning (
+maxSurge
+) or limit downtime (
+maxUnavailable
+).
+✅ Example
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+
+🛡️ Pod Disruption Budget (PDB)
+Purpose
+: Protect against 
+voluntary disruptions
+ (e.g., node drain, manual deletion, cluster upgrades).
+Scope
+: Applies 
+outside of deployments
+, across the cluster.
+Use when
+:
+You want to ensure a 
+minimum number of pods remain available
+ during disruptions.
+You want to prevent Kubernetes from evicting too many pods at once.
+✅ Example
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: my-app
+
+🧠 Best Practice: Use Both Together
+Use Case
+Use 
+maxSurge
+ / 
+maxUnavailable
+Use PDB
+Control rollout behavior
+✅
+❌
+Protect against node drains or evictions
+❌
+✅
+Ensure high availability during updates
+✅
+✅
+Prevent flapping or over-scaling
+✅
+✅
+ Examples of Different Rolling Deployment Configurations
+All examples use 2 Replicas as the desired state.
+ 
+ 
+maxUnavailable: 0%
+ and 
+maxSurge: 100%
+ 
+ 
+maxUnavailable: 50%
+ and 
+maxSurge: 50%
+ 
+ 
+maxUnavailable: 100%
+ and 
+maxSurge: 0%
+ 
+ 
+maxUnavailable: 0%
+ and 
+maxSurge: 50%
+ URL:/spaces/platform/pages/4523294803/Deployment+Strategies

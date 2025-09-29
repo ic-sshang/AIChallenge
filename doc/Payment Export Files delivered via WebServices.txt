@@ -1,0 +1,12 @@
+If a ticket is received regarding payment exports, but there is no export data found on the pages below, it is likely the biller receives file via Webservices.
+CRM (Stratus Management tab)
+CRM (FTP Management tab)
+Biller Portal (Data Sync History)
+To verify what webmethod a biller uses to receive payment reports we can check for recent webservice logs.
+Note: Option 84 must be enabled for these logs to appear.
+On the db, the queries below can below to also verify what webmethod the biller uses
+select distinct webmethodid from webmethodlogs
+select * from tblwebmethod where webmethodid in (PROVIDE LIST FROM QUERY ABOVE)
+
+Example screenshot using queries for BID 2317
+ URL:/spaces/DS/pages/2999713797/Payment+Export+Files+delivered+via+WebServices

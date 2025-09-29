@@ -1,0 +1,39 @@
+High volume Autopay
+Job runs the transactions and sends out reminders for scheduled payments and autopay. This is a legacy job and has its own repo.
+Job Name
+Start time
+End time
+Days the job Run
+Notes
+STAGING-HighVolumeAutoPay
+3:00 AM CT
+3:10 AM CT
+Daily
+Job finishes in a minute as it contains less reminders and transaction to process
+Purpose:
+This Job contains 2 billers which is a legacy job. It will run the transaction if there is any and send reminders for the auto payments. This job bundles both payments and reminders together.
+Related Topics:
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+Context:
+It contains details about how we check failed job and rerun the job which is failed.
+How To [Insert Process Here]
+If job failed it will trigger an email with the log attached to 
+it_processess@invoicecloud.com
+. This mail only goes to Mark today something that needs to be FIXED ASAP
+Open logs to check error encountered while running the job.
+It is safe to rerun the job from skybot if it’s failed. As there is logic in the job to support reruns if a reminder was already sent out, it is checking the queue to see that there are no duplicate reminders sent out.
+we can also download the job log from skybot
+If the job failed we can select job → Job control → Run job now
+download the logs anytime while processing the job to see if everything is working fine. In case of any exceptions escalate to engineering team
+Run the job without changing any data.
+The summary email goes to support inbox
+Source Code
+https://invoicecloud.visualstudio.com/Src/_git/HighVolumeAutoPay
+OpsGenie and NewRelic Alerts 
+The opsgenie alert has been configured from skybot, probably we should validate.
+No New Relic Alerts configured for this job. When there is an alert, phone call will be made to the respective on call engineer.
+Engagement and Escalation 
+escalate to the engineering team
+ URL:/spaces/DS/pages/2551709697/High+Volume+Autopay

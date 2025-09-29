@@ -1,0 +1,59 @@
+Summary: 
+Azure Redis Cache 
+redis-east-appinfra-iaas-prod
+ is capping memory and CPU. 
+Ideally memory or cpu (server load in azure portal) should not exceed 80-85% capacity.  Memory needs healthy slack so that fragmentation does not force disk usage under high load. Similarly, the CPU needs slack to handle unexpected load such as key expirations/evictions/defragmentation/non cache related host needs. cpu and memory capping can greatly increase the latency of redis and contribute to data loss.
+Memory Capping:
+I was not able to find many Redis error in regards to memory caps, (this may be because evictions kicked out old data to make the write) however, I did find errors as a result of the redis instance being put into high cpu/memory pressure. There are Timeout and No Connection Available type exceptions. These exceptions typically happen when either the client codes host cannot handle the load due to not having io threads or workers available. Or the redis server is under high load and starting to fail. In these exceptions, the stats point to us having enough resources available to the app code. We could experiment with raising our thread count a bit, as we have seen more than 13 become busy and our min avail is 8.  There is a 500ms penalty for injecting a new worker thread.  However, I am not sure this will fix our issues, as I suspect the root problem is that our redis instance is capping.
+Why is it capping?
+The application utilizes the cache quite a bit (it accounts for >= 30% of the applications database operations), and is likely storing more than necessary.  We also have a chunk of hours in the day when most of our users are active at the same time.  This leads to high memory usage which can also lead to pressure on the cpu, as evictions, expirations, and defragmentation need to occur.
+Looking inside redis:
+After looking in the cache, I confirmed that the average space per key is around 30k to 60k (avg 44k).  It is possible that we are storing more data than we need, but I am not sure. In some cases we are storing an entire html web page in the session, not just the data to populate it. We are caching a lot of data in general, does it all really need to be cached?
+CPU spikes are accommodated by either high evicts and expires, or a decreased RSS memory (defragmentation). I think we may be able to tackle CPU spikes with increased memory capacity, and it is a result of the high memory pressure. 
+maybe we can shorten the TTL, it seems to be hours long at least, and could probably be shorter, especially if the TTL is rolling. (not sure how azure redis provider handles this, TTL may not be rolling)
+Reducing the TTL would reduce the length of time memory is used after a user has left (without logging out, as I believe this clears the cache), reducing how often evictions would need to occur.
+command log from console session:
+bash
+scan 0
+scan 32768
+# a few more scans to see more keys...
+hscan {hashtag-ommitted-myiis}_Data 0
+scan 0 match *BillerPortal*
+hscan {hashtag-ommitted-billerportal}_Data 0
+hscan {hashtag-ommitted-billerportal}_Internal 0
+memory usage samples 0 {hashtag-ommitted-myiis}_Data
+memory usage samples 0 {hashtag-ommitted-billerportal}_Data
+ttl {hashtag-ommitted-billerportal}_Data
+# a few more TTL checks to get a sample...
+scan 0 type string
+scan 0 type hash
+scan 0 type zset
+scan 0 type list
+Other thoughts:
+eviction policy is volatile rather than all keys. is that what we want? should be ok, I think everything has TTL’s
+Are we using JWT's? - these can contain a good amount of session data that are needed system wide such as userId, name, roles, etc. It is basically a drivers license, information on the JWT likely isn't needed in redis too.
+Could we be utilizing application/domain specific caches, rather than one big one? and/or, we could potentially consolidate values that are cached multiple times with different keys. If there are things that are not unique to the user but needed frequently. 
+there seems to be a pattern where we cap memory every morning (though evictions protect future writes) and then we steadily return back to ok state in the afternoon.  We likely need a bit more redis, but not much. Clustering is probably a good fit.
+there is likely increased db load when the cache is failing or too slow
+Customer Impact:
+long requests exceeding 9 seconds or more
+Potential Solutions:
+Redis Clustering:
+Clustering will allow us to add a bit more memory, cpu, network without increasing cost too much and without overprovisioning. The next vertical bump (P5) would cost more than 7k and give us way more mem than we likely need. Clustering would allow us to drop down a vertical tier (to P3), use 3 shards, and end up with only a bit more resources than we currently use for about 4.5k instead. Clustering spreads the load which should help us get more out of the service. It will allow us to scale a few more times without spending as much as the next vertical bump. Can improve availability of redis.
+This could require code changes depending on use cases.
+From my investigation it seems that we are mostly if not only using the aspnet session with the aspnet redis provider. The lib is greater than v2.1 and should be ready to go for clustering.  non prod should be used first to verify the data is evenly distributed in the cluster, and no operation related issues occur.
+Code Optimizations:
+There are optimizations that can be made to the IC.RedisClient library, or elsewhere using redis through other means.  It currently is using the Redis String data structure with default serialization.  This could be improved by utilizing protobuf.  Proto is a binary format that will improve speed, and reduce memory. Another optimization that could be made is by exploring other data structures in Redis such as the HashSet. Using this to store objects rather than storing them as json strings gives more flexibility in how the data can be used, and is much more performant that the string data structure, both in terms of speed and memory. 
+The good news is, 
+this seems to already be done via the asp net redis provider
+, so the only places for optimization would be usages outside of that.
+Other code optimizations would be going through the cache usage to consolidate/reduce/re-organize the cached data.  
+Consolidate
+: Any data that isn’t user session specific could be cached more efficiently.  
+Reduce: 
+There is currently quite a bit of stuff thrown into the “session” cache. Sometimes large chunks of html.  I would be willing to bet there is a good amount we could pull out of the session store.  Some of the properties seen in the session store may be overhead from using aspnet sessions.
+Re-organize
+: Could data be stored in different caches that are more domain specific? This could help us reduce the need for larger instances of redis, but would require more of them.
+Don’t use aspnet session.
+  While its usage of redis is efficient, I have found it much easier to manage what is in redis and how it is stored when utilizing a redis lib directly.  When we hide behind this abstraction it a) likely comes with extra baggage we don’t need and b) makes it way to easy to “just throw it in the cache” as if that had infinite memory.
+ URL:/spaces/DS/pages/2786131976/Redis+Cache+Spike+Analysis

@@ -1,0 +1,827 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+:
+Summary: KYFB is using CloudPayV2 for all integration points. The ‘portal’ user experience includes a portion of IC SSO - see additional details below.
+Jira ticket 
+INT-3324
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Release Date
+Dec 2022
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+n/a
+API Documentation
+TEST BASE URL:
+ 
+https://pit-uat.k58ek.net/PaymentIntegration/ExternalPaymentPostingService/ExternalPaymentPostingService.wsdl
+PROD BASE URL: 
+TBD
+API Authentication Method: Username & Password
+ - 
+Configured in Advanced Settings 12 and 13
+Username: ticpint
+Password:!7dOb1NxaGqjl?4LtMD1S
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Data Pump: Payments
+PaymentPosting
+IC passes three types of payments in this web service:
+Authorized payments
+Scheduled payments
+Cancelled scheduled payments
+IC will post to multiple endpoints
+ for KFB, based on a value passed to IC (by KFB) in the CloudPayV2 call in the Biller Reference Field. Mapping is as follows: 
+Use Endpoint A (Advanced Setting 11) for all values except those mapped in Advanced Setting 40 (see detail below)
+Use Endpoint B (Advanced Setting 40) when the first 4 values of Biller Reference match the configuration in Advanced Setting 40 
+Advanced Setting 40 - Generic Transaction Sequence  - contains the 4 value configuration and the endpoint URL
+IC will retry to post payments
+ automatically whenever a ‘500’ error is received or any “01” error code. IC will attempt to retry up to 8 times.
+<?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="
+http://schemas.xmlsoap.org/soap/envelope/"
+>
+  
+soapenv:Header
+    <wsse:Security xmlns:wsse="
+http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+ soapenv:mustUnderstand="1">
+      
+wsse:UsernameToken
+        
+wsse:Username
+*
+</wsse:Username>
+        <wsse:Password type="
+http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText"
+</wsse:Password>>
+      </wsse:UsernameToken>
+    </wsse:Security>
+  </soapenv:Header>
+  
+soapenv:Body
+    <ns2:processPaymentPostingRequest xmlns:ns2="
+http://www.kyfb.com/PaymentIntegration/%22
+ >
+        <ext:externalPostPayment>
+         <!--Optional:-->
+         <externalPostPaymentReq>
+            <AccountNumber>0002541052</AccountNumber>
+            <OrderId></OrderId>
+            <invoiceNumber>16000073-0002541052</invoiceNumber>
+            <PaymentAmount>1027.00</PaymentAmount>
+            <PaymentDate>07-21-2022</PaymentDate>
+            <PayAccount>1111</PayAccount>
+            <PayType>C</PayType>
+            <TransactionId>12349</TransactionId>
+            <TransactionType>A</TransactionType>
+            <ConfCode>7890</ConfCode>
+            <!--Optional:-->
+            <AgentID></AgentID>
+         </externalPostPaymentReq>
+      </ext:externalPostPayment>
+   </soapenv:Body>
+</soapenv:Envelope>
+Username: ticpint
+Password:!7dOb1NxaGqjl?4LtMD1S
+IF Biller Reference= 
+CR-A
+RU-A
+GP-A
+PRODUCTION ONLY: 
+CR-P
+EB-P
+Use this endpoint: 
+http://pit-ppd.k58ek.net/PaymentIntegration/ExternalPaymentPostingService
+<?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="
+http://schemas.xmlsoap.org/soap/envelope/"
+>
+  
+soapenv:Body
+    <ns2:processPaymentPostingResponse xmlns:ns2="
+http://www.kyfb.com/PaymentIntegration/%22
+ >
+      <status>
+        <StatusCode>00</StatusCode>
+        <StatusMessage>Success</StatusMessage>
+      </status>
+      <processPaymentPostingResponseInfo>
+        <AccountNumber>0000530838</AccountNumber>
+        <OrderId>11718390</OrderId>
+        <TransactionId>020550003446931</TransactionId>
+      </processPaymentPostingResponseInfo>
+    </ns2:processPaymentPostingResponse>
+  </soapenv:Body>
+</soapenv:Envelope>
+Field Mapping for Payment Posting:
+AccountNumber = AccountNumber
+OrderId = Always Blank
+invoiceNumber = IC Invoice Number
+PaymentAmount 
+= Payment Amount (do not include service fees)
+For Chargebacks and ACH Rejects, IC will use the Chargeback or Reject amount
+PaymentDate 
+= 
+Payment Date and Time, unless scheduled payment, then:
+Scheduled Payment Date
+For Chargebacks and ACH Rejects, IC will use the Chargeback or Reject date
+PayAccount 2998 = Last 4 of payment method
+ (Blank for Scheduled Payments)
+PayType = 
+C=Credit
+ and Debit
+E=ACH
+TransactionId 20550003446931 = 
+PaymentReference 
+(Blank for Scheduled payments)
+TransactionType Mapping Below:
+Authorized = A
+Scheduled = S
+Scheduled Update = U 
+Scheduled Deleted = C
+Declined = Z
+Void = V
+Credit/Refund = R
+EFT Return/ACH Reject
+ = E
+Chargeback = T
+ConfCode 136002 = 
+Approval Code (only message after Approved)
+ (Blank for Scheduled Payments)
+Automatically retry any 500 errors or any “01” error code 8 times.
+Invoices
+Summary: KFB will be utilizing CloudPayV2 for all payments in Phase1 (Phase2=Guidewire integration). The Request Parameters section below outlines the values that KFB will pass in the CloudPayV2 request. Some fields vary depending on the payment origination (Cash Receipts versus web payments).
+CR = Cash Receipts (Over the counter payments - EMV Devices - CloudPayV2 - in the KFB state and agency offices)
+eB = eBusiness (Guest and portal web payments - CloudPayV2)
+Request Parameters
+Field Mapping
+IC Field Name
+IC Data Type
+IC Field Description
+Required (T/F)
+Biller Field Name
+Biller Field Description/Purpose
+Biller Values
+ReturnURL
+String
+Qualified url for ‘Continue’ button at the end of the payment processing cycle. Cannot exceed 250 characters.
+FALSE
+N/A - using iFrame
+PostBackURL
+String
+Fully qualified url, supporting http:80 or https:443 for posting transaction results back to third party while rendering payment confirmation screen. Cannot exceed 250 characters.
+FALSE
+N/A - not used
+BillerReference
+String
+Any optional Biller information. Cannot exceed 100 characters.
+FALSE
+Combination of several values: Postback Indicator, Source, County, Agency, Branch, EntryTS 
+Example: CR-A 056 121 001 20220430175433 
+Based on the first 3 character of the string, IC will post payment to different URLs configured.  
+ViewMode
+Integer
+Currently support two view modes Default Window (0) and Iframe (1). For more information on styling click here .
+FALSE
+CR: 1 (iFrame)
+eB: 1 (iFrame)
+CssUrl
+String
+Css url to apply styling to pages within the iframe. Cannot exceed 200 characters.
+False*
+TBD by KFB based on site/portal styling
+Customers
+Data Object Array
+Object containing Customer specific values, Invoices and Account Number. If no Invoice objects are passed, the latest, active invoice with a non-zero balance will be presented for payment.
+TRUE
+One Customers object per Membership related item being paid (typically one but can be multiple). 
+Required Customer Data Object
+AccountNumber
+String
+Unique customer account number.
+TRUE
+Membership number related to the Invoice Item being paid. 
+Multiple Account records can exist per payment payload. If a set of Policies or Accounts Bill numbers are related to different Memberships, one per unique membership should be created, and the related items included as Invoice records. 
+Name
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+Address
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+City
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+State
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+Zip
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+EmailAddress
+String
+Used to pre-populate payment form and for creating optional customer record.
+FALSE
+CR: Blank, eB: Populate
+Invoices
+Data Object Array
+An array of objects containing invoice specific values. If no invoices are passed, the latest, active invoice with a non-zero balance will be presented for payment.
+FALSE
+One per Item being paid
+For each entity one line item and all entities must group by membership
+Optional Invoice Data Object
+InvoiceNumber
+String
+Invoice number for transactions. Must be unique.
+TRUE
+Up to ten digit item being paid 
+(Membership Number, Policy Number, Account Bill, "External   ", "Other   "); dash; 
+OrderId 
+from payment Integraton.
+Examples:
+0012345678-75671
+A003456-00987
+TypeID
+Integer
+Invoice TypeID. Must be enabled for Biller.
+FALSE**
+164 - Membership
+165 - Policy
+166 - Account Bill
+167 - External Policy
+168 - Merchandise / Other
+InvoiceDate
+Date
+Invoice Date. If not passed, current date is assumed.
+FALSE**
+DueDate
+Date
+Invoice Due Date. If not passed, current date is assumed.
+FALSE**
+CR: Current Date
+eB: Current Date; or actual invoice Date if scheduling a future payment if desired. For multiple invoice items the most recent Invoice Due Date
+BalanceDue
+Double
+Transaction amount to be processed. Must be greater than zero.
+FALSE**
+Amount to be paid (not the balance due for the item being paid)
+CCServiceFee 
+Double 
+If passed, could be overwritten if Biller is Submitter Model for InvoiceTypeID provided.
+FALSE** 
+N/A - not used
+ACHServiceFee 
+Double 
+If passed, could be overwritten if Biller is Submitter Model for InvoiceTypeID provided.
+FALSE** 
+N/A - not used
+Cloud Payment Settings
+AllowSwipe
+Boolean
+If allow swipe is enabled, the credit card entry screen would contain an image that if clicked, would open a dialog for card swipe. This feature is disabled by default.
+FALSE
+True for CR payments and false for portal payments
+AllowCCPayment
+Boolean
+If passed as false, Credit Card acceptance would be excluded if available for biller. Default value is true.
+FALSE
+True for CR  and portal payments
+AllowACHPayment
+Boolean
+If passed as false, EFT acceptance would be excluded if available for Biller. Default value is true.
+FALSE
+True for portal and false for CR payments
+CreateCustomerRecord
+Boolean
+If true, IC will check if customer exists to chain new invoice under or create new customer record and chain new invoice.* Default value is false.
+FALSE
+Always set to True
+If the customer record is set to false, and the customer record does not already exist, Invoice Cloud will accept payment, but will not record an account number or customer in which the payment is associated. This will cause errors with postback (Identifying which account/membership/policy payments should be posted to), and will not allow data pump to function properly.
+RemoteAuthenicationToken
+String
+Provided by the RemoteAuthentication method on the Remote Authentication web service. If passed, the Customer will have the option to use their saved payment methods to make a payment.
+FALSE
+N/A - IC value
+Used when user is logged in to make payment
+* The Invoices data object is optional but will be required if the Customer does not exist.
+** For existing Invoices, only InvoiceNumber is needed. For a new Invoice, all fields must be passed. Multiple new invoices can be processed per request.
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller. This payment file includes all payments (authorized, declined, void, refunds, ACH rejects, chargebacks).
+File Extension: .txt
+File Naming Convention: ICPayments_YYYYMMDDHHmmss.txt
+File Delimiter: Fixed width 
+Specification: 
+IC includes all payment types except: ACH Reject C-codes
+Credits/Refunds, ACH Rejects, Chargebacks should all have negative values.
+For Voids, payment record (with a positive amount) and the Void record (with a negative amount) are sent on the same remittance/payment file. The Payment Confirmation Code/ClientConfirmationCd/Approval code will be blank, and the PaymentReference/Vendor Transaction ID is the same value on both transactions.
+Sample File: 
+SFTP File Path: KYFBPROD\FromInvoiceCloud\Payments
+File Transfer Frequency: File is delivered Once per day at 7:15 PM EST. If there are no transactions, IC will deliver a blank file (with header and footer). 
+Field Mapping
+Sample data row:
+11543960                                          2022-05-1100:20:19000000000131APC0000000093407147300599D020550003282329               VISWilliam L Logan
+Field
+Position, Length
+Format
+Values
+Row Type
+RecType 
+[1,1] 
+Char 
+Always H
+Header Row
+PaymentProcessNm 
+[2,9] 
+Char 
+Always PROXY_EOD
+Header Row
+FileHeaderDt 
+[11,8] 
+Date  yyyymmdd 
+File date 
+Header Row
+FileHeaderTm 
+[19,6] 
+Time  HHmmss 
+Header Row
+PaymentOrderNbr 
+[1,50] 
+Char 
+InvoiceNumber
+Data Row
+PaymentDt 
+[51,18] 
+DateTime  yyyy-mm-ddHH:mm:ss 
+Transaction Amount and Date (Payment date and time, Void date and time, Credit date and time)
+If the Payment is Voided, use the DateRecAdded from the ChangeLog table instead of the payment date.  This will represent when the payment was voided.  This should only be used when reporting Voids.
+Data Row
+BnkCrdAuthNbr 
+[69,12] 
+Integer 
+Data Row
+TransactionTypeCd 
+[81,1] 
+Char 
+Mapping below:
+Authorized = A
+Declined = Z
+Void = V
+Credit/Refund = R
+EFT Return/ACH Reject = E
+Chargeback = T
+Scheduled
+ = 
+S 
+Scheduled Update = U 
+Scheduled Deleted = C
+Data Row
+PaymentSettlementTypeCd 
+[82,1] 
+Char 
+B- Both
+*KFB expressed that We should only specify if there is a difference in the cost of a membership and premium invoice. Currently there is not so we can use any. I would like to see these broken out by invoice type and if both are included we should send B.
+Not used but potential options: 
+M - Membership
+ and 
+P - Premium
+Data Row
+PaymentTypeCd 
+[83,1] 
+Char 
+C=Credit
+E=ACH
+Data Row
+PaymentAmt 
+[84,13] 
+Decimal(13,2) 
+Payment Amount (do not include service fees)
+Implied decimal - Ex: $35,999.00 will be 3599900 in file
+Data Row
+LastFourNbr 
+[97,4] 
+Integer 
+Last four digits of card number/Bank Account Number
+Data Row
+ClientConfirmationCd 
+[101,50] 
+VarChar 
+Payment Message (6-digit numeric portion only)
+For Voids, payment record (with a positive amount) and the Void record (with a negative amount) are sent on the same remittance/payment file and the Payment Confirmation Code/ClientConfirmationCd/Approval code will be blank
+For Declines, we cannot send the 6-digit numeric portion of the payment message because declines do not always have a numeric portion. Therefore, the Payment Confirmation Code/ClientConfirmationCd/Approval code will always be sent with word ‘DECLINE’. 
+Data Row
+VendorTransactionId 
+[107,50}
+BigInt 
+PaymentReference (Blank for Scheduled payments)
+Data Row
+CardTypeCd 
+[137,3] 
+Char 
+EFT = Check/ACH payments
+DCV = Discover
+MST = Mastercard
+VIS = Visa
+PPL = PayPal
+AMX = American Express
+Data Row
+CardHolderNm 
+[140,50 
+VarChar 
+Name entered by user while making a payment
+Data Row
+BillerReference
+[254,50]
+VarChar 
+Biller Reference
+Data Row
+PaymentSource
+[304,20]
+VarChar 
+PaymentSource to differentiate the payments from cloudPAyV2, POS, API . and any future implementation of payments
+Data Row
+Misc
+[354,50]
+VarChar 
+Reject Code from IC
+Data Row
+RecType 
+[1,1] 
+Char 
+T
+Trailer Row
+RecordsCnt 
+[2,7] 
+Integer 
+Trailer Row
+TotalPaymentAmt 
+[9,12] 
+Decimal(18,2) 
+Trailer Row
+Advanced Settings
+Setting ID
+Description
+Value
+Description
+3
+SSO Customer Login URL
+https://my.kyfb.com/login
+ 
+5
+Customer Portal Home Button Redirect
+1
+11
+DataPump Payments EndPoint/WebService URL
+See CRM
+IC will post to multiple endpoints
+ for KFB, based on a value passed to IC (by KFB) in the CloudPayV2 call in the Biller Reference Field. Mapping is as follows: 
+Use Endpoint A (Advanced Setting 11) for all values except those mapped in Advanced Setting 40 (see detail below)
+Use Endpoint B (Advanced Setting 40) when the first 4 values of Biller Reference match the configuration in Advanced Setting 40 
+Advanced Setting 40 - Generic Transaction Sequence  - contains the 4 value configuration and the endpoint URL
+12
+DataPump Payments EndPoint/WebService Username
+See CRM
+Username for data pump service
+13
+DataPump Payments EndPoint/WebService Password
+See CRM
+Password for data pump service
+40
+Generic Transaction Sequence
+See CRM
+IC will post to multiple endpoints
+ for KFB, based on a value passed to IC (by KFB) in the CloudPayV2 call in the Biller Reference Field. Mapping is as follows: 
+Use Endpoint A (Advanced Setting 11) for all values except those mapped in Advanced Setting 40 (see detail below)
+Use Endpoint B (Advanced Setting 40) when the first 4 values of Biller Reference match the configuration in Advanced Setting 40 
+Advanced Setting 40 - Generic Transaction Sequence  - contains the 4 value configuration and the endpoint URL
+131
+JSON Configuration
+{"KFB":{"DataPumpConfigurations":{"PostPaymentRequestObjectConfiguration":{"TransactionId":"PaymentReference"}},"StratusWebServices":{"PaymentLineExportConfiguration":{"VendorTransactionID":"PaymentReference"}}}}
+Kentucky Farm Bureau needs an InvoicePaymentHistory output parameter (PaymentReference) that traces the “transaction” level of invoice payments. When Kentucky Farm Bureau calls CloudPayV2 to make a payment with one or more invoices/accounts/InvoiceTypeIDs, they need 1 unique value (PaymentReference) for all the invoices in that CloudPayV2 payment. 
+This Advanced setting controls passing back the InvoicePaymentHistory output parameter, PaymentReference, in the Data Pump and Payment File. 
+133
+Datapump Skip Demo Sleep Time
+1
+BIF Customization's
+N/A - Biller is using CloudPayV2 for all invoice creation and payments
+Implementation Details
+SSO Integration
+Integration Detail
+Multi-User 
+KFB will use multi-user functionality with co-owner (logintypID = 5) so that all users have the same permissions. All users will be passed to IC with a logintypeID=5. In the event that an account is being registered and there is no owner (logintypeID = 1), the integration will use the default logic by IC register the first user as the owner - this happens automatically within IC.
+ID
+Option Description
+Details
+CRM Option 74
+ENABLE Multiple Customer Login Functionality
+Enable
+CRM Option 78
+Customer Portal - Allow Co-owners
+Enable
+CRM Option 79
+Customer Portal - Maximum Number of Co-owners per Account
+10
+Data Conversion
+IC Process (Data Type)
+Data Origination 
+Date of Conversion (Prod)
+Details
+Accounts
+KFB
+Estimated Date: 3/17/23
+Create CustomerRecord (accounts) in IC to import registered users
+Registered Users
+KFB
+Estimated Date: 3/17/23
+Import registered user details to register accounts
+ (KFB is using username as the authentication method)
+Stored Payment Methods (Wallet)
+Fiserv
+Estimated Date: 3/17/23
+Import stored payment methods for registered users
+NOTE: Since Registered User information originates with KFB and stored payment method information originates with Fiserv, KFB may need to provide IC a ‘mapping’ document to pair accounts and users for import.
+IC Portal Configuration
+There are three portals setup for KFB - described below:
+Name
+BID
+Purpose
+Kentucky Farm Bureau DEV
+3556
+Used by Development teams to test new enhancements, code deployments, fixes, etc. 
+Kentucky Farm Bureau TEST
+3115
+Used for System Integration Testing (SIT) and/or Implementation User Acceptance Testing (UAT)
+Kentucky Farm Bureau
+3257
+Production
+Required Options
+See SSO section for SSO section for Multi-User Required Options
+ID
+Option Description
+Details
+Invoice Type Option 1
+Allow Paperless Registration   
+Disable
+Invoice Type Option 4
+Allow Customer to AutoPay
+Disable
+Invoice Type Option 5
+Allow Registration / Customer Portal
+Enable
+User 
+Interaction and Design
+Data Flow - Invoice
+No Invoice Files - All invoices will be created during the CloudPayV2 jump to IC
+att2336293279
+2199683090
+1
+KFB Invoices
+IM
+att2336587791
+att2336849957
+0
+Data Flow - Payment
+att2335047767
+2199683090
+1
+KFB Payment Flow
+IM
+att2336456727
+att2336358412
+0
+Data Flow - Chargebacks
+att2335801379
+2199683090
+1
+KFB Chargebacks
+IM
+att2336227364
+att2336882717
+0
+Data Flow - Credits/Refunds
+att2335539259
+2199683090
+1
+KFB Credits
+IM
+att2337014168
+att2335670316
+0
+Data Flow - Void
+att2336423956
+2199683090
+1
+KFB Voids
+IM
+att2336456733
+att2336358417
+0
+Data Flow - ACH Reject
+att2336293285
+2199683090
+1
+KFB Ach Rejects
+IM
+att2336227371
+att2336784405
+0
+Biller Experience
+https://www.figma.com/proto/8wi486eek3TX6sBTAs9KVz/Payer-Flows?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A2
+ 
+User Stories
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Web Services 
+Sample 
+User Registration
+User navigates to KFB portal and registers through the KFB member portal. After registration, logged in user makes a payment. 
+Assumptions: 
+KFB does not know if an insured is registered with InvoiceCloud
+KFB stores Remote Authentication Token (per session) for use in 
+CloudPayV2 Registered User workflow
+In Step 3, KFB membership accounts are linked/grouped together at the time of registration when the same email address and password is sent to IC
+Requirement:
+LogintypeID (REST- Remote Authentication- Register Accounts) is always = 5
+Note: Standard IC functionality will be used in the case that logintypeID5 is passed and there is no longtypeID1. If no logintypeID=1, any value passed during registration will create that user as the owner
+Email address is not included in the 'Create Customer Record' web service
+Check to see if account exists in invoice cloud and if it is registered.
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist: 
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+Cloud Payments V2 
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+Cloud Payments V2 
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+Cloud Payments V2 
+Registered User Payment (Single Invoice)
+A registered user is logged in and makes a payment on a single account, single invoice.
+Assumptions:
+User is already registered and authenticated via step 3 of 
+User Registration
+ workflow
+KFB stores Remote Authentication Token from Remote Authentication web service
+Sample request will include expired Remote Authentication Token - this will need to be created by KFB when testing this web service
+KFB launches CloudPayV2 with Remote Authentication Token
+Cloud Payments V2 with Remote Authentication Token
+Registered User Payment (Multi Invoice)
+A registered user is logged in and makes payments on 
+multiple accounts, multiple invoices.
+Assumptions:
+User is already registered and authenticated via step 3 of 
+User Registration
+ workflow
+KFB stores Remote Authentication Token from Remote Authentication web service
+Requirement: All accounts must be linked together.
+Sample request will include expired Remote Authentication Token - this will need to be created by KFB when testing this web service
+KFB launches CloudPayV2 with Remote Authentication Token
+Cloud Payments V2 with Remote Authentication Token
+Unregistered User Payment
+ (Single Invoice)
+An unregistered user makes a payment on a single account, single invoice.  
+Requirement: Set ‘CreateCustomerRecord’ to TRUE
+KFB launches CloudPayV2
+Cloud Payments V2
+Unregistered User Payment (Multi Invoice)
+An unregistered user makes payments on a multiple accounts, multiple invoices.  
+Requirement: Set ‘CreateCustomerRecord’ to TRUE
+KFB launches CloudPayV2
+Cloud Payments V2
+Update Email Address
+Registered user logs into the KFB portal and updates their email address.
+Assumption: KFB has current email address of user
+KFB calls update email address method
+REST- Remote Authentication- Update Email Address
+Update Password
+Registered user logs into the KFB portal and updates their password.
+Assumptions: KFB has the current email address and password of the user
+KFB calls update password method
+REST- Remote Authentication- Update Password
+Manage Payment Methods
+A registered user is logged in to KFB portal and navigates to IC screen to store, update or remove payment methods.
+Assumptions:
+User is already registered and authenticated via step 3 of 
+User Registration
+ workflow
+KFB redirects (iFrame) to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+Managed Scheduled Payments
+A registered user is logged in to KFB portal and navigates to IC screen to  update or cancel a scheduled payment.
+Assumptions:
+User is already registered and authenticated via step 3 of 
+User Registration
+ workflow
+KFB redirects (iFrame) to Scheduled Payments screen
+CloudSSOConnect (redirect 9 = Customer Portal Scheduled Payments Listing)
+Account Management
+Membership consists of User1 and User2. Both users have a registered account. User1 needs to remove User2 from the account (ex. divorce). User1 calls KFB and KFB removes User2.
+Assumptions:
+KFB uses this web service after the source system is updated to remove User2
+If User2 becomes a new member, KFB will follow the 
+User Registration 
+workflow
+KFB unregisters user account(s)
+REST- Remote Authentication- Unregister Accounts
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Frequency
+CloudPayV2
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Customers- Create Customer Record
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Remote Authentication- Register Accounts
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Remote Authentication- Remote Authentication
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Remote Authentication- Update Email Address
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Remote Authentication- Update Password
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Remote Authentication- Unregister Accounts
+CloudPayV2 will be used for all payments. See user stories above for specific details on each use case.
+REST- Invoice Pay - Process ACH Sale with UserBankGUID
+Will be used for AutoPay (to be included in data pump and remittance file)
+REST- Invoice Pay - Process Credit Card Sale with UserCreditCardGUID
+Will be used for AutoPay (to be included in data pump and remittance file)
+CloudSSOConnect
+KFB will use the following iFrame redirects:
+5 = Customer Portal Payment Options
+9 = Customer Portal Scheduled Payments Listing
+On demand
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5511
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Jan 2023
+Replace with Payment Reference
+Request for Kentucky Farm Bureau (3115, 3257) - Add Webservice payments to Datapump and Remittance (Payment) file
+TBD
+Webservice payments are not in the current DataPump or Remittance (Payment) file.
+Add webservice payments to the DataPump and Remittance (Payment) file.
+ITG-1875
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+BillerReference, PaymentSource and Misc not included in remittance file.
+BillerReference, PaymentSource and Misc to be included in remittance file.
+Relevant information for KFB to report/track payments.
+ITG-2702
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+When a payment is Voided, the paymentdate is obtained on the export file.
+When a payment is voided, use the daterecadded from the ChangeLog table..
+KFB requested this change to proper reporting.
+Out of Scope
+Functionality
+Description/Story
+Link Accounts
+KFB does not ‘link’ accounts by membership so there is no need to link accounts in IC for a registered user.
+Policies may be ‘grouped' together in KFB for billing but the user does not have access to the membership information from the portal. In this case, the user experience is limited to their specific membership.
+ URL:/spaces/IM/pages/2199683090/BID+3257+Kentucky+Farm+Bureau+KFB+Technical+Design

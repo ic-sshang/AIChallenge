@@ -1,0 +1,237 @@
+Both MCL and non-MCL will need to have this constraint
+When changing email address a unique check will need to be implemented in any software that updates email address on logins
+Phase 1: Stop the bleeding
+CRM option: new “Unique” Email auth type, hide existing Email auth type
+DB: enforce uniqueness at the DB level for legacy billers (cleanup/migration needed for existing dupes, but no more dupes should be created)
+User flow: require any user attempting to register with an existing email address to either (1) create a new login, or (2) reset password to regain access if their password is unknown
+Phase 2: Migration and clean-up
+Requires a dedicated application to link customers, decrypt and re-encrypt payment methods to consolidate logins. Crypto services collaboration needed for writing the clean-up utility.
+Payment methods and AutoPay should be preserved during login consolidation process.
+Requirements
+Where does the validation need to be implemented?
+Where in the app do we need to ensure logins are unique?
+What parts of the software create the login records and duplicate email logins?
+Stored Procedures
+Stored Procedure
+Type
+Summary
+Call Stack to Primary SPs
+mcl.spCreateLogin
+ 
+PRIMARY
+ 
+Creates new login records in the mcl.Logins table with email addresses, passwords, PIN, username, and other login-related fields. Also creates associated CustomerLogins records. 
+mcl.updLogin
+ 
+PRIMARY
+ 
+Updates existing login records in the mcl.Logins table. Allows modification of email addresses, passwords, PIN, username, and other login fields. Includes change tracking functionality. 
+dbo.ImportFileRealTimeSetBasedInv
+ 
+PRIMARY
+ 
+Bulk import procedure that performs dynamic UPDATE operations on mcl.Logins table during file processing. Also resets PIN values for newly inserted logins to handle duplicate email address scenarios. 
+dbo.ImportFileRealTimeSetBasedInv_WS
+ 
+CALLER
+ 
+Web service wrapper for ImportFileRealTimeSetBasedInv that handles file imports via web service calls. 
+Call stack:
+ spPromoteImportInvoiceDuplicate → ImportFileRealTimeSetBasedInv_WS → insBIFCustomer → spCreateLogin/updLogin 
+dbo.insBIFCustomer
+ 
+CALLER
+ 
+Inserts Biller Import File customer data and calls spCreateLogin to create login records for customers with email addresses. 
+Call stack:
+ ImportFileRealTimeSetBasedInv_WS → insBIFCustomer → spCreateLogin/updLogin<br/>
+Call stack:
+ ImportFileRealTimeSetBased → insBIFCustomer → spCreateLogin/updLogin<br/>
+Call stack:
+ ImportFileRealTimeMishawaka → insBIFCustomer → spCreateLogin/updLogin<br/>
+Call stack:
+ ImportFileRealTime → insBIFCustomer → spCreateLogin/updLogin<br/>
+Call stack:
+ ImportFileRealTimeV2 → insBIFCustomer → spCreateLogin/updLogin 
+pld.insBIFCustomer
+ 
+CALLER
+ 
+PreLoad database version of the customer insertion procedure. 
+Call stack:
+ spSplitImport → pld.insBIFCustomer → spCreateLogin/updLogin 
+dbo.spLinkNewCustomerToOriginal
+ 
+CALLER
+ 
+Links new customer accounts to original accounts and creates login records using spCreateLogin. 
+Call stack:
+ ImportConveyanceFile → spLinkNewCustomerToOriginal → spCreateLogin 
+dbo.spPromoteImportInvoiceDuplicate
+ 
+CALLER
+ 
+Promotes duplicate invoice imports and calls ImportFileRealTimeSetBasedInv_WS for processing. 
+Call stack:
+ spPromoteImportInvoiceDuplicate → ImportFileRealTimeSetBasedInv_WS → insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportInvoiceFileByJob
+ 
+CALLER
+ 
+Job-based invoice file import procedure that routes to different import methods based on file type. 
+Call stack:
+ ImportInvoiceFileByJob → ImportFileRealTimeSetBasedInv (direct)<br/>
+Call stack:
+ ImportInvoiceFileByJob → ImportConveyanceFile → spLinkNewCustomerToOriginal → spCreateLogin 
+dbo.ZZZImportInvoiceFileByJob
+ 
+CALLER
+ 
+Alternative job-based import procedure with similar routing logic. 
+Call stack:
+ ZZZImportInvoiceFileByJob → ImportFileRealTimeSetBasedInv (direct)<br/>
+Call stack:
+ ZZZImportInvoiceFileByJob → ImportConveyanceFile → spLinkNewCustomerToOriginal → spCreateLogin 
+dbo.ImportInvoiceFileToPreLoad
+ 
+CALLER
+ 
+Imports invoice files to preload database and calls spCopyToPreLoad for processing. 
+Call stack:
+ ImportInvoiceFileToPreLoad → spCopyToPreLoad → spSplitImport → pld.insBIFCustomer → spCreateLogin/updLogin 
+dbo.spCopyToPreLoad
+ 
+CALLER
+ 
+Copies data from ImportRealTime to Import table in DBPreLoad database and calls pld.spSplitImport. 
+Call stack:
+ spCopyToPreLoad → spSplitImport → pld.insBIFCustomer → spCreateLogin/updLogin 
+pld.spSplitImport
+ 
+CALLER
+ 
+Splits import data into various tables in the preload database and calls pld.insBIFCustomer. 
+Call stack:
+ spSplitImport → pld.insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportFileRealTimeV2
+ 
+CALLER
+ 
+Version 2 of real-time file import procedure with enhanced processing capabilities. 
+Call stack:
+ ImportFileRealTimeV2 → insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportFileRealTimeSetBased
+ 
+CALLER
+ 
+Set-based version of real-time file import for improved performance. 
+Call stack:
+ ImportFileRealTimeSetBased → insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportFileRealTimeMishawaka
+ 
+CALLER
+ 
+Specialized import procedure for Mishawaka biller with custom processing logic. 
+Call stack:
+ ImportFileRealTimeMishawaka → insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportFileRealTime
+ 
+CALLER
+ 
+Original real-time file import procedure for processing invoice files. 
+Call stack:
+ ImportFileRealTime → insBIFCustomer → spCreateLogin/updLogin 
+dbo.ImportConveyanceFile
+ 
+CALLER
+ 
+Imports conveyance files and calls spLinkNewCustomerToOriginal for customer linking. 
+Call stack:
+ ImportConveyanceFile → spLinkNewCustomerToOriginal → spCreateLogin 
+Software Components
+Repository Name
+File Path
+Class Name
+Method Name
+Call Stack
+AutoPaymentProcessing                
+/AutoPaymentProcessing/Models/AccountOwnerLogin.vb   
+AccountOwnerLogin  
+spCreateLogin 
+(not specified)             
+ScheduledPaymentProcessing            
+/ScheduledPaymentProcessing/Models/Logins/AccountOwnerLogin.vb 
+AccountOwnerLogin  
+spCreateLogin 
+(not specified)             
+IC.Logins                            
+/IC.Logins/DAL.vb                                    
+DAL                
+spCreateLogin 
+(not specified)             
+IC.Logins                            
+/IC.Logins/Extended/DAL.vb                           
+ExtendedDAL        
+spCreateLogin 
+(not specified)             
+AutoPaymentReminders                 
+/AutoPaymentRemindersTest/AutoPaymentReminderTests.vb
+AutoPaymentReminderTests 
+spCreateLogin 
+(not specified)             
+IC.Logins                            
+/IC.Logins/AccountOwnerLogin.vb                      
+AccountOwnerLogin  
+spCreateLogin 
+(not specified)             
+IC.Logins                            
+/IC.Logins/Extended/Login.vb                          
+ExtendedLogin      
+spCreateLogin 
+(not specified)             
+RemoteAuthentication                 
+/RemoteAuthenticationTests/Business/wsRemoteAuthentication.vb 
+wsRemoteAuthentication 
+spCreateLogin 
+(not specified)             
+SystemsAndSoftware4.0               
+/SystemsAndSoftware4.0/App_Code/semco.vb            
+semco              
+spCreateLogin 
+(not specified)             
+IC.Logins                            
+/IC.Logins/Login.vb                                  
+Login              
+spCreateLogin 
+(not specified)             
+RegisterAutoPay                      
+/RegisterAutoPay/Business/Operations/LoginOperations.vb 
+LoginOperations    
+spCreateLogin 
+(not specified)             
+ICLogins                             
+/IC.Logins/Extended/Login.vb                         
+ExtendedLogin      
+spCreateLogin 
+(not specified)             
+MyIIS                                
+/IC.Common/Models/MultiCustomerLogin/CustomerLogin.vb 
+CustomerLogin      
+spCreateLogin 
+(not specified)             
+OracleOfsllDataImport               
+/OracleOfsllDataImport/Models/Login.vb              
+Login              
+spCreateLogin 
+(not specified)             
+RemoteAuthentication                 
+/RemoteAuthentication/App_Code/Tools/clsCustomerLogins.vb 
+clsCustomerLogins  
+spCreateLogin 
+(not specified)             
+ICKioskAPI                           
+/ICKioskAPI/Models/Repository/Database.Customer.vb  
+Database.Customer   
+spCreateLogin 
+(not specified)             
+ URL:/spaces/EA/pages/4629790769/Add+Unique+Login+Email+Constraint

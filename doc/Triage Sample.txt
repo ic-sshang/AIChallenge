@@ -1,0 +1,26 @@
+Introduction:
+The following document is a sample example triage Dev Support items into pending.
+Summary Section: 
+It is best to read this by itself.  It should give you an idea of what the item is suppose to solve.  When reading this information you should get a sense of what data is needed from the submitter to research and complete the request.
+Example:
+By reading this summary thoughts should be on on the Autopay and Paperless report why the core report does not display that information.  
+Questions To Ask Yourself:
+What is the actual purpose of the reports? 
+To show who is on autopay and paperless.
+Why we would not show changes on the report? 
+Because it does show changes, new autopay and paperless flags will be shown with the mix of the report data. It just will not flag it saying that the flag was changed.  I believe changes would be a separate report if that is all they want to show.  Same with Payment Type.  That should be a separate report.  
+Description Section:
+This section repeats the summary, but provides more detail regarding how to reproduce and sometimes a solution that can only be performed by Engineering.
+Example:
+Reading the description we get more detail.  We now see that it is a Changelog export that is not providing adequate information for the biller.  
+Questions to Ask Yourself:
+Does the changelog export process need to change for this biller according to this item? 
+Yes, because we do not support that in the current Changelog file type we are using. 
+ 
+Can Dev Support make this change? 
+No,  this is an integration modification and should be treated as such.
+With the two questions asked above, we can conclude that the changelogs need to be changed and Integrations needs to be notified.
+Ticket Resolution:
+Since we concluded that it needs to move on to integrations, we would clone this item and move it to the INT board under task, and mark it as an integration modification.  The old item will be marked as resolved and a comment would be made to indicate it has been sent to integrations and been cloned as another item for them.  
+Done!!
+ URL:/spaces/DS/pages/2419556585/Triage+Sample

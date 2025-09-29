@@ -1,0 +1,4961 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+NA
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+NA
+Knowledge Transfer
+NA
+Overview
+Legend
+: 
+The title of each mapping is generally Category: Account Number Format + Invoice TypeID + Balance Forward or Open BIlling (BF or OB)
+Invoice Files
+If the biller went live with Tyler Munis after 2008 they will have UBCIS which produces invoice files in the XML format. This should be the preferred format used for invoice files. 
+Billers implemented before 2008 are being converted but may not have access to XML format.  
+Adjustment Files
+Not every adjustment file will work for each invoice mapping because the adjustment file is trying to reconstruct the account number. See ‘Corresponding Adjustment’ file for each invoice mapping.
+Delinquent Files
+City of Ruston BID 3379 uses a unique delinquent file.
+Payment Files
+Payment files can be in standard lockbox format or in questpoint format. The account number is not included in the payment file so the account number format is not important (biller bill number is used instead)
+Changelog Files
+Munis does not have a specific changelog file that can be automatically imported into their system. A generic changelog can be sent daily and the biller would have to manually reflect account changes.
+API Documentation
+Batch integration does not make use of API - for more information about the real time integration see here:
+Tyler Munis Real Time Technical Design
+ 
+XML Invoice File Mappings
+Water: WTR-AcctNo + 1 + BF
+Water: WTR-AcctNo + 1 + BF
+Key File Type Features
+Invoice Type: Water (1)
+Account Number: No Customer Number included (WTR-H_ACCT_NO)
+Balance Forward (BIF customization)
+File Format Name: 
+IF_MunisV2 UB XML
+How to Run Report:
+ (These are instructions on one instance of the report and not necessarily the way that works best with the biller’s setup)
+File Summary/Purpose
+File Extension:
+.XML
+File Naming Convention:
+InvoiceTypeID:
+Water
+File Delimiter:
+ NA
+Code Repository:
+ StratusWebServices
+FileName/ClassName:
+ MunisV2_Invoices_UB_XML_v2
+FileTypeID: 
+561
+Corresponding Adjustment File: 
+IF_Munis Cumulative Adjustment v18 - Water
+ 
+FileTypeID 223
+Sample File:
+Known Billers with this file type enabled :
+488,1153,1195,1278
+Last Used on 2022-06-14 10:01:22.290 
+by 1268
+Class Constants:
+AccountNumberPrefix 
+= "WTR-"
+InvoiceNumberPrefix 
+= "UB"
+IncludeCustomerNo = False
+BalanceDue AmountDueMode = TOTDUE
+TotDue AmountDueMode = TOTDUE
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Creation Logic/Conditions
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+clsIntegratorTools
+N/A
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+Current Date
+N/A
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/a - IC to generate - Always 'N'
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+'WTR-'
++ 
+DataRow
+("BILL_NO").
+N/A
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BILL_DATE_FMT").
+N/A
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("DUE_DATE_FMT").
+N/A
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE").
+N/A
+Invoice Header
+26
+PONumber
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+38
+Custom1
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+39
+Custom2
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_NO")
+N/A
+Invoice Header
+40
+Custom3
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_STR")
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_CTY")
+N/A
+Invoice Header
+ 42
+Custom5
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_ST")
+N/A
+Invoice Header
+ 43
+Custom6
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_ZIP")
+N/A
+Invoice Header
+ 44
+Custom7
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_FMT")
+N/A
+Invoice Header
+ 45
+Custom8
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PARCEL_ID")
+N/A
+Invoice Header
+ 46
+Custom9
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("INT_DUE")
+N/A
+Invoice Header
+47
+Custom10
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_CHARGES")
+N/A
+Invoice Header
+ 94
+Custom11
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE")
+N/A
+Invoice Header
+95 
+Custom12
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ADJ_SINCE_LAST")
+N/A
+Invoice Header
+96 
+Custom13
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PMTS_SINCE_LAST")
+N/A
+Invoice Header
+97 
+Custom14
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_CRED_APPL")
+N/A
+Invoice Header
+98 
+Custom15
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SUM_ACTVTY_SINCE_LAST")
+N/A
+Invoice Header
+99 
+Custom16
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_BAL")
+N/A
+Invoice Header
+100 
+Custom17
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_COMMIT")
+N/A
+Invoice Header
+101 
+Custom18
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("Int_PD_SINCE_LAST")
+N/A
+Invoice Header
+102 
+Custom19
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BALANCE_FWD")
+N/A
+Invoice Header
+103 
+Custom20
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ACCT_NO")
+N/A
+Invoice Header
+104 
+Custom21
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SCAN_EXCL_NOTDUE")
+N/A
+Invoice Header
+105 
+Custom22
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("INT_DATE")
+N/A
+Invoice Header
+106 
+Custom23
+Y
+ FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+107 
+Custom24
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PENLTY_DATEPENLTY_DATE")
+N/A
+Invoice Header
+108 
+Custom25
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ACCT_TYP")
+N/A
+Invoice Header
+109 
+Custom26
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_CTL_START")
+N/A
+Invoice Header
+110 
+Custom27
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_CTL_END")
+N/A
+Invoice Header
+111
+Custom28
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NO")
+N/A
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE").
+ 
+NA
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 1
+ NA
+NA
+NA
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+Case
+:
+IF IncludeSCAN_EXCL_NOTDUE
+AND
+SCAN_EXCL_NOTDUE=””
+Then
+DataRow
+("SCAN_EXCL_NOTDUE").ToString.Substring(7, 4).Trim)
+ELSE
+DataRow
+("BILL_DATE").ToString.Trim, 4))
+NA
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+NA
+MunisV2_Invoices_UB_XML_v2
+‘WTR-’&
+DataRow
+("H_ACCTNO")
+NA
+Customer Record
+602
+CustomerName
+Y
+TRUE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NAME1").
+NA
+Customer Record
+ 
+CustomerName2
+ 
+ 
+ 
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NAME2").
+ 
+ 
+61
+Address1
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ADDR1").
+NA
+Customer Record
+62
+Address2
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ADDR2").
+NA
+Customer Record
+63
+City
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_CTY").
+NA
+Customer Record
+64
+State
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ST").
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ZIP").
+NA
+Customer Record
+ 
+DisplayAccountNumber
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+‘WTR-’ +
+DataRow
+("H_ACCTNO")
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+ NA
+Set to ‘ID’ by IC
+NA
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SERV_DESC").
+NA
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_READ_DATE").
+NA
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_READ_DATE").
+NA
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("READ_CODE").
+NA
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_READ").
+NA
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_READ").
+NA
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("FACT_ACT_USG").
+NA
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("MTR_NO").
+NA
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("NUM_UNITS”).
+NA
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SERV_CHARGE").
+NA
+Invoice Detail
+208
+CustomField11
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("OLD_ACT_USG").
+NA
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("RATE_DESC").
+NA
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("RATE_ADJ_AMT").
+NA
+Invoice Detail
+211
+CustomField14
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CONS_AMT").
+NA
+Invoice Detail
+347
+BillerInvoiceNumber
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BILL_NO").
+NA
+Invoice Header
+Water: WTR-AcctNo + 1 + BF (New FileType for City of Aspen)
+Key File Type Features
+Invoice Type: Water (1)
+Account Number: No Customer Number included (WTR-H_ACCT_NO)
+Balance Forward (BIF customization)
+Custom8 will be used to map on <CUST_NO>
+<PARCEL_ID> will be moved to the next available field Custom28
+File Format Name: 
+IF_MunisV2 UB XML
+How to Run Report:
+ (These are instructions on one instance of the report and not necessarily the way that works best with the biller’s setup)
+File Summary/Purpose
+File Extension:
+.XML
+File Naming Convention:
+InvoiceTypeID:
+Water
+File Delimiter:
+ NA
+Code Repository:
+ StratusWebServices
+FileName/ClassName:
+ MunisV2_Invoices_UB_XML_v2
+FileTypeID: 
+Need assign new FileTypeID 
+Corresponding Adjustment File: 
+IF_Munis Cumulative Adjustment v18 - Water
+ 
+FileTypeID 223
+Sample File:
+BOX Link: 
+utnewbil2021TEST.txt
+Class Constants:
+AccountNumberPrefix 
+= "WTR-"
+InvoiceNumberPrefix 
+= "UB"
+IncludeCustomerNo = False
+BalanceDue AmountDueMode = TOTDUE
+TotDue AmountDueMode = TOTDUE
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Creation Logic/Conditions
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+clsIntegratorTools
+N/A
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+Current Date
+N/A
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/a - IC to generate - Always 'N'
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+'WTR-'
++ 
+DataRow
+("BILL_NO").
+N/A
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BILL_DATE_FMT").
+N/A
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("DUE_DATE_FMT").
+N/A
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE").
+N/A
+Invoice Header
+26
+PONumber
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+38
+Custom1
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+39
+Custom2
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_NO")
+N/A
+Invoice Header
+40
+Custom3
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_STR")
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_CTY")
+N/A
+Invoice Header
+ 42
+Custom5
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_ST")
+N/A
+Invoice Header
+ 43
+Custom6
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_ZIP")
+N/A
+Invoice Header
+ 44
+Custom7
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("LOC_FMT")
+N/A
+Invoice Header
+45
+Custom8
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NO")
+N/A
+Invoice Header
+ 46
+Custom9
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("INT_DUE")
+N/A
+Invoice Header
+47
+Custom10
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_CHARGES")
+N/A
+Invoice Header
+ 94
+Custom11
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE")
+N/A
+Invoice Header
+95 
+Custom12
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ADJ_SINCE_LAST")
+N/A
+Invoice Header
+96 
+Custom13
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PMTS_SINCE_LAST")
+N/A
+Invoice Header
+97 
+Custom14
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_CRED_APPL")
+N/A
+Invoice Header
+98 
+Custom15
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SUM_ACTVTY_SINCE_LAST")
+N/A
+Invoice Header
+99 
+Custom16
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_BAL")
+N/A
+Invoice Header
+100 
+Custom17
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_COMMIT")
+N/A
+Invoice Header
+101 
+Custom18
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("Int_PD_SINCE_LAST")
+N/A
+Invoice Header
+102 
+Custom19
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BALANCE_FWD")
+N/A
+Invoice Header
+103 
+Custom20
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ACCT_NO")
+N/A
+Invoice Header
+104 
+Custom21
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SCAN_EXCL_NOTDUE")
+N/A
+Invoice Header
+105 
+Custom22
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("INT_DATE")
+N/A
+Invoice Header
+106 
+Custom23
+Y
+ FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+107 
+Custom24
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PENLTY_DATEPENLTY_DATE")
+N/A
+Invoice Header
+108 
+Custom25
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("ACCT_TYP")
+N/A
+Invoice Header
+109 
+Custom26
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_CTL_START")
+N/A
+Invoice Header
+110 
+Custom27
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("T_CTL_END")
+N/A
+Invoice Header
+111
+Custom28
+Y
+ FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PARCEL_ID")
+N/A
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("TOT_DUE").
+ 
+NA
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 1
+ NA
+NA
+NA
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+Case
+:
+IF IncludeSCAN_EXCL_NOTDUE
+AND
+SCAN_EXCL_NOTDUE=””
+Then
+DataRow
+("SCAN_EXCL_NOTDUE").ToString.Substring(7, 4).Trim)
+ELSE
+DataRow
+("BILL_DATE").ToString.Trim, 4))
+NA
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+NA
+MunisV2_Invoices_UB_XML_v2
+‘WTR-’&
+DataRow
+("H_ACCTNO")
+NA
+Customer Record
+602
+CustomerName
+Y
+TRUE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NAME1").
+NA
+Customer Record
+ 
+CustomerName2
+ 
+ 
+ 
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_NAME2").
+ 
+ 
+61
+Address1
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ADDR1").
+NA
+Customer Record
+62
+Address2
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ADDR2").
+NA
+Customer Record
+63
+City
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_CTY").
+NA
+Customer Record
+64
+State
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ST").
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CUST_ZIP").
+NA
+Customer Record
+ 
+DisplayAccountNumber
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+‘WTR-’ +
+DataRow
+("H_ACCTNO")
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+ NA
+Set to ‘ID’ by IC
+NA
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SERV_DESC").
+NA
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_READ_DATE").
+NA
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_READ_DATE").
+NA
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("READ_CODE").
+NA
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CURR_READ").
+NA
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("PREV_READ").
+NA
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("FACT_ACT_USG").
+NA
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("MTR_NO").
+NA
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("NUM_UNITS”).
+NA
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("SERV_CHARGE").
+NA
+Invoice Detail
+208
+CustomField11
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("OLD_ACT_USG").
+NA
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("RATE_DESC").
+NA
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("RATE_ADJ_AMT").
+NA
+Invoice Detail
+211
+CustomField14
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("CONS_AMT").
+NA
+Invoice Detail
+347
+BillerInvoiceNumber
+Y
+FALSE
+NA
+MunisV2_Invoices_UB_XML_v2
+DataRow
+("BILL_NO").
+NA
+Invoice Header
+Utility: AcctNo-CustomerID (Reversible) + 42 + BF
+Logic is completly the same as: 
+StratusInvoiceFileTypeDesc:
+ IF_MunisV2 UB XML (File Type ID: 561) 
+Except for: 
+Account Number
+: Account number can be either CustomerID-AccoutNO OR AccountNO-CustomerID are supported (Depending on biller option 50) (no prefix)
+If Option 50 = true will be CustomerID first, if false will be AccountNO first. 
+USE ACCOUNTNUMBER-CUSTOMERID FORMAT UNLESS OTHERWISE NEEDED
+Display Account Number
+: Same as account number
+Duplicates
+: the copyto field (used if the bill is being sent to multiple places) will put the bill in multiple times in the file. This class can handle those duplicates (any duplicate after first is skipped)
+Invoice Number
+: JUST BILL_NO with no prefix
+TotalAmountDue
+: Will display the most recent bill amount instead of the total account balance (that will be displayed in balance due) this way the user can see their most recent bill charge + account balance in same place
+InvoiceTypeID
+: 42
+This file inherits from the same logic as XML Water: Balance Forward. Only differences are specified below. Information on all other fields can be found under the XML Water: Balance Forward section.
+File Format Name:
+ IF_Tyler Munis - UB - Real Time Integration - Balance Foward 
+(
+even though real time is in name can be used for batch integration)
+How to run report
+: (These are instructions on one instance of the report and not necessarily the way that works best with the biller’s setup)
+File Summary/Purpose:
+File Extension:
+.XML
+File Naming Convention:
+InvoiceTypeID :
+42 (Utility, this could probably be used for water as well if invoice type id is 42)
+File Delimiter:
+ NA
+Code Repository:
+ StratusWebServices
+FileName/ClassName:
+ MunisV2_Invoices_UB_XML (NOT v2 but inherits v2 and overrides)
+FileTypeID: 
+780
+Corresponding Adjustment File
+: If Account number in AccountNumber-CustomerID Format: 
+IF_Munis UB Cumulative Adjustment v3 No PreFix - PropertyID + CustomerNum FileTypeID 262
+IF_Munis Cumulative v19 - Excel Grand Total PropertyID_CustomerNum - No Acct Prefix FileTypeID 260
+Sample File:
+Variables:
+IncludeCustomerNo = True
+BalanceDue AmountDueMode = TOTDUE
+TotDue AmountDueMode = CurrCharges
+ScanExcludingNotDue = True
+InvoiceType - 42
+Assumptions
+: 
+Since invoicenumber is set to Bill_NO - bill number does not repeat across different invoice types
+Since account number is H_ACCTNO-CustomerID (or reverse) (no prefix) - assumes that account numbers don’t overlap between billing groups, since there is no prefix
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Partner Field Format
+Creation Logic/Conditions
+Partner Field Character Limit
+Record Type
+10
+InvoiceNumber
+Y
+T
+Bill_No
+MunisV2_Invoices_UB_XML
+DataRow
+NA
+InvoiceHeader
+93
+BalanceDue
+Y
+N
+Curr_Charges
+Curr_Charges
+NA
+Invoice Header
+252
+InvoiceTypeId
+N
+T
+ H_ACCTNO-CUST_N
+NA
+NA
+Set by IC - 42
+NA
+Invoice Header
+59
+AccountNumber
+Y
+T
+ H_ACCTNO-CUST_N
+MunisV2_Invoices_UB_XML
+DataRow
+If option 50 is true: It will be H_ACCTNO-CUSTNO
+If option 50 is not set  false will be: CUSTNO-H_ACCTNO
+NA
+Customer Record
+ 373
+DisplayAccountNumber
+Y
+F
+ H_ACCTNO-CUST_N
+MunisV2_Invoices_UB_XML
+DataRow
+If option 50 is true: It will be H_ACCTNO-CUSTNO
+If option 50 is not set  false will be: CUSTNO-H_ACCTNO
+NA
+Customer Record
+Utility: AcctNo-CustomerID (Reversible) + 42 + 
+OB
+Utility: AcctNo-CustomerID (Reversible) + 42 + OB
+Logic is completly the same as: 
+StratusInvoiceFileTypeDesc:
+ IF_MunisV2 UB XML (File Type ID: 561)
+Except for: 
+Account Number
+: Account number can be either CustomerID-AccoutNO OR AccountNO-CustomerID are supported (Depending on biller option 50) (no prefix)
+If Option 50 = true will be CustomerID first, if false will be AccountNO first. 
+USE ACCOUNTNUMBER-CUSTOMERID FORMAT UNLESS OTHERWISE NEEDED
+Display Account Number
+: Same as account number
+Duplicates
+: the copyto field (used if the bill is being sent to multiple places) will put the bill in multiple times in the file. This class can handle those duplicates (any duplicate after first is skipped)
+Invoice Number
+: JUST BILL_NO with no prefix
+TotalAmountDue
+: Will display the most recent bill amount instead of the total account balance (Curr_Charges)
+Balance Due
+: will be set to Curr_Charges for open billing
+InvoiceTypeID
+: 42
+This file inherits from the same logic as XML Water: Balance Forward. Only differences are specified below. Information on all other fields can be found under the XML Water: Balance Forward section.
+File Format Name: 
+IF_Tyler Munis - UB CURR_CHARGES
+How to run report
+: (These are instructions on one instance of the report and not necessarily the way that works best with the biller’s setup)
+File Summary/Purpose:
+File Extension:
+.XML
+File Naming Convention:
+InvoiceTypeID :
+42 (Utility, this could probably be used for water as well if invoice type id is 42)
+File Delimiter:
+ NA
+Code Repository:
+ StratusWebServices
+FileName/ClassName:
+ MunisV2_Invoices_UB_XML (NOT v2 but inherits v2 and overrides)
+FileTypeID: 
+731
+Corresponding Adjustment File
+: If Account number in AccountNumber-CustomerID Format: 
+IF_Munis UB Cumulative Adjustment v3 No PreFix - PropertyID + CustomerNum FileTypeID 262
+IF_Munis Cumulative v19 - Excel Grand Total PropertyID_CustomerNum - No Acct Prefix FileTypeID 260
+Sample File:
+IncludeCustomerNo = True
+BalanceDue AmountDueMode = TOTDUE
+TotDue AmountDueMode = CurrCharges
+ScanExcludingNotDue = True
+InvoiceType - 42
+Assumptions
+: 
+Since invoicenumber is set to Bill_NO - bill number does not repeat across different invoice types
+Since account number is H_ACCTNO-CustomerID (or reverse) (no prefix) - assumes that account numbers don’t overlap between billing groups, since there is no prefix
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Partner Field Format
+Creation Logic/Conditions
+Partner Field Character Limit
+Record Type
+10
+InvoiceNumber
+Y
+T
+Bill_No
+MunisV2_Invoices_UB_XML
+DataRow
+NA
+InvoiceHeader
+13
+TotalAmountDue
+Y
+T
+CURR_CHARGES
+CURR_CHARGES
+38
+Custom1
+Y
+T
+CUST_NO
+DataRow
+InvoiceHeader
+111
+Custom28
+Y
+T
+ACCT_CO
+DataRow
+InvoiceHeader
+252
+InvoiceTypeId
+N
+T
+ H_ACCTNO-CUST_N
+42
+Invoice Header
+59
+AccountNumber
+Y
+T
+ H_ACCTNO-CUST_N
+MunisV2_Invoices_UB_XML
+DataRow
+If option 50 is true: It will be H_ACCTNO-CUSTNO
+If option 50 is not set  false will be: CUSTNO-H_ACCTNO
+NA
+Customer Record
+93
+BalanceDue
+Y
+N
+CURR_CHAGES
+CURR_CHARGES
+ 373
+DisplayAccountNumber
+Y
+F
+ H_ACCTNO-CUST_N
+MunisV2_Invoices_UB_XML
+DataRow
+If option 50 is true: It will be H_ACCTNO-CUSTNO
+If option 50 is not set  false will be: CUSTNO-H_ACCTNO
+NA
+Customer Record
+Delinquent (City of Ruston BID 3379): 
+Key File Type Features
+Invoice Type: Utility (42)
+Account Number
+: Account number can be either CustomerID-AccoutNO OR AccountNO-CustomerID are supported (Depending on biller option 50) (no prefix)
+If Option 50 = true will be CustomerID first, if false will be AccountNO first. 
+USE ACCOUNTNUMBER-CUSTOMERID FORMAT UNLESS OTHERWISE NEEDED
+City of Ruston has Option 50 = true so their account numbers will be CustomerID-AccountNO
+Invoice Number
+: DELQ-{BILL_NO}
+These delinquent need a unique DELQ FTP folder for processing
+File Format Name:
+File Summary/Purpose
+File Extension: 
+.txt
+File Naming Convention:
+InvoiceTypeID: 
+Utility
+File Delimiter:
+ NA
+Code Repository:
+ StratusWebServices
+FileName/ClassName:
+ 
+FileTypeID:
+Sample File:
+Known Billers with this file type enabled :
+3379
+Class Constants:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Creation Logic/Conditions
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+N/A
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+N/A
+N/A
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+N/A
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+N/A
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+N/A
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+N/A
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC to generate - Always 'N'
+N/A
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+N/A
+N/A
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+'DELQ-'
++ 
+DataRow
+("LAST_BILL")
+N/A
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+N/A
+DataRow
+("LAST_BILL_DATE")
+N/A
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DataRow
+("SHUTOFF_DATE")
+N/A
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+N/A
+DataRow
+("TOT_DUE_AMT")
+N/A
+Invoice Header
+26
+PONumber
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+38
+Custom1
+Y
+FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+39
+Custom2
+Y
+FALSE
+N/A
+DataRow
+("LOC_NUM")
+N/A
+Invoice Header
+40
+Custom3
+Y
+FALSE
+N/A
+DataRow
+("LOC_STREET")
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+N/A
+DataRow
+("LOC_CITY")
+N/A
+Invoice Header
+ 42
+Custom5
+Y
+ FALSE
+N/A
+DataRow
+("LOC_STATE")
+N/A
+Invoice Header
+ 43
+Custom6
+Y
+ FALSE
+N/A
+DataRow
+("LOC_ZIP")
+N/A
+Invoice Header
+ 44
+Custom7
+Y
+ FALSE
+N/A
+DataRow
+("LOC_FMT")
+N/A
+Invoice Header
+ 45
+Custom8
+Y
+ FALSE
+N/A
+DataRow
+("PARCEL_NUMBER")
+N/A
+Invoice Header
+ 46
+Custom9
+Y
+ FALSE
+N/A
+DataRow
+("INT_DUE_AMT")
+N/A
+Invoice Header
+47
+Custom10
+Y
+ FALSE
+N/A
+DataRow
+("PASTDUE_MINUS_LATE")
+N/A
+Invoice Header
+ 94
+Custom11
+Y
+ FALSE
+N/A
+DataRow
+("TOT_DUE_AMT")
+N/A
+Invoice Header
+95 
+Custom12
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+96 
+Custom13
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+97 
+Custom14
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+98 
+Custom15
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+99 
+Custom16
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+100 
+Custom17
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+101 
+Custom18
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+102 
+Custom19
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+103 
+Custom20
+Y
+ FALSE
+N/A
+DataRow
+("ACCOUNT_NUMBER")
+N/A
+Invoice Header
+104 
+Custom21
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+105 
+Custom22
+Y
+ FALSE
+N/A
+DataRow
+("INTEREST_DATE")
+N/A
+Invoice Header
+106 
+Custom23
+Y
+ FALSE
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+107 
+Custom24
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+108 
+Custom25
+Y
+ FALSE
+N/A
+DataRow
+("ACCOUNT_TYPE")
+N/A
+Invoice Header
+109 
+Custom26
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+110 
+Custom27
+Y
+ FALSE
+N/A
+N/A
+N/A
+Invoice Header
+111
+Custom28
+Y
+FALSE
+N/A
+DataRow
+("CUSTOMER_NUMBER")
+N/A
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+N/A
+DataRow
+("TOT_DUE_AMT")
+N/A
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 1
+N/A
+N/A
+N/A
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+NA
+DataRow
+("LAST_BILL_DATE").ToString.Trim, 4))
+N/A
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+N/A
+N/A
+N/A
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+NA
+DataRow
+("CUSTOMER_NUMBER”)-
+DataRow
+("ACCOUNT_NUMBER")
+e.g. 
+Customer123-Account456
+N/A
+Customer Record
+602
+CustomerName
+Y
+TRUE
+N/A
+DataRow
+("CUST_NAME1")
+N/A
+Customer Record
+ 
+CustomerName2
+ 
+ 
+ N/A
+DataRow
+("CUST_NAME2")
+N/A
+ 
+61
+Address1
+Y
+FALSE
+N/A
+DataRow
+("CUST_ADDR1")
+N/A
+Customer Record
+62
+Address2
+Y
+FALSE
+N/A
+DataRow
+("CUST_ADDR2")
+N/A
+Customer Record
+63
+City
+Y
+FALSE
+N/A
+DataRow
+("CUST_CITY")
+N/A
+Customer Record
+64
+State
+Y
+FALSE
+N/A
+DataRow
+("CUST_STATE")
+N/A
+Customer Record
+65
+Zip
+Y
+FALSE
+N/A
+DataRow
+("CUST_ZIP")
+N/A
+Customer Record
+ 
+DisplayAccountNumber
+Y
+FALSE
+DataRow
+("CUSTOMER_NO”)-
+DataRow
+("ACCOUNT_NUMBER")
+e.g. 
+Customer123-Account456
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+ N/A
+Set to ‘ID’ by IC
+N/A
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+208
+CustomField11
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+211
+CustomField14
+Y
+FALSE
+NA
+N/A
+N/A
+Invoice Detail
+347
+BillerInvoiceNumber
+Y
+FALSE
+NA
+DataRow
+("LAST_BILL")
+N/A
+Invoice Header
+Text Invoice File Mapping
+Utility: AccountNumber-CustomerID + 42 + Balance Forward
+Utility: AccountNumber-CustomerID + 42 + Balance Forward
+Summary/Purpose:
+ This text file is designed for Munis UB Classic billers requiring the AccountNumber field to be formatted as 'AccountNumber-CustomerID'.
+File Type:
+ IF_Munis UB 42 (New filename TBD)
+File Extension
+: .TXT
+InvoiceTypeID
+: 42
+Corresponding Adjustment File Type
+: IF_Munis v19 - Cumulative - Excel Grand Total PropertyID_CustomerNum - No Acct Prefix
+Sample Invoice file
+:
+Sample Adjustment file
+:
+File Transfer Frequency
+: Weekly, Monthly
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Class
+Logic is Found In
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+ N
+TRUE
+N/A - IC to generate - Always FH
+clsIntegratorTools
+ N/A
+ N/A
+File Header
+2
+BillerGuid
+ N
+TRUE
+N/A - IC to generate
+clsIntegratorTool
+ N/A
+ N/A
+File Header
+4
+FileCreationDate
+ N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+Current Date
+N/A
+N/A
+File Header
+5
+InvoiceCount
+ N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+ N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+File Header
+7
+RowType
+ N
+TRUE
+N/A - IC to generate - Always IH
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+8
+RecordType
+ N
+TRUE
+N/A - IC to generate - Always N
+clsIntegratorTools
+N/A
+N/A
+Invoice Header
+10
+InvoiceNumber
+ Y
+TRUE
+ N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+11
+InvoiceDate
+ Y
+TRUE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+12
+InvoiceDueDate
+ Y
+TRUE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+13
+TotalAmountDue
+ Y
+TRUE
+Bill Amt - Current Charges
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+38
+Custom1
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+39
+Custom2
+ Y
+FALSE
+AccountNumber
+MunisV2_Invoices_UB.vb
+position - 623, characters - 6
+N/A
+Invoice Header
+40
+Custom3
+Y
+FALSE
+CustomerID
+MunisV2_Invoices_UB.vb
+position - 152, characters - 5
+N/A
+Invoice Header
+41
+Custom4
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+Position - 389, Characters - 40
+N/A
+Invoice Header
+45
+Custom8
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+47
+Custom10
+Y
+FALSE
+ N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Bill Amt - Current Charges
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+94
+Custom11
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+95
+Custom12
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+98
+Custom15
+Y
+FALSE
+Present Read Date 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+99
+Custom16
+Y
+FALSE
+Present Read Date 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+100
+Custom17
+Y
+FALSE
+Present Read Date 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+101
+Custom18
+Y
+FALSE
+Present Read Date 4
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+102
+Custom19
+Y
+FALSE
+Previous Read Date 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+103
+Custom20
+Y
+FALSE
+Previous Read Date 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+104
+Custom21
+Y
+FALSE
+Previous Read Date 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+105
+Custom22
+Y
+FALSE
+Previous Read Date 4
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+106
+Custom23
+Y
+FALSE
+Present Meter Reading 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+107
+Custom24
+Y
+FALSE
+Present Meter Reading 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+108
+Custom25
+Y
+FALSE
+Read Type 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+109
+Custom26
+Y
+FALSE
+Read Type 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+110
+Custom27
+Y
+FALSE
+Read Type 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+112
+Custom29
+Y
+FALSE
+Usage, CCF 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+113
+Custom30
+Y
+FALSE
+Usage, CCF 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+114
+Custom31
+Y
+FALSE
+Usage, CCF 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+115
+Custom32
+Y
+FALSE
+Usage, CCF 4
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+116
+Custom33
+Y
+FALSE
+Charge 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+117
+Custom34
+Y
+FALSE
+Charge 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+118
+Custom35
+Y
+FALSE
+Charge 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+119
+Custom36
+Y
+FALSE
+Charge 4
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+120
+Custom37
+Y
+FALSE
+Last Payment Amount
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+121
+Custom38
+Y
+FALSE
+Last Payment Date
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+122
+Custom39
+Y
+FALSE
+Past Due Amount
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+123
+Custom40
+Y
+FALSE
+Past Due Interest
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+124
+Custom41
+Y
+FALSE
+Current Charges
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+125
+Custom42
+Y
+FALSE
+Amount Due
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+126
+Custom43
+Y
+FALSE
+Previous Meter Reading 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+127
+Custom44
+Y
+FALSE
+Previous Meter Reading 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+128
+Custom45
+Y
+FALSE
+Interest Due
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+129
+Custom46
+Y
+FALSE
+Amount Due Last Bill
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+130
+Custom47
+Y
+FALSE
+Total Due By
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+345
+BillerInstallmentNumber
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+346
+BillerBillYear
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+347
+BillerInvoiceNumber
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+375
+Active
+ N
+FALSE
+ N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Header
+58
+RowType
+ N
+TRUE
+N/A - IC to generate - Always CR
+clsIntegratorTools
+N/A
+N/A
+Customer Record
+59
+AccountNumber
+ Y
+TRUE
+Custom2-Custom3
+MunisV2_Invoices_UB.vb
+position - 623-position - 152
+N/A
+Customer Record
+60
+CustomerName
+ Y
+TRUE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+61
+Address1
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+62
+Address2
+Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+Position - 471, Characters - 45
+N/A
+Customer Record
+63
+City
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+64
+State
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+65
+Zip
+ Y
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+69
+RegistrationValue
+ N
+FALSE
+N/A
+Hardcoded ‘NA’
+N/A
+N/A
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+N/A
+Position - 197, characters - 40
+N/A
+Customer Record
+373
+DisplayAccountNumber
+N
+FALSE
+Custom2Custom3 (Without special characters)
+MunisV2_Invoices_UB.vb
+Custom2= position - 623
+Custom3=
+ 
+position - 152
+N/A
+Customer Record
+409
+Active
+N
+FALSE
+N/A
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Customer Record
+70
+RowType
+N
+TRUE
+N/A
+clsIntegratorTools
+N/A
+N/A
+Invoice Detail
+72
+Description
+ Y
+FALSE
+Bill Header
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+83
+CustomField1
+ Y
+FALSE
+Service Code
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+84
+CustomField2
+ Y
+FALSE
+Service Description - Long
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+85
+CustomField3
+ Y
+FALSE
+Meter Manufacturer Code
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+86
+CustomField4
+ Y
+FALSE
+Meter Number
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+88
+CustomField6
+ Y
+FALSE
+Service Factor
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+89
+CustomField7
+ Y
+FALSE
+Previous Read Date
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+90
+CustomField8
+ Y
+FALSE
+Previous Reading
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+92
+CustomField10
+ Y
+FALSE
+Current Read Date
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+208
+CustomField11
+ Y
+FALSE
+Current Reading
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+209
+CustomField12
+ Y
+FALSE
+Current Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+210
+CustomField13
+ Y
+FALSE
+Usage Days
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+211
+CustomField14
+ Y
+FALSE
+Service Charge - Actual
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+212
+CustomField15
+ Y
+FALSE
+Service User - Defined 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+213
+CustomField16
+ Y
+FALSE
+Service User - Defined 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+214
+CustomField17
+ Y
+FALSE
+Service User - Defined 3
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+215
+CustomField18
+ Y
+FALSE
+Service User - Defined 4
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+216
+CustomField19
+ Y
+FALSE
+Service User - Defined 5
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+217
+CustomField20
+ Y
+FALSE
+Service User - Defined 6
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+218
+CustomField21
+ Y
+FALSE
+Service User - Defined 7
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+219
+CustomField22
+ Y
+FALSE
+Service User - Defined 8
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+220
+CustomField23
+ Y
+FALSE
+Service User - Defined 9
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+221
+CustomField24
+ Y
+FALSE
+Service User - Defined 10
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+223
+CustomField26
+ Y
+FALSE
+Service Description - Short
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+224
+CustomField27
+ Y
+FALSE
+Actual Serv Desc-Short-PLUS Charge if Budget
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+225
+CustomField28
+ Y
+FALSE
+Actual Serv Desc-Long-PLUS Charge if Budget
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+226
+CustomField29
+ Y
+FALSE
+Charge Category
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+227
+CustomField30
+ Y
+FALSE
+Remote ID
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+228
+CustomField31
+ Y
+FALSE
+Dials
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+229
+CustomField32
+ Y
+FALSE
+Read Code
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+230
+CustomField33
+ Y
+FALSE
+Service Type
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+231
+CustomField34
+ Y
+FALSE
+Summary Code
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+232
+CustomField35
+ Y
+FALSE
+Fuel Adjustment Factor
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+233
+CustomField36
+ Y
+FALSE
+Tax Credit Factor
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+234
+CustomField37
+ Y
+FALSE
+Current Factored Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+235
+CustomField38
+ Y
+FALSE
+Replaced Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+236
+CustomField39
+ Y
+FALSE
+Factored Replaced Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+237
+CustomField40
+ Y
+FALSE
+Total Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+238
+CustomField41
+ Y
+FALSE
+Total Factored Usage
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+239
+CustomField42
+ Y
+FALSE
+Service Days
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+241
+CustomField44
+ Y
+FALSE
+# of Units/Quantity
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+242
+CustomField45
+ Y
+FALSE
+Unit Price
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+243
+CustomField46
+ Y
+FALSE
+Remarks 1
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+244
+CustomField47
+ Y
+FALSE
+Remarks 2
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+245
+CustomField48
+ Y
+FALSE
+Tier Charge Base Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+246
+CustomField49
+ Y
+FALSE
+Actual Serv Charge -- Budget
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+247
+CustomField50
+ Y
+FALSE
+Service Charge (DUE)
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+255
+CustomField51
+ Y
+FALSE
+Service Interest Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+256
+CustomField52
+ Y
+FALSE
+Service Past Due
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+257
+CustomField53
+ Y
+FALSE
+Service Penalties Past Due
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+258
+CustomField54
+ Y
+FALSE
+Service Total Due
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+259
+CustomField55
+ Y
+FALSE
+Tier 1 Charge Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+260
+CustomField56
+ Y
+FALSE
+Tier 2 Charge Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+261
+CustomField57
+ Y
+FALSE
+Tier 3 Charge Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+262
+CustomField58
+ Y
+FALSE
+Tier 4 Charge Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+263
+CustomField59
+ Y
+FALSE
+Budget Serv Code
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+264
+CustomField60
+ Y
+FALSE
+Budget Serv Desc - Short
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+265
+CustomField61
+ Y
+FALSE
+Budget Serv Desc - Long
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+266
+CustomField62
+ Y
+FALSE
+Budget Serv Charge
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+267
+CustomField63
+ Y
+FALSE
+Settlement Var. Amt
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+268
+CustomField64
+ Y
+FALSE
+Budget Plan Balance
+MunisV2_Invoices_UB.vb
+N/A
+N/A
+Invoice Detail
+Adjustment / Daily Balance Files
+Details Receivable
+:  AcctNo-CustID + Most Invoice Types + BF
+Summary
+: Not invoice type specific, PropertyID and AccountNumber are used interchangeably. Account Number must be in AcctNo-CustID format. It seems the code can accommodate all invoice types, invoice type is determined by the account prefix, if there is none it is set to -1 which means it’s not used?
+FileName
+: IF_Munis UB Cumulative Adjustment v3 No PreFix - PropertyID + CustomerNum
+Details Receivable:  AcctNo-CustID + Most Invoice Types + BF
+How to run Report:
+ 
+File Extension:
+.txt
+File Naming Convention:
+File Delimiter: NA
+Code Repository
+: StratusWebServices
+Inherits: 
+MunisV2_Adjustments_10_5_Consolidated
+FileID
+:262
+InvoiceType
+: NA
+Sample File: 
+Variables
+:
+AppendInvTypeToAccount:
+ False
+CustomerNumberFullField:
+ True
+PropertyIDType 
+= PropertyID_CustomerNum
+FileSpecID
+FieldName
+DataType
+FieldDesc
+Required
+Partner Field
+Creation Logic/Conditions
+305
+RowType
+varchar(2)
+Always AH
+True
+NA
+Set by IC
+306
+BillerGuid
+varchar(36)
+Biller Guid assigned by IC
+True
+NA
+Set by IC
+307
+ThirdPartyFileReference
+varchar(50)
+FileID assigned by the Biller. Used for tracking purposes
+False
+NA
+Set by IC
+308
+FileCreationDate
+date
+Date/Time the file was created by the Biller. Used for tracking purposes
+True
+NA
+Set by IC
+309
+AdjustmentCount
+int
+Total number of payments included in payment file
+True
+NA
+Set by IC
+310
+TotalAdjustmentAmount
+money
+Sum of all the payments in the file
+True
+NA
+Set by IC
+311
+RowType
+varchar(2)
+Always AR
+True
+NA
+Set by IC - Always AR
+312
+InvoiceNumber
+varchar(50)
+Invoice Reference Number
+False
+NA
+NA
+313
+AccountNumber
+varchar(30)
+Account number of your customer
+True
+AcctNo - CustID
+The file refers to it as PropertyID but this is interchangable with account number
+If one is null or empty will fail
+314
+AdjustmentAmount
+money
+Total amount of the adjustment for this invoice
+True
+TotalUnpaid
+Rounds to two decimal
+316
+AdjustmentTypeID
+int
+1=Fixed Amount 2=Balance Differential
+True
+2 = Balance Differential
+354
+MatchMethodID
+int
+1=Oldest,2=Newest
+False
+2 = Newest
+370
+InvoiceTypeID
+int
+Invoice Type
+False
+AccountNumber
+Invoice TypeID is determined based of the prefix of the account number:
+R=8
+P=7
+M=9
+B=10
+Else (utility  water)
+-1
+Details Receivable:  AcctNo-CustID + Most Invoice Types + BF(New FileType for City of Aspen)
+How to run Report:
+ 
+File Extension:
+.txt
+File Naming Convention:
+File Delimiter: NA
+Code Repository
+: StratusWebServices
+Inherits: 
+MunisV2_Adjustments_10_5_Consolidated
+FileID
+:212
+InvoiceType
+: NA
+Sample File: 
+Variable
+AppendInvTypeToAccount:
+ False
+CustomerNumberFullField:
+ True
+PropertyIDType 
+= PropertyID_CustomerNum
+FileSpecID
+FieldName
+DataType
+FieldDesc
+Required
+Partner Field
+Partner Field Position
+Creation Logic/Conditions
+305
+RowType
+varchar(2)
+Always AH
+True
+NA
+Set by IC
+306
+BillerGuid
+varchar(36)
+Biller Guid assigned by IC
+True
+NA
+Set by IC
+307
+ThirdPartyFileReference
+varchar(50)
+FileID assigned by the Biller. Used for tracking purposes
+False
+NA
+Set by IC
+308
+FileCreationDate
+date
+Date/Time the file was created by the Biller. Used for tracking purposes
+True
+NA
+Set by IC
+309
+AdjustmentCount
+int
+Total number of payments included in payment file
+True
+NA
+Set by IC
+310
+TotalAdjustmentAmount
+money
+Sum of all the payments in the file
+True
+NA
+Set by IC
+311
+RowType
+varchar(2)
+Always AR
+True
+NA
+Set by IC - Always AR
+312
+InvoiceNumber
+varchar(50)
+Invoice Reference Number
+False
+NA
+NA
+313
+AccountNumber
+varchar(30)
+Account number of your customer
+True
+Property Code
+The file refers to it as PropertyCode but this is interchangable with account number
+Line 02
+Column 20-33
+If one is null or empty will fail
+314
+AdjustmentAmount
+money
+Total amount of the adjustment for this invoice
+True
+Adjusted Bill
+Balance after adjustments
+Line 01
+Column 124-138
+All Numerical value below are right justified
+Rounds to two decimal
+316
+AdjustmentTypeID
+int
+1=Fixed Amount 2=Balance Differential
+True
+2 = Balance Differential
+354
+MatchMethodID
+int
+1=Oldest,2=Newest
+False
+2 = Newest
+Excel: AcctNo-CustID + No Specified Invoice Type + BF
+Summary/Purpose: 
+The Excel file is from the newest versions of Munis. Unsure of exact version number but I think 2018 / 2019 or higher
+FileName
+: IF_Munis Cumulative v19 - Excel Grand Total PropertyID_CustomerNum - No Acct Prefix
+Excel: AcctNo-CustID + No Specified Invoice Type + BF
+How to run Report:
+ 
+NO INSTRUCTIONS AVAILABLE 
+File Naming Convention:
+File Delimiter: NA
+File extension: 
+.xlsx
+Code Repository
+: StratusWebServices
+Inherits: 
+MunisV2_Adjustments_18
+FileID
+: 260
+InvoiceType
+: NA
+Sample File:
+Variables
+:
+INCLUDEACCOUNTPREFIX 
+= FALSE
+FILEFORMAT
+: XLSX
+CONTAINSHEADERS 
+= TRUE
+FileSpecID
+FieldName
+DataType
+FieldDesc
+Required
+Partner Field
+Creation Logic/Conditions
+305
+RowType
+varchar(2)
+Always AH
+True
+NA
+Set by IC
+306
+BillerGuid
+varchar(36)
+Biller Guid assigned by IC
+True
+NA
+Set by IC
+307
+ThirdPartyFileReference
+varchar(50)
+FileID assigned by the Biller. Used for tracking purposes
+False
+NA
+Set by IC
+308
+FileCreationDate
+date
+Date/Time the file was created by the Biller. Used for tracking purposes
+True
+NA
+Set by ICSet by IC
+309
+AdjustmentCount
+int
+Total number of payments included in payment file
+True
+NA
+Set by IC
+310
+TotalAdjustmentAmount
+money
+Sum of all the payments in the file
+True
+NA
+Set by IC
+311
+RowType
+varchar(2)
+Always AR
+True
+NA
+Set by IC - Always AR
+312
+InvoiceNumber
+varchar(50)
+Invoice Reference Number
+False
+NA
+313
+AccountNumber
+varchar(30)
+Account number of your customer
+True
+PropertyID- CustID
+The file refers to it as PropertyID but this is interchangable with Account Number
+If either of these properties are not found will fail.
+In the file AcctNo is labelled as PropertyID
+314
+AdjustmentAmount
+money
+Total amount of the adjustment for this invoice
+True
+Sums each adjustment amount row on the account for a total
+316
+AdjustmentTypeID
+int
+1=Fixed Amount 2=Balance Differential
+True
+NA
+2 = Balance Differential
+354
+MatchMethodID
+int
+1=Oldest,2=Newest
+False
+NA
+2 = Newest
+370
+InvoiceTypeID
+int
+Invoice Type
+False
+NA - not set
+Excel (Open Billing): CustomerNumber-PropertyID + No Specified Invoice Type + BF
+Excel (Open Billing): CustomerNumber-PropertyID + No Specified Invoice Type + BF
+Summary/Purpose: 
+Convert .XLSX files to .BAF while making an adjustment record for every row in the Excel file. 
+This file conversion matches by 
+account number 
+and the 
+invoice number
+. 
+The Account Number is constructed using the Customer Number and PropertyID joined by a dash. 
+The 
+Customer Number 
+is pulled in a column named “Customer Number” in the Excel file.
+The 
+Property
+ 
+ID
+ is pulled in a column named “Property ID” in the Excel file.
+AccountNumber = CustomerNumber-PropertyID 
+The Invoice Number is set by using the column value “Bill Number” in the Excel file.
+InvoiceNumber = column("Bill Number")
+How to export: 
+FTP METHOD: 
+1. Setup the file type in FTP Management with the File Extension search pattern. 
+2. Drop the desired file in an ICFTPROOT folder that has a FTP Import Setting setup to pick up Adjustments. 
+3. The IC processes will pick it up after 15-30 minutes, and convert the file to a BAF. 
+
+STRATUS MANAGEMENT:
+1. Setup a Stratus task with the file type, file extension search pattern, and the biller's folder where we pick up adjustments.
+2. Push the tasks and Save. 
+3. The biller can now send those files to convert to a BAF.
+
+WEB SERVICE METHOD: N/A
+File Type Information:
+File Type Name: IF_Munis Adjustment v19 - Excel - Open Billing - CustomerNum_PropertyID - No Acct Prefix
+File Naming Convention: Biller file specific.
+File Delimiter: Biller file specific. 
+Converts File Extension: .xlsx
+Output File Extension: .baf
+Code Repository: StratusWebServices
+Inherits: MunisV2_Adjustments_19_Excel_Cumulative_GrandTotal_wCustomerID
+StratusAdjustmentFileID: 313
+Sample File:
+Variables
+:
+INCLUDEACCOUNTPREFIX = FALSE
+FILEFORMAT: XLSX
+CONTAINSHEADERS = TRUE
+ACCOUNTNUMBERFORMATSETTING = Integrations.Software.MunisV2.MunisV2_Adjustments_Excel_Base.AccountNumberFormat.CustomerNumber_PropertyID
+FileSpecID
+FieldName
+DataType
+FieldDesc
+Required
+Partner Field
+Creation Logic/Conditions
+305
+RowType
+varchar(2)
+Always AH
+True
+NA
+Set by IC
+306
+BillerGuid
+varchar(36)
+Biller Guid assigned by IC
+True
+NA
+Set by IC
+307
+ThirdPartyFileReference
+varchar(50)
+FileID assigned by the Biller. Used for tracking purposes
+False
+NA
+Set by IC
+308
+FileCreationDate
+date
+Date/Time the file was created by the Biller. Used for tracking purposes
+True
+NA
+Set by IC
+309
+AdjustmentCount
+int
+Total number of payments included in payment file
+True
+NA
+Set by IC
+310
+TotalAdjustmentAmount
+money
+Sum of all the payments in the file
+True
+NA
+Set by IC
+311
+RowType
+varchar(2)
+Always AR
+True
+NA
+Set by IC - Always AR
+312
+InvoiceNumber
+varchar(50)
+Invoice Reference Number
+False
+“Bill Number” 
+Set by using the column’s value named “Bill Number” in the row.
+313
+AccountNumber
+varchar(30)
+Account number of your customer
+True
+Uses the 
+AcountNumberFormatSetting
+ to set the account number to be created using the 
+CustomerNumber-PropertyID
+.
+The Account Number is set using the CustomerNumber and PropertyID. The 
+CustomerNumber
+ is set by column named “Customer Number” in the Excel file. The 
+PropertyID
+ is set by the column named “Property ID" in the Excel file. These two values are then concatenated by a dash. 
+Example:
+CustomerNumber-PropertyID
+12345-1234567
+XXXXX-XXXXXXX
+314
+AdjustmentAmount
+money
+Total amount of the adjustment for this invoice
+True
+“Total Receivable"
+Set by using the column’s value named “Total Receivable" in the row. 
+316
+AdjustmentTypeID
+int
+1=Fixed Amount 2=Balance Differential
+True
+NA
+2 = Balance Differential
+354
+MatchMethodID
+int
+1=Oldest,2=Newest
+False
+NA
+2 = Newest
+370
+InvoiceTypeID
+int
+Invoice Type
+False
+NA - not set
+DetailsReceivable: WTR-ACCOUNTNO + 1 + BF 
+DetailsReceivable: WTR-ACCOUNTNO + 1 + BF
+File Summary/Purpose:
+File Extension:
+.txt
+File Naming Convention:
+How to Run Report:
+File Delimiter: NA
+Code Repository
+: StratusWebServices
+FileName/ClassName:
+ MunisV2_Adjustments_18_UB_Cumulative
+Inherits: 
+MunisV2_Adjustments_18
+FileID
+:223
+InvoiceType
+: NA
+StratusAdjsutmentFileTypeDesc:
+ IF_Munis Cumulative Adjustment v18 - Water
+Sample File:
+Last Date used: 2022-06-16 05:40:40.633
+BID1064
+Key File Type Features:
+Cumulative Aggregation of Adjustment Amount
+InvoiceType: Water Exclusive
+Variables
+:
+AppendInvTypeToAccount=TRUE
+AccountNumberType= PropertyID
+Known Billers with this file type enabled :
+1064,1131,130,1074,1278,210,488
+Last Date used: 2022-06-16 05:40:40.633 
+by 1064
+File Mapping
+FileSpecID
+FieldName
+DataType
+FieldDesc
+Required
+Partner Field Format
+Creation Logic/Conditions
+Class Logic Location
+305
+RowType
+varchar(2)
+Always AH
+True
+NA
+NA
+NA
+306
+BillerGuid
+varchar(36)
+Biller Guid assigned by IC
+True
+NA
+NA
+NA
+307
+ThirdPartyFileReference
+varchar(50)
+FileID assigned by the Biller. Used for tracking purposes
+False
+NA
+NA
+NA
+308
+FileCreationDate
+date
+Date/Time the file was created by the Biller. Used for tracking purposes
+True
+NA
+NA
+NA
+309
+AdjustmentCount
+int
+Total number of payments included in payment file
+True
+NA
+NA
+NA
+310
+TotalAdjustmentAmount
+money
+Sum of all the payments in the file
+True
+NA
+NA
+NA
+311
+RowType
+varchar(2)
+Always AR
+True
+NA
+NA
+NA
+312
+InvoiceNumber
+varchar(50)
+Invoice Reference Number
+False
+LineData
+NA
+NA
+313
+AccountNumber
+varchar(30)
+Account number of your customer
+True
+LineData
+Case 
+PropertyIDType.PropertyID
+Where 
+PropertyIDType.PropertyID
+=PropertyID = 0
+retval
+=
+LineData
+.
+Substring
+(
+19, 18
+)
+.Replace("'", "").Replace("_", "").Replace(" ", "").Replace("-", "")
+THEN
+IF 
+AppendInvTypeToAccount
+Where 
+AppendInvTypeToAccount=True
+AccountNumber=
+AccountPrefix 
+&
+retval
+WHERE 
+AccountPrefix 
+=”WTR-” (
+Constant
+)
+ELSE
+AccountNumber=
+retval
+MunisV2_Adjustments_18_UB_Cumulative
+314
+AdjustmentAmount
+money
+Total amount of the adjustment for this invoice
+True
+LineData
+Math.Round
+(CDbl(
+Right
+(
+LineData
+, 
+14
+).Trim), 2)
+Returns 14 characters starting from the right position , trimmed of whitespacce rounded to 2 decimal places
+MunisV2_Adjustments_18
+316
+AdjustmentTypeID
+int
+1=Fixed Amount 2=Balance Differential
+True
+LineData
+BalanceDifferential (2) (
+constant
+)
+MunisV2_Adjustments_18_UB_Cumulative
+341
+AdjustmentDesc
+varchar(100)
+Description for the Adjustment Entry
+False
+LineData
+"DAILY BALANCE ADJ" (
+constant
+)
+MunisV2_Adjustments_Base
+343
+AdjustmentDate
+date
+Date the adjustment was made to the account. If no data is passed we will default to the current date
+False
+LineData
+Now.ToShortDateString
+Date adjustment file is converted
+MunisV2_Adjustments_18_UB_Cumulative
+351
+BillerInstallmentNumber
+int
+Installment Number, ie: 1,2,4,5
+False
+NA
+NA
+NA
+352
+BillerBillYear
+int
+Biller Bill Year, ie: 2011, 2012, 2013
+False
+ 
+0 (
+constant
+)
+NA
+353
+BillerInvoiceNumber
+varchar(50)
+Biller Bill Number used to Locate Invoices for offline Payments and Adjustments
+False
+NANA
+NA
+NA
+354
+MatchMethodID
+int
+1=Oldest,2=Newest
+False
+ 
+Newest (1)
+ 
+370
+InvoiceTypeID
+int
+Invoice Type
+False
+NA
+Water
+ (Constant)
+ 
+Payment/Lockbox Files
+MUNIS All Invoice Types - Settled Only
+Standard Lockbox
+: All Invoice Types + Settled Only
+I think this is referred to as the Standard Lockbox File in MUNIS
+File Extension:
+.txt
+File Naming Convention:
+ "ICPayments-" & DateAndTimeForFilename & ".txt"
+PaymentTypes Exported:
+ 
+Settled Only
+InvoiceTypes Exported :
+ 
+All
+Code Repository:
+ StratusWebServices
+ClassName:
+ modMunis 
+Function
+:-PaymentExportAllInvTypes()
+StratusPaymentFileTypeDesc: 
+MUNIS All Invoice Types - Settled Only
+FileTypeID: 
+81
+Sample File:
+Key File Type Features:
+Stored Procedure Used to Pull Data:
+"selBillerPaymentsMunisAllInvTypes "
+tps.selMunisBatchPaymentDetailAllInvTypes
+Known Billers with this file type enabled (Does not include biller using a Stratus Client)
+210,329
+Payment File BreakDown
+Payment 
+Header
+H0000230768
+06302022
+1234
+0001
+HeaderLine Constant
+Batch Amount
+PaymentDate
+HeaderLine Constant
+batchCounter
+H0000
+230768
+06302022
+1234
+0001
+Payment 
+Body
+:
+60
+2022
+02094932
+0000019626
+0001
+PaymentLine Constant
+BillerBillYear
+BillerInvoiceNumber Or Custom10 or InvoiceNumber
+PaymentAmount
+batchCounter 
+60 (Only applicable for InvoiceTypes:)
+ 1, 2, 3, 15, 42
+2022
+02094932
+0000019626
+0001
+Payment File Mapping
+FileSpecID
+IC Field Name
+DataType
+Containing Class
+DataType
+Payment File Location
+Creation Logic/Conditions
+Required
+203
+InvoiceNumber
+varchar(50)
+DataRow()
+Body
+DataRow
+(
+"InvoiceNumber"
+)
+Only applicable if BillerInvoiceNumber.Length<0 And Custom10.Length<0
+PadLeft(8, "0").  A InvoiceNumber will be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+02094932
+, the extra leading 0 is added on. to make 8 total characters
+True
+204
+AccountNumber
+varchar(30)
+DataRow()
+Body
+DataRow
+(
+"AccountNumber"
+)
+True
+205
+PaymentAmount
+money
+DataRow()
+Body
+DataRow
+(
+"PaymentAmount"
+)
+PadLeft(10, "0").  A PaymentAmountwill be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+0000019626
+, the extra leading 
+00000
+ is added on. to make 8 total characters
+True
+206
+PaymentDate
+datetime
+DataRow()
+Header
+DataRow
+(
+"PaymentAmount"
+)
+True
+349
+BillerBillYear
+int
+DataRow()
+Body
+DataRow
+(
+"BillerBillYear"
+)
+PadLeft with 4 - “0”'s
+False
+350
+BillerInvoiceNumber
+varchar(50)
+DataRow()
+Body
+DataRow
+(
+"BillerInvoiceNumber"
+)
+PadLeft(8, "0").  A BillerInvoiceNumber will be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+02094932
+, the extra leading 0 is added on. to make 8 total characters
+False
+Questpoint: Utility + Settled Only
+Questpoint: Utility + Settled Only
+File Extension:
+.txt
+File Naming Convention:
+ "ICPayments-" & DateAndTimeForFilename & ".txt"
+PaymentTypes Exported:
+ 
+Settled Only
+Invoice Types (1, 2, 3, 15, 42)
+Code Repository:
+ StratusWebServices
+ClassName:
+ MunisV2_AllInv_QuestPoint_LockBox_Base
+StratusPaymentFileTypeDesc: 
+IF_Munis Utility Invoice Types - Questpoint Payment Export
+FileTypeID: 258
+Sample File:
+Variables
+:
+SettledItemsOnly:
+ True
+SplitPaymentFile
+: False (splits out file by CC and ACH if true)
+QuestPointFormat
+: True
+Key File Type Features:
+Stored Procedure Used to Pull Data:
+tps.selBillerPaymentsMunis_IF
+Known Billers with this file type enabled (Does not include biller using a Stratus Client)
+1920
+Payment File BreakDown
+Payment 
+Header
+H0000
+026466
+06292022
+12340001
+HeaderLine Constant
+Batch Amount
+PaymentDate
+HeaderLine Constant
+BatchNumber
+H0000
+026466
+06302022
+1234
+0001
+Payment 
+Body
+:
+60
+20220
+13445260
+0000025000
+6292022
+12340001
+PaymentLine Constant
+BillerBillYear
+BillerInvoiceNumber Or Custom10 or InvoiceNumber
+PaymentAmount
+PaymentDate
+BatchNumber 
+60 InvoiceTypeID Indicator
+ 1, 2, 3, 15, 42=60
+7=25
+8=20
+9=30
+10=40
+19=50
+20220
+13445260
+0000025000
+06292022
+12340001
+Payment File Mapping
+FileSpecID
+IC Field Name
+DataType
+DataType
+Payment File Location
+Creation Logic/Conditions
+Required
+203
+InvoiceNumber
+varchar(50)
+DataRow()
+Body
+DataRow
+(
+"InvoiceNumber"
+)
+Only applicable if BillerInvoiceNumber.Length<0 And Custom10.Length<0
+PadLeft(8, "0").  A InvoiceNumber will be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+02094932
+, the extra leading 0 is added on. to make 8 total characters
+True
+204
+AccountNumber
+varchar(30)
+DataRow()
+Body
+DataRow
+(
+"AccountNumber"
+)
+True
+205
+PaymentAmount
+money
+DataRow()
+Body
+DataRow
+(
+"PaymentAmount"
+)
+PadLeft(10, "0").  A PaymentAmountwill be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+0000019626
+, the extra leading 
+00000
+ is added on. to make 8 total characters
+True
+206
+PaymentDate
+datetime
+DataRow()
+Header
+DataRow
+(
+"PaymentAmount"
+)
+True
+349
+BillerBillYear
+int
+DataRow()
+Body
+DataRow
+(
+"BillerBillYear"
+)
+PadLeft with 4 - “0”'s
+False
+350
+BillerInvoiceNumber
+varchar(50)
+DataRow()
+Body
+DataRow
+(
+"BillerInvoiceNumber"
+)
+PadLeft(8, "0").  A BillerInvoiceNumber will be padded with additional zeros on its left side if it is smaller then 8 numbers in length
+E.g 
+02094932
+, the extra leading 0 is added on. to make 8 total characters
+False
+Questpoint: Utility + Settled Only + Split File
+Questpoint: Utility + Settled Only + Split File
+File Extension:
+.txt
+File Naming Convention:
+ "ICPayments-" & DateAndTimeForFilename & ".txt"
+PaymentTypes Exported:
+ 
+Settled Only
+Invoice Types (1, 2, 3, 15, 42)
+Code Repository:
+ StratusWebServices
+ClassName:
+ MunisV2_AllInv_QuestPoint_LockBox_Base
+StratusPaymentFileTypeDesc: 
+IF_Munis Utility Invoice Types - Questpoint Payment Export Split
+FileTypeID: 364
+Sample File:
+Variables:
+SettledItemsOnly: True
+SplitPaymentFile: True (splits out file by CC and ACH if true)
+QuestPointFormat: True
+Key File Type Features:
+(splits out file by CC and ACH if true)
+This is the only difference From Questpoint: Utility + Settled Only is that Payment exports are split into 2 seperate files depending on CC or ACH
+For all other details see Questpoint: Utility + Settled Only File Ino
+Known Billers with this file type enabled (Does not include biller using a Stratus Client)
+2597
+Change Log Files
+There is no Munis Specific changelog file. I do not think they have the ability to automatically import changes into their system through the batch integration. Has to be manually handled by biller if they want to update account changes. 
+Generic Changelog File
+Field Mapping
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: comma, pipe, or tab (biller can chose)
+Specification: below
+Sample File:
+SFTP File Path:
+File Transfer Frequency: Daily
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+BIF customization - Biller by Biller
+AutoPayCollectionDate
+BIF customization - Biller by Biller
+BalanceForward
+BIF customization - Biller by Biller (generally set to 1  / yes unless biller is on open billing)
+CreditCardServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+FirstNotifyRequestedDate
+BIF customization - Biller by Biller
+InvoiceDate
+Not Needed
+InvoiceDueDate
+Not Needed
+InvoiceFormatGuid
+Generally not needed (set in file mapping)
+InvoiceTypeID
+Generally not needed (set in file mapping)
+LateFeeDate
+BIF customization - Biller by Biller
+LocationReference
+Generally Not used
+MinimumAmountDue
+BIF customization - Biller by Biller
+PaymentExpirationDate
+BIF customization - Biller by Biller
+PaymentExpirationMessage
+BIF customization - Biller by Biller
+PromptPayExpirationDate
+BIF customization - Biller by Biller
+RegistrationValue
+BIF customization - Biller by Biller
+SecondNotifyRequestedDate
+BIF customization - Biller by Biller
+ThirdNotifyRequestedDate
+BIF customization - Biller by Biller
+User Interaction and Design
+Data Flow - Invoice
+att2326724615
+2051833861
+1
+Diagram1
+IM
+att2326691859
+att2326921227
+0
+Data Flow - Adjustments
+att2326528043
+2051833861
+1
+Diagram2
+IM
+att2327379983
+att2326626340
+0
+Data Flow - Payment
+att2326593548
+2051833861
+1
+Diagram3
+IM
+att2327576580
+att2327543811
+0
+Data Flow - Void
+Since batch integration any voids will simply not be reflected in the payment file the next day (as they happen before batch close)
+Data Flow - ACH Reject
+Email sent to biller and payer, have to be handled manually
+Data Flow - Change Log
+No Munis specific changelog file
+att2332295270
+2051833861
+1
+Diagram4
+IM
+att2332819495
+att2332295265
+0
+Data Flow - Bill Presentment
+Varies from biller to biller
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller portal - Munis does not have a built in CSR integration with IC
+Invoice Cloud Web Services
+Not used for batch integration
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5590
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Jan 2023
+Adjustment file support for balance forward integration only
+Adjustment file support for open invoicing 
+ITG-1947
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+11/30/2023
+Adjustment file failed to convert due to a shift in the data
+Adjustment file successfully convert for new FileID
+Add a file mapping for FileID 212 and new adjustment example for City of Aspen only.
+ITG-2215
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Error email is sent due to duplicate invoices
+Avoid send error email due to process duplicate invoices 
+Skipped and not attempted to be processed incoming bills with 
+<CUST_RELATION>T</CUST_RELATION>
+in the header.
+INT-8870
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Account Number is a combination of customer number and account number
+Store in Separate field for customer number and account number for search purposes 
+IC stores CustomerNumber to Custom1, and AccountNumber to Custom28
+TBD
+TBD
+Invoice file load only loads the Account Number.
+New file type would load the account number formatted as AccountNumber-CustomerID.
+This new file type can be used for all Munis UB Classic billers that need the Accountnumber-CustomerID format.
+ URL:/spaces/IM/pages/2051833861/Tyler+Munis+Utility+Batch+Technical+Design

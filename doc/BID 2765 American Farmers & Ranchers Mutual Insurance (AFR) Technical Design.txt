@@ -1,0 +1,379 @@
+Summary:
+ Custom batch integration details for AFR. Biller will be going through a conversion when they go live with Sapiens Coresuite in 2022. Biller wanted IC to handle payment plans at the time of autopay enrollment but this functionality does not exist within IC. 
+Page Navigation
+Jira ticket 
+INT-2431
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is to transfer bill/invoice data to IC from the biller
+File Extension: BIF
+File Naming Convention: AFR_MMDDYYYY.BIF
+File Delimiter: pipe |
+Specification: InvoiceCloud
+Sample File: Pending
+SFTP File Path: /ToInvoiceCloud/Invoices
+File Transfer Frequency: daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+n/a
+File Header
+2
+BillerGuid
+Y
+TRUE
+n/a
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+n/a
+File Header
+5
+InvoiceCount
+Y
+TRUE
+n/a
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Y
+File Header
+7
+RowType
+Y
+TRUE
+n/a
+Invoice Header
+8
+RecordType
+Y
+TRUE
+n/a
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+n/a
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+MICR
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Date of Invoice
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date of Invoice
+Invoice Header
+13
+TotalAmountDue
+TRUE
+Total Amount Due on Policy
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+N/A
+Static Value '1'
+Invoice Header
+21
+MinimumAmountDue
+N
+FALSE
+Invoice Header
+23
+FirstNotifyRequestedDate
+N
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+N
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+N
+FALSE
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Member Number
+Invoice Header
+39
+Custom2
+N
+FALSE
+Invoice Header
+40
+Custom3
+N
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+Static Value '1'
+Invoice Header
+248
+AutoPayCollectionDate
+Y
+FALSE
+Due Date
+Invoice Header
+58
+RowType
+Y
+TRUE
+n/a
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Policy Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+Customer Record
+61
+Address1
+Y
+FALSE
+Customer Address 1
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Address 1
+Customer Record
+63
+City
+Y
+FALSE
+City
+Customer Record
+64
+State
+Y
+FALSE
+State
+Customer Record
+65
+Zip
+Y
+FALSE
+Zip
+Customer Record
+66
+Phone
+Y
+FALSE
+Phone
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Email
+Customer Record
+70
+RowType
+Y
+TRUE
+n/a
+Invoice Detail
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: txt
+File Naming Convention: AFR_Payments_MMDDYYYY.txt
+File Delimiter: pipe |
+Specification: Generic
+Sample File: 
+SFTP File Path: /FromInvoiceCloud/Payments
+File Transfer Frequency: Daily - 8:00 PM Batch Close - Payment File 9:00 PM CT delivery
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Description
+File Header - Date
+string
+8
+MMDDYYYY
+Current Date
+File Header - Payment
+int
+Count of payment records
+File Header - Total Amounts of Payments
+decimal
+1000000.00
+Sum of Payment Records amount.
+Policy Number / Quote ID
+string
+50
+AFR123456789
+Policy number for autopay and express payments. Cloudstore payments will reference Biller Reference for the Quote ID.
+Amount
+decimal
+1000000.00
+Dollar amount of payment or return
+Reject Code
+string
+3
+R01
+ACH Reject Code
+Policy Holder Name
+string
+50
+Name of Customer
+Change Log File
+File Summary/Purpose: The purpose of this file is to transfer change log data from IC to the biller
+File Extension: txt
+File Naming Convention: ICChangeLog_mmddyyyy
+File Delimiter: pipe
+Specification:  IC Generic / Include C-Code ACH Rejects? No.
+Sample File: 
+SFTP File Path: /FromInvoiceCloud/ChangeLogs
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+in BIF (at the time of implementation, this is set in BIF as the Static Value '1')
+AutoPayCollectionDate
+in BIF (at the time of implementation, this is set in BIF as Due Date)
+BalanceForward
+in BIF (at the time of implementation, this is set in BIF as the Static Value '1')
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - see biller questionnaire 
+InvoiceDate
+in BIF (at the time of implementation, this is set in BIF as the Date of Invoice)
+InvoiceDueDate
+in BIF (at the time of implementation, this is set in BIF as Due Date of Invoice)
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF customization - see biller questionnaire 
+ThirdNotifyRequestedDate
+BIF customization - see biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice, Adjustments
+AFR sends their invoices with the Record Type - R, providing any adjustments for existing Invoices
+Data Flow - Payment, ACH Rejects
+Both One-time payments through CloudPay and Payments made through other channels are provided in the nightly Remit File.
+This file will also include any ACH Rejects provided by Chase.
+Data Flow - Change Log
+Nightly Change Log provides back the AutoPay Enrollment Status - Email & Paperless status isn’t consumed today by the Biller.
+Data Flow - Bill Presentment
+PDFs are linked to the Customer based on filename once uploaded to the FTP.
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+The Agents use a link within the Biller Portal to make downpayments.
+ URL:/spaces/IM/pages/1918763098/BID+2765+American+Farmers+Ranchers+Mutual+Insurance+AFR+Technical+Design

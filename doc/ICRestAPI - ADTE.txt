@@ -1,0 +1,230 @@
+Application Discovery
+Configurations
+Application Settings
+Click to checkout app settings
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <!-- Number of seconds past the current hour that we will redirect calls to Cloudflare.  
+         A value of 30 means any Cloudflare traffic after the first 30 seconds of the current hour (1:00:30, 2:00:30, etc..) will be 
+         redirected to the originating server (most likely www.invoicecloud.com) instead of going to Cloudflare (www4.invoicecloud.com)-->
+    <add key="CloudflareRedirectTimeSeconds" value="30" />
+    <add key="MessagingServiceErrorEmailRecipients" value="gmata@invoicecloud.com;mlagunez@invoicecloud.com;iamaya@invoicecloud.com;rtorres@invoicecloud.com;sconcannon@invoicecloud.com;jgarcia@invoicecloud.com;tcordova@invoicecloud.com" />
+    <add key="certegyStationID" value="1078838501" />
+    <add key="certegyStationTESTID" value="1078838600" />
+    <add key="certegyBackupEndpointUri" value="https://check-certegy-ctc.FNIS.com/cka/CKAuthService" />
+    <add key="UseManagedIdentity" value="true"></add>
+    <add key="ClientId" value=""></add>
+    <add key="VaultName" value="icappsettingsdevtest"></add>
+    <add key="TokenExpirationOffset" value="30"></add>
+    <add key="NewRelic.AppName" value="Azure - RESTAPI - McLogin" />
+webpages:Version
+Usage: Determines the version of Razor view engine to be used
+webpages:Enabled
+Usage: Determines if the html files in Views folder can be accessed directly from a browser
+ClientValidationEnabled
+Usage: Determines if client side validation is enabled in a view
+UnobtrusiveJavaScriptEnabled
+Usage: Determines if client side validation is enabled in a view
+CloudflareRedirectTimeSeconds
+Usage: Number of seconds past the current hour that we will redirect calls to Cloudflare.  A value of 30 means any Cloudflare traffic after the first 30 seconds of the current hour (1:00:30, 2:00:30, etc..) will be redirected to the originating server (most likely 
+http://www.invoicecloud.com
+ ) instead of going to Cloudflare (
+http://www4.invoicecloud.com
+ )
+MessagingServiceErrorEmailRecipients
+Usage: Was used earlier to send error email, has now been replaced with new relic logging. The value however is still retrieved in code but never used.
+certegyStationID
+Usage: Used as station Id to make inquiry request to Certegy service.
+certegyStationTESTID
+Usage: Usage Not found
+certegyBackupEndpointUri
+Usage: Used as a backup end point to connect to Certegy service, if the original endpoint of the client doesn’t work.
+UseManagedIdentity
+Usage: Used by IC.Database to enable or disable managed identity. It is passed through 
+SettingsService 
+class If disabled it will force the fallback and use config connection strings.
+ClientId
+Usage: Used for key vault and database access via Azure token creation. If empty , it will use DefaultIdentity for KeyVault as per the code.
+VaultName
+Usage: Used to create KeyVaultReader.
+TokenExpirationOffset
+Usage: Used to configure token expiration offset in IC.Database.Authentication
+NewRelic.AppName
+Usage: Used to configure application name for APM monitoring
+Connection Strings
+The below key value pairs for connection strings is being inserted and used by IC.Database package.
+These values are replaced at the time of deployment through the pipeline.
+ <add name="DBLIVE" connectionString="Junk"></add>
+ <add name="DBPDF" connectionString="Junk"></add>
+ <add name="JITBITHELPDESK" connectionString="Junk"></add>
+ <add name="DBDATAWAREHOUSE" connectionString="Junk"></add>
+ <add name="DBPERFLOGGING" connectionString="Junk"></add>
+ <add name="ICGATEWAY" connectionString="Junk"></add>
+ <add name="ICGATEWAYTEST" connectionString="Junk"></add>
+ <add name="ICGATEWAYAUDIT" connectionString="Junk"></add>
+Environment Variables
+IC_LOGS_DIR
+References found: 
+1
+Usage: Directory where enriched logs will be stored.
+Package Initializations
+The following packages have been initialized in Global.asax.vb -
+IC.Serilog.Utility
+CloudCrypto.AES 
+ IC.Azure.Blob
+ ICFramework.Utilities.Email
+ IC.ServiceProxies.Services
+ IC.ServiceProxies.DatabaseProxy
+IC.ServiceProxies.Services.CryptoService
+IC.PlatformFeatures.CachedFeatureManager
+Databases
+Database connectivity is done using the 
+IC.Database
+ library and the 
+implementation 
+is in 
+\ICRESTAPI\ICRESTAPI.DB\Database\Database.vb
+ which uses a 
+DatabaseProxy
+ object to talk to the database. 
+Under the hood 
+IC.Database
+ uses 
+SettingsService.vb 
+to fetch the connection string from the 
+ConfigurationManager
+.
+These connection string values are populated at the deployment time in the pipeline from the Key Vault.
+DefaultDatabase used: DBLIVE
+Additionally 
+IC.ServiceProxies.DatabaseProxy
+ is also being 
+initialized
+ in 
+Global.asax.vb
+ and passed as parameter to
+ IC.PlatformFeatures.CachedFeatureManager
+Key Vault
+A keyvault client has been created using 
+IC.Azure.KeyVault.KeyVaultReader
+ at 
+this
+ location.
+The Key Vault client is being used to
+ GetCertificate("FISGlobalCertegySSL")
+for Certegy service
+KeyVault Name is fetched from the variable groups of respective environments based on this 
+yaml
+Environment
+Variable Group
+Vault Name
+Devtest
+Devtest
+icappsettingsdevtest
+Regression
+Regression
+ExternalAppSettings
+Preview
+Preview
+ExternalAppSettings
+Production
+Production
+ExternalAppSettings
+External Services
+The following services are being utilized by ICRestAPI
+ICCryptoService - 
+http://icservices:1002/ICCryptoService
+Certegy - 
+https://check-certegy-stc.FNIS.com/cka/CKAuthService
+Cdyne - 
+http://sms2.cdyne.com/sms.svc/WS
+https://sms2.cdyne.com/sms.svc/WS
+http://sms2.cdyne.com/sms.svc/Soap
+https://sms2.cdyne.com/sms.svc/SecureSoap
+CloudTransactionProcessing- 
+https://www.invoicecloud.com/webservices/private/ctp/cloudtransactionprocessing.asmx
+CloudCreditCardProcessingV2 - 
+https://www.invoicecloud.com/portal/webservices/CloudCreditCardProcessingV2.asmx
+ 
+Logging
+ IC.Serilog is configured to utilize LogType  as NewRelic in Global.asax.vb.
+ NewRelic.Api.Agent.NewRelic.NoticeError is also being used at places to log errors/exceptions.
+Application Versioning
+Versioning using URI- Most of the methods are using RoutePrefix- 
+v1/
+ while 
+some
+ do use route
+ v2/
+VerifySignature
+ method expects “version” to be passed as a request item. This is expected to be “2.0” for application to process the request.
+Health Checks
+A HealthCheckController currently exists which returns True/False as string content based on the output of the healthchecks.
+Route- 
+/api/v1/healthcheck/test
+Response- HttpResponseMessage with True/False as string content
+Pipeline-The healthcheck api is being called as part of 
+postdeloy 
+step in the deployment pipeline
+Checks Included-
+Database
+ - GET_DATASET returns rows greater than 0
+IC.Logins 
+- Login.FromLoginID returns a LoginId greater than 0
+IC.Azure.Blob 
+- RetrieveStorageFileList returns list of files with count greater than 0
+KeyVault / CloudCrypto - 
+ AES.Encrypt and .AES.Decrypt provides expected results
+KeyVault / Certegy Cert
+- “FISGlobalCertegySSL” certificate returned from keyVaultClient is not null.
+Regression Tests
+Regression tests to be implemented
+Health Check Enhancements
+Identified Components
+The following are components that have been identified as a necessary configuration, service, or dependency that should be health checked against.
+Environment Settings
+Application Settings
+Azure Key Vault Access
+Database Connectivity
+External Service Connectivity
+Logging functionality
+IC.Logins connectivity
+IC.Azure.Blob connectivity
+Encryption via CloudCrypto
+Proposed Health Check Logic 
+Currently the healthcheck verifies each check sequentially and breaks the loop if any of the check fails. Incase of failure, error is logged, the result is returned as ‘false’ and further checks are not run.
+This should be modified to ensure that all the checks run and log the errors before returning a result. A ’True' result should be returned if all the checks pass the expected criteria, else the output should be returned as ‘False’ This would help in getting all the failures in one go in the logs.
+Add 
+Logging
+ as part of health check. Currently logging happens only in case of exceptions.
+Add check for 
+configuration
+ values and environment variables.
+Environment Variable- 
+IC_LOGS_DIR
+App Settings-
+ClientId
+VaultName
+Check 
+connectivity for IC.PlatformFeatures
+ as it utilizes IC.ServiceProxies for database connection
+Verify connection to 
+external services
+ mentioned in the above section.
+ICCryptoService
+Certegy 
+Cdyne 
+CloudTransactionProcessing
+CloudCreditCardProcessingV2 
+Azure Key Vault Access
+Retrieve 
+testsecret
+ value which is available in both vaults.
+Send proper
+ status code
+ in the http response
+200 status code (healthy)
+503 status code (unhealthy)
+ URL:/spaces/EN/pages/3015376933/ICRestAPI+-+ADTE

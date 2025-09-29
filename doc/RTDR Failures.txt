@@ -1,0 +1,41 @@
+RTDR and Data Pump Error Handling Meeting Notes
+Date:
+ 09/10 
+Attendees:
+ Albert, Marcus, Mark, Fernando, Roopa
+Current Situation
+90% of errors occur in RTDR or data pump.
+Engineering team often reaches out to client services to check customer endpoint status or changes.
+Uncertainty about disabling RTDR and continuing with potentially stale balances for autopay.
+No one-size-fits-all approach identified yet.
+Goals
+Involve the right team for effective and efficient problem-solving.
+Increase response time.
+Reduce toil for SPAM, Integration, and also for client services teams.
+Problems and Challenges
+Need to reduce noise, triggering alerts only for critical errors.
+Unclear if conditions exist for high error rates or specific exceptions.
+Not all applications send source ID to RTDR (Autopay does, others need review).
+Proposed Solutions and Ideas
+Improve Error Categorization:
+ Set up conditions for high error rates or specific exceptions. Use biller ID and source (e.g., autopay) to calculate success vs. failure ratio.
+Enhance RTDR Response:
+ Add more properties to RTDR response objects (e.g., partial success information). Research benefits of providing context in responses (Integration and SPAM to collaborate).
+Alert Routing and Management:
+ Create an RTDR-specific Slack channel for alerts. Investigate adding Client Services to OpsGenie for relevant alerts. Implement tiered alerting system (warnings vs. errors) and alert only relevant teams.
+Process Improvements:
+Review and update applications to send source ID to RTDR.
+Research efficiency improvements in invoice processing (Albert to review).
+Today, many integrations loop through invoices for updates. We may report an error even if recent invoices processed successfully and only the old ones failed. {Albert to review for potential efficiency gains}
+Documentation and Guidelines:
+ Develop runbooks/rubric to help set SLAs and define courses of action.
+Action Items
+SRE team to confirm OpsGenie access for Client Services team.
+SRE team to review current alert conditions in New Relic.
+Analyze New Relic logs for actionable exceptions/errors.
+SRE team and SPAM to discuss New Relic logs and creating an escalation tier.
+Also, create an escalation tier with warnings for slow performance and errors for actual failures.
+Alert only relevant teams based on the escalation tiers
+Integration team to review invoice processing efficiency.
+Integration team to research with SPAM team on enhancing RTDR response objects.
+ URL:/spaces/PE/pages/3554377745/RTDR+Failures

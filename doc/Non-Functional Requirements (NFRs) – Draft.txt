@@ -1,0 +1,106 @@
+This document outlines the baseline NFRs we are applying across all new applications. These standards ensure observability, reliability, quality, security, and operational readiness.
+1. Observability & Metrics
+Custom metrics per application
+ based on functionality.
+APIs:
+ record request counts, request duration (latency), error rates.
+Cron jobs / background workers:
+ record run duration, success/failure counts, error classification, and any job-specific KPIs.
+All metrics are published to New Relic
+ with 
+dedicated dashboards
+ per application/service. Ex : 
+https://onenr.io/02R55WWq1Rb
+2. Service Levels
+APIs:
+ must define 
+SLOs
+ (e.g., availability, latency, error rate).
+Cron/Batch Applications:
+ must define 
+SLAs
+ (e.g., job must complete successfully within X minutes, by Y schedule).
+SLOs/SLAs tracked via dashboards & alerts.
+3. Testing & Coverage
+Unit test coverage target:
+ ≥ 80% line coverage across all new code.  
+ 
+Automated test enforcement:
+ CI/CD pipelines enforce coverage thresholds.
+E2E automation:
+ 
+Playwright and other frameworks are being rolled out for UI and API workflows.
+4. Deployment & Healthchecks
+Dedicated healthcheck endpoints
+ for all apps (liveness, readiness, and dependency checks).
+Healthchecks follow best practices to ensure safe automated deployments and rollbacks. 
+5. Idempotency
+Idempotency keys
+ are implemented in all APIs where write or side-effect operations occur.
+Enables safe retries, prevents duplicate entries, and simplifies client integration.
+6. Logging
+Structured, supportive logs
+ must be present for all applications.
+Logs are centralized and 
+pushed to New Relic
+ for query, correlation, and alerting.
+Logs include correlation IDs for request tracing where applicable
+.
+7. Security
+Static and dynamic analysis:
+ All apps must pass 
+SonarQube
+ and 
+CodeScene scans
+ to minimize or eliminate CVEs and code smells. As of 8/24 - Submitted Request to add applications to CodeScene scans. 
+Platform baseline:
+ All apps are built on 
+.NET Core LTS (8.0)
+ to ensure long-term support and security patches.
+Secrets management:
+ All sensitive values are stored in 
+Azure Key Vault
+ and retrieved securely at runtime.
+Data protection:
+ Sensitive fields are 
+encrypted
+ and 
+masked
+ where appropriate. (Verified in New Relic + PR Reviews + Acceptance Criteria)  
+8. Performance & Scalability
+Load testing:
+ All critical apps (especially PayFac migration paths) undergo 
+load testing
+ to validate throughput, latency, and scaling thresholds. Ex. 
+Shadow Mode
+Kubernetes hosting:
+ All apps are deployed to Kubernetes clusters, with 
+horizontal auto-scaling
+ enabled where applicable.
+Capacity planning:
+ Load test results feed into autoscaling and resource allocation policies.
+9. Compliance & Auditing
+Database change tracking:
+ Key data stores include 
+change tracking
+ for auditability. WIP on Payments schema. 
+Database audit logs:
+ Applied to sensitive tables (e.g., payments, funding, PII access).
+Operational logging:
+ All critical changes/events are logged with user IDs, timestamps, and correlation IDs. 
+10. Documentation & Runbooks
+Readme:
+ Every application must include a 
+README
+ file documenting setup, configuration, execution, and testing instructions.
+API Documentation:
+ All APIs must expose 
+Swagger/OpenAPI specifications
+ for discoverability and integration.
+Confluence Documentation:
+ Each application must have a Confluence page documenting:
+All endpoints (for APIs) with descriptions and expected inputs/outputs.
+All cron jobs have with purpose, functionality, schedule, and owners.
+Runbooks:
+ Operational runbooks are maintained for on-call engineers, covering alerts, recovery steps, and escalation paths.
+ URL:/spaces/EA/pages/4602921702/Non-Functional+Requirements+NFRs+Draft

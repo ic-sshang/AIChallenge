@@ -1,0 +1,31 @@
+The Payer Portal can be hosted in a browser IFRAME by partners.  There are a couple of key behavior changes in this mode that need to be handled.
+How it works
+Sessions are established using a SSO process, not in scope for this project.   
+When the Partner/Biller is ready to redirect the user to the Payer Portal, they will redirect the user using a pre-defined URL. 
+https://www.invoicecloud.com/portal/remoteauth/customerportalredirect.aspx?RemoteAuthenticationToken=token&ViewMode=value&RedirectID=value&CSSUrl=value
+ViewMode
+ViewMode is required to identify how the user is accessing the Payer Portal pages. The correct value must be set in order to customize the experience. 
+0
+ = Default
+1
+ = iFrame
+2
+ = Dialog
+CSSUrl
+The value is only required if a Partner/Biller would like to customize the Payer Portal and if the value was not provided in the SSO process.
+Use the SSOConnect PDF to get the CSS class names that need to be applied to specific UI elements.  
+1.5 UI Support
+The 
+ViewMode
+ will need to be passed to the 1.5 UI url as an optional query string parameter so that it can handle the various modes.
+ViewMode = 1
+The 1.5 UI will use a layout that does not show the primary navigation elements (header, menu, footer, sidebar).
+Option 3:
+ SSO Customer Login URL
+This is used when option 23 is not configured
+Option 23:
+ SSO Customer LogOff URL
+This is used for both logout and session expiration redirect
+ViewMode = 2
+The 1.5 UI will use a layout that does not show the primary navigation elements (header, menu, footer, sidebar) and show a Close button in the upper right hand corner.  Closing with close the current window via javascript.
+ URL:/spaces/EN/pages/2817458226/IFRAME+Support

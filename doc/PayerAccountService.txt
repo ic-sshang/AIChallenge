@@ -1,0 +1,104 @@
+  Application Overview
+Field
+Details
+Application Name
+PayerAccountService
+Version
+1.0
+Description
+Payer manage accounts API Service
+Primary Functionality
+This service here is to provide the access to the database/data-structure for manage accounts feature.(specifically for MFEs)
+Key Features
+Get all the listed account related to that user.
+Add/Link a new account. 
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Bill Hughes
+Tech Lead
+Shanki Vaidhya
+Engineering Manager
+Shanki Vaidhya
+Support Contact
+Bala Nageswarrao Bhuvanagiri / Dhruv Rastogi
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+C#
+Frameworks/Libraries
+.NET8, Entity Framework
+Database
+Biller Shards
+Key Vault
+Dependencies
+Biller Shard Database
+Code Repository Link
+  Application Services
+Field
+Details
+Notes
+Application Service Indicator
+payer-account-service
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+Create Application Service Vault
+False
+Grant Crypto Vault Access
+False
+Grant Environment Vault Access
+True
+Grant Cluster Vault Access
+False
+Grant ServiceBus Sender Access
+False
+Grant ServiceBus Receiver Access
+False
+Grant ServiceBus Data Owner Access
+False
+Grant IC Blob Storage Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant PDF Extract Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Biller Shard DB Access
+True
+Biller Shard DB Access for QE
+True
+Only utilized by Tooling Cluster Workload for now so likely your Workload will not need it.
+  Deployment Information
+Field
+Details
+Cluster
+Payer
+ 
+Deployment Node
+k8s Web Node
+ 
+Application Type
+Web API
+ 
+Outbound Network Ports
+Inbound Network Ports
+80
+PCI Scope
+No
+What is the intended audience for this application?
+External users (customers, partners, or the public)
+Environment Variables
+  Web Ingress (optional for Web and API workloads)
+Field
+Details
+Health Endpoint
+/health
+Suggested URL Root
+https://api.invoicecloud.com/payer/payer-account-service
+ URL:/spaces/ED/pages/4530176015/PayerAccountService

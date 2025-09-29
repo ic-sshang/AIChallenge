@@ -1,0 +1,144 @@
+Page Navigation:
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+Guidewire
+Zensar is a software integrator working with InvoiceCloud to integrate with Guidewire
+Software Product Name
+Guidewire BillingCenter, Guidewire PolicyCenter
+Software Cashiering System
+Not Supported
+Supported Versions
+9,10, Cloud Native 
+Hakuba, Innsbruck, Jasper (March 2024 release), future releases
+Integration Requirements and Pre-Requisites
+Make endpoint available to IC
+Check with account manager on billing setup per client
+Vertical
+Insurance
+Sample Biller Implementation
+None
+Feature Not Supported
+Feature
+Description
+Suspense Payments
+Suspense Payments(Payments made without account/policy existence ) is not supported with the current accelerator and will be a manual process within the GW system, that will get reflected within IC either through the invoice record where the suspense payment is applied or RTDR, if it is applied on an existing outstanding balance invoice.
+Key Notes
+Account Number on the Biller Portal currently uses the internal Billing id as a search parameter. On the Biller Portal, search by invoice number instead of account number, which is readily available
+Customer Portal search will still work with Display Account number on the Account number search screen
+For Guidewire v10 CRM Setups:  Integration Partner ID: Zensar, Integrator: Zensar, and Biller Software: HomeGrown - Blue.
+For Guidewire Cloud Native CRM Setups: Integration Partner ID: Guidewire Cloud Native Accelerator, Integrator: Guidewire Cloud Native Accelerator, and Biller Software: HomeGrown - Blue.
+Planning
+Test Portals
+IC Hosted Test Portal: BID 2319 
+Partner Hosted Test Portal: 
+Policy Number: 
+Mailing Zip: 
+Policy Effective: 
+Rules of Engagement
+Refer to the integration as the 'Invoice Cloud Integration Feature' for the biller
+Timeline
+60-90 days
+Configuration
+Invoice Types
+164 - Additional invoice types have not been accounted for in the integration design - only one invoice EBPP invoice type (164)
+Virtual Site
+Input image of suggested virtual site input/output screen. If there’s a required configuration or mapping, note that here.
+Example: Integration will always use displayaccountnumber on the virtual site. Please ensure all grids, settings and options support the use of displayaccountnumber. (See 
+ISI Enterprise Implementation Details
+ for more detail on displayaccountnumber)
+Required Options
+No required options
+ - enable/disable for SSO integration and biller preference
+ID
+Option Description
+Details
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Partner Coding Requirements
+What
+Provided To
+When
+Biller Name
+N/A
+Project Assignment 
+BID
+N/A
+Project Assignment 
+Invoice Format ID
+N/A
+Project Assignment 
+Invoice Format GUID
+N/A
+Project Assignment 
+Biller GUID TEST
+Biller or Software Integrator 
+Project Assignment 
+WebService Key TEST
+Biller or Software Integrator 
+Project Assignment 
+Biller GUID PROD
+Biller or Software Integrator 
+Project Assignment 
+WebService Key PROD
+Biller or Software Integrator 
+Project Assignment 
+Invoice Type ID
+Biller or Software Integrator 
+Project Assignment 
+Invoice Cloud Coding Requirements
+What
+Provided By
+ETA
+Details
+Invoice Data
+Biller or Software Integrator 
+After kick-off
+Customer Endpoints (Domain for all web services - RTDR, data pump, PDF linking)
+Biller or Software Integrator 
+After kick-off
+Partnerid
+Biller or Software Integrator 
+After kick-off
+Whitelisting IP Addresses
+Invoice Cloud
+After kick-off
+Bill Presentment
+Biller or Software Integrator 
+After kick-off
+The PDF URL for PDF linking is provided by TCCS and can be submitted with the implementation coding request. A separate track is not needed.
+ URL:/spaces/IM/pages/1105592393/Guidewire+Accelerator+Implementation+Details

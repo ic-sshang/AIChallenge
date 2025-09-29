@@ -1,0 +1,59 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+sonarscan
+True
+projectName
+" "
+jobName
+" "
+dependsOn
+" "
+testRepo
+" "
+env
+" "
+tag
+" "
+tag was set by the user, so we use it
+              ${{ elseif ne(parameters.tag
+testFilter
+" "
+testFilter was set by the user, so we use it
+              ${{ if ne(parameters.testFilter
+nugetConfigPath
+" "
+threadCount
+-1
+pool
+" "
+variables
+" "
+testproject
+**/*.csproj
+parallelTestRun
+True
+sequentialTestRun
+False
+continueOnTestError
+False
+populateXrayTestExecution
+False
+sendSlackNotification
+False
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/deployment-multi-job.yaml
+flows/deployment.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/jira/get-fix-version.yaml
+../tasks/sonarqube/prepare-dotnet.yaml
+../tasks/sonarqube/analyze-and-publish.yaml
+ URL:/spaces/platform/pages/3634790568/jobs+test.yaml

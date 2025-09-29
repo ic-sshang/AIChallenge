@@ -1,0 +1,66 @@
+User Story Title
+- 
+EBPP-4619 Handle "failure" entries in funding batch response file
+Related Story
+ 
+EBPP-8157
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-8158
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-8155
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-8156
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Functional Understanding
+problem statement : 
+If we detect errors, we would reset the funding batch similar to how we are processing in Cass.
+Access : 
+db
+Test area : 
+Batch Procesing, db
+Scenarios/test steps :
+1.Success Scenario - No error is recorded when the batch file is successful.
+2.Invalid Bank Account Scenario - The file uploaded must contain an invalid bank account.
+3.System Error Scenario - System error returned from Paypal / Braintree
+Insufficient Fund Scenario - Ensure that the sum total of records that are present in the export one batch file is higher that the balance in the Hyper wallet account.
+ 
+Env 
+: devtest4 ?
+Test data
+ :
+a biller having invalid bank account deatils.
+a biller with insufficient fund.
+System Error Scenario- need to check
+a biller with valid account details.
+Technical Understanding
+Code Walk Through- ICPaymentProcessingAPI Project
+Job/App- HyperWalletFileProcessing
+Option 3- Validation/Acknowledgement file import
+Option 4- Response File Import
+Business Logic
+This is a job processing XML Files received from Hyperwallet. 
+In this Job, we need to parse XML, identify the erroneous records, 
+For each record, an existing Stored Proc(s) needs to be updated - To update the records in IC databases
+A new XML file needs to be created to be shared with Hyperwallet team (to specify the next steps that they need to take with respect to erroneous records.  
+For work with the biller we can take one of the biller Database shard<billerId> from testd.
+Stored procedure for Option 3, 4- selOneBatchFile., updateOnbatch_File.
+Reset the funding batches via stored procedure spResetBatchFunding  . its also called rollback stored procedure.
+Cass Repo and Hyperwallet  shared the same database.
+configur the fund on hyperwallet
+Need to create a logic Read the xml file and make the logic for reading the data from xmlelement 
+paymentResponseCode
+ . xml file have funding batch. Need to parse the xml file .
+We need to find some input regarding the find the funding batch FundingBatchID and TerminalTypeID for sp  selFundingBatch.
+Reset the batch and call or execute batch 2 option one batch file creation. solution need look around.
+References -
+Date- 12/12/2022- Q&A session with Martin
+Related to ICG -    Hyper WalletFile Processing F block of Architecture diagram 
+ URL:/spaces/EN/pages/2532245505/Hyperwallet+File+Processing

@@ -1,0 +1,70 @@
+This Confluence page has been moved to:
+https://invoicecloud.atlassian.net/wiki/x/CwChxw
+ 
+Golden Signals
+Latency: The amount of time it takes your application to service a request.
+Traffic: The number of requests your system receives.
+Errors: The rate of requests that fail.
+Saturation: The stress on resources to meet the demands of your application.
+Signls/Alerts of Interest for AzureApplicationGatewaySample event:
+Application Gateway Total Time Milliseconds (Latency)
+SELECT average(`applicationGatewayTotalTimeMilliseconds.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Total Requests (Traffic)
+SELECT average(`totalRequests.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Failed Requests (Errors)
+SELECT average(`failedRequests.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+CPU Utilization Percent (Saturation)
+N/A
+Additional metrics of interest:
+Healthy Host Count
+SELECT average(`healthyHostCount.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Unhealthy Host Count
+SELECT average(`unhealthyHostCount.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Blocked Request Count
+SELECT average(`blockedCount.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Client RoundTrip Time
+SELECT average(`clientRttMilliseconds.Average`)
+FROM AzureApplicationGatewaySample 
+WHERE ((`provider` = 'AzureApplicationGateway') 
+AND (entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwtNjQwMDQ5NDUzMzc1ODYwODgxMQ')) 
+TIMESERIES AUTO
+Trends to consider
+A spike in “Backend First Byte Response Time” but “Backend connect time“ is stable, indicates appGW to backend latency and time taken to establish connection is stable. Spike is caused due to increase in response time of backend application.
+A spike in “Backend First Byte Response Time“ and spike in “Backend Connec Time“, indicates either the network between appGW and backend server or backend server TCP stack has saturated.
+A spike in “Backend Last Byte Response Time“ but “Backend First Byte Response Time“ is stable, indicates spike is because of a large file being requested
+A spike in “Application Gateway Total Time“ but “Backend Last Byte Response Time“ is stable, indicates either a performance bottleneck at appGW or bottleneck in the network between client and appGW. Additionally, if “Client RTT“ also spikes, indicates that degredation is because of the network between client and appGW
+Response Code Alerts
+The AzureApplicationGatewaySample data source, which is where the data sent by Azure regarding gateway metric collection is stored in New Relic, only allows for retrieval of HttpStatusGroups, such as 4XX and 5XX, but it does not provide the specific response code associated with the request, only its group (1st image).
+After some digging, we found that adding a Diagnostic Setting to configure the collection of Application Gateway Access Logs can provide logs that include specific response codes. Getting these Access Logs into New Relic may be part of a larger body of work since there needs to be some configuration of destinations, such as Event Hub, in order to stream the logs through. However, the logs would at least be available in Azure to begin, with the flip of a switch. 
+More on Diagnostic logs for AppGW
+This 
+blog
+ contains example of what we could expect to see from enabling these Access Logs
+NOTE
+: There may be usage charges associated with this approach, pending looking into cost specifics.
+Given what's currently available, alerts can be configured in New Relic around count of requests per 4XX or 5XX HttpStatusGroup in a given window. it may be difficult to estimate an appropriate threshold without monitoring live traffic, but this threshold can always be adjusted accordingly once the switch to AppGW is made.
+ URL:/spaces/DS/pages/3319169080/AppGW+Monitoring+and+Alerting

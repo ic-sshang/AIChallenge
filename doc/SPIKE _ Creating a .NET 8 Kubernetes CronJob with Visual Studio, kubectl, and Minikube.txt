@@ -1,0 +1,118 @@
+Overview
+This guide describes how to create a .NET 8 console application in 
+Visual Studio
+, containerize it with Docker, and run it as a 
+Kubernetes CronJob
+ using 
+Minikube
+ and 
+kubectl
+.
+Prerequisites
+Tool
+Requirement
+Notes
+Visual Studio
+2022 (v17.8+)
+With 
+.NET 8
+ and 
+Docker
+ workload
+.NET SDK
+8.0
+Included in Visual Studio installer
+Docker Desktop
+Running & configured
+Required to build images
+Minikube
+v1.31.0+
+Install Guide
+kubectl
+v1.27+
+Install Guide
+1. 🧱 Create .NET 8 Console App in Visual Studio
+Open 
+Visual Studio
+ → 
+Create a new project
+.
+Select 
+Worker Service App (Console App)
+, click 
+Next
+.
+Set Project Name: 
+DotNetCronJob
+, click 
+Next
+.
+Choose 
+.NET 8
+, click 
+Create
+.
+Enable Docker support while creating this project which will include Dockerfile in project directory.
+2. 🏗️ Build Docker Image
+Build the Docker image from Visual Studio:
+Right-click the project → 
+Publish
+ → Choose 
+Container Registry
+ > 
+Folder
+.
+Alternatively, use terminal inside project folder:
+docker build -t dotnet8-cronjob:latest .
+3.🚀 Set up Minikube and Load Docker Image
+Start Minikube:
+minikube start
+minikube image load dotnet8-cronjob:latest
+4. 📄 Create Kubernetes CronJob YAML
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dotnet8-cronjob
+spec:
+  schedule: "*/5 * * * *" # every 5 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: dotnet8
+            image: dotnet8-cronjob:latest
+          restartPolicy: OnFailure
+
+Apply the CronJob:
+kubectl apply -f dotnet-cronjob.yaml
+5. 🔍 Monitor CronJob
+To list CronJobs:
+kubectl get cronjobs 
+To see jobs and their pods:
+kubectl get jobs kubectl get pods 
+Check logs from a pod:
+kubectl logs <pod-name>
+6. Create Nuget.Config File to Access IC Packages Nuget Feed
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="ICPackages" value="https://pkgs.dev.azure.com/invoicecloud/_packaging/ICPackages/nuget/v3/index.json" />
+  </packageSources>
+
+  <packageSourceCredentials>
+    <ICPackages>
+      <add key="Username" value="%Username%" />
+      <add key="ClearTextPassword" value="%ClearTextPassword%" />
+    </ICPackages>
+  </packageSourceCredentials>
+</configuration>
+
+The credentials are populated when artifact is created with its build and deploy yaml files.
+7. ✅ Clean Up
+Delete the CronJob:
+kubectl delete -f dotnet-cronjob.yaml 
+minikube stop
+minikube delete
+ URL:/spaces/PE/pages/4315775029/SPIKE+Creating+a+.NET+8+Kubernetes+CronJob+with+Visual+Studio+kubectl+and+Minikube

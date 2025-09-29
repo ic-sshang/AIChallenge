@@ -1,0 +1,204 @@
+This page documents the technical analysis of adding 
+Paperless Enrolment
+ to the 
+IVR workflow.
+none
+Objective
+The purpose of this document is to analyse the current InvoiceCloud IVR workflow and identify the necessary API integrations required to support the Paperless Enrolment feature. This includes:
+	•	Determining which APIs should be used to enable Paperless Enrolment before and after a payment transaction in the IVR flow.
+	•	Investigating how to add an additional IVR message regarding Paperless Enrolment at the start of a call.
+	•	Analysing how the IVR system communicates with InvoiceCloud APIs.
+	•	Addressing open queries from the team regarding Paperless Enrolment.
+Investigation of Acceptance Criteria
+API Required for Updating IVR Workflow for Paperless Enrolment Before Payment Transaction
+To enrol customers in Paperless Billing before making a payment, we need to validate their eligibility and store their preference. The following APIs are required:
+InvoiceExists
+Ensures that the invoice exists before offering Paperless Enrolment
+SearchByAccountNumber
+ or 
+SearchByCustomerPhoneNumber
+Retrieves the customer details linked to the invoice.
+If the customer has multiple invoices, they should select one before opting in for Paperless Billing.
+SendWebLink
+Sends an SMS link to the customer, allowing them to review Paperless Billing details and confirm their choice online.
+If the customer accepts Paperless Billing, they can continue with the payment process.
+API Required for Updating IVR Workflow for Paperless Enrolment After Payment Transaction
+If Paperless Enrolment is to be offered after a payment is completed, we need to validate the payment and store the user’s preference. The APIs required:
+StoreCustomerPaymentMethodV2
+Ensures the payment method is securely stored, which may be required for auto-pay setup when opting into Paperless Billing.
+SendWebLink
+Sends an SMS link confirming Paperless Enrolment and Payment Completion.
+StoreCustomerPreference
+ 
+API (New API Required)
+This API (if developed) should store the customer’s choice for Paperless Enrolment in the system.
+If InvoiceCloud does not go with this API, a workaround is to use an internal tracking system to store the Paperless preference for that customer.
+Adding Another Message at the Start of the IVR Call
+The IVR system should include a message at the beginning of the call to inform customers about Paperless Billing. The approach:
+Modify the Initial Prompt in IVR Workflow
+“
+Thank you for calling the [Biller Name] Phone System. Did you know you can now receive your invoices digitally and reduce paper waste? Press 1 to enrol in Paperless Billing
+.”
+If the Customer Presses 1:
+IVR will execute the Paperless Enrolment process before proceeding with the rest of the workflow.
+Communication Between APIs and IVR Technology
+IVR interacts with InvoiceCloud using SOAP APIs, processing requests based on caller inputs and stored customer data.
+API requests are sent in real-time to fetch invoice details, customer accounts, and payment methods.
+API responses determine the next steps in the IVR workflow (e.g., payment authorization, Paperless Billing eligibility).
+Impact Analysis & Risks
+Impact Analysis
+IVR System Update:
+Requires modifying the initial prompt and workflow paths to integrate Paperless Enrolment.
+Customer Experience Enhancement:
+Proactive Paperless Enrolment increases adoption rates and reduces paper invoice costs.
+Offering Paperless Enrolment after payment can encourage repeat customers to transition to digital invoicing.
+Technical Modifications:
+IVR must be updated to handle:
+Validating invoice/account details before enrolment.
+Ensuring customers have a valid phone number for receiving SMS confirmation.
+Storing Paperless preference securely in the InvoiceCloud system.
+Risks
+Risk
+Impact
+Mitigation
+Customer does not have a phone number on file
+Cannot send SMS confirmation for Paperless Enrolment
+IVR should prompt for a valid phone number entry
+Paperless Enrolment requires email, but the customer has none
+Paperless Billing may fail due to missing required details
+Provide an option to enter an email or allow SMS-based confirmation
+Multiple invoices linked to an account
+Confusion about which invoice to enrol in Paperless Billing
+Ask customers to select the invoice first, then offer Paperless Enrolment
+Customers opt-in by mistake
+Unintended enrolments in Paperless Billing
+Allow a confirmation step before finalizing Paperless Enrolment
+API errors or downtime
+Customers may be unable to enrol
+Provide fallback options like directing them to a customer service representative
+Queries to be Resolved
+Query
+Clarification Required
+An email address is required for Paperless, but the customer does not have one. What is the process?
+Should we allow Paperless Enrolment without an email and use SMS confirmations instead? ￼
+What is the standard process to enable a new option in the IVR workflow? Who owns IVR configuration?
+Do we need a formal approval process for adding Paperless Choice, or can it be configured by InvoiceCloud?
+Do we need help from the IVR tech team to enable Paperless Enrolment?
+If yes, what are the development and deployment timelines?
+After Paperless Enrolment, do we need to send an email notification to the user?
+If yes, should this be handled by InvoiceCloud’s email system or through an external notification service?
+Are we providing an option to disable Paperless Enrolment through IVR?
+If a customer wants to opt-out, how should the system handle it?
+Do we require a tracker to monitor whether Paperless is enabled through IVR?
+Should a customer activity log track this change?
+Is Paperless Enrolment only applicable for specific invoice types, or all?
+Should the IVR validate invoice type eligibility before offering Paperless Billing?
+What is the expected behaviour if a customer does not complete Paperless Enrolment in IVR?
+Should we prompt them again in the next call, or require manual re-enrolment?
+Conclusion & Next Steps
+Actionable Next Steps
+Confirm Required APIs:
+Validate if 
+StoreCustomerPreference
+ API exists or needs to be developed.
+Ensure 
+SearchByAccountNumber
+ and 
+SendWebLink 
+support Paperless Enrolment.
+Modify IVR Workflow to Include Paperless Choice:
+Before Payment: Ask customers to enrol in Paperless Billing before proceeding with payment.
+After Payment: Prompt users to opt into Paperless Billing once the transaction is complete.
+Update API Calls for Paperless Integration:
+Ensure all API responses handle errors properly (e.g., missing email, invalid phone number).
+Confirm IVR Configuration Ownership:
+Determine who is responsible for deploying new IVR options and what the process involves.
+Address Outstanding Queries:
+Seek clarifications on opt-in confirmation, tracking logs, and eligibility for Paperless Billing.
+POC Code sample and flow for Paperless Enrolment in IVR
+Overview
+The “
+Enroll Paperless
+" functionality in the CloudIVR class contains methods and classes related to enrolling customers in paperless billing. The primary method is EnrollInPaperless, which handles the enrolment process by validating the request, checking customer details, and updating the system accordingly.
+Classes
+PaperlessEnrollment_Request
+•	Represents the request structure for enrolling in paperless billing.
+•	Fields:
+•	
+PaymentGUID
+: String
+•	
+BillerGUID
+: String
+•	
+PartnerGUID
+: String
+•	
+PartnerKey
+: String
+PaperlessEnrollment_Response
+•	Represents the response structure for the enrollment process.
+•	Fields:
+•	
+EnrollmentSuccessful
+: Boolean
+•	
+Message
+: String
+•	
+ErrorCode
+: Integer
+Methods
+EnrollInPaperless
+•	This method handles the enrollment process for paperless billing.
+•	
+Parameters
+:
+•	Request: PaperlessEnrollment_Request
+•	Returns:
+•	PaperlessEnrollment_Response
+•	
+Workflow
+:
+Initialize: Create instances of clsBillers and StringBuilder for logging.
+Log Request Parameters: Log the parameters received in the request.
+Validate Partner: Use clsUtilities.ValidateIvrPartner to validate the partner using PartnerGUID and PartnerKey.
+Load Biller: Validate and load the biller using ValidateBillerAndProduct.
+Fetch Payment Details: Execute a SQL query to fetch payment details using PaymentGUID.
+Validate Email Address: Check if the email address is valid using clsValidation.isValidEmailAddress.
+Enroll in Paperless: Check if the customer is already enrolled or pending enrollment. If not, call StartPaperlessRegistrationForCustomer to enroll the customer.
+Handle Exceptions: Log any exceptions that occur during the process.
+2. 
+StartPaperlessRegistrationForCustomer
+•	This method handles the actual registration of the customer for paperless billing.
+•	
+Parameters
+:
+•	CustomerID: Integer
+•	InvoiceTypeID: Integer
+•	BillerID: Integer
+•	EmailAddress: String
+•	
+Workflow
+:
+Initialize SQL List: Create a list to hold SQL commands.
+Update Customer Record: Add SQL command to update the customer's email address.
+Insert Pending Record: Add SQL command to insert a pending paperless registration record.
+Execute SQL Commands: Execute the SQL commands using clsDatabase.EXECUTE_COMMAND_NONQUERY
+Insert Email Queue Record: Add the customer to the paperless email queue.
+Code Sample
+vb
+Dim request As New PaperlessEnrollment_Request With {
+    .PaymentGUID = "12345-abcde-67890-fghij",
+    .BillerGUID = "98765-zyxwv-43210-utsrq",
+    .PartnerGUID = "partner-guid-example",
+    .PartnerKey = "partner-key-example"
+}
+
+Dim response As PaperlessEnrollment_Response = EnrollInPaperless(request)
+If response.EnrollmentSuccessful Then
+    Console.WriteLine("Enrollment successful: " & response.Message)
+Else
+    Console.WriteLine("Enrollment failed: " & response.Message & " (Error Code: " & response.ErrorCode & ")")
+End If
+ URL:/spaces/PE/pages/4076732502/Spike+for+PRISM-97+Paperless+choice+in+the+IVR

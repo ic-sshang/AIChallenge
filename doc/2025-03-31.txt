@@ -1,0 +1,137 @@
+Change Time Window
+5 PM Eastern to 6 PM Eastern
+Changes
+Hub_Infrastructure
+ 
+ 
+PLAT-1340
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Pipeline to Run
+Tooling_Infrastructure
+ 
+ 
+SEC-5538
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INFRA-1070
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Pipeline to Run
+Biller_Infrastructure
+ 
+ 
+PLAT-1482
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SEC-5538
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Pipeline to Run
+Batch Accounts
+PLAT-1975
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+icautopay
+Bicep to Apply
+ 
+ 
+icbatch
+Bicep to Apply
+ 
+ 
+Remove unused Pools from 
+icbatch
+TestPool
+ 
+ 
+NotificationsPool
+ 
+ 
+StandardNotificationsEQP
+ 
+ 
+HighVolumeNotificationsEQP
+ 
+ 
+Gateway Servers
+ 
+ 
+PLAT-1633
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Payer_Infrastructure
+PLAT-1478
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-1588
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SEC-5538
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Pipeline to Run thru PRD
+Payer_Infrastructure
+ 
+ 
+OneTimePaymentService
+Deploy
+ 
+ 
+PayerPayByTextService
+Deploy
+ 
+ 
+PayerPortalUI
+Deploy
+ 
+ 
+Payer Account Service
+Deploy
+ 
+ 
+Payer Branding Service
+Deploy
+ 
+ 
+Payer User Service
+Deploy
+ 
+ 
+Payer Support Service
+Deploy
+ 
+ 
+Payer Support UI
+Deploy
+ 
+ 
+Testing Plan
+Run Smoke Tests against production.
+ 
+Run Payer NextGen Regression Tests against production.
+ 
+Ensure No More Network Error on Elastic Job SQL Server Query Editor in Portal
+Run Biller Cluster Healthchecks
+ 
+Ensure AWX is still accessible in Prod
+Ensure the 2 Managed Identities used by ADO Pipeline Deployments are added to XAT and PRD
+Ensure Payer NextGen Prod Healthchecks all pass:
+ URL:/spaces/platform/pages/4155965552/2025-03-31

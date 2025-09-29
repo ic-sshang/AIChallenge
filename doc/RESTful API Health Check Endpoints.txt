@@ -1,0 +1,69 @@
+The following describes endpoints used to determine the health of a RESTful API.  Each endpoint should be accessible via a HTTP GET and return a 200 status code when successful.
+/health
+Purpose
+: To ensure that external dependencies such as HTTP services and database connections are functioning correctly.
+Usage
+: 
+Required
+.  This is particularly useful for applications that rely on multiple external services. If any of these checks fail, the application can take appropriate actions, such as alerting the team or attempting to reconnect.
+Example
+: Checking if the application can successfully connect to an external API and a database.
+Status Codes
+:
+200 OK
+: The application is running and healthy.
+500 Internal Server Error
+: The application is in a broken state.
+/health/startup
+Purpose
+: To determine if an application has successfully started.
+Usage
+:  
+Optional
+.  This is particularly useful for applications that have long initialization times. If the startup probe fails, the container is killed and restarted.
+Behavior
+: Kubernetes uses the startup probe to check if the application has started correctly. This is useful for applications with long initialization times. If the startup probe fails, Kubernetes will restart the container. 
+Once the startup probe succeeds, the liveness and readiness probes take over.
+Example
+: Checking if the application has completed its startup routine and is ready to run.  Perhaps the application needs to seed a in-memory cache before it is ready.
+Status Codes
+:
+200 OK
+: The application has successfully started and is ready to run.
+500 Internal Server Error
+: The application has failed to start and needs to be restarted.
+/health/liveness
+Purpose
+: To determine if an application is running and has not entered a broken state.
+Usage
+: 
+Required
+.  If the liveness probe fails, the container is considered unhealthy and is usually restarted Kubernetes.
+Behavior
+: Kubernetes uses the liveness probe to check if the application is still alive. If the liveness probe fails, Kubernetes will restart the container. This helps recover from situations where the application is stuck or deadlocked.  Kubernetes continuously calls the liveness probe at a configured interval.
+Example
+: Checking if the application process is still running and responsive.  This endpoint is also used by the Kong API Gateway for healthy API monitoring.
+Status Codes
+:
+200 OK
+: The application is running and healthy.
+500 Internal Server Error
+: The application is in a broken state and needs to be restarted.
+/health/readiness
+Purpose
+: To determine if an application is ready to handle requests.
+Usage
+: 
+Optional
+.  If the readiness probe fails, the application is temporarily removed from the load balancer's pool of available services until it becomes ready again.
+Behavior
+: Kubernetes uses the readiness probe to check if the application is ready to serve traffic. If the readiness probe fails, the pod is temporarily removed from the service's load balancer pool until it becomes ready again.  Kubernetes continuously calls the readiness probe at a configured interval.
+Example
+: Ensuring that all necessary dependencies (like databases or external services) are available and the application is fully initialized.  
+Status Codes
+:
+200 OK
+: The application is ready to handle requests.
+503 Service Unavailable
+: The application is not ready to handle requests, typically because it is still initializing or dependencies are not available.
+ URL:/spaces/EA/pages/4103307286/RESTful+API+Health+Check+Endpoints

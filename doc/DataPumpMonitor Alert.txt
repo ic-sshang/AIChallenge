@@ -1,0 +1,70 @@
+1
+6
+false
+list
+brackets
+true
+STAGING - Data Pump Monitor Alert - IC-APP
+Description
+DataPump alerts through a project called 
+DataPumpMonitor
+. When a biller has not processed pending payments consistently for 2 minutes in the DataPump table, a count of pending payments in the DataPump queue are reported on a Jira alert.
+Common Scenarios
+Related to DataPump deployments delaying payments.
+Biller is the processing bit stuck and is not being picked up to process.
+Biller have payments posting slowly or is timing out longer than 2 minutes, the DateRecAdded in the DataPump table is over 2 minutes ago.
+Bulk auto-pay payments being queued at once, taking time for DP instances to finish processing.
+An uncaught exception is not being handled, erroring out DataPump before updating the processing bit or the DateDelivered.
+DP-Controller job runs longer than a minute, missing to pick up newly created payments until the next run.
+There is an issue with the app server from the alert, unexpected restarted delaying payment or causing stuck billers.
+Steps to Resolve
+Go to the biller’s shard and search for tables 
+DataPump
+ and 
+BillerDataPump
+. 
+You could also go to the biller portal and check the 
+BillerSyncHistoryDataPump
+ page or in the CRM’s 
+DataPump Prod Billers 2 Min Delay
+ page in the 
+Reporting
+ tab.
+Look up all records in 
+DataPump
+ to see if they have a 
+DateDelivered
+.
+Ex. For 10 stuck payments, check if these 10 are being updated.
+Check the DataPump.DateDelivered fields every minute or so to see if these are getting updated. In the case they are just updating slowly, skip to the last step.
+Check the 
+BillerDataPump.LastUpdated
+ to see how recent 
+BillerDataPump.Hold
+ and 
+BillerDataPump.Processing
+ was updated. 
+If its been too long and no pending payments have a DateDelivered, we may need to reset the processing bit from 1 to 0. A dedicated message and alert would also post to signal bits not updated.
+This message may also display in the existing alert, but does not confirm the processing bit is stuck.
+Also keep in mind if this is the only biller, there are others with this same issue. It could be an issue related to an app server. Keep in mind if delays of large amounts of payment maybe running the same instance longer. The processing bit updates to 0 once the DataPump.exe instance is finished.
+If needed, go to 
+CRM/DataPumpManagementProcessing.aspx 
+to reset the
+ 
+BillerDataPump.ProcessingBit
+ value to 0. This should considered as a last resort resolution.
+User will need Manage Biller Datapump Processing CRM permission enabled to access the page. 
+There could be a risk of double posting payments to a biller when updating the processing bit. If not sure, please confirm with the team.
+In cases with delayed timeouts or errors, its also good to post an update in the production-ops channel so the biller is made aware in case of server side errors or biller-intervention that may be needed.
+If resolved, new alerts will stop coming in for these biller(s).
+ 
+DataPump.DateRecAdded
+ past 2 minutes ago will now have a 
+DataPump.DateDelivered
+ 
+ 
+BillerDataPump.ProcessingBit
+ will also be updated recently (indicated by 
+BillerDataPump.LastUpdated
+).
+ URL:/spaces/IM/pages/4245127198/DataPumpMonitor+Alert

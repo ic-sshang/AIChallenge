@@ -1,0 +1,229 @@
+EmailHistory Documentation
+Overview
+EmailHistory provides a way to track and query email notifications sent to customers through various system processes. It supports pagination, filtering, and sorting capabilities through GraphQL.
+Views
+ARG.vwUnifiedEmailHistory
+EmailQueueTypeID
+EmailQueueTypeDesc
+ARG.vwUnifiedEmailHistory
+1
+First Invoice Email Notification
+Yes
+2
+Late Fee Email Notification
+Yes
+3
+Declined Auto Pay Transaction
+Yes
+4
+Declined Scheduled Payment Notification
+Yes
+5
+Payment Transaction Receipt
+Yes
+19
+Registered Customer Welcome Email
+Yes
+21
+AutoPay Registration Notification
+Yes
+23
+Paperless Registration Notification
+Yes
+25
+ACH Reject/Chargeback Notices
+Yes
+32
+Scheduled Payment Confirmation
+Yes
+33
+AutoPay Reminder Notification
+Yes
+37
+Second Invoice Email Notification
+Yes
+38
+Third Invoice Email Notification
+Yes
+41
+Cloud Payment Transaction Receipt
+Yes
+44
+Scheduled Payment Reminder
+Yes
+46
+Shopping Cart Payment Receipt
+Yes
+50
+Online Bank Direct Payment Receipt
+Yes
+63
+Conveyed Customer Notification
+Yes
+67
+Recurring Scheduled Payment Confirmation
+Yes
+69
+Recurring Scheduled Payment Canceled
+Yes
+75
+AutoPay Registration Completed Notification
+Yes
+76
+Paperless Registration Completed Notification
+Yes
+Default Columns
+emailSentDate, emailTypeDesc, emailRecipient, emailStatus, customerName, accountNumber
+This document describes the structure and purpose of the following classes, which represent different types of email notification records in the system:
+•	EmailHistory
+1. EmailHistory
+Purpose:
+Represents a record of general email notifications sent to customers, including status and tracking information.
+Available Data:
+•	EmailRecipient: The recipient's email address.
+•	EmailType: Enum indicating the type of email sent.
+•	EmailTypeDesc: Description of the email type.
+•	EmailSentDate: Date and time the email was sent.
+•	EmailStatus: Status of the email (e.g., sent, failed).
+•	CustomerId: ID of the customer associated with the email.
+•	CustomerName: Name of the customer.
+•	AccountNumber: Customer's account number.
+•	Customer: Navigation property to the related Customer entity.
+EmailQueueType Available:
+wide
+760
+public enum EmailQueueType_EmailHistory
+{
+    FirstInvoiceNotification = 1,
+    LateFeeNotification = 2,
+    DeclinedAutoPayTransaction = 3,
+    DeclinedScheduledPaymentNotification = 4,
+    PaymentTransactionReceipt = 5,
+    RegisteredCustomerWelcomeEmail = 19,
+    AutoPayRegistrationNotification = 21,
+    PaperlessRegistrationNotification = 23,
+    ACHRejectChargebackNotices = 25,
+    ScheduledPaymentConfirmation = 32,
+    AutoPayReminderNotification = 33,
+    SecondInvoiceNotification = 37,
+    ThirdInvoiceNotification = 38,
+    CloudPaymentTransactionReceipt = 41,
+    ScheduledPaymentReminder = 44,
+    ShoppingCartPaymentReceipt = 46,
+    OnlineBankDirectPaymentReceipt = 50,
+    ConveyedCustomerNotification = 63,
+    RecurringScheduledPaymentConfirmation = 67,
+    RecurringScheduledPaymentCanceled = 69,
+    AutoPayRegistrationCompletedNotification = 75,
+    PaperlessRegistrationCompletedNotification = 76
+}
+Prompt Examples:
+Show me email history for 
+cison@invoicecloud.com
+wide
+760
+{ emailHistory(first: 1000, where: { emailRecipient: { eq: \"cison@invoicecloud.com\" } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { emailSentDate, emailTypeDesc, emailRecipient, emailStatus, customerName, accountNumber } totalCount }
+list of declined autopay emails
+wide
+760
+{ emailHistory(first: 1000, where: { emailType: { eq: DECLINED_AUTOPAY_TRANSACTION } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { emailSentDate, emailTypeDesc, emailRecipient, emailStatus, customerName, accountNumber } totalCount }
+list of emails for paperless registration that was sent
+wide
+760
+{ invoiceEmailNotifications(first: 1000, where: { emailStatus: { eq: \"Sent\" }, emailType: { eq: PAPERLESS_REGISTRATION_NOTIFICATION } }) { pageInfo { startCursor endCursor hasNextPage hasPreviousPage } nodes { emailSentDate, emailTypeDesc, emailRecipient, emailStatus, customerName, accountNumber } totalCount }
+EmailQueueType Not Included (can be added in the future)
+EmailQueueTypeID
+EmailQueueTypeDesc
+6
+Request System Notification
+7
+Batch Close Notification
+8
+New EFT Reject Notifications
+9
+Generic Notification for Applications
+10
+Customer Password Recovery
+11
+System Error / Exception
+27
+Chase Consolidated Batch Close Notification
+28
+Chase Chargeback Notification
+29
+Chase Retrieval Request Notification
+30
+Credit/Debit Card Expiration Notification
+36
+Online Bank Direct Deposit Notification
+39
+Paperless Bounce Notification
+40
+Check 21 Deposit Notification
+42
+FlexPay Confirmation Notification
+47
+Paperless Off Confirmation
+49
+Online Bank Direct Daily Reversals
+52
+Check 21 Payment Receipt
+54
+Holyoke PDF Failure Notice
+55
+Linked Accounts First Invoice Notification
+57
+Linked Accounts Second Invoice Notification
+59
+Linked Accounts Third Invoice Notification
+61
+AutoPay Off Confirmation
+65
+Multiple Registered Customers Welcome Email
+71
+Online Bank Direct Upcoming Return in 2 days
+72
+Online Bank Direct Upcoming Return in 1 day
+73
+Oracle OFSLL Welcome Letter
+74
+Payment Plan Confirmation Notification
+77
+Not Live - Void Transaction Receipt
+79
+CCExpiration Resend Notification
+80
+New Documents Available
+81
+Document Paperless Registration
+82
+Document Paperless Registration Completed
+84
+Document Paperless Off Confirmation
+88
+ICG Batch Close Notifications
+89
+Account Deactivation Notification
+91
+Password Reset Notification
+97
+Payment Method Block Notification
+98
+Linked Accounts AutoPay Reminder
+100
+Linked Accounts AutoPay Receipt
+102
+AutoPay with Paperless Registration Completed
+105
+NCR Jetpay Batch Close Notification
+106
+FlexPay Auto Enrollment
+108
+BlueFin Batch Close Notification
+109
+Biller User Reset Password
+111
+Biller User Create Password
+112
+Consolidated Payment Transaction Receipt
+ URL:/spaces/ED/pages/4441636893/Email+History

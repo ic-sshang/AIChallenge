@@ -1,0 +1,10 @@
+You may need to update the invoice due date if you have past due invoices and for example need to test flexpay…
+Select your shard in the object explorer
+Run select statements to see what columns you need
+sql
+select * from Invoices order by 1 desc
+select * from customers order by 1 desc
+Run your update statement example
+sql
+update invoices set invoiceduedate='2025-12-31',autopaycollectiondate='2025-12-31' where invoiceid=1704
+ URL:/spaces/PRODUCT/pages/3290562584/Updating+Invoices+via+SQL

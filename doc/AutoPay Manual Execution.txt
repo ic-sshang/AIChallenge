@@ -1,0 +1,25 @@
+Introduction
+This page will go over how to manually run AutoPayProcessing. This is performed by running the main console application that processes all autopay payments. An example of when this process is run is when there is an issue with RTDR returning incorrect balances and it needs to be manually run with RTDR disabled. It is advised to ask for supervision from Mark or Alexis when performing this process.
+Environment Setup
+This process must be performed from the Bastion production servers.
+Cloning the Repo
+In Visual Studio, clone the AutoPaymentProcessing repo from the Src project.
+Setting Collection Date
+AutoPay collects invoices to process based on the AutoPayCollectionDate field in the invoice record. When processing Autopay manually, this field may not be set to the correct date. In this case, an ITR needs to be submitted to update the value so that the invoices can be collected properly.
+It is CRUCIAL that you are set up to process these payments before submitting the ITR
+.
+In some cases, there is another value being updated together with the AutoPayCollectionDate such as BalanceDue. You want to have the least amount of time between the values being updated by data services and starting the execution of AutoPaymentProcessing. This is because there could be RTDR calls that change these values, possibly leaving out some invoices from being collected. If the biller this is being done for does not use RTDR, this can be done with more leisure.
+Configuring the Function
+These are the variables that need to be updated and verified for the appropriate value before executing the program.
+Setting the BillerID
+There is a BillerID property that needs to be set with the BillerID.
+Comment out the IF statement from lines 39-46 and set the BillerID as the return value.
+Setting ReRun
+There is a ReRun property that needs to be set to True.
+Comment out the if statement and leave a Return True as shown in the image below
+Disabling RTDR
+There is a section in this project to run RTDR on the customers that are being processed. This section is usually commented out when performing manual runs to avoid unexpected changes by this refresh.
+Comment out the if statement below the comment “do we need to real-time update?“ to disable RTDR.
+Executing the Program
+Execution of the program should be done after the project is set up, balances are up to date, and the AutoPayCollectionDates are set. I recommend setting a breakpoint on the CountToRun variable to make sure that the expected amount of invoices was picked up to process. After this, run in debug mode and allow it to process.
+ URL:/spaces/DS/pages/2701361175/AutoPay+Manual+Execution

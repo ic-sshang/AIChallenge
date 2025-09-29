@@ -1,0 +1,11 @@
+https://invoicecloud.atlassian.net/browse/PLAT-1668https://invoicecloud.atlassian.net/browse/PLAT-1668
+Option to authenticate via Azure AD and restrict users based on groups doesnt work on AWX. We could see the options for this in AWX using AZURE AD OAUTH2 ORGANIZATION MAP or AZURE AD OAUTH2 TEAM MAP.
+However, after creating the groups on Azure AD and teams on AWX, I am unable to map the group. This issue is preventing us from proceeding further.
+Open issue on github 
+https://github.com/ansible/awx/issues/7362
+ 
+Possible options: 
+Manual - not the ideal way to do. We need to control using AD Groups and not manage users and group manually.
+OKTA/SAML - Recommended as other tools use it as well. meet 
+ to discuss more on it.
+ URL:/spaces/platform/pages/3951689788/AWX+Authentication

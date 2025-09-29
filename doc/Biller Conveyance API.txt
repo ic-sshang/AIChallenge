@@ -1,0 +1,38 @@
+Application Overview
+Application Name: BillerConveyanceAPI
+Version: 1.0.0
+Description: Biller Conveyance API
+Primary Functionality: An API that will convey an account, update the customer name, or send to the Biller Portal Review Queue depending on the similarity scoring it receives.
+Key Features:
+Development Team Contact Information
+Product Manager: John Whitworth
+Tech Lead: Byron King
+Engineering Manager: Sean Concannon
+Support Contact: Sean Concannon
+Architect: Martin Henderson
+Technical Details
+Programming Languages: C# 
+Frameworks/Libraries: .NET 8 
+Database: Master, Biller Shards (Devtest and Production Environments)
+Dependencies: Master, Biller Shards Azure SQL Databases
+Deployment Information
+Deployment Environment 
+( k8s Web Node | k8s Job Node | Web VM | Job VM | Proxy VM )
+: Biller Clusters
+Application Type 
+( Job | Web API | Web UI )
+: Web API
+Outbound Network Ports:
+Inbound Network Ports:
+PCI Scope: [Does the application handle credit card data?]
+Environment Variables:
+Web Ingress
+Health Endpoint 
+(optional)
+:
+Suggested URL Root:
+Examples:
+https://api.invoicecloud.com/{domain}/{api}
+https://www.invoicecloud.com/{somepath}/{webapp}
+ 
+ URL:/spaces/ED/pages/3963126297/Biller+Conveyance+API

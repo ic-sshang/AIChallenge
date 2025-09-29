@@ -1,0 +1,28 @@
+Microservices communication patterns ensure that small, independent services in a software system can interact smoothly and efficiently. Here are some common patterns:
+Synchronous Communication
+In synchronous communication, services communicate in real-time, waiting for a response before proceeding. Common protocols include:
+HTTP/REST
+: Widely used for its simplicity and compatibility with web technologies.
+Use when:
+When a service needs an immediate response
+When you need strong consistency and the operations are tightly coupled
+When you need low latency and the overhead of managing asynchronous communication is not justified
+Examples:
+Authentication
+Payment Processing
+Asynchronous Communication
+Asynchronous communication allows services to interact without waiting for an immediate response. This is often achieved through message brokers or event-driven architectures:
+Message Brokers
+: Tools like Azure Service Bus and Azure Storage Queues facilitate asynchronous communication by allowing services to send and receive messages without direct interaction.
+Event-Driven Architecture
+: Services communicate by emitting and listening to events. This decouples services and allows for more flexible and scalable interactions.
+Use when:
+When services can operate independently and do not need an immediate response
+When tasks can be process in the background to allow for processing higher volume
+When you need to scale services independently and handle spikes in traffic 
+Examples:
+Sending emails or notifications
+Boarding a biller across multiple systems
+API Gateway
+An API Gateway acts as a single entry point for all requests, routing them to the appropriate microservices. It can also handle cross-cutting concerns like authentication, logging, and rate limiting.
+ URL:/spaces/ED/pages/3517677672/Communication+Patterns

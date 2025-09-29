@@ -1,0 +1,1765 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+ 
+ 
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File- First Half Mapping
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension:  .txt
+File Naming Convention: 
+File Delimiter:  ',' (comma)
+Specification: Column headers
+Sample File (Real Estate Personal Property):
+Sample File (Mobile Home): not yet received
+SFTP File Path:
+File Transfer Frequency:  Yearly - once to create bills. They will upload first half, wait till halfway through year then generate second half bill through process with Aumentum
+***There are two file mappings on the backend, one for mobile home and one for real estate / personal property. The format of the two files seem to be exact and much of the logic is repeated. Any columns that differ between the two mappings are colored red.
+If either property number or balance due is blank / not set in the file the row will be skipped - confirmed with biller
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+Always ‘FH’
+File Header
+2
+BillerGuid
+N
+TRUE
+Set by IC
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+File Header
+4
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+Set by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Set by IC
+File Header
+7
+RowType
+N
+TRUE
+Always ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+Set by IC (Always 'N')
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Set by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Real Estate / Personal Property
+mpropertynumber-mtaxyear-FirstHalf
+FirstHalf is literal string ‘FirstHalf’
+Mobile Homes
+mpropertynumber-MH-mtaxyear-FirstHalf
+MH is literal string ‘MH’
+FirstHalf is literal string ‘FirstHalf’
+mpropertynumber - A1
+mtaxyear- A0
+Invoice Header
+11
+InvoiceDate
+N
+False
+Set by IC - Date invoice is received
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+minstallmentDueDate_1st
+mInstallmentDueDate_1st - A2
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+T15
+C18
+Invoice Header
+38
+Custom1
+Y
+FALSE
+mlocStrNo + mlocStrDir + mlocStrName + mlocStrSuffix
+A7,A8,A9,A10
+Invoice Header
+39
+Custom2
+Y
+FALSE
+mNetTaxAmount_1st/T9
+C7
+InvoiceHeader
+40
+Custom3
+Y
+FALSE
+mNetCurrentDue_1st\T14
+C8
+InvoiceHeader
+41
+Custom4
+Y
+FALSE
+C12 - Delinquent Amount
+C12
+Invoice Header
+42
+Custom5
+Y
+FALSE
+mPrimaryOwnerName
+A4
+Invoice Header
+43
+Custom6
+Y
+False
+mhYear
+A27
+Invoice Header
+44
+Custom7
+Y
+False
+mhMake
+A28
+Invoice Header
+45
+Custom8
+Y
+False
+mhModel
+A29
+Invoice Header
+46
+Custom9
+Y
+False
+mHCertificate no
+A30
+Invoice Header
+47
+Custom10
+Y
+False
+mHYear + mhMake + mhModel 
+A27 + A28 + A29
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+1st installment: mamountDue_1st\total tax due
+mamountDue_1st\total tax due c17
+Invoice Header
+94
+Custom11
+Y
+False
+d14 MH Deprecation  / like real
+d14
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+Real Estate
+8 - Real Estate Taxes
+Mobile Homes
+44 - Mobile Homes
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+1
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+mtaxyear
+A0 - mtaxyear
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+N
+TRUE
+Set by IC (Always CR)
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+mpropertynumber
+A1
+Customer Record
+60
+CustomerName
+Y
+TRUE
+mMailName
+A14
+Customer Record
+61
+Address1
+Y
+FALSE
+ mStrNumber + mStrDirection + mStrName + mStrSuffix
+A16, A17, A18, A19
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+mCity
+A22
+(this is mailing address)
+Customer Record
+64
+State
+Y
+FALSE
+mState
+A23
+(this is mailing address)
+Customer Record
+65
+Zip
+Y
+FALSE
+mZipCode
+A24
+(this is mailing address)
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+msecondaryOwnerName
+A5
+Customer Record
+70
+RowType
+N
+TRUE
+Always ID
+Invoice Detail
+Invoice File- Second Half Mapping
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension:  .txt
+File Naming Convention: 
+File Delimiter: ',' (comma)
+Specification: Column Headers
+Sample File (Real Estate / Personal Property): 
+Sample file with columns not in use grayed out:
+Sample File: (Mobile Home):
+SFTP File Path:
+File Transfer Frequency:  Yearly - mid year once second half bills are created
+***There are two file mappings on the backend, one for mobile home and one for real estate / personal property. The format of the two files seem to be exact and much of the logic is repeated. Any columns that differ between the two mappings are colored red.
+If either property number or balance due is blank / not set in the file the row will be skipped - confirmed with biller
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+Always ‘FH’
+File Header
+2
+BillerGuid
+N
+TRUE
+Set by IC
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+File Header
+4
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+Set by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Set by IC
+File Header
+7
+RowType
+N
+TRUE
+Always ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+Set by IC (Always 'N')
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Set by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Real Estate / Personal Property
+mpropertynumber-mtaxyear-SecondHalf
+SecondHalfis literal string ‘SecondHalf’
+Mobile Homes
+mpropertynumber-MH-mtaxyear-SecondHalf
+MH is literal string ‘MH’
+SecondHalf is literal string ‘SecondHalf’
+mpropertynumber - A1
+mtaxyear- A0
+SecondHalf is literal string ‘SecondHalf’
+Invoice Header
+11
+InvoiceDate
+N
+TRUE
+Set by IC - Date invoice is received
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+minstallmentDueDate
+mInstallmentDueDate- A2
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+T15
+C18
+Invoice Header
+38
+Custom1
+Y
+FALSE
+mlocStrNo + mlocStrDir + mlocStrName + mlocStrSuffix
+A7,A8,A9,A10
+Invoice Header
+39
+Custom2
+Y
+FALSE
+mNetTaxAmount_1st/T9
+C7
+InvoiceHeader
+40
+Custom3
+Y
+FALSE
+mNetCurrentDue_1st\T14
+C8
+InvoiceHeader
+41
+Custom4
+Y
+FALSE
+C12 - Delinquent Amount
+C12
+Invoice Header
+42
+Custom5
+Y
+FALSE
+mPrimaryOwnerName
+A4
+Invoice Header
+43
+Custom6
+Y
+False
+mhYear
+A27
+Invoice Header
+44
+Custom7
+Y
+False
+mhMake
+A28
+Invoice Header
+45
+Custom8
+Y
+False
+mhModel
+A29
+Invoice Header
+46
+Custom9
+Y
+False
+mHCertificate no
+A30
+Invoice Header
+47
+Custom10
+Y
+False
+mHYear + mhMake + mhModel 
+A27 + A28 + A29
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+T15
+C18
+Invoice Header
+94
+Custom11
+Y
+False
+d14 MH Deprecation  / like real
+d14
+Invoice Header
+194
+BalanceForward
+N
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+Real Estate
+8 - Real Estate Taxes
+Mobile Homes
+44 - Mobile Homes
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+2
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+mtaxyear
+A0 - mtaxyear
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+N
+TRUE
+Set by IC (Always CR)
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+mpropertynumber
+A1
+Customer Record
+60
+CustomerName
+Y
+TRUE
+mMailName
+A14
+Customer Record
+61
+Address1
+Y
+FALSE
+  mStrNumber + mStrDirection + mStrName + mStrSuffix
+A16, A17, A18, A19
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+mCity
+A22
+(this is mailing address)
+Customer Record
+64
+State
+Y
+FALSE
+mState
+A23
+(this is mailing address)
+Customer Record
+65
+Zip
+Y
+FALSE
+mZipCode
+A24
+(this is mailing address)
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+msecondaryOwnerName
+A5
+Customer Record
+70
+RowType
+N
+TRUE
+Always ID
+Invoice Detail
+Invoice File- No File Header
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension:  .txt
+File Naming Convention: 
+File Delimiter: ',' (comma)
+Specification: No File Headers
+Sample File (Real Estate / Personal Property): 
+SFTP File Path:
+File Transfer Frequency: 
+If either property number or balance due is blank / not set in the file the row will be skipped - confirmed with biller
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+NA-Generated by IC-Always ‘FH’
+File Header
+2
+BillerGuid
+N
+TRUE
+NA-Generated by IC
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+File Header
+4
+FileCreationDate
+N
+TRUE
+NA-Generated by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+NA-Generated by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+NA-Generated by IC
+File Header
+7
+RowType
+N
+TRUE
+Always ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+Set by IC (Always 'N')
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Set by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Real Estate / Personal Property
+mpropertynumber-mtaxyear-FirstHalf
+FirstHalf is literal string ‘FirstHalf’
+Mobile Homes
+mpropertynumber-MH-mtaxyear-FirstHalf
+MH is literal string ‘MH’
+FirstHalf is literal string ‘FirstHalf’
+mpropertynumber - A1
+mtaxyear- A0
+Invoice Header
+11
+InvoiceDate
+N
+False
+Set by IC - Date invoice is received
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+minstallmentDueDate_1st
+mInstallmentDueDate_1st - A2
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+T15
+C18
+Invoice Header
+38
+Custom1
+Y
+FALSE
+mlocStrNo + mlocStrDir + mlocStrName + mlocStrSuffix
+A7,A8,A9,A10
+Invoice Header
+39
+Custom2
+Y
+FALSE
+mNetTaxAmount_1st/T9
+C7
+InvoiceHeader
+40
+Custom3
+Y
+FALSE
+mNetCurrentDue_1st\T14
+C8
+InvoiceHeader
+41
+Custom4
+Y
+FALSE
+C12 - Delinquent Amount
+C12
+Invoice Header
+42
+Custom5
+Y
+FALSE
+mPrimaryOwnerName
+A4
+Invoice Header
+43
+Custom6
+Y
+False
+mhYear
+A27
+Invoice Header
+44
+Custom7
+Y
+False
+mhMake
+A28
+Invoice Header
+45
+Custom8
+Y
+False
+mhModel
+A29
+Invoice Header
+46
+Custom9
+Y
+False
+mHCertificate no
+A30
+Invoice Header
+47
+Custom10
+Y
+False
+mHYear + mhMake + mhModel 
+A27 + A28 + A29
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+1st installment: mamountDue_1st\total tax due
+mamountDue_1st\total tax due c17
+Invoice Header
+94
+Custom11
+Y
+False
+d14 MH Deprecation  / like real
+d14
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+Real Estate
+8 - Real Estate Taxes
+Mobile Homes
+44 - Mobile Homes
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+1
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+mtaxyear
+A0 - mtaxyear
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+N
+TRUE
+Set by IC (Always CR)
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+mpropertynumber
+A1
+Customer Record
+60
+CustomerName
+Y
+TRUE
+mMailName
+A14
+Customer Record
+61
+Address1
+Y
+FALSE
+ mStrNumber + mStrDirection + mStrName + mStrSuffix
+A16, A17, A18, A19
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+mCity
+A22
+(this is mailing address)
+Customer Record
+64
+State
+Y
+FALSE
+mState
+A23
+(this is mailing address)
+Customer Record
+65
+Zip
+Y
+FALSE
+mZipCode
+A24
+(this is mailing address)
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+msecondaryOwnerName
+A5
+Customer Record
+70
+RowType
+N
+TRUE
+Always ID
+Invoice Detail
+Adjustment/Daily Balance File - RE / PP 1st Half
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension:  csv
+File Naming Convention: 
+File Delimiter: ',' (comma)
+Specification: Column Headers
+Sample File: 
+First Half Sample
+FTP File Path:
+File Transfer Frequency: Daily
+There will be two mappings for the adjustment / daily balance file with TWO different locations / tasks on SFTP. Mahoning has confirmed all users will either be on 1 or 2 at same time.
+**Note: The automatically generated file from Mahoning has the first row as headers, and the second row as filler data (-----,---------------,---------,-----------,------------,-------------): Read the headers from the first row but please skip the second row as it will not be readable. If possible, the code should try to rea the second row and see if it’s actual data and if not skip to make most flexible for future implementations. If this is not possible just skip second row.
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC - Always ‘AH’
+File Header
+306
+BillerGuid
+N
+TRUE
+set by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+N
+TRUE
+set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+set by IC
+File Header
+311
+RowType
+N
+TRUE
+set by IC, always ‘AR’
+Adjustment Record
+312
+InvoiceNumber
+N
+FALSE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+mPropertyNumber
+Position 2
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+For installment 1: Add delinquent amount+ First half
+Position 4, 5,
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+N
+FALSE
+Adjustment Record
+352
+BillerBillYear
+Y
+TRUE
+BillYear
+YYYY
+Position 1
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+8
+Adjustment Record
+Adjustment/Daily Balance File - RE / PP 2nd Half
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension:  csv
+File Naming Convention: 
+File Delimiter: ',' (comma)
+Specification: Column Headers
+Sample File: 
+Second Half Sample:
+SFTP File Path:
+File Transfer Frequency: Daily
+There will be two mappings for the adjustment / daily balance file with TWO different locations / tasks on SFTP. Mahoning has confirmed all users will either be on 1 or 2 at same time.
+**Note: The automatically generated file from Mahoning has the first row as headers, and the second row as filler data (-----,---------------,---------,-----------,------------,-------------): Read the headers from the first row but please skip the second row as it will not be readable. If possible, the code should try to rea the second row and see if it’s actual data and if not skip to make most flexible for future implementations. If this is not possible just skip second row.
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC - Always ‘AH’
+File Header
+306
+BillerGuid
+N
+TRUE
+set by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+N
+TRUE
+set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+set by IC
+File Header
+311
+RowType
+N
+TRUE
+set by IC, always ‘AR’
+Adjustment Record
+312
+InvoiceNumber
+N
+FALSE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+mPropertyNumber
+Position 2
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+For installment 2: 
+Add delinquent Amount + First Half + Second Half Balance for total due
+Position 4, 5, 6
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+N
+FALSE
+Adjustment Record
+352
+BillerBillYear
+Y
+TRUE
+BillYear
+YYYY
+Position 1
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+8
+Adjustment Record
+Adjustment/Daily Balance File - Mobile Homes First Half
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension:  csv
+File Naming Convention: 
+File Delimiter: comma delimited ','
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Daily
+There will be two mappings for the adjustment / daily balance file with TWO different locations / tasks on SFTP. Mahoning has confirmed all users will either be on 1 or 2 at same time.
+**Note: The automatically generated file from Mahoning has the first row as headers, and the second row as filler data (-----,---------------,---------,-----------,------------,-------------): Read the headers from the first row but please skip the second row as it will not be readable. If possible, the code should try to rea the second row and see if it’s actual data and if not skip to make most flexible for future implementations. If this is not possible just skip second row.
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC - Always ‘AH’
+File Header
+306
+BillerGuid
+N
+TRUE
+set by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+N
+TRUE
+set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+set by IC
+File Header
+311
+RowType
+N
+TRUE
+set by IC, always ‘AR’
+Adjustment Record
+312
+InvoiceNumber
+N
+FALSE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+mPropertyNumber
+Position 2
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+For installment 2: 
+Add delinquent Amount + First Half + Second Half Balance for total due
+Position 4, 5, 6
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+N
+FALSE
+Adjustment Record
+352
+BillerBillYear
+Y
+TRUE
+BillYear
+YYYY
+Position 1
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+44
+Adjustment Record
+Adjustment/Daily Balance File - Mobile Homes Second Half
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension:  csv
+File Naming Convention: 
+File Delimiter: comma delimited ','
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Daily
+There will be two mappings for the adjustment / daily balance file with TWO different locations / tasks on SFTP. Mahoning has confirmed all users will either be on 1 or 2 at same time.
+**Note: The automatically generated file from Mahoning has the first row as headers, and the second row as filler data (-----,---------------,---------,-----------,------------,-------------): Read the headers from the first row but please skip the second row as it will not be readable. If possible, the code should try to rea the second row and see if it’s actual data and if not skip to make most flexible for future implementations. If this is not possible just skip second row.
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC - Always ‘AH’
+File Header
+306
+BillerGuid
+N
+TRUE
+set by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+N
+TRUE
+set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+set by IC
+File Header
+311
+RowType
+N
+TRUE
+set by IC, always ‘AR’
+Adjustment Record
+312
+InvoiceNumber
+N
+FALSE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+mPropertyNumber
+Position 2
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+For installment 2: 
+Add delinquent Amount + First Half + Second Half Balance for total due
+Position 4, 5, 6
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+N
+FALSE
+Adjustment Record
+352
+BillerBillYear
+Y
+TRUE
+BillYear
+YYYY
+Position 1
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+44
+Adjustment Record
+Payment/Lockbox File - Real Estate
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension:  .txt
+File Naming Convention:  N/A
+File Delimiter:  
+Fixed Position
+Specification: 
+ACH Reject
+ Requirements:
+C-Code Rejects included?
+Yes/
+No
+Include Credits & Chargebacks?
+Credits?
+Yes/
+No
+Chargebacks?
+Yes/
+No
+Sent a Negative value, using dash indicator?
+Yes/
+No
+Alternative credit indication:
+Sample File:
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+Header Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+40
+Position 3-3
+Machine Number
+1
+Position 4-5
+DD Effective Payment Date
+Day of Month (DD) 
+DATE THAT PAYMENT WILL POST TO THEIR SYSTEM (BATCH CLOSE DATE, NOT PAYMENT DATE)
+Position 6-7
+MM EffectivePayment Date
+Month of Year (MM) DATE THAT PAYMENT WILL POST TO THEIR SYSTEM (BATCH CLOSE DATE, NOT PAYMENT DATE)
+Position 8-9
+Batch Number
+01
+Position 10-16
+Batch Type
+Real (Lpadded with spaces)
+Position 17-20
+Year of effective payment
+YYYY of effective payment
+Position 21-80
+Empty spaces
+Detail Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+01
+Position 3-3
+Transaction Type / Type Code
+F = First Installment (keyed off the invoice number or biller installment number)
+X = Second Installment (keyed off the invoice number or biller installment number)
+Position 4-4
+Unused
+empty space
+Position 5-34
+Property (Account Number)
+Account number lpad with spaces
+Position 35-46
+Amount (12 digits)
+Payment amount without service fee, lpadded with 0s
+Position 47-80
+Filler
+Unused Empty Spaces
+Footer Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+41
+Position 3-14
+Total Batch Amount
+Total batch amount lpadded with 0s
+Payment/Lockbox File - Mobile Homes
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension:  .txt
+File Naming Convention:  N/A
+File Delimiter:  
+Fixed Position
+Specification: 
+ACH Reject
+ Requirements:
+C-Code Rejects included?
+Yes/
+No
+Include Credits & Chargebacks?
+Credits?
+Yes/
+No
+Chargebacks?
+Yes/
+No
+Sent a Negative value, using dash indicator?
+Yes/
+No
+Alternative credit indication:
+Sample File:
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+Header Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+40
+Position 3-3
+Machine Number
+1
+Position 4-5
+DD Effective Payment Date
+Day of Month (DD) 
+DATE THAT PAYMENT WILL POST TO THEIR SYSTEM (BATCH CLOSE DATE, NOT PAYMENT DATE)
+Position 6-7
+MM EffectivePayment Date
+Month of Year (MM) DATE THAT PAYMENT WILL POST TO THEIR SYSTEM (BATCH CLOSE DATE, NOT PAYMENT DATE)
+Position 8-9
+Batch Number
+01
+Position 10-16
+Batch Type
+Mobile 
+ (Lpadded with spaces)
+Position 17-20
+Year of effective payment
+YYYY of effective payment
+Position 21-80
+Empty spaces
+Detail Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+01
+Position 3-3
+Transaction Type / Type Code
+F = First Installment (keyed off the invoice number or biller installment number)
+X = Second Installment (keyed off the invoice number or biller installment number)
+Position 4-4
+Unused
+empty space
+Position 5-34
+Property (Account Number)
+Account number lpad with spaces
+Position 35-46
+Amount (12 digits)
+Payment amount without service fee, lpadded with 0s
+Position 47-80
+Filler
+Unused Empty Spaces
+Footer Record
+Field
+Data Type
+Character Limits
+Format
+Values
+Position 1-2
+Record Code
+41
+Position 3-14
+Total Batch Amount
+Total batch amount lpadded with 0s
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: .csv 
+File Naming Convention: 
+File Delimiter:  comma
+Specification:  Standard Changelog
+Sample File:
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+N/A
+BIF Customization's
+Invoice Type Option 22 needs to be turned to on so that the most recent invoice is zeroed out on conveyance.
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Biller by Biller Basis
+AutoPayCollectionDate
+Biller by Biller Basis
+BalanceForward
+Always set to 1, each bill should balance forward
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller by Biller Basis
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGuid
+N/A
+InvoiceTypeID
+N/A
+LateFeeDate
+Biller by Biller Basis
+LocationReference
+N/A
+MinimumAmountDue
+Biller by Biller Basis
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller by Biller Basis
+ThirdNotifyRequestedDate
+Biller by Biller Basis
+User Interaction and Design
+Data Flow - Invoice
+att2286714885
+2268168214
+1
+Chart1
+IM
+att2286616582
+att2286321677
+0
+Data Flow - Adjustments
+att2286419972
+2268168214
+1
+Chart2
+IM
+att2285338653
+att2286288901
+0
+Data Flow - Payment
+att2286747653
+2268168214
+1
+Chart4
+IM
+att2286288906
+att2284912661
+0
+Data Flow - Void
+Manually 
+Data Flow - ACH Reject
+Manually 
+Data Flow - Change Log
+att2286288913
+2268168214
+1
+Chart5
+IM
+att2286649360
+att2286419977
+0
+Data Flow - Bill Presentment
+Varies biller by biller
+Payer Experience
+Redirect
+att2286845959
+2268168214
+1
+Chart7
+IM
+att2286256135
+att2286485511
+0
+2. Registered User
+att2286223376
+2268168214
+1
+Chart 3
+IM
+att2285994002
+att2286223371
+0
+Biller Experience
+Biller Portal
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Cloud Pay v1
+Used for redirect to IC for payment
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-7128
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+09/2023
+No BillYear column in Adjustment file.
+Biller would like to add BillYear to the Adjustment file for all Invoice Type: RE/PP/MH.
+Convert adjustment files that are converted using the following invoice types: RE - FirstHalf, RE - SecondHalf
+MH - FirstHalf, MH - SecondHalf 
+(Only Biller using these file types: 3219, 3266, 3695)
+ URL:/spaces/IM/pages/2268168214/Harris+Aumentum+MVP+-+Technical+Design

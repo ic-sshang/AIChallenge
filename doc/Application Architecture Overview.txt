@@ -1,0 +1,150 @@
+Components
+Web Servers
+: Azure VMs, Microsoft IIS
+App Servers
+: Azure VMs, Skybot agents
+Skybot Server
+: Azure VM, Job scheduling control plane
+Azure Functions
+: Serverless compute service for running code
+Azure Batch
+: For large scale parallel and high performance applications
+Azure Storage
+: Blob storage, file storage, and message queues
+Azure SQL
+: Managed relation database service
+High Level System
+The systems can be grouped into tiers; Web, Job, Service, and Data.
+2
+1
+0
+0
+3536781354
+3537108994
+1
+Untitled Diagram-1725536814934.drawio
+1
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1725536814934.drawio
+0
+910.5
+240.5
+Web Tier
+This is the topmost layer that interacts directly with the user. It includes the user interface and is responsible for displaying information to the user and collecting user input. In web applications, this involves web pages rendered by a web browser and HTTP APIs consumed by clients.  Interfaces are exposed over HTTPS.
+Role
+: This is the topmost layer that interacts directly with the user.
+Responsibilities
+: It handles the user interface and user experience, displaying information to the user and collecting user input.
+Technologies
+: HTML, CSS, JavaScript, JQuery, 4.8 ASP.Net Web Forms, 4.8 ASP.Net Web APIs, Microsoft IIS.
+Example
+: The Biller Portal where billers can log in, view their reports, or interact with the application.
+2
+1
+0
+0
+3534848080
+3535274098
+1
+Untitled Diagram-1725538258669.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1725538258669.drawio
+0
+711
+431
+Details: 
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/3537895425/Application+Architecture+Details#Portals-R%27-Us---Users-Interacting-with-InvoiceCloud
+ 
+Network: 
+Web Network Components
+ 
+Job Tier
+This layer automates and manages complex business processes.  These processes can be triggered by events or schedules.
+Role
+: This tier is responsible for executing scheduled tasks or background jobs that are not directly triggered by user actions.
+Responsibilities
+: It handles batch processing, data synchronization, report generation, and other automated tasks.
+Technologies
+: Fortra Skybot (Automate Schedule), 4.8 .Net Console, Azure Functions, and Azure Batch
+Example
+: CreditCardAutoClose is a hourly job that settles biller payments on the terminals payment processor (Chase, Paya, Braintree, etc…).
+2
+1
+0
+0
+3534815363
+3535274098
+1
+Untitled Diagram-1725538780859.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1725538780859.drawio
+0
+831
+541
+Details: 
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/3537895425/Application+Architecture+Details#The-App-Tier
+ 
+Skybot: 
+Skybot (Automate Schedule) Component
+ 
+Service Tier
+This middle layer processes centralized business logic and data access for applications. It processes data and makes decisions based on the business rules.  Services are exposed over HTTPS (443) or dedicated TCP ports for non-HTTP protocols.  Services are not directly accessed by users.
+Role
+: This middle layer processes business logic and data access of the application.
+Responsibilities
+: It processes data and enforces business rules.
+Technologies
+: .Net WCF Services; SOAP and Binary.
+Example
+: ICCryptoService is a service to encrypt/decrypt data.
+2
+1
+0
+0
+3535929394
+3535274098
+1
+Untitled Diagram-1725539750525.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1725539750525.drawio
+0
+521
+431
+Details: 
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/3537895425/Application+Architecture+Details#The-Proxy-Tier
+ 
+Data Tier
+Role
+: This is the bottom layer responsible for data storage and management.
+Responsibilities
+: It includes databases and cloud storage to retrieve and store data.
+Technologies
+: Azure SQL, Azure Blob, Azure Queue.
+Example
+: SQL biller shard database stores biller information, configurations, transaction records, and other critical data per biller.
+2
+1
+0
+0
+3537043473
+3537108994
+1
+Untitled Diagram-1725548137164.drawio
+5
+5
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1725548137164.drawio
+0
+261
+671
+Details: 
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/3537895425/Application+Architecture+Details#Don%E2%80%99t-Forget-the-Data
+ 
+ URL:/spaces/ED/pages/3537108994/Application+Architecture+Overview

@@ -1,0 +1,42 @@
+Status
+Accepted
+Context
+Current architecture uses system/master database assets and a per biller database assets.  Assets are mixed in a shared model for all systems.
+Decision
+Create multi-tenant biller DB assets dedicated to the service.
+Consequences
+The DB assets get created once for the application service and only records for billers who use the service are created managed by the CRM.  There will be replication/syncing of system data to the dedicated DB assets.  Changes to the system are isolated to the application service and CRM.
+Data Storage Proposals (Conceptual)
+Use existing biller DB database structure
+2
+1
+0
+0
+2983460877
+2983264264
+1
+Untitled Diagram-1705580498241.drawio
+9
+9
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1705580498241.drawio
+0
+1081
+1171
+Dedicated multi-tenant DB assets for the service
+2
+1
+0
+0
+2983821367
+2983264264
+1
+Untitled Diagram-1705592628240.drawio
+6
+6
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1705592628240.drawio
+0
+1081
+1171
+ URL:/spaces/EN/pages/3011805334/Database+Architecture+-+CCU

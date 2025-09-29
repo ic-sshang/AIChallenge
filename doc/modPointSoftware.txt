@@ -1,0 +1,199 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File
+File Summary/Purpose: This partner sends BIFS through Stratus Client.
+File Extension: BIF
+File Transfer Frequency: Quarterly
+Adjustment/Daily Balance File
+File Summary/Purpose: IC creates a BAF from the BIF files that Point Software sends.
+File Extension: BAF
+File Transfer Frequency: Quarterly
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+Adjustment Balance Amount
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+2 = Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+“Daily Balance File”
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Current Date ("MM/dd/yyyy")
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: Custom report is used to pull data, fileType creates a tab-delimited text file.
+File Extension: TXT
+File Naming Convention: ICPayments-DateandTime.txt
+File Delimiter: TAB
+File Transfer Frequency: Daily
+InvoiceType 1,7,8:
+InvoiceType 9:
+Field
+Data Type
+Character Limits
+Format
+Values
+Echo1
+String
+Bill Number
+PaymentAmount
+Double
+Echo2
+string
+Receivable Type
+Echo3
+string
+Tax Year
+Echo4
+string
+Owner name
+Echo5
+string
+Property Address
+AccountNumber
+string
+PP ID
+Echo7
+string
+Point ID
+PaymentDate
+Date
+EmailAddress
+string
+Ownername
+InvoiceType 9:
+Field
+Data Type
+Character Limits
+Format
+Values
+Echo1
+String
+Bill Number
+PaymentAmount
+Double
+Echo2
+string
+Receivable Type
+Echo3
+string
+Tax Year
+Echo4
+string
+Owner name
+Custom2/Custom3
+string
+Vehicle year slash make
+AccountNumber
+string
+PP ID
+Echo7
+string
+Point ID
+PaymentDate
+Date
+EmailAddress
+string
+Ownername
+BIF Customizations: none
+User Interaction and Design
+Data Flow - Invoice
+BIF sent to IC through Stratus Client
+Data Flow - Adjustments
+IC Created from BIF
+Data Flow - Payment
+Payment Export through Straus Client
+Data Flow - Bill Presentment
+PDF Remote Link
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2112389123/modPointSoftware

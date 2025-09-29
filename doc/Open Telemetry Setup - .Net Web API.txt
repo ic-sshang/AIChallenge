@@ -1,0 +1,75 @@
+Helm Chart Environment YAML Example
+Supported Charts: 
+web
+Add the below key value pair to your environment (DEV, IAT, QAR, XAT, PRD) Helm YAML files to enable the OTEL environment variable injection.
+yaml
+.
+.
+.
+enableOpenTelemetry: true
+.
+.
+.
+.Net 8 Web API Example
+You will need to add the following Nuget packages to your web API project.
+xml
+<PackageReference Include="OpenTelemetry" />
+<PackageReference Include="OpenTelemetry.Exporter.Console" />
+<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+<PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+
+<!-- For APIs that publish events using Rebus -->
+<PackageReference Include="Rebus.OpenTelemetry" />
+Once deployed, the following 3 environment variables should be present in the deployed pod’s environment:
+OTEL_SERVICE_NAME # Defaults to = {serviceName}-{instance}-{environment}
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+ 
+ Below is a example of the bootstrap code for adding OTEL to a web API.
+c#
+var builder = WebApplication.CreateBuilder(args);
+.
+.
+.
+// read the otel settings from environment variables
+// these values are set/injected via the deployment pipeline
+var serviceName = builder.Configuration["OTEL_SERVICE_NAME"];
+var tracingOtlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"];
+var metricsOtlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_METRICS_ENDPOINT"];
+// configure OTEL for tracing and metrics
+builder.Services.AddOpenTelemetry()
+		   .WithTracing(tracingBuilder =>
+		   {
+			   tracingBuilder
+				   .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+				   .AddAspNetCoreInstrumentation()
+				   .AddHttpClientInstrumentation();
+			   if (String.IsNullOrEmpty(tracingOtlpEndpoint))
+				   tracingBuilder.AddConsoleExporter(); // For local testing purposes
+			   else
+				   tracingBuilder.AddOtlpExporter(options =>
+				   {
+					   options.Endpoint = new Uri(tracingOtlpEndpoint);
+                       options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+				   });
+		   })
+		   .WithMetrics(metricsBuilder =>
+		   {
+               // add the APM data you want published
+			   metricsBuilder
+				   .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
+				   .AddAspNetCoreInstrumentation()
+				   .AddHttpClientInstrumentation();
+			   if (String.IsNullOrEmpty(metricsOtlpEndpoint))
+				   metricsBuilder.AddConsoleExporter(); // For local testing purposes
+			   else
+				   metricsBuilder.AddOtlpExporter(options =>
+				   {
+					   options.Endpoint = new Uri(metricsOtlpEndpoint);
+                       options.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
+				   });
+		   });
+
+ URL:/spaces/PMK/pages/4450484261/Open+Telemetry+Setup+-+.Net+Web+API

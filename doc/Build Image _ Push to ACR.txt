@@ -1,0 +1,16 @@
+Enter WSL to build on Ubuntu
+wsl
+Login to the public endpointed ACR
+az acr login -n acrglbcloudflared1sbx --expose-token
+docker login 
+http://acrglbcloudflared1sbx.azurecr.io
+  --username 00000000-0000-0000-0000-000000000000 --password "<TOKEN_HERE>"
+Docker Build, Tag and Push
+sudo docker build -t cloudlfared .
+sudo docker tag cloudlfared:latest 
+acrglbcloudflared1sbx.azurecr.io/infrastructure/cloudflared:
+<VERISION_HERE>
+sudo docker push 
+http://acrglbcloudflared1sbx.azurecr.io/infrastructure/cloudflared:1.0.0
+ 
+ URL:/spaces/icinfradoc/pages/3381231638/Build+Image+Push+to+ACR

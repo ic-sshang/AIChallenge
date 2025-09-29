@@ -1,0 +1,172 @@
+Description:
+This research project focuses on analyzing the performance of various PDF operations in Azure Blob Storage. It involves testing and comparing the efficiency of saving, retrieving, and streaming both large and multiple PDF files. The study aims to measure and document the time taken and memory utilization for each operation, providing valuable insights for optimizing PDF handling in cloud storage environments.
+Research Objectives
+To evaluate the performance of saving, retrieving, and streaming large and multiple PDF files in Azure Blob Storage.
+To measure and compare the time taken and memory utilization for each operation.
+To provide recommendations for optimizing PDF handling in cloud storage environments.
+Test Scenarios
+The following scenarios were required to be tested and tracked so they can be compared:
+save multiple PDFs into blob.
+save a Large PDF into blob.
+retrieve multiple PDFs from blob.
+retrieve a large PDF from blob.
+stream multiple PDFs from blob.
+stream a large PDF from blob.
+Considering that the actions of save, retrieve and stream can happen inside the same operation, we have created 3 different Azure Functions to test and track these scenarios and retrieve the information we need to compare the viable options.
+Azure Storage Account & Blob Containers Setup
+We proceed to create a set of blob containers inside an emulated storage account:
+(blob) pdf-extraction: Contains a large file of 70,000 PDF pages with a size of 7.55 GB.
+(blob) pdf-multiple-extraction: Will contain exactly multiple single PDF files with a size of 266 KB.
+(blob) pdf-split: Is where we will end up saving the large PDF file and the Multiple Files simulating a versatile blob container in charge of managing any files coming in.
+1. Test moving PDF files from a local folder into a blob.
+For this scenario, we will execute the 
+MultiplyPDFIntoBlob
+ azure function, which is in charge of moving 5,000 single PDF files into  the 
+pdf-multiple-extraction
+ blob container. This action should provide us the time it takes to move 5,000 PDF files into a blob and the average time per file.
+So we proceed to execute the 
+MultiplyPDFIntoBlob
+ azure function with Postman by setting up a POST call with the provided path and proper parameters:
+As you can see in the path, we provide the 
+filePath
+ parameter with the path of our test file that we will multiply a 5,000 times (specified on the parameter 
+“number”
+) into the blob. 
+We proceed to run the process, and we got the following feedback:
+Also, we validate that all these files have been generated into the blob successfully:
+result
+Green
+ - The feedback is telling us that for every 5,000 files of 266KB each the process takes approximately 1 minute with 17.40 seconds and to move a single file can take up to 15 milliseconds approximately.
+2. Test moving multiple PDF files from one blob to another.
+For this scenario we will execute the 
+MoveMultiplePDF
+ azure function which is in charge of moving files from the 
+pdf-multiple-extraction
+ into 
+pdf-split
+ blobs. This action should provide us with the time it takes the process to move 5,000 PDF files from one blob to another, and the average memory utilization.
+Proceed to execute the 
+MoveMultiplePDF
+ azure function with Postman by setting up a POST call with the provided path:
+We validate that currently 
+pdf-split
+ blob Is empty:
+we proceed to run the process, and we got the following feedback:
+Also we validate that all the files moved to the expected blob:
+RESULT
+Green
+  - We successfully moved the files in 
+1 minute, 25 seconds, and 801 milliseconds.
+Also the memory utilization of 670656, represents the amount of memory used in 
+bytes
+. 
+To convert this to more familiar units:
+Kilobytes (KB)
+: 670656÷1024≈654.25670656÷1024≈654.25 KB
+Megabytes (MB)
+: 670656÷1048576≈0.64670656÷1048576≈0.64 MB
+Gigabytes (GB)
+: 670656÷1073741824≈0.000625670656÷1073741824≈0.000625 GB
+So, 670656 bytes is approximately 
+654.25 KB
+, 
+0.64 MB
+, or 
+0.000625 GB
+.
+3. Test moving large PDF files from one blob to another.
+For this scenario we will execute the 
+MoveLargePDF
+ Azure function, which is in charge of moving a large PDF file from blob 
+pdf-extraction
+ to blob 
+pdf-split
+ by retriving the PDF and split it  in blocks of 8 Megabytes this way we can stream these bytes into the new blob as the new copy of the moved PDF. This action should provide us with the overall time it takes to move the large file, and also an aproximate of the memory used.
+Proceed to execute the 
+MoveLargePDF
+ azure function with Postman by setting up a POST call with the provided path and proper parameters:
+We proceed to run the process, and we got the following feedback:
+Also we validate that the file has been moved into the expected blob:
+result
+Green
+  - According to the feedback the process provide us moving the large PDF from one blob to another took 
+4 minutes with 11 seconds and 733 milliseconds.
+- Retriving the file from 
+pdf-extraction
+ blob took: 
+313 milliseconds.
+- Streaming the file into the 
+pdf-split
+ blob took: 
+4 minutes with 11 seconds and 404 milliseconds.
+- The memory used during the download: 28232 bytes is 
+27.57 KB
+, 
+0.027 MB
+, or 
+0.000026 GB
+.
+- The memory used during the Upload: 9144288 bytes is 
+8932.5 KB
+, 
+8.71 MB
+, or 
+0.0085 GB
+.
+Conclusion
+This research project aimed to analyze the performance of various PDF operations in Azure Blob Storage, focusing on saving, retrieving, and streaming both large and multiple PDF files. The study measured and documented the time taken and memory utilization for each operation, providing valuable insights for optimizing PDF handling in cloud storage environments.
+Key Findings
+Saving Multiple PDFs into Blob
+:
+Time Taken: Approximately 1 minute and 17.40 seconds for 5,000 files.
+Average Time per File: Approximately 15 milliseconds.
+Moving Multiple PDFs from One Blob to Another
+:
+Time Taken: 1 minute, 25 seconds, and 801 milliseconds for 5,000 files.
+Memory Utilization: Approximately 654.25 KB (0.64 MB).
+Moving a Large PDF from One Blob to Another
+:
+Total Time Taken: 4 minutes, 11 seconds, and 733 milliseconds.
+Retrieving Time: 313 milliseconds.
+Streaming Time: 4 minutes, 11 seconds, and 404 milliseconds.
+Memory Utilization: 27.57 KB (0.027 MB) for download, 8.71 MB (0.0085 GB) for upload.
+Comparison Table
+Test Scenario
+Number of PDFs
+Size of PDFs
+Time Taken
+Memory Utilization
+Move multiple PDFs from one blob to another
+5,000
+266 KB each
+1 minute, 25 seconds, and 801 milliseconds
+654.25 KB (0.64 MB)
+Move a large PDF from one blob to another
+1
+17.45 GB
+4 minutes, 11 seconds, and 733 milliseconds
+27.57 KB (download), 8.71 MB (upload)
+Advantages and Disadvantages
+Advantages
+:
+Efficiency
+: The study provides precise metrics on the time and memory utilization for various PDF operations, enabling the identification of the most efficient methods.
+Scalability
+: Azure Blob Storage offers scalable storage solutions, accommodating both large and multiple PDF files seamlessly.
+Optimization
+: The insights gained can drive optimization of PDF handling processes, enhancing performance and resource utilization.
+Disadvantages
+:
+Resource Management
+: While Azure Blob Storage and Functions are powerful tools, they require careful resource management to ensure cost-effectiveness and optimal performance.
+Performance Variability
+: The performance of operations can vary based on network conditions and storage account configurations, necessitating continuous monitoring and adjustments.
+Recommendations
+Based on the findings, the following recommendations can be made for optimizing PDF handling in cloud storage environments:
+Batch Processing
+: For multiple small files, batch processing can significantly reduce the time taken per file, improving overall efficiency.
+Efficient Streaming
+: For large files, employing efficient streaming methods can minimize memory utilization and enhance transfer times.
+Monitoring and Scaling
+: Regular monitoring of performance metrics and scaling resources as needed can help maintain optimal performance and cost-effectiveness.
+ URL:/spaces/IM/pages/4139253761/Performance+Analysis+of+PDF+Operations+in+Azure+Blob+Storage

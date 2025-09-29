@@ -1,0 +1,80 @@
+The Command Pattern encapsulates a request as an object, allowing you to separate the intention (what the user wants to do) from the execution (how the system performs it).  It's a strategic tool for building clean, maintainable, and testable applications.
+Why
+Clear Separation of Concerns
+Commands represent what the user wants to do, while handlers define how the system should respond. This separation keeps your application logic clean and focused.
+Explicit Use Case Modeling
+Each command maps directly to a business use case (e.g., 
+PlaceOrder
+, 
+RegisterUser
+, 
+CancelInvoice
+). This makes the system easier to understand and reason about.
+Improved Testability
+Commands and their handlers are independent units. You can test them in isolation without needing to spin up the entire application or mock unrelated components.
+Extensibility with Decorators
+You can easily wrap handlers with decorators to add cross-cutting concerns like:
+Logging
+Validation
+Authorization
+Metrics
+This avoids cluttering your business logic with infrastructure concerns.
+Implementation
+Define the Command
+The command is a simple, immutable data structure that represents a specific 
+i
+ntention or action in your system—such as placing an order, registering a user, or updating a profile.  It contains only the data required to perform that action, and nothing more.  
+Where: Core / Domain Class Library (DDD the Application Layer)
+c#
+public record PlaceOrderCommand(Guid CustomerId, List<Guid> ProductIds);
+Define the Handler Interface
+The command interface defines a contract for handling a specific type of command. It ensures that all command handlers implement a consistent method signature, making them interchangeable and easy to work with.   
+One very common pattern is to use a decorator pattern to extend the functionality of a command handler.
+Where: Core / Domain Class Library  (DDD the Application Layer)
+c#
+public interface ICommandHandler<TCommand>
+{
+    Task HandleAsync(TCommand command);
+}
+Implement the Handler
+The command handler is where the orchestration of the domain behavior occurs. It’s responsible for:
+Executing the business logic associated with a command
+Interacting with repositories to persist or retrieve domain data
+Interacting and coordinating with services
+Where: Core / Domain Class Library (DDD the Application Layer)
+c#
+public class PlaceOrderHandler : ICommandHandler<PlaceOrderCommand>
+{
+    private readonly IOrderService _orderService;
+
+    public PlaceOrderHandler(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    public async Task HandleAsync(PlaceOrderCommand command)
+    {
+        await _orderService.PlaceOrderAsync(command.CustomerId, command.ProductIds);
+    }
+}
+In the above example the 
+IOrderService
+ is also defined in the Core / Domain Class Library (DDD the Application Layer).  However, the implementation of the 
+IOrderService
+ is done in a separate Service Class Library to encapsulate the service/infrastructure technology.
+Why Use In API Projects
+It's essential to keep controllers thin and business logic isolated. The Command Pattern is a powerful tool for achieving this.
+By introducing command objects and handlers, you move the responsibility of executing business logic out of the controller and into dedicated, testable components.
+The controller can focus only on HTTP concerns (routing, status codes).
+This leads to:
+Faster, more reliable unit tests
+No need to mock HTTP context or controllers
+Clear separation between API behavior and business rules
+Resources
+Solution/Project Structure
+ 
+Repository Pattern
+ 
+https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures
+ 
+ URL:/spaces/EA/pages/4466507949/Command+Pattern

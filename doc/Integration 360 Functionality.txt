@@ -1,0 +1,143 @@
+Project Name
+Integration 360
+Managed by
+Integration Engineering Team
+Users
+Primary: Implementation Manager
+Secondary: Integration Engineering Team  
+1
+7
+true
+Table of Content
+6
+1
+false
+default
+list
+true
+background-color: Grey
+Introduction
+Integration 360 (AKA Int360) is a tool used for onboarding a new biller which uses 
+Standard Software Integration Partner
+ (Alliance partner) like BS&A, WaterSmart, Harris Advanced Utility Systems etc. As part of implementation, the InvoiceCloud implementation manager has to work with the billers to get the details for setting up the integration in CRM. 
+CRM settings set by Int360
+Biller Advanced Configuration Settings
+FTP Configuration Settings
+Data Pump Settings
+Invoicing Settings
+As these are 
+standard software integrations
+ most of the time it is the same set of configurations (or similar) which is applied for the new biller. 
+note
+The primary purpose of Int360 tool is to populate the similar/repetitive standard software integration configuration value in InvoiceCloud CRM.
+
+
+The primary purpose of Int360 tool is to populate the similar/repetitive standard software integration configuration value in InvoiceCloud CRM.
+
+
+Integration 360
+Biller Advanced Configuration Settings
+Click here to see Biller Advanced Confirmation Settings
+Int360
+ FTP Configuration Settings
+Click here to see FTP settings
+Int360
+Data pump & Invoicing Settings
+Click here to see Data Pump & Invoicing settings
+Int360
+CurrentFlow
+Current Flow
+2
+1
+0
+0
+4069589270
+4064280577
+1
+Int360 flow.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Int360 flow.drawio
+0
+1290.5
+440
+As part of the current workflow the IMs have to gather details in order to setup all the required integrations for a new biller in InvoiceCloud CRM, and in case of Standard Integration most of the information will be same/similar in nature. In order to reduce the manual effort of IMs i.e., key in all the values in CRM, Int360 tool can be used to populate the templatised values (as reference) so that IMs can work with biller and replace the placeholder values with biller specific values.
+On successful completion of above flow the values are populated in CRM and audit line is show under 
+Notes 
+section for the biller
+InvoiceCloud CRM
+Advantages of using Int360
+Reduced manual effort i.e., setting up values in CRM, as IM can refer the templatised values which are pre-populated.
+Reduced chances of missing the integration specific values while setting up biller in CRM.
+Reduced to No involvement of Intergration Engineering team is setting up a new biller if it is using Standard Integration partner.  
+Useful Information
+Standard Software Integration Partner
+ (Alliance partner)
+Partners which are already having integration with InvoiceCloud. 
+List of Standard Software Integration Partner (
+Note: 
+This list is subject to Change as new Software Partners are add to the tool.)
+9​3 - BS&A
+159 - IMT v1 MIPS/APPS
+195 - IMT Spectrum
+100 - Harris Flexbill v1
+96- SSI EGov v1
+119 - WaterSmart
+174 - Caselle - Real-Time – Utility
+175/201 - Caselle – Batch -Utility
+92 - Southern Software v1
+203 - Muni-Link Real-Time v1
+141 - Delphi Technologies – Batch
+218 - ESC
+158 - SpryPoint v1
+180 - LOCiS Batch v1
+79 - Daffron
+255 - Vertex One
+64 - Harris Advanced Utility Systems
+236 - FREY Municipal Software
+Link to Int360: 
+SKYNET APP URL
+CSTermServer IP: 10.0.8.4
+Technical Details
+Authentication/Server Details
+CSTeam Server: IP 10.8.8.4 (user is authenticated using Azure IAM)
+SKYNET APP: Uses CRM username & password (there is not Okta authentication)
+Database (Key tables for Int360)
+Int360 related details will be under 
+DBMaster_GoldAzure 
+database.
+Key tables (all table with schema itg), all the templatized values will be stored in these tables
+If interested to know more, please refer - 
+IC-DBMaster_GoldAzure - Repos
+ 
+Database Name
+Schema
+Table Name
+DBMaster_GoldAzure
+itg
+BillerFileSplit
+FieldMappings
+IntegratorProfiles
+ProfileAdvancedSettings
+ProfileBIFCustomizations
+ProfileBillerFileSplitConfig
+ProfileDataPumpConfig
+ProfileDataPumpParams
+ProfileFields
+ProfileFtpFileConfig
+ProfileFtpFileExportConfig
+ProfileFtpPdfConfig
+ProfileFtpZipConfig
+ProfileStratusAvailableFormats
+ProfileStratusConfig
+ProfileTerminals
+Future Enhancements
+Enhancing the end user i.e., Implantation manager user experience by automating manual effort of apply Int360 settings for a biller. 
+As currently IM has to take multiple steps to apply these settings, in future it will be added as part of Biller Wizard (via InvoiceCloud CRM) flow. 
+Int360 will be added as a last stage of Biller Wizard workflow. 
+Improving the processes of Software Integration Partner profile creation (with templatized values)
+As mentioned in 
+Current Flow section
+ currently there are two teams involved in setting up a software partner profile i.e., Integration Engineering Team(to come with instructions) and Data Services Team(to execute the instructions in form if SQL Scripts), building a UI will enable the faster biller onboarding and less to no involvement of multiple teams.  
+ URL:/spaces/PRODUCT/pages/4064280577/Integration+360+Functionality

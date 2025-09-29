@@ -1,0 +1,176 @@
+Scheduled Changes
+Pre work:
+Notify customer service of going into maintenance mode for a portion of this maintenance 
+ 
+Day of:
+Notify dailyops and maintenance slack channels of maintenance starting 
+ 
+Put pingdom in maintenance mode 
+ 
+Enable the maintenance page on 
+www
+ and 
+my
+ by replacing 
+pal.invoicecloud.com
+ with 
+icmaintenance.azurewebsites.net
+ in Cloudflare under DNS 
+ 
+ 
+Uncheck the 
+Trusted Azure Resources Exception
+ in Prod SQL Servers: 
+ic-db-east-server1
+, 
+ic-db-west-server1
+ 
+ 
+ and 
+ and 
+ and 
+ 
+PLAT-841
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-739
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Run this script!
+ (make sure you’ve got the tsv from the same directory as well as the script itself)
+PLAT-844
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-986
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Prod Deployment
+Run smoke tests against 
+www4.invoicecloud.com
+, if successful remove maintenance page 
+ 
+ 
+Move the biller back to 
+www.invoicecloud.com
+ 
+Fix Private DNS Zone Recordset for 
+api.invoicecloud.com
+ to point to Kong Cluster instead of Payer Cluster 
+ 
+ and 
+ 
+Remove 
+api.invoicecloud.com
+ from the Helm Chart for 5 of the Payer NextGen Services
+PLAT-840
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+OTP: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176507&view=results
+Payer Support UI: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176848&view=results
+Payer User Service: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176515&view=results
+Payer Account Service: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176509&view=results
+Payer Branding Service: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176510&view=results
+Payer Pay By Text Service: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176519&view=results
+Payer Portal UI: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176512&view=results
+Payer Support Service: 
+https://dev.azure.com/invoicecloud/Src/_build/results?buildId=176513&view=results
+Delete the current 
+api.invoicecloud.com
+ Private DNS Zone Recordset
+PLAT-866
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Script to Run
+Deploy Kong Pipeline
+PLAT-867
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Run
+Minor update to App Gateway Payer NextGen Portal UI HTTPS Redirect Configuration. 
+ 
+ 
+PLAT-865
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Run
+Delete old Barracuda Firewall VMs, NICs, and Disks as they have been deallocated for over a month 
+ 
+ 
+Dragon1East
+Dragon2East
+DragonCCEast
+PLAT-610
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Script to Run
+Delete really old Barracuda Resource Groups that are just a collections of NICs, Disks, Public IPs, NSGs,  LBs with No Backends in the Backend Pool, and a Route Table with no attached Subnets. 
+ 
+ 
+RG-Firewall-East
+RG-Firewall-East-Temp
+RG-Firewall-East-Temp2
+RG-Firewall-East-Temp3
+RG-Firewall-East-Temp4
+RGFirewall2West
+RGFirewallWest1
+PLAT-862
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Delete 
+AnsibleTest-Rob
+ Resource Group since we should not be running Test or POC Workloads in 
+Primary-Subscription
+ since it should be considered solely a Production PCI Zone/Subscription. 
+ 
+ 
+PLAT-864
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Patch production servers 
+ 
+ 
+ 
+ 
+PLAT-967
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Remove IC-App* from `production` ADO Environment 
+ 
+ 
+INFRA-455
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Test Plan
+Run full regression tests 
+ 
+Post-Steps
+Start the Jobs - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+Notify dailyops and maintenance channels of maintenance finished and results 
+ 
+ URL:/spaces/icinfradoc/pages/3519840321/9+22+2024

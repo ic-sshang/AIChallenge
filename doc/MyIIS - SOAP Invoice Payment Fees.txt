@@ -1,0 +1,84 @@
+HTTP POST Request
+Use a simple c# HTTP client and POST instead of adding a generated service reference proxy.  The operation and XML payloads are not complex.  
+Use the value of the JWT token that was received in the authorization header as the value for the element soap12:Envelope/soap12:Header/BearerTokenHeader/BearerToken.
+ SOAP API definition as of 2/23/2023
+text
+POST /portal/webservices/invoicepaymentfees.asmx HTTP/1.1
+Host: devtest4.invoicecloud.com
+Content-Type: application/soap+xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Header>
+    <BearerTokenHeader xmlns="https://www.invoicecloud.com/portal/webservices/InvoicePaymentFees/">
+      <BearerToken>string</BearerToken>
+    </BearerTokenHeader>
+  </soap12:Header>
+  <soap12:Body>
+    <CalculateSingleInvoicePaymentFee xmlns="https://www.invoicecloud.com/portal/webservices/InvoicePaymentFees/">
+      <request>
+        <InvoiceGuid>guid</InvoiceGuid>
+        <PaymentMethod>
+          <PaymentAmount>double</PaymentAmount>
+          <PaymentSourceId>int</PaymentSourceId>
+          <Creditcard>
+            <BIN>string</BIN>
+            <PAN>string</PAN>
+            <ExpMonth>int</ExpMonth>
+            <ExpYear>int</ExpYear>
+          </Creditcard>
+          <ACH>
+            <RTE>string</RTE>
+            <AccountNumber>string</AccountNumber>
+          </ACH>
+          <PaypalBrands>
+            <PaymentTypeId>int</PaymentTypeId>
+          </PaypalBrands>
+        </PaymentMethod>
+      </request>
+    </CalculateSingleInvoicePaymentFee>
+  </soap12:Body>
+</soap12:Envelope>
+HTTP POST Response
+HTTP/1.1 200 OK
+Content-Type: application/soap+xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <CalculateSingleInvoicePaymentFeeResponse xmlns="https://www.invoicecloud.com/portal/webservices/InvoicePaymentFees/">
+      <CalculateSingleInvoicePaymentFeeResult>
+        <TotalConvenienceFee>decimal</TotalConvenienceFee>
+        <TotalPaymentAmount>decimal</TotalPaymentAmount>
+      </CalculateSingleInvoicePaymentFeeResult>
+    </CalculateSingleInvoicePaymentFeeResponse>
+  </soap12:Body>
+</soap12:Envelope>
+AB Testing 
+The SOAP API was tested by comparing the existing Payment Route UI paying for Invoice (65CB8AEF-2775-46A4-BFC3-E1F1E853A385) with Biller (B8F1FA83-2719-4CDA-A7C6-BAF5DA55DD33)
+SOAP Request
+<CalculateSingleInvoicePaymentFee xmlns="https://www.invoicecloud.com/portal/webservices/InvociePaymentFees/">
+      <request>
+        <InvoiceGuid>65CB8AEF-2775-46A4-BFC3-E1F1E853A385</InvoiceGuid>
+        <PaymentMethod>
+          <PaymentAmount>100.00</PaymentAmount>
+          <PaymentSourceId>14</PaymentSourceId>
+          <Creditcard>
+            <BIN>4111111</BIN>
+            <PAN>4111111111111111</PAN>
+            <ExpMonth>1</ExpMonth>
+            <ExpYear>2024</ExpYear>
+          </Creditcard>
+        </PaymentMethod>
+      </request>
+    </CalculateSingleInvoicePaymentFee>
+SOAP Response
+<CalculateSingleInvoicePaymentFeeResponse xmlns="https://www.invoicecloud.com/portal/webservices/InvociePaymentFees/">
+            <CalculateSingleInvoicePaymentFeeResult>
+                <TotalConvenienceFee>4</TotalConvenienceFee>
+                <TotalPaymentAmount>104</TotalPaymentAmount>
+            </CalculateSingleInvoicePaymentFeeResult>
+        </CalculateSingleInvoicePaymentFeeResponse>
+ URL:/spaces/EN/pages/2532802688/MyIIS+-+SOAP+Invoice+Payment+Fees

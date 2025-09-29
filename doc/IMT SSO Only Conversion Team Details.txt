@@ -1,0 +1,70 @@
+Description
+Things to know when the Conversion Team is transitioning a biller from the InvoiceCloud Customer Portal to IMT’s SSO Insured Portal, including CRM configuration, project coordination, and customer communication.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+This document outlines the process for converting a biller from the InvoiceCloud Customer Portal to IMT’s SSO Insured Portal. It includes the steps for initiating the project, CRM configuration, communication with the biller, and validation of portal settings. The guide ensures a smooth transition by detailing the required verbiage, system options, and coordination between InvoiceCloud and IMT.
+ Process
+Definitions
+Advance Settings: Configuration fields used to define SSO login, logout, and return URLs.
+BID: Biller ID used in CRM for configuration and testing.
+CRM: Customer Relationship Management system used to manage biller configurations.
+ IMT: IMT Software Services, provider of the SSO Insured Portal.
+ Insured Portal: The SSO-based portal provided by IMT for customer account access.
+SSO: Single Sign-On, allowing users to access multiple systems with one login.
+Key Responsibilities
+Biller: Provide verbiage for Virtual Site and approve CRM changes.
+Client Services: Open conversion project request and coordinate with the Conversion Team.
+ Project Manager: Execute CRM configuration and validate settings.
+IMT: Initiate help desk ticket and provide SSO URLs.
+Project Manager (InvoiceCloud): Coordinate project milestones and confirm go-live readiness.
+Quality Assurance
+Project Manager: : Validate CRM settings, confirm SSO URLs are configured, and verify registration options are disabled.
+Project Manager: Ensure all steps are completed before go-live and confirm with IMT and the biller.
+Roles
+Biller: The client organization transitioning to IMT’s SSO Insured Portal.
+Client Services: InvoiceCloud team responsible for initiating the conversion project.
+IMT: Provider of the SSO Insured Portal.
+Project Manager (InvoiceCloud): Oversees the conversion process and coordinates with stakeholders.
+Procedure
+1. Initiate Help Desk Ticket
+Who: IMT
+IMT submits a help desk ticket to 
+helpdesk@invoicecloud.com
+ with the company name and SSO request. Specify whether the company will remain single-user or transition to multi-user. Include this information in the SOW if known.
+2. Open Conversion Project
+Who: Client Services
+Client Services opens a conversion project request and notifies the Conversion Team. They also reach out to the biller to begin coordination.
+3. Provide Verbiage and SOW
+Who: Project Manager
+Request verbiage from the biller to post on the Virtual Site. Provide the SOW and notify 
+implementation-team@imtapps.com
+ once the signed SOW is received.
+4. CRM Configuration
+Who: Project Manager
+Update CRM settings including Profile > Misc Settings and Invoice Type Options. Ensure the following:
+Auth Type is set to 'Email Address with Password'
+Disable registration options
+Enable multi-user settings if applicable
+Add Advance Settings 3, 23, and 36 with URLs from IMT
+5. Validation and Go-Live
+Who: Project Manager
+Confirm all CRM changes are complete. Validate that registration is disabled and SSO URLs function correctly. Coordinate go-live date with IMT and the biller.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4474372236/IMT+SSO+Only+Conversion+Team+Details

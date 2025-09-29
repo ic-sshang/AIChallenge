@@ -1,0 +1,32 @@
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/4555109?selectedIssue=EPD-228&issueViewSection=comments
+ 
+Quick Links
+BillerCustomerQRCodeReportDataSet API reference
+https://www.invoicecloud.com/portal/webservices/cloudreporting.asmx?op=BillerCustomerQRCodeReportDataSet
+Tracking UTM tags in Pendo
+https://support.pendo.io/hc/en-us/articles/360032293371-URLs-for-Page-tagging#01H8P8YC4KQ9EMX1VZ5D4NFE5F
+Flow
+Pull dataset from InvoiceCloud 
+CloudReporting.BillerCustomerQRCodeReportDataSet API
+ that contains all active customers/invoices for the provided InvoiceTypeID.  
+This screenshot shows how you can pull this dataset using Postman. 
+The dataset will have a row for every Customer.  Every Customer will have a Url value that is unique for that Customer.  
+Generate a QR code for each of those URLs.  For demonstration purposes I have used a random QR code generator to generate the one below.  This can then be positioned in a location where the Customer can scan with their QR code reader.
+After the QR code is read, the user will be taken to that URL in their browser.  Behind the scenes, our server receives that request and will respond with a “302 redirect” to redirect them to another URL.  This 2nd URL contains UTM tags.  Here is an example of one URL.  Note, it has 3 UTM tags (
+utm_medium
+, 
+utm_source
+, 
+utm_campaign
+).  These tag names are not customizable today.  The values for 
+utm_medium
+ and 
+utm_source
+ are fixed.  The value for 
+utm_campaign
+is unique per Biller.  The value format is 
+invoice_QR_<billerid>
+.  Product team may be the best resource to inquire about tracking these tags using Pendo.  
+Here is a link to some documention on Pendo to set it up to track these values.
+The User will land on the designated pay page.  In this example it automatically jumped them into Step 1 of the payment process but for others it may land on other pages based on their data.  
+ URL:/spaces/ED/pages/3956178957/How+to+use+QR+Code+Feature+as+is

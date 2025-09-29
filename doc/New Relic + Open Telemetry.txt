@@ -1,0 +1,69 @@
+Overview 
+This guide provides information specific to finding sampled OTEL metrics & traces in New Relic and provides some troubleshooting details.
+Prerequisites
+Ensure that your application has been properly configured to use Open Telemetry
+Ensure that your application has instrumentation sources - Metrics and/or Traces - configured and sampled.
+Finding Instrumentation Outputs in New Relic
+There are a few ways to arrive at the correct location for querying metrics - the easiest (for k8s-based workloads) is to identify the running pod name and search for it from the 
+Kubernetes
+ menu option in New Relic. 
+Kubernetes menu option
+Example:
+Find the pod name - either via 
+kubectl
+ or Azure Portal.
+Search for the pod in New Relic
+The New Relic page for the Pod has a lot of valuable information already - including a dashboard containing visualizations of some of the kubelet metrics.
+New Relic Dashboard for the indicated pod
+ From here, we can navigate to the 
+Events Explorer
+ - which will just open up a query console.
+Querying for Custom Metrics
+At present, there are two major buckets of metrics sampled from Kubernetes into New Relic. The first are those that are scraped from the kubelet API on the k8s node - these contain information on the pod, its resource consumption, and health (e.g. CPU/Memory Usage, # of restarts, etc.). These metrics provide a lot of value and insight into the state of your pods and are all sampled automatically by the Open Telemetry collector agents running in Kubernetes. The second category are the custom metrics that are added to the application at development time and are used for more granular insight into the application’s functionality - filtering for these can initially be a bit tricky.
+In either case, all metrics will land in New Relic’s 
+Metric
+ table.
+Do note that there is a bit of latency between the instrumentation outputs and their arrival in New Relic - if you don’t see anything right away, you may wait for a short amount of time and retry.
+If you followed the previous navigation path - 
+Kubernetes
+ → 
+Pod
+ → 
+Events explorer
+ - New Relic should provide you with the 
+entityGuid
+ field for your selected service - this is the easiest way to narrow down results scoped to your pod.
+New Relic showing the entityGuid field for the selected pod.
+You can then run the query, using whatever 
+entityGuid
+, to retrieve all metrics scoped to your service coming from 
+opentelemetry
+:
+sql
+SELECT * 
+  FROM 
+    Metric 
+  WHERE 
+    entityGuid = 'MTQ5OTcwNHxJTkZSQXxOQXwzOTc5Njc0Mjg1MzE2MjkzNDYx;' 
+  AND 
+    instrumentation.provider = 'opentelemetry'
+At this point, the query above will output a ton of metrics - both custom and kubelet alike.
+It may be more beneficial to search for the metric directly - you can further refine the query to only select what you want - or to perform additional aggregations, etc.
+sql
+SELECT * FROM Metric WHERE metricName LIKE '%biller.reportgenerator%'
+This should filter to your custom metrics, directly - regardless of pod instance
+Custom Metrics in New Relic
+Querying for Custom Traces
+Following the same steps as above - we’ll instead target our queries at the 
+Span
+ table.
+Again, it may be easier to start with the initiating trace/activity name and navigate from there
+sql
+SELECT * FROM Span WHERE name = 'RunBillerReport'
+Once you have identified a trace record you care about - you can then filter using the 
+trace.id
+ field to show the full e2e trace for that activity.
+sql
+SELECT * FROM Span WHERE trace.id = '4a238718752d66fc983e1dbee902d952'
+All events logged for the given Trace ID.
+ URL:/spaces/PMK/pages/4509499453/New+Relic+Open+Telemetry

@@ -1,0 +1,98 @@
+Table of Contents
+1
+1
+false
+default
+list
+true
+Adding Notes to a Request
+Any time you make a change to an ITG, whether it’s a status change or single field update, you should add a comment explaining why the change was made. 
+Any time you have a conversation outside the comments in the ITG, you should add a comment summarizing the conversation and what action items came out of it. Ideally, those action items should come with ETAs for completion.
+Any time you learn something new with regards to the request, you should add a comment documenting your findings. 
+Adding as many notes and as much context as you can to your tickets makes it so much easier to hand off your work should you need to step away. It also makes creating a timeline and retroing an issue a much simpler task. This habit should be carried forward to all Jiras you work on or touch.
+Important Fields
+When triaging an ITG, the following fields need to be populated in most cases. Incomplete fields could lead to failed automation rules which could result in gaps in our service/coverage of our services. 
+These fields should be reviewed and populated (if necessary) before triggering any of the manual automations.
+Description
+Use the description to add your notes on what the root cause is and where the potential code change should be and any additional information you want the scrum team to have. This may differ from what the initial reporter as requested (in some cases it should be).  The Original Request no longer needs to be copied into the description area; the automation will take care of this for you.
+Integration Request Type
+Integration request type is important for identifying and prioritizing our different lanes of activities. Below is a breakdown of each value and when they should be used.
+Value
+Usage
+Bill Presentment
+Change to bill presentment.  
+Biller Integration
+Change to a custom biller integration.
+Integrations
+Change to core integrations features. Not tied to a specific biller or platform. What we call “base code”.
+Customer Data Conversion
+Used primarily for automation purposes. Automatically triaged to the INT board so you should never need to set this.
+Dev Support
+Needs to go to Dev Support for troubleshooting and support.
+Implementation
+Change in how a biller is implemented. Typically a no-code request.
+Platform Conversion
+Biller is changing from one CIS to another. Could also be a CIS version upgrade.
+Platform Integration
+Change to a standard integration. Not a “one-off”
+Product Support
+Operations requires Engineering support. Typically for providing logs, sample calls, or one-off bulk operations such as RTDR.
+Research
+Inquiry into how our services work or why something isn’t working as expected. Requires reading code and interpreting findings for the requestor.
+Solutions Architecture
+Needs to go to Solutions Architecture for solutioning and documentation. Typically used when business decisions need to be made and requirements need to be clearly defined.
+Stratus Install
+Not really used anymore. Speak up if you find yourself needing this.
+Due Date
+Originally the due date was set based on the team’s capacity, but this may be changing soon. You may need to communicate with your tech lead on when the change can be delivered (current or future sprint depending on urgency). Once you have identified the sprint, you can set the due date to the final release of that sprint (typically the Thursday following the last day of the sprint).
+Code Repositories
+This is an asset selector that has all our repos and which team owns it. Before creating an INT using the manual triggers, be sure to have at least one project selected here. If the change spans multiple teams, you can split the request to create an ITG for the other teams to triage. If the repo you’re looking for doesn’t exist in the assets, reach out to your tech lead for assistance with getting it added.
+Reason for Cancellation
+If an ITG is submitted that should have gone to another team or could have been resolved with relying on Engineering, we want to set the cancellation reason as part of closing the request. Below is a list of the options here and when they should be used.
+Value
+Usage
+Biller Resolved
+Biller resolved the issue without any changes needed to our codebase or configurations (CRM included).
+CRM Configuration
+Issue was resolved by making a change in the CRM.
+Data Services
+Request should have gone to data services instead. Typically a custom report or a request to bulk reprocess data pump entries.
+Dev Support
+Issue reported is not related to an issue with the integration or importing or exporting of data. Request may be too vague and missing basic level troubleshooting to narrow down what the issue is.
+Duplicate
+Duplicate request of an existing ITG.
+Expired
+Reporter is unresponsive or it has been more than 5 business days since the last meaningful update and there is no discernable path forward for the request
+Int 360
+An implementation request that didn’t need to come to us. Issue was resolved by running the Int 360 tool.
+Invalid
+This should not be used unless a conversation has been had with INT leadership.
+Logging Needed
+Probably shouldn’t use this one. If logging is needed, it should have triggered the creation of an INT to add that logging. In which case, the request should not have been cancelled.
+Partner Resolved
+Partner resolved the issue without any changes needed to our codebase or configurations (CRM included).
+Product Level
+Request is for an enhancement of our platform and not limited to a change in the integration.
+Solutions Architecture
+Request is a change to our codebase that needs to go to Solutions Architecture for solutioning and documentation. Typically used when business decisions need to be made and requirements need to be clearly defined.
+Training 
+Supersedes other reasons. If the requestor shows a lack of understanding in our platform or processes, the request can be flagged for training with this value. 
+Unsupported
+Not really used. Typically if it’s unsupported, it will go to Solutions for review.
+Worked as an Incident
+Issue was caused by an incident and was resolved via the incident management process. No further work is needed.
+Manual Automation Triggers
+Manually triggered automations will show up as actions in your ITG requests. Please leverage these automations to move requests to the different teams. You may trigger them as many times as necessary. 
+Please review and populate (if necessary) any 
+Important Fields
+ before triggering automations.
+Split Request
+If the request requires work across scrum teams, you can use the Split Request action to clone your current request and select the team from which you need assistance. The automation will also prompt you for a short reasoning for creating the additional request. This is a good opportunity to provide context to the team member who will be working the request on why their assistance is needed. A good example of this is an implementation that requires pdf extraction in addition to the normal setup.
+Create INT
+Once you’ve identified a code change is needed, add your research notes and your justification for the code change being necessary to the Description field. Refer to the Important Fields section to ensure all necessary fields have been set prior to executing this automation. 
+In an exceptional case, you may need to create an INT without having a code change identified. In these instances, you can select the team from the dropdown when prompted by the automation and add a note to elaborate on the reason for sending it through.
+Create DS
+If the request needs to go to Dev Support, you can leverage this action to create an issue on their board. The automation will prompt you for your justification for moving it over. 
+Create SA
+If the request needs to go to Solutions Architecture, you can leverage this action to create an issue on their board. The automation will prompt you for your justification for moving it over. 
+ URL:/spaces/IM/pages/3781099547/ITG+Triage+Runbook

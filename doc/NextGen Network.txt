@@ -1,0 +1,65 @@
+2
+7
+Network Architecture
+The second generation of the InvoiceCloud network architecture will utilize the Hub and Spoke network topology design pattern with a primary and secondary replication strategy.
+A hub and spoke network topology is a way to isolate workloads while sharing common services. The hub is a virtual network (VNet) that acts as a central connection point to shared services as well as a gateway for traffic to transit from one spoke to another if such transit is allowed. The spokes are VNets that peer with the hub and contain the InvoiceCloud solution workloads.
+The Hub Network
+The hub will contain the following shared services:
+Firewall Appliance
+Private DNS Zones
+Private Endpoints to the Global Container Registry
+API Gateway
+Azure DevOps Build Agents
+The Spoke Networks
+The spokes will contain the following solution workload services:
+Kubernetes Cluster
+Key Vaults
+Storage Accounts
+Databases
+Below is a diagram of the Network Architecture.  The draw.io diagram file and more information can be found in the InvoiceCloud 
+Network_Architecture repo
+ in Azure DevOps.
+1
+0
+2673147905
+2479751174
+1
+network-architecture-mvp1-v4.drawio
+1
+0
+1
+https://invoicecloud.atlassian.net/wiki
+network-architecture-mvp1-v4.drawio
+0
+kqf_aG30-MlXnVOoSkw8 1
+4016
+auto
+top
+1
+1710
+Network Ingress
+Network ingress from outside the InvoiceCloud private network for User/Client facing applications is regulated by several different layers as shown in the diagram below.  Currently only Next Generation Production workloads will be accessible from outside the InvoiceCloud Private Network which is accessible by InvoiceCloud personnel via VPN.
+The first layer of inbound traffic regulation is Cloudflare that is used to provide load balancing for top level hostnames such as:
+payer.invoicecloud.com
+ :: the FQDN for the next generation Payer UI, which is a ReactJS based single page application.
+api.invoicecloud.com
+ :: the FQDN for the next generation InvoiceCloud APIs, which will be used both by the next generation UI’s as well as partner and customer integrations.
+1
+0
+2671607958
+2479751174
+1
+network-ingress-architecture-mvp1-single-lane-single-waf.v4.drawio
+1
+0
+1
+https://invoicecloud.atlassian.net/wiki
+network-ingress-architecture-mvp1-single-lane-single-waf.v4.drawio
+0
+OdfxCIr4g2WYhS_aBDC4 1
+1980
+auto
+top
+1
+2215
+ URL:/spaces/icinfradoc/pages/2687893549/NextGen+Network

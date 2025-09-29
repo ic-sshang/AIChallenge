@@ -1,0 +1,57 @@
+This document provides a visual page UI and API mapping. Reference 
+1.5 Route Table
+  for the API IDs and their details.
+The UI is made up of a host React application for overall layout / navigation components and domain specific React micro UIs that expose components designed to use specific API backends.
+UI Dev URL:
+https://payer-ui-v2.dev.invoicecloud.com/payer/pyrprtl0/home/index/{sessionId}/paybytext
+UI Production URL*:
+https://www.invoicecloud.com/portal/ui/home/index/{sessionId}/paybytext
+*Will be configured during maintenance 8/18/2023
+PAGE-1
+OTP-01 and MYIIS-01 are APIs used for authentication and do not provide data to be rendered in the UI. MYIIS-01 provides the current MyIIS Payer Portal authenticated user’s session signed identity.  OPT-01 validates a user’s signed identity and issues and JWT bearer token for use with other APIs.
+2
+1
+0
+0
+2690482186
+2690416652
+1
+Untitled Diagram-1683307004624.drawio
+11
+11
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1683307004624.drawio
+0
+1454.5
+945.5
+2
+1
+0
+0
+2711715880
+2690416652
+1
+PayByTextEnrolling.drawio
+8
+8
+https://invoicecloud.atlassian.net/wiki
+PayByTextEnrolling.drawio
+0
+1002.6799999999998
+730
+2
+1
+0
+0
+2710929520
+2690416652
+1
+PayByTextPendingEnrollment.drawio
+5
+5
+https://invoicecloud.atlassian.net/wiki
+PayByTextPendingEnrollment.drawio
+0
+1284.17
+1020
+ URL:/spaces/EN/pages/2690416652/Pay+By+Text+UI

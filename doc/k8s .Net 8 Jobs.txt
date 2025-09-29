@@ -1,0 +1,60 @@
+Settings 
+In .NET 8, application settings are managed using 
+appsettings.json
+file.   
+{
+  "ConnectionStrings": {
+    "MyConnection": "Server=myServer;Database=myDB;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
+  }
+}
+The 
+ConfigurationBuilder
+ in .NET allows you to combine settings from 
+appsettings.json
+, environment specific files, and environment variables. The order in which you add these sources determines the precedence, with the last added source having the highest precedence.
+Environment Variables are the preferred method for managing settings in k8s.   Environment Variables can be used to override settings in a 
+appsettings.json
+ file by using the double underscore convention for handling the JSON hierarchy.
+powershell
+ConnectionStrings__MyConnection="Server=myServer1;Database=myDB1;"
+Dockerfile Reference
+# helpful link on using private nuget feed in build process - http://mikehadlow.blogspot.com/2020/08/restoring-from-azure-artifacts-nuget.html
+ARG NUGET_USERNAME
+ARG NUGET_PAT
+ARG SEMVER=0.0.0.0
+ARG NUGET_VERSION=0.0.0
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG NUGET_USERNAME
+ARG NUGET_PAT
+ARG SEMVER
+ARG NUGET_VERSION
+ENV NUGET_USERNAME=${NUGET_USERNAME}
+ENV NUGET_PAT=${NUGET_PAT}
+
+WORKDIR /src
+COPY . .
+
+RUN dotnet restore -p:Configuration=Release -v:n || exit 1
+RUN dotnet build --no-restore -c:Release -p:Version=$SEMVER -p:NuGetVersion=$NUGET_VERSION ./MailgunSpamComplaints.ConsoleApp
+RUN dotnet publish --no-build -o /publish -c:Release ./MailgunSpamComplaints.ConsoleApp
+
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /publish .
+
+# create a new group and non root user
+RUN addgroup --gid 2000 job && adduser --uid 1000 --gid 2000 --disabled-password --gecos "" jobapp
+
+# apply new user ownership, run as the new user
+RUN chown -R jobapp:job /app
+USER jobapp:job
+
+ENTRYPOINT ["./MailgunSpamComplaints.ConsoleApp"]
+ URL:/spaces/EA/pages/3878846510/k8s+.Net+8+Jobs

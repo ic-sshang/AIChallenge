@@ -1,0 +1,141 @@
+Below is a list of DTrace operations that were finalised based on the value-add and ease of implementation. These few functionalities, if implemented, can improve tracking and monitoring over our applications.
+Request-Handler Latency Histogram
+Transactions-Per-Second Counter
+Kernel Context-Switch Counting
+Business-Metric Probes
+Each section explains 
+what
+ it does, 
+why
+ it adds value, 
+how
+ it improves performance, and includes a concrete DTrace example from an application POV.
+1. Request-Handler Latency Histogram
+What it does
+Captures end-to-end execution time of our core billing request handler and classify observed latencies.
+Why it’s a value add
+Reveals tail-latency spikes that logging alone may miss.
+Helps us understand SLO compliance (e.g. 95th, 99th percentiles).
+How it improves performance
+Pinpoints slow code paths or resource contention.
+Drives targeted optimizations (DB indices, caching).
+Example:
+d
+#pragma D option quiet
+
+pid$target::billingRequestHandler:entry
+{
+  self->ts = timestamp;
+}
+
+pid$target::billingRequestHandler:return
+/self->ts/
+{
+  @latency = quantize(timestamp - self->ts);
+  self->ts = 0;
+}
+Invocation of the script:
+# Attach to our billing daemon and collect for 60s
+sudo dtrace -s handler_hist.d -p $(pgrep billingd) -G > handler_latency.out
+2. Transactions-Per-Second (TPS) Counter
+What it does
+Counts billing transactions in real time and prints TPS per interval.
+Why it’s a value add
+Provides immediate feedback on throughput under load.
+Correlates performance degradation with spikes in TPS.
+How it improves performance
+Alerts ops when TPS drops below expected thresholds.
+Guides capacity planning (scale-up vs. scale-out).
+Example
+d
+#pragma D option quiet
+
+pid$target::processTransaction:entry
+{
+  @tx_count = count();
+}
+
+tick-1sec
+{
+  printa("WallTime %@d, TPS %d\n", walltimestamp, @tx_count);
+  trunc(@tx_count);
+}
+Invocation
+# Run for 2 minutes to observe trends
+sudo dtrace -s tps_counter.d -p $(pgrep billingd) | tee tps.log
+3. Kernel Context-Switch Counting
+What it does
+Counts how often our billing/specific process is descheduled/rescheduled by the kernel.
+Why it’s a value add
+Exposes CPU contention or heavy lock-holding in the OS.
+Can measure how long our service thread spend waiting to run (i.e. off the CPU) versus actually executing, helping us uncover kernel‐level scheduling pauses.
+How it improves performance
+Guides CPU-pinning or cgroup tuning to reduce jitter.
+Detects interference from noisy-neighbor workloads.
+Example
+#!/usr/sbin/dtrace -qn
+
+fbt::context_switch:entry
+/execname == "billingd"/
+{
+  @cswitches = count();
+}
+Invocation
+# Sample for 30s and aggregate offline
+sudo dtrace -s cswitch_count.d -G > context_switches.out
+4. Business-Metric Probes
+What it does
+Instruments domain-specific events, e.g., billing failures, invoice creations, payment authorizations and counts/timestamps them.
+Why it’s a value add
+Bridges technical metrics with business KPIs.
+Enables real-time SLA dashboards (failed payments/sec, invoices/sec).
+How it improves performance
+Quickly detects functional regressions (e.g. sudden spike in payment failures).
+Prioritizes troubleshooting by business impact.
+Examples
+d
+#pragma D option quiet
+
+pid$target::authorizePayment:return
+/arg1 == 0/       /* assume return code 0 = success */
+{
+  @payments_success = count();
+}
+
+pid$target::authorizePayment:return
+/arg1 != 0/       /* non-zero = failure */
+{
+  @payments_fail = count();
+}
+
+tick-10sec
+{
+  printa("Last 10s – Success: %d, Fail: %d\n", @payments_success, @payments_fail);
+  trunc(@payments_success); trunc(@payments_fail);
+}
+Invocation
+# Monitor business KPIs in 10s windows
+sudo dtrace -s biz_metrics.d -p $(pgrep billingd)
+Useful Probes:
+Invoice Creation Rate - Counts how many invoices our service generates per interval.
+Correlate drops in invoice rate with system errors or resource saturation.
+Drives capacity planning around peak billing windows.
+Payment Authorization Success/Failure Count 
+Quickly detect and escalate third-party payment failures.
+Focus troubleshooting on external dependencies.
+Refund Processing Rate
+Correlate refund spikes with recent code changes or any campaign launches
+Guides investigation into billing logic errors.
+Transaction Amount Distribution - Reveals the revenue profile 
+Drives targeted optimizations (e.g. caching for frequent small transactions).
+Flags unexpected changes in transaction mix that may impact provisioning.
+note
+Multiple probes can be created for various business case metrics. These can be ingested to our monitoring solutions for improved observability.
+
+
+Multiple probes can be created for various business case metrics. These can be ingested to our monitoring solutions for improved observability.
+
+
+To-Do:
+ Determine the most effective way to automate the process of enabling DTrace on systems, considering that a server restart is required before DTrace scripts can be executed. Additionally, since DTrace is disabled by default after each Windows update, we need to implement a post-patch script that re-enables DTrace and restarts the system as recommended by Microsoft.
+ URL:/spaces/platform/pages/4309811235/DTrace+Viable+Functionalities

@@ -1,0 +1,21 @@
+Overview
+Current
+Today boarding emails boarding files for both IC and PSN to engineering.  An engineer is assigned to process the file, copies the file to a Bastion server, imports the file running the ICGBoarding application on the Bastion server, and results are communicated back to boarding.  
+Proposed
+Boarding uploads the boarding file in the CRM to a Azure Blob Storage.  The ICGBoarding application downloads new blobs for processing on a scheduled interval on the Skybot server, imports the data, and uploads a ACK blob to the Azure Blob Storage.  Boarding can review  ACK blobs using a CRM report.
+2
+1
+0
+0
+3086680113
+3086975068
+1
+Untitled Diagram-1709583111426.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1709583111426.drawio
+0
+1713
+417
+ URL:/spaces/EN/pages/3086975068/Boarding+Enhancements

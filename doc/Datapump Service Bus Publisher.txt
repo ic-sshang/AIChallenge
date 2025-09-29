@@ -1,0 +1,107 @@
+  Application Overview
+Field
+Details
+Application Name
+Datapump Service Bus Publisher 
+Version
+NA
+Description
+This is a .NET worker service deployed in the Biller Kubernetes cluster. It runs continuously, pausing for 10 seconds (tentative) between iterations. The service reads unprocessed Datapump records from Biller shards and publishes them to Azure Service Bus in near real time.
+Reads pending record counts from the Datapump metadata table from a centralized database, then connects to relevant Biller shards with updates. 
+KEDA 
+scaling is driven by the message backlog count fetched using KEDA SQL trigger or based on metrics exposed via biller-datapump-api , enabling the worker service to autoscale according to the message backlog for Azure Service Bus publishing.
+Primary Functionality
+Publishes the pending datapump records to azure service bus.
+Key Features
+Optimized Biller Shard Connectivity for Datapump Updates based on Azure Elastic DB Query and Custom .NET fan-out code, Kubernetes-Based Deployment, Worker Service, Dotnet 8, Rebus/Azure Messaging SDK, KEDA.
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Anoop Nag
+Tech Lead
+Pradeep Kumar, Vivek Regonda
+Engineering Manager
+Kailashnadh Pochiraju
+Support Contact
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+c#
+Frameworks/Libraries
+dotnet 8, IC.Database, Serilog
+Database
+ IC.Net.DataAccess.MsSql
+Key Vault
+kv-pri-biller0-{env}
+Dependencies
+Database, Azure Service Bus
+Code Repository Link
+  Application Services
+Field
+Details
+Notes
+Application Service Indicator
+datapump-servicebus-publisher
+NA
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+NA
+Create Application Service Vault
+False
+NA
+Grant Crypto Vault Access
+False
+NA
+Grant Environment Vault Access
+True
+Yes
+Grant Cluster Vault Access
+False
+No
+Grant ServiceBus Sender Access
+True
+No
+Grant ServiceBus Receiver Access
+True
+No
+Grant ServiceBus Data Owner Access
+False
+No
+Grant IC Blob Storage Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant PDF Extract Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Biller Shard DB Access
+True
+True
+Biller Shard DB Access for QE
+False
+Only utilized by Tooling Cluster Workload for now so likely your Workload will not need it.
+  Deployment Information
+Field
+Details
+Cluster
+Biller
+Deployment Node
+k8s Job Node
+Application Type
+Worker Service
+Outbound Network Ports
+Inbound Network Ports
+PCI Scope
+[Does the application handle credit card data?] No
+Environment Variables
+IC__SqlDatabase__PerfloggingConnectionString
+IC__SqlDatabase__BillerConnectionStringTemplate
+Schedule
+NA
+ URL:/spaces/ED/pages/4579590158/Datapump+Service+Bus+Publisher

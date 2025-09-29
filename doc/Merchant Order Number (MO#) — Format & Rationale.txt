@@ -1,0 +1,83 @@
+1. Format
+Structure:
+BID (6 digits) + Terminal (3 digits) +
+ Transaction ID (up to 13 digits)
+Max Length:
+ 22 characters (per Chase requirement)
+Examples
+0038010010000001234
+003801
+ = BID
+001
+ = Terminal for Utilities
+0000001234
+ = Transaction Sequence
+0132610020000005678
+013261
+ = BID
+002
+ = Terminal for Property Taxes
+0000005678
+ = Transaction ID
+2. Purpose of MO#
+Unique Transaction Identifier
+Each transaction is traceable back to a biller (BID), a merchant account (terminal), and its transaction record.
+Alignment with Chase
+Chase requires InvoiceCloud to pass a merchant order number with each authorization; max length = 22 characters.
+Reconciliation Backbone
+MO# serves as the cross-system key across Chase settlement files, CRM, billing, and reconciliation.
+Compliance
+Encodes hierarchy so MCC, TIN, and descriptors tied to a terminal can be linked back for 
+1099 reporting
+ and 
+KYC
+.
+3. Rationale Behind the Structure
+BID
+Ties every transaction to the biller entity.
+Terminal (Invoice Line)
+In PayFac design, terminals = merchant accounts.
+Each terminal captures MCC, soft descriptor, and TIN (needed for compliance and reporting).
+Invoice types can map to different terminals if they need different MCCs or funding accounts.
+Transaction ID
+Provides uniqueness at the transaction level.
+Keeps sequence generation simple and scalable.
+4. Shopping Cart Handling
+All items in same terminal
+ → 1 MO# / single payer debit.
+Items across multiple terminals
+ → multiple MO#s / multiple payer debits.
+Future option
+ → allow single payer debit by defaulting to the 
+primary MCC
+ (highest-volume MCC for the biller).
+⚠️ 
+Validation Needed (
+ 
+)
+How frequent are 
+“mixed MCC” shopping carts
+ (e.g., utility + tax + permit in one cart) vs. 
+multiple payments of the same type
+ (e.g., 3 utility bills)?  
+This analysis will confirm whether 
+primary MCC consolidation logic
+ is required now or can be deferred.
+5. Summary
+MO# = BID + Terminal + Transaction ID
+ (finalized across sessions).
+Shopping cart logic
+:
+Single MO# if all items under one terminal.
+Multiple MO#s if spanning multiple terminals.
+CRM design:
+Terminals
+ = merchant accounts; capture MCC, descriptor, TIN.
+Invoice Types
+ = control funding instructions (bank accounts).
+Transaction Holds:
+Alpha:
+ manual/DB toggle.
+Future:
+ Ops UI control.
+ URL:/spaces/EA/pages/4663574598/Merchant+Order+Number+MO+Format+Rationale

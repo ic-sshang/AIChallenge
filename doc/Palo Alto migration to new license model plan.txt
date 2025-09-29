@@ -1,0 +1,183 @@
+Date
+Action
+License state
+Palo Non Prod
+Palo Prod East
+Palo Prod West
+#
+SKU
+Type
+#
+SKU
+Type
+#
+SKU
+Type
+3/22/2024
+Current State
+4
+VM 500
+AZM
+6
+VM 500
+BYOL
+4
+VM 500
+AZM
+1
+Pan
+BYOL
+1
+Pan
+BYOL
+1
+Pan
+BYOL
+5/19/2024
+(May maintaiance window)
+Apply Flex Licenses
+4
+VM 500
+AZM
+6
+VM 500
+Flex
+4
+VM 500
+AZM
+1
+Pan
+BYOL
+1
+Pan
+Flex
+1
+Pan
+BYOL
+Aug 2024
+Date 1
+Reduce flex credits applied to Palo Prod East
+4
+VM 500
+AZM
+6
+VM 300
+Flex
+4
+VM 500
+AZM
+1
+Pan
+BYOL
+1
+Pan
+Flex
+1
+Pan
+BYOL
+Aug 2024
+Date 2
+Drop Palo West FW
+4
+VM 500
+AZM
+6
+VM 300
+Flex
+1
+Pan
+BYOL
+1
+Pan
+Flex
+Sept 2024
+Date 1
+Redeploy Palo West FW with reclaimed credits
+4
+VM 500
+AZM
+6
+VM 300
+Flex
+4
+VM 300
+Flex
+1
+Pan
+BYOL
+1
+Pan
+Flex
+1
+Pan
+Flex
+Oct 2024
+Date 1
+Drop Palo NonProd
+6
+VM 300
+Flex
+4
+VM 300
+Flex
+1
+Pan
+Flex
+1
+Pan
+Flex
+Oct 2024
+Date 2
+Redeploy Palo NonProd with NonProd flex credits
+4
+VM 300
+Flex
+NonProd
+6
+VM 300
+Flex
+4
+VM 300
+Flex
+1
+Pan
+Flex
+NonProd
+1
+Pan
+Flex
+1
+Pan
+FlexQues
+Proposed schedule to migrate to flex licenses:
+System
+Subsystem
+Date
+Notes
+POC Test System
+SBX
+Panorama
+Week of April 8th
+Firewalls
+n/a
+Production
+Panoramas
+4/28/2024
+Firewalls
+4/28/2024
+Question:
+Panorama license update - how does it happen? @palo  to send steps
+With flex credit rediuction on east, do we have to resize VM or existing VM compatible with reduced credits?
+Any dependency license updates and firmware?
+ 
+Please send all the FW version to team
+Try to schedule FW updates before license updates
+Notes:
+Ask to Palo/SHI:
+Provide trial VM 500 license + 1 Pan license or provide a lab environment to perform conversion to flex conversion
+Trial flex licenses
+Quotes:
+6 VM 500 + 2 Pan equivalent Flex credits - 1 yr and 3 yr
+Lab credits 4 VM 300 + 1 Pan equivalent
+We can downsize the firewalls on the portal, and lower the Azure SKU later if desired
+ URL:/spaces/icinfradoc/pages/3094151210/Palo+Alto+migration+to+new+license+model+plan

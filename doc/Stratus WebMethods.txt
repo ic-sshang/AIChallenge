@@ -1,0 +1,14 @@
+CRM Section
+Stratus configuration will be available in CRM Stratus Section. The only way to get the client logs is to enable the logs in CRM which will send the logs to 
+support@invoicecloud.com
+ inbox
+Frequently used SQL 
+wsreportid is something of interest. This is the tracking for the report that is generated via webservice calls 
+sql
+select wsreportid, * from payments where invoiceid=382646835 order by 1 desc
+select * from settledbatches order by 1 desc
+select * from webmethodlogs  where webmethodid = 34 order by 1 desc
+select * from tblwebmethod where webmethoddesc like '%stratus%'
+Code Repo
+https://invoicecloud.visualstudio.com/Src/_git/StratusWebServices?path=/StratusWebServices
+ URL:/spaces/DS/pages/2544599041/Stratus+WebMethods

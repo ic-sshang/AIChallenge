@@ -1,0 +1,51 @@
+Background Information
+In order to isolate all file processing to the App servers, we decided that StratusWebServices would transfer incoming files from the Web server to a random App server, and StratusFileProcessor would process them there. SWS looks at the “Staging_Agents” agent pool in Skybot and tries to move the file to a random agent in that pool. If it fails, it tries again with a different agent. If it fails to transfer to all of the agents, SWS will drop the file in an errors folder on the Web machine and send out an alert. 
+The platform team release schedule can be found here: 
+Releases
+ 
+Problem
+During Sunday Maintenance, the INFRA team will often take down all of the App servers at the same time. When this happens, SWS will not be able to send files to the App servers, so it will drop them in the errors folder. After maintenance is done (or as soon as the App servers are back online), we need to go into the Web servers, grab all the files from the errors folder, and manually drop them into the App servers. 
+ Note: The INFRA team may take some of the Web servers out of rotation. If that’s the case, those servers don’t need to be checked for files, as long as they were out of rotation for the whole time that the App servers were down. 
+Instructions
+After the App servers are back online, go into each Web server and identify the files in the errors folder that are from within the maintenance time window (see the 
+Helpful Information
+ section below for steps to connect to the servers).
+note
+Errors folder: 
+EDataAppData\Files\In\Errors\
+
+
+Errors folder: 
+EDataAppData\Files\In\Errors\
+
+
+Copy all the necessary files to your AVD.
+Divide the files into 8 groups/folders so you can spread them out evenly across the 8 Apps. 
+Navigate into each App server and drop the appropriate files in the pending folder. Note: you do not need to drop them into the correct subfolder (Invoices/Adjustments/etc.), you can just drop them into the pending folder, and they will get processed.
+note
+Pending folder: 
+EDataAppData\Files\In\StratusPending\
+
+
+Pending folder: 
+EDataAppData\Files\In\StratusPending\
+
+
+Once the Skybot jobs are released, monitor the pending folder in the App servers and the StratusFileProcessor table in IC_PerfLogging to make sure the files are getting picked up. If needed, you can check the logs for StratusFileProcessor in Skybot (see the 
+Helpful Information
+ section below for the Skybot link).
+Helpful Information
+Server IP Addresses:
+ 
+URLs and Server List
+ 
+Steps to navigate into a Web/App server:
+Find the IP for the server in the linked document above. In the Prod AVD, open File Explorer, right click, and select New → Shortcut. In the location field, enter 
+\\{IP Address}
+ (example: \\10.0.6.4) and click through to create the shortcut.
+Double click on your shortcut to open the machine folder. It will prompt you to login with a PIN, but you will have to click on ‘More choices’ and choose ‘Use a different account’ and then type your IC email and password.
+The EDataAppData folder contains the relevant file processing subfolders.
+Production Skybot:
+ (only accessible from Prod AVD) 
+http://10.0.6.21:8008/automate-schedule/jobs
+ URL:/spaces/IM/pages/3937533962/StratusFileProcessor+Post-Maintenance+Recovery

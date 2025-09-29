@@ -1,0 +1,72 @@
+Function
+SOAP
+API Change Notes
+REST
+Check system availability
+SystemAvailable
+No equivalent?
+Get biller configuration
+Currently it’s configured in IVR system
+We have 
+Retrieve Biller Status
+ and 
+Retrieve Biller Payment Types
+, but neither returns everything we need, so we’ll need to revise Retrieve Biller Status, or add a new function.
+Get customer details (incl. open invoices)
+AdvancedIVRSearch
+Add SOAP response params:
+CustomerGUID
+AccountNumber
+Paperless enrollment status
+Autopay enrollment status
+EmailAddress
+There’s no existing function to blindly get accounts.  The closest we have is 
+Retrieve Open Invoices
+ and similar.  Problem is this requires a customer guid.  We can get customer guid from 
+Retrieve CustomerGUID
+, but that requires an authentication token, which can be retrieve using 
+Remote Authentication
+, but that requires user/email and password, which we don’t have.  We may have to spin up a new function to return us a customer guid, using an account search similar to the web.
+Process card payment (w/ invoice)
+CC_Sale
+Invoice Pay \ 
+Process Credit Card Sale
+Invoice Pay \ 
+Process Credit Card Sale with UserCreditCardGUID
+ - if making a payment using a stored payment method (once we authenticate the customer)
+Process check payment (w/ invoice)
+ACH_Sale
+Invoice Pay \ 
+Process ACH Sale
+Invoice Pay \ 
+Process ACH Sale with UserBankGUID
+ - if making payment using a stored payment method (once we authenticate the customer)
+Process card payment (w/o invoice)
+BlindIVR_CC_Sale
+Cloud Pay \ 
+Process Credit Card Sale
+Cloud Pay \ 
+Process Credit Card Sale with UserCreditCardGUID
+ - if making a payment using a stored payment method (once we authenticate the customer)
+Process check payment (w/o invoice)
+BlindIVR_ACH_Sale
+Cloud Pay \ 
+Process ACH Sale
+Cloud Pay \ 
+Process ACH Sale with UserBankGUID
+ - if making payment using a stored payment method (once we authenticate the customer)
+Retrieve autopay status
+ViewCustomerAutoPaySettings
+Retrieve Customer Autopay Status v2.1
+Enroll/unenroll in autopay
+UpdateCustomerAutoPayStatus
+Update Customer AutoPay Status
+ - this also requires customer guide, so we’ll have the same challenges we face with the search function above
+Retrieve paperless status
+ViewCustomerPaperlessSettings
+Retrieve Customer Paperless Status
+Enroll/unenroll in paperless
+UpdateCustomerPaperlessStatus2
+Update Customer Paperless Status
+ - this also requires customer guide, so we’ll have the same challenges we face with the search function above
+ URL:/spaces/PRODUCT/pages/4116283393/Payer+Agent+API+Overview+MVP+Only

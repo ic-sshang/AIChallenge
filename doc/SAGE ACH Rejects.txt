@@ -1,0 +1,70 @@
+1
+7
+SAGE ACH Rejects 
+Sage is a processor which we use to send ACH transaction and some billers are still in SAGE even though the bulk of our transaction goes via Chase Paymentech
+Purpose:
+The purpose of the SOP is to monitor and report if there is any issue with the SAGE ACH Rejects job
+Related Topics:
+https://app.getguru.com/card/5ij7M6Bi/EFT-Rejects
+ 
+Negative File for Clients.pptx
+Context:
+The job schedule and how to check will help in determining whether things are working as expected. 
+Job Schedule
+Job Name
+Start time
+End time
+Days the job Run
+Notes
+Staging-SageEFTRejects
+13:00 PM CT
+13:05 PM CT
+Sunday to Monday
+Only time the job run can late is during Sunday Maintenance
+How To Check the Job
+Check Automate if the job has started successfully
+In case the job is stuck for a long time and has not been completed within 5 mins. Try to grab the log for the job run 
+Look for errors or whether the job is stuck 
+Job Started . . . :  12/27/2022 13:00:04 CST
+Job Name  . . . . :  STAGING-SageEFTRejects
+Job ID  . . . . . :  1953
+Job Description . :  Sage EFT Reject Processing
+Job Parameters  . :  
+Run Number  . . . :  100403494
+Agent Environment :  Apps_Login
+Agent Name  . . . :  IC-APP3_DEFAULT
+Agent Owner . . . :  IC-APP3$
+Agent OS  . . . . :  Windows NT (unknown) 10.0
+Agent Relmod  . . :  R04M021171002
+Server Name . . . :  ICSERVICESSKYBOT:7472
+
+Starting process with command: bin\Win32\RobotTermSocket64.exe  "icskybotprodagent@invoicecloud.com"  1672167604272 C:\Windows\system32\cmd.exe
+
+ Password:
+Microsoft Windows [Version 10.0.14393]
+(c) 2016 Microsoft Corporation. All rights reserved.
+
+C:\Program Files (x86)\Help Systems\Automate Schedule Agent>E:
+"C:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20221227.130004.491: %Errorlevel%
+
+E:\>COMPLETED_CMDID_20221227.130004.491: 0
+
+E:\>cd \Data\Apps\
+"C:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20221227.130004.606: %Errorlevel%
+
+E:\Data\Apps>COMPLETED_CMDID_20221227.130004.606: 0
+
+E:\Data\Apps>EFTRejects\EFTRejects.exe
+"C:\Program Files (x86)\Help Systems\Automate Schedule Agent\bin\Win32\eecho" COMPLETED_CMDID_20221227.130004.857: %Errorlevel%
+12/27/2022 1:00:04 PM - Starting Main
+12/27/2022 1:00:05 PM - Starting Today Loop
+Processing BillerID=1
+Has 0 total rejects
+Processing BillerID=32
+EFTRejects process only Sage rejects
+ The source cod can be found - 
+https://invoicecloud.visualstudio.com/Src/_git/EFTRejects?path=/EFTRejects/EFTRejects.vb
+ 
+OpsGenie and NewRelic Alerts 
+Engagement and Escalation [Insert Process Here]
+ URL:/spaces/DS/pages/2545975297/SAGE+ACH+Rejects

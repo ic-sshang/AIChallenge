@@ -1,0 +1,56 @@
+Aging Funds
+Definition
+Aging report looks for payments on the gateway DB that are not part of a funding batch (no funding batch detail). Report is generated from rpt.NonFundedPayments.
+Useful Queries
+sql
+-- Locate Aging Payment
+select * from Payments P
+left join FundingBatchDetail FBD on P.PaymentID = FBD.PaymentID
+where P.TerminalID in (select TerminalID from Terminals where BillerID = [BILLER] and TerminalTypeID = 1)
+and FBD.FundingBatchID is null
+and P.PaymentDate > '4/10/2025'
+order by 1 desc
+Clearing Aging Funds for Test Payments
+Context:
+Sometimes the WT product team will submit test payments that are not settled on the Gateway DB. In the scenario where we need to clear out these payments, follow these steps. 
+Payments can be identified as test payments if the MID on the terminal for a payment is “invoicecloudinc_instant_4“ or the Unique Identifier is similar to “IC-LiveTestBiller-1“.
+Please follow these steps to clear out these types of payment: 
+Identify the LegacyID of the payment(s).
+Provide Settlement Ops the LegacyID of the payments in question and ask for a refund. 
+Confirm if a refund is possible (usually it is possible).
+Submit a DBR 
+Request to update the PaymentStatusID of the affected payment(s) to 12 which corresponds to the VOIDED status (include the Gateway DB PaymentID of the payment(s) in question on the DBR item)
+Request to submit an offset ledger entry for the payment in question with a 
+negative amount
+.
+Example DBR request:
+Dear Data Services,
+
+Please insert an offsetting ledger entry for -188.91 to the PayPal ledger of BillerID 1158 (TerminalID 6745).
+This entry relates to PaymenID 7748749. This is a follow-up request from DBR-4974: Data Update Request 1158-Norwich Public Utilities (CT)
+Resolved
+ to perform the necessary ledger work to reflect the manual refund that was processed on the Braintee portal.
+
+MerchantAccountID: cityofnorwichutility
+TerminalID: 6745
+Adding Records to a Funding Batch
+Project: IC.Gateway
+Branch: manualWork-example
+Page: 
+OBD: IC.Gateway\Tests\IntegrationTests\Tests\ThirdPartyFunding\ThirdPartyFundingTests.cs
+PayPal Terminal:
+IC.Gateway\Tests\IntegrationTests\Tests\Reconciliation\BatchInquiryTests.cs
+IC.Gateway\Tests\IntegrationTests\Tests\Reconciliation\BatchCloseTests.cs
+Method: 
+OBD: ThirdPartyFundingService_1CreateFundingBatchRecord_Success()
+PayPal Terminal: 
+BatchInquiry_Success (to confirm totals match)
+BatchClose_Success (to insert the funding batch)
+For PayPal payments, fill out the REQ object’s properties including the following: 
+BatchReference: Should be “BillerID|GUID“
+Based on Transaction Type ID - update Counts and Volumes (1 = Sale, 2 = Credit)
+MerchantAccountID of terminal in question
+TerminalID of payment(s) in question
+Start/End Date: DateTime.Now.AddHours(1)
+InclusionList: Comma separated list of PaymentReferences
+ URL:/spaces/DS/pages/4416012426/Funding

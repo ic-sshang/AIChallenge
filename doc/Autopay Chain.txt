@@ -1,0 +1,86 @@
+1
+7
+Autopay
+AutoPay is a payment solution provided by Invoice Cloud to Billers and their customers. 
+The application will leverage the Azure Batch technology to create a job in our Azure Batch Account. The job will contain an arbitrary number of tasks. These tasks will run an application called ICAzureBatchRunner and will kick off the Auto Pay chain.
+Each task will run the AutoPay chain for a single biller.
+Job Additional Details
+The controller will execute these commands in the following sequence:
+Index
+JobName
+1
+ScheduledPaymentBalanceCheck
+2
+RecurringScheduledPaymentsGenerator
+3
+ScheduledPaymentProcessing
+4
+ScheduledPaymentProcessingMultiInvoice
+5
+AutoPaymentProcessing
+6
+AutoPaymentsProcessingMultiInvoice
+7
+CreateLateFees
+It is safe to re-run if the job fails after ScheduledPaymentProcessing. In case the job fails in SchedulePaymentBalanceCheck or RecurringScheduledPaymentsGenerator. Involve the Product Engineering team since the clean-up is required.
+Links
+ICAzureBatchRunner - 
+ReadMe
+Job Name
+Start time
+End time
+Days the job Run
+Notes
+Azure Batch Job
+3:00 AM CT
+11:00 AM CT
+Daily
+AutoPayments (Single)
+3:00 AM CT
+10:45 AM CT
+Daily
+AutoPayments (multi)
+3:00 AM CT
+10:45 AM CT
+Daily
+There are usually none or very few multi-invoice auto-pay and scheduled pay payments daily, if the value is 0, that can be ignore.
+ScheduledPayments (single)
+3:00 AM CT
+9:07 AM CT
+Daily
+ScheduledPayments (multi)
+3:00 AM CT
+9:07 AM CT
+Daily
+Scheduled Payment Reminders
+14:14 PM CT
+14:32 PM CT
+Daily
+LateFees
+3:14 AM CT
+10:45 AM CT
+Daily
+Purpose:
+This job does an automatic payment based on the funding type set up on the invoice due date.
+Related Topics:
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+[Insert related Guru Card Links]
+Context:
+This is an SOP document, the way to use this document is to identify an autopay scheduled pay job failures
+How To Check
+1. icautopay is the azure batch account that runs the job
+2. Select IClogstorage from Azure resources
+select container → ICautopay
+Search by date 
+select stdout to check output logs and download. Logs contain both scheduled pay and auto pay
+3. Login to IC perf database from the bastion host
+Can query using DB query to find average RTDR
+Slack Channel
+The autopaycontroller logs the message in #dailyautomatedpmtinfo
+The summary email doesn’t go out until all the billers are completed
+LateFee job generates latefee emails/reminders to the Biller Users who haven’t made the payment yet.
+OpsGenie and NewRelic Alerts 
+Engagement and Escalation [Insert Process Here]
+Reach out to team SPAM on-call in opsgenie.
+ URL:/spaces/DS/pages/2546597889/Autopay+Chain

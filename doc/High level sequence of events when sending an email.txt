@@ -1,0 +1,29 @@
+This provides a high level view of the sequence of events that happen when we send an email.  
+(TODO) Email is triggered from application
+(TODO) Email information is inserted into EmailQueue table
+EmailQueueProcessing picks up the data from EmailQueue table
+The email goes through 
+EmailQueueTypeID
+ specific processing inside EmailQueueProcessing
+The library IC.EmailQueueFramework plays a critical role in processing all email.  Once an email has been processed through its 
+EmailQueueTypeID
+ specific logic, the library will continue general processing
+IC.EmailQueueFramework will send the email details to the email sending handler
+https://dev.azure.com/invoicecloud/Src/_git/IC.EmailQueueFramework?path=/IC.EmailQueueFramework/EmailQueueBase.vb&version=GBmain&line=1099&lineEnd=1114&lineStartColumn=1&lineEndColumn=53&lineStyle=plain&_a=contents
+The handler (injected into IC.EmailQueueFramework.EmailQueueBase) will accept and do some additional email only processing
+https://dev.azure.com/invoicecloud/Src/_git/EmailQueueProcessing?path=/EmailQueueProcessing/Implementations/EmailHandlerV1.vb&version=GBmain&line=15&lineEnd=19&lineStartColumn=1&lineEndColumn=75&lineStyle=plain&_a=contents
+The handler will then send it into the ICFramework.Utilities.Email library for actual sending of the email through our email relay provider.  There is a check against the “do not email list” here.
+https://dev.azure.com/invoicecloud/Src/_git/ICFramework.Utilities.Email?path=/ICFramework.Utilities.Email/Email.vb&version=GBmain&line=548&lineEnd=562&lineStartColumn=1&lineEndColumn=21&lineStyle=plain&_a=contents
+The library then forwards that information to SendEmailRelay where additional low-level email processing continues.
+https://dev.azure.com/invoicecloud/Src/_git/ICFramework.Utilities.Email?path=/ICFramework.Utilities.Email/Email.vb&version=GBmain&line=205&lineEnd=205&lineStartColumn=1&lineEndColumn=137&lineStyle=plain&_a=contents
+In most cases the email relay provider will be Mailgun.  Other providers are used as a backup.  It will enter a function to send the email through Mailgun
+https://dev.azure.com/invoicecloud/Src/_git/ICFramework.Utilities.Email?path=/ICFramework.Utilities.Email/Email.vb&version=GBmain&line=499&lineEnd=499&lineStartColumn=1&lineEndColumn=126&lineStyle=plain&_a=contents
+We use a standard 
+SmtpClient
+ to send email through Mailgun today.  We set the server details, set the credentials to connect, set the port, and Send().
+https://dev.azure.com/invoicecloud/Src/_git/ICFramework.Utilities.Email?path=/ICFramework.Utilities.Email/Email.vb&version=GBmain&line=508&lineEnd=520&lineStartColumn=1&lineEndColumn=39&lineStyle=plain&_a=contents
+The request to send the email now lives on the Mailgun system.  From this point you can log into Mailgun portal and go to the Logs area and search for the email to confirm it made it there.
+https://app.mailgun.com/mg/reporting/logs
+ 
+The found email will have a Status on it.  Put simply, when we send the email to Mailgun for processing, it should show up as Accepted.  When Mailgun sends that email to the recipient, and the recipient accepts it, it shows up as Accepted
+ URL:/spaces/EA/pages/3908632597/High+level+sequence+of+events+when+sending+an+email

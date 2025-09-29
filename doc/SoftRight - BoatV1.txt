@@ -1,0 +1,1454 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+N
+TRUE
+NA - IC Genereated Value
+InvoiceClass
+:
+Regular
+N
+  2. Others
+U
+1
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+InvoiceClass:
+Demand
+Start Index 250, Length 6
+Other 
+Start Index 257, Length 6
+07152021
+-BT-
+123456
+'BillYear+ “BT” + BillerInvoiceNumber
+Creates Invoice Number from dataline.
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+IC Generated: Returns Date of Upload(“Today”)
+InvoiceDate could be found in the Header
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+IC Generated: 
+ 
+InvoiceClass
+:
+Demand
+Date of Upload(“Today”) + 14 days
+Other
+Date of Upload(“Today”)  + 60 days
+Gets Due Date
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+InvoiceClass:
+Demand and other classes:
+If Start Index 254, length 28 has a dash”-” for credits:
+trim dash, divide field by 100 and multiple by -1
+No dash
+divide field by 100
+String
+Gets Total Amount Due. 
+10
+Invoice Header
+14
+TotalTaxAmount
+FALSE
+Invoice Header
+15
+TotalDiscountAmount
+FALSE
+Invoice Header
+16
+TotalShippingAmount
+FALSE
+Invoice Header
+17
+TotalDutyAmount
+FALSE
+Invoice Header
+18
+VATTaxRate
+FALSE
+Invoice Header
+19
+VATTaxAmount
+FALSE
+Invoice Header
+20
+AllowPartialPayments
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+FALSE
+Invoice Header
+22
+Terms
+FALSE
+Invoice Header
+23
+FirstNotifyRequestedDate
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+FALSE
+Invoice Header
+26
+PONumber
+FALSE
+Invoice Header
+27
+SalesRep
+FALSE
+Invoice Header
+28
+ShipDate
+FALSE
+Invoice Header
+29
+TrackingNumber
+FALSE
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+InvoiceClass:
+Demand
+Start Index 312, Length 26
+Other
+Start Index 319, length 26
+City, State, and Zip come from one line. strings up to index before two cap letters.
+Invoice Header
+35
+CustomerShipState
+FALSE
+InvoiceClass:
+Demand
+Start Index 312, Length 26
+Other
+Start Index 319, length 26
+City, State, and Zip come from one line. Return two cap letters between whitespace.
+Invoice Header
+36
+CustomerShipZip
+FALSE
+InvoiceClass:
+Demand
+Start Index 312, Length 26
+Other
+Start Index 319, length 26
+City, State, and Zip come from one line. Return indexes with 5 consecutive numbers.
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+Start Index 0, Length 1
+String
+Detail code
+Invoice Header
+39
+Custom2
+FALSE
+Start Index 112, Length 8
+String
+Owner 1 DOB
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Start Index 94, Length 8
+String
+Owner 2 DOB
+10
+Invoice Header
+41
+Custom4
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 221, Length 4
+Other
+Start Index 228, Length 4
+String
+Boat Year
+10
+Invoice Header
+42
+Custom5
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 225, Length 5
+Other
+Start Index 232, Length 5
+String
+Boat Length
+10
+Invoice Header
+43
+Custom6
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 230, Length 17
+Other
+Start Index 237, Length 17
+String
+Boat Make
+8
+Invoice Header
+44
+Custom7
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 260, Length 6
+Other
+Start Index 267, Length 6
+String
+Valution
+8
+Invoice Header
+45
+Custom8
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 140, Length 20
+Other
+Start Index 140, Length 20
+String
+Mail Street1
+3
+Invoice Header
+46
+Custom9
+FALSE
+InvoiceClass:
+Demand
+Start Index 221, Length 4
+Other
+Start Index 228, Length 4
+string
+Mail Street2
+Invoice Header
+47
+Custom10
+FALSE
+InvoiceClass:
+Demand
+Start Index 250, Length 6
+Other
+Start Index 257, Length 6
+Bill Number for the lockbox
+Invoice Header
+48
+Aging1
+FALSE
+Invoice Header
+49
+Aging2
+FALSE
+Invoice Header
+50
+Aging3
+FALSE
+Invoice Header
+51
+Aging4
+FALSE
+Invoice Header
+52
+Aging5
+FALSE
+Invoice Header
+53
+Aging6
+FALSE
+Invoice Header
+54
+Aging7
+FALSE
+Invoice Header
+55
+Aging8
+FALSE
+Invoice Header
+56
+Aging9
+FALSE
+Invoice Header
+57
+Aging10
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Same as TotalAmountDue
+String
+Gets BalanceDue
+10
+Invoice Header
+94
+Custom11
+FALSE
+InvoiceClass:
+Demand
+Start Index 180, Length 26
+Other
+Start Index 180, Length 26
+Mail City State ZIP
+Invoice Header
+95
+Custom12
+FALSE
+Start Index 338, Length 10
+Interest
+Invoice Header
+96
+Custom13
+FALSE
+Start Index 348, Length 10
+Demand
+Invoice Header
+97
+Custom14
+FALSE
+Start Index 358, Length 10
+Charges
+Invoice Header
+98
+Custom15
+FALSE
+Invoice Header
+99
+Custom16
+FALSE
+Invoice Header
+100
+Custom17
+FALSE
+Invoice Header
+101
+Custom18
+FALSE
+Invoice Header
+102
+Custom19
+FALSE
+Invoice Header
+103
+Custom20
+FALSE
+Invoice Header
+104
+Custom21
+FALSE
+Invoice Header
+105
+Custom22
+FALSE
+Invoice Header
+106
+Custom23
+FALSE
+Invoice Header
+107
+Custom24
+FALSE
+Invoice Header
+108
+Custom25
+FALSE
+Invoice Header
+109
+Custom26
+FALSE
+Invoice Header
+110
+Custom27
+FALSE
+Invoice Header
+111
+Custom28
+FALSE
+Invoice Header
+112
+Custom29
+FALSE
+Invoice Header
+113
+Custom30
+FALSE
+Invoice Header
+114
+Custom31
+FALSE
+Invoice Header
+115
+Custom32
+FALSE
+Invoice Header
+116
+Custom33
+FALSE
+Invoice Header
+117
+Custom34
+FALSE
+Invoice Header
+118
+Custom35
+Y
+FALSE
+Invoice Header
+119
+Custom36
+Y
+FALSE
+Invoice Header
+120
+Custom37
+Y
+FALSE
+Invoice Header
+121
+Custom38
+Y
+FALSE
+Invoice Header
+122
+Custom39
+Y
+FALSE
+Invoice Header
+123
+Custom40
+FALSE
+Invoice Header
+124
+Custom41
+Y
+FALSE
+Invoice Header
+125
+Custom42
+FALSE
+Invoice Header
+126
+Custom43
+FALSE
+Invoice Header
+127
+Custom44
+Y
+FALSE
+Invoice Header
+128
+Custom45
+Y
+FALSE
+Invoice Header
+129
+Custom46
+Y
+FALSE
+Invoice Header
+130
+Custom47
+Y
+FALSE
+Invoice Header
+131
+Custom48
+Y
+FALSE
+Invoice Header
+132
+Custom49
+Y
+FALSE
+Invoice Header
+133
+Custom56
+Y
+FALSE
+Invoice Header
+Custom50
+Y
+FALSE
+Start Index 209, Length 15
+RegNo
+Custom51
+Y
+FALSE
+Invoice Header
+Custom52
+Y
+FALSE
+Invoice Header
+Custom53
+Y
+FALSE
+Invoice Header
+Custom54
+Y
+FALSE
+Invoice Header
+Custom55
+Y
+FALSE
+Invoice Header
+Custom57
+Y
+FALSE
+Invoice Header
+Custom58
+Y
+FALSE
+Invoice Header
+Custom59
+Y
+FALSE
+Invoice Header
+Custom60
+Y
+FALSE
+Invoice Header
+Custom61
+Y
+FALSE
+Invoice Header
+Custom62
+Y
+FALSE
+Invoice Header
+Custom63
+Y
+FALSE
+Invoice Header
+Custom64
+Y
+FALSE
+Invoice Header
+Custom65
+Y
+FALSE
+Invoice Header
+Custom66
+Y
+FALSE
+Invoice Header
+Custom67
+Y
+FALSE
+Invoice Header
+Custom68
+Y
+FALSE
+Invoice Header
+Custom70
+Y
+FALSE
+Invoice Header
+Custom72
+Y
+FALSE
+Invoice Header
+Custom73
+Y
+FALSE
+Invoice Header
+Custom74
+Y
+FALSE
+Invoice Header
+Custom80
+Y
+FALSE
+Invoice Header
+Custom81
+Y
+FALSE
+Invoice Header
+Custom82
+Y
+FALSE
+Invoice Header
+Custom83
+Y
+FALSE
+Invoice Header
+Custom85
+Y
+FALSE
+Invoice Header
+Custom86
+Y
+FALSE
+Invoice Header
+Custom87
+Y
+FALSE
+Invoice Header
+Custom88
+Y
+FALSE
+Invoice Header
+Custom89
+Y
+FALSE
+Invoice Header
+183
+LocationReference
+FALSE
+Invoice Header
+186
+LateFeeAmount
+FALSE
+Invoice Header
+187
+LateFeeDate
+FALSE
+Invoice Header
+188
+LateFeeDetailRecord
+FALSE
+Invoice Header
+189
+LateFeeDesc
+FALSE
+Invoice Header
+190
+EmailLateFeeNotice
+FALSE
+Invoice Header
+191
+ApplyLateFeeIfNoPaymentsOnly
+FALSE
+Invoice Header
+192
+CreditCardServiceFee
+FALSE
+Invoice Header
+193
+AchServiceFee
+FALSE
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+249
+PromptPayDiscountAmount
+FALSE
+Invoice Header
+250
+PromptPayExpirationDate
+FALSE
+Invoice Header
+251
+PromptPayDesc
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+NA - IC Generated Value.
+InvoiceTypes.Utility
+Gets InvoiceTypeID from IC Integrator Tool
+Invoice Header
+317
+PaymentExpirationDate
+FALSE
+Invoice Header
+318
+PaymentExpirationMessage
+FALSE
+Invoice Header
+319
+Echo1
+FALSE
+Invoice Header
+320
+Echo2
+FALSE
+Invoice Header
+321
+Echo3
+FALSE
+Invoice Header
+322
+Echo4
+FALSE
+Invoice Header
+323
+Echo5
+FALSE
+Invoice Header
+324
+Echo6
+FALSE
+Invoice Header
+325
+Echo7
+FALSE
+Invoice Header
+326
+Echo8
+FALSE
+Invoice Header
+327
+Echo9
+FALSE
+Invoice Header
+328
+Echo10
+FALSE
+Invoice Header
+329
+Echo11
+FALSE
+Invoice Header
+330
+Echo12
+FALSE
+Invoice Header
+331
+Echo13
+FALSE
+Invoice Header
+332
+Echo14
+FALSE
+Invoice Header
+333
+Echo15
+FALSE
+Invoice Header
+334
+Echo16
+FALSE
+Invoice Header
+335
+Echo17
+FALSE
+Invoice Header
+336
+Echo18
+FALSE
+Invoice Header
+337
+Echo19
+FALSE
+Invoice Header
+338
+Echo20
+FALSE
+Invoice Header
+339
+PDFToken
+FALSE
+Invoice Header
+340
+PDFFileName
+FALSE
+Invoice Header
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+0
+1
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+InvoiceClass:
+Demand
+Start Index 250, Length 6
+Other
+Start Index 257, Length 6
+Note: We run StringLeadingZeroes for this field. If no input is passed, we may generate “000” as a placeholder.
+4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+InvoiceClass:
+Demand:
+billyear + “BT” + Start Index 250, length 6(stripleadingzeroes)
+Other:
+billyear + “BT” + Start Index 257, length 6(stripleadingzeroes)
+String
+Retrieves the Account Number
+12
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Start index 20, length 64
+String
+Retrieves the Customers Name
+30
+Customer Record
+61
+Address1
+FALSE
+String
+Customer Record
+62
+Address2
+FALSE
+String
+Customer Record
+63
+City
+FALSE
+String
+Customer Record
+64
+State
+FALSE
+String
+Customer Record
+65
+Zip
+FALSE
+String
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Start index 102, length 38
+string
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+83
+CustomField1
+FALSE
+Invoice Detail
+84
+CustomField2
+FALSE
+Invoice Detail
+85
+CustomField3
+FALSE
+Invoice Detail
+86
+CustomField4
+FALSE
+Invoice Detail
+87
+CustomField5
+FALSE
+Invoice Detail
+88
+CustomField6
+FALSE
+Invoice Detail
+89
+CustomField7
+FALSE
+Invoice Detail
+90
+CustomField8
+FALSE
+Invoice Detail
+91
+CustomField9
+FALSE
+Invoice Detail
+92
+CustomField10
+FALSE
+Invoice Detail
+208
+CustomField11
+FALSE
+Invoice Detail
+209
+CustomField12
+FALSE
+Invoice Detail
+210
+CustomField13
+FALSE
+Invoice Detail
+211
+CustomField14
+FALSE
+Invoice Detail
+212
+CustomField15
+FALSE
+Invoice Detail
+213
+CustomField16
+FALSE
+Invoice Detail
+214
+CustomField17
+FALSE
+Invoice Detail
+215
+CustomField18
+FALSE
+Invoice Detail
+216
+CustomField19
+FALSE
+Invoice Detail
+217
+CustomField20
+FALSE
+Invoice Detail
+218
+CustomField21
+FALSE
+Invoice Detail
+219
+CustomField22
+FALSE
+Invoice Detail
+220
+CustomField23
+FALSE
+Invoice Detail
+221
+CustomField24
+FALSE
+Invoice Detail
+222
+CustomField25
+FALSE
+Invoice Detail
+223
+CustomField26
+FALSE
+Invoice Detail
+224
+CustomField27
+FALSE
+Invoice Detail
+225
+CustomField28
+FALSE
+Invoice Detail
+226
+CustomField29
+FALSE
+Invoice Detail
+227
+CustomField30
+FALSE
+Invoice Detail
+228
+CustomField31
+FALSE
+Invoice Detail
+229
+CustomField32
+FALSE
+Invoice Detail
+230
+CustomField33
+FALSE
+Invoice Detail
+231
+CustomField34
+FALSE
+Invoice Detail
+232
+CustomField35
+FALSE
+Invoice Detail
+233
+CustomField36
+FALSE
+Invoice Detail
+234
+CustomField37
+FALSE
+Invoice Detail
+235
+CustomField38
+FALSE
+Invoice Detail
+236
+CustomField39
+FALSE
+Invoice Detail
+237
+CustomField40
+FALSE
+Invoice Detail
+238
+CustomField41
+FALSE
+Invoice Detail
+239
+CustomField42
+FALSE
+Invoice Detail
+240
+CustomField43
+FALSE
+Invoice Detail
+241
+CustomField44
+FALSE
+Invoice Detail
+242
+CustomField45
+FALSE
+Invoice Detail
+243
+CustomField46
+FALSE
+Invoice Detail
+244
+CustomField47
+FALSE
+Invoice Detail
+245
+CustomField48
+FALSE
+Invoice Detail
+246
+CustomField49
+FALSE
+Invoice Detail
+247
+CustomField50
+FALSE
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+LN(0).Trim.ToString().Substring(0, 3) & "-" & LN(0).Trim.ToString().Substring(3, 5) & "-" & LN(0).Trim.ToString().Substring(8, 2)
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+LN(1).Trim.ToString()
+Adjustment Balance Amount
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+2 = Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+“Daily Balance File”
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Current Date ("MM/dd/yyyy")
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2072805414/SoftRight+-+BoatV1

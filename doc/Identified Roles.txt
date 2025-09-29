@@ -1,0 +1,94 @@
+Carrier
+Synonymous with “Biller” in InvoiceCloud systems - Insurance providers are “Carriers”.
+Agency (Independent Agency) (IA)
+Independent Insurance Agency that does business with a Carrier.
+Can be associated to one or more Carriers 
+Independent Agencies are created independently of a Carrier
+Carrier Administrators are able to assign IA’s to the Carrier they belong to - this establishes the IA and its agents as policy providers for the Carrier. 
+Contains/Associates Independent Agents.
+Independent Agents are associated to a Carrier by way of an Independent Agency.
+Carrier Administrator
+Administrator of the Carrier’s Agent Billing Accounts
+Responsible for 
+Creating and managing Captive (In-House) Agent accounts.
+Managing Carrier’s customer accounts for agents - both independent and captive.
+Can assign customer accounts to agents or transfer them between agents.
+Creating and managing payment methods at the Carrier level.
+Managing Independent Agencies assigned to Carrier.
+Certain Carrier Administrators may need the ability
+System Administrator
+Administrator of Carrier’s Admin Accounts OR Administrator of IAs Admin Accounts.
+Can view audit logs to see what actions Agents & Carrier Administrators performed. 
+Agent
+Two varieties
+Captive
+These agents are “in-house” - they work directly for the Carrier.
+Agents of this variety are restricted to the agent they are assigned to.
+Independent
+These agents belong to an Independent Agency and can work across multiple Carriers 
+Agents of this variety are assigned to an Agency and can only work within Carriers they have been assigned to. 
+Agents can
+Create and manage policies for customers
+Manage or make payments on behalf of customers
+Generate Payment Confirmations or Receipts
+Manage Autopay for customers
+Manage Customer Details on payments
+Role
+Carrier
+           Agency
+Carrier Admin
+System Admin
+Agent
+Description
+An Insurance Organization (Carrier) - synonymous with a “Biller”.
+Independent Insurance Agency - does business with a Carrier, holds Independent Agents. 
+Administrative Account Under a Carrier - Responsible for Managing Captive Agent Accounts, assigning Independent Agents, and potentially performing the role of an Agent when necessary.
+Administrative Account - Responsible for managing Carrier - Create/Manage Carrier Admins and System Admins
+Agents are responsible for creating policies and making payments on behalf of customers.
+Subtypes
+N/A
+N/A
+Agent Manager
+Manage (Invite, Link, Activate/Deactivate) Agent Accounts
+SuperAdmin
+Can Elevate to Agent - i.e. an Agent is unavailable, and someone else needs to complete their work.
+N/A 
+(Clarify)
+???
+Independent Agents
+1-to-many with Carriers - can only view carriers they are assigned to.
+Captive Agents
+1-to-1 with a Carrier - these accounts are restricted to their assigned carrier.
+Write Actions
+N/A
+N/A
+Create and Manage Captive Agent Accounts.
+Invite/Assign Independent Agent Accounts
+Transfer Customer Accounts between Agents
+Assign/Remove Customer Accounts to/from Agents (Single or Bulk)
+Create Agent Account Roles
+Manage Payment Methods at Carrier Level'
+Create and Manage Carrier Administrator Accounts.
+Create and Manage System Administrator Accounts.
+Add Payment Method (assigned to Agent only).
+Make Payments on behalf of customer
+Generate Payment Confirmations & Receipts.
+For any account assigned to the agent.
+Configure Autopay for Customer
+Manage Customer Details for Payments
+Read Actions
+N/A
+N/A
+Agent Accounts
+Profile Information
+Activation Status
+Account Associations
+Customer Accounts 
+(Clarify WHAT)
+View Audit Logs
+System & Carrier Administrator Accounts
+Customer Accounts (assigned to Agent)
+Payment methods/information for Carrier (Captive only?), Agent (themselves), or Customer (ReadOnly)
+Customer Autopay Status
+Payments made on Customer Account - by Customer or Agent (themselves).
+ URL:/spaces/EA/pages/4466638901/Identified+Roles

@@ -1,0 +1,123 @@
+Description
+Things to Know when converting existing billers to the BS&A platform on InvoiceCloud.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+The BS&A Conversion outlines key considerations for transitioning billers to the BS&A platform, serving as both a scope and setup guide to ensure smooth onboarding and implementation. Since BS&A supports only one InvoiceCloud BID per biller, any separate tax and utility BIDs must be merged, and BS&A to BS&A Cloud upgrades require minimal involvement from Invoice Cloud beyond post-upgrade monitoring.
+Duplicate bill handling must be configured by enabling specific settings in the biller's system.
+File extraction guidance is provided via links for utility and tax data, and invoice types must be consistently identified using predefined IDs.
+For billers using remote PDF linking, InvoiceFormatID 1131 must be used, and no sample images are needed.
+Testing credentials and URLs are included for staging and production environments, though BS&A typically does not test for a conversion or upgrade.
+ Process
+Definitions
+·        BID: Biller ID used in InvoiceCloud to identify separate billing systems (e.g., tax, utility).
+·        EBPP: Electronic Bill Presentment and Payment.
+·        PDF Linking: A method for presenting bills using remote file references instead of uploading images.
+·        InvoiceFormatID 1131: Required format ID for PDF-linked invoices in BS&A.
+·        CRM: Customer Relationship Management system used to manage invoice settings.
+Key Responsibilities
+·        
+BS&A & Biller:
+ Configure the system to flag and display duplicate bills.
+·        
+Project Manager (PM) & Biller:
+ Confirm whether the biller has multiple InvoiceCloud BIDs and ensure they are merged if necessary, guides file extraction, sets up testing access
+·        
+Biller
+ (guided by PM): Select invoice types to be processed and ensure correct Invoice Type IDs are used.
+·        
+PM
+: Use provided sample files or guide the biller through the file extraction process.
+·        
+PM & Development Team
+: Set up PDF linking and confirm correct InvoiceFormatID is applied.
+·        
+PM: 
+Provide testing credentials and ensure access to staging and production environments.
+Quality Assurance
+Biller or BS&A
+: Validates successful file transmission to the test portal.
+Project Manager
+: Tests connectivity of the endpoint URL in the CRM.
+Project Manager
+: Verifies that all web services and advanced settings are updated with the correct endpoints after testing.
+Project Manager
+: Monitors post-upgrade performance during BS&A to BS&A Cloud upgrades.
+Roles
+Biller
+: The client organization undergoing the conversion. Responsible for providing data, credentials, and access needed for integration and testing.
+BS&A (Provider)
+: The platform provider and data source. Responsible for transmitting billing data to InvoiceCloud, configuring system capabilities (e.g., duplicate bill setup), and ensuring endpoint compatibility
+Project Manager/PM (InvoiceCloud)
+: The primary coordinator for the conversion project. Manages technical setup, communication, and validation tasks between InvoiceCloud and the biller.
+Procedure
+Confirm BID Structure
+Verify if the biller has multiple InvoiceCloud BIDs (e.g., for tax and utility).
+If so, they must be merged, as BS&A supports only one BID per biller.
+Duplicate Bill Setup
+BS&A configures the system to flag duplicate bills.
+Biller enables this in:
+Program Setup > Program Settings > Billing Settings > Bill/Notice/Email Messages > Tab #3
+Check “print this message” and include the word “duplicate” on line 1.
+File Extraction
+Use sample files provided after kickoff, or refer to BS&A’s extraction guides:
+Utility: 
+https://invoicecloud.app.box.com/file/908935790952
+ 
+Tax: 
+https://invoicecloud.app.box.com/file/908935419748
+ 
+Invoice Type Selection & ID Assignment
+Determine which invoice types will be processed.
+Use consistent Invoice Type IDs for setup:
+Misc. Receivables: 0
+Special Assessments: 6
+Summer Tax: 7
+Winter Tax: 8
+Utility: 42
+Permits: 43
+Business License: 57
+Misc. Payments/General Receipts: 68
+Village Tax/Delinquent Tax: 95
+PDF Linking Setup (if applicable)
+Enable remote linking for bill presentment.
+Ensure invoices use 
+InvoiceFormatID 1131
+; update in CRM if needed.
+Note in coding doc: “using BS&A reporting/remote linking.”
+No sample images required.
+Testing Access
+Use provided credentials and URLs for testing:
+§  Login URL - 
+https://accessmygov.com/?uid=2505
+ 
+Username: invoicecloud
+Password: Invoicecloud123!!!
+§  Test Payments: 
+https://accessmygov.com/InvoiceCloud/Staging
+ 
+Live Payments: 
+https://accessmygov.com/InvoiceCloud/Production
+ 
+Cloud Upgrade Monitoring (if applicable)
+BS&A to BS&A Cloud upgrades require minimal IC involvement.
+A maintenance window and data pump hold are required.
+Project Manager monitors any post-upgrade issues.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4470702085/BS+A+Conversions+Team+Details

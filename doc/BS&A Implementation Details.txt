@@ -1,0 +1,169 @@
+Page Navigation:
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+BS&A
+Software Product Name
+BS&A Online
+Formerly: AccessMyGov - AMG
+Software Cashiering System
+Cash Receipting
+CSRConnect (route to one-time pay redirect) - This communication is held via an API and no Invoice Cloud product needs to be installed. Entirety of customer/clerk experience is held within BS&A
+Supported Versions
+n/a
+Integration Requirements and Pre-Requisites
+BS&A Online Module (web payments) and/or Cash Receipting (counter payments)
+The majority of BS&A billers host their own instance of BS&A. Any integration pre-requisites are determined by BS&A.
+Vertical
+GUB
+Sample Biller Implementation
+1298 City of Tifton
+BS&A Payment Processor Lookup
+Details on each BS&A customer (active invoice types, processor, etc)
+BS&A Modules per Client
+Details on each BS&A module and customers that have said modules
+Go to 
+https://ppl.bsaonline.com/
+ to check which BS&A modules the Biller uses. In this web page you can seeif the Biller uses Cash Receiptiing, Building Permits and/or Business Licensing. 
+Planning
+Test Portals
+IC Hosted Test Portal
+BSA Software Test – BID 775
+Test Portal used by BS&A and IC to complete code and testing
+BS&A Hosted Test Portal: 
+https://bsaonline.com/?uid=2663
+ 
+*IC users can make any test payments in this portal
+What BS&A products can IC support?  
+It depends. 
+Always ask the billers if they have purchased a module or check online. This is how you can determine what IC products to set up.
+ You can also check yourself what modules the biller uses by going to
+ 
+https://ppl.bsaonline.com/
+ 
+Rules of Engagement
+See contacts details below - Use the IC Implementations email for all questions during implementation
+Timeline
+~60 days
+Configuration
+Invoice Types
+See 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/54001670/BS+A+Integration+Software+Details#Products
+ for a breakdown on the use of CSRConnect (express payments) and their Cash Receipting software (web service payments).
+BS&A calls IC Invoice Type IDs “Product IDs”. The Product ID is made up of the following values: BID-InvoiceTypeID
+Supported invoice types (EBPP) - Utility, Summer Tax, Winter Tax and Village Tax
+Supported invoice types (non-EBPP) - Delinquent Tax, Special Assessments, Building Permits, Business Licenses, and Misc. Receivables. 
+Generally (95%), every BS&A biller needs an invoice type setup for General Receipts.
+ 
+Standard Invoice Type IDs: 
+Standard Invoice Type ID's MUST be used for the invoice types specified
+Misc. Receivables 0
+Permits 43
+Business License 57
+Summer Tax 7
+Winter Tax 8
+Village Tax and/or Delinquent Tax 95
+General Receipts 68
+Special Assessments 6
+Utility - IC can support multiple InvoiceTypeIDs for utility based on the first value in the account number format (ex: 
+V
+###-##-####). These ID’s must be specified in the coding request - see Jira item and example below:
+ 
+INT-3731
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ Example: (integration also supports not pictured 162-G###-##-#### and 163-M###-##-####)
+Virtual Site
+BS&A Billers may not use the IC virtual site but it is always configured
+Required Options
+The below options are required but please note the ‘InvoiceTypeID’ column to indicate which invoice types these are required for.
+ID
+Invoice Type ID
+Option Description
+Details
+52 (Invoice Type Option)
+Any Utility InvoiceTypeID 
+CloudCSRConnect- Use a partial match search on Account Number
+Enable
+Use Case: A resident has moved out, and their account has been conveyed. The new resident’s account has been created through the export file. Both the new resident, and old resident have an open invoice in BS&A online. If the old resident is making the jump, with the same account number being passed but different customer name – we do a partial account number match to the conveyed account. The customer name will do a full match, and then we create the invoice on the conveyed account. This allows the previous resident and the new resident to both have the ability to pay an invoice, if it is open in BSA Online.
+53 (Invoice Type Option)
+Any Utility InvoiceTypeID  
+CloudCSRConnect- Use an exact match search on Customer Name
+58 (Invoice Type Option)
+Summer Tax
+Winter Tax
+Village Tax
+Exclude expired invoices from customer search
+Tax bills expire online (late Feb/early Mar) and were still rendering in customer search results. Turning this option on will exclude these invoices from the customer search so the customer will not see them and inquire.
+Update this option using the below detail:
+If a biller has Invoice Types 7 & 8 enabled, Option 58 would need to be checked under both of those invoice types.
+Also, if a biller has Invoice Type 95 enabled with the alias of Village Tax, Option 58 would need to be checked.
+Coding Requirements
+Invoice Cloud Coding Requirements
+BS&A Integrations are configured using the IC Integrations360 tool.
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+The same sample files are used for all integration coding, 
+located on the box
+.
+These generic sample files are used for coding all biller implementations. 
+IM should still request sample export files from the biller to import and use during testing.
+BS&A Online Export
+If multiple utility invoice types are required, include mapping - Example: 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/54067263/BS+A+Implementation+Details#Configuration
+PDF Linking
+BS&A or the bill print vendor - discuss during the kick-off call
+*See notes on Integration & Software Details about bill presentment
+Project Assignment
+BS&A Online Utility - Direct Report Setup (PDF Linking)
+Bill Presentment does not work until after go-live
+SFTP
+Invoice Cloud
+Project Assignment - provide in coding request
+Provide to BS&A on the BS&A Data Sheet
+RTDR API, DataPump API, RTDR Passcode
+These values are hardcoded in the integration and do not need to be provided to IT (see exact URLs on 
+Integration & Software Details
+ page)
+RTDR and Data Pump do not work until after go-live
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+BS&A Data Sheet Required: Datasheet provides all implementation related items to BS&A for their coding/setup efforts. 
+The below items should be on the BS&A Data Sheet:
+Cash Receipting Codes
+ Required: Codes derived from BS&A's Cash Receipting software and tie to Invoice Cloud invoice types/invoice type IDs (i.e. UB is Utility Billing and would tie to Invoice Cloud's Utility invoice type - typically invoice type ID 42). These codes must be acquired from the biller.
+Product ID Required: Product ID = Invoice Cloud's BID + Invoice Type ID (i.e. 1298-42 for Tifton, GA's Utility Invoice Type). BS&A uses this value internally for both Cash Receipting and BS&A Online. This product ID will always be ####-##.
+icimplementation@bsasoftware.com
+Once Invoice Cloud coding has been completed and deployed
+BS&A will complete their configuration and complete testing (~10 days)
+Contacts
+1700
+500
+ URL:/spaces/IM/pages/54067263/BS+A+Implementation+Details

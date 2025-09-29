@@ -1,0 +1,21 @@
+Creating and installing a version of the InvoiceCloud Database Service on your AVD for testing/troubleshooting purposes:
+Preparation:
+Install NSIS (Nullsoft Scriptable Install System) - Our line of ICSERVICES (DatabaseService, RTDR, Crypto, Business) services use this to create the installer.  I was able to install this without any additional permission on my non-prd AVD.
+https://nsis.sourceforge.io/Main_Page
+ 
+Clone ICDatabaseService from ADO
+https://dev.azure.com/invoicecloud/Src/_git/ICDatabaseService
+Ensure all nuget packages are installed and the project builds successfully.  
+Creating the Installer
+Select the 
+Proxy 
+Solution Configuration from the VS toolbar
+Build the IC.WindowsServices.Database project
+Verify that the output was directed to the bin\x86\Proxy folder like this
+Open NSIS from your Start Menu
+Select Compile NSIS scripts
+Click Load Script icon to locate the NSIS installer file
+The .nsi file is located in the IC.DatabaseWindowsService project that was built earlier.  Select that and click Open.
+NSIS will immediately execute the file and generate the installer.  The output from the process will look like this.  Edits can be made to the .nsi file to evolve the installer to fit your needs.  It shouldn’t need an edit for these steps.
+The generated installer is in the IC.WindowsServices.Database project folder
+ URL:/spaces/ED/pages/3906142216/ICDatabaseService+-+Building+Installer

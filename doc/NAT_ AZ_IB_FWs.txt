@@ -1,0 +1,146 @@
+Pre Rules
+Name
+Location
+Tags
+Original Packet Source Zone
+Original Packet Destination Zone
+Original Packet Destination Interface
+Original Packet Source Address
+Original Packet Destination Address
+Original Packet Service
+Translated Packet Source Translation
+Translated Packet Destination Translation
+Active/Active HA Binding
+Target
+Rule Usage
+Modified
+Created
+FTP
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+FTP_Ports
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.10/32
+none
+any
+Unused
+########
+########
+FTPPort21
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+tcp_21
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.10/32;port: 990
+none
+any
+Unused
+########
+########
+All-Web
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+All-Web_Ports
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.20/32
+none
+any
+Unused
+########
+########
+SFTP-Port2021-FWD
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+tcp_2021
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.10/32;port: 2022
+none
+any
+Unused
+########
+########
+MCC-FTPS
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+MCC-SFTP
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.7.15/32
+none
+any
+Unused
+########
+########
+IC-SFTP
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Internet
+20.246.162.38
+tcp_2022
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.10/32
+none
+any
+Unused
+########
+########
+Temp-Segment-Test
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+Rob_Chenault_Home_FIOS
+20.246.162.38
+tcp_4022
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.8.5/32;port: 22
+none
+any
+Unused
+########
+########
+SFTP-22
+AZ_IB_FWs
+none
+Untrusted
+Untrusted
+any
+174.196.130.218_32
+20.246.162.38
+tcp_22
+dynamic-ip-and-port;ethernet1/2
+destination-translation;address: 10.0.3.10/32;port: 2022
+none
+any
+Unused
+########
+########
+ URL:/spaces/icinfradoc/pages/2812870755/NAT+AZ_IB_FWs

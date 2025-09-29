@@ -1,0 +1,52 @@
+Status
+Draft
+Context
+Kubernetes (K8s) CronJobs will fail.   In some cases these failures will need support to recover requiring manual intervention to rerun the jobs.   We need a reliable solution to handle these failures efficiently.
+Note: We should ensure that our jobs follow standard practices to restart on failure up to a particular backoff limit. 
+See the docs on handling job failures in Kubernetes
+. In the event that a job is unrecoverable and requires manual intervention, a production incident should be created. Listed below are options on how to rerun failed jobs. 
+If the job is expected to need to be manually triggered regularly, the below options should not be considered and a feature should be implemented in the CRM/Biller Portal to facilitate rerunning the job.
+Some options to discuss and drive conversation.  This is not a definitive list.
+Manual Rerun via kubectl or Azure Portal
+Description
+: Manually rerun the failed CronJob using 
+kubectl
+ or using the Azure Portal UI.
+Pros
+: Simple and quick for immediate reruns.
+Cons
+: 
+Requires manual intervention, not scalable for frequent failures
+Requires PIM for activity
+Human activity could be error prone 
+Example Command
+:
+kubectl create job --from=cronjob/<cronjob_name> <job_name>
+Use an Azure DevOps Deployment Pipeline to Create One-Time Job Deployment
+Description
+: Implement an Azure DevOps pipeline that can be triggered to create a one-time job deployment in Kubernetes. This pipeline will automate the process of rerunning failed CronJobs by deploying a new job instance based on the failed job's configuration.
+Pros
+: 
+Reduces the need for manual intervention by automating the rerun process.
+Can handle multiple job reruns efficiently, making it suitable for environmens with frequent job failures.
+Integrates with existing Azure DevOps workflows and CI/CD pipelines.
+Supports approval gate
+Pipeline audit / history
+Ensures that reruns are performed in a consistent and repeatable manner.
+Cons
+: 
+Requires initial setup and configuration of the Azure DevOps pipeline, which can be time-consuming
+Ongoing maintenance of the pipeline is necessary to ensure reliability and performance
+Notes
+Runs would need the ability to add parameters or override settings
+Skybot allows command line arguments to be edited and then the job can be triggered via the UI
+Need to handle a bulk hold/resume for system maint.
+Some jobs schedules can simply be disabled
+Some jobs will need to be terminated (job owner will qualify behavior)
+Approval process needs a formal procedure for recording the why (RC) and if there is a opportunity for remediation through code changes (JIRA item), suggestion is to use the incident process
+Decision
+Use a pipeline to run a one off job run, allow overriding environment variables, command line arguments
+Consequences
+Will require a approver 
+Approver can not be the same person that triggered the run
+ URL:/spaces/EA/pages/3824975874/k8s+CRON+Job+Failures+-+ADR

@@ -1,0 +1,22 @@
+Polly
+Polly is a .NET resilience and transient-fault-handling library that allows you to define policies such as retries, circuit breakers, and fallbacks.
+https://github.com/App-vNext/Polly
+ 
+Retry Policy
+Transient faults are temporary issues that can occur in distributed systems, such as network timeouts, temporary unavailability of a service, or brief connectivity issues. Retry policies help handle these transient faults by retrying the operation after a short delay, increasing the chances of success.
+This example demonstrates how to create a retry policy that retries an operation up to three times with a two-second delay between each retry.
+c#
+// Define the retry policy
+var retryPolicy = Policy
+    .Handle<HttpRequestException>()
+    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2), (exception, timeSpan, retryCount, context) =>
+    {
+        Console.WriteLine($"Retry {retryCount} encountered an error: {exception.Message}. Waiting {timeSpan} before next retry.");
+    });
+
+// Execute the operation with the retry policy
+await retryPolicy.ExecuteAsync(async () =>
+{
+    await MyExternalSystemHttpRequestAsync();
+});
+ URL:/spaces/EA/pages/3475046404/Resiliency+Handling

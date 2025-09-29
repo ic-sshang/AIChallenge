@@ -1,0 +1,181 @@
+none
+Troubleshooting AVD Access Issues 
+Make sure that you have a decent internet connection with lower latency.
+How to Check Latency
+:
+I
+. 
+Command Prompt
+: Type 
+ping google.com
+ and check the time in ms.
+II
+.
+ Online Tool
+:  
+Cloudflare Speed Test
+.
+2.Ensure that you are connected to Cloudflare WARP with the Gateway set to “
+Gateway with WARP
+” 
+ and the virtual network configured as “
+IC-NonProduction-AVD
+”.
+Note
+: Here is a sample configuration shown in the image below.
+Unlock GitHub Copilot in Visual Studio
+Sign Up for GitHub
+:
+Use your company email to create a free GitHub account. 
+ 
+ Note: 
+ GitHub handle format: 
+{business_unit_abbrev}-{first_letter_of_first_name}{last_name}
+ (e.g., 
+ic-mhenderson
+).
+Raise an Access Request
+:
+Submit an Access Request to the IT Service Desk by mentioning below fields.
+Select Access Request under Request Type dropdown.
+Select “Microsoft 365” under the System dropdown.
+Provide the necessary details in the description.
+Service Desk Analyst Invitation
+:
+A service desk analyst will send you an email invitation to join the organization (i.e. Invoice-Cloud).
+Install GitHub Copilot
+:
+Open Visual Studio 2022.
+Install GitHub Copilot from the top right corner.
+Sign in with your new GitHub account that was created in previous step.
+Granting Access
+:
+The owner of the organization will automatically grant you access to GitHub Copilot.
+If still facing any issues, we can directly check with the assignee of the Service Desk ticket.
+Grant admin access to Azure virtual desktop
+Access Azure Portal
+:
+From your AVD, browse to 
+https://portal.azure.com
+  and sign in.
+At the top of the page, search for “PIM” and open Microsoft Entra Privileged Identity Management.
+Select and Activate Group
+:
+On the left side, select “Groups”.
+In the Eligible Assignments tab, find “
+ic-iac-avd-admins-npd
+” and click “Activate” on the far right.
+Enter Reason and Activate
+:
+In the appearing window, enter the reason and click “Activate”.
+After validation, you should be able to elevate (grant admin access) on your AVD within a few moments.
+Note
+: This elevated access will be valid for 30 minutes only.
+FYI
+: We can follow the same steps to extend access for an additional 30 minutes if needed.
+Steps to Bypass Biller Portal Login (Dev) on Localhost
+Login to the Dev Okta SSO.
+Open the Dev CRM Portal:
+ 
+https://devtest.invoicecloud.com/crm/Blank.aspx
+ 
+Navigate to Users:
+ Go to 
+Users > Login as this user
+. This will open a webpage in a new tab.
+Copy the URL:
+ Copy the URL starting from 
+BillerLogin.aspx?EBG=Guid
+ and place it after the localhost URL opened by running the code.
+Automatic Login:
+ You will now automatically be logged in with that biller portal and user in your localhost site. Enjoy debugging!
+Note:
+ Sometimes the URL redirects too quickly to see the EBG value. You can use browser extensions like Redirect Path to save the redirected URL, so you can copy and use it in the localhost site.
+How to Get Access to the Skybot Portal
+Navigate to ServiceDesk:
+Go to 
+ServiceDesk > Access Request > Create
+.
+Fill in the Request Form:
+Request Type:
+ Access Request
+System:
+ Okta
+Mention the Required Skybot URLs:
+Devtest:
+ 
+http://10.33.0.5:8008/automate-schedule
+XAT:
+ 
+http://10.33.0.20:8008/automate-schedule
+Reset the Password:
+After your request is approved, reset the password and use the specific portal you requested.
+Info:
+ For job names, refer to the Skybot Registry Confluence page: 
+Skybot Job Registry
+ 
+Obtain Your Own BID in the CRM Portal (Dev/Prod)
+Send an email to 
+boarding@invoicecloud.com
+ with the subject 
+Demo Portal Request
+ and mention any existing BID to mimic.
+You’ll receive an email with a new BID for your use.
+Steps to Create Dev Okta Credentials
+Navigate to ServiceDesk:
+Go to 
+ServiceDesk > Access Request > Create
+.
+Fill in the Request Form:
+Request Type:
+ Access Request
+System:
+ Okta
+Required URL:
+ 
+https://dev-390385.okta.com/
+Reset the Password:
+Once your request is approved, reset the password and configure 2FA on your mobile device for easier access.
+Steps to make successful payments from local
+Clone CTP repo
+Open 
+CTP repo
+ in VS
+Set CloudTransactionProcessingSOAP project as startup project
+Set CloudTransactionProcessing.asmx page as startup page
+Build and Run solution.
+Copy the localhost url.
+Paste local host url in place of in MyIIS.  ( 
+https://www.invoicecloud.com/
+  => 
+https://localhost:44353/
+ )
+Changes in MyIIS
+Replace local url in below mentioned files
+[ cloudtransactionprocessing.wsdl , web.config (BillerPortal) , web.config (MyIIS) , Settings.Designer.vb, Settings.Settings ,
+MyIIS\IC.Common\app.config ]
+in cloudtransactionprocessing.wsdl file replace local url in place of 
+invoicecloud.com
+ for method which you are going to call example : IC_CNP_Multi_Customer_Sale.
+A.I Healthcheck documentation  
+Hands-on session 
+Confluence page  
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/3857612802/Hands-on+Session+on+.Net+framework+upgrade+and+AI+Health+Check
+SharePoint  
+ 
+Documentation  
+AI.CodeDocumentation
+ 
+Auto Pay/Scheduled Pay Chain Scheduling In Dev
+Go to 
+https://portal.azure.com/
+ 
+Search for icbatchtest in Azure Portal batch account, then expand Features tab and select Job schedules.
+Select AutoPayControllerScheduler from the list 
+Select Schedule from General menu on Left side panel, you should be able to edit the Date and Time 
+Please ensure that the time is set to 5 minutes ahead of the current time.
+Then save the details, it will schedule the job to the mentioned Date and Time
+Documentation    
+AutoPay/ScheduledPay Chain
+ 
+ URL:/spaces/PE/pages/4030496769/Spark+Team+Dev-Access+checklist

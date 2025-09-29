@@ -1,0 +1,73 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+projectName
+$(Build.Repository.Name)
+solution
+**/*.sln
+configuration
+release
+publishprofile
+TFSPublish
+version
+n/a
+patch
+n/a
+targetFeed
+ReleaseArtifacts
+sonarscan
+True
+ignoreSonarQubeErrors
+False
+ignoreTestErrors
+False
+iccommon
+False
+iccommonTargetDir
+MyIIS/Bin
+iccommonFramework
+False
+iccommonFrameworkTargetDir
+MyIIS/Bin
+msbuildExtraArgs
+publishDir
+" "
+buildFullSolution
+True
+testFilterExtension
+testFilter
+" "
+sonarFilterExtension
+sonar.exclusions = "**/*.xml"
+
+preBuildSteps
+[]
+postBuildSteps
+[]
+Post publishing magic
+      - ${{ each step in parameters.postBuildSteps
+pathToProjectFile
+$(System.DefaultWorkingDirectory)\$(Build.Repository.Name)
+runtime
+net6.0
+pathToNugetConfigFile
+$(System.DefaultWorkingDirectory)\nuget.config
+targetFolder
+build
+dotnetPublish
+False
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+tasks/git/create-tag.yaml
+tasks/git/get-pr-description.yaml
+tasks/sonarqube/prepare-dotnet.yaml
+tasks/sonarqube/analyze-and-publish.yaml
+ URL:/spaces/platform/pages/3633054331/build-dotnet.yaml

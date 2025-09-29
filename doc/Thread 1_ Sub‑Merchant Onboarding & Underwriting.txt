@@ -1,0 +1,266 @@
+Medium Rocks (MVP vs Day‑1 vs Future)
+How to Read the Table
+Rows = Capabilities (Big Rocks)
+ → Each row is a core capability (e.g., Wizard, KYC, Funding Config). Marked as 
+Must
+ or 
+Should
+ from workshops.
+Columns = Phases of Readiness
+MVP = Regulatory Baseline
+ → Minimum controls required by Chase/regulators. Manual, Ops-driven. Goal: 
+Legally live
+ (1–3 billers).
+Day-1 = Operational Baseline
+ → Minimal automation to support ~20 billers. Light UI/API builds. Goal: 
+Operationally viable
+.
+Day-90+ = Optimization & Scale
+ → Efficiency, self-service, advanced integrations. Goal: 
+Reduce manual work & scale growth
+.
+Color Codes in Cells
+🔴 
+Net-New Dev (High Effort)
+ – API, service, or UI build.
+🟡 
+Partial Dev (Medium Effort)
+ – CRM config, vendor API, workflow extension.
+🟢 
+Ops/Policy (Low Effort)
+ – Manual workaround or process only.
+Open Qs / Decisions / Blockers
+ → Tracks unresolved items, dependencies, and next steps.
+Estimation
+Effort (S/M/L/XL)
+ = raw build/test work.
+Complexity (Low/Med/High)
+ = cross-team, integration, vendor/Chase risk.
+A) Medium‑Rocks Table 
+Medium Rock
+Description (incl. must/should from meetings)
+Alpha (1–3 billers)
+Beta (~20 billers)
+GA (scale/efficiency)
+Open Questions / Decisions / Blockers
+Salesforce → CRM handoff
+Creation of “Ready-to-Board” biller records; MoSCoW: 
+Should
+.
+🟢 Ops manually uploads CSV into CRM; data keyed by onboarding team; audit trail via CRM notes.
+🟡 Automated one-way sync from Salesforce to CRM; error queue for failures; reduces re-keying.
+🔴 Real-time integration with field-level mapping, status feedback loop back to Salesforce.
+Blocker:
+ Mapping not finalized. 
+Next Step:
+ RevOps + Eng workshop to lock field mappings.
+CRM Workflow Board
+Lane-based onboarding board (Draft → Submitted → KYC → Chase → Funding → Live); MoSCoW: 
+Should
+.
+🟢 Ops uses manual ticketing/reports to track onboarding progress.
+🟡 Basic Kanban board in CRM with stage updates, owners, and comments.
+🔴 SLA timers, escalation logic, analytics dashboard for Ops leadership.
+Blocker:
+ Ops has not defined SLA thresholds. 
+Next Step:
+ Ops to draft SLA playbook.
+Biller Portal Wizard
+Self-serve guided intake (entity, UBOs, banking, MCC, volumes); MoSCoW: 
+Must
+.
+🟢 Ops collects data via Excel/secure email; re-keys into CRM; supporting docs stored manually.
+🔴 Minimal wizard with forms feeding directly into CRM/DB; auto-capture of docs + audit timestamps.
+🔴 Enhanced wizard with dynamic rules (MCC validation, UBO repeats), self-service updates post-onboarding.
+Blocker:
+ Entity hierarchy data model unresolved. 
+Next Step:
+ Cross-team (Eng + Finance + Ops) session.
+DocuSign Integration
+Trigger e-sign packet; store signed docs; MoSCoW: 
+Should
+.
+🟢 Contracts sent/returned via email; PDF uploaded manually to CRM.
+🟡 Single DocuSign template flow triggered at correct stage; status surfaced in CRM.
+🔴 Clause libraries, multiple template sets by segment, analytics on contract execution.
+Blocker:
+ Legal templates not finalized. 
+Next Step:
+ Legal/Eng to finalize Day-1 templates.
+Bank Account Verification
+Verify payout/debit accounts; penny test fallback; 
+MoSCoW: 
+Must
+.
+🟢 Ops manually validates with letter/micro-deposits; penny test run before funding enabled.
+🔴 API integration (Chase or CertiG) to validate in real time; re-verification triggered on bank change.
+🔴 Open-banking APIs to monitor ongoing account health and NSF risk.
+Blocker:
+ Vendor choice (Chase vs CertiG) pending. 
+Next Step:
+ Risk/Finance decide vendor + SLA.
+KYC / OFAC Vendor Integration
+Initial KYC/AML/OFAC + periodic reviews; MoSCoW: 
+Must
+.
+🟢 Ops runs KYC/OFAC manually via vendor portal; evidence uploaded to CRM.
+🟡 Automated API calls to vendor at onboarding; Ops queue for remediation of fails.
+🔴 Multi-vendor enrichment (LexisNexis, Alloy); webhook eventing for real-time decisions.
+Blocker:
+ Re-KYC policy for migrated billers undecided. 
+Next Step:
+ Compliance + Risk finalize.
+KYC Failure Handling
+Queues, SLA timers, comms, remediation; not explicitly MoSCoW’d.
+🟢 Failures managed manually; Ops declines in CRM; sub-merchant prevented from activation.
+🟡 SLA-driven queue in CRM; automated email templates to billers.
+🔴 Self-service remediation portal; automated resubmission flows.
+Blocker:
+ Decline notification templates undefined. 
+Next Step:
+ Compliance draft comms.
+Chase Screening API (C1/C3)
+Required Chase approval before processing; MoSCoW: 
+Must
+.
+🔴 Minimal adapter calls Chase API to create merchant + poll status; approval captured in CRM.
+🟡 Enhanced adapter w/ retries, better error mapping; Ops dashboard for Chase status.
+🔴 Event-driven/webhook architecture to remove polling; auto-retry logic.
+Blocker: Sandbox credentials not available from Chase. Next Step: Chase to provision.
+Sub-merchant Hierarchy & 1099
+Define 
+hierarchy data model
+ for Parent Biller → Sub-merchants → Entity Types. 
+Impacts onboarding, KYC, Chase screening, funding templates, pricing, reporting, and enables IRS 1099-K compliance. 
+Also foundational for future 
+super-biller expansion
+ (multi-entity rollups, consolidated reporting, and settlements).
+MoSCoW: 
+Must
+.
+🟡 Capture Parent/Sub, MCC, and TIN in CRM; manual 1099 support.
+🟡 Support multi-TIN billers in CRM; consolidated vs entity-level reporting; 
+integrate with Ops funding templates.
+🔴 Automated 1099-K generation & IRS filing;
+Risk segmentation across entities; 
+Super-biller roll-up reporting and consolidated settlements.
+Blocker: Confirm data model (Merchant vs Sub-Merchant vs EntityType).
+ 
+Next Step:
+ Cross-team (Eng + Finance + Ops) session to finalize. 
+Note:
+ May need to 
+future-proof hierarchy
+ for 
+super-billers
+ - Roopa to work with Product to define.
+PayPal / Amex Boarding
+Establish process for onboarding to 
+non-Chase rails
+ (PayPal, Amex). Day-1 scope = placeholders + Ops runbook; full API orchestration deferred. Recognized as 
+Should Have
+.
+🟢 Document Ops runbook; capture placeholder config in CRM (e.g., merchant IDs, account settings).
+—
+Blocker:
+ Data elements to send to PayPal/Amex (e.g., merchant order ID) not captured in workflow. 
+Next Step:
+ Product/Payments Eng to confirm with Chase + PayPal/Amex requirements. 
+Note:
+ Amex OptBlue migration not feasible by Day-1 — to be phased.
+Funding Config UI
+UI for Ops to configure 
+payout rules, fee debit accounts, reserves/chargeback routing, and sweep cadence
+, with full audit logs. Ensures funds are routed correctly and supports Treasury/GL mapping. Marked as 
+Must
+ because no biller can be activated without it. MoSCoW: 
+Must
+.
+🔴 Minimal CRM screen for Ops to enter payout/fee config; every change logged; config feeds funding jobs.
+🟡 Add approval workflows, validations for errors (e.g., duplicate accounts).
+🔴 Biller self-service UI with approval gating.
+Blocker:
+ Decision: CRM vs Portal location unresolved. 
+Next Step:
+ Product/Eng to decide.
+Pricing Flags (CRM → Billing)
+Capture 
+who pays fees
+ (submitter, biller absorbed, or mixed) and sync to billing for accurate statements. Also the basis for future premium pricing (e.g., fast funding). MoSCoW: 
+Should
+.
+🟡 Capture basic flags\toggles in CRM; sync to billing; test statements reconcile.
+🟡 Expand to include settlement cadence flags (fast vs. slow) and ensure sync into billing.
+🔴 Advanced pricing matrices, tiering, revenue optimization. (e.g., fast funding premium); advanced reconciliation.
+Blocker:
+ Finance/Ops must define golden test billers to validate billing sync. 
+Next Step:
+ Align Finance + Eng on minimal Day-1 pricing catalog.
+Monthly OFAC Rescreen
+Regulatory obligation to rescreen all live billers against OFAC sanctions. Ensures ongoing compliance.
+Batch re-screening; MoSCoW: 
+Must
+.
+🟢 Ops manually runs OFAC rescreen with vendor; 
+uploads results (PDF/CSV) into CRM
+ as audit evidence.
+🟡 Scheduled batch job runs automatically; results logged in CRM; tasks created for Ops review.
+🔴 Risk-tiered cadence (e.g., high-risk weekly, low-risk monthly) with near-real-time feeds and automated audit log retention.
+Open Q:
+ How long must evidence be retained? 
+Blocker:
+ No agreed UI today for uploads; 
+MVP assumes Ops attaches vendor output manually.
+Annual / Periodic re-KYC
+Annual re-KYC reminders; MoSCoW: 
+Must
+.
+🟢 Manual ticklers in CRM; Ops runs re-KYC with vendor manually.
+—
+🔴 Portal automates reminders, collects new docs, supports self-serve.
+Next Step:
+ Compliance define cadence by risk tier.
+Biller Offboarding
+Deactivation in CRM + Chase sync; MoSCoW: 
+Must
+.
+🟢 Ops manually deactivates; CRM syncs status to Chase; processing blocked.
+🟡 Notifications triggered; partial suspend/reactivate supported.
+🔴 Full lifecycle automation: suspend, reactivate, terminate, notify biller + Chase.
+Blocker:
+ Must confirm Chase notification requirements.
+Next Step:
+ Ask Chase integration team.
+POS Terminal Activation
+Explicitly out of Day-1 scope.
+—
+—
+🔴 Full device lifecycle mgmt (tokenization, firmware updates).
+Blocker:
+ Need Bluefin/Chase confirmation on terminal boarding.
+B) Estimation Blockers vs Assumptions
+With the assumptions below, there are no blockers to estimate Day‑1 for Thread 1.
+ 
+Migration sizing is gated only by the re‑KYC policy decision for existing billers.
+Potential blockers for estimation
+Data model dependency:
+ We need to confirm whether 
+Merchant / SubMerchant / EntityType
+ are distinct objects, and how they relate.
+Wizard UX complexity:
+ If billers can add multiple entity types, the form logic gets more complex (repeatable sections, validation, rules for linking).
+KYC/Screening impact:
+ Each entity type may need separate 
+KYC checks, bank verification, and Chase screening requests
+.
+Funding template impact:
+ Multiple entity types under one biller may mean 
+different payout accounts
+ and pricing rules per entity.
+Requiring 
+Portal self‑serve funding
+ in D1 instead of Ops‑only in CRM.
+Re‑KYC policy for existing billers
+ mandated pre‑migration (affects migration program sizing, not D1 onboarding feature estimates).
+Where to implement Funding Config (BP vs CRM)?
+ URL:/spaces/EA/pages/4587257919/Thread+1+Sub+Merchant+Onboarding+Underwriting

@@ -1,0 +1,174 @@
+Below is a list of Pod Security Baseline Policies we recommend for all Pods Deployed, note exceptions can be made and Risks can be Accepted based on the nature of the Workload Hosted in a K8s Cluster.
+4
+4
+false
+list
+false
+Pods Should have Resource Limits and Requests
+Adding CPU and Memory Limits on containers provide several protections: 
+Protect against resource exhaustion attack that could bring down a set of workloads or enable lateral movement of an attacker. 
+Protect against the silent hijacking of CPU Resources by an attacker who uses a compromised container to run their own workloads such as crypto currency mining, network snooping, network configuration discovery, etc. 
+Protects against memory or processing leaks in one workload causing resource exhaustion for other workloads in the cluster that share the memory and processing resources of the Node. 
+Resource Requests and Limits are specified in each containers definition in the workload's deployment manifest.
+Example
+yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ic-service
+  template:
+    spec:
+      containers:
+          image: acrglbimages1sbx.azurecr.io/ic-service:latest
+          name: ic-service
+          # Resource Limits and Requests
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+Implementations
+ICDatabaseService
+ICBusinessService
+Accepted Risks
+None
+Windows Containers Should Run as ContainerUser or User Created in DOCKERFILE
+To reduce the ability of an attacker to escape a compromised Pod and access the Node's Operating System, the Cluster's API, or other Pods, the Container should be run as a Non-Admin User. 
+This needs to be configured in the Security Context of the Pod with the Pod's Deployment manifest.
+Example
+yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ic-service
+  template:
+    spec:
+      # Example using built in ContainerUser Account
+      securityContext:
+        windowsOptions:
+          runAsUserName: "ContainerUser"
+      containers:
+        image: acrglbimages1sbx.azurecr.io/ic-service:latest
+        name: ic-service
+Implementations
+None
+Accepted Risks
+ICDatabaseService - WCF Service needs Escalated Permissions due to WCF Framework
+ICBusinessService - WCF Service needs Escalated Permissions due to WCF Framework
+Prevent Automounting of Service Account Token to Pod
+The ServiceAccount Admission Controller is a specialized Admission Controller that ensure the existence of Pod Service Accounts and the Service Account’s related Control Plane API Token.
+The modification of pods is implemented via a plugin called an 
+Admission Controller
+. It is part of the API server. This admission controller acts synchronously to modify pods as they are created. When this plugin is active (and it is by default on most distributions), then it does the following when a Pod is created:
+If the pod does not have a 
+.spec.serviceAccountName
+ set, the admission controller sets the name of the ServiceAccount for this incoming Pod to 
+default
+.
+The admission controller ensures that the ServiceAccount referenced by the incoming Pod exists. If there is no ServiceAccount with a matching name, the admission controller rejects the incoming Pod. That check applies even for the 
+default
+ ServiceAccount.
+Provided that neither the ServiceAccount's 
+automountServiceAccountToken
+ field nor the Pod's 
+automountServiceAccountToken
+ field is set to 
+false
+:
+the admission controller mutates the incoming Pod, adding an extra 
+volume
+ that contains a token for API access.
+the admission controller adds a 
+volumeMount
+ to each container in the Pod, skipping any containers that already have a volume mount defined for the path 
+/var/run/secrets/kubernetes.io/serviceaccount
+. For Linux containers, that volume is mounted at 
+/var/run/secrets/kubernetes.io/serviceaccount
+; on Windows nodes, the mount is at the equivalent path.
+If the spec of the incoming Pod doesn't already contain any 
+imagePullSecrets
+, then the admission controller adds 
+imagePullSecrets
+, copying them from the 
+ServiceAccount
+.
+You can access the Control Plane API from inside a pod using the automatically mounted service account credentials. However this provides a mechanism for an intruder to increase their blast radius and potentially make lateral movements.  It is recommended to Prevent Automounting of Service Account Token.
+Example
+yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ic-service
+  template:
+    spec:
+      containers:
+        image: acrglbimages1sbx.azurecr.io/ic-service:latest
+        name: ic-service
+      # Example of disallowing the Admission Controller to Automount the Service Account Token
+      automountServiceAccountToken: false
+Implementations
+ICDatabaseService
+Accepted Risks
+None
+Pods Should Not Have Access to the Host Network or a Limited set of Host Ports
+Host Network:
+ Controls whether the Pod may use the Node network namespace. Doing so gives the Pod access to the loopback device, services listening on localhost, and could be used to snoop on the network activity of other pods on the same Node. 
+Host Ports:
+ Provides a list of ranges of allowable ports in the host network namespace. Defined as a list of Host Port Range, with Min (inclusive) and Max (inclusive) value. Defaults to no allowed host ports. 
+It is recommended to not allow the Host Network.
+Example
+yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ic-service
+  template:
+    spec:
+      containers:
+        image: acrglbimages1sbx.azurecr.io/ic-service:latest
+        name: ic-service
+      # Example of disallowing the Pod to access the Host Network
+      hostNetwork: false
+Implementations
+Accepted Risks
+None
+References
+https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+ 
+https://kubernetes.io/docs/concepts/windows/intro/
+ 
+https://kubernetes.io/docs/concepts/security/windows-security/#container-users
+ 
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-runasusername/
+ 
+https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#serviceaccount-admission-controller
+ 
+https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-security#when-to-use-containeradmin-and-containeruser-user-accounts
+ 
+https://aws.github.io/aws-eks-best-practices/windows/docs/security/
+ 
+https://opensource.com/article/22/6/kubernetes-networking-fundamentals
+ 
+ URL:/spaces/platform/pages/3646423041/Windows+Pod+Security+Baseline

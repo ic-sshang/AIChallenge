@@ -1,0 +1,30 @@
+Please see BMS devs to get credentials for MC and Fiserv FTP access.
+Usual message in the log:
+MC Cass and the old MC file
+MC Cass
+MC old
+ Download today’s file inside T708 folder and paste it in 
+\\10.0.6.4\EDataAppDataRPPS\downloads\in\mcrpps
+Fiserv
+File would be inside Outbox folder 
+Download today’s file inside Outbox folder and paste it in 
+\\10.0.6.4\EDataAppDataRPPS\downloads\in\fiserv
+MC_RPPS
+Start MC_RPPS with the MC_RPPS_Import. 
+Please make sure we are not duplicating the files. Check if we really did not get the files today and also there’s no files left in the FTP server for both MC and Fiserv as MC_RPPS_Import will also try to download those files.
+If we pasted the files in the downloads folder, we would need to run the MC_RPPS_Import. If we pasted it in the 
+\in
+ folder. No need to run MC_RPPS_Import. Just go straight to MC_RPPS.
+ 
+skybot
+ 
+Additional Questions
+How do we check if there’s already a file for today?
+go to 
+\\10.0.6.4\EDataAppDataRPPS\in\mc
+ and 
+\\10.0.6.4\EDataAppDataRPPS\in\fiserv
+and check for files that have {YYYYMMDD} (today’s date) on their filename.
+How do we check if there are no files in the FTP?
+go to the MC and Fiserv folders mentioned above and check if it’s empty.
+ URL:/spaces/ED/pages/3094183987/MC_RPPS_Import+failed+to+get+the+files+from+Mastercard+and+Fiserv

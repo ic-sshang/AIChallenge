@@ -1,0 +1,65 @@
+Useful Links
+EBPP-22830
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+https://invoicecloud.atlassian.net/wiki/x/BQA93w
+ 
+Technical Guide
+Southern Farm Bureau needs to know WHO made a change to the Autopay settings for Customers.  To date we record the TYPE of user making the change but not the WHO.  Saving the WHO will require the following updates:
+Identify and update the ins/upd Autopay stored procedures to accept 
+@UserFKID
+ and save it to the 
+ChangeLogsByInvoiceType
+ table
+Table 
+ChangeLogsByInvoiceType
+ already has a column to store that value.  We just need to feed it that value from the Autopay stored procedures
+Update all areas that use the Autopay stored procedures to pass in the appropriate 
+@UserFKID
+in context
+Confirm 
+UserFKID
+ in table 
+ChangeLogsByInvoiceType
+ is getting populated after making changes
+This change alone enables us to start passing the WHO to SFB through the integration (may need an integration update) BUT only for supported Change Requestors.   They want us to pass the WHO for unsupported Change Requestors so we will need to make more changes.
+SFB will be using our Agent Connect product to make Autopay changes.  Agent Connect supports the caller passing in agent-user context information, and this context information is saved in table 
+AgentConnectRequest
+ but our Change Log system does not recognize these AgentConnect-only users.  We will need to add support for these Agent Connect users.
+We will need to make the following database changes:
+Add the following Change Requestors to 
+tblChangeRequestor
+.  
+Agent Connect - CSR
+Agent Connect - Agent
+Agent Connect - Customer
+Agent Connect - Other
+Agent Connect - Live Agent
+Create a shard table that will store the 
+UserLogName
+ values described in the Agent Connect specification.  We predict the columns on this table will grow over time as Billers request that we store more user context that they provide.  Flexibility of table should be kept in mind
+We recommend a table name like “BillerChangeRequestors” or “DynamicChangeRequestors”
+Start with standard columns like:
+BillerChangeRequestorID
+UserLogName
+DateRecAdded
+Lean on DB team to guide us to a performant solution
+Now that our Change Log system supports these new Change Requestors, we need to update Agent Connect and related systems to create the user in 
+BillerChangeRequestors
+ where applicable and pass in the primary key of that user as the 
+@UserFKID
+value to the Autopay stored procedures.  The applicable 
+@ChangeRequestorID
+ value will also need to be passed in to the Autopay stored procedures.
+A couple things worth noting:
+Because this will be a shard-level table, the table will not have data from other Billers.  
+If the user passed in already exists, use the existing record.  We are assuming the values passed in by Billers are unique.  If they are not we need to better understand why they aren’t unique and how we can make it unique.
+Once confirmed the changes are properly saving the new Change Requestors, Integrations team will need to update the integration to support sending these values.  We can follow the existing look up table pattern to get this data.  For example, if 
+ChangeRequestorID=2
+ the Integrations team is getting the user info from the 
+Customers
+ table.  If it’s any of the new Change Requestors, look up the user info in 
+BillerChangeRequestors
+.  
+ URL:/spaces/EA/pages/3745284109/SFB+-+More+Change+Requestors+-+ADR

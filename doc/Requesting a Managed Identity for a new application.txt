@@ -1,0 +1,58 @@
+Overview: 
+With Managed Identities (MI), your application can authenticate with Azure resources that leverage Azure Active Directory (AAD) authentication. The identity is simply a credential, and is referenced by the application with a client id. 
+What is the naming convention for MI? 
+mi-{RepositoryAlias}-{ServerType}-{Environment}
+Repository Alias: a minified version of the app name. The reason we need an alias is because the managed identities have a limit of 24 characters. 
+Server Type: the type of server the managed identity will be running on. Example: app, web, pxy
+Environment: The environment that this will run on. 
+Example: 
+dt1 (DevTest1)
+dt4 (DevTest4)
+dt6 (DevTest6)
+reg (Regression)
+prv (Preview)
+prd (Production). 
+Example: 
+mi-ACHCLOSE-web-dt6
+Requesting a Managed Identity
+The process to get a new managed identity created is: 
+Sign in to Service Desk via the OKTA apps. 
+Add a new request 
+CC - your manager, 
+ 
+Request Type: Access Request
+System: Azure Infrastructure
+Description: Request that you need a new managed identity for application X and it needs access to servers y and z. 
+Example: Please create a new managed identity for 
+MyIIS
+. The application will be executed on the 
+DevTest6 web 
+server. 
+New system or update: Optional. Leave empty. 
+Internal and external vulnerability scan will be required: Optional Leave empty.
+Security has been considered: Optional leave empty. 
+Anticipated go live date: Optional. Feel free to add a date to increase urgency. 
+Priority: Medium. The team is quick on these items, so it wont sit there for too long. 
+On request completion, the ticket will have a comment added with the managed identity name created for said environment. 
+What happens behind the scenes? 
+The team member working the ticket will be using Terraform to generate these new managed identities. 
+This is the process: 
+Add a new entry to an environment specific Azure DevOps library in the Systems_Src project. 
+The entry must follow a specific format
+Name: This has to have a prefix of “appmi_”, followed by the repository alias. 
+Example: 
+appmi_MYIIS
+Value: This value is a comma delimited list of colon delimited values.
+The colon delimited values are the Resource Group of the virtual machine (VM) and the VM name. 
+Example: The value will have the resource group for DevTest 6 and DevTest 5
+RG-EAST-INFRAQA6-DEV:vm-web-vm1qa6,RG-EAST-INFRAQA5-DEV:vm-web-vm1qa5
+Save the changes on the Azure DevOps library. 
+Go to pipelines, and kick off the 
+GlobalConfig_Infrastructure_devtest
+ pipeline. 
+Set the “varGroup” parameter to the library that was recently edited. 
+Click Run 
+Grab some coffee. This process may take a while since the Terraform run has to refresh the state, check  and display the changes, apply the changes, and then run a lengthy script to add the Managed Identities to the servers. 
+TL;DR
+Here is a diagram showing the process flow for creating a new managed identity. 
+ URL:/spaces/PE/pages/2419490835/Requesting+a+Managed+Identity+for+a+new+application

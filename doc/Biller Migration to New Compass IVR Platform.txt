@@ -1,0 +1,85 @@
+As of 7-29-21 we are waiting on IVR to complete the migration approach. Billers have been notified of the changes and we have seen some handraisers already. These billers we will not transition in bulk with the others: 
+As of 5-10-21 we have migrated 17 billers to the new platform with no issues. There remain approximately 860 more billers that can be transitioned to the new platform. 
+Features
+The call flow and overall IVR experience should be very similar. The new features we will be releasing are harder to see. One thing to note, access to some of these features will require some additional work from our sister company IVRT to enable, but that should not be a huge lift. Features include:
+Trigger a text message from the call flow to be sent to the payer (requires additional enablement).
+Storing phone numbers for payers automatically under their customer profile if they call in.
+Caller ID lookup – the customer is looked up automatically by phone number so they don’t have to input an account number or other verification method (requires additional enablement).
+Support for invoice type-specific transfers – if a biller allows, we can now redirect a payer to a unique destination by invoice so they can get more targeted support. The payer can press a button to be redirected to support for water bills and another for support on tax bills for example (requires additional enablement and may not be applicable to you).
+Complex policy numbers – we can now include “/” and “-“ for policy numbers by pressing a key on their phone.
+Static ANI – transfers to a biller’s internal customer service can be configured to show as a transfer from an IVRT number so billers can more easily see how many times transfers are made (may not apply to you).
+Global IVR search – payers can enter in whatever number they have in the case of multiple accounts they may have with a biller and get a result, rather than having to listen to invoice options to pay first.
+Lookup by account and zip code – new lookup method (requires additional enablement)
+We will also use the communication opportunity to share 
+https://invoicecloud.atlassian.net/browse/EBPP-1673
+ with billers. 
+Risks
+IVRT has indicated they would be able to turn this on over the course of several weeks. However, before doing so we should understand the risks involved. 
+Risk
+IVRT Feedback
+The migration leads to an interruption of service
+If they are using an existing number (legacy) we need to re-assign that number to the new compass application. The interruption time would be 1-5 mins or so. Would probably want to do this after hours time. 
+A customized IVR integration is broken during the transition
+Not on the IC end. We should look into the endpoints consumed by IVR in legacy vs production (should be identical in what they are targeting) (Victor and Shaun to ask)
+Certain previous features are lost 
+No
+How do we know which billers might be most at risk? How would they be identified?
+The data source should be feeding from the same integration points we set up. We assume that it shouldn’t break the integration
+Timeline and Plan
+The goal is to complete much of the migration during May 2021. The plan is to:
+First, get the test phone numbers from IVRT and provide them to the billers to test. We can leave 1-2 weeks for testing to make sure features work for test billers
+At the same time, we will work with the marketing, sales, and implementation teams to roll out: 
+https://invoicecloud360.sharepoint.com/:w:/r/_layouts/15/Doc.aspx?sourcedoc={3c009d53-5846-482d-9004-48d7370eae38}&action=view
+Include a description in the monthly product email
+We plan on sending one email to all IVR billers to notify them. We will also send a broader email to all billers detailing the changes. 
+Create a survey we can send to capture responses on enablement from billers. We will then share this with IVRT to implement the changes. 
+We will migrate billers in predetermined groups based on ease of migration. Largest billers like Safety and HRSD will go last. You can find the migration progress here: 
+https://workdrive.zohoexternal.com/sheet/open/nia7lc07c7403d39243f191fc032ebab9a3f4?sheet=Sheet1&range=F26&authId={"linkId"%3A"4jD9y2vHNSV-LlltF"}
+true
+%7B%22title%22%3A%22Roadmap%20Planner%22%2C%22timeline%22%3A%7B%22startDate%22%3A%222021-04-01%2000%3A00%3A00%22%2C%22endDate%22%3A%222021-06-30%2000%3A00%3A00%22%2C%22displayOption%22%3A%22WEEK%22%7D%2C%22lanes%22%3A%5B%7B%22title%22%3A%22Testing%22%2C%22color%22%3A%7B%22lane%22%3A%22%233b7fc4%22%2C%22bar%22%3A%22%236c9fd3%22%2C%22text%22%3A%22%23ffffff%22%2C%22count%22%3A1%7D%2C%22bars%22%3A%5B%7B%22title%22%3A%22Create%20tickets%20for%20CRM%20and%20biller%20portal%20changes%22%2C%22description%22%3A%22This%20is%20the%20third%20bar.%22%2C%22startDate%22%3A%222020-09-14%2017%3A11%3A17%22%2C%22duration%22%3A1.5148514851485149%2C%22rowIndex%22%3A0%2C%22id%22%3A%229d6c013f-8457-4a40-ae43-88893eec60a6%22%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222020-11-30%2002%3A13%3A04%22%2C%22id%22%3A%226abbe9e2-47b5-4e45-ba66-2ee2fcb9e7e9%22%2C%22title%22%3A%22Testing%20new%20platform%20for%20the%20test%20billers%22%2C%22description%22%3A%22%22%2C%22duration%22%3A3.108910891089109%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222021-04-19%2001%3A39%3A48%22%2C%22id%22%3A%2226da3022-db86-4a47-9b90-2de000d8e7dd%22%2C%22title%22%3A%22Testing%20new%20platform%20for%20test%20billers%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1.99009900990099%2C%22pageLink%22%3A%7B%7D%7D%5D%7D%2C%7B%22title%22%3A%22Deployment%22%2C%22color%22%3A%7B%22lane%22%3A%22%23ea632b%22%2C%22bar%22%3A%22%23ef8a60%22%2C%22text%22%3A%22%23ffffff%22%2C%22count%22%3A1%7D%2C%22bars%22%3A%5B%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222021-01-03%2006%3A15%3A26%22%2C%22id%22%3A%22dddec5b4-fd52-4aa6-899c-8aa995315737%22%2C%22title%22%3A%22Pendo%20Video%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1.8316831683168318%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A1%2C%22startDate%22%3A%222021-01-03%2018%3A27%3A19%22%2C%22id%22%3A%22333df196-b657-4878-8ac6-cf10fd2d6706%22%2C%22title%22%3A%22Pendo%20Communication%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1.7524752475247525%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A2%2C%22startDate%22%3A%222021-01-09%2002%3A32%3A04%22%2C%22id%22%3A%22c215ac11-7509-4e8a-a1a4-6ed55109dc5e%22%2C%22title%22%3A%22Pendo%20Dashboard%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222021-05-10%2001%3A39%3A48%22%2C%22id%22%3A%22dc6c348d-1119-4e0d-a58e-5a4744f57729%22%2C%22title%22%3A%22IVRT%20migrates%2017%20test%20billers%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A2%2C%22startDate%22%3A%222021-05-17%2000%3A33%3A16%22%2C%22id%22%3A%22e40d628a-fcbd-4489-932d-9d5225cfa5d3%22%2C%22title%22%3A%22Migrate%20additional%20groups%20of%20billers%22%2C%22description%22%3A%22%22%2C%22duration%22%3A4.02970297029703%2C%22pageLink%22%3A%7B%7D%7D%5D%7D%2C%7B%22title%22%3A%22Marketing%22%2C%22color%22%3A%7B%22lane%22%3A%22%23f6c342%22%2C%22bar%22%3A%22%23fadb8e%22%2C%22text%22%3A%22%23594300%22%2C%22count%22%3A1%7D%2C%22bars%22%3A%5B%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222021-05-17%2016%3A04%3A45%22%2C%22id%22%3A%22162426e5-85c8-4135-883f-731d13866bbd%22%2C%22title%22%3A%22Marketing%20email%20to%20IVR%20billers%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A1%2C%22startDate%22%3A%222021-05-10%2005%3A32%3A40%22%2C%22id%22%3A%22ce1d622a-1dcf-4fa6-b57a-fbbd656fc48d%22%2C%22title%22%3A%22Mention%20in%20product%20release%20email%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%2C%7B%22rowIndex%22%3A2%2C%22startDate%22%3A%222021-05-17%2004%3A26%3A08%22%2C%22id%22%3A%228df68eaf-b1fb-4b2c-ad3f-596a174021a9%22%2C%22title%22%3A%22New%20Bar%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%5D%7D%2C%7B%22title%22%3A%22Implementations%22%2C%22color%22%3A%7B%22lane%22%3A%22%238eb021%22%2C%22bar%22%3A%22%23aac459%22%2C%22text%22%3A%22%23ffffff%22%2C%22count%22%3A1%7D%2C%22bars%22%3A%5B%7B%22rowIndex%22%3A0%2C%22startDate%22%3A%222021-05-10%2001%3A06%3A32%22%2C%22id%22%3A%221d38288b-17bc-4ee1-acb5-61c7603aaa85%22%2C%22title%22%3A%22Detail%20the%20features%20that%20need%20additional%20implementation%22%2C%22description%22%3A%22%22%2C%22duration%22%3A1%2C%22pageLink%22%3A%7B%7D%7D%5D%7D%5D%2C%22markers%22%3A%5B%7B%22title%22%3A%22Marker%201%22%2C%22markerDate%22%3A%222020-08-15%2000%3A00%3A00%22%7D%2C%7B%22markerDate%22%3A%222020-12-14%2003%3A59%3A25%22%2C%22title%22%3A%22Product%20Launch%22%7D%2C%7B%22markerDate%22%3A%222021-01-15%2023%3A45%3A44%22%2C%22title%22%3A%22Marketing%20Push%22%7D%2C%7B%22markerDate%22%3A%222021-05-11%2019%3A14%3A51%22%2C%22title%22%3A%22Begin%20roll%20out%22%7D%5D%7D
+Roadmap%20Planner
+c4da4efb1963ac721425ebba8789af75
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+N
+Sales
+Do you need sales enablement materials?
+Y
+We will need one slide detailing the new IVR capabilities. To work with Sudip and Braley on this
+Marketing
+Does this impact marketing?
+Y
+We will need to create a marketing release that both communicates the enhancements as well as when we will be completing the migrations
+Training
+Do you need to update support content or training?
+Y
+We may have some questions from training
+Implementations
+Changes to questionnaire
+Y
+This may depend on the features a biller wants to enable. The ANI lookup for example requires additional effort to enable
+Delivery
+Set up and Enablement
+N
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+N
+Support
+Biller questions and support
+Y
+We will provide support with the IVRT deck as well as the new sales material we create
+Legal
+Are there potential legal ramifications?
+N
+Reconciliations
+Questions from billers about charges
+N
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+N
+ URL:/spaces/PRODUCT/pages/1409712129/Biller+Migration+to+New+Compass+IVR+Platform

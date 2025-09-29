@@ -1,0 +1,265 @@
+Last update: 
+k8s update I
+ 
+3
+4
+false
+list
+false
+State of proxies in each environment
+
+
+
+
+4
+
+
+complete
+
+
+ 
+ - can you please update the below?
+
+
+
+
+WCF SVC
+Sandbox
+DevTest
+Regression (
+UAT
+)
+Prod
+DB
+Deployed: 
+Yes
+Load Tested: 
+Yes
+Functionally Tested: 
+In-Progress
+Observability added: 
+Yes
+Deployed: 
+Yes
+Load Tested: 
+Yes
+Functionally Tested: 
+In-Progress
+Observability added: 
+Yes
+UAT cluster was deployed
+. 
+Deployed: 
+No
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Crypto
+Currently, waiting for Jose to be enabled as custodian to remove secrets from the repo to KV. Once done, this proxy can be migrated into k8s
+Business
+Deployed: 
+Yes
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Deployed: 
+Yes
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Deployed: 
+No
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+RTDR
+Deployed: 
+Yes
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Deployed: 
+Yes
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Deployed: 
+No
+Load Tested: 
+No
+Functionally Tested: 
+No
+Observability added: 
+Yes
+Dependency Analysis
+Analysis of Repo/App Consumption of WCF Proxy Services and Deployment State
+Status
+
+
+
+
+1
+
+
+complete
+
+
+Proxy Dependencies
+
+
+
+
+
+
+2
+
+
+incomplete
+
+
+Web App Dependencies
+
+
+
+
+Learnings from the past and delaying factors
+Hurdles and Unknowns Encountered
+ 
+Lessons Learned and Obstacles Encountered
+ 
+Tech Deep Dives Planned
+
+
+
+
+3
+
+
+incomplete
+
+
+ 
+ Can you please update by putting a date on deep dive sessions you have planned?
+
+
+
+
+NextGen Architecture Overview
+Environments
+Environment Global/Singleton Resources vs Resources with an explicit Redundant pair
+Hubs
+Spokes
+Resource Naming Convention
+Palo Firewall Rule Modeling
+How can get my Workload to connect to other Resources within the IC NextGen Network Topology?
+Environmental Global/Singleton Resources Deep Dive
+KeyVaults
+Also discuss other levels of KeyVaults available
+ACRs
+Private Endpoint Deep Dive
+What is it?
+Private DNS Zone Architecture
+Which Network Should my Private Endpoint be connected to?
+How AVD and/or Local Development with VPN Plays into NextGen Network Topology
+How these differ from Legacy Term Servers
+How do Jumpboxes play into this?
+App Spoke Deep Dive
+Network
+K8s Cluster
+Workload Identity
+Application Services Explained
+Application Instances Explained
+Available KeyVaults
+Golden Metrics in NewRelic
+Dashboards
+Alerts
+The Platform Azure DevOps Project
+How can I find the Components I need to create my infrastructure and deployment my Application Service?
+Network Infrastructure
+Segmented Hub & Spoke Architecture that supports Primary and Secondary Lanes/Regions and Environment Isolation
+Jumpbox access to Network Lanes to leverage Azure DNS which is automated via Azure Private DNS Zones
+K8s Platform
+Secrets Management
+Workload Identity/MI
+Logging Improvements
+Security Practices
+Helm Charts/Pipeline Improvements
+NewRelic Alerts/Dashboards Improvements
+Production modeled Load Testing achieved
+Scaling and Sizing Improvements using Load Testing Metrics
+Plan/ning
+Migration Options
+https://invoicecloud.atlassian.net/wiki/spaces/KMT/pages/2865823745/Team+OKRs#Objectives-Roadmap-and-K8s-Migration-Plan-Decision-Notes
+ 
+Current Roadmap
+2
+1
+0
+0
+2868412419
+2865823745
+1
+K8s Migration Team Objectives
+8
+8
+https://invoicecloud.atlassian.net/wiki
+K8s Migration Team Objectives
+0
+3180
+789
+Current Major Velocity issues
+Platform unknowns (
+Mentioned above
+)
+Application unknowns
+Containerization readiness
+Testing knowledge and ability to test (environment parity)
+DR Architecture Pivot options
+Compute platform can be shifted other options (previously explored):
+VMs
+AppServices
+Azure Service Fabric
+Recommendations (regarding DR with k8s)
+Technology stack:
+Changing technology stack does not solve the above issues impacting velocity. 
+No change in recommendation for - k8s migration for DR
+Process changes:
+To gain scope of unknowns, dedicated efforts of analysis for : 
+Dependencies
+Containerization readiness of all web apps in scope
+Test case coverages (this metrics should already exist)
+(App SME support needed)
+Replan roadmap:
+with 
+SWAT Team approach
+ or 
+with only k8s migration platform team members approach
+Notes - 12th Jan 2024
+Bring Proxy’s to a logical conclusion, by end of ??
+Focus shifted to:
+Work stream 1: 
+Define approach of auto creation of integration tests
+Implement integration tests
+Work stream 2:
+Regression and UAT environments
+Once #1 at a usable state, replan and start k8s migration.
+Reconvene 26th Jan 2024
+ URL:/spaces/icinfradoc/pages/2966716500/k8s+update+-+II+12th+Jan+2024

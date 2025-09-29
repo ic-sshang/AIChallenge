@@ -1,0 +1,242 @@
+This page represents a general dump of research, findings, etc, as we come up to speed on the concepts within the IAM/SSO/MFA areas.
+ SSO Basics
+https://www.youtube.com/watch?v=O1cRJWYF-g4
+ Big Rocks
+SSO
+ (who owns the credentials that will be used to authenticate?)
+This can be commercial idP or IC
+MFA
+ (who owns the authentication process?)
+Do we do SMS? This costs money.
+Email OTP is free, but terrible.
+FIDO/Passkeys/TOTP are free and strong.
+Roles
+ (how do we map roles and permissions?)
+ Does the mapping or our roles/permissions happen on a per-integration basis, or based on middleware, or idP?
+ Core Entities
+Authentication App
+ (in our case: Biller Portal)
+Commercial Identity Providers (idPs)
+Examples: Okta, Auth0, OneLogin, Ping Id, Azure Entra ID
+ Which are the providers we need support for?  (reference biller interviews)
+ Do we need to do a biller survey?
+Middleware App
+Future-proofs against new protocols, vulnerability patches, etc
+Reduces our coding effort to a single integration rather than many protocols
+Key functions:
+Centralize our product application Sign-Ins and MFA (for our users who log into our products directly, we manage the identity)
+SSO with other idPs (for users who log into external systems and are then redirected into our product, they manage the identity)
+ Do we want SaaS solution or on-prem?  Need Branden input.
+Can be hosted login page or API comm
+If hosted page, they own the MFA/etc
+ Is there any reason we wouldn’t go hosted?
+Examples: KeyCloak, Okta, Auth0, Azure AD, Zluri
+Need to put together a matrix for comparison
+Pricing
+Protocols/idPs supported
+Integration options
+Branding/customization options
+ What other factors are relevant?
+ Who owns this research?
+ 
+ Protocols
+The type of communication the auth runs on
+Examples: OAuth2, SAML, OpenID Connect, FIDO
+Considerations:
+Middleware selection should 
+Do we need to support them all?
+Do we standardize on one as long as all the major idPs support it?
+Are some easier than others to implement?
+Project Details
+Participants
+Product: Ryan, Palash, John
+InfoSec: Branden, Rob
+Architecture: Martin, Tony
+Design: Angela
+Development: Sean/BMS, Shanki/Prism
+Platform: Ray
+Kickoff calls
+Prelim - 
+video1983982151.mp4
+Tech - pending
+SSO Workflow
+Palash’s Notes:
+MFA: 
+As per the call with Boston, we would like to have as many options as possible, like the text message, passkeys, etc.
+We should have a standardisation.
+We will have variable costs if we have the sms enabled as on of the factors.
+We will also need the commercials to support and provide background on why and why not we have certain factors involved.
+Platform team needs to lead this eventually. Tom and Rob.
+Post Delivery : We might need to get the SSO writer signed by the clients.
+Notes from the discussion on 6th March:
+Do we agree on the approach of using middleware?
+Yes
+Are there clear options we want to pursue?
+Remove azure from list
+Combine Auth0/Okta
+List from Gartner report (get from Branden)
+Or this: 
+https://www.kuppingercole.com/reprints/e56c6f53d8b14486c4da26371bf3b365
+ 
+Auth0 - already a relationship due to Okta usage, way more developer friendly, easier integration for us
+PingID – Branden has relationship
+Has some additional features
+Risk-based engine
+Da Vinci – workflows
+Keycloak – we host it ourselves (vs SaaS)
+How do we decide on hosted vs on prem? What attributes need to be considered?
+Also consider latency, worse in the cloud provider
+Pricing is usually by identity, not by session
+Another feature to consider: “someone logged into your account”, like Netflix
+Can we solve the super biller problem here?
+Can we hook into the same idP integration? Allows one account to access multiple billers?
+Need to reach out to our contacts, start with Rob and Branden
+What level of involvement/role does everyone want?
+Make sure Shanki is involved (and other India lead in different lane?)
+Rob, not a ton of involvement
+Branden, guide
+Bring Ray in when we’ve decided what solution, and we’ll figure out next steps
+Inputs from Co Pilot:
+Hosted Login Page:
+Yes, all three platforms—Auth0, Keycloak, and PingID—provide hosted login pages for web portals.
+Auth0
+: Auth0 offers Universal Login, a hosted login page that handles the authentication process for your application
+[1]
+[2]
+. It provides easy customization options to create a consistent, branded experience for users
+[3]
+.
+Keycloak
+: Keycloak uses a default hosted login page for user authentication
+[4]
+. You can customize this login page to match your application's branding and design
+[5]
+[6]
+.
+PingID
+: PingID provides secure authentication methods, including hosted login pages for web portals
+[7]
+. It supports various authentication methods such as biometrics, OTPs, and security keys
+[7]
+.
+These hosted login pages simplify the authentication process and enhance security for your web portals.
+Is there a specific feature or customization you're interested in for these login pages?
+References
+[1] 
+Customize Login Pages - Auth0
+[2] 
+Login - Auth0
+[3] 
+Customize Universal Login - Auth0
+[4] 
+Customizing Login Page for Keycloak - Baeldung
+[5] 
+Avoid keycloak default login page and use project login page
+[6] 
+Keycloak Custom Login Page Example - Vector Linux
+[7] 
+PingID authentication for the web | PingID End User Guide
+Threat detection
+:
+Yes, threat detection is available with Auth0, Keycloak, and PingID.
+Auth0
+: Auth0 provides robust threat detection features, including bot detection, suspicious IP throttling, brute force protection, and breached password detection
+[1]
+[2]
+. These features help identify and mitigate malicious attempts to access your application.
+Keycloak
+: Keycloak offers brute force detection capabilities, which can identify and respond to multiple failed login attempts indicative of brute force attacks
+[4]
+[3]
+. Administrators can configure thresholds and actions to protect against unauthorized access.
+PingID
+: PingID includes threat protection through PingOne Protect, which uses machine learning and configurable security policies to analyze user identity and detect potential threats
+[5]
+[6]
+. It evaluates various risk factors, such as IP reputation, device trust, and user behavior anomalies, to prevent identity fraud and account takeover
+[7]
+.
+These platforms provide comprehensive threat detection mechanisms to enhance the security of your web portals.
+Is there a specific threat detection feature you're interested in learning more about?
+References
+[1] 
+Attack Protection - Auth0
+[2] 
+Auth0 Signals: New Threat Intelligence to Protect Customers from ...
+[3] 
+Chapter 16. Mitigating security threats | Red Hat Product Documentation
+[4] 
+Keycloak Brute Force Detection Guide: Fortify Security and ... - Webvar
+[5] 
+Threat Protection - Ping Identity
+[6] 
+Introduction to PingOne Protect | PingOne - docs.pingidentity.com
+[7] 
+PingOne Protect - Ping Identity
+Administration features:
+Yes, Auth0, Keycloak, and PingID all provide comprehensive administration features for managing authentication and access control.
+Auth0
+: Auth0 offers a robust dashboard for managing various aspects of authentication and authorization
+[2]
+[1]
+. Key administration features include:
+Application Management
+: Manage applications, APIs, and single sign-on (SSO) integrations.
+User Management
+: View and create user profiles, perform password resets, block and delete users, and manage roles and permissions.
+Security Settings
+: Configure multi-factor authentication (MFA), attack protection, and other security measures.
+Branding
+: Customize login pages, email templates, and domains to match your branding
+[3]
+.
+Keycloak
+: Keycloak provides extensive administration capabilities through its server administration guide
+[4]
+[5]
+. Key features include:
+User Management
+: Manage user profiles, roles, and permissions.
+Identity Providers
+: Configure and manage identity providers such as LDAP and Active Directory.
+Security Settings
+: Implement password policies, multi-factor authentication, and other security measures.
+Customization
+: Customize login, registration, and account management interfaces
+[6]
+.
+PingID
+: PingID offers a range of administration features as part of its adaptive multi-factor authentication solution
+[7]
+[8]
+. Key features include:
+Policy Management
+: Configure authentication policies, device pairing policies, and device posture policies.
+User Lifecycle Management
+: Manage user authentication methods, device management, and reporting.
+Integration
+: Integrate PingID with various systems such as VPNs, remote access, and Windows login
+[9]
+.
+These platforms provide powerful tools for administrators to manage authentication and enhance security for web portals.
+Is there a specific administration feature you're interested in exploring further?
+References
+[1] 
+Auth0 Dashboard
+[2] 
+Features - Auth0
+[3] 
+Auth0 Overview
+[4] 
+Server Administration Guide - Keycloak
+[5] 
+Enabling and disabling features - Keycloak
+[6] 
+Chapter 1. Red Hat build of Keycloak features and concepts
+[7] 
+PingID policy settings | PingID Administration Guide
+[8] 
+PingID | PingID Administration Guide - Ping Identity
+[9] 
+Simple Identity Administration
+ URL:/spaces/PRODUCT/pages/3887235086/IAM-SSO-MFA+Research

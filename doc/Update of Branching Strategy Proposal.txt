@@ -1,0 +1,324 @@
+Branching Model
+Branch Name
+Purpose
+Base Branch
+Comments
+release_mm_dd_yyyy
+(For e.g. release_01_01_1999)
+Pre-release stabilization
+Mirror of main (After cut-off time)
+Code Freeze
+ 
+for Upcoming Release
+No merges are permitted after the code freeze
+Exceptions: Only the Tech Lead from the respective scrum team is authorized to merge code, and this must be done with the necessary approvals.
+Process for Exceptions: If any changes are made to the branch due to exceptions, a Pull Request (PR) must be opened to merge these changes back to the main branch after deployment.
+Current Status: The creation of the branch and build processes are currently manual. We are actively working on automating these steps.
+releasehotfix/*
+Regression/Exception/prod hot fixes
+release_mm_dd_yyyy
+This branch will be created
+Release Regression testing issues
+Release exception
+Prod hot fix
+It will be branched off from 
+release_mm_dd_yyyy
+, and any changes will be directly merged back into 
+release_mm_dd_yyyy
+.
+main
+Release Candidates
+-
+Any release candidate code can be merged
+feature/*
+New features or stories
+main
+ 
+Workflow Diagram
+ 
+ 
+Workflow Steps
+Feature Development
+Branch
+: feature/* from main
+Action
+:
+Developer creates a feature branch.
+Pushes to local DevTest environment.
+Performs unit testing.
+Updates 
+JIRA Status
+: In Progress.
+Publishes the PR for code review.
+ 
+Code Review
+Participant
+: Tech Lead / Manager
+Branch
+: Feature
+Action
+:
+Requires 
+code review and 2 required approvals
+.
+JIRA Status: Code Review.
+Once code review is complete, Jira is moved for testing
+JIRA Status: Ready for testing.
+Testing
+Performed by
+: Test Engineer
+Branch
+: Feature
+Action
+:
+Dev deploys feature changes on devtest environment.
+Tester runs functional testing and feature regression (if required).
+JIRA Status: In Testing.
+After successful testing, story is moved to Final Review.
+ 
+Merge to Main
+Performed by
+: Tech Lead
+Branch
+: main
+Action
+:
+Review repo health and complete the PR.
+Changes are merged to main and the status in Jira is updated to Deployment_queue with the fixVersion only if its release candidate
+ 
+Release
+Branch
+: release_<dd_mm_yyyy> from main
+Timing
+: Based on release cut-off date/time.
+Action
+:
+Release branch is locked after merging.
+Full QA regression testing is done.
+JIRA Status: Deployment Queue.
+ 
+Release Hotfix (If Needed)
+Branch
+: hotfix/release_<dd_mm_yyyy>
+Base
+: release/release_<dd_mm_yyyy>
+Timing
+: Any issue found during the regression testing, release issues or release exception or prod hotfix
+Action
+:
+Hotfix created, merged back to:
+release/release_<dd_mm_yyyy>
+main
+ 
+ 
+ 
+Naming Conventions
+ 
+Type
+Format
+Example
+Feature
+feature/{jira-id}-{desc}
+feature/SPARK-123-feature_desc
+ReleaseHotfix
+releasehotfix/{context}
+releasehotfix/prod-session-fix
+Release
+release_<dd_mm_yyyy>
+release_01_01_1999
+Developer Journey Examples
+Scenario 1: Single Developer Working on a Feature
+Details:
+Developer
+: Developer 1
+JIRA ID
+: SPARK-101
+Branch
+: feature/SPARK-101-feature-desc
+Base Branch
+: Main
+Environment
+: Local DevTest
+Participants
+: Developer, Tech Lead, Tester.
+ 
+Step-by-Step Flow:
+Step
+Action
+Branch
+Actor
+Jira Status
+Notes
+1
+Create feature branch
+feature/SPARK-101-feature-desc from main
+Developer 1
+In Progress
+Clone Repo and Code initialized
+2
+Local development and unit testing
+Local DevTest
+Developer 1
+In Progress
+Development
+3
+Raise PR to Main
+PR: feature/SPARK-101-feature-desc → Main
+Developer 1
+Code Review
+2 approvals required
+4
+Code Review
+feature/SPARK-101-feature-desc
+Tech Lead, Reviewer
+Ready for Testing
+PR approved
+5
+Testing
+feature/SPARK-101-feature-desc
+Test Engineer
+In Testing
+Test Engineer performs testing.
+6
+Testing completed
+feature/SPARK-101-feature-desc
+Test Engineer
+Final Review
+Testing is finished
+7
+Merge to Main
+feature/SPARK-101-feature-desc →Main
+Tech Lead
+Final Review
+Feature is now merged to Main
+8
+Regression on Main
+Main
+Test Engineer
+Final Review
+Feature regression is performed
+9
+Merge to release/release_<dd_mm_yyyy>
+Main -> release/release_<dd_mm_yyyy>
+Tech Lead
+Deployment Queue
+Merged to release after cut-off date.
+10
+Deploy to Production
+release/release_<dd_mm_yyyy> → Prod
+Release team
+Resolved
+Stable release
+ 
+Scenario 2: Two Developers Working on Different Features
+Objective
+:
+Developer 1: Implements feature-1 (SPARK-201)
+Developer 2: Implements feature-2 (SPARK-202)
+Both features are targeting for same release.
+ 
+Step-by-Step Flow:
+Step
+Action
+Branch
+Actor
+Jira Status
+Notes
+1
+Create feature branches
+feature/SPARK-201-feature-1, feature/SPARK-202-feature-2
+Developer 1 & 2
+In Progress
+Pulls code from latest main
+2
+Independent development and unit testing
+Local DevTest
+Developers
+In Progress
+Each on their own
+3
+Developer 1 raises PR to Main
+feature/SPARK-201-feature-1 → Main
+Developer 1
+Code Review
+Feature-1 PR
+4
+Code reviewed and PR Approved
+feature/SPARK-201-feature-1 
+Reviewers
+Ready for Testing
+ Code is reviewed and moved for testing
+5
+Testing
+feature/SPARK-201-feature-1 
+Test Engineer
+In Testing
+Test Engineer performs testing.
+6
+feature-1 merge to main
+main
+Tech Lead
+Final Review
+feature-1 merge to main after testing and final review
+7
+Developer 2 raises PR to Main
+feature/SPARK-202-feature-2 → Main
+Developer 2
+Code Review
+Base was older main
+8
+Code reviewed and PR Approved
+feature-2
+Reviewers
+Ready for Testing
+ Code is reviewed and moved for testing
+9
+Testing
+feature/SPARK-202-feature-2 
+Test Engineer
+In Testing
+Test Engineer performs testing.
+10
+feature-2 merge to main
+main
+Tech Lead
+Final Review
+feature-2 merge to main after testing and 
+Merge Conflict Detected
+11
+Resolve Conflicts
+feature/SPARK-202-feature-2
+Developer 2
+Code Review
+Rebase or merge Main into feature branch and sync with Developer-1 to resolve conflicts if required.
+12
+QA Functional Testing
+Feature-1, feature-2
+Test Engineer
+In Testing
+Both features validated
+13
+Final Review and Merge to Main
+Feature-1,2 → main
+Tech Lead
+Final Review
+Both features now merged to Main
+14
+Regression on Main
+Main
+Test Engineer
+Final Review
+Feature regression is performed
+15
+Merge to release/release_<dd_mm_yyyy>
+Main -> release/release_<dd_mm_yyyy>
+Tech Lead
+Deployment Queue
+Merged to release after cut-off date and release branch is locked.
+16
+Deploy to Production
+release/release_<dd_mm_yyyy> → Prod
+Release team
+Resolved
+Stable release
+ URL:/spaces/PE/pages/4283367425/Update+of+Branching+Strategy+Proposal

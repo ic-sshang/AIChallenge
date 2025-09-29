@@ -1,0 +1,12 @@
+Implementation Plan:
+Deactivation/ Reactivation of any custom domain can be taken care by using the existing database column “Active” of “BillerEmailDomains” table.  
+If the value in database is 1, then the custom domain will be Active and can be used for sending emails based on the configuration made.
+If the value is set as 0, then the domain will be set as Inactive, and it won’t be considered while sending email.
+The current implementation has a delete button within first grid column for all domains respectively, which when clicked, will deactivate the domain and remove it from the UI grid.
+With the new changes in place, when delete button is clicked for any domain, the domain will be deactivated and the option to edit the domain’s invoice type mapping will not be shown. Reactivate domain option will be shown.
+When we click on Reactivate button, the domain will be marked as Active in database and all default options will be shown. (View DNS Settings, Edit Record, Deactivate Domain).
+ 
+Screenshots:
+Before deactivation
+After deactivation
+ URL:/spaces/PE/pages/4337893402/Reactivate+Deactivate+a+custom+email+domain

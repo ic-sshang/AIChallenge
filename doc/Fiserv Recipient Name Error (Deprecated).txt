@@ -1,0 +1,21 @@
+Update Version:
+ 
+https://invoicecloud.atlassian.net/wiki/pages/resumedraft.action?draftId=4201840721
+ 
+MC_RPPS CASSRun sometimes fails when we get an exception like the following: 
+Exception: 3875CITY OF CARR       does not have a dash. Please get with DS to update the RecipientName and the ImportDate to get picked up for tomorrow's run.
+We have to create a database request so the data can get updated. After we get confirmation that it’s been updated, we will need to do a manual run to set the live date for fiserv and the upload the entries to the gateway. We will need to request PIM access to be able to run the application. How to request access: 
+Privileged Identity Management (PIM) - Request Process
+ 
+Steps:
+Open MC_RPPS in the bastion server and look for the “ManualRunForFiservRecipientNameError” branch
+You will need to update the billerid and the fileid (which can be found in the MC_RPPS CASSRun log for that day)
+Don’t forget to comment out “Return 0” to be able to run. It is there to prevent us from running it by accident. 
+ 
+You will need to debug the application and make sure it sets the cass live date for fiserv and uploads the entries. You will need to step through this to make sure the rpps entries were picked up.
+*If the date of the file you are running is different from today’s date, you will need to change the date here for the entries to get uploaded to the gateway.
+ For example:
+Lastly, just check prdrpps table in the db to check the live date and the gateway db rppsentries table to verify the entries got uploaded.
+ 
+ 
+ URL:/spaces/ED/pages/3068919812/Fiserv+Recipient+Name+Error+Deprecated

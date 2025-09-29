@@ -1,0 +1,59 @@
+This document describes the process for implementing a Tyler Incode V9 Standard implementation and includes the following details
+Required Tasks to be setup
+Converting File Types (For Invoices and adjustments)
+Known Export File Types (For payment, changelog and miscellaneous file export)
+Sample Files (Invoices and adjustments)
+Known Tyler Incode V9 implementations.
+ Instructions
+Test Biller’s Files
+1. Test File the billers provided sample files
+The billers provided invoice and adjustment file samples should be able to be converted using the following: 
+Stratus Invoice File Types:
+727	IF_InCode - Utility Invoices - XML
+788	IF_InCode - Utility Invoice Upload - Include Dashes in Account Number
+ 
+This is a sample of a standard Tyler Incode Version 9 sample invoice file:
+Stratus Adjustment File Types:
+255	IF_ValleyView - Utility
+261	IF_InCode - Utility Adjustments - XML
+290	IF_InCode UB Adjustment - CSV With Header - Include Dashes
+ 
+This is a sample of a standard Tyler Incode Version 9 sample Adjustment file:
+The biller provided files should be standard to Tyler Incode 9. The various converting file types on IC side are used to accommodate variations to data such as account number format (e.g. with/without dashes, prefixes). 
+IF a biller’s file does not convert, we should push back and ask for a file in the format of the above provided samples
+The following are known Payment , Miscellaneous and Changelog export filetypes used with biller’s currently implementing  Tyler Incode version 9:
+Stratus Miscellaneous Export filetypes:
+40		IF_City of Bloomington IL - Paperless Autopay Report
+Stratus Changelog Export filetypes:
+1	InvoiceCloud CSV Format
+20	IF_Generic Change Logs - Account Number
+Stratus Payment Export filetypes:
+340		IF_ValleyView Utility - Payments
+322		IF_InvoiceCloud Payments Download
+Always attempt to provide an export sample and ask for file sample approval before committing to using one of the above filetypes. Don’t assume.
+Setup Task’s (Import & Export)
+Setup Task's
+Setup either Stratus or FTP tasks
+The biller/Implementation manager will decide which to set.
+The task should utilize the converting file type(s) tested in the step: “Test Biller’s files”
+FTP task:
+Stratus Task:
+Complete Integration Summary
+ Known Tyler Incode Version 9 Implementations:
+INT-5992
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+INT-6016
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+INT-2725
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+INT-5006
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ URL:/spaces/IM/pages/2719875096/Tyler+Incode+V9+Standard+Implementation

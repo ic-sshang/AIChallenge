@@ -1,0 +1,43 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+configuration
+release
+The configuration to use when building the project.
+solution
+**/*.sln
+The solution file to build.
+cleanProject
+False
+Whether to clean the project before building.
+nugetConfigPath
+" "
+The path to the NuGet configuration file.
+projectName
+$(Build.Repository.Name)
+The name of the project
+platform
+" "
+The platform to build the solution for.
+SolutionPath
+**/*.sln
+The path to the solution file
+msbuildArgs
+" "
+Additional arguments to pass to MSBuild.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+azure-batch-build.yaml
+azure-build.yaml
+app.yaml
+jobs/dotnet-framework/build.yaml
+jobs/dotnet-framework/post-helm-deploy-test.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+ URL:/spaces/platform/pages/3634921662/tasks+dotnet-framework+build.yaml

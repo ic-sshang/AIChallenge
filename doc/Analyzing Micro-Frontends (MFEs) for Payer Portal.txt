@@ -1,0 +1,103 @@
+Objective
+The goal of this document is to present a comprehensive analysis of 
+PayerPortal
+ and analyze the common MFEs that can be reused in different large MFEs. Moreover, Identify the components needed from system design.
+Analysis Of Payer Portal(Authenticated/Logged-in User)
+2
+1
+0
+0
+4396581236
+4397498614
+1
+MFE(Authenticated)
+1
+1
+https://invoicecloud.atlassian.net/wiki
+MFE(Authenticated)
+0
+731
+884
+Extracted MFEs from Payer Portal
+2
+1
+0
+0
+4397105451
+4397498614
+1
+MFEs Workflow
+1
+1
+https://invoicecloud.atlassian.net/wiki
+MFEs Workflow
+0
+1381
+1401
+Smaller MFEs that can be reused in Bigger MFEs
+The "
+Edit Recurring Payment
+" and "
+Edit Autopay
+" features use the same screen layout, allowing them to share a common or smaller Micro Frontend (MFE) that can be reused.
+The sections for 
+Open Invoices, Closed Invoices, Upcoming Scheduled Payments,
+ and 
+Payment History
+ all utilize a shared MFE in the form of a grid layout.
+Likewise, 
+Open Invoices, Closed Invoices, Recent Payments,
+ and 
+Upcoming Scheduled Payments
+ all use a common summary card component, which can also be reused on the homepage of the Payer Portal. 
+2
+1
+0
+0
+4397793475
+4397498614
+1
+Common MFEs
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Common MFEs
+0
+762
+592
+Design system components that are needed/required    
+ 
+System Component Name
+Component Description/ Current limitations
+Priority
+Grid
+Paperless, Autopay, Payment methods, etc
+ 
+We don’t have Grid component current in design system.
+High
+Table
+We can’t render icons as headers in current table component implementation.  We are accepting headers as `
+keys
+`.
+we have also sorting missing here.
+High
+Loaders/skeleton
+Needed when UI is being loaded
+High
+Filter
+Needed where we are applying filter or showing data in grid format such as open Invoices, Closed Invoices, or payment History, etc.
+High
+Typography
+In current Heading/Paragraph components which are sub-part of typography, there is a lacking customization and flexibility.
+There is a problem with size also, there are only two options `
+xs
+` & `
+s
+`.
+Medium
+Checkbox
+Lacking flexibility & customization
+Medium
+ 
+ 
+ URL:/spaces/PE/pages/4397498614/Analyzing+Micro-Frontends+MFEs+for+Payer+Portal

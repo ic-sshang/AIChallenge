@@ -1,0 +1,12 @@
+To elevate to local admin on your NonProd AVD for a max of 30 minutes at a time, please perform the following steps:
+From your AVD, browse to 
+https://portal.azure.com
+ and sign-in.
+At the top of the page, search for PIM and open Microsoft Entra Privileged Identity Management
+On the left side, select "Groups"
+In the Eligible Assignments tab, you should see 
+"ic-iac-avd-admins-npd". 
+Click activate on the far right.
+In the appearing window, enter the reason and click Activate
+After validation has completed, you should be able to elevate on your AVD within a few moments.
+ URL:/spaces/platform/pages/4369743884/Elevate+to+Admin+on+non-prod+AVD

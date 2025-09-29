@@ -1,0 +1,96 @@
+none
+  Application Overview
+Field
+Details
+Application Name
+ICChasePaymentProcessingAPI
+Version
+1.0.0
+Description
+IC Chase Payment Processing API
+Primary Functionality
+Provides a HTTP API Interface to support processing payments through Chase’s system
+Key Features
+.NET 8.0 , Payments
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Angie Paul
+Tech Lead
+Rene Reyes
+Engineering Manager
+Roopa Devarajan
+Support Contact
+Rodrigo Dos Santos
+Architect
+Randy Torres
+  Technical Details
+Field
+Details
+Programming Languages
+C#
+Frameworks/Libraries
+.NET 8.0 , IC.Azure.KeyVault, Serilog, ASP.Net
+Database
+Pending
+Key Vault
+Pending
+Dependencies
+Database, Chase API 
+Code Repository Link
+https://dev.azure.com/invoicecloud/Src/_git/ICChasePaymentProcessingAPI?path=%2F&version=GBEBPP-27772-InitializeApp&_a=contents
+  Application Service Access Dependencies
+Field
+Details
+Application Service Indicator
+ic-chase-payment-processing-api
+Application Service Short Indicator
+NA
+Create Application Service Vault
+False
+Grant Crypto Vault Access
+False
+Grant Environment Vault Access
+True
+Grant Cluster Vault Access
+True
+Grant ServiceBus Sender Access
+False
+Grant ServiceBus Receiver Access
+N/A
+Grant ServiceBus Data Owner Access
+N/A
+Grant IC Blob Storage Access
+N/A
+Grant PDF Extract Storage Account Access
+N/A
+Grant IC Vendor PDF Archive Storage Account Access
+N/A
+Biller Shared DB Access
+True
+Biller Shared DB Access for QE
+N/A
+  Deployment Information
+Field
+Details
+Deployment Environment
+Payer Cluster (k8s)
+Application Type
+Web API
+Outbound Network Ports
+Inbound Network Ports
+PCI Scope
+Yes ??
+Environment Variables
+Pending
+  Web Ingress
+Field
+Details
+Health Endpoint (optional)
+/health (pending)
+Suggested URL Root
+Pending
+Examples
+https://api.invoicecloud.com/{domain}/{api}
+ URL:/spaces/ED/pages/4330061825/IC+Chase+Payment+Processing+API+-+ICPPA

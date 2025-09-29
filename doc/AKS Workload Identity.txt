@@ -1,0 +1,94 @@
+Intro
+The Azure Kubernetes Service offers an integration that maps an Application/Workload hosted in Kubernetes to an Azure Managed Identity as a way to manage RBAC and ACLs for the Application/Workload running in the AKS Cluster, enabling the Application/Workload to access other Azure Resources such as a KeyVault or SQL Server.  
+Article Table of Contents
+1
+6
+false
+default
+list
+true
+Enabling AKS Workload Identity for an AKS Cluster
+You can use a Helm chart provided by the creators of the AKS Workload Identity integration to install it on an AKS Cluster.  We do that now for the AKS Clusters we deploy, we have a blueprint repo for normal AKS Spokes we use as the seed for specific Application/Domain Spokes with the 
+Helm chart installed
+ as part of the blueprint.
+Implementation Example
+The key is a federation between a Kubernetes (K8s) Service Account and an Azure Managed Identity.  Below are some code snippets showing how to setup the Federation.
+Create K8s Namespace
+APPLICATION_NAMESPACE=exampleapp-ns
+
+kubectl create namespace $APPLICATION_NAMESPACE
+Create K8s Service Account with Workload Identity Integration
+RESOURCE_GROUP=rg-pri-exampleapp-sbx
+
+MANAGED_IDENTITY_NAME=mi-aks-pri-exampleapp-sbx
+
+export USER_ASSIGNED_IDENTITY_CLIENT_ID="$(az identity show -g ${RESOURCE_GROUP} -n ${MANAGED_IDENTITY_NAME} --query clientId -o tsv)"
+
+SERVICE_ACCOUNT_NAME=exampleapp-wi-sa
+
+APPLICATION_NAMESPACE=exampleapp-ns
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: ${USER_ASSIGNED_IDENTITY_CLIENT_ID}
+  labels:
+    azure.workload.identity/use: "true"
+  name: ${SERVICE_ACCOUNT_NAME}
+  namespace: ${APPLICATION_NAMESPACE}
+EOF
+Create Managed Identity with Federation
+identityName=mi-aks-pri-exampleapp-sbx
+
+federationName=mi-aks-pri-exampleapp-sbx-federation
+
+rgName=rg-pri-exampleapp-sbx
+
+issuer=https://eastus.oic.prod-aks.azure.com/6ee1d96e-4c90-42a8-be8a-f94078515d91/3a089226-f0f0-42b1-beac-59b087c4befc/
+
+aksNamespace=exampleapp-ns
+
+aksServiceAccountName=exampleapp-wi-sa
+
+az identity federprid-credential create --identity-name $identityName --name $federationName --resource-group $rgName --issuer $issuer --subject system:serviceaccount:$aksNamespace:$aksServiceAccountName
+Create Pod with Workload Identity Integration
+RESOURCE_GROUP=rg-pri-exampleapp-sbx
+
+KEYVAULT_NAME=kv-prm-exampleapp-sbx
+
+KEYVAULT_SECRET_NAME=exampleapp-secret
+
+SERVICE_ACCOUNT_NAMESPACE=default
+
+SERVICE_ACCOUNT_NAME=exampleapp-wi-sa
+
+export KEYVAULT_URL="$(az keyvault show -g ${RESOURCE_GROUP} -n ${KEYVAULT_NAME} --query properties.vaultUri -o tsv)"
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  namespace: ${SERVICE_ACCOUNT_NAMESPACE}
+spec:
+  serviceAccountName: ${SERVICE_ACCOUNT_NAME}
+  containers:
+    - image: ghcr.io/azure/azure-workload-identity/msal-go
+      name: oidc
+      env:
+      - name: KEYVAULT_NAME
+        value: ${KEYVAULT_NAME}
+      - name: KEYVAULT_URL
+        value: ${KEYVAULT_URL}
+      - name: SECRET_NAME
+        value: ${KEYVAULT_SECRET_NAME}
+  nodeSelector:
+    kubernetes.io/os: linux
+EOF
+InvoiceCloud Workload Helm Chart Support
+We have included the support for adding the AKS Workload Identity integration to our InvoiceCloud workload deployments, these helm charts can be found in the 
+helm-charts
+ Repo in the Platform AzDo Project. 
+ URL:/spaces/platform/pages/3061317726/AKS+Workload+Identity

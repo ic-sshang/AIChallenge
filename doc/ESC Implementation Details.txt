@@ -1,0 +1,235 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+ESC integration can support a batch integration for retiree benefits.  ESC will send a BIF and BAF and Invoice Cloud provide a custom payment file.  NO PAPERLESS OR PRESENTMENT. 
+See BID 4168 McAllen TX for example configuration.  
+IMPORTANT-SELECT INTGRATOR AS HOMEGROWN for this type of integration.
+Summary
+Summary
+Details
+Software Partner Name
+ESC
+Software Product Name
+ORACLE
+Software Cashiering System
+N/A
+Using the IC biller portal for all in person payments
+Supported Versions
+All Versions
+Only one version in use at this time
+Integration Requirements and Pre-Requisites
+None
+Vertical
+GUB
+Sample Biller Implementation
+3066
+City of Moreno Valley
+Planning
+Test Portals
+IC Hosted Test Portal 3078 ESC Partners Test
+Partner Hosted Test Portal- Coming soon
+Biller Test Portal - Required
+Rules of Engagement 
+Once assigned please reach out to Cindy Del Rosario 
+cindy.del.rosario@esc-partners.com
+ with the 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/2181136393/ESC+Implementation+Details#Implementation-Worksheet
+ completed and password protected. 
+Timeline 
+60-90 days
+Configuration
+Invoice Types
+42 Utility     NOTE-ERP Benefits utilizes 6 Government Services.  This is the only integration using that invoice type.  
+Virtual Site
+Virtual site setup is required.  
+Required Options
+ID
+Option Description
+Details
+1
+Allow Adjustments on Closed Invoices
+Enable this option if Payments and Adjustments can be applied to an Invoice that is considered closed. There are cases in which the recommended functionality is to disable this option. One case is Balance Forward, which by definition the balance of the previous Invoice is adjusted out and moved to the new Invoice. No more payments or adjustments should be allowed on that closed Invoice.
+Always turn this on
+2
+Paperless Checkbox Default
+When Registering, or when making a Payment via ExpressPay, the user is presented with the option to Go Paperless with a checkbox. The Biller may choose to have this either checked by default, or not checked.
+Determine with the biller
+64
+RTDR - Override 6 Hour Previous RTDR Check
+For Billers with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh.
+ 
+Always turn this on
+93 
+Virtual Site - Display registration areas
+By default, registration panels and menu links may be shown in the virtual site if the Biller allows registration for their invoice types. Turning this off overrides all other checks and hides these areas. Customers may still access the registration page via the invoice search if that invoice type allows registration.
+This option is 
+On
+ by default.
+Always turn this off
+41
+Block Customer Portal from Email Updates/Deletes
+By default, the Customer Portal allows a customer to update and remove an email address. This will block that capability. (MLS)
+This option is 
+Off
+ by default.
+Always turn this on
+42
+Biller Portal - Edit Email Address
+By default, changes to the email address are allowed. Unchecking this will make the Email Address field in the Biller Portal as read-only.
+This option is 
+On
+ by default.
+Always turn this OFF 
+101
+Customer Portal require email when making a payment
+By default when making a payment in the Customer Portal, email address entry is not required. By checking this option the user will be required to enter their email address when making a payment.
+Always turn this on
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update a customer email address. However, new emails for customers without an email address, will still be inserted.
+This option is 
+Off
+ by default.
+Always turn this on
+129
+Display latest $0 balance invoices in Open Bill Listing and CloudPayV2
+When enabled, the most recent $0 balance invoice will be displayed in the Open Bill Listing and CloudPayV2. Note: Invoice Type #15 must be enabled for this feature to work.
+This option is Off by default
+Always turn this on 
+INVOICE TYPE OPTION 14
+Allow Customers to Submit Payment Greater than Invoice Balance Due
+Always turn this on 
+INVOICE TYPE OPTION 15
+Allow Customers to Submit Payments on 0 Balance and Negative Balance Invoices.
+Always turn this on
+INVOICE TYPE OPTION 5
+Allow Registration / Customer Portal
+Always turn this off
+Coding Requirements
+Implementation Worksheet
+Provide the below Implementation Worksheet to Cindy Del Rosario at ESC once you have the coding requirements.  ESC will complete their section and send back to you for coding.  This sheet must be password protected.  
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+ESC
+Upon Request
+Specific to each biller
+Bill Presentment
+ESC
+Upon Request
+PDF URL for linking is provided by ESC and can be submitted with the implementation coding request.
+RTDR API
+ESC
+Upon Request
+Specific to each biller
+DataPump API (same as RTDR API)
+ESC
+Upon Request
+Specific to each biller
+Client ID
+ESC
+Upon Request
+Specific to each biller
+Allowed Scope
+ESC
+Upon Request
+Specific to each biller
+Client Secret
+ESC
+Upon Request
+Specific to each biller
+Token URL
+ESC
+Upon Request
+Specific to each biller
+Get Bill URL
+ESC
+Upon Request
+Specific to each biller
+SSO URL
+ESC
+Upon Request
+Specific to each biller
+PDF URL
+ESC
+Upon Request
+Specific to each biller
+Whitelisting IP Addresses
+No need to provide
+ 
+ESC already has the range of IP addresses.  Unless a new range is created there is no need to provide to ESC.  
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+BID
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+Invoice Format GUID
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+Biller GUID TEST
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+WebService Key TEST
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+Biller GUID PROD
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+WebService Key PROD
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+Invoice Type ID
+ESC
+Project Assignment 
+Listed in Implementation Worksheet.  Populate and send to ESC
+Contacts
+Name
+Email
+Role
+Cindy Del Rosario
+cindy.del.rosario@esc-partners.com
+Implementation Contact
+ URL:/spaces/IM/pages/2181136393/ESC+Implementation+Details

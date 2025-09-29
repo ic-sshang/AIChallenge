@@ -1,0 +1,108 @@
+Note: this document is based on the Invoice Cloud Wiki on DevOps. The original document can be viewed 
+here
+. 
+Standard Logging Practices
+Purpose: We are implementing a new logging standard using the Serilog framework. The Serilog logging framework provides a way to classify each log, and is flexible enough to extend the framework to send logs to a number of different integrations.
+The IC.Serilog library is used to store the centralized configuration for a number of implementations. 
+This way all we have to do is pass in an enum, and you're all set. 
+The Serilog framework can be modified on each app should the predefined configurations not work for you.
+Bring those cases up to the Tech Lead(TL) to discuss if it should live in the IC.Serilog framework or not. 
+
+Packages: IC.Serilog (latest version) (link to the repo)
+Configuration:
+To configure the Serilog framework, run the following code at the 
+start
+ of the application. 
+THIS MUST BE A SINGLETON.
+Console:		
+	IC.Serilog.Utility.Configure(appName:= "My Application", logType:= IC.Serilog.LogType.Console)
+File:
+	IC.Serilog.Utility.Configure(appName:= "My Application", logType:= IC.Serilog.LogType.File, fileSizeLimitBytes:= 10000 )
+NewRelic: 
+	IC.Serilog.Utility.Configure(appName:= "My Application", logType:= IC.Serilog.LogType.NewRelic)
+
+
+Available configurations:
+ Console = 0
+ ConsoleAndFile = 1
+ ConsoleAndNewRelic = 2
+ ConsoleFileAndNewRelic = 3
+ File = 4
+ NewRelic = 5
+
+Usage: Serilog.Log.Information(Message) Serilog.Log.Information(Format, ParamArray)
+Flavors:
+	Serilog.Log.Verbose
+	Serilog.Log.Debug
+	Serilog.Log.Information
+	Serilog.Log.Warning
+	Serilog.Log.Error
+	Serilog.Log.Fatal
+
+Where to find logs? Console: Console output. 
+File: Log
+s are stored in 'E:\Data\Logs{appName}' NewRelic: Logs are stored in 'E:\Data\Logs\NewRelic'
+	Logs can be queried using the following NRQL:
+		SELECT * FROM Log WHERE message like '%My Custom Text%'
+
+Examples
+Here are some examples of how to utilize the Serilog framework.
+The usage is similar to a String.Format. The neat thing about this is that each positional argument can be queried against with NewRelic.
+Here is an example query on how to look for a billerID in one of the properties.
+SELECT * from Log where Message.Properties.5 = 1146
+
+Here is a code sample
+VB.NET
+
+public function Test(validSession as Boolean, billerID as Integer, eventName as String ) 
+
+	Serilog.Log.Information("Triggered by {6}. [SessionID: {0}] BillerID: {5}. Valid Session: {1}. IP Address: {2}. UserAgent: {3}. PageUrl: {4}. ",
+							HttpContext.Current.Session.SessionID, 
+							validSession,
+							clsUtilities.GetRemoteIP(),
+							HttpContext.Current.Request.ServerVariables("HTTP_USER_AGENT"),
+							HttpContext.Current.Request.Url.ToString(),
+							billerID,
+							eventName)
+End Function
+
+
+C#
+public void Test(bool validSession, int billerID, string eventName)
+{
+    Serilog.Log.Information("Triggered by {6}. [SessionID: {0}] BillerID: {5}. Valid Session: {1}. IP Address: {2}. UserAgent: {3}. PageUrl: {4}. ", HttpContext.Current.Session.SessionID, validSession, clsUtilities.GetRemoteIP(), HttpContext.Current.Request.ServerVariables("HTTP_USER_AGENT"), HttpContext.Current.Request.Url.ToString(), billerID, eventName);
+}
+
+
+Examples using Structured Logging:
+Structured logging
+ is a concept that logs objects, not just strings. Logging frameworks like NLog and Serilog support structured logging, and APM tools like New Relic and Application Insights incorporate that metadata.
+Reusing the previous C# example (but this works in 
+VB.NET
+ too):
+    Serilog.Log.Information("Triggered by {eventName}. [SessionID: {sessionId}] BillerID: {billerId}. Valid Session: {validSession}. IP Address: {ipAddress}. UserAgent: {userAgent}. PageUrl: {pageUrl}. ",
+		eventName, 
+		HttpContext.Current.Session.SessionID, 
+		billerId, 
+		validSession, 
+		clsUtilities.GetRemoteIP(), 
+		HttpContext.Current.Request.ServerVariables("HTTP_USER_AGENT"), 
+		HttpContext.Current.Request.Url);
+
+In this case, if you were querying New Relic, you would use
+	SELECT * FROM Log WHERE Message.Properties.billerId = 1146
+
+instead of
+	SELECT * FROM LOG WHERE Message.Properties.5 = 1146
+
+The advantage is that NewRelic can find the billerId wherever it is in the message; it doesn't always have to be in the 5th position.
+The disadvantage is that the format string determines the corresponding argument by position; the developer must ensure that the field names in the message format correspond to the variables passed as arguments, otherwise you'll get logs where pageUrl equals 'IC-APP6' and other absurdities.
+Structured Logging Special Cases
+You can log an object by passing the object to Serilog. You must prefix the field name with an at-sign. Serilog will deconstruct the object and pass in each field name and value.
+  Serilog.Log.Information("BillerReconciliationDetail {@billerReconciliationDetail}", billerReconciliationDetail);
+
+You can log an exception in Serilog using a call that passes the exception as the first argument. However, you must provide at least one additional argument; consider it an opportunity to provide some context about the exception.
+catch(Exception ex) {  
+  Serilog.Log.Error(ex, "BillerId:{billerId} PageUrl:{pageUrl}", billerId, pageUrl);
+}
+ URL:/spaces/DS/pages/2806186035/Structured+Logging

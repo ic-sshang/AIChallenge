@@ -1,0 +1,102 @@
+https://developer.atlassian.com/cloud/assets/assets-rest-api-guide/workflow/
+ 
+https://developer.atlassian.com/cloud/assets/rest/
+ 
+Authentication
+https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/
+ 
+The Assets API uses basic authentication. To provide basic authentication with 
+curl
+, use the 
+--user
+ flag: 
+--user smiller@invoicecloud.com:my-token-goes-here
+.
+You can create and manage your API tokens here
+Workspace ID
+Before you get started, you’ll need to determine your Jira’s JSM / Assets workspace ID. Note that ID’s in this article may belong to our Sandbox JSM instance.
+curl -i -X GET \
+  --user "username@invoicecloud.com:personal-access-token" \
+  'https://invoicecloud-sandbox-794.atlassian.net/rest/servicedeskapi/assets/workspace'
+Once done, you’ll use that in all your other requests with the following pattern:
+https://api.atlassian.com/jsm/assets/workspace/{workspace ID}/v1/etc/etc
+Sample Calls
+Search for objects using Assets Query Language:
+curl -i -X POST \
+   --user "username@invoicecloud.com:personal-access-token" \
+   -H "Content-Type:application/json" \
+   -d \
+'{
+  "qlQuery": "objectType = \"Service Version\" AND Name LIKE \"CRM 1.3\""
+}' \
+  'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/object/aql'
+Get one particular object by ID
+curl -i -X GET \
+  --user "username@invoicecloud.com:personal-access-token" \
+  'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/object/17'
+Creating / Updating Objects
+Create a new object type
+About Icon ID's
+Note that icon ID is required. There’s no easy way to browse icon ID’s 
+ I opened dev tools and then opened the list, which loads all icons. From there, you can view the ID’s. ID 23 (used in the example) is a clock. 
+ID 11 is an astronaut
+curl --request POST \
+  --url 'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/objecttype/create' \
+  --user "username@invoicecloud.com:personal-access-token" \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "inherited": false,
+  "abstractObjectType": false,
+  "objectSchemaId": "6",
+  "iconId": "23", 
+  "name": "Time Zone",
+  "description": "Time zone configured on server OS"
+}'
+Once you’ve created your object type, you can add attributes to it
+curl --request POST \
+  --url 'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/objecttypeattribute/28' \
+  --user "username@invoicecloud.com:personal-access-token" \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "foo",
+  "type": "0",
+  "defaultTypeId": "0"
+}'
+After adding attributes, you’ll need to 
+GET
+ the object type attributes so that you have their ID’s
+curl --request GET \
+  --url 'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/objecttype/28/attributes' \
+  --user "username@invoicecloud.com:personal-access-token"
+And then you can finally create your object! Unfortunately, you need to provide attribute ID and value, not name and value; it’s a bit annoying. If you leave out the key, it’ll randomly generate one for you. No need to set 
+created
+ or 
+updated
+, either - those are set automatically.
+curl -i -X POST \
+   --user "username@invoicecloud.com:personal-access-token" \
+   -H "Content-Type:application/json" \
+   -d \
+'{
+  "objectTypeId": "28",
+  "attributes": [
+    {
+      "objectTypeAttributeId": "235",
+      "objectAttributeValues": [
+        {
+          "value": "US East"
+        }
+      ]
+    },
+    {
+      "objectTypeAttributeId": "236",
+      "objectAttributeValues": [
+        {
+          "value": "bar"
+        }
+      ]
+    }
+  ]
+}' \
+  'https://api.atlassian.com/jsm/assets/workspace/eb1ab876-94cc-4402-bb41-573e2d3b007c/v1/object/create'
+ URL:/spaces/platform/pages/4398350338/Assets+API

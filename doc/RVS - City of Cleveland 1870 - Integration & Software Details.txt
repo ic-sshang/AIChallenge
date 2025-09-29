@@ -1,0 +1,151 @@
+Page Navigation:
+Document Status
+complete
+Green
+Document Owner
+ 
+ 
+Knowledge Transfer 
+Gong Recording
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+csv
+Stratus
+Statement file (biller bills once a month but the Stratus job will run once per day)
+IC will need to create the invoice number
+Adjustment 
+txt
+Stratus
+Stratus task would run every 15 minutes to check balance adjustments
+NOTE: the adjustment file is ALSO placed in the ‘Customer Update’ path on stratus to update the past due amount 
+Payment 
+csv
+Stratus
+Payment file provided daily
+ACH Reject
+Not Supported
+ACH rejects will not be passed to RVS. Cleveland will need to manually input them in RVS
+Void
+Not Supported
+Change Log 
+csv
+Stratus
+Change Log File contains email address, phone number, autopay and paperless enrollment. Biller may choose to use or NOT use this file. It will vary per biller implementation. Cleveland does not use this file.
+AutoPay Enrollment 
+csv
+Stratus
+Change Log File contains email address, phone number, autopay and paperless enrollment. Biller may choose to use or NOT use this file. It will vary per biller implementation. Cleveland does not use this file.
+Paperless Enrollment
+csv
+Stratus
+Change Log File contains email address, phone number, autopay and paperless enrollment. Biller may choose to use or NOT use this file. It will vary per biller implementation. Cleveland does not use this file.
+Bill Images
+Supported:
+PDF Linking - must be provided by the biller/print vendor
+PDF Extraction - PDFs must be provided by the biller
+Template - RVS only supports template creation
+RVS does not support PDF Linking or PDF Extraction but if the biller can provide the PDF web services/PDF files, IC can use these methods to display the images. RVS only supports template by providing the data in the billing/invoice file.
+Cleveland provides PDF bill images via Stratus
+Configuration 
+Invoice Types
+42 - Utility 
+Virtual Site
+Required Options
+N/A
+Supported Products and Features
+Products
+Type
+Definitions/Details
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+CloudStore has not been implemented with Cleveland
+CSRConnect
+Not Supported
+IVR
+Supported
+Suggested search method: utility search 2 by account number
+Kiosk
+Supported
+Kiosk has not been implemented with Cleveland
+OBD
+Supported
+Cleveland implemented OBD - no special notes at this time
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Payers will use the Invoice Cloud Customer Portal and the linking by email address and password
+       Multi-User Log In
+Supported
+Payers will use the Invoice Cloud Customer Portal and can enable multi-customer log-in if desired. Cleveland does not have this enabled. 
+       Co-Owner Registration
+Supported
+Payers will use the Invoice Cloud Customer Portal and can enable co-owner registration if desired. Cleveland does not have this enabled. 
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+BIF customization
+Batch Closure
+Auto
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+BIF customization
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Sent in Invoice File for some billers (block ACH 
+DOES 
+apply for Cleveland) - depends on the specific biller implementation. Check technical details for exact field mapping
+Conveyance
+Supported
+Account number can stay with the customer OR the property - can change per biller - 
+Cleveland will use auto conveyance (noted on biller questionnaire)
+Data Conversions
+Supported
+Email Notification Schedule
+BIF customization
+Timeline noted on biller questionnaire
+Expire Bill for Payment
+BIF customization
+Not used for Cleveland
+Minimum Payment
+Not Supported
+Paperless
+Supported
+Check with the biller on paperless - if the biller is not able to provide their print vendor with the paperless enrollment data, they cannot use this feature because all bills will be mailed.
+Partial Payments
+BIF customization
+Past Due
+Not Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Supported
+Cleveland will use one device for biller portal payments
+Ingenico EMV
+Not Supported
+ URL:/spaces/IM/pages/193232961/RVS+-+City+of+Cleveland+1870+-+Integration+Software+Details

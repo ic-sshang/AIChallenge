@@ -1,0 +1,54 @@
+Process Workflow
+The process workflow for onboarding a biller.
+Overview
+When a new biller is setup in the system, or when a biller is converted, the process looks similar whether the biller is being configured for Braintree, Chase, or any other processor.   There are a few considerations which come into play about which processor will be utilized.
+:light_bulb_on:
+atlassian-light_bulb_on
+:light_bulb_on:
+#DEEBFF
+As of 8/7/2023 the following statements are factored into the decision of which processor is used:
+If the biller has EMV or Bluefin terminals, these are not supported by PayPal/Braintree so these billers will go to Chase by default.
+If the biller is requesting PayPal as a payment option, they will also be setup for Braintree, even if they are not using Braintree as a processor.
+Daily there is a meeting where the concerned parties - this includes finance, boarding, sales ops, delivery, conversion, and implementation teams - come together to look at the new billers or conversions that are signed.  If it’s a new biller, they will set them up in CRM that day, this will get the BID and it may include some basic information during that initial definition.  Then the BID will get assigned to members of each team listed above where applicable (for example conversion may not need a boarding person). 
+Once assigned the representatives selected from each group will go through and setup all of the agreements, websites, etc. under the biller profile in the CRM.  As an example, Implementation Managers (IMs) take care of things like the Batch Close, and Misc. Settings areas of the profile - they are also responsible for setting the invoice types to the terminals and toggling a terminal live.  Boarding takes care of the agreements, and products and services - e.g. Credit/Debit Card, OBD, etc. 
+note
+For the purposes of this document the full details of who enters what data is not included beyond the base understanding that each group has its own responsibilities.
+
+
+For the purposes of this document the full details of who enters what data is not included beyond the base understanding that each group has its own responsibilities.
+
+
+As an early part of this process there is a spreadsheet used by boarding to collect detailed information about the biller.  This spreadsheet aggregates data from various sources so the biller’s information is all in a single CSV file that matches a format defined by PayPal that adheres to the
+ PayPal Intake Data Dictionary
+.  This file, called the Front Book file, contains information including but not limited to:
+Unique ID:  A combination of the BID + Terminal ID
+Legal Name:  Comes from the W9
+Tax ID:  Comes from the W9
+Demographics:  Much of this data comes from the Biller Order Form (BOF)
+Merchant Category Code:  Indicates the type of business done by the biller.
+Owner Information and Ownership Percentage:  Spreadsheet supports up to 5 owners and their percentages.
+Amex Number (if Applicable)
+Routing and Account Numbers for Hyperwallet
+Number of customers
+Here is a sample version of the file
+.
+Once this file is completed it is uploaded to Braintree via the Braintree Gateway web application.  There is instant feedback on whether or not the file contains issues or has been accepted.  Once the file is accepted, the Braintree underwriting team begins the vetting process.
+Government entities are a little faster and more simplistic because they are often tied to the demographics of the municipality, and there are no owners.  Private businesses are often more heavily vetted by Braintree’s Underwriting team.
+Once the vetting is complete (typically 3-4 days) they are added to the “gateway list”.  This file contains all of the account IDs for all of the MAIDs that have been setup.  When this file is updated, it is sent over to the engineering team to be loaded into the IC Gateway.  Here is an 
+example of this file
+ as well.  The team places the file in the correct location where the 
+ICGBoarding
+ picks it up and processes it.
+When the engineering team completes loading the file, they send the list of MAIDs to the boarding reps and then the implementation team sets up the terminals and additional information in the CRM.  The IMs will tie the invoice types to the terminal at this time.  Once the invoice types are configured it’s about a week or two until everything is done and the biller is setup for Braintree.
+When the configuration is complete it is sent to a QA person who verifies everything looks good.  After QA greenlights the configuration, the IMs will go into the CRM and set the terminals to live and send out the Go Live Notification.  Upon completion the biller is live, and boarding is considered complete unless there is an addon or a price change or something of a similar nature.
+Related
+The Life of a Payment
+ 
+More Info
+Sample File: 
+Paypal Intake Data Dictionary
+Sample File: 
+IC Front Book (File provided to PayPal)
+Sample File: 
+IC Gateway File (File provided to the Onboarding job)
+ URL:/spaces/ED/pages/2789179439/Braintree+Boarding+Process

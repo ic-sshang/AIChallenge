@@ -1,0 +1,58 @@
+BillerFtpPdfProcessing_PDF job failure
+Subject: Job BillerFtpPdfProcessing_PDF with run number ###### on agent IC-PDFEXTRACT(1|2)_IC-PDFEXTRA(1|2) entered FAILED status.
+Alert email box: 
+alert@invoicecloud.opsgenie.net
+SME: 
+ 
+Description: Skybot job BillerFtpPdfProcessing_PDF has failed
+Goto job history in Skybot: 
+http://10.0.6.21:8008/automate-schedule/job_histories?job_id=2039
+ or filter for BillerFtpPdfProcessing_PDF.
+If the most recent job is successful, the alert can be closed out. Otherwise, download the job log history for the failed job.
+Search for “exception” or “failed”. Note any WebExceptions from clsSlack with 403 Forbidden can be ignored.
+Common Issues:
+File was already moved on a different thread:
+Error messages:
+File was moved to machine: IC-PDFEXTRACT1_IC-PDFEXTRA1 - \10.0.6.50\InvoicesByExtractionPending\
+2216_2216_102784_57528
+.pdf
+Failed moving to machine IC-PDFEXTRACT1_IC-PDFEXTRA1 - '\10.0.6.50\InvoicesByExtractionPending\
+2216_2216_102784_57528
+.pdf'.
+There was a problem with file \
+icwebsftppremium.file.core.windows.net
+\icftproot\has san lake\toinvoicecloud\pdfs\2216_102784_57528.pdf.
+Exception: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection
+Exception: System.IO.FileNotFoundException: Could not find file '\
+icwebsftppremium.file.core.windows.net
+\icftproot\has san lake\toinvoicecloud\pdfs\2216_96900_57323.pdf'.
+Resolution:
+Verify file is out of the errors folder
+Validate the next run (job runs on the XX:15s) succeeds.
+Verify in CRM, the biller’s FTP Management settings. See if there is more than 1 task looking in the same directory.
+Close the alert.
+BillerFtpPdfProcessing_PDF job failure
+Subject: Job BillerFtpPdfProcessing_ZIP with run number ###### on agent IC-PDFEXTRACT(1|2)_IC-PDFEXTRA(1|2) entered FAILED status.
+Alert email box: 
+alert@invoicecloud.opsgenie.net
+SME: 
+ 
+Description: Skybot job BillerFtpPdfProcessing_ZIP has failed
+Goto job history in Skybot: 
+http://10.0.6.21:8008/automate-schedule/job_histories?job_id=2039
+ or filter for BillerFtpPdfProcessing_PDF.
+If the most recent job is successful, the alert can be closed out. Otherwise, download the job log history for the failed job.
+Search for “exception” or “failed”. Note any WebExceptions from clsSlack with 403 Forbidden can be ignored.
+Common Issues:
+File was already moved on a different thread:
+Error messages:
+openFromMemData:
+        Failed to find end-of-central-directory-record.
+        Failed to get central dir locations.
+ 
+Resolution:
+Find the biller’s PDF input folder from CRM in the FTP management pages.
+Unzip zip file into that folder using windows or 7 zip.
+Place the zip file in an processed folder for the biller.
+Close the alert.
+ URL:/spaces/IM/pages/3718905882/BillerFtpPdfProcessing_PDF+-+BBQ

@@ -1,0 +1,448 @@
+Page Navigation
+1
+7
+Document Status
+IN progress
+Yellow
+ 
+Document Owner
+ 
+Knowledge Transfer
+Knowledge transfer will be hosted in Q1 2024 
+Summary
+Summary
+Details
+Software Partner Name
+Utegration
+IC partnered with Utegration (consulting) to design a standard integration with SAP software.
+Software Product Name
+SAP
+Software Cashiering System
+N/A
+Supported Versions
+Any - IC will work with Utegration to provide the biller with the import/export jobs to use this standard integration. 
+Integration Requirements and Pre-Requisites
+See 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1999929540/SAP+Utegration+Implementation+Details#Biller-Pre-Requisites
+ below
+Vertical
+GUB
+Sample Biller Implementation
+N/A
+Planning
+Test Portals
+IC Hosted Test Portal - 2870
+Partner Hosted Test Portal - N/A 
+Biller Test Portal - Not Required 
+Rules of Engagement
+InvoiceCloud does not have a relationship with SAP directly. IC worked with team members at Utegration to establish a standard integration using new and existing imports and exports.
+Timeline
+~90 days
+Required Options
+N/A
+Utegration has a requirement that we send a custom batch close notification nightly per biller through email to an address designated by Utegration.  This report is custom and will be required to be completed by Data Services through a request.  File format is listed below.
+Batch Close File Format
+A file will be sent daily to close the batch. The batch close file format will look like:
+Date
+Online
+IVR
+Autopay
+AgentAssisted
+Online Bank Direct
+CC
+ (total amounts)
+ 
+ 
+ 
+ 
+ACH
+ 
+ 
+ 
+ 
+ 
+Virtual Site Configuration
+Invoice Types
+42 - Any InvoiceType ID can be configured - IC is handling the mapping
+Virtual Site
+Up to the biller - general utility setup with account number, last name, service address (Custom2), etc. is suggested.
+Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Utegration
+Upon request
+Data specific to the biller
+Bill Presentment
+ 
+ 
+No integration standard - unique to each biller
+RTDR API (test)
+Utegration
+ Upon request
+ 
+RTDR Passcode (test)
+Utegration 
+ Upon request
+ 
+RTDR API (prod)
+ Utegration
+ Upon request
+ 
+RTDR Passcode (prod)
+ Utegration
+ Upon request
+ 
+DataPump API (test)
+ Utegration
+ Upon request
+ 
+DataPump Passcode (test)
+ Utegration
+ Upon request
+ 
+DataPump API (prod)
+ Utegration
+ Upon request
+ 
+DataPump Passcode (prod)
+ Utegration
+ Upon request
+ 
+Payment Codes
+ Invoice Cloud
+ 
+Standard codes
+.
+Block CC Flag
+ N/A
+ 
+Block CC will be done in biller portal.  Utegration will use webservices to determine status before sending invoice on the fly with AgentConnect
+Block ACH Flag
+N/A 
+ 
+Block ACH will be done in biller portal.  Utegration will use webservices to determine status before sending invoice on the fly with AgentConnect
+Whitelisting IP Addresses
+Invoice Cloud
+ 
+ 
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Utegration
+Project Assignment
+ 
+BID
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Invoice Format ID
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Invoice Format GUID
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Biller GUID TEST
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+WebService Key TEST
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Application API Key TEST
+ Utegration
+Project Assignment
+Located in the Biller Portal
+Biller GUID PROD
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+WebService Key PROD
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Application API Key PROD
+ Utegration
+Project Assignment
+Located in the Biller Portal
+Invoice Type ID
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+SFTP Credentials
+ Utegration
+Project Assignment
+Located within CRM on the Profile Tab
+Biller Portal Support User
+ Utegration
+Project Assignment
+Provide detail on where to find this value - CRM
+Document Type Mapping
+Document Type is a
+ two digit code 
+that will be used to 
+map the payment source
+ (ie how the payment was made). These are the following standard values:
+DocumentType
+Payment Source ID
+Payment Source Description
+X1
+1
+Web Services
+X2
+2
+Biller Portal
+X3
+3
+Customer Portal
+X4
+4
+Express Payments
+X5
+5
+Jobs and Processes
+X6
+6
+Payment File Upload
+X7
+7
+Online Bank Direct
+X8
+8
+POS - Point of sale
+X9
+9
+Check 21
+X
+0
+10
+IVR
+Y1
+11
+Cloud Payments
+Y2
+12
+Cloud Store - Consumer Initiated
+Y3
+13
+Cloud Store - Biller Initiated
+Y4
+14
+Shopping Cart
+Y5
+15
+Auto Pay
+Y6
+16
+Scheduled Payment
+Y7
+17
+Biller Portal - Easy Pay
+Y8
+18
+CSR - One Time Pay
+Y9
+19
+Kiosk
+Y
+0
+20
+Mobile Express Payments
+Z1
+21
+Harris GoMobile
+Z2
+22
+Recurring Scheduled Payment
+Z3
+23
+Pay By Text
+Z4
+24
+PayNearMe
+Z5
+25
+Payment Plan
+Z6
+26
+Live Agent Payment
+Z7
+27
+Agent Connect
+Z8
+N/A
+Other (any other payment method)
+Return Reason Mapping
+The ReturnReason is a 
+two digit code
+ that will be used to 
+map a payment reject (why Chase rejected the payment). These are the following standard values:
+Reject Code
+Description
+C01
+Incorrect Account Number
+C02
+Incorrect Routing Transit Number (RTE)
+C03
+Incorrect Routing Transit Number (RTE) / Account
+C04
+Incorrect Account Holder Name
+C05
+Incorrect Transaction Code
+C06
+Account Number and Transaction Code
+C07
+Transit/Routing Number, Account Number & Transaction Code
+C10
+Company Name
+C13
+Addenda Record Error
+R01
+Insufficient Funds
+R02
+Account Closed
+R03
+Unable to Locate
+R04
+Invalid Account
+R05
+Reserved
+R06
+Returned Per ODFI's Request
+R07
+Authorization Revoked
+R08
+Payment Stopped
+R09
+Uncollected Funds
+R10
+Not Authorized
+R11
+Check Transaction Entry Return or State Law Affecting Acceptance of PPD Debit Entry Constituting Notice of Presentment or PPS Accounts Receivable Truncated Check Debit Entry
+R12
+Account at Other Branch
+R13
+RDFI Not Qualified To Participate
+R14
+Holder Deceased
+R15
+Beneficiary or Account Holder (Other than a Representative Payee) Deceased
+R16
+Account Frozen
+R17
+File Record Edit Criteria (Specify)
+R18
+Improper Effective Entry Date
+R19
+Amount Field Error
+R20
+Non-Transaction Account
+R21
+Invalid Company Identification
+R22
+Invalid Individual ID Number
+R23
+Credit Entry Refused by Receiver
+R24
+Duplicate Entry
+R25
+Addenda Error
+R26
+Mandatory Field Error
+R27
+Trace Number Error
+R28
+Routing Number Check Digit Error
+R29
+Not Authorized
+R30
+RDFI Not Participant In Check Truncation Program
+R31
+Permissible Return Entry
+(CCD and CTX only)
+R32
+RDFI Non-Settlement
+R33
+Return of XCK Entry
+R34
+Limited Participation DFI
+R35
+Return of Improper Debit Entry
+R36
+Return of Improper Credit Entry
+R40
+Return of ENR Entry By Federal Government Agency
+(ENR only)
+R41
+Invalid Transaction Code
+R42
+RTE Error
+R43
+Invalid Account
+R44
+Invalid Individual ID Number / Identification Number
+(ENR only)
+R45
+Invalid Individual Name / Company Name
+(ENR only)
+R46
+Invalid Representative Payee Indicator
+(ENR only)
+R47
+Duplicate Enrollment
+(ENR only)
+R50
+State Law Affecting RCK Acceptance
+R51
+Item Ineligible, Notice Not Provided, Signature Not Genuine, or Item Altered
+R52
+Stop Payment On Item
+R61
+Misrouted Return
+R62
+Incorrect Trace Number
+R63
+Incorrect Dollar Amount
+R64
+Incorrect Individual Identification
+R65
+Incorrect Transaction Code
+R66
+Incorrect Company Identification
+R67
+Duplicate Return
+R68
+Untimely Return
+R69
+Multiple Errors
+R70
+Permissible Return Entry Not Accepted
+R80
+Cross-Border Payment Coding Error
+R81
+Non-Participant In Cross-Border Program
+R82
+Invalid Foreign Receiving DFI ID
+R83
+Foreign Receiving DFI Unable To Settle
+ URL:/spaces/IM/pages/1999929540/SAP+Utegration+Implementation+Details

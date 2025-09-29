@@ -1,0 +1,2282 @@
+ 
+Page Navigation:
+Jira tickets
+INT-13130
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-13209
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DBR-6258
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-14206
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-14207
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Integrator Web Services
+Summary:  This custom integration for Empro utilizes the Origami Risk system. Currently, Empro is transitioning from the Delphi/Oasis system to Origami, necessitating the simultaneous use of both systems. During this transition, invoices will be processed based on their invoice type ID. This is roughly a 2 year transition.
+This is a balance forward integration.
+Invoices with an invoice type ID of “164”,”165”,”166” will follow the Delphi/Oasis route, which operates on a batch file basis.
+Invoices with an invoice type ID of “
+167
+” will be processed using the Origami Risk real-time design.
+Authentication Token
+API Details
+IC Use
+Partner API Name
+Description
+Specifications
+Bearer Auth Token
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/Authentication/Authenticate
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/Authentication/Authenticate
+This API is designed to obtain an authentication token required for accessing additional APIs.
+Success
+json
+{
+  "Token": "string",
+  "TokenExpiry": "string",
+  "TokenIsExpired": boolean
+}
+Failure
+json
+{
+  "status": "fail",
+  "exception": "Unable to Authenticate. Invalid login credentials."
+}
+  
+Request
+json
+{
+  "Account": "EmPRO_Pre-Prod",
+  "User": "InvoiceCloudAPIUser",
+  "Password": "96c577cb-5a8c-4943-b824-a889449eaec7",
+  "ClientName": "EmPRO"
+}
+User=OAuthClientID (Advanced Setting 145)
+Password=OAuthClientSecret (Advanced Setting 146)
+ClientName|Account= OAuthScope (Advanced Setting 147)
+Response
+json
+{
+    "Token": "KxCBLlOzaK/Wz6ZiWWMJIGo7I0IZC1L+7l93zVz4fElfDKfNiqx4MN0Y99eyVUpOPu7Ngt5o/EbU83YpsomWfmafTvrc43/DN/PAtKPlLd/HSLSgpy+EI3bkuc1Zkzv5Jhq4HEBYDPRUyxwlIV+j5NM+pzMXf/kuZw9OugEtY+8=",
+    "TokenExpiry": "2025-01-15T15:20:58.000Z",
+    "TokenIsExpired": false
+}
+Real Time Data Refresh
+API Details
+Balance Update
+IC Use
+Partner API Name
+Description
+Specifications
+Account Balance
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/AccountBalance
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/AccountBalance
+This API is designed to fetch balance of a policy or billing account based on the account number and invoice number provided in the request.
+Request
+accountNumber
+ = IC Account Number
+invoiceNumber
+ = IC Invoice Number
+Response
+Success
+totalAmountDue
+ = IC Total Amount Due & IC Balance Due
+invoiceDueDate
+ = IC Due Date (MM/DD/YYYY)
+Request
+json
+{
+  "accountNumber": "AN-1234",
+  "invoiceNumber": "IN-P1"
+}
+Response
+json
+{
+  "message": "Success",
+  "data": {
+    "totalAmountDue": "1500.00",
+    "invoiceDueDate": "01/05/2025",
+  }
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Customer Changes (Block flags) - N/A
+IC Use
+Partner API Name
+Description
+Specifications
+Request
+Response
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Data Pump
+API Details
+Payments
+IC Use
+Partner API Name
+Description
+Specifications
+Payment Code Mapping
+Payment Source Mapping
+Payments
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/Payment
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/Payment
+IC Datapump Payments
+accountNumber
+ = IC Account Number
+accountType
+ = IC Custom1
+invoiceNumber
+ = IC Invoice Number
+paymentMethod
+ = IC Payment Method
+Use verbiage string 
+(
+CC/DC - Visa)
+(CC/DC - Mastercard)
+paymentAmount
+ = IC Payment Amount
+paymentDate
+ = IC Payment Date
+paymentSource
+ = IC Payment Source (Web Services)
+Use verbiage string (Web Services)
+paymentGUID
+ = IC Payment GUID
+CC/DC
+Visa
+Mastercard
+Discover
+AmericanExpress
+EFTCheck
+CreditAdj
+EasyPay
+Check
+Cash
+PaymentDisc
+DebitAdj
+BalanceForward
+OnlineBankDirect
+Payment
+AutoConveyance
+PayNearMe
+PayPal
+PayPalCredit
+Venmo
+Default: “
+Invoice Cloud Web Payment”
+Payment Source ID - Payment Source Description: 
+1 - Web Services 
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Request
+Example Request ACH
+json
+{
+  "accountNumber": "AN-1234",
+  "accountType": "Policy",
+  "invoiceNumber": "IN-P1",
+  "paymentMethod": "ACH",
+  "paymentAmount": 123.45,
+  "paymentDate": "01/05/2024",
+  "paymentSource": "Web Services",
+  "paymentGUID": "20380a36-8777-43f7-a79e-65bdb53f4621"
+}
+Example Request CC/DC
+json
+{
+  "accountNumber": "AN-1234",
+  "accountType": "Policy",
+  "invoiceNumber": "IN-P1",
+  "paymentMethod": "CC/DC - Visa",
+  "paymentAmount": 123.45,
+  "paymentDate": "01/05/2024",
+  "paymentSource": "Web Services",
+  "paymentGUID": "20380a36-8777-43f7-a79e-65bdb53f4621"
+}
+Response
+Success
+{
+	“Code”: “200”,
+	“Message”:”Payment record is created”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+{
+	“Code”:”409”,
+	“Message”:”Payment Record with same GUID already exist”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Credits 
+IC Use
+Partner API Name
+Description
+Specifications
+Credit
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+This API is designed to credit a payment on a policy or account based on the parameters provided in the request.
+accountNumber
+ = IC Account Number
+paymentGUID
+ = IC Payment GUID
+reversalDate
+ = IC Reversal Date
+reversalAmount
+ = IC Amount
+Using a negative value
+reversalReason
+ = “credit”
+Request
+json
+{
+	"accountNumber":"703603",
+	"paymentGUID":"20380a36-8777-43f7-a79e-65bdb53f4621",
+	“reversalDate”:”01/03/2025”,
+	“reversalAmount”:”-234.00”,
+	“reversalReason”:”credit”	
+}
+Response
+Success
+json
+{
+  “code”:”200”
+  “message”: “Payment has been reversed successfully”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+json
+{
+  “code”:”443”
+  “message”: “Internal error occurred”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Voids 
+IC Use
+Partner API Name
+Description
+Specifications
+Void
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+This API is designed to void a payment on a policy or account based on the parameters provided in the request.
+accountNumber
+ = IC Account Number
+paymentGUID
+ = IC Payment GUID
+reversalDate
+ = IC Reversal Date
+reversalAmount
+ = IC Amount
+Using a negative value
+reversalReason
+ = “void”
+Request
+{
+	"accountNumber":"703603",
+	"paymentGUID":"20380a36-8777-43f7-a79e-65bdb53f4621",
+	“reversalDate”:”01/03/2025”,
+	“reversalAmount”:”-234.00”,
+	“reversalReason”:”void”	
+}
+Response
+Success
+json
+{
+  “code”:”200”
+  “message”: “Payment has been reversed successfully”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+json
+{
+  “code”:”443”
+  “message”: “Internal error occurred”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+ACH Rejects
+IC Use
+Partner API Name
+Description
+Specifications
+Included Payment Types
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+This API is designed to void a payment on a policy or account based on the parameters provided in the request.
+accountNumber
+ = IC Account Number
+paymentGUID
+ = IC Payment GUID
+reversalDate
+ = IC Reversal Date
+reversalAmount
+ = IC Amount
+Using a negative value
+reversalReason
+ = “ACH Reject Code: ” + RCode
+R Code Rejects
+Request
+{
+	"accountNumber":"703603",
+	"paymentGUID":"20380a36-8777-43f7-a79e-65bdb53f4621",
+	“reversalDate”:”01/03/2025”,
+	“reversalAmount”:”-234.00”,
+	“reversalReason”:”ACH Reject Code: R02”	
+}
+Response
+Success
+json
+{
+  “code”:”200”
+  “message”: “Payment has been reversed successfully”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+json
+{
+  “code”:”443”
+  “message”: “Internal error occurred”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Chargebacks
+IC Use
+Partner API Name
+Description
+Specifications
+Included Payment Types
+Chargebacks
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Billers can ACH Reject via biller portal
+accountNumber
+ = IC Account Number
+paymentGUID
+ = IC Payment GUID
+reversalDate
+ = IC Reversal Date
+reversalAmount
+ = IC Amount
+Using a negative value
+reversalReason
+ = “Chargeback-” + “Chargeback Reason Code: ” + Chargeback Reason Code
+Ex: Chargeback-ChargebackReasonCode: A02
+R Code Rejects
+Request
+json
+{
+	"accountNumber":"703603",
+	"paymentGUID":"20380a36-8777-43f7-a79e-65bdb53f4621",
+	“reversalDate”:”01/03/2025”,
+	“reversalAmount”:”-234.00”,
+	“reversalReason”:”reversalReason”	
+}
+Response
+Success
+json
+{
+  “code”:”200”
+  “message”: “Payment has been reversed successfully”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+json
+{
+  “code”:”443”
+  “message”: “Internal error occurred”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Paperless Enrollments
+ - 
+N/A
+IC Use
+Partner API Name
+Description
+Specifications
+Request
+Response
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Autopay Enrollments and Payment Method Changes 
+:warning:
+atlassian-warning
+#FFFAE6
+AUTOPAY WILL BE PART OF PHASE 2
+IC Use
+Partner API Name
+Description
+Specifications
+AutoPay
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/AutoPay
+This API is designed to flag autopay is enabled/disabled on a policy or account based on the parameters provided in the request.
+accountNumber
+ = IC Account Number
+autopayStatus
+ = true/false
+paymentMethod
+ = IC Payment Method
+Use verbiage string (CC)
+Request
+{
+	"accountNumber":"703603",
+	"autopayStatus”: true,
+	“paymentMethod”:”CC”	
+}
+Response
+Success
+{
+  “code”:”200”
+  “message”: “Autopay is enabled”
+}
+If any error occurs, follow ICs standard of 3 consecutive retries.
+Error
+{
+  “code”:”443”
+  “message”: “Internal error occurred”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Customer Changes - N/A
+IC Use
+Partner API Name
+Description
+Specifications
+Request
+Response
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+User Stories
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Balance Update
+Invoice Cloud will update balances in real time when the customer record is accessed.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Customer Record is accessed in Invoice Cloud
+Invoice Cloud calls Integrator webservice
+Invoice Cloud updates balance (if IC record is different)
+Data Pump Payments
+Invoice Cloud will post payments to biller in real time when the customer makes a payment.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Payment is made on invoice
+Customer Record is accessed in Invoice Cloud
+Payment is made on an invoice
+Invoice Cloud calls Integrator webservice
+Data Pump Credits
+Invoice Cloud will post credits to biller in real time when the customer has a credit.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Payment is made on invoice
+Credit is made on invoice
+Customer Record is accessed in Invoice Cloud
+Payment is made on an invoice
+Credit is made on invoice
+Invoice Cloud calls Integrator webservice
+Data Pump Voids
+Invoice Cloud will post voids to biller in real time when the customer has a void.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Payment is made on invoice
+Void is made on invoice
+Customer Record is accessed in Invoice Cloud
+Payment is made on an invoice
+Void is made on invoice
+Invoice Cloud calls Integrator webservice
+Data Pump ACH Rejects
+Invoice Cloud will post ACH Rejects to biller in real time when the customer has an ACH Reject.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Payment is made on invoice
+ACH Reject is made on invoice
+Customer Record is accessed in Invoice Cloud
+Payment is made on an invoice
+ACH Reject is made on invoice
+Invoice Cloud calls Integrator webservice
+Data Pump Chargeback
+Invoice Cloud will post chargebacks to biller in real time when the customer has a chargeback.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Payment is made on invoice
+Chargeback is made on invoice
+Customer Record is accessed in Invoice Cloud
+Payment is made on an invoice
+Chargeback is made on invoice
+Invoice Cloud calls Integrator webservice
+Data Pump Paperless Enrollment
+Invoice Cloud will post paperless status to biller in real time when the customer enrolls in paperless.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+User enrolls in Paperless
+Customer Record is accessed in Invoice Cloud
+Customer enrolls in paperless
+Invoice Cloud calls Integrator webservice
+Data Pump Autopay Enrollment
+THIS IS PHASE 2
+ - Invoice Cloud will post autopay status to biller in real time when the customer enrolls in autopay.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+User enrolls in AutoPay
+Customer Record is accessed in Invoice Cloud
+Customer enrolls in autopay
+Invoice Cloud calls Integrator webservice
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Single Sign On
+Purpose/Summary: EMPro is using SSO to manage single or multi user accounts.
+Configuration
+SSOConnect Details
+Field
+Required
+Comments
+Partner Specification
+RemoteAuthenticationToken
+Yes
+Token is provided from Remote Authentication Web Service.
+Token is provided from Remote Authentication Web Service.
+ViewMode
+Yes
+Value is required to identify how the Customer is accessing the Invoice Cloud pages.
+Always 
+0
+ = Default
+RedirectID
+Yes
+Value is required to be able to redirect the Customer to the requested page. See full list: 
+How to setup Cloud SSO Connect (REST) | Field Definitions
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+9
+ = Customer Portal Scheduled Payments Listing
+CSSUrl
+No
+The value is only required if a Partner/Biller would like to customize the Invoice Cloud Pages and if the 
+CSSUrl
+ value was not provided in the 
+RemoteAuthentication
+ web method call.
+N/A
+ReturnUrl
+Yes
+When this value is provided, the customer will be redirected to the provided url after clicking the sign out button.
+Homepage - EmPRO Insurance Company
+CustomReturnSiteName
+Yes
+When a 
+ReturnUrl
+ is provided, the tooltip text of the sign out button will change to “Sign out and Return to 
+<SiteName>
+”. 
+<SiteName>
+ defaults to the Biller DBA but can be customized by providing a value for 
+CustomReturnSiteName
+.
+Biller SiteName
+User Stories:
+Empro user SSO Workflow
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+User Registration
+User registration happens after BIF upload. Not all Empro users are necessarily IC customers. Only insured customers are users on IC. 
+Assumptions:
+Empro knows if an insured is registered with InvoiceCloud
+Empro stores Remote Authentication Token (per session) for use in 
+CloudSSO Redirect User using the pre-defined URL
+Requirement:
+LogintypeID (REST- Remote Authentication- Register Accounts) is always = 
+5
+ 
+Check to see if account exists in invoice cloud and if it is registered. When user clicks on “Make Payment”
+If account does not exist:
+Create Customer Record
+Register Account(s)
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Authenticate Account(s)
+Registered User Payments workflows
+If account does exist and is registered:
+Authenticate Account(s)
+Registered User Payments workflows
+REST- Remote Authentication- Retrieve Users
+If account does not exist:
+REST- Customers- Create Customer Record
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO IC Portal
+If account does exist and is not registered:
+REST- Remote Authentication- Register Accounts
+REST- Remote Authentication- Remote Authentication
+CloudSSO IC Portal
+If account does exist and is registered:
+REST- Remote Authentication- Remote Authentication
+CloudSSO IC Portal
+ 
+ 
+ 
+ 
+ 
+Registered User Payment
+A registered user is logged in and makes payments on an account.
+Assumption:
+User is already registered and authenticated
+Empro stores Remote Authentication Token from Remote Authentication web service
+Empro redirects to IC Portal Customer Portal Recent Bill Listing
+CloudSSOConnect (redirect 1 = Customer Portal Recent Bill Listing)
+AutoPay Enrollment- Phase 2
+ 
+A registered user is logged in to Empro portal and navigates to IC screen to enroll or unenroll autopay option.
+Empro also has the option to update via API.
+Assumption:
+User is already registered and authenticated
+Empro redirects (IC SSO Portal)  to Customer Portal AutoPay Settings screen
+CloudSSOConnect (redirect 3 = Customer Portal AutoPay Settings
+)
+ 
+ 
+Manage Payment Methods
+A registered user is logged in to Empro portal and navigates to IC screen to store, update or remove payment methods.
+Assumption:
+User is already registered and authenticated
+Empro redirects (IC SSO Portal)  to Payment Methods screen
+CloudSSOConnect (redirect 5 = Customer Portal Payment Options)
+ 
+User Stories:
+User Stories
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Cloud Payments V2 - N/A
+Purpose/Summary: N/A
+Sample Request:
+Additional Details
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+PostBackURL
+False
+BillerReference
+False
+ViewMode
+True
+CssUrl
+False
+Customers
+True
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+DisplayAccountNumber
+False
+Name
+False
+Address
+False
+City
+False
+State
+False
+Zip
+False
+EmailAddress
+False
+Invoices
+False
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+TypeID
+False
+InvoiceDate
+False
+DueDate
+False
+BalanceDue
+False
+CCServiceFee
+False
+ACHServiceFee
+False
+MinimumAmountDue
+False
+AllowPartialPayments
+False
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+AllowEMV
+False
+EMVDeviceID
+False
+EMVLocationID
+False
+CashierName
+False
+AllowCCPayment
+False
+AllowACHPayment
+False
+CreateCustomerRecord
+False
+RemoteAuthenticationToken
+False
+PageLoadOverride
+False
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+AllowRegisterAccount
+Optional
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+AllowRemove
+Optional
+AllowViewRelated
+Optional
+AllowRemindMe
+Optional
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Additional WebServices - N/A
+Additional WebServices
+API Name
+API Use/Purpose
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Bill Presentment
+Sample Bill Image: 
+ 
+Mapping:
+Bill Presentment
+IC Use
+Partner API Name
+Description
+Specifications
+Bill Presentment
+POST
+Dev Instance (Test Environment):
+https://live.origamirisk.com/OrigamiApi/api/Webhook/BillPresentment
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/BillPresentment
+PDF Linking: 
+This API is designed to fetch invoices in Base64 encoded format for a policy or billing account based on the account number and invoice number provided in the request.
+accountNumber
+ = IC Account Number
+invoiceNumber
+ = IC Invoice Number
+Request
+json
+{
+  "accountNumber": "AN-1234",
+  "invoiceNumber": "IN-P1"
+}
+Response
+json
+{
+  "message": "Success",
+  "data": {
+    "document": "Base64 encoded file"
+
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .bif
+File Naming Convention: INV_TimestampMMddYYYYhhmmsss.BIF
+File Delimiter: Pipe '|'
+Specification: 
+Sample File: 
+ 
+SFTP File Path:
+File Transfer Frequency: Every 15 minutes as invoices are created
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+Always “FH”
+varchar
+File Header
+2
+BillerGuid
+Y
+TRUE
+Biller Guid assigned by IC
+varchar
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+Name Of File
+ - INV_TimestampMMddYYYYhhmmsss.BIF
+varchar
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Date/Time the file was created by the Biller. Used for tracking purposes
+Date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+This is the total number of invoices included in the fileThis the total dollar amount of invoices in the file
+NUMBER
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+This the total dollar amount of invoices in the file
+MONEY
+File Header
+7
+RowType
+Y
+TRUE
+Always “IH”
+VARCHAR
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Always 'N'
+VARCHAR
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+from system constant Invoice 'Cloud InvoiceFormatGUID'
+VARCHAR
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice Reference number “
+MemberTransaction.InvoiceNumber/BillingInvoice.InvoiceNumber” example   10~10000661599
+VARCHAR
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+MemberTransaction.TransactionDate/BillingInvoice.InvoiceDate
+DATE
+Invoice Date (MM/DD/YYYY)
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+MemberTransaction.DueDate/BillingInvoice.DueDate
+DATE
+Invoice Due Date (MM/DD/YYYY)
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+MemberTransaction.BilledAmount/BillingInvoice.InvoiceAmount
+MONEY
+Invoice Billed Amount
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+1
+VARCHAR
+Always 1
+Invoice Header
+21
+MinimumAmountDue
+FALSE
+38
+Custom1
+Y
+TRUE
+Map "Account" if Account Billing; or "Policy" if Policy Billing
+VARCHAR
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+MemberTransaction.OutstandingBalance/BillingInvoice.OutstandingBalance
+MONEY
+Outstanding Invoice Amount
+Invoice Header
+194
+BalanceForward
+N
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+N
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Always 167
+VARCHAR
+Always 167
+Invoice Header
+58
+RowType
+Y
+TRUE
+Always “CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account number of your customer. This number must be unique, otherwise the invoice record will get added to the existing customer with this account number.
+MemberTransaction.Policy.PolicyNumber/BillingInvoice.BillingAccount.AccountNumber
+Customer Record
+60
+CustomerName
+Y
+TRUE
+MemberTransaction.Member.Name/BillingInvoice.BillingName 
+Should this include MEMBERNAME ( Origami question)
+Customer Record
+61
+Address1
+Y
+FALSE
+MemberTransaction.Member.AddressLine1/BillingInvoice.BillingStreet1
+Customer Record
+62
+Address2
+Y
+FALSE
+MemberTransaction.Member.AddressLine1/BillingInvoice.BillingStreet2
+Customer Record
+63
+City
+Y
+FALSE
+MemberTransaction.Member.City/BillingInvoice.BillingCity
+Customer Record
+64
+State
+Y
+FALSE
+MemberTransaction.Member.State/BillingInvoice.BillingState
+Customer Record
+65
+Zip
+Y
+FALSE
+MemberTransaction.Member.PostalCode/BillingInvoice.BillingPostalCode
+Customer Record
+66
+Phone
+N
+FALSE
+Get this field populated ? Required for downstream record valiadations. ?
+Customer Record
+67
+EmailAddress
+N
+FALSE
+Get this field populated ? Required for downstream record valiadations. ?
+Customer Record
+70
+RowType
+Y
+TRUE
+Always 'ID'
+Customer Record
+72
+Description
+N
+FALSE
+Description of the product or service being paid for.
+(Product ID or Description is required - at least one of these fields must be present)
+Customer Record
+Advanced Settings
+Setting ID
+Required/Optional/N/A
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+3
+Required
+SSO Customer Login URL
+http://ixpressua.hostidp.com/PRIMMA/Account/InsuredLogOn
+Y
+6
+Required
+Customer Portal - Suppress Change Email
+1
+Y
+8
+Required
+RTDR EndPoint/WebService URL
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/OrigamiApi/api/Webhook/AccountBalance
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/AccountBalance
+Y
+11
+Required
+DataPump Payments EndPoint/WebService URL
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/OrigamiApi/api/Webhook/Payment
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/Payment
+Y
+14
+N/A (Phase 1)
+DataPump Paperless EndPoint/WebService URL
+Not using paperless (Phase 2 Int)
+NA
+Y
+17
+N/A (Phase 1)
+DataPump AutoPay EndPoint/WebService URL
+Not using Autopay (Phase 2 Int)
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/OrigamiApi/api/Webhook/AutoPay
+Y
+20
+Required
+Remote PDF EndPoint/WebService URL
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/OrigamiApi/api/Webhook/BillPresentment
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/BillPresentment
+Y
+77
+Required
+Insurance Vertical - Enable Policies
+0
+Y
+101
+Required
+DataPump ACH Rejects EndPoint/WebService URL	
+This EndPoint/WebService URL will be used for ACH Rejects, Chargebacks, Voids, and Credits/Refunds.
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/OrigamiApi/api/Webhook/PaymentReversal
+Y
+144
+Required
+OAuth Endpoint
+Dev Instance (Test Environment): 
+https://live.origamirisk.com/Origami/Apo/Authentication/Authenticate
+Pre-Prod Instance (Test Environment):
+https://preprod.origamirisk.com/Origami/Apo/Authentication/Authenticate
+145
+Required
+OAuth Client ID
+User=OAuthClientID
+InvoiceCloudAPIUser
+146
+Required
+OAuth Client Secret
+Password=OAuthClientSecret
+Dev Instance (Test Environment): 
+8135709c-277a-4edf-a452-5bf25b1c422a
+Pre-Prod Instance (Test Environment):
+96c577cb-5a8c-4943-b824-a889449eaec7
+147
+Required
+OAuthScope
+ClientName|Account=OAuthScope
+EmPRO|EmPRO_Pre-Prod
+Invoice Types
+Invoice Types
+Delphi/Oasis (164,165,166) | Origami Risk (167)
+Virtual Site
+Pay or View Bills | EmPRO Insurance Company TEST
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+120
+Display Remove Email Address / Username in Update My User Info page (SSO)
+This option will display the Remove Email Address / Username link in the Update My User Info page for SSO users. This option should only be used for SSO integrations that Invoice Cloud manages the biller's customers' emails/usernames and passwords.
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF Customization - Yes
+AutoPayCollectionDate
+BIF Customization - Invoice Due Date (12|0)
+BalanceForward
+BIF Customization - Yes
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF Customization - Invoice Date Plus 1 Day(s)
+ (11|1)
+InvoiceDate
+In BIF
+InvoiceDueDate
+In BIF
+InvoiceFormatGuid
+BIF Customization
+InvoiceTypeID
+In BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization - Invoice Due Date Minus 10 Day(s)
+ (12|-10)
+ThirdNotifyRequestedDate
+BIF Customization - Invoice Due Date Minus 1 Day(s)
+ (12|-1)
+User Interaction and Design
+https://www.figma.com/files/1012354053515257599/project/387707061
+Data Flow - Invoice
+Origami Risk will send Invoice Cloud a BIF nightly.
+Data Flow - Adjustments
+Invoice Cloud calls Origamis/Empro API to update balances via RTDR
+Data Flow - Invoice Updates
+N/A
+Data Flow - Customer Update
+N/A
+Data Flow - Conveyance
+N/A
+Data Flow - Payment
+Invoice Cloud calls Origamis/Empro API to post payment data via data pump
+Data Flow - Void
+Invoice Cloud calls Origamis/Empro API to post voids via data pump
+Data Flow - ACH Reject
+Invoice Cloud calls Origamis/Empro API to post ach rejects via data pump
+Data Flow - Change Log
+N/A
+Data Flow - Bill Presentment
+Invoice Cloud calls Origamis/Empro API to receive a base64 encoded PDF
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal via SSOConnect
+Agent Experience
+N/A
+Biller Experience
+Billers will access Invoice Cloud biller portal
+User Stories
+Integration Sizing
+Total Initial LOE (By Story Points)
+37
+In Integration?
+Name
+Category
+Component
+Initial LOE (By Story Points)
+
+
+
+
+1
+
+
+1
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments File Split
+Adjustments
+Biller File Split
+5
+
+
+
+
+2
+
+
+2
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments
+Adjustments
+Native Web Services
+0
+
+
+
+
+3
+
+
+3
+
+
+complete
+
+
+Y/N
+
+
+
+
+Balance Refresh
+Adjustments
+Real-Time Data Refresh
+5
+
+
+
+
+4
+
+
+4
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustment File Conversion
+Adjustments
+File Conversion
+8
+
+
+
+
+5
+
+
+5
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+HTML Template
+8
+
+
+
+
+6
+
+
+6
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+Native Web Services
+0
+
+
+
+
+7
+
+
+7
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Extraction
+3
+
+
+
+
+8
+
+
+8
+
+
+complete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Remote Linking
+2
+
+
+
+
+9
+
+
+9
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+DataPump
+5
+
+
+
+
+10
+
+
+10
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Status Report
+Change Logs
+File Export
+3
+
+
+
+
+11
+
+
+11
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Change Log
+Change Logs
+File Export
+2
+
+
+
+
+12
+
+
+12
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+Native Web Services
+0
+
+
+
+
+13
+
+
+13
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+File Size Split
+Invoices
+Biller File Split
+2
+
+
+
+
+14
+
+
+14
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update File Split
+Invoices
+Biller File Split
+3
+
+
+
+
+15
+
+
+15
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Pre-Processing
+Invoices
+Biller File Split
+8
+
+
+
+
+16
+
+
+16
+
+
+complete
+
+
+Y/N
+
+
+
+
+Batch Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+17
+
+
+17
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Single Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+18
+
+
+18
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update
+Invoices
+Real-Time Data Refresh
+1
+
+
+
+
+19
+
+
+19
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Real-Time Data Refresh
+5
+
+
+
+
+20
+
+
+20
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice On-Demand
+Invoices
+Real-Time Data Refresh
+13
+
+
+
+
+21
+
+
+21
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice File Conversion
+Invoices
+File Conversion
+8
+
+
+
+
+22
+
+
+22
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Biller API Data Import
+5
+
+
+
+
+23
+
+
+23
+
+
+complete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+DataPump
+5
+
+
+
+
+24
+
+
+24
+
+
+complete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+DataPump
+5
+
+
+
+
+25
+
+
+25
+
+
+complete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+DataPump
+5
+
+
+
+
+26
+
+
+26
+
+
+complete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+DataPump
+3
+
+
+
+
+27
+
+
+27
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+File Export
+5
+
+
+
+
+28
+
+
+28
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+File Export
+3
+
+
+
+
+29
+
+
+29
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+File Export
+5
+
+
+
+
+30
+
+
+30
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+File Export
+3
+
+
+
+
+31
+
+
+31
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+Native Web Services
+0
+
+
+
+
+32
+
+
+32
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment File Conversion
+Payments
+File Conversion
+8
+
+
+
+
+33
+
+
+33
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Conveyance File Split
+Customers
+Biller File Split
+13
+
+
+
+
+34
+
+
+34
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update File Split
+Customers
+Biller File Split
+3
+
+
+
+
+35
+
+
+35
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update
+Customers
+Real-Time Data Refresh
+1
+
+
+
+
+36
+
+
+36
+
+
+complete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+Real-Time Data Refresh
+5
+
+
+
+
+37
+
+
+37
+
+
+complete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+DataPump
+5
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3418915768/BID+2400+EmPRO+Insurance+Company+Origami+Risk+Technical+Design

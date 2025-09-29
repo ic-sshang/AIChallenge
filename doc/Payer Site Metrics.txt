@@ -1,0 +1,48 @@
+Introduction
+One Pager - 
+Payer Site Instrumentation (core metrics)
+ 
+Payer Flows
+https://www.figma.com/proto/nxcbzfdiLpX6RvNlaaLvoY/Payer-Flows-2019?node-id=1967%3A0&scaling=scale-down
+ (pages 3-5)
+Core / Fundamental Metrics
+Priority
+Category
+Metric
+Segment by
+Notes
+Primary
+PAYMENTS
+Total payers that hit the site vs. total payers that made a payment
+Primary
+PAYMENTS
+% of successful payments
+Source, Channel, Platform, Biller Type, Payment Types, User Type
+Primary
+AUTOPAY
+% of Autopay enrollments vs. eligible Accounts
+Source, Channel, Biller Type
+Do we exclude Safety since Payers can’t self-enroll yet?
+Primary
+PAPERLESS
+% of Paperless enrollments vs. eligible Accounts
+Source, Channel, Biller Type
+Primary
+PAY-BY-TEXT
+% of PBT enrollments vs. eligible Accounts
+Note: It’s assumed that additional metrics will reveal themselves after instrumenting the product, and they should be added to this list. Depending on relevance, the above list is subject to change.
+Sources
+Desktop, mobile, voice, text
+Channels
+direct, referral (e.g., biller website redirect), email, text, other
+Platforms
+Desktop, mobile, tablet, in-person (includes POS, kiosk, and direct payments with cash/check)
+Payment types
+Credit card, ACH, OBD, Cash, Check, POS, Digital Wallet
+User type
+Registered, Unregistered, SSO, IVR(?)
+Longer-term Metrics
+Category
+Metric
+Notes
+ URL:/spaces/PRODUCT/pages/971374597/Payer+Site+Metrics

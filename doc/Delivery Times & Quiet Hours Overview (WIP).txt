@@ -1,0 +1,48 @@
+Current Accepted Solution:
+EBPP-21586
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+(initial) Proposed solution
+Either a web API in k8s or an Azure function to act as a simple HTTP listener for POST messages from Mailgun for email delivery events. The same pattern will be applied for Cdyne/Esendex SMS events.
+A service bus to a separate AZ function to batch insert/update is optional. Due to time constraints and the current requirements, we believe it can be omitted.
+An insert-optimized staging table in each shard to immediately insert the incoming event – only two columns: delivery time and a tracking Guid to link back to the record that will be updated (either EmailTracking table or sms.SmsOut). A database job periodically updates the SmsOut/EmailTracking tables and cleans up the staging table. This could be nightly but ideally is as frequent as hourly so billers can confirm delivery times.
+Requirements:
+Handle up to 500,000 email delivery events per hour – determined due to the quiet hours scheduled delivery work. Mailgun has a cap of 500k scheduled emails in their queue. If all were scheduled around the same time, e.g. 11 AM, then we would expect those events to reach our system without a significant delay.
+all delivered emails: ~1.5m/day; 2.2m max/day
+need more product input
+will need to handle IC maintenance windows, if applicable
+Majority of solution must be delivered by Sept 4 with remaining work tapering down after that
+Suggested timeline
+Phase 1: Deploy just listener to accept/log Mailgun traffic
+requires:
+basic logging to NR
+parsing the payload
+verifying the message is from Mailgun
+Phase 2: inserting into the optimized table and batch update
+Context
+for both SmsNotifications and EmailQueueProcessing, we need to send an identifier (guid) and the billerguid to link the message back to a record in our system
+in EQP, a notification SMS is inserted into the SMS queue: sms.insSmsOut
+it will NOT include the 
+ExternalReferenceGuid
+ that is passed to Cdyne for tracking / linking back
+in SmsNotifications, we get a list of SMSes for invoice notifications
+ we will create the ExtRefGuid when sending the Cdyne request
+ the ExtRefGuid will be added to the SmsOut table via the [spMarkSmsNotificationAsSent] – this call updates SmsOut
+ExtRefGuid reasoning:
+it confirms that cdyne sent it out and is independent of the
+ smsReference that we create
+Gotchas
+team has limited knowledge of service bus and data warehouse
+need a 2nd app instance + routing for qa-reg testing if we go with k8s solution
+Notes
+store shard mapping in memory to avoid selAzureBillers calls to retrieve the billerID for db inserts.
+preferably avoid the dbservice and go with next gen implementation
+we can send a response code to mailgun if we can't accept the event (I believe they retry up to 3 times)
+** 200 - no retry
+** 406 -- rejected, no retry
+** anything else retry 10m,10m,15m,30m,1hr,2hr,4hr
+pull model first
+.net 8 console job in skybot, bulk insert into staging table at the shard level
+keep k8s-friendly, later shift
+ URL:/spaces/PE/pages/3460300801/Delivery+Times+Quiet+Hours+Overview+WIP

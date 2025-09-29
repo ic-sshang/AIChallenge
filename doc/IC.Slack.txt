@@ -1,0 +1,69 @@
+Overview
+IC.Slack is designed to interact with the Slack API, enabling developers to integrate Slack functionalities into their applications. It provides a high-level interface for common Slack operations such as sending messages, retrieving channel information, and managing users.
+Key Features
+Message Sending: Easily send messages to Slack channels or users.
+Channel Management: Retrieve and manage Slack channel information.
+User Management: Access and manage Slack user details.
+OAuth Support: Handle authentication and authorization with Slack's OAuth.
+Block Kit: Create rich, interactive messages using Slack's Block Kit.
+Version
+1.0.8990.23848 or greater
+Slack Documentation
+https://api.slack.com/
+Example Usage
+1. Sending a message with a pre-generated block kit template
+Code:
+wide
+1011
+using IC.Slack;
+using IC.Slack.Models.Enums;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string blockKit = SlackBlockKitTemplateGenerator.GenerateMessageTextBlock(SlackChannelID.DailyOBDInfoTest, "Test", true);
+        
+        var slackClient = new SlackApplicationClient(Slack.Models.Enums.SlackApplication.BMSSlackBot);
+        slackClient.SlackChatPostMessageWithBlockKit(blockKit);
+    }
+}
+Message Preview:
+2. Sending a message using SlackBlockKitBuilder
+Code:
+wide
+1011
+using IC.Slack;
+using IC.Slack.Models.Enums;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string blockKit = GenerateBlockKit();
+        
+        var slackClient = new SlackApplicationClient(Slack.Models.Enums.SlackApplication.BMSSlackBot);
+        slackClient.SlackChatPostMessageWithBlockKit(blockKit);
+    }
+    
+    private string GenerateBlockKit()
+    {
+        var postdata = new
+        {
+            channel = {CHANNEL ID}, 
+            blocks = new object[] {
+                SlackBlockKitBuilder.GenerateHeaderBlock("This is a header"),
+                SlackBlockKitBuilder.GeneratePlainTextAsCodeBlockBlock("This is a text with code block"),
+                SlackBlockKitBuilder.GenerateContextMarkDownBlock("This is a markdown"),
+                SlackBlockKitBuilder.GenerateDividerBlock()
+            }
+        };
+    
+        return JsonConvert.SerializeObject(postdata);
+    }
+}
+Preview:
+Related Pages
+How to Add Channel in IC.Slack - Engineering Documentation - Confluence
+SlackBlockKitTemplateGenerator - Engineering Documentation - Confluence
+ URL:/spaces/ED/pages/3466100747/IC.Slack

@@ -1,0 +1,25 @@
+Provisioning OAuth 2.0 credentials for a Biller is a manual process at the time of this writing.  There is a plan to integrate the Biller Portal to the Kong API to create the parent Biller consumer record and allow Billers to self-service managing OAuth applications under their consumer record.
+Creating a OAuth 2.0 Application will allow a Biller to authenticate via the OAuth 2.0 client credentials grant and access APIs that require OAuth 2.0 authentication. 
+Name
+This is a friendly name to identify the application
+Value
+DefaultApplication
+ClientId
+This is a unique identifier assigned to the client application. It is used to identify the client making the request.
+Value
+Leave this blank, Kong will generate this for you with the proper amount of unique/random entropy  
+ClientSecret
+This is a secret known only to the client and the authorization server. It is used to authenticate the client to the authorization server.
+Value
+Leave this blank, Kong will generate this for you with the proper amount of unique/random entropy
+HashSecret
+Unchecked
+ClientType
+This field specifies the type of client application. There are generally two types:
+Confidential
+: These clients are capable of maintaining the confidentiality of their credentials (e.g., server-based applications).
+Public
+: These clients cannot maintain the confidentiality of their credentials (e.g., client-side applications like mobile apps or single-page applications).
+Value
+confidential
+ URL:/spaces/ED/pages/4093214813/Biller+OAuth+2.0+Application+Setup+-+Kong

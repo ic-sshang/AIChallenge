@@ -1,0 +1,71 @@
+SR-381
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+(CRM->Support->Tools)
+Purpose
+An internal settlement team tool to 
+search and reset PayPal or Online Bank Direct funding batches
+, with audit logging and permission restrictions.
+Architecture
+Frontend:
+ WebForms (ASPX) using Telerik controls
+Backend:
+ code-behind
+Data Access:
+ 
+FundingBatchRepository
+ to retrieve and reset batches
+Permissions:
+ 
+CRMPermissions.FundingBatchReset
+Logging:
+ Captures batch reset details with user info
+User Workflow
+1. 
+Page Load
+Tool checks 
+HasPermission
+:
+Authorized: search bar + panel displayed
+Unauthorized: display styled warning message
+2. 
+Search Funding Batch
+User enters 
+Funding Batch ID
+ in a search box
+Clicks 
+Search
+Backend validates input and fetches batch info:
+Batch ID
+TerminalType (PayPal / OBD)
+SaleVolume
+FundingBatchProcessedDate
+StartDate
+If valid: details appear in a grid or summary panel
+If invalid: error message is displayed 
+3. 
+Reset Batch
+A 
+Reset
+ button is shown next to the retrieved batch info
+On click:
+A confirmation popup appears
+Upon confirmation:
+Backend invokes reset logic in 
+FundingBatchRepository
+Batch status is updated
+A 
+log entry
+ is created:
+FundingBatchID
+Type
+Reset timestamp
+Reset by (userID)
+A success or error message is shown
+4. 
+Post Reset
+The search box is cleared or retains last input
+Mock UI
+User Audit after resetting the Batches
+ URL:/spaces/DS/pages/4303814672/Funding+Batch+Reset+Tool+Design+Workflow+-+WIP

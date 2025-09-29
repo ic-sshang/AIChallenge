@@ -1,0 +1,67 @@
+Introduction
+The following procedure will walk you through the process of installing Windows Performance Tool kit and capture event on Windows server to troubleshoot performance related to high resources usage
+Requirements
+This procedure assumes that you have administrative rights on the ADO and the target Windows server you are trying to capture resource analysis. 
+ There are two components for this tool
+WPR: Windows performance Recorder
+WPA: Windows Performance Analyzer
+We will be capturing target server’s performance using WPR and analyze the capture with WPA. 
+Procedure
+Installation of the kit on the AVD.
+On your AVD, download and install Windows Performance tool kit which is part of Windows Assessment and Deployment Kit.
+ADK is available to download from 
+https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install
+ADK comes with lots of features, we will be installing Windows Performance Toolkit
+Capturing Events on the target server
+From your AVD, copy the folder 
+C:\Program Files(x86) \Windows Kits\10\Windows Performance Toolkit 
+to the target server
+This can be saved on your Desktop or Documents folder on the target server.
+Open a PowerShell as Administrator
+Navigate to the Windows Performance Toolkit folder
+WPR has few built-in profiles that can we used to capture events for analysis, a list can be viewed with 
+wpr -profiles
+Depending on what resource you are trying to troubleshoot, one of the profiles can be used in following command to start the capture. For example, if troubleshooting High CPU usage select CPU profile.
+Please note, General Profile will capture CPU, Memory, Disk and File IO and Network activity. We should try not to use General Profile as it will create a large file compared to specific profile like CPU or Memory. Also, will consume lots of resources. On a server that is under lots of stress, we should use specific profile. General Profile should only be used if we are not sure what is causing high resource usage.
+File size will also depend on how long you run the capture. 
+wpr -start CPU 
+By default, captures will in memory mode unless specified with -filemode command. File mode will be useful if troubleshooting high Memory Usage.
+Let the capture run for a time. Again, longer the capture runs the larger the file. Once you are satisfied on the duration of the capture, stop and save the capture with following command,
+Replace <path_to_save_the_file> with location where you wish to save the file.
+wpr -stop <path_to_save_the_file>.etl
+Analyzing the captures
+From the target server Copy the saved .etl file to your AVD.
+Double click the .etl file and it will open in WPA (Windows Performance Analyzer) or you can start WPA from CMD with
+wpa
+and select the file you want to analyze. 
+Below is sample capture file open in WPA
+Common Column Types in WPA
+Column Name
+Description
+Count
+Number of times an event occurred (e.g., CPU samples, I/O operations).
+Weight (%)
+Relative percentage of total activity (e.g., CPU usage by a process).
+Process / Thread ID
+Identifiers for the process or thread involved in the event.
+Start Time / End Time
+Timestamp for when an event started or ended.
+Duration
+How long the event lasted (e.g., disk I/O duration, CPU execution time).
+Stack
+Call stack associated with the event (used for profiling and debugging).
+Path / Name
+File path, module name, or function name involved in the event.
+Priority / State
+Thread priority or state (e.g., Ready, Running, Waiting).
+CPU Number
+Which CPU core handled the event.
+Type / Opcode
+Type of event (e.g., Read, Write, Context Switch).
+Tool will allow you to narrow your analysis by clicking a Process name and expanding from the stack column. Below is an example of CSFalconContainer.exe and its sub threads
+ 
+Clean up
+Once done with the analysis, please make sure to delete the etl file and 
+Windows Performance Toolkit
+ folder from the server.
+ URL:/spaces/platform/pages/4367024245/Performance+Analysis+on+Windows+Server

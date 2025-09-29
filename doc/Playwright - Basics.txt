@@ -1,0 +1,984 @@
+Overview
+Playwright is a Microsoft-maintained end-to-end testing framework for applications. Playwright has become a de facto standard for e2e testing due to its ease of use, familiar syntax, cross-platform, cross-browser, and multi-language support, and high degree of test parallelization. In addition to these features, Playwright has a relatively high degree of interoperability with Azure DevOps and can provide a lot of value in a CI/CD context.
+Scope
+This guide will cover
+Setting up Playwright for a new or existing repository.
+Configuring Playwright for Flexible, Dynamic Testing
+EXAMPLE
+ Containerized Database Seeding
+Writing Simple Tests with Playwright
+Repository Setup
+Playwright can be added to a new or existing repository in the following manner:
+bash
+wide
+760
+npm init playwright@latest
+When running the above command, you will be greeted with a small handful of prompts to guide you through the configuration steps:
+Do you want to use TypeScript or JavaScript? 
+TypeScript
+Where to put your end-to-end tests? 
+e2e
+You may also nest the 
+e2e
+ folder within an existing 
+tests
+ directory, if desired. Though avoid using 
+UnitTest
+ language or placing the Playwright tests in a 
+UnitTest
+ directory (or equivalent) - Playwright tests are end-to-end or integration tests, not unit tests - it’s important to keep these categories separated, cleanly.
+Add a GitHub Actions workflow? 
+false
+Not necessary when using Azure DevOps - this may be desirable for projects using GitHub Enterprise.
+Install Playwright browsers? 
+true 
+or 
+false
+If you are testing only API functionality this is not required. 
+If you have done this previously this is not required.
+See more on Playwright browsers in 
+the official documentation
+A more comprehensive step-by-step can be found in
+ the Playwright documentation
+ and includes an exhaustive list of which configuration files are created as a result of the above command.
+Once Playwright has been added, we can continue on to the next step - though you may wish to execute (or simply just remove) the example tests that are generated as a result of the 
+init
+ command at this point.
+Configuring Playwright
+Once Playwright has been added to a project, it can be invoked right away to run any tests that exist in the directory specified in the 
+playwright.config.ts
+ (set by the
+init
+ in the previous step). However, there are some additional steps that can be taken to enable a much more organized, scalable, and maintainable testing experience.
+For the remainder of this doc, we’ll focus on 3 distinct pieces
+Global Setup + Teardown
+Utilities
+Tests
+1. Adding Global Setup + Teardown
+The Playwright 
+defineConfig
+ function that is present in the 
+playwright.config.ts
+ file defines how Playwright behaves whenever 
+playwright test
+ is invoked and tells Playwright both where and how to execute tests. This configuration, by default, exposes two mechanisms of adding global setup/teardown hooks that can be run by Playwright before and after test execution. The first is through the 
+globalSetup
+ and 
+globalTeardown
+ properties that are defined by the object passed to 
+defineConfig
+. The second is by adding these tasks to the 
+projects
+ property and defining them as “pipeline” steps.
+The former approach requires that 
+globalSetup.ts
+ and 
+globalTeardown.ts
+ expose a single function to which Playwright subsequently passes a 
+FullConfig
+ object to. These two methods allow Playwright configurations to be modified, environment vars to be set, etc. However, this approach excludes any of the behavior in setup or teardown methods from the resultant test output - which is not always desirable.
+We will focus on the latter approach in the remainder of this guide as it provides a way to include certain prerequisite tasks as part of the overall testing suite. For example - if we’re testing an API project - acquiring a JWT, running a health check, and validating OpenAPI/GraphQL schema endpoints are all testable behavior that could be prerequisite test cases for the remainder of running integration tests to be considered valid. Using the project-based approach allows setup/teardown to function more as integration testing pipeline tasks vs. pre-test & post-test hooks.
+Note that for e2e web projects dependent upon a live API - 
+globalSetup
+ and 
+globalTeardown
+ may prove adequate as we may just need to perform some simple tasks like database seeding & JWT acquisition, which could be excluded from the scope of client application functionality.
+You can read more about Playwright’s Test Configuration options 
+in the official documentation
+.
+1. Add Setup/Teardown files to the test directory. 
+In the previous step, when running 
+npm init playwright@latest
+ - you should have been prompted for a folder name in which Playwright tests will be stored and executed from - in this and subsequent examples, we’ll assume the default value of 
+tests
+ has been used.
+Create the following:
+tests/setup.global.ts
+tests/setup.teardown.ts
+We’ll revisit these in just a moment - for now, it’s enough that these exist. Make a mental note of these two files & continue on to the next step.
+2. Add Setup & Teardown to Playwright Configuration
+Once the 
+setup.global.ts
+ & 
+teardown.global.ts
+ files have been created in the 
+tests
+ directory, Playwright needs to be configured to run these as part of the test pipeline.
+Open the 
+playwright.config.ts
+ and find the 
+projects
+ property on the object passed to the 
+defineConfig
+ function.
+typescript
+wide
+760
+import { defineConfig, devices } from '@playwright/test';
+export default defineConfig({
+  testDir: './tests',
+  /** Excluded for brevity */
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome']},
+    },
+    /** Excluded for brevity - Firefox + Safari configs */
+  ]
+});
+There should be a configuration object in the 
+projects
+ array for each browser that tests will be run against - these can be updated as required at this point, however, we’ll need to add an additional 
+dependencies
+ array to each task we wish to preserve to ensure that the setup task runs correctly prior to test execution.
+Inside the 
+projects
+ array - let’s add the setup & teardown tasks.
+typescript
+wide
+760
+export default defineConfig({
+  /** Excluded for brevity */
+  projects: [
+      {
+        name: 'setup',
+        testMatch: /global\.setup\.ts/,
+        teardown: 'teardown',
+      },
+      {
+        name: 'chromium',
+        use: { ...devices['Desktop Chrome']},
+        dependencies: ['setup']
+      },
+      {
+        name: 'teardown',
+        testMatch: /global\.teardown\.ts/,
+      }
+  ]    
+});
+Note that the 
+setup
+ task is provided a 
+teardown
+ property that indicates the 
+'teardown'
+ task, and the 
+chromium
+ configuration has been given 
+setup
+ as a dependency. Additional dependent setup tasks can be executed in this manner, allowing for more modular setup/teardown on a per-browser basis.
+Once these tasks have been configured - they should run in the indicated sequence. 
+setup
+ will always run first & is indicated as a dependency for the actual browser tests that will run. 
+teardown
+ is always run last - it is provided as a dependency on the 
+setup
+ task and will always run after anything dependent on 
+setup
+ has completed.
+3. Populate Setup & Teardown Test Files
+Now that the setup has been configured - we can first confirm that both the setup & teardown tasks are working as expected. In order to confirm this behavior, we can just add a simple test stub to each file for now. We’ll use some syntactic sugar here to make these a little more intuitive.
+typescript
+wide
+760
+// global.setup.ts
+import { test as setup, expect } from '@playwright/test';
+
+setup('Setting up test infrastructure', async ({}) => {
+    console.log('Setup Works!');
+});
+
+// global.teardown.ts
+import { test as teardown } from '@playwright/test';
+
+teardown('Tearing down test infrastructure', async ({}) => {
+    console.log('Teardown works!');
+});
+Then we can go ahead and run 
+npx playwright test
+ from a command line to verify test run order.
+Playwright test run with Setup + Teardown
+Example: Database Interaction - Seeding & Rollback
+Prerequisites
+The following steps are assuming
+A database instance with SQL Server Auth is running - assuming 
+localhost
+SQL Scripts are created and contain statements to insert data into specific tables and subsequently remove that data afterward.
+An API instance is running on localhost, connected to the database instance
+Playwright e2e with Database Setup
+1. Adding Additional Packages to Support Testing
+To bring this example back into the realm of temporary databases, let’s go ahead and get started by adding some 
+mssql
+ packages to our Playwright project.
+Add the 
+mssql
+ and its corresponding Node 
+@types
+ package (for seamless TypeScript interop) - you can 
+view more information on this package here
+.
+bash
+wide
+760
+npm i mssql
+npm i @types/mssql --save-dev
+2. Adding the Database Configuration
+We can add a central database configuration and some helper methods to a single file called 
+database.ts
+ - for the sake of example, this just lives alongside the tests in Playwright’s 
+tests
+ folder.
+Using the example 
+mssql
+ package, we’ll define a database configuration object & create two methods - one that connects to the database & returns that connection, and another that connects to the database and executes a SQL Script from a file.
+typescript
+wide
+760
+// database.ts
+import sql from 'mssql';
+import fs from 'fs';
+
+/**
+ * Database configuration
+ * @see https://www.npmjs.com/package/mssql#tedious
+ */
+const dbConfig = {
+    server: 'localhost',
+    port: 1433,
+    database: 'BillerShard',
+    user: 'docker',
+    password: 'Oxjo%QYh9t17V53957fcr90Y3@',
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000
+    },
+    options: {
+        appName: 'PlayWright Testing', // Optional, useful for identifying the application in SQL Server logs.
+        encrypt: false, // Use 'true' if connecting to Azure SQL
+        trustServerCertificate: true // Use 'false' if connecting to a remote DB (not local, or a container).
+    },
+};
+
+/**
+ * Connect to the database
+ * @returns A connection to the database
+ */
+export async function connectToDatabase(): Promise<sql.ConnectionPool> {
+    try {
+        const pool = await sql.connect(dbConfig);
+        console.log('Connected to database.');
+        return pool;
+    } catch(err) {
+        console.error('Error connecting to database:', err);
+        throw err;
+    }
+}
+
+/**
+ * Execute a SQL script from a file
+ * @param sqlFilePath - The path to the SQL script file
+ */
+export async function executeSqlScriptFromFile(sqlFilePath: string): Promise<void> {
+    // Read SQL script from file
+    const sqlScript = fs.readFileSync(sqlFilePath, 'utf8');
+
+    // Execute the script
+    const connection = await connectToDatabase(dbConfig);
+    await connection.request().query(sqlScript);
+    await connection.close();
+}
+The above file defines our localhost database connection - including host, port, username, password, etc. and exposes two methods for interacting with the database - we can take advantage of this in both our setup & teardown tasks as well as any other tests we have that require executing database scripts beforehand.
+3. Using the Database Configuration to Execute Seeding for Database.
+With the necessary database interop established, we can revisit our 
+global.setup.ts
+ file and add a step to seed data prior to executing any tests.
+For this example, I’ve created a 
+sql-scripts
+ directory in the repository - external to the Playwright 
+tests
+ directory - that contains a 
+Setup.sql
+ and 
+Teardown.sql
+ file. Playwright sets its execution context at the repository root, where the 
+playwright.config.ts
+ file is located, so we can reference this directory within our tests from the repository root without needing to create path aliases, etc.
+Setup.sql
+ contains a handful of 
+INSERT
+ statements targeting a specific table
+Teardown.sql
+ executes a 
+DELETE
+ on this table - clearing out any data that was seeded.
+Back in our 
+global.setup.ts
+ file, we can remove the template test from the previous step and add one that performs a seed task:
+typescript
+wide
+760
+// global.setup.ts
+import { test as setup, expect } from '@playwright/test';
+import { connectToDatabase, executeSqlScriptFromFile } from './database';
+
+setup('Seed Database', async ({}) => {
+    console.log('Seeding database');
+
+    try {
+        await executeSqlScriptFromFile('./sql-scripts/Setup.sql');
+    } catch(err) {
+        console.error('Error seeding database:', err);
+    } finally {
+        console.log('Done with seeding task.')
+    }
+});
+If you wish, go ahead and run the Playwright task again to confirm the script runs without issue
+Post-seed test run
+And verify rows were inserted:
+SQL Result #1
+SQL Result #2
+Here is the 
+Setup.sql
+ script for reference:
+sql
+wide
+760
+-- Setup.sql
+SET QUOTED_IDENTIFIER ON;
+
+USE BillerShard;
+
+BEGIN
+	DECLARE @QID INT;
+
+	INSERT INTO RPT.ReportGeneratorQueue (ScheduledReportID, BillerID, ScheduledReportName, "SQL") 
+	VALUES 
+	(0, 1, 'Integration_Testing', 'dbo.selPaymentsBP @BillerID=1,@StartDate=''9/1/2021'',@EndDate=''9/14/2021'',@Approved=1,@PaymentSourceID=''15'',@IncludeServiceFee=1,@RowCount = 0'),
+	(0, 1, 'Integration_Testing', 'selBillerCustomerSearchBP @BillerID=1,@EmailAddress=''@invoicecloud.com'',@RowCount=0'),
+	(0, 1, 'Integration_Testing', 'dbo.rptEmailClickThrough @BillerID = 1, @CurrentMonth = 1'),
+	(0, 1, 'Integration_Testing', 'exec [rptRecurringScheduledPaymentsBillerPortal] @BillerID=1');
+
+	SELECT * FROM RPT.ReportGeneratorQueue ORDER BY ReportGeneratorQueueId DESC;
+	
+	SELECT @QID = (SELECT TOP 1 ReportGeneratorQueueId FROM RPT.ReportGeneratorQueue ORDER BY ReportGeneratorQueueID DESC);
+
+	INSERT INTO RPT.ReportGeneratorRecipients (ReportGeneratorQueueID, EmailAddress)
+	VALUES (1, 'malltop@invoicecloud.com'), (2, 'malltop@invoicecloud.com'), (3, 'malltop@invoicecloud.com'), (4, 'malltop@invoicecloud.com'), (34890, 'malltop@invoicecloud.com');
+END
+4. Tearing Down Data After Test Execution
+Following the previous example, we’ll do something nearly identical in the 
+global.teardown.ts
+ file. The main difference being that we’ll use the 
+Teardown.sql
+ file in this case.
+typescript
+wide
+760
+// global.teardown.ts
+
+import { test as teardown } from '@playwright/test';
+import { executeSqlScriptFromFile } from './database';
+
+teardown('Clean up database', async ({ }) => {
+  console.log('Cleaning up test database seed data...');
+  
+  try {
+      await executeSqlScriptFromFile('./sql-scripts/Teardown.sql');
+  } catch(err) {
+      console.error('Error tearing down database:', err);
+  } finally {
+      console.log('Done with database teardown task.')
+  }
+});
+Again, we can execute the test runner once this has been established and check the output to verify that we’re successfully running our teardown task.
+Post-teardown Test Run
+And verify data has been removed from the tables
+SQL Result #1
+SQL Result #2
+And the 
+Teardown.sql
+ for reference
+sql
+wide
+760
+-- Teardown.sql
+SET QUOTED_IDENTIFIER ON;
+
+USE BillerShard;
+
+BEGIN
+    DELETE FROM RPT.ReportGeneratorQueue;
+    DELETE FROM RPT.ReportGeneratorRecipients;
+
+    -- Reseed the Identity col PK back to 0.
+    DBCC CHECKIDENT ('RPT.ReportGeneratorQueue', RESEED, 0);
+END
+5. Putting Everything Together
+With both setup and teardown tasks established, we can now run some tests in between the two tasks that read, mutate, and verify state.
+For the sake of example, here’s a simple test added to 
+tests/example.spec.ts
+ that verifies the number of rows that are inserted during the 
+setup
+ task.
+typescript
+wide
+760
+// example.spec.ts
+import { test, expect } from '@playwright/test';
+import { connectToDatabase } from './database';
+
+test('Table has 5 rows', async ({ page }) => {
+  const db = await connectToDatabase();
+
+  const result = await db.request().query('SELECT * FROM RPT.ReportGeneratorQueue');
+
+  console.log("Records in table: ", result.recordset);
+
+  expect(result.recordset.length).toBe(5);
+});
+Below is the resultant output from the test runner upon execution - note that the 
+result.recordset
+ contains all of the queried database rows, formatted into JSON objects - the 
+mssql
+ package also provides an ORM-like API that allows mapping these to TypeScript objects, however, this is beyond the scope of this guide. I highly recommend 
+exploring the mssql package more in-depth
+ - it is a very robust library that provides a lot of out-of-the-box functionality for interacting with SQL Server.
+Test run consuming seeded database data
+2. Introducing Utilities
+Like most software, a very large part of the effort in making our integration tests highly maintainable & scalable will be to facilitate re-usability and component isolation by way of abstraction and creation of DRY utility functions. 
+Utilities 
+(helper functions) are a simple way to accomplish this in Playwright and allow for common behavior or pluggable configurations to be shared across multiple test cases.
+Technically, we have already introduced our first utility function in the preceding example when configuring our database connection. We will start there and begin expanding our utilities to give us a much more robust integration testing framework.
+1. Revisiting the Database Configuration
+In the 
+preceding example
+, we created a 
+database.ts
+ file that contained our database configuration - we will move this file into a more appropriate containing folder and begin expanding it. First, let's establish a 
+utils
+ directory that will contain all of our testing utilities.
+yaml
+wide
+760
+# Example directory structure
+- .azuredevops
+- .helm
+- .tests         # Existing 'tests' folder in repo
+    - e2e        # Playwright tests
+        - utils  # Utilities folder
+    - manual     # Existing, scripted integration tests
+- src
+- package.json
+- playwright.config.ts
+- Dockerfile
+- .env
+We will further subdivide our utilities into two categories - 
+Framework 
+and 
+API
+ utilities. Note that this is neither a prescriptive nor exhaustive approach for organizing utilities - but this should serve as a good working example that should get you in the correct mindset. If in doubt, start with a single, simple set of utilities and begin implementing better organization as your project grows - there is no issue with this.
+Framework utilities
+ include:
+Database interop - configs, connections, queries.
+URL management - paths, params, etc.
+General - Data generation, conversion/formatting functions, etc.
+API utilities
+ include:
+TypeScript types - API requests, models, etc.
+Test Fixtures - Setup/Teardown of resource/configs prior to executing test suites (distinct from GLOBAL setup/teardown).
+API call methods - Build payloads, parameterize API requests, etc.
+Secrets & Data - 
+To accomplish this - we’ll land on a final folder structure:
+yaml
+wide
+760
+- .tests                    
+    - e2e                  
+        - utils                          
+            - framework                  # Houses framework utilities
+                - mssql-database.ts      # Our 'database' utility from above.
+            - api                        # Houses API utilities
+
+- .env # Environment file to load in settings.
+Note that we’ve moved the 
+database.ts
+ utility inside of the 
+utils/framework
+ folder and have renamed it 
+mssql-database.ts
+ to be slightly more descriptive.
+1a. OPTIONAL - Define path aliases
+It may be desirable to add some path aliases to your project such that imports in Typescript files are kept relative, terse, and easier to read. This is a common pattern in many TypeScript projects and can be accomplished with some minor setup in the 
+tsconfig.json
+ file.
+Playwright does not create a 
+tsconfig.json
+ file by default, even when using the TypeScript option at 
+init
+ - so we will need to add one manually to the root of the repository. Do note that existing web projects may already have a 
+tsconfig
+ - the same process can be followed here without creating a new file.
+If you do not already have one, simply add a 
+tsconfig.json
+ file to the root of the repository and add the following:
+json
+wide
+760
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "baseUrl": ".",
+        "paths": {
+            "@utilities/*": [".tests/e2e/utils/*"]
+        },
+        "types": ["node", "playwright"]
+    },
+    "include": [".tests/**/*.ts", "playwright.config.ts"]
+}
+This will allow utility functions to be imported into your test files using the 
+@utilities/{sub-dir}/util.ts
+ syntax rather than needing to use relative pathing (i.e. 
+../../../utils/framework/util.ts
+). You can setup these paths in whatever way makes the most sense for your project - as another example:
+json
+wide
+760
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "baseUrl": ".",
+        "paths": {
+            "@framework-utils/*": [".tests/e2e/utils/framework/*"]
+            "@api-utils/*": [".tests/e2e/utils/api/*"]
+        },
+        "types": ["node", "playwright"]
+    },
+    "include": [".tests/**/*.ts", "playwright.config.ts"]
+}
+2. Expanding the Database Utility
+Let’s revisit the existing code 
+from the example above
+ and expand it to introduce a more dynamic configuration style.
+A prime example - Invoice Cloud presently maintains a shard-per-Biller database architecture alongside a master database that contains certain aggregations & lookups. We should account for both of these scenarios and allow our tests to execute queries against either database.
+First, we’ll introduce a Typescript enum that we can use to toggle which database connection we want to use.
+typescript
+wide
+760
+// mssql-database.ts
+export enum ICDatabase {
+    Shard,
+    Master
+}
+From there - we can introduce a method that provides the database configuration that was defined statically in the earlier example and use the enum that we just introduced to change which database we’re connected to on-demand.
+typescript
+wide
+760
+// mssql-database.ts
+const getDatabaseConfig = (dbConnection: ICDatabase): sql.config => {
+  return {
+    server: 'localhost',
+    port: 1433,
+    database: dbConnection === ICDatabase.Shard ? "Shard1" : "DBMaster_AzureGold",
+    user: 'docker',
+    password: 'Oxjo%QYh9t17V53957fcr90Y3@',
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 30000
+    },
+    options: {
+        appName: 'PlayWright Testing', // Optional, useful for identifying the application in SQL Server logs.
+        encrypt: false, // Use 'true' if connecting to Azure SQL
+        trustServerCertificate: true // Use 'false' if connecting to a remote DB (not local, or a container).
+    },
+  }  
+};
+Now we’ve got a way to switch the database configuration across any number of consuming methods - let’s look again at the 
+connectToDatabase
+ & 
+executeSqlScriptFromFile
+ methods from the example above and update them to use the new 
+getDatabaseConfig
+ method that we just introduced.
+typescript
+wide
+760
+export async function connectToDatabase(dbConnection: ICDatabase): Promise<sql.ConnectionPool> {
+    const dbConfig = getDatabaseConfig(dbConnection);
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        console.log('Connected to database.');
+        return pool;
+    } catch(err) {
+        console.error('Error connecting to database:', err);
+        throw err;
+    }
+}
+
+export async function executeSqlScriptFromFile(dbConnection: ICDatabase, sqlFilePath: string): Promise<void> {
+    // Read SQL script from file
+    const sqlScript = fs.readFileSync(sqlFilePath, 'utf8');
+
+    try {
+        // Execute the script
+        const connection = await connectToDatabase(dbConnection);
+        await connection.request().query(sqlScript);
+        await connection.close();
+        console.log('SQL script executed successfully.');
+    } catch(err) {
+        console.error('Error connecting to database:', err);
+        throw err;
+    }
+}
+Easy enough! Now we’ve got a pretty robust database utility that can dynamically connect to multiple databases and execute SQL directly from script files.
+There is one final thing worth mentioning here - we’ve now introduced a 
+more dynamic
+ database connection, but we still have a lot of hardcoded values that constrain what can actually be accomplished by this code. For instance, we’re still pointed at 
+localhost
+ and we’ve hardcoded 
+Shard1
+ as the ONLY possible shard database.
+We’ll take a brief side quest and make this even more dynamic using 
+dotenv
+.
+2a. Using the 
+dotenv
+ package to leverage environment files
+To better support pulling configuration from the environment, we should extract values into Node’s 
+process.env
+.
+This can be done in a live environment by directly setting environment variables in the system environment - but for local or pipeline testing, there is a need to establish an initial set of environment values from files, variable groups, or pipeline params. We can do this by pulling in the 
+dotenv
+ package and loading an environment file in whenever Playwright is bootstrapped.
+First, install the package as a regular npm 
+dependency
+.
+npm i dotenv
+Then introduce a 
+.env
+ file at the ROOT of the repository (alongside your 
+playwright.config.ts
+) and use a 
+KEY=Value
+ syntax within to establish the environment variables
+text
+wide
+760
+# Example .env
+MSSQL_SERVER="localhost"
+MSSQL_PORT=1433
+MSSQL_DB_MASTER="DBMaster_GoldAzure"
+MSSQL_DB_SHARD="Shard2"
+MSSQL_USERNAME="docker"
+MSSQL_PASSWORD="Oxjo%QYh9t17V53957fcr90Y3@"
+We can then invoke 
+dotenv
+ in our 
+playwright.config.ts
+ to load all of the values from this file into the environment such that they can be accessed off of 
+process.env
+.
+typescript
+wide
+760
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+// https://github.com/motdotla/dotenv
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+export default defineConfig({
+  // Config
+});
+Once that is done, we can simply access the values in our 
+.env
+ file directly through 
+process.env
+ like so
+typescript
+wide
+760
+const getDatabaseConfig = (dbConnection: ICDatabase): sql.config => {
+  return {
+    server: process.env.MSSQL_SERVER,
+    port: process.env.MSSQL_PORT,
+    database: dbConnection === ICDatabase.Shard ? 
+      process.env.MSSQL_DB_SHARD : 
+      process.env.MSSQL_DB_MASTER,
+    user: process.env.MSSQL_USERNAME,
+    password: process.env.MSSQL_PASSWORD
+    // Rest excluded for brevity.
+  }  
+};
+That’s it! Now we have completely externalized our config and simply need to inject new environment values to be able to change our configuration on a case-by-case basis. We can continue to expand our configuration in this manner, if desired - adding API URIs, tokens, usernames, etc. 
+Be mindful of the 
+.env
+ files for local testing - these should typically NOT be checked into a repository. Rather they should be added to 
+.gitignore
+ and instead provided by the pipeline via environment variables.
+Two approaches for managing these settings when working in (Azure DevOps) pipelines are
+Using the 
+azd
+ CLI 
+to set the values manually
+ (presumably after setting the necessary items in a variable group).
+Storing 
+.env
+ files 
+as “Secure Files” in Azure DevOps
+ where they can subsequently be downloaded in a pipeline run and included as part of the source code build.
+An even cleaner approach to the above method that avoids using 
+process.env
+ all over the place is to create individual TypeScript models for your configurations (e.g. 
+DatabaseSettings
+, 
+ApiSettings
+, etc.) and map the 
+process.env
+ values to these models in your 
+playwright.config.ts
+ immediately after invoking 
+dotenv
+ to load the settings in. These models can then be passed to your tests and used in place of 
+process.env
+.
+3. Enabling Dynamic Testing Behavior using Utilities
+The last topic within the scope of this guide around utilities is regarding their use in enabling dynamic behavior at the test-scenario level.
+Recall that we never introduced a method in our database utility that executes ad-hoc SQL queries - there was a specific reason for that! We’re going to create some dynamic queries as our first 
+API utilities 
+(
+our categories from earlier
+).
+Let’s add a 
+data
+ directory nested within our 
+./utilities/api
+ directory and add a single file, 
+shard-queries.ts
+ - to this file, we’ll add our first dynamic query behavior leveraging our 
+mssql-database
+ utility and the 
+mssql
+ package we installed earlier.
+For now - we’ll add a couple of very simple examples:
+typescript
+wide
+760
+// ./tests/e2e/utils/api/data/shard-queries.ts
+import { connectToDatabase, ICDatabase } from "@utilities/framework/mssql-database";
+import sql from 'mssql';
+
+/**
+ * Get a customer by their ID
+ * @param customerId - The ID of the customer to get
+ * @returns Recordset of customer
+ */
+export async function getCustomerById(customerId: number): Promise<any> {
+    try {
+        const pool = await connectToDatabase(ICDatabase.Shard);
+
+        const result = await pool.request()
+        .input('customerId', sql.Int, customerId)
+        .query(`SELECT * FROM mcl.Customers WHERE CustomerID = @customerId`);
+
+        return result;
+    } catch(err) {
+        console.error('Error getting customer by ID:', err);
+        throw err;
+    }
+};
+
+/**
+ * Get customers by last name
+ * @param lastName - The last name to search for
+ * @returns Recordset of customers
+ */
+export async function findCustomersByLastName(lastName: string): Promise<any> {
+    try {
+        const pool = await connectToDatabase(ICDatabase.Shard);
+
+        const result = await pool.request()
+        .input('lastName', sql.VarChar, lastName)
+        .query(`SELECT * FROM mcl.Customers WHERE LastName LIKE '%@lastName%`);
+
+        return result;
+    } catch(err) {
+        console.error('Error getting customer by ID:', err);
+        throw err;
+    }
+};
+The above methods provide the capability of returning a customer from the 
+mcl.Customers
+ table using the customer’s ID or a range of customers with last names that are equivalent or similar to the searched last name.
+The examples here focus heavily on the 
+mssql
+ package for communicating with SQL Server - this package is extremely robust and provides the ability to perform much more complex parameterized queries, if desired.
+Reference 
+the package documentation
+ for a much more thorough overview of what is possible.
+3. Writing Tests with Playwright
+Now that we’ve done all of this setup and established some patterns for creating more manageable test infrastructure, let’s get right down to it and start writing some tests with Playwright.
+our 
+shard-queries.ts
+ file, let’s add a method that can insert a new customer record into the database - we can pair this with our 
+getCustomerById
+ method to demonstrate a dead-simple read after write test.
+typescript
+wide
+760
+/**
+ * Inserts a customer into the database
+ * @param billerId - The ID of the biller
+ * @param accountNumber - The account number of the customer
+ * @param customerName - The name of the customer
+ * @param customerName2 - The second name of the customer
+ * @param address1 - The first address of the customer
+ * @param address2 - The second address of the customer
+ * @param city - The city of the customer
+ * @param state - The state of the customer
+ * @param zip - The zip code of the customer
+ * @param phone - The phone number of the customer
+ * @param emailAddress - The email address of the customer
+ * @param emailAddressCC - The second email address of the customer
+ * @param displayAccountNumber - The display account number of the customer
+ * @param loginName - The login name of the customer
+ * @returns Recordset of customer
+ */
+export async function insertCustomer(billerId: number, accountNumber: string, 
+    customerName: string, customerName2: string, 
+    address1: string, address2: string, 
+    city: string, state: string, zip: string, 
+    phone: string, emailAddress: string, emailAddressCC: string, 
+    displayAccountNumber: string, loginName: string): Promise<any> {
+    try {
+        const pool = await connectToDatabase(ICDatabase.Shard);
+        const ps = new sql.PreparedStatement(pool);
+        ps.input('billerId', sql.Int);
+        ps.input('accountNumber', sql.VarChar);
+        ps.input('customerName', sql.VarChar);
+        ps.input('customerName2', sql.VarChar);
+        ps.input('address1', sql.VarChar);
+        ps.input('address2', sql.VarChar);
+        ps.input('city', sql.VarChar);
+        ps.input('state', sql.VarChar);
+        ps.input('zip', sql.VarChar);
+        ps.input('phone', sql.VarChar);
+        ps.input('emailAddress', sql.VarChar);
+        ps.input('emailAddressCC', sql.VarChar);
+        ps.input('displayAccountNumber', sql.VarChar);
+        ps.input('loginName', sql.VarChar);
+
+        await ps.prepare(`
+        INSERT INTO mcl.Customers (
+            BillerID,
+            AccountNumber,
+            CustomerName,
+            CustomerName2,
+            Address1,
+            Address2,
+            City,
+            State,
+            Zip,
+            Phone,
+            EmailAddress,
+            EmailAddressCC,
+            DisplayAccountNumber,
+            LoginName
+            )
+            VALUES(
+                @billerId,
+                @accountNumber,
+                @customerName,
+                @customerName2,
+                @address1,
+                @address2,
+                @city,
+                @state,
+                @zip,
+                @phone,
+                @emailAddress,
+                @emailAddressCC,
+                @displayAccountNumber,
+                @loginName
+            )`, );
+
+            const result = await ps.execute({ 
+                billerId: billerId,
+                accountNumber: accountNumber, 
+                customerName: customerName, 
+                customerName2: customerName2, 
+                address1: address1, 
+                address2: address2, 
+                city: city, 
+                state: state, 
+                zip: zip, 
+                phone: phone, 
+                emailAddress: emailAddress, 
+                emailAddressCC: emailAddressCC, 
+                displayAccountNumber: displayAccountNumber, 
+                loginName: loginName });
+
+        await ps.unprepare();
+        await pool.close();
+
+        return result;
+    } catch(err) {
+        console.error('Error inserting customer:', err);
+        throw err;
+    }
+};
+Now - we can finally combine our utility methods into actual integration or e2e tests. Let’s add an actual test file to our 
+test
+ directory - we’ll call this 
+customer.spec.ts
+ (
+.spec
+ is default for Playwright - but other established conventions also work).
+typescript
+wide
+760
+
+import { test, expect } from '@playwright/test';
+import { insertCustomer, getCustomerById, findCustomersByLastName } from './utils/api/data/shard-queries';
+
+test('Insert a customer', async ({ }) => {
+    const result = await insertCustomer(2, 'CUST-123', 'Matthew Alltop', '', '123 Maple St', '', 'Springfield', 'IL', '62701', '555-123-0001', 'malltop@invoicecloud.com', '', 'CUST-123', 'malltop');
+    expect(result).toBeDefined();
+
+    
+    const customers = await findCustomersByLastName('Alltop');
+    console.log(customers);
+
+    const customerId = customers.recordset[0].CustomerID;
+
+    const customer = await getCustomerById(customerId);
+    expect(customer).toBeDefined();
+    expect(customer.recordset[0].CustomerName).toBe('Matthew Alltop');
+    expect(customer.recordset[0].LoginName).toBe('malltop');
+    expect(customer.recordset[0].AccountNumber).toBe('CUST-123');
+    expect(customer.recordset[0].City).toBe('Springfield');
+    expect(customer.recordset[0].State).toBe('IL');
+    expect(customer.recordset[0].Zip).toBe('62701');
+    expect(customer.recordset[0].Phone).toBe('555-123-0001');
+    expect(customer.recordset[0].EmailAddress).toBe('malltop@invoicecloud.com');
+    expect(customer.recordset[0].EmailAddressCC).toBe('');
+    expect(customer.recordset[0].DisplayAccountNumber).toBe('CUST-123');
+    expect(customer.recordset[0].Address1).toBe('123 Maple St');
+    expect(customer.recordset[0].Address2).toBe('');
+});
+ TODO - Finish this.
+ 
+References
+Installation | Playwright
+API testing | Playwright
+Work with Azure Developer CLI environment variables | Microsoft Learn
+mssql - npm
+ URL:/spaces/EA/pages/4605214916/Playwright+-+Basics

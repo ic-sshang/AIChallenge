@@ -1,0 +1,223 @@
+none
+Personas
+ 
+Partner
+Biller
+Customer
+Payer
+Employee
+  
+Simply explained Invoice Cloud offering
+ 
+InvoiceCloud offers a SaaS platform that enables companies to digitally invoice their Customers and enable them to pay with common payment methods using convenient payment channels.  Further value is provided to Customers with services such as ability to view invoice and payment history, sign up for recurring payment services, online servicing of their accounts, etc. 
+ 
+ 
+The core Use Case with intros to key personas
+ 
+A business (
+Biller
+) offers on a recurring basis multiple services to their 
+Customers.  
+The business has a need to invoice their Customers for services rendered every month.  The traditional form of invoicing has included printing paper, stuffing an envelope, buying a stamp, and taking the envelope to the post office.  The Customer waits multiple days for that invoice to arrive in their mailbox.  The customer will then review their invoice and fill out a small form with the payment method details they want to use to pay the invoice.  That form is then stuffed into another envelope, stamped, and dropped off at their post office.  Multiple days will pass, again, before the business receives the envelope with payment from their Customer.  The business will then open the envelope, review the payment details, and then process the payment through their payment processor.  The business will then mark that payment as paid within the customer information system (CIS).  The cycle repeats every month for hundreds, if not thousands, of customers.
+ 
+InvoiceCloud's core service helps businesses bring this entire process online, simplifying the process for all involved with multiple benefits:
+Cost Savings for Businesses
+No more paper and stuffing of envelops
+No more paying for stamps
+No driving to post offices
+Safe and secure payment options for Customers
+Credit card and ACH supported
+No more entering of payment information on insecure forms
+Time Savings for All
+Businesses will see payment information flow directly into their CIS and applied to the proper accounts
+Businesses are funded faster
+Customers can apply payments instantly
+ 
+InvoiceCloud will work with the business to establish a two-way integration between both systems that enables data to flow from the business CIS into InvoiceCloud and from InvoiceCloud back into the CIS.  Explained differently, when the business needs to invoice a customer they will send that invoice data to InvoiceCloud.  InvoiceCloud will communicate to the Customer there is a new invoice and present to them multiple payment options.  After payment is made, that event flows back down to the business CIS.  Simple and seamless.
+ 
+The Evolution of InvoiceCloud
+ 
+The core Use Case simplifies the understanding of the InvoiceCloud service.  As InvoiceCloud has moved upstream the platform has evolved to a more capable platform but with this simple use case still at the heart of everything that InvoiceCloud does:
+More payment methods supported (PayPal, GooglePay, ApplePay, Venmo)
+More ways to make payments (IVR, Kiosk, API, Online Bank Direct, POS)
+Realtime integrations
+ 
+Other Key Personas
+ 
+A 
+Partner 
+is the owner of the CIS being used by businesses.  InvoiceCloud can work directly with the Biller to build an integration with the CIS they are using or will also work with the Partner to build the integration.  The benefit to working with the Partner is getting the access to a large base of prospective Billers all of which use the same CIS system.  If InvoiceCloud integrates directly to the CIS in theory any new Biller using that same CIS system will simplify integrations.
+ 
+A 
+Payer 
+is the person paying an invoice.  This person could be the 
+Customer 
+themselves, and most of the time it is, but a Payer could also be a mortgage company paying multiple invoices for properties they own, or a landlord paying for multiple apartments they own.  A Payer can also be someone that has multiple invoices owned by different Customer accounts but really it's the same person.  For example a Payer could have 2+ properties, and each property is issued a different account number, and each account number has it's own list of invoices. 
+ 
+An 
+Employee
+ is an InvoiceCloud employee who can play multiple roles.  An InvoiceCloud employee can help service a Biller account in many ways.
+ 
+ 
+Portals R' Us - Users Interacting with InvoiceCloud
+ 
+All Personas have a portal UI hosted on InvoiceCloud that they can interact with to self-service. 
+ 
+Biller Portal - Used by Billers and Partners AND also used indirectly by Employees
+Customer Portal - Used by Payers and Customers AND also used indirectly by Billers and Partners
+CRM - Used by Employees ONLY
+ 
+A visual:
+P - primary user of
+S - secondary user of
+ 
+ 
+Biller Portal
+Customer Portal
+CRM
+Biller
+P
+S
+ 
+Customer
+ 
+P
+ 
+Payer
+ 
+P
+ 
+Partner
+P
+S
+ 
+Employee
+S
+S
+P
+ 
+Quick summary of each:
+ 
+Biller Portal - Provides access to all Customer and Invoice data that belongs to the signing in Biller.  Typically used to search across these data sets to service their customers, view useful reports, manage payments, and manage access permissions.  Biller Portal enables a user that finds a Customer to "log in as" that Customer by jumping directly into the Customer Portal.  A Partner may be given access to this same portal.
+ 
+Customer Portal - Provides access to customer and invoice data that belongs to the signing in Customer/Payer.  Typically used to view and pay new invoices, look at invoice history, view payment history, sign up for services like AutoPay, Paperless, Pay By Text, etc. 
+ 
+CRM - Provides access to all Biller data and other InvoiceCloud-level features like reporting and tools to help manage Billers.  Typically used to manage Biller data like users, settings, terminals, etc.  CRM enables a user to "log in as" a Biller into Biller Portal as well for deeper service capabilities. 
+ 
+Simple diagram:
+ 
+ 
+ 
+Code Details
+ 
+ 
+RepoName[.ProjectName]
+Language
+Project Type
+Link
+Biller Portal
+MyIIS.BillerPortal
+VB.Net 
+ASP.NET WebForm  Web Site
+ADO Link
+Customer Portal
+MyIIS.MyIIS
+VB.Net 
+ASP.NET WebForm Web Site
+ADO Link
+CRM
+ICCRM.ICCRM
+VB.Net 
+ASP.NET WebForm Web Site
+ADO Link
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Other Key Components
+ 
+Our web layer is a 10 VM web server farm, with traffic evenly distributed across available servers using Azure Application Gateway.  In addition to Biller Portal, Customer Portal, and CRM being hosted on our web layer, multiple other web applications are hosted on these same servers.  To name a few repo names:
+ 
+StratusWebServices - API layer for our desktop application named Stratus
+ICKioskAPI - API layer for our Kiosk partners
+ICRESTAPI - One of multiple API suites called by Billers, and our apps as well
+ICCSRConnectAPI - API layer for our Agent Connect offering
+CTP - API layer for internal payment processing
+CloudConnectWS - API layer for our desktop application named POS Connect / Pay
+Sms - API layer for our SMS service provider
+ICSkynet - Internal-only web application hosting key integrations/implementation functions
+ 
+Slight expansion of previous diagram with other web apps in view:
+ 
+ 
+ 
+The App Tier
+ 
+The App tier is a set of 8 VMs in a server farm pattern.  Unlike the Web tier, the App tier is not public facing, meaning it is NOT available for external users to access.  Also unlike the Web tier, it does not host web applications.  It hosts mostly .NET Console applications that perform a wide variety of background functions usually tied to public facing products and/or features.  For example, a Customer may sign up for our Pay by Text product through the Customer Portal UI, through the Web tier, but it is an application running on the App tier that actually sends out text messages to the Customer when an invoice is generated.  Another example of this is when a Biller is viewing a report in the Biller Portal showing recently bounced emails.  The Biller Portal UI is displaying a user friendly view of the raw data in our database but it's an application on the App tier that periodically pulls bounce data from one of our vendors and saves to our database.  If there is a need for a background worker to process data there is a good chance it runs on the App tier.
+ 
+With many Console applications running on the App tier, and each possibly having different configuration needs, there is a need for an orchestrator to manage run schedules of these applications, provide run history reporting, perform support functions, etc.  This is where Automate Schedule, originally and still very well known as "Skybot", comes in.  This is 3rd party software installed inside our network that makes these functions available to us.  Keeping it simple, the core "Skybot" software is hosted on a VM that is NOT one of the App tier VMs.  This software manages the applications on the App tier through the use of Agent software that is installed on every App tier server.  The Agent takes actions on the installed server and reports back various data points back to the core "Skybot" software.  The "Skybot" software is usable by InvoiceCloud Engineering Employees through a web portal only accessible within the internal network.  This web portal is served from the server where Skybot is installed, and not from the Web tier discussed earlier.
+ 
+In many cases an application on the App tier is a "job" on Skybot.  In other cases a "job" on Skybot could be a collection of App tier applications running in a desired sequenced.  In other cases you may have multiple "jobs" configured to execute the same App tier application, with the argument being passed to the application, and the schedule, being the difference between each of these jobs.  Skybot empowers our teams to solution the use cases they run into as needed.
+ 
+One other function that Skybot offers that is critical to our team is error management of jobs.  When a job fails Skybot will send an alert email to OpsGenie that will start the process of engaging teams to react to the issue.  It has proactive abilities as well, like the ability to alert when a job is overrunning or when a job is skipped.  Again, the flexibility of Skybot enables us to configure jobs to suit the function they are performing.
+ 
+To name a few repo names of applications that run on the App tier:
+ 
+EmailQueueProcessing - Sends out the majority of the emails leaving our systems for multiple use cases (receipts, manual notifications, etc) and products (Autopay, Paperless, etc)
+DataPump - Sends out updates to Biller APIs notifying them of events such as a payment taking place
+SmsNotifications - Sends out text messages for multiple use cases (registrations, new invoices, etc) as part of our Pay by Text product
+BouncedEmailMonitor - Pulls bounced email data from our email relay provider
+BillerReportGenerator - Generates Biller requested reports and emails them out as part of our Biller Scheduled Reports feature
+AchAutoClose/CreditCardAutoClose - Closes unsettled payment batches at schedules times as part of our core Payment Processing function
+MC_RPPS - Pulls and processes "bank bill pay" data from multiple providers as part of our Online Bank Direct product.
+ 
+A visual that displays the App tier location in the environment:
+ 
+ 
+ 
+The Proxy Tier
+ 
+While the Web tier holds public facing web Uis and APIs, and the App tier holds the background processing applications, the Proxy tier holds some key services for internal-use only.  This server farm has 10 VMs and runs 4 critical WCF services, each hosted separately on its own Windows Service.  IIS is not used to host these services.   The 4 services are:
+ 
+ICDatabaseService - Simplifies connectivity to databases while providing common database functionality to calling applications.  Note that database connectivity from applications has evolved over time.  The majority of applications still get their database access through this service but a growing number are now getting their connectivity through the IC.Database library that is the core library inside ICDatabaseService.  One of the main benefits of using the IC.Database library over using it through the WCF service layer is performance.  If the application is using the library the call to the database is direct from the application.  When using the WCF service layer, the call from the application goes from app to proxy tier to database. 
+ 
+ICCryptoService - Provides cryptography functionality, such as credit card encryption, to calling applications
+ 
+ICRTDR - Exposes simple methods that encapsulate complex business logic that calls Biller APIs to pull invoice updates. 
+ 
+ICBusinessService - Exposes simple methods to connect to Azure Blob containers
+ 
+A visual:
+ 
+An App-tier with built in scale
+The previously described Web, App, and Proxy tiers contain a fixed number of servers, tuned to handle the current performance needs.  When there is a need to handle more the solution is to add another server into the tier and have it match the configuration of the others.  This is a manual process today.  Cloud computing can help us address some of these problems and more recently these services have seen large growth in adoption with our engineering solutions.  We use Microsoft Azure to host all our systems which also comes with some great cloud computing offerings.  
+ 
+Azure Batch
+Azure’s Batch offering fills our processing needs for a couple key background functions.  One of those needs is the ability to send out hundreds of thousands of invoice notification emails within 24hrs, and dynamically scale out to grow with the business.  For historical perspective, this function used to run on only 1 of the 8 App tier servers at any one time.  Now this one function runs on multiple “nodes” with dynamic ability to grow to more as needed.  
+Another need that is addressed with Azure Batch is the ability to process 100,000+ payments daily for our Autopay product.  Before the shift to Batch this one process was again running on 1 of 8 App tier servers at any one time with limited scale.  Now this runs on multiple “nodes” again with limitless scale.  
+Products/features that are currently powered by Azure Batch are:
+-Invoice Notifications
+-Autopay/Recurring/Scheduled Payments
+-Autopay/Scheduled Payment Reminders
+ 
+Azure Functions
+Azure’s Functions offering also fills in critical performance needs for various products and features.  One of those needs is the ability to send test emails from our Biller Portal Email Management area in real time.   For historical perspective, this function used to run on only 1 of 8 App tier servers, again a theme problem, at any one time.  In addition, the Biller would have to wait a minute or more for that email to be received because Skybot could only schedule the application running on the App tier to run in minute increments.  Now this one function runs in the cloud, sending that email immediately after it’s requested from the Biller Portal, with dynamic ability to scale out as more users are using that tool.  
+Another more critical need addressed by Azure Functions is the ability to settle hundreds of batches within a minute of the scheduled time.  Again for historical perspective, this used to be an application running on 1 of 8 App tier servers and as more Billers used it you could have batches settle past the scheduled time.  Using Azure Functions this function is now able to hit new levels of concurrency with the power of the cloud enabling us to close hundreds of batches within the scheduled time.  
+Some of the products/features that are currently powered by Azure Functions are:
+-Custom Batch Close
+-Biller Portal Email Management Test Emails
+-File Exports
+-Payer Reject Emails
+-Others
+More Azure Cloud Tech
+In addition to Batch and Functions our applications also make use of other Azure cloud offerings like Storage Queues and Service Bus, Blob Storage, AKS (Azure Kubernetes Service), etc.  We cannot forget about our databases.  All are hosted on Azure SQL Database!
+A visual displaying where these cloud technologies fit in the big picture:
+ 
+Don’t Forget the Data
+The majority of our applications have a need to perform CRUD operations against the database to perform it’s function successfully.  All our databases are hosted on Azure’s SQL Database PaaS offering.  We’ve implemented a sharded database model that enables us to provide Biller’s their own database while making it easy on us to maintain and support thousands of databases.  While each Biller has their own database they are all using the same single instance, multi-tenant application.  As users use our portals there is usually a Biller context available that tells the application which Biller they are working with.  That BillerID value (primary key for a Biller) is passed to our database layer (ICDatabaseService or IC.Database) which contains the logic to locate the right database to connect to to perform the requested functions.  
+In addition to each Biller having their own database, there are other databases that store critical data and help facilitate locating Biller databases.  The most well known of these is our “DBMaster” which stores IC specific data (not Biller-specific) like employee data, reference data tables, Biller lookup data, etc. 
+A quick visual that depicts how an application connects to the database:
+ URL:/spaces/ED/pages/3537895425/Application+Fundamentals

@@ -1,0 +1,17 @@
+Here you will find documentation on handling common alerts.
+Golden Alerts
+Golden alerts represent the most important metrics of a systems health and are broken down into four categories.
+Saturation: 
+How full the system is
+Latency: 
+How long the system takes to process a request
+Throughput: 
+The rate of requests it is processing
+Errors: 
+Error rate
+The exact details of each 
+golden metric 
+may vary depending on the context at which you are observing the overall system.  For example, an API team may measure 
+Throughput 
+as requests per minute. However, the platform team who is observing the cluster as a whole may measure using network packets/bytes in/out instead.
+ URL:/spaces/DS/pages/2900820038/Runbooks

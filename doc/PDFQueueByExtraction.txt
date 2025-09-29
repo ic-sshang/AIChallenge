@@ -1,0 +1,53 @@
+PDF Extraction Definition
+PDF Extraction is a Bill Presentment service provided by Invoice Cloud which allows Billers to upload PDF images that they intend to link to specific, existing, invoices. This is done by “extracting” data from the PDF images using PDF “markers” and renaming the PDF image files in Invoice Cloud’s PDF name structure.
+Triaging PDF Extraction issues can involve retrieving the PDF images using our internal tools or accessing our extraction-related servers, using our File Mapping tool, running the extraction process locally, making database queries to confirm data, and more. 
+PDF Lifecycle (Server)
+Finding PDF File Backups
+Please see Guru Card: 
+PDF Backup Locations
+.
+Retrieving PDF’s that linked can be done through the ICBlob Storage > IC-PDF:BID, The PDF’s are renames using the Lowercase GUID of the PDF in question which can be found on the Linked PDF Table on the database 
+Where do “Errored” PDFs go? 
+Depending on where PDFs encountered an error, they are placed in one of 2 folders. 
+You can access the error directories by navigating to one of the two PDF Extract servers (
+IC-PDFExtract1
+ and 
+IC-PDFExtract2
+) and inputting the BilerID in the search Bar. 
+PDF Remote Linking
+The remote linking is the only option where we fetch file from the printvendor site. The rest of the cases we get pdf files either from ftp, stratus or webservice call. The webservice call is the way the pdf vendor can push the PDF to us. They use DeliverPDF webservice call.
+use the 
+PdfFileBytes
+ to check if the incoming pdf is good or corruputed. 
+You can check if this is the case by getting the 
+PdfFileBytes
+ string from the web service logs, decode the bytes (Base64) then save it as a .pdf. From there you can open it in an pdf reader to see if there is an issue with the incoming PDF.
+Use Notepad++ to convert base64 and look for the pdf.
+select * from pdf.billerpendingpdfs where invoicenumber = '3697' odrer by 1 desc
+select PDFToken, * from pdf.pdflinkhistory where invoiceid = 3696 order by 1 desc
+Blob Storage for the pdf files can be looked up by getting the PDFToken from the above query.
+Matrix PDF Linking 
+We receive a file with the name darsexport in it and use the information in that to generate a invoice number from the account number and invoice date using the 
+Matrix Code
+ 
+After downloading the file verify the invoice date matches the invoice date of the invoices in question, and change the darsexport file to match that invoices [invoice date] and place it in the folder found in the FTP Management 
+Then place the matrix file there to be picked up and processed
+If it fails verify that the invoice number is being generated as AccountNumber-InvoiceDate(yyyyMMdd) and that the InvoiceDates and AccountNumber Match the invoices in question
+The Automate Job is [
+BillerPDFRemoteLinkingReferenceProcessing
+] and the Billers effected by this job in question are 
+3016, 2627, 2613, 2238, 2180, and 1314
+GURU LINKS
+: [
+Matrix Implementation
+], [
+Early/Late Upload Troubleshooting
+]
+Helpful Tip on Searching for PDFs
+A part of linking PDFs is looking for the PDFs. The process of searching for the PDFs becomes more of a challenge when the number of PDFs is large.
+For example, I am searching for some PDFs in a file full of PDFs. This could take hours if there is a lot of PDFs. 
+File Explorer can help with this issue. You can simply search for a value that is in the PDF you want. In this case, I will look for a PDF with the account number acc-123 in it.
+File Explorer not only searches the names of the files but also the contents of the files.
+Another case where this is helpful is when you are trying to confirm if a PDF is in a big unbursted PDF.
+Fist you will need to burst the PDF and then search through all the individual PDFs like in the first case.
+ URL:/spaces/DS/pages/2538340383/PDFQueuebyExtraction

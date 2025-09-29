@@ -1,0 +1,35 @@
+Overview
+Kong API Gateway is a web traffic load balancer that operates at the application layer (OSI layer 7). It is used to route API HTTP traffic to our Azure Web Servers and k8s cluster ingresses.  It is also used to manage API lifecycles, centralize authentication, and observability.
+Each target persona (API user) and environment will have a workspace in Kong.  Workspaces isolate Kong resources;  services, routes, plugins, and consumers.
+Lower Environments (DEV, IAT) 
+Kong Manager
+https://kong.invoicecloud-beta.com/
+API Base URLs
+https://api-dev.invoicecloud-beta.com
+https://api-iat.invoicecloud-beta.com
+ 
+Workspaces
+biller-dev
+biller-iat
+payer-dev
+payer-iat
+Upper Environments (QAR, XAT, PRD) 
+Kong Manager
+https://kong.invoicecloud.com/
+API Base URLs
+https://api-qar.invoicecloud.com
+https://api-xat.invoicecloud.com
+https://api.invoicecloud.com
+Workspaces
+biller-qar
+biller-xat
+biller-prd
+payer-qar
+payer-xat
+payer-prd
+Related links:
+Kong
+ 
+Kong API Gateway Integration
+ 
+ URL:/spaces/ED/pages/4000940033/API+Gateway+-+Kong

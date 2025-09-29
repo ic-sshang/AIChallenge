@@ -1,0 +1,1617 @@
+Summary
+: This Technical Design only captures changes made to 
+Town of Fortville
+ in Q3 2025 for PDF TEMPLATE Jira Request. The early Technical Design is not documented at this time for this specific biller specifically, but the Integration Design can be found here: 
+Boyce Systems Technical Design - Integrations - Confluence
+Page Navigation
+Jira ticket 
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/SA/queues/custom/87/SA-1345
+ 
+ITR
+N/A
+Release Date
+N/A
+Document status
+IN pROGRESS
+Green
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+Bill Presentment (Template Detail)
+ Town of Fortville REQUESTED PDF TEMPLATE CHANGE
+Code Repository: ICTemplates
+InvoiceFormatID: 232
+InvoiceFormatGUID
+: 2FB3B2F0-3FFC-4315-A6E0-CF7B0ADDDFCD
+Template Description: 
+Town of Fortville
+CURRENT TEMPLATE:
+TEMPLATE WITH BILLING SUMMARY TEXT CHANGES
+UPDATED PDF TEMPLATE WITH A NEW LINE “PREVIOUS TOTAL BALANCE”
+Change request 
+Description of change or the ICField Name to use for populating date or dollar value
+Biller Usage
+1
+Add a new line to the billing summary section to display the “PREVIOUS TOTAL BALANCE”
+Add the new line after the “Due Date” line
+Display Previous Total Balance to customers
+2
+CUSTOMFIELD11
+Displaying the “PREVIOUS TOTAL BALANCE” ON PDF TEMPLATE
+File Mapping
+Invoice File
+Boyce Systems without PDF
+File Summary/Purpose: 
+File Extension:.txt
+File Naming Convention: 
+File Delimiter: NA
+Code Repository: StratusWebServices
+FileName/ClassName:
+ modBoyceSystems
+Function
+: BoyceBIF
+StratusInvoiceFileTypeDesc
+:  Boyce Systems without PDF
+ID
+: 139
+Known Billers with this file type enabled
+ : ,951,2941,1582,1903,591,433,1783,428,343
+Sample Biller File:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name/Tag
+Class
+Logic is Found In
+Partner Field Format
+Creation Logic/Conditions
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/a - IC to generate - Always 'N'
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+clsIntegratorTools
+N/A
+N/A
+N/A
+N/A
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+N/A
+modBoyceSystems
+DataRow
+20220617024502-1
+Where 
+20220617024502
+is the date the invoice is processed
+and 
+-1
+ is the current invoice being processed in the file in a sequential format
+InvoiceNumber
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+<DATE>
+modBoyceSystems
+DataRow
+Extract data from file
+InvoiceDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+<DUEDATE>
+modBoyceSystems
+DataRow
+Extract data from file
+InvoiceDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+<TOTALDUE>
+modBoyceSystems
+DataRow
+Extract data from file
+TotalAmountDue
+Invoice Header
+38
+Custom1
+Y
+FALSE
+<SERVADD>
+modBoyceSystems
+DataRow
+Extract data from file
+Service Address
+Invoice Header
+39
+Custom2
+Y
+FALSE
+<WABAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Water penalty owed
+Invoice Header
+40
+Custom3
+Y
+FALSE
+<SWBAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Sewer penalty owed
+Invoice Header
+41
+Custom4
+Y
+FALSE
+<SABAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Sanitation penalty owed
+Invoice Header
+Custom5
+Y
+FALSE
+<ELBAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Electric penalty owed
+Invoice Header
+Custom6
+Y
+FALSE
+<GABAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Gas penalty owed
+Invoice Header
+Custom7
+Y
+FALSE
+<MSBAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Misc. Service penalty owed
+N/A
+Invoice Header
+Custom8
+Y
+FALSE
+<AOTHER1>
+modBoyceSystems
+DataRow
+Extract data from file
+Previous Other Charge one balance
+N/A
+Invoice Header
+Custom9
+Y
+FALSE
+<AOTHER2>
+modBoyceSystems
+DataRow
+Extract data from file
+Previous Other Charge two balance
+Invoice Header
+47
+Custom10
+Y
+FALSE
+<AOTHER3>
+modBoyceSystems
+DataRow
+Extract data from file
+Previous Other Charge three balance
+Invoice Header
+Custom11
+Y
+FALSE
+<WAMON>
+modBoyceSystems
+DataRow
+Extract data from file
+Water budget monthly billing amount
+Invoice Header
+Custom12
+Y
+FALSE
+<SWMON>
+modBoyceSystems
+DataRow
+Extract data from file
+Sewer budget monthly billing amount
+Invoice Header
+Custom13
+Y
+FALSE
+<LIENBAL>
+modBoyceSystems
+DataRow
+Extract data from file
+Lien balance included in total balance
+Invoice Header
+Custom14
+Y
+FALSE
+<WABDBL>
+modBoyceSystems
+DataRow
+Extract data from file
+Water budget balance amount
+Invoice Header
+Custom15
+Y
+FALSE
+<SWBDBL>
+modBoyceSystems
+DataRow
+Extract data from file
+Sewer budget balance amount
+Invoice Header
+Custom16
+Y
+FALSE
+<ELMON>
+modBoyceSystems
+DataRow
+Extract data from file
+Electric budget monthly billing amount
+Invoice Header
+Custom17
+Y
+FALSE
+<GAMON>
+modBoyceSystems
+DataRow
+Extract data from file
+Gas budget monthly billing amount
+Invoice Header
+Custom18
+Y
+FALSE
+<ELSAVE>
+modBoyceSystems
+DataRow
+Extract data from file
+-Electric Energy Assistance amount
+Invoice Header
+Custom19
+Y
+FALSE
+<GASAVE>
+modBoyceSystems
+DataRow
+Extract data from file
+Gas Energy Assistance amount
+Invoice Header
+Custom20
+Y
+FALSE
+<ELBDBL>
+modBoyceSystems
+DataRow
+Extract data from file
+-Electric budget balance
+Invoice Header
+Custom21
+Y
+FALSE
+<GABDBL>
+modBoyceSystems
+DataRow
+Extract data from file
+Gas budget balance
+Invoice Header
+Custom22
+Y
+FALSE
+<WHCREDIT>
+modBoyceSystems
+DataRow
+Extract data from file
+Water heater credit
+Invoice Header
+Custom23
+Y
+FALSE
+<ACCREDIT>
+modBoyceSystems
+DataRow
+Extract data from file
+Air conditioner credit
+Invoice Header
+Custom24
+Y
+FALSE
+<SPRCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Sprinkler charge
+Invoice Header
+Custom25
+Y
+FALSE
+<HYDCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Hydrant charge
+Invoice Header
+Custom26
+Y
+FALSE
+<MULTGA3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas meter multiplied consumption
+Invoice Header
+Custom27
+Y
+FALSE
+<MULTGA2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas meter multiplier
+Invoice Header
+Custom28
+Y
+FALSE
+<MULTGA>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas meter multiplier
+Invoice Header
+Custom29
+Y
+FALSE
+<MULTEL3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric meter multiplier
+Invoice Header
+Custom30
+Y
+FALSE
+<MULTEL2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric meter multiplier
+Invoice Header
+Custom31
+Y
+FALSE
+<MULTEL>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric meter multiplier
+Invoice Header
+Custom32
+Y
+FALSE
+<TDATE>
+modBoyceSystems
+DataRow
+Extract data from file
+billing service thru date
+Invoice Header
+Custom33
+Y
+FALSE
+<FDATE>
+modBoyceSystems
+DataRow
+Extract data from file
+billing service from date
+Invoice Header
+Custom34
+Y
+FALSE
+<MISCCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+4th service charge
+Invoice Header
+Custom35
+Y
+FALSE
+<MSCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total water misc. charges (hydrant+sprinkler)
+Invoice Header
+Custom36
+Y
+FALSE
+<GATAX3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas charge tax
+Invoice Header
+Custom37
+Y
+FALSE
+<GATAX2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas charge tax
+Custom38
+Y
+FALSE
+<FG3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas meter fuel adjustment
+Invoice Header
+Custom39
+Y
+FALSE
+<FG2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas meter fuel adjustment
+Custom40
+Y
+FALSE
+<GACHG3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas charge
+N/A
+Invoice Header
+Custom41
+Y
+FALSE
+<GACHG2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas charge
+N/A
+Invoice Header
+Custom42
+Y
+FALSE
+<GATAX>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas tax
+N/A
+Invoice Header
+Custom43
+Y
+FALSE
+<FG>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas fuel adjustment
+N/A
+Invoice Header
+Custom44
+Y
+FALSE
+<GACHG>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas charge
+N/A
+Invoice Header
+Custom45
+Y
+FALSE
+<SACHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Trash charge
+N/A
+Invoice Header
+Custom46
+Y
+FALSE
+<SWCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Sewer charge
+N/A
+Invoice Header
+Custom47
+Y
+FALSE
+<WATAX3>
+modBoyceSystems
+DataRow
+Extract data from file
+not used
+N/A
+Invoice Header
+Custom48
+Y
+FALSE
+<WATAX2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd water tax
+N/A
+Invoice Header
+Custom49
+Y
+FALSE
+<WACHG3>
+modBoyceSystems
+DataRow
+Extract data from file
+not use
+N/A
+Invoice Header
+Custom50
+Y
+FALSE
+<WACHG2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd water charge
+N/A
+Invoice Header
+Custom51
+Y
+FALSE
+<WATAX>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water tax
+N/A
+Invoice Header
+Custom52
+Y
+FALSE
+<WACHG>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water charge
+N/A
+Invoice Header
+Custom53
+Y
+FALSE
+<ELTAX3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric tax
+N/A
+Invoice Header
+Custom54
+Y
+FALSE
+<ELTAX2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric tax
+N/A
+Invoice Header
+Custom55
+Y
+FALSE
+<FA3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd Electric Fuel adjustment
+N/A
+Invoice Header
+Custom56
+Y
+FALSE
+<FA2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric fuel adjustment
+N/A
+Invoice Header
+Custom57
+Y
+FALSE
+<ELCHG3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric charge
+N/A
+Invoice Header
+Custom58
+Y
+FALSE
+<ELCHG2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric charge
+N/A
+Invoice Header
+Custom59
+Y
+FALSE
+<ELTAX>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric tax
+Invoice Header
+Custom60
+Y
+FALSE
+<FA>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric fuel adjustment
+Custom61
+Y
+FALSE
+<ELCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric charge
+Invoice Header
+Custom62
+Y
+FALSE
+<GAREAD6>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas meter previous reading
+Invoice Header
+Custom63
+Y
+FALSE
+<GAREAD5>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas meter current reading
+Invoice Header
+Custom64
+Y
+FALSE
+<GAREAD4>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas meter previous reading
+Invoice Header
+Custom65
+Y
+FALSE
+<GAREAD3>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas meter current reading
+Invoice 
+Custom66
+Y
+FALSE
+<GAREAD2>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas meter previous reading
+Invoice 
+Custom67
+Y
+FALSE
+<GAREAD1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas meter current reading
+Invoice 
+Custom68
+Y
+FALSE
+<WCON2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd water meter consumption
+Invoice 
+Custom69
+Y
+FALSE
+<WAREAD4>
+modBoyceSystems
+DataRow
+Extract data from file
+-2nd water meter previous reading
+Invoice 
+Custom70
+Y
+FALSE
+<WAREAD3>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd water meter current reading
+Invoice 
+Custom71
+Y
+FALSE
+<WCON>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water meter consumption
+Invoice 
+Custom72
+Y
+FALSE
+<WAREAD2>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water reading previous reading
+Invoice 
+Custom73
+Y
+FALSE
+<WAREAD1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water meter current reading
+Invoice 
+Custom74
+Y
+FALSE
+<ELREAD6>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric meter previous reading
+Invoice 
+Custom75
+Y
+FALSE
+<ELREAD5>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric meter current reading
+Invoice Header
+Custom76
+Y
+FALSE
+<ELREAD4>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric meter previous reading
+Invoice Header
+Custom77
+Y
+FALSE
+<ELREAD3>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric meter current reading
+Invoice Header
+Custom78
+Y
+FALSE
+<ELREAD2>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric meter previous reading
+Invoice Header
+Custom79
+Y
+FALSE
+<ELREAD1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric meter current reading
+Invoice Header
+Custom80
+Y
+FALSE
+<MACCT>
+modBoyceSystems
+DataRow
+Extract data from file
+Account number to be printed
+Invoice Header
+Custom81
+Y
+FALSE
+<ELECTCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total electric charge
+Invoice Header
+Custom82
+Y
+FALSE
+<ELECTTAX>
+modBoyceSystems
+DataRow
+Extract data from file
+Total electric tax
+Invoice Header
+Custom83
+Y
+FALSE
+<SECLGT>
+modBoyceSystems
+DataRow
+Extract data from file
+Total security light
+Invoice Header
+Custom84
+Y
+FALSE
+<GASCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total gas charge
+Invoice Header
+Custom85
+Y
+FALSE
+<GASTAX>
+modBoyceSystems
+DataRow
+Extract data from file
+Total gas tax
+Invoice Header
+Custom86
+Y
+FALSE
+<WATERCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total water charge
+Invoice Header
+Custom87
+Y
+FALSE
+<WATERTAX>
+modBoyceSystems
+DataRow
+Extract data from file
+Total water tax
+Invoice Header
+Custom88
+Y
+FALSE
+<WATERMS>
+modBoyceSystems
+DataRow
+Extract data from file
+Total misc. water charge
+Invoice Header
+Custom89
+Y
+FALSE
+<SEWERCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+-Total sewer charge
+Custom90
+Y
+FALSE
+<TRASHCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total trash charge
+Invoice Header
+Custom91
+Y
+FALSE
+<FOURTHCHG>
+modBoyceSystems
+DataRow
+Extract data from file
+Total fourth service charge
+Invoice Header
+Custom92
+Y
+FALSE
+<SEWERSSC>
+modBoyceSystems
+DataRow
+Extract data from file
+S Message if summer sprinkling credit given
+Invoice Header
+Custom93
+Y
+FALSE
+<MSG1>
+modBoyceSystems
+DataRow
+Extract data from file
+Normal billing customer message line
+Invoice Header
+Custom94
+Y
+FALSE
+<MSG2>
+modBoyceSystems
+DataRow
+Extract data from file
+Normal billing customer message line
+Invoice Header
+Custom95
+Y
+FALSE
+<FUTURE13>
+modBoyceSystems
+DataRow
+Extract data from file
+Total Owed if paid after due date (total due plus projected penalty)
+Invoice Header
+Custom96
+Y
+FALSE
+<FUTURE31>
+modBoyceSystems
+DataRow
+Extract data from file
+E Total Electric Charge including Fuel Adj
+Invoice Header
+Custom97
+Y
+FALSE
+<FUTURE57>
+modBoyceSystems
+DataRow
+Extract data from file
+Water Consumption, previous 12 months
+Invoice Header
+Custom98
+Y
+FALSE
+<FUTURE58>
+modBoyceSystems
+DataRow
+Extract data from file
+Electric Consumption, previous 12 months
+Invoice Header
+Custom99
+Y
+FALSE
+<FUTURE59>
+modBoyceSystems
+DataRow
+Extract data from file
+Gas Consumption, previous 12 months
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+<TOTALDUE>
+modBoyceSystems
+DataRow
+Extract data from file
+BalanceDue
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 8
+NA
+DataRow
+NA
+NA
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+DataRow
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+<ACCT>
+modBoyceSystems
+DataRow
+Extract data from file
+account Number
+NA
+Customer Record
+602
+CustomerName
+Y
+TRUE
+<NAME>
+modBoyceSystems
+DataRow
+Extract data from file
+customer Name
+NA
+Customer Record
+61
+Address1
+Y
+FALSE
+<ADD>
+modBoyceSystems
+DataRow
+Extract data from file
+address1
+NA
+Customer Record
+62
+Address2
+Y
+FALSE
+<ADD2>
+modBoyceSystems
+DataRow
+Extract data from file
+Address2
+NA
+Customer Record
+63
+City
+Y
+FALSE
+<CITYSTZIP>
+OR
+<ADD2>
+modBoyceSystems
+DataRow
+If 
+<CITYSTZIP>
+ data has a length of 0
+THEN pull data from 
+<ADD2>
+city
+NA
+Customer Record
+64
+State
+Y
+FALSE
+<CITYSTZIP>
+OR
+<ADD2>
+modBoyceSystems
+DataRow
+If 
+<CITYSTZIP>
+ data has a length of 0
+THEN pull data from 
+<ADD2>
+state
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+<CITYSTZIP>
+OR
+<ADD2>
+modBoyceSystems
+DataRow
+If 
+<CITYSTZIP>
+ data has a length of 0
+THEN pull data from 
+<ADD2>
+zip
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+DataRow
+NA
+NA
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+<EST_WA2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd water meter estimated
+NA
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+<EST_WA1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st water meter estimated
+NA
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+<EST_GA3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd gas meter estimated
+NA
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+<EST_GA2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd gas meter estimated
+NA
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+<EST_GA1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st gas meter estimated
+NA
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+<EST_EL3>
+modBoyceSystems
+DataRow
+Extract data from file
+3rd electric meter estimated
+NA
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+<EST_EL2>
+modBoyceSystems
+DataRow
+Extract data from file
+2nd electric meter estimated
+NA
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+<EST_EL1>
+modBoyceSystems
+DataRow
+Extract data from file
+1st electric meter estimated
+NA
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+<FUTURE49>
+modBoyceSystems
+DataRow
+Extract data from file
+disconnect date
+NA
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+<SL>
+modBoyceSystems
+DataRow
+Extract data from file
+Security light charge
+NA
+Invoice Detail
+208
+CustomField11
+Y
+FALSE
+<PRVTOT>
+modBoyceSystems
+DataRow
+Extract data from file
+PREVIOUS TOTAL BALANCE 
+NA
+Invoice Detail
+211
+CustomField14
+Y
+FALSE
+<FUTURE3>
+modBoyceSystems
+Description of the fee will be provided on the following lines: <FUTURE3>
+Amount <AOTHER1>
+Extract data from file
+NA
+Invoice Detail
+212
+CustomField15
+Y
+FALSE
+<FUTURE4>
+modBoyceSystems
+Description of the fee will be provided on the following lines:<FUTURE4>
+Amount <AOTHER2>
+Extract data from file
+NA
+Invoice Detail
+213
+CustomField16
+Y
+FALSE
+<FUTURE5>
+modBoyceSystems
+Description of the fee will be provided on the following lines:  <FUTURE5>
+Amount <AOTHER3>
+Extract data from file
+NA
+Invoice Detail
+292
+Echo1
+Y
+FALSE
+<WHCREDIT>,<ACCREDIT><FA3><FA2><ELCHG3><ELCHG2><FA><ELCHG>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Current charge for Electric
+NA
+Invoice Detail
+293
+Echo2
+Y
+FALSE
+<ELSAVE>,<GASAVE>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+NCurrent charge for EAPA
+NA
+Invoice Detail
+294
+Echo3
+Y
+FALSE
+<FG3>,<FG2><GACHG3><GACHG2><FG><GACHG>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Current charge for Gas Meters
+NA
+Invoice Detail
+295
+Echo4
+Y
+FALSE
+<MSCHG>,<WACHG3><WACHG2><WACHG>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Current charge for Water Meters
+NA
+Invoice Detail
+296
+Echo5
+Y
+FALSE
+<ELMON>,<ELBDBL>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Budget charge for Electric
+NA
+Invoice Detail
+297
+Echo6
+Y
+FALSE
+<GAMON>,<GABDBL>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Budget charge for Gas
+NA
+Invoice Detail
+298
+Echo7
+Y
+FALSE
+<WAMON>,<WABDBL>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Budget charge for Water
+NA
+Invoice Detail
+299
+Echo8
+Y
+FALSE
+<SWMON>,<SWBDBL>
+modBoyceSystems
+DataRow
+Will only pull from 1 Partner Field Name/Tag IF and only IF that Field has a Numeric Value
+Budget charge for Water
+NA
+Invoice Detail
+300
+Echo9
+Y
+FALSE
+<DIRECTWD>
+modBoyceSystems
+DataRow
+If customer is autopay then message states "
+AUTOMATIC WITHDRAWL-NO BILL
+"
+NA
+Invoice Detail
+301
+Echo10
+Y
+FALSE
+<ROUTE>
+modBoyceSystems
+DataRow
+Route Number
+NA
+Invoice Detail
+302
+Echo11
+Y
+FALSE
+<FINALMSG>
+modBoyceSystems
+DataRow
+NA
+NA
+Invoice Detail
+303
+Echo12
+Y
+FALSE
+<FUTURE35> <FUTURE36>
+modBoyceSystems
+DataRow
+NA
+NA
+Invoice Detail
+304
+Echo13
+Y
+FALSE
+<FUTURE48>
+modBoyceSystems
+DataRow
+NA
+NA
+Invoice Detail
+chart:default
+com.atlassian.chart
+BAR
+vertical
+false
+350
+false
+Untitled chart
+Untitled axis
+true
+auto
+false
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+Chart
+default
+4b0bb907-00a8-40e0-a939-c65e123e30b8
+c28f946a-4132-44ce-b513-deefe22f4dc7
+chart:default
+com.atlassian.chart
+BAR
+vertical
+false
+350
+false
+Untitled chart
+Untitled axis
+true
+auto
+false
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+0
+Chart
+default
+4b0bb907-00a8-40e0-a939-c65e123e30b8
+c28f946a-4132-44ce-b513-deefe22f4dc7
+ URL:/spaces/IM/pages/4604624897/BID+303+Town+of+Fortville+Technical+Design

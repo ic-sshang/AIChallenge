@@ -1,0 +1,61 @@
+Guildlines:
+	- Test coverage determines the impact. 
+		- SonarQube
+	Example:
+		- Autopayment processing
+			- Logging. 
+
+Low
+	- If there are database changes it cannot be a lowest tier change. 
+		- Even if there is NO Product Engineering work. 
+	- Customizable text fields
+		- Add new text field
+		- Edit existing text field
+	- Email Recipients
+	- Alerts (NewRelic / OpsGenie)
+	- Permissions
+		- CRM
+		- Customer Login
+		- Biller
+	- RESEARCH:
+		- Identify the % of errors coming out completed items before Tony lets the Leads complete these.
+			- We need a base line. 
+			
+Medium
+	- Reports
+		- New Reports
+		- Existing Reports	
+			- Adding columns
+			- Adding data breakdown
+	- New/Editing API/SOAP methods
+		- 
+	- New Email Queue Types
+	- New Email Templates
+	- Displaying Invoice/Customer/PII data. 
+	- 
+High
+	- Modifying Invoice Notifications
+Highest
+	- Affects payments
+	- Framework level changes on 
+		- Registrations
+		- Authenticating
+		- Sessions
+		- Roles
+
+	
+	
+Impact: 
+ Lowest
+	- small UI Changes
+ Low
+	- If it impacts 1 non-VIP biller 10%
+ Med
+	- If it impacts 1 VIP biller 50%?
+	- Is the feature wrapped around a setting or biller option? 
+	- 
+ High
+	- If it impacts an unknown amount of billers. 
+ Highest
+	- Platform wide update, Affects ALL Billers.
+ URL:/spaces/PE/pages/2067988484/Risk+Level+Discussions

@@ -1,0 +1,31 @@
+This Web Service is used via IVR to return a utility invoice record from our system. If your method call is successful, 
+InvoiceSearch_Result.RecordFound
+ will be true. Param1 is the Customer Account Number and Options is used for custom implementations. 
+Triaging UtilitySearch2 IVR Method Calls
+To triage these types of issues please first 
+enable Option 84
+ and 
+set up your SOAPUI Environment
+. 
+Within SOAPUI choose the correct method in this case UtilitySearch2 and create a sample request. 
+The sample request should look like this: 
+Remember to remove all “?“  and change them to the correct data! 
+sql
+--To get the partnerGUID, PartnerKey, BillerGUID from the database run this query on the BillerShard
+
+Select BillerID, PartnerID, BillerGUID from Billers 
+
+--This will give you the IntegratorID/PartnerID associated with the software partner
+
+Select IntegratorID, IntegratorGUID, IntegratorKey from Integrators where IntegratorID = PartnerID
+
+-- To get the InvoiceTypeID you need to know the Account Number from Param1 
+-- change param1 in the query below to see the invoicetypeids available 
+
+Select * from invoices where customerid in (select customerid from customers where accountnumber like '%PARAM1%' OR displayaccountnumber like '%PARAM1%')
+Note: 
+ Make sure to look at the customer record to verify that the account number passed in param1 is the full customer account number or the DisplayAccountNumber as using the DisplayAccountNumber is an Options that are used in this call.
+Remember to ask what Options are being passed in the Options parameter as well! 
+Once you have all the information needed to replace the “?'s“  > click the green execute button to test the method call.
+To see the result click on the XML tab of the response. 
+ URL:/spaces/DS/pages/2548334663/UtilitySearch2

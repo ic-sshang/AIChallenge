@@ -1,0 +1,99 @@
+Step-by-step to catalogue resources
+Enforce Tagging & Naming Conventions  
+ • Every Terraform resource must include a tag 
+Environment
+ 
+hcl
+tags = {
+  Environment = var.environment    # dev, test, prod
+  Owner       = var.owner
+  CostCenter  = var.cost_center
+}
+Name
+ 
+modules and resources with a clear suffix or prefix
+hcl
+<app>-<component>-<env>-<region>
+Generate a Terraform-Based Inventory
+hcl
+# 1. Select or create your devtest workspace
+terraform workspace select devtest|| terraform workspace new devtest 
+
+# 2. Plan against your vars
+terraform plan \
+  -var-file=devtest.tfvars \
+  -out=devtest.plan
+
+# 3. Export the plan to JSON
+terraform show -json devtest.plan > devtest.plan.json
+
+# 4. Extract resource list via jq
+jq -r '
+  .planned_values.root_module.resources[] |
+  [.address, .type, .provider_name] | @csv
+' devtest.plan.json > devtest-resources.csv
+Crosscheck with Azure CLI Inventory  
+hcl
+az resource list \
+  --tag Environment=devtest\
+  --query '[].{Name:name,Type:type,RG:resourceGroup,Loc:location}' \
+  --output tsv > azure-devtest-resources.tsv
+Consolidate & Publish
+hcl
+# Python snippet (run in your CI/CD or locally)
+import json, csv, pandas as pd
+
+# 1. Load Terraform CSV
+tf_df = pd.read_csv('devtest-resources.csv', names=['Address','Type','Provider'])
+
+# 2. Load Azure TSV
+az_df = pd.read_csv('azure-devtest-resources.tsv', sep='\t')
+
+# 3. Combine
+combined = pd.concat([
+  tf_df.assign(Source='Terraform'),
+  az_df.assign(Source='Azure-CLI')
+], ignore_index=True)
+
+combined.to_csv('devtest-inventory-master.csv', index=False)
+Automation & Drift Detection
+Azure Policy:
+ Enforce tagging (
+Environment
+, 
+Owner
+) and alert on non-compliant resources.
+yaml
+# Example Azure Policy to require Environment tag
+properties:
+  displayName: "Require Environment tag"
+  policyType: BuiltIn
+  mode: All
+  parameters:
+    tagName:
+      type: String
+      defaultValue: "Environment"
+  policyRule:
+    if:
+      field: "tags[Environment]"
+      exists: false
+    then:
+      effect: "deny"
+Best Practices
+Automate nightly
+: Add this to a Jenkins/GitLab CI job on your 
+main
+ branch—so your catalogue always reflects the latest IaC.
+Version control
+: Check your 
+prod/devtest.plan.json
+, scripts and reports into a dedicated 
+infra-inventory
+ repo.
+Review on merge
+: Gate Pull Requests so any drift (resources in cloud not in IaC) fails the build.
+Publish
+: Upload 
+prod/devtest-inventory-master.csv
+ (or Confluence table) to a shared library; tag it with the date.
+ URL:/spaces/platform/pages/4288708639/Cataloging+Resources

@@ -1,0 +1,71 @@
+Problem Statement:
+When the field value is a string, the process must return the string. When the field value describes a field from the invoice/customer/invoice detail records it should return the actual value of that field.
+As an invoice can have multiple invoice details, Investigate the current templates on how they are identifying/mapping the values across the different invoice details and how we can adapt it into the records for  
+CustomTemplateFields
+Potential Solution:
+ 
+We can add all the column names from the Customer/Invoice/InvoiceDetails as special keywords that will automatically get the value instead of the word. Anything else should return the string value.
+We can add a Bit to the new table that identifies if we should return the string or attempt to pull a value.
+We can add a new column in the new data table called 
+InvoiceDetailIdentifier
+ in which will contain a key:value pair. The 
+key
+ would be the column name used to determine where to search, and the 
+value
+ would be used to find the correct invoice detail to be pulled from the editable template data table. Sample table below.
+FieldID
+InvoiceFormatID
+BillerID
+FieldName
+FieldValue
+FieldType
+StartDate
+CreationDate
+IsActive
+InvoiceDetailIdentifier
+1
+1269
+1875
+WaterTotalAmount
+CustomField1
+Decimal
+5/7/2025
+5/7/2025
+1
+Description:Water
+Research Notes:
+For the Invoice Detail problem, when investigating, I noticed a pattern we do in all the utility services. Almost all of them, we use a description to identify what invoice detail we need to use, then get the field we need. Sometimes it's the 
+Description
+ field, other times it's a 
+CustomField
+ so we need a way to identify which field we need to search on.
+Other times, we pull the entire collection. This can be useful for editable grid views, but this is not something currently in scope.
+InvoiceDetailID
+InvoiceID
+ProductID
+Description
+Quantity
+LineItemTotal
+CustomField1
+CustomField2
+CustomField3
+CustomField4
+8403
+3440
+WATER
+4211
+0.00
+44.79
+215249
+219460
+4/22/2025
+8404
+3440
+SEWER
+4211
+0.00
+53.92
+215249
+219460
+4/22/2025
+ URL:/spaces/IM/pages/4294672427/Method+to+map+and+retrieve+the+different+field+types.

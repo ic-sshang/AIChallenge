@@ -1,0 +1,29 @@
+When we create new pipelines to take the place of existing ones, or when we deprecate repositories that have associated pipelines, we need to do something to ensure that the legacy pipelines left in place aren’t run anymore. Eventually, we’ll need to clean them up. As of this moment we aren’t maintaining run history outside of Azure DevOps. Because of this, we are unable to delete the pipelines, as we’ll lose any history they contain.
+Important: 
+only deprecate a pipeline once the updated pipeline’s source has been merged to main and tested
+ 
+(all the way to production in the case of a deployment pipeline)
+Deprecating Classic Build Pipelines
+To deprecate a “designerJson” build pipeline (any non-YAML build pipeline), you must
+Update the pipeline name to begin with 
+[do not use]
+ (case insensitive). 
+Disable the pipeline (edit > options, change 
+The new build request is processing
+ to 
+Disabled
+ 
+Deprecating Release Definitions
+To deprecate a release definition (a legacy release pipeline, found under the 
+Releases
+ tab rather than the 
+Pipelines
+ tab), you must
+Update the definition name to begin with 
+[do not use]
+ (case insensitive)
+Disable the continuous deployment trigger if it exists (edit > lightning bolt above artifact name - change to 
+Disabled
+)
+ 
+ URL:/spaces/platform/pages/3442737165/Deprecating+and+Deleting+Pipelines

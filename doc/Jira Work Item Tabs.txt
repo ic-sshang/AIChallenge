@@ -1,0 +1,111 @@
+General
+The General tab is meant to be the original, unmodified request.  This should describe the problem being experienced, the pain being felt, the opportunity being sought.  Today, we’re using this for most things.  One of the most impactful changes with the new tabs 
+will be removing
+ the “solution” from this section and putting it into 
+its
+ own tab.
+Solution
+The Solution section of a story should be the proposed (and eventually finalized) solution that’s solving the problem outlined on the previous tab.  This should initially be provided by the scrum team (possibly with input from the Design team) during backlog grooming.
+Important note:
+ As the solution evolves over the life of story execution, the team should be disciplined in keeping this tab up-to-date, rather than relying on the comments section.  All stakeholders should be able to use this tab to see the most recent info on the solution to be delivered.
+Engineering
+The “Pull Request \ Code Review Committee” (renamed to “Engineering”) tab is a new addition intended to capture the handoff from developer to tech lead.
+Error Risk [IT ONLY]:
+ To be completed jointly by the tech lead and the developer.
+Code Branches:
+ Populated by the developer prior to story status being changed to “Tech Lead Review”.
+Pull Requests:
+ Populated by the developer prior to story status being changed to “Tech Lead Review”.
+Testing
+The Testing tab is a new addition intended to capture the handoff from development to QA.  The intent here is for the QE to have everything they need to begin testing immediately, including the code updates being deployed.
+Testing Status:
+ This is a field for the QE to keep track of whether something has been tested or not.  This status field should always be updated before a story transitions out of the QA team.
+Untested:
+ The story has not yet been tested.
+Tested - Failed:
+ The story was tested and testing failed.  The QE will provide specifics to the developer on which cases failed.
+Tested - Passed:
+ The story was tested and testing passed.
+Not Testable \ Won’t Test:
+ For reasons agreed upon by the scrum team, this story cannot be or won’t be tested.
+Domain:
+ The domain under which the updated/testable application has been deployed.  This is populated by the developer.
+Virtual Application:
+ The application with the domain above that contains the updated/testable application.  This is populated by the developer.
+BID(s):
+ Any biller IDs that should be used for testing, if applicable.  If any biller can be used, you can 
+leave
+ this field empty.  This is populated by the developer.
+Test URL:
+ Direct URL where the updated/testable application can be found.  This is populated by the developer.
+BDD Script:
+ The “behavior driven development” script to be executed by the QE.  This script is initiated during backlog grooming and is further refined during sprint planning and sprint execution.  It should ultimately contain a full list of cases before going to QA.
+Training
+The Training tab is mean to contain all training aspects of a story, and is mostly owned by the Training team, which is introduced to stories in the Release Planning meetings.
+Training:
+ Recommendation from the PM on if this story should be 
+discuss
+ed in the In-The-Know training, warrants a Master Class, or doesn’t require any training.
+In-The-Know Date:
+ Once the training team knows when this will be discussed, they can put the ITK date here.
+Master Class Date:
+ Once the training team knows when this will be discussed, they can put the Master Class date here.
+Knowledge Base Impact:
+ In the opinion of the Training team, how should this story be represented in the Salesforce Knowledge Base?  Does this story warrant 
+its
+ own article/video?  Should it be a modification to an existing article?  Is there no impact at all?  This is guidance for the Documentation owner.
+Marketing
+This tab is meant to contain all marketing details handed off from the scrum team to the Marketing team so the marketing team doesn’t need to track down the details it needs to perform 
+its
+ functions.
+Comm Strategy:
+ To be provided by the PM; does this story warrant general communication, targeted communication, or no external communication at all.
+Comm Target:
+ If the strategy calls for 
+target
+ed communication, who is the target?  It can be a list of BIDs, or a description of a biller segment (“only BS&A billers”, or “only billers who use X feature”).  If the marketing team needs assistance converting this target into a list of BIDs/contacts to communicate with, the Pm can assist.
+Comm Channels:
+ Recommendation (subject to change by the Marketing team) of which mediums the communication utilizes.  Currently the list is limited to “
+Monthly Release Email
+“, “
+Pendo in Biller Portal
+“, “
+Personal Email from CSMs
+“, “
+CloudBurst Newsletter
+“, and “
+Press Release
+“, but will likely grow.
+Problem Being Solved:
+ A brief summary of what challenge or problem is being addressed with 
+these
+ updates.
+Solution Benefits:
+ A brief summary of what benefits the solution will provide to stakeholders.  These last two items are meant to provide the Marketing team with what they need to craft release communication. Note that the Collateral Pics/Videos on the Documentation tab will also be used by Marketing.
+Documentation
+A relatively new focus, the Documentation tab will be completed by a 
+join
+t effort between the PM and the Documentation team.
+KB Article URL:
+ If the Training team identifies the need for a KB article in the 
+Knowledge Base Impact
+ field on the Training tab, the Documentation team will provide that URL here.
+Support Doc URL:
+ If the story warrants a dedicated document for support team consumption, the URL would go here.  (example shows a Box link, but this could be Teams, etc)
+Special Requests:
+ If there is anything outside the normal KB and support docs, such as updates to technical specs, biller-facing user guides, etc, those would go here.
+Collateral Pics/Videos:
+ These are likely to be captured by the PM during functional validation and provided here for other teams to use.
+Deployment
+Last but not least, the Deployment tab is meant as a deployment night checklist, owned entirely by the engineers deploying the changes to production.
+Notification Sent?
+ Have pre- and post-deployment notifications been sent?  How these notifications are sent (slack, email, etc) is 
+up to the deployment team
+, this is just to remind and track that it happens.
+Monitors Enabled?
+ Have production monitors and alert esclations paths been established for this new functionality?
+Rollback Plan:
+ Prior to deployment, the deployment team needs to identify the rollback plan that needs to be executed if the post-deployment test plan fails.
+Test Plan:
+ Prior to deployment, the deployment team needs to identify the post-deployment test plan that is to be executed to ensure the deployment was clean.
+ URL:/spaces/PRODUCT/pages/1988886533/Jira+Work+Item+Tabs

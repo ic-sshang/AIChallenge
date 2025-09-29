@@ -1,0 +1,61 @@
+Procedure Name
+: [dbo].[selAzureBillers]
+Author
+: Ross Lefrancois
+Create Date
+: 4/16/2018
+Description
+: Retrieves information about billers from the database based on various input parameters
+Purpose
+Objective
+: Retrieves information about billers from the database based on various input parameters
+Parameters
+Input Parameters
+:
+@BillerID VARCHAR(36) = ''
+	,@BillerDBA VARCHAR(50) = ''
+	,@BillerGUID VARCHAR(36) = ''
+	,@WebServiceKey VARCHAR(36) = ''
+	,@DemoAccount VARCHAR(36) = ''
+	,@PartnerID VARCHAR(36) = ''
+	,@SalesRepID VARCHAR(36) = ''
+	,@ImplementationMgrID VARCHAR(3) = ''
+	,@TimeZoneID VARCHAR(36) = ''
+	,@AutoCloseHour VARCHAR(2) = ''
+	,@BillerIsAlsoPartner VARCHAR(36) = ''
+	,@ChargeRCodeOnly VARCHAR(1) = ''
+	,@ACHMonthEndFees VARCHAR(1) = ''
+	,@CustomClose VARCHAR(1) = ''
+	,@Active VARCHAR(36) = ''
+	,@HighVolumeAutoPay VARCHAR(36) = ''
+	,@PDFDBID VARCHAR(2) = ''
+	,@PreLoadBifFiles VARCHAR(1) = ''
+	,@CancelDate VARCHAR(25) = ''
+	,@CheckDemoStatus BIT = 1
+	,@BOFSignDate VARCHAR(25) = ''
+	,@PayerSupport VARCHAR(1) = ''
+	,@PSApprovalDate VARCHAR(25) = ''
+	,@PSCancelDate VARCHAR(25) = ''
+	,@DivisionID VARCHAR(25) = ''
+	,@WebDomainID VARCHAR(1) = ''
+	,@ManualBilling	VARCHAR(1) = ''
+	,@BoardingRepID VARCHAR(5) = ''	
+	,@DomainTypeID VARCHAR(3)=''
+	,@DomainID VARCHAR(3) = ''
+Return Values
+Return Type
+: [Type of value returned, e.g., INT, VARCHAR]
+Description
+: [Explanation of what the return value represents]
+Dependencies
+Tables
+: dbo.Billers, tblVirtualApplications, BillerDomains, tblDomainTypes, dbo.tblDomains
+Example Usage
+Sample Call
+: [Example of how to call the stored procedure]
+SQL
+EXEC [dbo].[selAzureBillers]
+
+Expected Output
+: List of billers
+ URL:/spaces/ED/pages/3510567020/dbo+.+selAzureBillers+-+Shared+Stored+Procedure

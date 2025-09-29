@@ -1,0 +1,165 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+ 
+Knowledge Transfer
+n/a
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+Webservices
+Invoices are sent to IC via web services every 15 minutes
+Adjustments/Balances
+IC Web Services 
+Webservices
+Balance Updates
+InHance  "Balance Job" runs every 15 minutes
+InHance "Balance All Job" runs once a week on Sunday
+Payments
+IC Web Services 
+Webservices
+There are 2 ways to handle the payment coming from Invoice Cloud and the choice is (the Biller's) on how it will be handled:
+Through pending payments or live to the account. If you go the pending payments route, all payments downloaded from Invoice Cloud will sit in the View Pending Payments screen under Batch Entries until someone (the biller) goes in and manually posts them.
+If you choose to go the live route, all payments downloaded from Invoice Cloud will be posted directly to the customers’ accounts by a dummy clerk we (inHance) set up named IC Clerk. You (biller) will get a report through Open Transactions for this clerk for all payments made that day.
+ACH Rejects Posting
+Not Supported
+Void
+Not Supported
+Change Log - AutoPay Enrollment
+IC Web Services 
+Webservices
+InHance Auto Pay job: This job downloads a flag that tells inHance that Invoice Cloud will handle the ACH. When inHance downloads this flag, they set the customer to Draft and put dummy bank account info on the account. The bank name is Invoice Cloud Bank and the account number is 000000000 with a dummy routing number. If the biller does not currently handle any bank drafts at all, the biller will need to make sure they are including drafts when printing bills
+Change Log - Paperless Enrollment
+IC Web Services 
+Webservices
+InHance Customer job: This job downloads any flags or minor changes from Invoice Cloud -paperless, emails and phone numbers.
+Change Log - Phone Number
+IC Web Services 
+Webservices
+InHance Customer job: This job downloads any flags or minor changes from Invoice Cloud -paperless, emails and phone numbers.
+Change Log - Email Address
+IC Web Services 
+Webservices
+InHance Customer job: This job downloads any flags or minor changes from Invoice Cloud -paperless, emails and phone numbers.
+Bill Images 
+PDF Linking - Supported*
+PDF Extraction - Supported*
+Template - Supported
+Note: the InvoiceFormatGUID needs to be requested for the bill presentment type that’s being implemented. InHance only supports templates but IC can support Linking or Extraction between IC and their print vendor.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+CSRConnect
+Not Supported
+EMV
+Not Supported
+IVR
+Supported 
+Search by account number
+Kiosk
+Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+Supported
+IM helps the biller with installing the software
+Provide the biller with Guid, Web Service Key and Invoice Type ID
+SRED card swipe devices
+Biller can download the software from the biller portal (documentation - integration docs- specifications, click on CloudPOSconnect). Under Installation make sure you click on Download next to CloudPOSconnect and NOT CloudPOSPay
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+Supported
+Biller can use email address or username for registration
+ 
+Account Linking
+Supported
+Standard account linking on IC
+       Multi-User Log In
+Supported
+       Co-Owner Registration
+Supported
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported
+BIF customization
+Batch Closure
+Auto or Custom
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Supported
+in BIF
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Managed in the biller portal
+Conveyance
+Supported
+inHance does use conveyance/auto conveyance depending on their client
+Data Conversions
+Supported
+Typically, inHance only sends the past two billing cycles. If the Biller wants more, it needs to be requested from inHance.
+Email Notification Schedule
+Supported
+BIF customization - BIF customization are set by InHance EXCEPT email notification dates.
+Expire Bill for Payment
+Supported
+in BIF
+Minimum Payment
+Supported
+in BIF
+Paperless
+Supported
+Partial Payments
+Supported
+in BIF
+Past Due Payments
+Not Supported
+Scheduled Payments
+Supported
+Flex Pay
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Supported
+Supported through the biller portal
+Other EMV Devices
+Supported
+Supported through the biller portal
+ URL:/spaces/IM/pages/1966735636/Harris+inHance+v1+Integration+Software+Details

@@ -1,0 +1,346 @@
+Relationships
+Relationships between Roles
+System Administrator Can
+Create
+System Administrator Accounts
+Carrier Administrator Accounts - Carrier-specific
+Independent Agency (IA) Administrator Accounts - IA-specific.
+View
+Audit Logs
+System & Carrier Administrator Accounts
+Manage
+System Administrator Accounts
+Carrier Administrator Accounts
+Agent Accounts
+Carrier Administrator Can
+Two Types/Scopes
+Carrier 
+Can also perform some actions at the account/policy level for assigned Independent Agencies/Agents
+Independent Agency 
+Actions only cover the Independent Agency they belong to.
+Create
+Independent Agencies
+Link Independent Agency to Carrier
+Agent Accounts
+Link Agent Account to Carrier
+Link Customer Accounts to Agent
+Single + Bulk Assignment
+Transfer Customer Account between Agents
+Can be done between any combination of Carrier Agents, Independent Agents.
+Create Agent Account Roles
+Payment Methods (At Carrier Level)
+View
+Agent Accounts
+Profile Information
+Activation Status
+Account Associations
+IMPORTANT 
+For Carrier-associated Admins - should ONLY be able to view account associations for THEIR Carrier. 
+For IA associated Admins - can view whatever the agent has assigned?
+Customer Accounts
+Manage
+Agent Account Status (Active/Inactivate)
+Remove Customer Account(s) from Agent
+Carrier Payment Methods
+Agents Can
+Create
+Payment Methods (for themselves)
+Make Payment on behalf of customer
+Payment Confirmations and Receipts 
+Either Customer paid or Agent paid
+Configure Autopay for Customer
+View
+Customer Accounts (Assigned to Active Agent)
+Payment Methods/Information for Carrier, Agent (Themselves), Customer
+Autopay status
+Payments made on Customer Account - Either by Customer or themselves
+Manage
+Payment Methods (for themselves)
+Autopay Settings (on behalf of customer)
+Customer Details for Payments - Address, Contact Details, etc.
+Entity Hierarchy
+2
+1
+0
+0
+4519035046
+4474273831
+1
+Untitled Diagram-1753302093173.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1753302093173.drawio
+0
+981
+1081
+Organization & Agent Management
+API/Service Legend
+API/Service
+Description
+Access
+Agency Management API
+Manages Independent Agency Details - System accounts, Carrier Admin Accounts, Carrier Account Associations
+Contains IA-specific audit logs, etc.
+System Administrators
+Independent Agency Administrators
+API/Service
+Description
+Access
+Carrier Management API
+Manages Carrier Details - System accounts, Carrier Admin Accounts, Independent Agency Associations
+Contains carrier-specific audit logs, etc. 
+System Administrators
+Carrier Administrators
+Captive Agents 
+Diagram
+2
+0
+1
+0
+4474273831
+4541317319
+Untitled Diagram-1753981512123.drawio
+1
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1753981512123.drawio
+0
+2061
+1271
+Payments
+API/Service Legend
+Payment Mgmt
+API/Service
+Description
+Access
+Payment Management API
+Manages Payment Information at User Level - Agent & Customer Defined Payment Methods
+Customers
+Agents
+Carrier Payment API
+Manages Payment Information at Carrier Level - details are stored alongside other Carrier information.
+Carrier Administrator - Read/Write
+Captive Agents - Read
+Payments
+API/Service
+Description
+Access
+Transactions Service
+Manages Transaction Lifecycle of Payments - retrieves card info, handles various events in the lifecycle of a transaction, pushes events to notify of successful transactions.
+N/A - worker-style service.
+Payments API
+Initiates payments and acts as a gateway between internal systems and external payment networks.
+Customers
+Agents
+Carrier Administrator (as Agent)
+Notifications
+API/Service
+Description
+Access
+Notifications Service
+Manages the delivery of notifications to a target user and the lifecycle of those notifications - i.e. retries, delivery tracking, etc. 
+N/A - worker-style service.
+Diagram
+2
+1
+0
+0
+4485873803
+4474273831
+1
+Agent_Exp_Relationships.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Agent_Exp_Relationships.drawio
+0
+2930.5
+2170.5
+Agent Configuration
+API/Service Legend
+Carrier Administration
+API/Service
+Description
+Access
+Carrier Management API
+Manages Carrier Details - System accounts, Carrier Admin Accounts.
+Contains carrier-specific audit logs, etc. 
+System Administrators
+Carrier Administrators 
+Captive Agents 
+Agent Administration
+API/Service
+Description
+Access
+Agent API
+User management for Agent Accounts. Creation & Management of both Independent and Captive Agent accounts.
+Agents
+Carrier Administrators
+Diagram
+2
+1
+0
+0
+4486168827
+4474273831
+1
+AgentExperience_AgentMgmt.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+AgentExperience_AgentMgmt.drawio
+0
+1461
+1031
+Accounts
+API/Service Legend
+Carrier Administration
+API/Service
+Description
+Access
+Accounts API
+Provides details on and manages customer account associations.
+Carrier Administrators 
+Agents
+Customers
+Diagram
+2
+1
+0
+0
+4485808431
+4474273831
+1
+Agent_Experience_Accounts.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Agent_Experience_Accounts.drawio
+0
+2230.9999999999995
+731.0000000000001
+API Endpoint → Command Mapping
+These endpoints are a work in progress and will be more refined during detailed design.
+### 1. Login
+- **Login for Agents (OAuth/OIDC w/SSO)** -> CIAM Provider
+
+---
+
+### 2. Agent Management
+
+- **RegisterAgent**: POST
+- **InviteAgent**: POST
+- **ActivateAgent**: PUT or POST
+- **DeactivateAgent**: PUT or POST
+- **AgentProfile**: GET
+    - **AgentActivationStatus**: GET
+- **ChangeAgentProfile**: PUT or POST
+
+- **LinkAgentToCarrier**: (during creation or via API)
+    - Agent Setup may occur independently of Carrier - this behavior would be event-based.
+---
+
+### 3. Role and Permission Management
+- **AssignRoletoProfile**: POST
+- **CreateAgentRole** - POST
+
+---
+
+### 4. Account Assignment & Transfer
+- **AssignCustomerAccounToAgent**: POST
+- **TransferCustomerAccountToAgent**: POST
+- **RemoveCustomerAccountFromAgent**: POST
+
+
+- **Bulk Assignment of Customer Accounts to Agent**: POST
+   - Note - this will need an additional look. 
+
+---
+
+### 5. Account Visibility & Discovery
+- **GetPolicies**: GET
+   - Returns policies assigned to current agent.
+   
+- **SearchAccounts**: GET
+   - AI Search??
+
+---
+
+### 6. Payment Processing
+- **ProcessPayment**: POST
+   - On behalf of customer
+- **GeneratePaymentConfirmation**: POST
+- **GeneratePaymentReceipt**: POST
+
+- **PaymentsByAgent**: GET
+- **PaymentsByCustomer**: GET
+
+---
+
+### 7. Autopay Setup & Management
+- **ConfigureAutoPay**: POST
+   - On behalf of Customer
+- **AutopayStatus**: GET
+   - Should show config & setup details, owner, etc.
+
+---
+
+### 8. Payment Method Management
+- **ManagePaymentMethods**: POST (Carrier Admins)
+   - Internal to carrier
+- **ManagePaymentMethods**: POST (Agents)
+   - Agent-specific (or customer)
+- **PaymentMethods**: GET
+   - At Account Level.
+
+---
+
+### 9. Admin User Management
+- **CreateAdminAccount**: POST
+- **ManageAdminAccounts**: POST
+- **DeactivateAccount**: POST
+   - For Admins; Possibly redundant with `ManageAdminAccounts`
+- **ActivateAccount**: POST
+   - For Admins; Possibly redundant with `ManageAdminAccounts`
+- **AssignRoleToUser**: POST
+
+## Features Requiring Additional or Deeper Design Work
+
+### 10. Batch Payment Processing (Agent Cart)
+
+- **CustomerInvoices**: GET
+   - View
+   
+- **Add Customer Invoice to Cart**: POST
+- **Select/Deselect Invoices**: POST
+- **Summary View of Invoices**: GET
+
+---
+
+### 11. Autopay Event Notifications
+- **Configure Notification Preferences**: POST/PUT/PATCH
+  - These would be stored on a User Profile.
+
+---
+
+### 12. Audit Log
+- (No explicit API verb, but implied logging for all actions)
+
+---
+
+### 13. Customer Information Management
+- **Manage Customer Information**: POST
+
+### 14. Carrier Management
+- **CreateCarrier**: POST
+- **AssignAgentToCarrier**: POST (Slightly Redundant with #2 - could be done via eventing - determine where this belongs.)
+- **AssignIndependentAgencyToCarrier**: POST
+
+### 15. Independent Agency Management
+- **CreateIndependentAgency**: POST
+- **AssignAgentToIndependentAgency**: POST
+- **RemoveAgentFromIndependentAgency**: POST
+
+ URL:/spaces/EA/pages/4474273831/High-Level+Design

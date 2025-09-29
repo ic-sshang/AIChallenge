@@ -1,0 +1,29 @@
+Load Test Summary
+Max Virtual Users: 2,800
+Load Test Time: 30 minutes
+Test Cases
+CRM Login and navigating to and viewing pages via Azure Load Testing platform and JMeter scripts
+Biller Login and navigating to and viewing pages via Azure Load Testing platform and JMeter scripts
+Customer Login and navigating to and viewing pages via Azure Load Testing platform and JMeter scripts
+App Gateway Instances
+Min: 5
+Max: 50
+Requests Per Minute
+From Cloudflare we determined that we get 940 million requests per month which equates to 21,461 requests per minute.
+940,000,000 / 43800 = 21,461
+We achieved a maximum of 100k requests per minute and a consistent load of between 50k and 60k requests per minute.  We observed a max traffic spike during the day in production traffic coming in from Cloudflare of 50k requests per minute via NewRelic query by 
+ , so the consistent load of 50k to 60k per minute for 25 minutes should be a valid real-world load to test with.
+Bytes Sent
+From Cloudflare metrics we estimate we transmit 12 TB per month
+From Load Test: 430 megabytes * 43,800 = 18.834 TB per month
+App Gateway Metrics
+New Relic NonProd App Gateway Dashboard
+Azure Portal Requests Per Minute
+Azure Portal Response Statuses
+Azure Portal Failed Requests
+Azure Portal App Gateway Total Time by Listener
+Azure Portal Backend Last Byte Response Time by Listener
+Azure Portal Backend Bytes Sent by Listener
+Backend Service VM Metrics
+CPU and Memory Saturation
+ URL:/spaces/platform/pages/3341352976/Load+Test+3+for+App+Gateway+DV+0

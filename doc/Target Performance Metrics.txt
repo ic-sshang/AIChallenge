@@ -1,0 +1,364 @@
+Helps paint a picture of how our system is currently performing against expectations.  Together it can be used as a foundation to determine the impact of growth.
+Definitions
+Baseline Value is for the current performance value for that metric
+Target Value is what InvoiceCloud deems as the acceptable value for that metric and system
+Priority
+System/Product/Feature
+Metric
+Values
+Testable in Production env?
+Baseline
+Target
+ 
+Autopay
+Time to process Autopay payment (No RTDR)
+ 
+ 
+ 
+Autopay
+Time to pull Autopay process batch
+ 
+ 
+ 
+Autopay
+Time to process Autopay batch
+ 
+ 
+ 
+Biller Scheduled Reports
+Time to deliver ASAP report
+ 
+ 
+ 
+Database
+TODO: Number of supported shards
+ 
+ 
+ 
+DataPump
+Time to deliver item
+By data type
+ 
+ 
+DataPump
+Time to start processing queued item
+By data type
+Critical
+Email
+Time to deliver queued item
+By EmailQueueTypeID
+ Ex: 1min
+Ex: 30sec
+ 
+Critical
+Email
+Emails per minute
+By EmailQueueTypeID
+ 
+ 
+ 
+Email
+Time to import Bounces
+ 
+ 
+ 
+Email
+Time to import Complaints
+ 
+ 
+ 
+Email
+Time to import Email Status
+ 
+ 
+ 
+File Exports
+Time to generate export
+By file type
+ 
+ 
+Critical
+File Imports
+Time to import file 
+By file type
+By WS, FTP, Stratus
+ 
+ 
+File Imports
+Max Size By Delivery Method
+Web Upload
+FTP
+ 
+OBD
+Time to import file
+MC
+Fiserv
+ 
+ 
+ 
+OBD
+Time to automatch
+ 
+ 
+ 
+OBD
+Import X payments per minute
+ 
+ 
+ 
+OBD
+Automatch x payments per minute
+ 
+ 
+ 
+Pay by Text
+Time to send queued item
+By SmsTypeID
+ 
+ 
+ 
+Pay by Text
+Time to respond to TXT
+By SmsTypeID
+ 
+ 
+Critical
+Payment Batch Settlement
+Time to settle ACH batch
+By processor
+ 
+ 
+Critical
+Payment Batch Settlement
+Time to settle Credit Card batch
+By processor
+ 
+ 
+ 
+Payment Batch Settlement
+Settled batches per minute
+ 
+ 
+Critical
+Payment Processing
+Time to process ACH payment
+By processor
+ 
+ 
+Critical
+Payment Processing
+Time to process Credit Card payment
+By processor
+ 
+ 
+ 
+Payment Processing
+Time to process PP payment
+ 
+ 
+ 
+Payment Processing
+Time to process GP payment
+By processor
+ 
+ 
+ 
+Payment Processing
+Time to process Venmo payment
+By processor
+ 
+ 
+Critical
+Payment Processing
+Payments per minute
+By processor
+ 
+ 
+ 
+Payment Reporting
+Time to import ACH reject file/data
+ 
+ 
+ 
+Payment Reporting
+Time to import NOC file/data
+ 
+ 
+ 
+Payment Reporting
+TODO - PP, BT, recon reports, etc
+ 
+ 
+ 
+PDFs
+Time to Upload
+By transfer mechanism
+ 
+ 
+ 
+PDFs
+Time to Link
+ 
+ 
+ 
+RTDR
+Time to call Biller API
+ 
+ 
+ 
+RTDR
+Response Time back to caller
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/OpenInvoices
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/RecentInvoices
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/ClosedInvoices
+ 
+ 
+ 
+Web Services REST
+Response Time - UserBank/Retrieve
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/GetLinkedAccounts
+ 
+ 
+ 
+Web Services REST
+Response Time - UserCreditCard/Retrieve
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/CustomerPaperless
+ 
+ 
+ 
+Web Services REST
+Response Time - Customer/RetrieveCustomerGuid
+ 
+ 
+ 
+Web Services REST
+Response Time - CustomerPortalV/GetPaymentHistory
+ 
+ 
+ 
+Web Services SOAP
+Response Time - CloudToolsCalculateServiceFee1
+ 
+ 
+ 
+Web Services SOAP
+Response Time - GeneratePaymentRouteServiceFees/RecalculateServiceFeeBinNumber
+ 
+ 
+ 
+Web Services SOAP
+Response Time - CloudManagement.ViewCustomerRecord
+ 
+ 
+ 
+Web Services SOAP
+Response Time - CloudManagement.ViewCustomerAutoPaySettings
+ 
+ 
+ 
+Web Services SOAP
+Response Time - CloudPayments.TransactionResultSearch
+ 
+ 
+ 
+Web Services SOAP
+Response Time - CloudInvoicing.UploadInvoice
+ 
+ 
+ 
+Web Services SOAP
+Response Time - IVRTechV1.AdvancedIVRSearch
+ 
+ 
+ 
+Web Services SOAP
+Response Time - IVR.TaxSearch2
+ 
+ 
+ 
+Web VM
+CPU usage
+ 
+ 
+ 
+Web VM
+Memory usage
+ 
+ 
+Critical
+Website
+Virtual Site Customer Locator Search
+ 
+ 
+Critical
+Website
+Customer Portal Open Invoices View
+ 
+ 
+Critical
+Website
+Payer Payment Route Start to End
+ 
+ 
+ 
+Website
+Virtual Site Landing Page
+ 
+ 
+ 
+Website
+Customer Login Page
+ 
+ 
+ 
+Website
+Customer.aspx
+ 
+ 
+ 
+Website
+Customer Portal Dashboard
+ 
+ 
+ 
+Website
+CustomerPortalRedirect.aspx
+ 
+ 
+ 
+Website
+Biller Login Page
+ 
+ 
+ 
+Website
+Account Linking
+ 
+ 
+Critical
+Website
+Count of Active Sessions
+ 
+ 
+ 
+ URL:/spaces/EA/pages/4083580947/Target+Performance+Metrics

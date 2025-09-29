@@ -1,0 +1,381 @@
+ Solution Alignment
+What is this project about?
+The feeling (to be proven) is that new users within the Biller Portal are frustrated by the user experience.  We believe there are several things that are causing this, including lack of training attendance or ineffective training, poor design/usability of the user experience, and lack of dedicated new user focus.
+There are dev and non-dev opportunities for us to smooth this process.
+Some items discussed:
+Launch a pre-release Pendo guide to obtain metrics on new user comfort within the biller portal, and use this data (a) to justify the effort, and (b) as a basis for comparison for after we release updates.  For more details, see the 
+Pre-release Pendo
+ section.
+Publish a “quick-start” Pendo guide to encourage the user to complete specific tasks as a mechanism for coming up to speed, with detailed guidance/training along the way. (think: checkmarks when setting up new fantasy football league) See quick start section for more details.
+Encouraging training
+Introduce a new “welcome” email when user accounts are created.  This should give “what to expect” / “next steps”.
+This overlaps with recent security requirements to eliminate biller admin access to cleartext passwords in the Biller Portal (and IC access in CRM).  See Security updates section for more details.
+A second email will contain links to sign up for instructor-led training sessions and self-paced training videos.  The intent here is to get the user into training earlier in the new user process
+What other items do we want to include in this email?  Ask Cat/Anita/Mark(?).
+Pre-release Pendo 
+Pre-release-Pendo
+ 
+Pendo guides launched to collect preliminary data from new users:
+Start Date:
+ 2/14/23
+End Date:
+ TBD
+Target Audience:
+ First visit.
+Goal:
+ Capture raw feedback on level of confidence, and determine if trained.
+Jump to results
+New User Preparedness - Poll
+Start Date:
+ 4/5/23
+End Date:
+ TBD
+Target Audience:
+ Responded ‘
+I attended training
+’ and first visit not within last 5 weeks.
+Goal:
+ Temp check - allow time to acclimate/develop feedback and determine if quickly frustrated.
+New User Follow-Up (trained) - Poll
+Start Date:
+ 4/5/23
+End Date:
+ TBD
+Target Audience:
+ Did 
+not
+ respond ‘
+I attended training
+’ and first visit not within last 5 weeks.
+Goal:
+ Temp & status check - allow time to acclimate/develop feedback and determine if quickly frustrated.
+New User Follow-Up (not trained) - Poll
+What do we want to improve/solve?
+Current procedures provide biller portal access to users with little to no training/preparation.
+Why do users first log in, what prompts this action?
+If possible, may need to validate if new users log in simply because credentials were provided or based on some sort of instruction from IC staff or their superior.
+Early portal interactions for new users, either with or w/out training, lack guidance for getting started.
+If new users are frustrated, is it the portal/experience in general or something specific?
+If possible, may want to solicit additional feedback (open poll) to identify deficiencies to focus on - need to further discuss if appropriate at this stage or as a second layer after X visits/months.
+UX might launch a quarterly guide asking users their purpose for using the portal - check on this and/or potentially add a similar question as step 1 of the New User Prep guide.
+Project Components
+We see three phases of the new user experience with potential for changes to have a positive impact.
+Pre first login
+Procedures before users gain access to the portal
+What happens today (as of Oct 2022)?
+Boarding
+Daily smartsheet intake for paperwork review and to assign teams
+Sets up biller (BID) in CRM - including 
+MasterAccount 
+& 
+IC Support
+ users
+Portal credentials are 
+not
+ supplied by this group
+Implementations
+Lois and other dept leads attend intake to assign IMs accordingly
+IM double checks paperwork, comments from sales, preps smartsheet dashboard questionnaire for biller, 
+sends welcome email
+Login credentials either provided in welcome email or after kick-off call
+Update: As of May 2023, IM enters username & email address only (password reset is emailed to biller) - username included in kick-off recap or 
+training email
+ post kick off
+IM informs billers where to locate training videos and sign up for live sessions
+Some integrations require a test portal & production portal, but most are production that start off in demo mode
+Demo mode duration varies depending on biller, partner, etc. 
+Small/simple integrations typically 45-60 days while more complex is closer to 120 days
+No restrictions on adding new users while in demo
+Imp flow/outline in ES University Imp/Onboarding folder
+https://university.engagesmart.com/new/ui/learner#/update/1486820705142864119?series=1395760965849519951
+Training
+IM mainly drives new biller traffic to training
+Sends an email to sign up for live training upon go-live announcement
+Mark to forward Ryan a copy
+Can/should the procedure change?
+Upon first login
+User initial interaction with the portal
+Provide general and/or personalized guidance to get started
+Post first login (ongoing)
+Ensure continued success
+Provide convenient access to self-help assistance
+Facilitate ability to gather sitewide feedback
+Considerations
+A high-level ‘Biller Portal Overview’ video(s).
+Highlight different areas of the portal (where to go in nav menu) and how to access the KB.
+Possibly tailored to user persona with option to view other user persona based videos.
+Video followed by a series of prompts or guides to walk users through what we believe are the most critical tasks they will need to perform.
+If possible, we can track which tasks are completed/incomplete and display statuses to each user.
+Resource Center to collect open-poll style feedback on a per page basis.
+Need to research and determine if able to identify which page is associated with the feedback.
+Quick-start guide
+Open questions:
+Where are the users struggling, and what tasks should we have them perform to address those areas?
+These tasks are likely to be tailored to the type of user (CSR vs account vs admin vs ?)
+Are we able to determine the user’s role(s) before they login?
+If not, give them multiple choice roles/tasks to pick from, and these selection will dictate which quick-start tasks we present to them.
+Some options include:
+Is this something we can do exclusively with Pendo?
+We’re unable to display a constant Pendo guide (i.e., automatic guide that does not dismiss to show a list of relevant KB links) on the same page as any other automatic guides that may be desired - only multiple badge-driven guides can be used simultaneously or in conjunction with a constant guide.
+Pendo won’t have status persistence to facilitate showing completed vs incomplete tasks.
+For these reasons, we believe this needs to be a DEV project.
+Research if/how the Pendo “Resource Center” feature may be able to help:
+https://support.pendo.io/hc/en-us/articles/360031866712-Resource-Center-Overview
+ 
+Limited to one RC per app (i.e., only one RC can be created for the Biller Portal app)
+Customize modules and guides within the RC with segments and page locations to control which users see what and where 
+A user must be an eligible visitor in the module segment and guide segment for both the module and relevant guide to appear in the RC for that user
+If a user clicks the RC badge on a page where a guide is not located, said guide does not appear as an option within the module - it will appear only when the RC badge is clicked on the guide’s designated page
+Potential to create poll response segments to dynamically target user persona, but this method relies on users having provided a response which is largely unreliable
+RC does not interfere with standard guide display
+Using Pendo ‘integrations’ for a KB
+note
+Pendo/Salesforce integration info: 
+https://support.pendo.io/hc/en-us/articles/360032210011-Salesforce-Integration-Overview
+ 
+Sf is listed in Pendo integrations
+We have Admin access in Pendo but not Sf, which is required
+
+
+Pendo/Salesforce integration info: 
+https://support.pendo.io/hc/en-us/articles/360032210011-Salesforce-Integration-Overview
+ 
+Sf is listed in Pendo integrations
+We have Admin access in Pendo but not Sf, which is required
+
+
+Make external links to Knowledge Articles work with login
+ (article on ideaexchange from 2012 – still open!) – 
+is this relevant/a concern?
+Need to put together some mockups and start discussions with BMS and Design teams.
+Security updates
+Biller Portal users have access to PII, partial PAN, can manipulate financial transactions, they are in scope from a PCI perspective and need to follow industry standards
+Admins should never see/edit user passwords
+Passwords should be salted hash on the backend, no decryption possible
+Password field should go away, be replaced by a “reset password” feature
+Upon new user creation, user receives a welcome email with username and temporary login link
+Login link expires after X mins, need to determine what’s acceptable based on discussion with CS, I’m thinking a few hours
+If link expires, admin can resend email which will provide new link
+User is directed to a “set your password" page, follows data validation rules
+Upon creation of password, redirected to login page
+Same password page will be used if user is sent “reset password” email
+On new/edit user page, should we require the admin to provide role details / common tasks?
+Review password policy details and verify with SecCom team that they’re still accurate
+Ensure that we’re actually enforcing these policy details
+Make sure to include proactive messaging when password expiration is upcoming
+Usability of new user page
+Double entry on key fields, less in-your-face validation rules
+Product/mkt will help with messaging and delivery of new “feature” to billers
+These same requirements need to apply to the CRM UI as well (no IC admin seeing cleartext passwords)
+These same requirements need to be reviewed for payer user accounts as well
+Why are we doing it?
+Poll Results 
+prep-poll
+New User Preparedness
+Many users access the biller portal before receiving training and are unprepared, which may lead to frustration.  Unless otherwise indicated, % is based on overall # of relevant responses (excludes neutral %).  Guide details in 
+Pre-release Pendo
+.
+2023
+2/14-2/28
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Feel prepared to use portal
+Target:  50-100%
+28.05%
+27.27%
+32.95%
+30.93%
+25.45%
+32.47%
+28.19%
+Unaware of available training
+Target:  0-20%
+20.00%
+13.52%
+17.28%
+11.56%
+21.13%
+19.01%
+16.18%
+Plan to attend training soon
+Target:  0-30%
+54.67%
+53.74%
+43.21%
+55.11%
+47.89%
+49.30%
+51.45%
+Trained and feel prepared (subset)
+Target:  80-100%
+50.00%
+47.06%
+56.82%
+62.00%
+46.15%
+64.29%
+35.71%
+Total Responses (1 of 2 / 2 of 2)
+82/75
+297/281
+176/162
+236/225
+224/213
+154/142
+188/173
+% out of range
+ | 
+% within range
+New User Follow-Up (attended training before first visit)
+Unless otherwise indicated, % is based on overall # of relevant responses (excludes neutral %).  Guide details in 
+Pre-release Pendo
+.
+2023
+4/5-4/30
+May
+Jun
+Jul
+Aug
+Sep
+Rate experience as poor
+22.22%
+25.00%
+9.09%
+0.00%
+0.00%
+0.00%
+Rate experience as good
+55.56%
+25.00%
+81.82%
+50.00%
+66.67%
+83.33%
+Total Responses
+9
+4
+11
+4
+6
+6
+New User Follow-Up (did not attend training before first visit)
+Unless otherwise indicated, % is based on overall # of relevant responses (excludes neutral %).  Guide details in 
+Pre-release Pendo
+.
+2023
+4/5-4/30
+May
+Jun
+Jul
+Aug
+Sep
+Rate experience as poor
+0%
+13.64%
+7.69%
+0.00%
+20.00%
+0.00%
+Rate experience as good
+82.76%
+59.09%
+73.08%
+81.82%
+70.00%
+81.82%
+Still plan to attend training soon
+Target:  0-10%
+22.22%
+47.06%
+20.00%
+15.79%
+42.86%
+35.00%
+Now trained and feel good (subset)
+Target:  80-100%
+61.54%
+66.67%
+83.33%
+85.71%
+75.00%
+77.78%
+Total Responses (1 of 2 / 2 of 2)
+29/27
+22/17
+26/25
+22/19
+20/14
+22/20
+% out of range
+ | 
+% within range
+What does success look like?
+TBD
+ Impacted Stakeholders
+Billers
+TBD
+Software Partners
+TBD
+IC Support Staff
+TBD
+ Schedule Structure
+Milestone
+Description
+Target Date
+Status
+Launch new user preparedness guide
+Collect feedback from new biller portal users to establish a baseline of their comfort level and training status.
+ 
+Active
+Launch new user follow-up guides
+Check in on respondents of the preparedness guide to determine if users are feeling good about their experience or becoming frustrated, and if they since attended training (when applicable).
+ 
+Active
+Identify changes to improve experience
+Compile and review poll results to understand the benchmark for supporting meaningful changes - potential updates may include: quick-start Pendo guide or resource center, link KB articles to relevant biller portal pages (i.e., integrate Salesforce w/biller portal subscription), increase awareness to training (e.g., automated follow-up email to welcome email, call out on User Mgmt page), track training attendee status for internal reference and possibly targeted follow-up.
+ through 
+ 
+In Progress
+Implement changes
+TBD
+ 
+Pending
+Hand off to John (PM)
+Julie to monitor poll results post changes to ensure effectiveness, then turn over to applicable Product Manager for continued observation and any further action as needed.
+ 
+Pending
+ Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Sales
+Do you need sales enablement materials?
+Marketing
+Does this impact marketing?
+Training
+Do you need to update support content or training?
+Implementations
+Changes to questionnaire
+Delivery
+Set up and Enablement
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Support
+Biller questions and support
+Legal
+Are there potential legal ramifications?
+Reconciliations
+Questions from billers about charges
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+Appendix
+Post kick-off Training Email sent by IM
+TrainingEmail
+ URL:/spaces/PRODUCT/pages/2446524417/In+Process+One-Pager+Biller+Portal+New+User+Experience

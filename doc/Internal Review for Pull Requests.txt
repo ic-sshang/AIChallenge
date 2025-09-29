@@ -1,0 +1,22 @@
+Purpose
+The purpose of the internal review process is to ensure that the quality of changes on a Pull Request (PR) made by the ESRE engineer meet the Standards of Quality (SOQ) described in this document.
+ESRE
+Method
+ESRE engineer created a Pull Request 
+ESRE engineer adds the ESRE reviewers as optional reviewers.
+ESRE reviewers add comments on the PR regarding SOQ.
+ESRE engineer makes the necessary changes, if any. 
+ESRE Reviewers approve/deny the PR.
+Standards of Quality (SOQ):
+Logging
+All Serilog logging must follow the Structured Logging standard from the 
+Logging Standards Page
+. (i.e. Message Properties must NOT be numeric)
+Logging MUST include the BillerID if possible
+Transactions
+Transactions must include the BillerID as a custom attribute whenever possible. This is important to build Biller Monitoring. 
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS/pullrequest/20089
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=%2FIC.Common%2FclsNewRelic.vb&version=GBrelease&_a=contents
+SRE Initiatives 
+[To be filled out by Daniel]
+ URL:/spaces/DS/pages/2653093893/Internal+Review+for+Pull+Requests

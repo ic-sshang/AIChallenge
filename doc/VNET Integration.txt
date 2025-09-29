@@ -1,0 +1,44 @@
+Azure Vnet Integration Infrastructure
+Infra Repo: 
+https://dev.azure.com/invoicecloud/Systems_Src/_git/Vnet_Integration_Infrastructure
+Azure Resource Group: 
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/f89b91a0-e110-4fbb-b84b-24c02f68cd81/resourceGroups/rg-pri-vnet-int1-npd/overview
+Azure Function Apps
+Resource Group: 
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourceGroups/clickops-azure-functions/overview
+Generated a resource group in the Primary-Subscription or Enterprise Dev/Test subscription to ensure we test cross subscription vnet integrations to better test. Our function apps are in Primary-Subscription for example, so this is an important consideration.
+Function App:
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/1354872a-6bc9-4eb1-a4f0-feb046832e65/resourceGroups/clickops-azure-functions/providers/Microsoft.Web/sites/vnet-integration-to-sql-pve/appServices
+Created a public endpoint azure function app, that mimics our current DevTest Azure Function
+Using Python, I will test a connection to the SQL Database, I suspect I’ll need an MI to make this happen to follow our current pattern
+Create Azure Function Vnet Integration:
+Source: 
+https://learn.microsoft.com/en-us/cli/azure/functionapp/vnet-integration?view=azure-cli-latest
+ 
+We must use Azure CLI to create a vnet integration on an existing function app. There does not appear to be a way to do this via the GUI. I went
+az functionapp vnet-integration add \
+    --name 'vnet-integration-to-sql-pve' \
+    --resource-group 'clickops-azure-functions' \
+    --subnet 'snet-pri-vnet-int1-function-apps-npd' \
+    --skip-delegation-check false \
+    --vnet '/subscriptions/f89b91a0-e110-4fbb-b84b-24c02f68cd81/resourceGroups/rg-pri-vnet-int1-npd/providers/Microsoft.Network/virtualNetworks/vnet-pri-vnet-int1-npd'
+This command allows for cross subscription vnet integrations, note the vnet argument requires a full vnet ID. 
+In addition to the vnet-integration setting above we need to set two Environment variables
+az functionapp config appsettings set \
+    --name 'vnet-integration-to-sql-pve' \
+    --resource-group 'clickops-azure-functions' \
+    --settings WEBSITE_DNS_SERVER=168.63.129.16 WEBSITE_VNET_ROUTE_ALL=1
+These two env variables will ensure we can route traffic to the private endpoint and resolve the private link dns with azure private zone.
+Upgrade Azure Function App Service Plan SKU:
+az functionapp plan update --name 'ASP-clickopsazurefunctions-a337' --resource-group 'clickops-azure-functions' --sku 'EP1'
+Remove Vnet Integration:
+az functionapp vnet-integration remove     --name 'consumption-sku-upgrade-test'     --resource-group 'clickops-azure-functions'
+DevTest Function Vnet Integration Test
+Resource: 
+https://portal.azure.com/#@InvoiceCloud360.onmicrosoft.com/resource/subscriptions/f89b91a0-e110-4fbb-b84b-24c02f68cd81/resourceGroups/RG-DevApps-ICG/providers/Microsoft.Web/sites/fnICG-ICBatchReconDevTest/appServices
+Post Vnet Integration:
+Logs from Health Check Function
+ 
+Nslookup from the host running the Azure Functions
+ 
+ URL:/spaces/platform/pages/3218014250/VNET+Integration

@@ -1,0 +1,235 @@
+Overview
+Most console applications are run with our scheduling tool called Skybot/Automate Scheduler. 
+So, the new pipelines do the following:
+Create the skybot job if the job is not available.
+Hold the scheduled job. 
+Deploy the contents to the specific Virtual Machines(VMs) for that environment.
+Optionally, test the deployed application. 
+Release the scheduled job. 
+How does this all work? 
+Before we even get into the devops part of this framework we need to set some expectations for the repository. 
+There 
+must 
+be “.skybot” folder at the root of the repository. This directory will contain XML files needed to create a job on Skybot. 
+To create a job, the Skybot web service will expect a an XML body with things like your job name, what the schedule is, where is it supposed to run, and what kind of commands will be available in the job. There needs to be one XML file for each job that is on Skybot.
+Example: EmailQueueProcessing-1.xml , EmailQueueProcessing-37.xml, etc. 
+The team has done the work to export the existing job configurations from production to speed up the development process. The files are located on the Product Architecture Teams channel, and can be accessed with the following link: 
+https://invoicecloud360.sharepoint.com/:f:/s/PI/ErpQy4gHMUJNi0lFS7GDWrYBkzhLygBXb8ymxN-CZjuocg?e=KP0PCd
+ 
+Ensure there is a way to test system related actions if a “-Test” argument is passed. The command is subjective, but as long as there is a way to check the health of the application, it is fine. 
+What is in the health check?
+Can the application connect to the database? 
+If the application needs to use the Azure KeyVault, can it connect to the key vault?
+if the application connects to an FTP site, can it successfully connect to the FTP site? 
+etc. 
+There 
+must 
+be a  “.devops” folder at the root of the repository. This will contain the yaml files for the Azure DevOps pipelines. 
+build.yaml - This will contain the yaml to compile your application, run your unit tests, perform a scan with SonarQube to check your code quality, and push your binaries to a universal artifact found in the “ReleaseArtifacts” artifact feed. 
+deploy.yaml - This will contain the yaml to create the skybot job, hold the jobs,  publish your application to the VM, test your application, and release the skybot job. 
+What goes in the yaml files? 
+As of right now there two version of build.yaml. The most common one, which uses the template
+ app.yaml 
+and the one using the template called 
+build-dotnet.yaml 
+.  To know, which one to use, look at inside the repository the file called 
+repository_name.csproj
+ or 
+repository_name.csproj
+ and look at the value of 
+TargetFramework
+. If TargetFramework is 6.0 or higher build.yaml uses 
+build-dotnet.yaml
+, otherwise it uses 
+app.yaml
+build.yaml using the app.yaml template
+yaml
+trigger:
+- main
+
+resources:
+  repositories:
+    - repository: pipeline-templates
+      type: git
+      name: QA_Src/pipeline-templates
+      ref: refs/heads/main
+
+variables:
+  version: 1.0
+  patch: $[counter(variables['Build.SourceBranchName'], 0)]
+
+pool:
+# Hosted Agent
+  # vmImage: windows-latest
+# Local Agent
+  name: 'IC-Azure2019'
+
+extends:
+  template: app.yaml@pipeline-templates
+  parameters:  
+      version: $(version)
+      patch: $(patch)
+      sonarscan: true
+      ignoreTestErrors: false
+      projectName: MySuperCoolApplication
+      platform: x64 # Defaults to AnyCPU
+build.yaml using the build-dotnet.yaml template
+yaml
+trigger:
+- main
+
+resources:
+  repositories:
+    - repository: pipeline-templates
+      type: git
+      name: QA_Src/pipeline-templates
+      ref: refs/heads/main
+
+variables:
+  version: 1.0
+  patch: $[counter(variables['Build.SourceBranchName'], 0)]
+
+pool:
+  name: 'IC-Azure2019'
+
+extends:
+  template: build-dotnet.yaml@pipeline-templates
+  parameters:
+      projectName: "MySuperCoolApplication"
+      solution: MySuperCoolApplication.sln
+      version: $(version)
+      patch: $(patch)
+      sonarscan: true
+      buildFullSolution: true
+      ignoreTestErrors: true
+      preBuildSteps: []
+      postBuildSteps:
+        - task: CopyFiles@1
+          displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)\skybot'
+          inputs:
+            SourceFolder: .skybot
+            TargetFolder: '$(Build.ArtifactStagingDirectory)\skybot'
+            CleanTargetFolder: true
+          continueOnError: true
+      runtime: 'net6.0'
+      sonarFilterExtension: |
+        sonar.tests= Tests/
+        sonar.sources = MySuperCoolApplication/
+      testFilterExtension: |
+        !**/*TestPlatform*.*
+The build.yaml file will be extending from a template found in the QA_Src project. This template abstracts much of the common logic across the repositories. 
+If using the app.yaml template the build pipeline does the following: 
+Installs the Nuget tool.
+Installs the Visual Studio Test Platform tools. (This is needed to get the code coverage)
+Restore NuGet packages.
+Starts the Sonar Scanner for SonarQube and applies settings to read the Unit Test and Code Coverage results.
+Builds the solution
+Runs Unit Tests and also calculates the code coverage.
+Copies the resulting binaries from the release folder to a “build” folder in the Artifact Staging Directory.
+Copies the “.skybot” folder verbatim to a “skybot” folder in the Artifact Staging Directory. 
+Publishes the Artifact Staging Directory to the ReleaseArtifacts feed using the  Universal Artifacts task. This enables us to use semantic versioning on our builds. 
+Performs the SonarQube Analysis. This will analyze your repo and will judge it based on Quality Gates on SonarQube if it is up to par. 
+Example: New Code needs to have at least 80% code coverage. 
+Publishes the SonarQube results. This publishes the results to our SonarQube instance. 
+Publishes the Unit Test results. This publishes the results to Azure DevOps to see what the status is for each test. 
+If using the dotnet-build.yaml template the build pipeline does the following: 
+Does the exact same thing as above but uses .NET Core sdk, which replaces nuget restore and nuget build by dotnet restore and dotnet build.
+deploy.yaml
+yaml
+trigger:
+- none
+
+resources:
+  repositories:
+    - repository: pipeline-templates
+      type: git
+      name: QA_Src/pipeline-templates
+      ref: refs/heads/main
+
+parameters:
+  - name: version 
+    type: string 
+
+pool:
+  name: 'IC-Azure2019'
+
+extends:
+  template: console-app-deploy.yaml@pipeline-templates
+  parameters:
+    artifact: "${{ lower('AzureBatchLateStartMonitor') }}"
+    version: ${{ parameters.version }}
+    targetDir: E:\Data\Apps\$(Build.Repository.Name)
+    projectName: $(Build.Repository.Name)
+    #managedIdentityAppName: " " # Repository Alias for MyCoolApp (MCA)
+    SkybotJobName: MyCoolApp #look at the value in xml file
+    preDeployJob: []
+    postDeployJob: []
+    postDeploySteps: []
+    environments:
+      devtest:
+        miEnvironment: 1
+        tests: []
+      production:
+        miEnvironment: "prd"
+        tests: []
+The deploy.yaml extends  from a template found in the QA_Src project called 
+console-app-deploy.yaml
+ which extends  a  multi job yaml template called 
+deployment-multi-job.yaml
+ from the QA_Src project. There is a version 1 template called deployment.yaml, that template only supports one Azure DevOps Pipeline job when deploying to an environment. The deployment-multi-job.yaml template supports injecting jobs pre and post deployment to run actions before deploying to a set of virtual machines. 
+It does the following: 
+Obtains the stages needed to run from the “environments” parameter. 
+In the example above, there are two stages: devtest, production. 
+For each environment it’ll do the following
+Check if there are any approval gates
+If there are, the approver group(s) must approve before deploying to this environment. 
+Injects the variable groups specified in the “variableGroups” property from the “environments” parameter. Where this is useful if you have different secrets across multiple stages, and they are stored in Azure DevOps libraries. 
+Downloads the artifact to the resource. The artifact contents can be found in the directory stored in this predefined Azure DevOps variable 
+$(System.DefaultWorkingDirectory)
+.
+If the parameter “preDeployJobs” is not an empty array, then it will inject the jobs definitions. 
+In the example, it will create a new job that will run two tasks. 
+Create the skybot job
+Hold the skybot job
+Then it will perform the deployment on the environment’s resources that match the tag supplied in the “tags” property of the “environments” parameter. 
+In the context of the resource, if there are any “preDeploySteps” it will inject those steps 
+In the example, it will create a new step that runs a powershell script to set a new pipeline variable. By setting a new pipeline variable, it can be accessed in other steps in the job.
+If the parameter “
+managedIdentityAppName
+" is not set to a space, then it will inject a template to pull the managed identity using the Azure CLI, then set the ClientId pipeline variable with the client id from the managed identity. The ClientId value cannot be hardcoded in the repository since there will be a different managed identity per environment. The “
+managedIdentityAppName
+" is an alias that is used across the managed identities across the environments.  This will also perform a file transform on the .config files in the application. 
+In this example, the property is set to an empty space, so this does not occur. 
+It’ll do the following with the directory specified in the 
+targetDir
+ parameter:
+Clean the directory
+Copy the contents from the artifact’s build folder. 
+If there are any post deployment steps defined in the “postDeploySteps”, it will inject the steps. 
+In the example it calls a powershell script to execute the console app with a -Test argument. The application is wired to run a system check if it detects the -Test argument. The deployment will fail if this health check fails. 
+The last step for the the job running in the resource is to cleanup the $(System.DefaultWorkingDirectory) to prevent issues in the next deployment. In the yaml deployments, Azure DevOps will not clean the directory for you to aid in debugging sessions. Seems like a bug to me. 
+If the parameter “postDeployJobs” is not an empty array, then it will inject the jobs definitions. 
+In the example, it will create a new job that will run two tasks. 
+Release the skybot job
+Azure DevOps
+The build.yaml and deploy.yaml files are now available, now what? 
+The framework is to do the following:
+Sign in to Azure DevOps.
+Click on the Pipelines sidebar item. 
+ Click on the All Tab
+Create a folder inside of the 2.0 folder with the application’s name.
+Create a new pipeline using an existing template for Azure Repos Git.
+Select a file and click on Save.
+After the pipeline is saved, it will have the name of the repository. 
+On the grid in the far right, click on the elipses, then on “Rename/move”.
+Rename the pipeline to match the purpose. 
+build.yaml - RepositoryName_Build
+deploy.yaml - RepositoryName_Deploy
+All that is left is to kick off the pipelines! 
+Pipelines may require resources to be approved. Please get in touch with the Tech Lead (TL) if there are any issues. 
+Troubleshooting Tips
+Here is a non exhaustive list of errors: 
+During the hold the job step of the deployment if you encounter 
+System.NullReferenceException: Object reference not set to an instance of an object
+ , it means  the skybot job has no history. To solve that, just trigger the job from the skybot portal.
+ URL:/spaces/PE/pages/2419458123/Deploying+Console+Apps+with+Yaml+Pipelines+with+SkyBot+Job

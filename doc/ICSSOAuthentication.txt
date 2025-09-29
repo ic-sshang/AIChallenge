@@ -1,0 +1,995 @@
+Controllers
+ HealthCheckController 
+This controller is responsible for performing health checks on the application, ensuring that critical components like database connectivity and login functionality are operational. 
+Namespace and Dependencies
+Namespaces: The code uses namespaces to organize its classes. It imports ICSSOAuthentication.Models.Utilities for utility classes or methods, System for basic .NET functionalities, and System.Web.Mvc for MVC framework features.
+Controller Definition
+Class Declaration: HealthCheckController inherits from Controller, making it a part of the MVC architecture capable of handling HTTP requests and responses.
+Action Method: Index
+HTTP Get Attribute: [HttpGet] indicates that this action method, Index, should only respond to HTTP GET requests. This is a common approach for read-only operations, like checking the health of various components.
+ActionResult: The method returns an ActionResult, a base class for MVC action results, allowing for different types of responses (e.g., views, file downloads, redirects).
+Health Check Logic
+Database Connectivity Check:
+A try-catch block is used to handle potential exceptions.
+It attempts to retrieve a data table by executing a stored procedure (selAzureBillers) with a specific parameter. This operation checks the database's responsiveness and connectivity.
+If the data table contains rows, it sets result to true, indicating a successful database connection.
+If an exception occurs, it logs the error using Serilog and returns a view displaying the exception details.
+IC.Logins Check:
+Another try-catch block is set up to check the login functionality.
+It retrieves a data table by executing a stored procedure (selCustomerLoginHealthCheck) designed to test login health.
+It attempts to fetch a LoginID from the first row of the data table and uses it to retrieve a login object. If the LoginID of the retrieved login object is greater than 0, it implies successful login functionality.
+Similar to the database check, if an exception occurs, it logs the error and returns a view with the exception details.
+Final Result
+After performing both checks, the result variable is set to true regardless of the outcome of the checks. This seems to be a mistake, as it should reflect the actual health status based on the checks performed.
+Finally, it returns a view with the result variable, which, due to the oversight, will always indicate that the health check passed.
+Saml Controller
+The SamlController.cs file defines a controller in an 
+ASP.NET
+ MVC application, specifically for handling Single Sign-On (SSO) operations using the SAML (Security Assertion Markup Language) protocol. This controller is part of the ICSSOAuthentication project and is responsible for initiating and receiving SAML-based authentication requests. 
+Namespaces and Dependencies
+The controller imports several namespaces, including models for SAML and SSO configurations, utilities, and the Sustainsys.Saml2.HttpModule for SAML 2.0 protocol operations.
+Controller Definition
+Inheritance: SamlController inherits from Controller, making it capable of handling web requests and responses.
+Action Methods
+Index
+():
+An empty method that likely serves as a placeholder or entry point for the SSO process. It doesn't contain any implementation.
+Saml
+():
+This method is responsible for initiating the SSO process.  It creates an SSORequest object from the current HTTP request, which contains information necessary for the SSO operation.
+A SamlProtocol object is instantiated with the SSORequest, handling the specifics of the SAML protocol.
+The SingleSignOn object is then created, encapsulating the logic for initiating SSO with the given protocol and request.
+The InitiateSingleSignOn method is called, which constructs the URL to redirect the user to the SSO login page and the response is then redirected to this URL.
+If an exception occurs, it logs the error using Serilog with specific details about the event and message.
+Saml_Callback_Post
+():
+Decorated with [HttpPost] and [ActionName("Saml_Callback")], indicating it responds to POST requests at the /Saml_Callback route.
+Logs the available cookies for debugging or informational purposes.
+Similar to the Saml() method, it processes the SSO request but is designed to handle the callback from the SSO service after authentication.
+It creates the necessary objects (SSORequest, SamlProtocol, SingleSignOn) and calls ReceiveSingleSignOn to process the SSO response.
+Redirects the user based on the response from ReceiveSingleSignOn.
+Logs the redirection details, including the IP address obtained from a helper method.
+Catches and logs any exceptions that occur during the process.
+Saml_Callback
+():
+A GET method for the /Saml_Callback route, which logs an error using Serilog if triggered. The callback endpoint is expected to be accessed via POST only, and accessing it via GET is considered an incorrect usage.
+Summary
+The SamlController is a crucial component for handling SSO operations in the ICSSOAuthentication project, leveraging the SAML protocol. It includes mechanisms for initiating SSO, processing callbacks from the SSO service, and handling errors. The controller ensures that users can authenticate using SSO and that any issues during the process are logged for troubleshooting.
+Repositories
+Class Definition: BillerRepository
+Private Fields:
+_database: An instance of the Database class, used for executing database operations.
+_billerId: An integer storing the ID of a biller. It's used to perform operations specific to a biller.
+Constructor
+:
+The constructor takes two parameters: a Database object and an integer billerId.
+It checks if billerId is 0 and throws an ApplicationException if true, enforcing that a valid billerId must be provided.
+Initializes the _database and _billerId fields with the provided arguments.
+GetBillerByBillerId
+Purpose
+: 
+Retrieves a Biller object from the database based on the provided billerId.
+Parameter
+: 
+Accepts an integer billerId as its parameter.
+Implementation
+:
+Calls the _database.GET_DATATABLE method with the billerId and a SQL query string to retrieve a data table of billers.
+Converts the data table to a list of Biller objects using the .ToList<Biller>() extension method. This conversion likely utilizes custom mapping defined in the ICSSOAuthentication.Extensions namespace.
+Checks if the list contains any elements using .Any(). If true, it returns the first Biller object in the list.
+If the list is empty, it returns null, indicating no biller was found with the provided billerId.
+Summary
+The BillerRepository class encapsulates the data access logic for billers in the application. It provides a method to retrieve a biller by its ID, ensuring that operations are performed on valid biller IDs by throwing an exception if a biller ID of 0 is provided. 
+Class Definition: ClaimRepository
+The ClaimRepository class is defined without any instance fields or properties, suggesting that it solely contains static methods. This design choice indicates that the class is intended to be used without creating an instance of it, providing direct access to its methods.
+Static Methods
+GetConfigurations
+:
+Purpose
+: 
+Retrieves claim configurations for a specific biller.
+Parameter
+: 
+Accepts an int billerId to specify the biller for which configurations are being requested.
+Return Type: 
+Returns a DataTable containing the configurations.
+Implementation
+: 
+Calls the GET_DATATABLE method on the Database.Instance singleton, passing the billerId and a SQL stored procedure call as arguments. The stored procedure selClaimConfigurationDP is executed with parameters for the biller ID and an active flag set to 1, indicating that only active configurations should be retrieved.
+GetLoginTypeConfigurations
+:
+Purpose
+:
+Retrieves login type configurations for a specific biller, which could be related to how users log in to the system based on the biller's settings.
+Parameter
+: 
+Similar to GetConfigurations, it accepts an int billerId.
+Return Type: 
+Also returns a DataTable with the login type configurations.
+Implementation: 
+Similar to GetConfigurations, it uses Database.Instance.GET_DATATABLE to execute the selClaimMappingLoginType stored procedure with the biller ID and an active flag set to 1.
+Summary
+The ClaimRepository class serves as a data access layer for retrieving claim-related configurations from the database, specifically for different billers. It utilizes static methods to execute stored procedures, returning the results as DataTable objects. This approach encapsulates the SQL queries and database interactions, providing a clean interface for other parts of the application to retrieve the necessary data without directly dealing with SQL commands or database connections.
+Class Definition: CustomerLoginRepository
+Private Fields:
+_database: An instance of the Database class, used for executing database operations.
+_billerId: An integer storing the ID of a biller, used to perform operations specific to a biller.
+Constructor
+:
+Initializes the _database and _billerId fields. It throws an ApplicationException if billerId is 0, enforcing that a valid billerId must be provided.
+Methods
+GetCustomerLoginsByRegistrationValue
+Purpose
+: 
+Retrieves a list of customer login records based on an email address and a registration value.
+Parameters
+:
+string emailAddress: The email address associated with the customer login.
+string registrationValue: A specific registration value to filter the customer logins.
+Behavior
+: 
+Validates the input parameters for null or whitespace. Constructs a SQL query dynamically and executes it to fetch customer login data, returning a list of CustomerLogin objects.
+GetCustomerLoginsByAccountNumber (Two Overloads)
+Purpose
+: 
+Retrieves customer login records based on an email address and an account number. An overloaded version also considers the login type.
+Parameters
+:
+string emailAddress: The email address associated with the customer login.
+string accountNumber: The account number to filter the customer logins.
+LoginType loginType (in the overloaded method): The type of login to further filter the records.
+Behavior
+: 
+Validates the input parameters. Constructs and executes a SQL query to fetch the data, returning a list of CustomerLogin objects.
+DeleteCustomerLogin
+Purpose
+: 
+Deletes a customer login record based on a given customer login ID.
+Parameters
+:
+int customerLoginId: The ID of the customer login record to be deleted.
+Behavior
+: 
+Validates that the customerLoginId is not 0. Executes a SQL command to delete the specified customer login record.
+GetCustomerLoginsByLoginId
+Purpose
+: 
+Retrieves a list of customer login records based on a login ID and login type.
+Parameters
+:
+int loginId: The ID of the login.
+LoginType loginType: The type of login.
+Behavior
+: 
+Validates the loginId. Constructs and executes a SQL query to fetch the data, returning a list of CustomerLogin objects.
+GetCustomerLoginsByUsername
+Purpose
+: 
+Retrieves a list of customer login records based on a username.
+Parameters
+:
+string username: The username associated with the customer login.
+Behavior
+: 
+Validates the username. Constructs and executes a SQL query to fetch the data, returning a list of CustomerLogin objects.
+GetCustomerLoginsByCustomerId
+Purpose
+: 
+Retrieves a list of customer login records based on a customer ID and login type.
+Parameters
+:
+int customerId: The ID of the customer.
+LoginType loginType: The type of login.
+Behavior
+: 
+Validates the customerId. Constructs and executes a SQL query to fetch the data, returning a list of CustomerLogin objects.
+InsertLoginUserActivity
+Purpose
+:
+ Inserts a record of user activity for a login session into the database.
+Parameters
+:
+int loginId: The ID of the login session.
+string remoteIP: The remote IP address from which the activity originated.
+string activity: A description of the activity.
+int customerId: The ID of the customer associated with the activity.
+ActionSource actionSource: The source of the action.
+Behavior
+: 
+Validates the loginId. Attempts to insert the activity record into the database. Catches any exceptions, logs the error, and returns 0 to indicate failure.
+Class Definition: CustomerRepository
+Constructor
+Purpose
+: 
+Initializes a new instance of the CustomerRepository with a specific database connection and biller ID.
+Behavior
+: 
+Checks if the provided billerId is 0 and throws an ApplicationException if true, ensuring that a valid biller ID is always used. It then assigns the provided Database instance and billerId to private fields for use in other methods.
+GetCustomersByRegistrationValue
+Purpose
+: 
+Retrieves a list of customers based on a given registration value.
+Parameters
+: 
+Accepts a string registrationValue which is used to filter customers.
+Behavior
+: 
+First, it validates the registrationValue to ensure it's not null or whitespace. If the validation passes, it constructs a SQL query dynamically using the registration value and executes it using the _database.GET_DATATABLE method. The method then converts the resulting DataTable to a list of Local.Customer objects and returns it. If the registration value is not provided or is invalid, an ApplicationException is thrown.
+GetCustomerByRegistrationValue
+Purpose
+: 
+Retrieves a single customer based on a unique registration value.
+Parameters
+: 
+Accepts a string registrationValue which is presumed to uniquely identify a customer.
+Behavior
+: 
+Utilizes the GetCustomersByRegistrationValue method to retrieve a list of customers matching the provided registration value. It then checks the resulting list:
+If the list is null or empty, it throws an ApplicationException indicating that no customer could be found for the given registration value.
+If more than one customer is found, it throws an ApplicationException indicating that the registration value is not unique.
+If exactly one customer is found, it returns this customer. This method ensures that the registration value used is unique and corresponds to exactly one customer in the database.
+Summary
+These methods collectively provide a robust mechanism for retrieving customer data based on registration values, ensuring data integrity and consistency by enforcing the uniqueness of registration values and validating input parameters.
+Class Definition: IdentityRepository
+GetAuthenticationRecord
+Purpose
+: 
+Retrieves an authentication record for a given login and biller ID.
+Parameters: 
+Accepts a Login object and an int billerId.
+Behavior
+:  
+This method first queries the database for an authentication record matching the provided login ID and biller ID. If at least one record is found, it selects the first row as the current authentication record. Then, it queries another table (a master database table for authentication records) using the RemoteAuthenticationGuid from the first query. If no corresponding record is found in the master table, the method deletes the authentication record using the DeleteAuthenticationRecord method and sets the remoteAuth variable to null. The method returns the DataRow of the authentication record if it exists and is valid; otherwise, it returns null.
+InsertAuthRecordsInDatabase
+Purpose
+: 
+Inserts authentication records into the database for a given login and biller ID.
+Parameters
+: 
+Accepts a Login object and an int billerId.
+Behavior
+: 
+Generates a new Guid as the authenticationGuid. It then inserts a new authentication record into a biller-specific table and a master authentication table using the generated Guid, the biller ID, the customer ID from the first account associated with the login, and the login ID. The method returns the Guid of the newly inserted authentication record.
+DeleteAuthenticationRecord
+Purpose
+: 
+Deletes an authentication record from the database based on a given authentication GUID and biller ID.
+Parameters
+: 
+Accepts a Guid authenticationGuid and an int billerId.
+Behavior
+: 
+Executes two delete commands: one to remove the authentication record from a master database table using the authenticationGuid, and another to remove the record from a biller-specific table using both the authenticationGuid and the billerId. This ensures that the authentication record is fully removed from both the specific context of the biller and the broader context of the application.
+Summary
+Each method in the IdentityRepository class plays a crucial role in managing the lifecycle of authentication records within the application. By providing mechanisms to insert, retrieve, and delete these records, the class supports the application's authentication and authorization processes, ensuring that users can be correctly authenticated and that stale or invalid authentication records are properly cleaned up.
+Class Definition: IdPSettingsRepository
+GetSettingsFromDatabase
+Purpose
+: 
+Retrieves the IdP settings for a given biller ID and protocol from the database.
+Parameters
+:
+int billerId: The ID of the biller for whom the settings are being retrieved.
+Protocol protocol: The SSO protocol (e.g., SAML, OAuth) for which the settings are being retrieved.
+Behavior
+:
+ Executes a stored procedure that selects IdP settings based on the provided biller ID and protocol. If the query returns one or more rows, it selects the first row as the settings and returns it as a DataRow. If no settings are found, it returns null.
+InsertSettingsInDatabase
+Purpose
+: 
+Inserts new IdP settings into the database.
+Parameters
+:
+IdPSettings idpSettings: An IdPSettings object containing the settings to be inserted.
+Behavior
+: 
+Constructs a list of parameters from the IdPSettings object and executes a stored procedure to insert the settings into the database. The parameters include the biller ID, entity ID, metadata URL, SSO service URL, certificate (as a base64 string), and the SSO protocol.
+UpdateSettingsInDatabase
+Purpose
+: 
+Updates existing IdP settings in the database.
+Parameters
+:
+IdPSettings idpSettings: An IdPSettings object containing the updated settings.
+Behavior
+: 
+Similar to InsertSettingsInDatabase, it constructs a list of parameters from the IdPSettings object. It then executes a stored procedure to update the existing settings in the database based on the provided parameters.
+LoadParameters
+Purpose
+: 
+Constructs a list of parameters for SQL commands based on an IdPSettings object.
+Parameters
+:
+IdPSettings idpSettings: The IdPSettings object from which to construct the parameters.
+Behavior
+:
+Initializes a list of strings to hold the parameters. It then checks each property of the IdPSettings object and, if the property is not null or meets specific conditions (e.g., ID greater than 0), adds the corresponding SQL parameter to the list. This includes parameters for the identity provider ID, change requestor ID, biller ID, entity ID, metadata URL, SSO service URL, certificate, and SSO protocol. The method returns the list of constructed parameters.
+Summary
+Each method in the IdPSettingsRepository class plays a specific role in managing the lifecycle of IdP settings within the application. By providing mechanisms to retrieve, insert, and update these settings, the class supports the application's ability to interact with various identity providers, ensuring that authentication processes can be dynamically configured and maintained.
+Class Definition: LoginRepository
+Constructor
+Purpose
+: 
+Initializes a new instance of the LoginRepository with a specific database connection and biller ID.
+Behavior
+: 
+Checks if the provided billerId is 0 and throws an ApplicationException if true, ensuring that a valid biller ID is always used. It then assigns the provided Database instance and billerId to private fields for use in other methods.
+Save
+Purpose
+: 
+Saves or updates a login record in the database.
+Parameters
+: 
+Accepts a Login object containing the login details to be saved or updated.
+Behavior
+:
+First, it checks if the Id property of the Login object is 0, throwing an ApplicationException if true, to ensure that a valid login ID is provided.
+It then constructs a SQL command as a string using a StringBuilder. The command starts with the stored procedure name mcl.updLogin and appends parameters for the login ID, change requestor ID (set as Customer), and optionally the email address, username, and password if they are not null or whitespace.
+If the password is provided, it also appends the current date and time as the last password change date.
+Finally, it executes the constructed SQL command using the _database.EXECUTE_COMMAND_NONQUERY method, passing the _billerId and the command string. The method returns true if the command affects one or more rows in the database, indicating that the save operation was successful.
+Summary
+This class and its method provide a straightforward mechanism for updating login records in the database, ensuring that all necessary validations are performed and that the data is updated in a secure and controlled manner
+Class Definition: ServiceProviderRepository
+GetSettingsFromDatabase
+Purpose
+: 
+Retrieves the service provider settings for a given biller ID and SSO protocol from the database.
+Parameters
+:
+int billerId: The ID of the biller for whom the settings are being retrieved. This parameter identifies the specific biller whose service provider settings are needed.
+Protocol protocol: The SSO protocol (e.g., SAML, OAuth) for which the settings are being retrieved. This parameter specifies the type of SSO protocol used, allowing the method to fetch settings relevant to that protocol.
+Behavior
+:
+The method begins by initializing a DataRow object to null. This object is intended to hold the settings retrieved from the database if any are found.
+It then calls the GET_DATATABLE method of the Database class, passing in a hardcoded value of 0 and a dynamically constructed SQL command. The SQL command includes an execution of the stored procedure selServiceProviderDP with parameters for the billerId and the SSO protocol, converted to its integer representation.
+The GET_DATATABLE method is expected to return a DataTable containing the settings for the specified biller ID and protocol. If the DataTable contains one or more rows, indicating that settings were found, the method assigns the first row of the table to the settings variable.
+Finally, the method returns the settings DataRow. If no settings were found, the method returns null.
+Summary
+This method provides a straightforward way to access service provider settings for specific billers and SSO protocols, facilitating the configuration and management of SSO functionalities within the application.
+Class Definition: SSORequestRepository
+GetBillerId
+Purpose
+: 
+Retrieves the ID of a biller based on a provided GUID.
+Parameters
+:
+Guid billerGuid: The unique identifier (GUID) for the biller whose ID is being retrieved. This GUID is used to uniquely identify a biller in the database.
+Behavior
+:
+The method initializes an integer variable billerId to 0. This variable is intended to store the ID of the biller once retrieved from the database.
+It then retrieves a DataTable from the database by executing a stored procedure named selAzureBillers, passing the billerGuid as a parameter. This is done through the GET_DATATABLE method of the Database class, which is a singleton instance accessed via Database.Instance. The method constructs a SQL command string that includes the execution of the stored procedure with the billerGuid parameter.
+The method checks if the DataTable (billerTable) contains any rows. If it does, this indicates that the biller was found in the database. The method then retrieves the BillerID from the first row of the DataTable and assigns it to the billerId variable. The use of the first row is based on the assumption that the billerGuid should uniquely identify a single biller, thus resulting in only one row being returned.
+Finally, the method returns the billerId. If no biller was found matching the provided GUID, the method returns 0, as initialized.
+Summary
+This method provides a straightforward way to map a biller's GUID to their corresponding ID in the database, facilitating the identification of billers in the context of SSO requests. This is crucial for operations that require biller identification, such as validating SSO requests or retrieving biller-specific settings.
+SAML Configurations
+SamlOptions
+The SamlOptions.cs file within the ICSSOAuthentication project defines the SamlOptions class, which configures the options for SAML (Security Assertion Markup Language) based Single Sign-On (SSO) functionalities. This class implements the IOptions interface and is responsible for setting up service provider (SP) and identity provider (IdP) configurations. Here's a detailed explanation of each method within this class:
+Constructor: 
+SamlOptions(SSORequest ssoRequest)
+Purpose
+: 
+Initializes a new instance of the SamlOptions class using the provided SSO request.
+Parameters
+:
+SSORequest ssoRequest: The SSO request containing information such as the biller ID.
+Behavior
+:
+Sets the billerId property using the BillerId from the ssoRequest.
+Initializes the Notifications property with a new Saml2Notifications object. This object is configured to modify the AssertionConsumerServiceUrl of the authentication request to point to the /saml_callback endpoint of the current application.
+Calls LoadSPOptions to load the service provider options and assigns the result to the SPOptions property.
+Adds an identity provider to the IdentityProviders dictionary by calling LoadIdentityProvider.
+LoadIdentityProvider(bool loadFromMetadata = false)
+Purpose
+: 
+Loads the identity provider settings either from the database or from metadata, based on the provided parameters and the settings' state.
+Parameters:
+bool loadFromMetadata: Indicates whether to load the IdP settings from metadata. Defaults to false.
+Behavior
+:
+Initializes an IdPSettings object for the current billerId and protocol.
+Determines the source of the IdP settings (database or metadata) based on the IdPSettings state and the loadFromMetadata parameter.
+If loading from the database, it calls LoadIdpFromDatabaseSettings and logs the operation.
+If loading from metadata, it calls LoadIdpFromMetadata, saves the loaded settings, and logs the operation.
+Throws an exception if neither condition is met, indicating that IdP settings are not properly set up.
+LoadIdpFromMetadata(IdPSettings idpSettings)
+Purpose
+: 
+Creates an IdentityProvider instance using settings loaded from metadata.
+Parameters
+:
+IdPSettings idpSettings: The identity provider settings.
+Behavior
+:
+Instantiates a new IdentityProvider object with the entity ID from idpSettings and the service provider options (SPOptions).
+Configures the IdentityProvider to load metadata from the URL specified in idpSettings.
+LoadIdpFromDatabaseSettings(IdPSettings idpSettings)
+Purpose
+: 
+Creates an IdentityProvider instance using settings loaded from the database.
+Parameters
+:
+IdPSettings idpSettings: The identity provider settings.
+Behavior
+:
+Instantiates a new IdentityProvider object with the entity ID from idpSettings and the service provider options (SPOptions).
+Configures the IdentityProvider with various settings such as AllowUnsolicitedAuthnResponse, Binding, SingleSignOnServiceUrl, and WantAuthnRequestsSigned.
+Adds the signing key to the IdentityProvider using the certificate from idpSettings.
+LoadSPOptions()
+Purpose: 
+Loads the service provider options from the database.
+Behavior
+:
+Initializes a new ServiceProvider object for the current billerId and protocol.
+If the service provider settings are stored in the database, it calls LoadSPFromDatabaseSettings and logs the operation.
+Throws an exception if the service provider settings are not set up.
+LoadSPFromDatabaseSettings(ServiceProvider spSettings)
+Purpose
+: 
+Creates an SPOptions instance using settings loaded from the database.
+Parameters
+:
+ServiceProvider spSettings: The service provider settings.
+Behavior
+:
+Initializes a new Organization object and configures it with the organization name from spSettings.
+Instantiates a new SPOptions object with various configurations such as EntityId, ReturnUrl, Organization, and AuthenticateRequestSigningBehavior.
+Adds the service certificate to the SPOptions using the certificate loaded from spSettings.
+Summary
+This class and its methods collectively configure the SAML SSO functionality for the application, handling both service provider and identity provider settings to facilitate SAML-based authentication and authorization processes.
+SamlProtocol
+Constructor: 
+SamlProtocol(SSORequest request)
+Purpose
+: 
+Initializes a new instance of the SamlProtocol class, setting up necessary configurations for SAML SSO based on the provided SSO request.
+Behavior
+:
+Stores the provided SSORequest object.
+Initializes a Logger instance for logging purposes, using the biller ID from the SSO request.
+Calls LoadSaml2Options to load the SAML options required for SSO operations.
+Catches and logs any exceptions that occur during initialization, rethrowing them to ensure that initialization errors are not silently ignored.
+InitiateSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+Initiates the SSO process by creating and sending a SAML authentication request to the identity provider (IdP).
+Behavior
+:
+Prepares relay data and a unique identifier for the SSO request.
+Converts the incoming HTTP request to a HttpRequestData object, appending SAML-specific path information.
+Logs various details about the request for debugging purposes.
+Attempts to execute the SAML sign-in command using ExecuteCommand. If this fails, it tries to reload IdP metadata from a remote source and retries the command.
+Logs the outcome of the command execution and returns the location (URL) to which the user should be redirected to complete the SSO process.
+ReceiveSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+Handles the response from the IdP after a user attempts to authenticate via SSO, processing the SAML response and extracting user claims.
+Behavior
+:
+Converts the incoming HTTP request to a HttpRequestData object with SAML-specific path information.
+Logs request details for debugging.
+Executes the SAML ACS (Assertion Consumer Service) command to process the IdP's response, using ExecuteCommand.
+Logs the outcome and returns a tuple containing the extracted user claims and the redirect location for the user after successful authentication.
+ProcessSingleLogOut(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+Initiates the single logout process, sending a logout request to the IdP to terminate the user's session.
+Behavior
+:
+Converts the incoming HTTP request to a HttpRequestData object with SAML-specific path information.
+Executes the SAML logout command using ExecuteCommand, without additional processing of the result.
+ExecuteCommand(string commandName, HttpRequestData request, HttpResponseBase response)
+Purpose
+:
+Executes a specified SAML command, applying any resulting cookies to the response and logging the outcome.
+Behavior
+:
+Retrieves and executes the specified command from the CommandFactory, passing in the request data and SAML options.
+Applies any cookies specified by the command result to the response.
+Logs details about the executed command, including cookie information and the redirect location.
+ReloadFromMetadata()
+Purpose
+: 
+Attempts to reload the IdP's metadata from a remote source, updating the SAML configuration accordingly.
+Behavior
+:
+Calls LoadIdentityProvider on the Saml2Options object with a parameter to force loading from metadata.
+Catches and logs any exceptions that occur during the reload process.
+LoadSaml2Options()
+Purpose
+: 
+Loads the SAML options required for SSO operations, based on the initial SSO request.
+Behavior
+:
+Initializes a new SamlOptions object using the SSO request.
+Catches and logs any exceptions that occur during the loading process.
+Summary
+This class orchestrates the flow of SAML-based SSO processes, handling the initiation and reception of SSO requests, as well as the single logout process. It leverages the Saml2Options configuration to interact with the IdP and processes SAML responses to authenticate users and manage their sessions.
+SSO Configurations
+Claim
+Constructor: 
+Claim(int billerId)
+Purpose
+: 
+Initializes a new instance of the Claim class for a specific biller.
+Parameters
+:
+int billerId: The ID of the biller for whom the claim is being managed.
+Behavior
+:
+Sets the billerId field with the provided biller ID.
+Initializes a Logger instance for logging purposes, passing the biller ID to it.
+TranslateClaims(IEnumerable<System.Security.Claims.Claim> claims)
+Purpose
+:
+Translates a collection of incoming claims into a dictionary of claims based on the configurations stored in the database.
+Parameters
+:
+IEnumerable<System.Security.Claims.Claim> claims: The collection of claims to be translated.
+Behavior
+:
+Loads the configured claims from the database by calling LoadClaims.
+Iterates over each incoming claim and attempts to find a matching configured claim based on the claim type (Description). If a match is found, the claim is added to the translatedClaims dictionary with the MappedColumn as the key.
+Specifically handles claims of type /claims/nameidentifier by mapping them to a "Username" key.
+Translates the "LoginType" claim using the LoginTypeClaim class and checks if the translated claims are valid by calling ValidClaims.
+Logs any exceptions that occur during the translation process.
+LoadClaims()
+Purpose
+: 
+Loads the claims configurations from the database for the current biller.
+Behavior
+:
+Retrieves a DataTable of claim configurations from the ClaimRepository using the current billerId.
+Iterates over each row in the DataTable and converts it into a Claim object by calling LoadConfiguration, adding each Claim object to a list.
+Returns the list of configured claims.
+ValidClaims(Dictionary<string, string> claims)
+Purpose
+: 
+Validates the translated claims to ensure they contain required information.
+Parameters
+:
+Dictionary<string, string> claims: The dictionary of translated claims to be validated.
+Behavior
+:
+Checks if the claims dictionary is null or empty. If so, logs an informational message and returns false.
+Defines an array of expected claim keys (e.g., "EmailAddress", "LoginType") and checks if these keys are present in the claims dictionary.
+Logs any missing expected claims and returns false if any are missing, otherwise returns true.
+LoadConfiguration(DataRow row)
+Purpose
+: 
+Creates a Claim object from a DataRow containing claim configuration data.
+Parameters
+:
+DataRow row: The data row containing claim configuration information.
+Behavior
+:
+Instantiates a new Claim object with the current billerId.
+Sets the Id, Description, MappedColumn, and Active properties of the Claim object based on the values in the DataRow.
+Returns the configured Claim object.
+Properties
+Id, Description, MappedColumn, Active: Properties that store information about the claim, such as its database ID, description (type), the database column it maps to, and whether it is active.
+private readonly int billerId: A field that stores the ID of the biller for whom the claim is managed.
+private readonly Logger logger: A field that stores the Logger instance used for logging purposes.
+Summary
+This class plays a crucial role in the SSO authentication process by managing how claims are translated and validated, ensuring that only properly configured and valid claims are processed. This facilitates secure and accurate identity verification and access control based on claims.
+Identity
+The Identity class in the provided context is part of a Single Sign-On (SSO) authentication system. It manages user identities, including their creation, linking to accounts, and handling authentication states. Let's break down each method and its purpose within the class:
+Constructors
+Identity(int billerId): 
+This constructor initializes an Identity object for a specific biller (a company or entity that issues bills). It sets up repositories for accessing biller, customer, and login information from a database and initializes a logger for logging purposes.
+Identity(Dictionary<string, string> claims, string accountNumber, int billerId): 
+An overloaded constructor that takes additional parameters for claims (key-value pairs representing user attributes), account number, and biller ID. It initializes the object similar to the first constructor and attempts to load the identity object based on the provided claims. It logs the process and catches any exceptions that occur during the loading.
+Public Methods
+Expire
+(): 
+Marks the authentication record associated with the Identity object as expired. This is used to invalidate sessions or tokens after a certain period or upon user logout.
+LoadIdentityObject(string emailAddress, string accountNumber, LoginType loginTypeIn, string username): 
+Loads or creates an identity object based on the provided email address, account number, login type, and username. It involves several steps, including validating the account number, identifying the target customer, determining the login status, and linking the customer to a login. It handles different authentication types and updates the login status accordingly.
+Private Helper Methods
+GetLogin(string emailAddress, string username, int customerId): 
+Retrieves a login object based on the email address or username. It checks the authentication type of the biller and returns the login status and the login object.
+GetOwner(IC.Logins.Extended.Customer targetCustomer): 
+Determines the owner of a given customer account. It checks if the account owner is temporary or permanent and returns the login status and the login object.
+GetNumberOfCoOwnersForCustomerID(int billerID, int customerID): 
+Counts the number of co-owners associated with a customer ID for a specific biller. This is used to enforce limits on the number of co-owners per account.
+BillerAllowsCoOwners
+(): 
+Checks if the biller's settings allow for co-owners on accounts. This is a configurable option for each biller.
+BillerCoOwnerLimit(): 
+Retrieves the maximum number of co-owners allowed per account for the biller. This is a configurable setting.
+SetLoginType(int targetCustomerID): 
+Determines the appropriate login type for a new or existing login based on the biller's co-owner policies and the number of existing co-owners.
+SeverConnectionWithOwner(IC.Logins.Extended.Customer targetCustomer): 
+Removes the link between a customer and their account owner. This is used in scenarios where the customer's account needs to be dissociated from the current owner.
+PromoteTempToLogin(IC.Logins.Extended.Customer targetCustomer, Login temp): 
+Converts a temporary login to a permanent one. This is part of the registration or account confirmation process.
+GetLoginByUsername(string username): 
+Retrieves a login object based on a username. It logs the process and returns the login object if found.
+GetLoginByEmailAddress(string emailAddress, int customerId):
+ Similar to GetLoginByUsername, but retrieves a login based on an email address. It handles cases where multiple logins might use the same email address.
+GetCustomer(string accountNumber)
+Retrieves a customer object based on an account number. It logs an error if the account number is invalid.
+LoadAuthenticationGuid(Login login): 
+Inserts authentication records into the database for a given login and returns a GUID representing the authentication session.
+Summary
+Each method in the Identity class plays a specific role in managing user identities within the SSO system, from initialization and loading of identity objects to handling authentication states and linking customers to logins. The class also includes methods for managing account ownership and co-ownership, reflecting the complex rules and relationships that can exist in such systems.
+IDPSettings
+The IdPSettings.cs file defines the IdPSettings class, which encapsulates the settings for an Identity Provider (IdP) in the context of SSO (Single Sign-On) configurations. This class is responsible for loading, saving, and converting these settings. Let's break down each method and its functionality:
+Constructors
+Private Constructor: A private constructor is defined to prevent instantiation without parameters, ensuring that an IdPSettings object can only be created with specific biller and protocol information.
+Public Constructor (IdPSettings(int billerId, Protocol protocol)): 
+This constructor initializes an IdPSettings object for a given biller ID and protocol. It calls the LoadSettings method to load the IdP settings from the database based on the provided biller ID and protocol.
+Public Methods
+Save(IdentityProvider identityProvider): 
+This method saves the settings of an IdentityProvider object to the database. It first converts the IdentityProvider object to an IdPSettings object. If the settings for the given biller ID and protocol do not exist in the database, it inserts the new settings; otherwise, it updates the existing settings. The method handles both insertion and updating by checking the presence of settings in the database.
+Private Methods
+LoadSettings(int billerId, Protocol protocol): 
+This method loads the IdP settings from the database for a given biller ID and protocol. It retrieves the settings as a DataRow and then populates the properties of the IdPSettings object, including the entity ID, metadata URL, SSO service URL, and certificate. If the settings are not found in the database and no metadata URL is provided, it logs an error.
+ConvertIdentityProviderToSettings(IdentityProvider identityProvider): 
+This static method converts an IdentityProvider object to an IdPSettings object. It extracts the entity ID, metadata URL, SSO service URL, and certificate from the IdentityProvider object and assigns them to a new IdPSettings object. If the conversion fails due to an exception, it logs the error.
+Properties
+id: A public field that stores the database ID of the IdP settings.
+BillerId: A property that gets or privately sets the biller ID. If the biller ID is not set (i.e., is 0), it logs an error when accessed.
+EntityId: A property that gets the entity ID of the IdP.
+MetadataUrl: A property that gets the URL of the IdP's metadata.
+SsoServiceUrl: A property that gets the URL of the IdP's Single Sign-On service.
+Certificate: A property that gets the certificate used by the IdP for SSO.
+Protocol: A property that gets the protocol used for SSO (e.g., SAML).
+HasMetadata: A read-only property that checks if a metadata URL is available.
+IsStoredInDatabase: A read-only property that checks if the SSO service URL and certificate are available, indicating that the settings are stored in the database.
+Summary
+The IdPSettings class plays a crucial role in managing the configuration of identity providers for SSO authentication. It ensures that IdP settings can be accurately loaded from and saved to the database, facilitating the dynamic configuration of SSO authentication mechanisms based on the needs of different billers and protocols.
+IProtocol
+The IProtocol.cs file defines an interface named IProtocol within the ICSSOAuthentication.Models.SSOConfigurations namespace. This interface outlines the contract for implementing Single Sign-On (SSO) and Single Log-Out (SLO) functionalities, crucial for managing user authentication in a standardized way across different SSO protocols. Let's delve into each method defined in this interface:
+Uri InitiateSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+This method initiates the Single Sign-On process, which is the entry point for authenticating a user through an Identity Provider (IdP).
+Step by Step Process:
+Receive HTTP Request: The method takes an HttpRequestBase object as input, representing the incoming HTTP request that triggers the SSO process.
+Prepare for Redirection: It prepares the necessary information required to redirect the user to the IdP for authentication. This might include constructing the URL to the IdP's login page and appending any required query parameters such as a return URL.
+Return Redirection URI: The method returns a Uri object that represents the URL to which the user's browser should be redirected to begin the authentication process with the IdP.
+(IEnumerable<System.Security.Claims.Claim> claims, Uri redirectLocation) ReceiveSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+This method processes the response from the IdP after a user attempts authentication. It extracts the user's claims from the response and determines the next steps in the user's journey.
+Step by Step Process:
+Receive IdP Response: The method takes an HttpRequestBase object containing the IdP's response. This response may include tokens or assertions that prove the user's identity.
+Extract Claims: It extracts the user's claims from the IdP's response. Claims are pieces of information about the user, such as their email address or name.
+Determine Redirect Location: The method determines where to redirect the user after processing the SSO response. This could be the original page the user requested or a default landing page.
+Return Claims and Redirect URI: It returns a tuple containing the extracted claims and the Uri object representing the redirect location.
+void ProcessSingleLogOut(HttpRequestBase request, HttpResponseBase response)
+Purpose
+:
+ This method initiates or processes the Single Log-Out process, ensuring that the user is logged out from both the application and the IdP.
+Step by Step Process:
+Receive Logout Request: The method takes an HttpRequestBase object, which could be a logout request initiated by the user within the application or a logout request from the IdP.
+Process Logout: It processes the logout request. If the request is initiated by the application, it may involve redirecting the user to the IdP's logout URL. If the request is from the IdP, it involves clearing the user's session or tokens within the application.
+Send Response: Although the method's return type is void, it likely modifies the HttpResponseBase object to clear cookies or perform a redirect as part of the logout process.
+Summary
+Each method in the IProtocol interface plays a critical role in the lifecycle of SSO and SLO processes, abstracting the complexities of these operations and allowing for their implementation across different authentication protocols.
+LoginTypeClaim
+The LoginTypeClaim.cs file defines the LoginTypeClaim class, which is responsible for translating login type claims based on configurations specific to a biller. This class plays a crucial role in the Single Sign-On (SSO) process by ensuring that login types are correctly identified and processed. Let's break down each method and its functionality:
+Constructor: 
+LoginTypeClaim(int billerId)
+Purpose
+: 
+Initializes a new instance of the LoginTypeClaim class for a specific biller.
+Process
+:
+Accepts a billerId as an argument.
+Sets the billerId field with the provided value, which is used to load and translate claims specific to the biller.
+TranslateLoginTypeClaim(string loginTypeClaim)
+Purpose
+: 
+Translates a login type claim value into a corresponding internal representation based on the biller's configurations.
+Process
+:
+Calls LoadClaims to retrieve a list of configured login type claims for the biller.
+Attempts to find the first claim in the list that matches the provided loginTypeClaim value.
+If a matching claim is found, it converts the MappedLoginType (an enum) of the found claim to an integer and then to a string, which is returned as the method's result.
+If no matching claim is found or an exception occurs during the process, an error is logged. For exceptions, the specific error message is also logged.
+If no matching claim is found, a specific error message indicating an "Unknown claim value for LoginType" is logged.
+LoadClaims()
+Purpose
+: 
+Loads the login type claim configurations from the database for the current biller.
+Process
+:
+Initializes an empty list of LoginTypeClaim objects.
+Calls ClaimRepository.GetLoginTypeConfigurations(billerId) to retrieve a DataTable containing the claim configurations from the database.
+Iterates over each row in the DataTable.
+For each row, calls LoadConfiguration to create a LoginTypeClaim object from the row data and adds it to the list.
+Returns the list of LoginTypeClaim objects.
+LoadConfiguration(DataRow row)
+Purpose
+: 
+Creates a LoginTypeClaim object from a DataRow containing claim configuration data.
+Process
+:
+Creates a new LoginTypeClaim object for the current biller.
+Sets the Id property of the object based on the ClaimMappingLoginTypeID column in the DataRow. If the column value is null or whitespace, Id is set to 0.
+Sets the Value property based on the ClaimValue column. If the column value is null or whitespace, Value is set to null.
+Sets the MappedLoginType property based on the MappedLoginTypeID column. The column value is converted to an integer and then cast to the LoginType enum. If the column value is null or whitespace, MappedLoginType is set to a new instance of LoginType.
+Sets the Active property based on the Active column. The column value is converted to a boolean. If the column value is null or whitespace, Active is set to false.
+Returns the configured LoginTypeClaim object.
+Properties
+Id, Value, MappedLoginType, Active
+Purpose
+: 
+These properties store information about the login type claim, including its database ID (Id), the claim value (Value), the mapped login type (MappedLoginType), and whether the claim is active (Active).
+Summary
+The LoginTypeClaim class provides a mechanism for translating login type claims based on configurations specific to a biller, ensuring that the SSO process can accurately identify and process different types of logins.
+ServiceProvider
+The ServiceProvider.cs file defines the ServiceProvider class within the ICSSOAuthentication.Models.SSOConfigurations namespace. 
+This class is designed to manage the configuration and certificate loading for a service provider in the context of Single Sign-On (SSO) functionalities. Let's break down each method and its functionality:
+Constructor: 
+ServiceProvider(int billerId, Protocol protocol)
+Purpose
+: 
+Initializes a new instance of the ServiceProvider class with specific settings based on the provided biller ID and protocol.
+Process
+:
+Calls the LoadSettings method, passing the billerId and protocol as arguments. This method is responsible for loading the service provider's settings from the database.
+X509Certificate2 LoadCerficate()
+Purpose
+: 
+Loads the X.509 certificate used for SSO operations. The method determines the source of the certificate based on the execution context.
+Process
+:
+Checks if the current HTTP context is null or if the debugger is attached. If true, it means the application is likely running in a development environment.
+Calls LoadFromFilePath with a predefined file path to load the certificate from the file system in a development environment.
+If the application is not in a development environment, calls LoadFromKeyStore to load the certificate from the system's key store.
+Returns the loaded X509Certificate2 object.
+private static X509Certificate2 LoadFromFilePath(string filePath, bool fullpath = false)
+Purpose
+: 
+Loads an X.509 certificate from a specified file path.
+Process
+:
+Determines the full path of the certificate file. If fullpath is true, uses the provided filePath directly; otherwise, constructs the full path by combining the application's base directory with the filePath.
+Checks if the certificate file exists at the specified location.
+If the file exists, loads the certificate into an X509Certificate2 object with specific key storage flags.
+If the file does not exist, logs an error indicating the certificate was not found.
+Returns the loaded certificate or null if the file does not exist.
+private static X509Certificate2 LoadFromKeyStore()
+Purpose
+: 
+Loads an X.509 certificate from the system's key store.
+Process
+:
+Opens the "My" certificate store in the local machine location in read-only mode.
+Searches for a certificate with a specific thumbprint, as defined in the application's settings.
+If a matching certificate is found, selects the first certificate in the collection.
+If no matching certificate is found, logs an error indicating the certificate was not found in the key store.
+Closes the certificate store.
+Returns the found certificate or null if no matching certificate is found.
+private void LoadSettings(int billerid, Protocol protocol)
+Purpose
+: 
+Loads the service provider's settings from the database based on the provided biller ID and protocol.
+Process
+:
+Attempts to retrieve the service provider's settings from the database using the ServiceProviderRepository.GetSettingsFromDatabase method.
+If settings are successfully retrieved, populates the class properties (id, EntityId, PfxFilePath, OrgName, ReturnUrl, Protocol) with the values from the database.
+If the application is running in a local environment (detected via HttpContext.Current.Request.IsLocal), overrides the EntityId property with a value constructed from the current request's base URL.
+If an exception occurs during the settings loading process, logs an error with details of the exception.
+Properties
+EntityId: Stores the entity ID of the service provider.
+PfxFilePath: Stores the file path to the service provider's certificate.
+OrgName: Stores the name of the organization associated with the service provider.
+ReturnUrl: Stores the URL to which users are redirected after successful authentication.
+IsStoredInDatabase: A read-only property that indicates whether the service provider's settings are stored in the database.
+Protocol: Stores the SSO protocol used by the service provider.
+Summary
+The ServiceProvider class encapsulates the functionality required to manage the service provider's settings and certificates for SSO operations, including loading settings from the database and handling certificates based on the execution environment.
+SingleSignOn
+The SingleSignOn.cs file defines the SingleSignOn class, which orchestrates the Single Sign-On (SSO) process by leveraging a specific SSO protocol and handling SSO requests. This class is central to managing the initiation, reception, and processing of SSO and Single Log-Out (SLO) functionalities. Let's break down each method and its functionality:
+Constructor: 
+SingleSignOn(IProtocol protocol, SSORequest request)
+Purpose
+: 
+Initializes a new instance of the SingleSignOn class with a specific SSO protocol and request.
+Process
+:
+Checks if the protocol parameter is not null. If it is null, logs an error indicating that the protocol is missing.
+Assigns the protocol parameter to the Protocol property if it's not null.
+Checks if the request parameter is not null. If it is null, logs an error indicating that the SSO request is missing.
+Assigns the request parameter to the Request property if it's not null.
+Initializes a new Logger instance with the biller ID from the request, for logging purposes.
+Uri InitiateSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+:
+Initiates the SSO process by redirecting the user to the Identity Provider (IdP) for authentication.
+Process
+:
+Calls the InitiateSingleSignOn method of the Protocol property, passing the HTTP request and response objects.
+Returns the URI to which the user should be redirected for authentication.
+If an exception occurs, logs an error indicating the failure to initiate SSO and rethrows the exception.
+Uri ReceiveSingleSignOn(HttpRequestBase request, HttpResponseBase response)
+Purpose
+: 
+Processes the response from the IdP after the user has attempted authentication.
+Process
+:
+Calls the ReceiveSingleSignOn method of the Protocol property, passing the HTTP request and response objects, to process the IdP's response.
+Translates the claims received from the IdP using the Claim.TranslateClaims method.
+Determines the account number to use for the Identity object. If Request.AccountNumber is not empty, it uses that; otherwise, it uses the account number from the translated claims.
+Initializes a new Identity object with the translated claims and the determined account number.
+Builds a redirect URI by appending an authentication GUID to the redirect location received from the IdP.
+Returns the constructed redirect URI.
+If an exception occurs, logs an error indicating the failure to process the SSO assertion and rethrows the exception.
+void ProcessSingleLogout(HttpRequestBase request, HttpResponseBase response)
+Purpose
+:
+ Initiates or processes the Single Log-Out (SLO) process.
+Process
+:
+Calls the ProcessSingleLogOut method of the Protocol property, passing the HTTP request and response objects, to process the logout request.
+Calls the TerminateSession method to expire the current session.
+If an exception occurs, logs an error indicating the failure to process SLO and rethrows the exception.
+private void TerminateSession()
+Purpose
+: 
+Expires the current user session to complete the logout process.
+Process
+:
+Calls the Expire method of the Identity property to invalidate the session.
+If an exception occurs, logs an error including the exception details and the authentication GUID, indicating the failure to terminate the session.
+Properties: 
+Identity, Protocol, Request
+Identity: Stores the user's identity information after successful authentication.
+Protocol: Holds the SSO protocol implementation used for initiating SSO, receiving SSO responses, and processing SLO.
+Request: Contains the SSO request details, including the biller ID and account number.
+Summary
+The SingleSignOn class encapsulates the logic for handling the SSO process, including initiating SSO, processing the response from the IdP, and handling logout requests. It leverages the specified SSO protocol to interact with the IdP and manages the user's identity based on the authentication results.
+SSORequest
+The SSORequest.cs file defines the SSORequest class, which encapsulates the data and operations related to a Single Sign-On (SSO) request. This class is responsible for parsing, validating, and storing the details of an SSO request, including information about the biller, account number, and various URLs and IDs used in the SSO process. Let's break down each method and its functionality:
+Constructors
+SSORequest()
+Purpose: Provides a default constructor that initializes a new instance of the SSORequest class without any parameters.
+SSORequest(HttpRequestBase request)
+Initializes a new instance of the SSORequest class using data from an HttpRequestBase object.
+Process
+:
+Checks if the request's query string contains any keys.
+If keys are present, logs an informational message and calls LoadFromRequest to parse and load data from the request.
+If the query string is empty, logs an error message.
+Catches and logs any exceptions that occur during the process, rethrowing them afterward.
+SSORequest(HttpRequestData request)
+Purpose
+:
+Initializes a new instance of the SSORequest class using data from an HttpRequestData object, specifically focusing on relay data.
+Process
+:
+Checks if relay data is present in the stored request state.
+If relay data is present, logs an informational message and calls LoadFromRelayData to parse and load data from the relay data.
+If relay data is not present, logs both an informational and an error message.
+Public Methods
+LoadBillerId(Guid billerGuid)
+Purpose
+: 
+Loads the biller ID based on a provided biller GUID.
+Process
+:
+Calls SSORequestRepository.GetBillerId with the biller GUID to retrieve the corresponding biller ID.
+If a valid biller ID is found, it is stored; otherwise, an error is logged.
+LoadBillerGuid(string billerGuidIn)
+Purpose
+: 
+Converts a biller GUID from string format to a Guid object.
+Process
+:
+Attempts to parse the input string into a Guid.
+If successful, returns the Guid; otherwise, logs an error.
+AppendAuthGuid(Uri baseUri, Guid authenticationGuid)
+Purpose
+: 
+Appends an authentication GUID as a query parameter to a base URI.
+Process
+:
+Parses the query string of the base URI.
+Adds the authentication GUID to the query string.
+Constructs a new URI with the updated query string and returns it.
+BuildRequestQuery(Uri baseUri)
+Purpose
+: 
+Constructs a query string with SSO request parameters and appends it to a base URI.
+Process
+:
+Parses the query string of the base URI.
+Adds various SSO request parameters (e.g., account number, deep link ID, view mode, CSS URL, go-back URL, filter ID) to the query string.
+Constructs a new URI with the updated query string and returns it.
+Private Methods
+LoadFromRequest(HttpRequestBase request)
+Purpose
+: 
+Parses and loads SSO request data from an HTTP request.
+Process
+:
+Extracts and processes various parameters from the request's route data and query string, such as biller GUID/ID, account number, view mode, CSS URL, deep link ID, go-back URL, and filter ID.
+Logs errors for missing or invalid parameters.
+LoadFromRelayData(IDictionary<string, string> relayData)
+Purpose
+: 
+Parses and loads SSO request data from relay data.
+Process
+:
+Similar to LoadFromRequest, but extracts data from a dictionary representing relay data.
+Handles missing or invalid parameters similarly, logging errors as appropriate.
+Helper Methods
+LoadAccountNumber, LoadDeepLinkId, LoadCssUrl, LoadViewMode, LoadGoBackUrl, LoadFilterID: These methods parse and validate specific pieces of data (e.g., account number, deep link ID, CSS URL, view mode, go-back URL, filter ID) from string inputs. They log errors for invalid inputs.
+Properties
+BillerId, BillerGuid, AccountNumber, CssUrl, DeepLinkId, ViewMode, GoBackUrl, FilterID: These properties store the parsed and validated data relevant to the SSO request, such as biller information, account number, URLs, IDs, and view mode.
+Summary
+The SSORequest class serves as a comprehensive model for handling the data associated with an SSO request, providing mechanisms for parsing, validating, and storing this data, as well as constructing query strings for SSO-related URLs.
+Utilities
+Helper Class
+The Helper.cs file within the ICSSOAuthentication.Models.Utilities namespace provides a collection of static utility methods that perform various common tasks, such as IP address retrieval, email and username validation, session management, and more. Let's break down each method and its functionality:
+GetIPAddress()
+Purpose
+: 
+Retrieves the IP address of the client making the request.
+Process
+:
+Checks if the HttpContext.Current is null, which might indicate a unit testing scenario, and returns a default IP address "1.1.1.1".
+Attempts to retrieve the client's IP address from the HTTP_X_FORWARDED_FOR server variable, which is used when the client is behind a proxy or load balancer.
+If the HTTP_X_FORWARDED_FOR header contains multiple IP addresses, it splits the string by commas and returns the first IP address, which is the client's original IP.
+If an exception occurs during this process, it returns an empty string.
+IsValidEmailAddress(string emailAddress)
+Purpose
+:
+ Validates an email address both against a database and using a regular expression.
+Process
+:
+Queries the database to check if the email address has already been verified.
+If the email address exists in the database, it returns true.
+If the email address does not exist in the database, it uses a regular expression to validate the email address format.
+If the email address passes the regular expression check, it inserts the email address into the database as a verified email and returns true.
+If the email address fails the validation or an exception occurs, it returns false.
+IsValidUsername(string username)
+Purpose
+: 
+Validates a username using a regular expression.
+Process
+:
+Uses a regular expression to ensure the username consists of 4 to 50 characters that are within the printable ASCII range.
+Returns true if the username matches the pattern; otherwise, returns false.
+Catches and ignores exceptions, returning false in case of an exception.
+GetFromSession(this object sessionObject, string sessionKey)
+Purpose
+: 
+Retrieves an object from the session state.
+Process
+:
+Checks if HttpContext.Current is null, returning null if it is (indicating no current HTTP context, possibly due to running outside a web request).
+Returns the object associated with the specified sessionKey from the current session state.
+SaveToSession(this object sessionObject, string sessionKey)
+Purpose
+: 
+Saves an object to the session state.
+Process
+:
+Checks if HttpContext.Current is not null (indicating there is a current HTTP context).
+Saves the sessionObject to the session state using the specified sessionKey.
+GetRemoteIP()
+Purpose
+: 
+Retrieves the remote IP address of the client, accounting for proxies and local requests.
+Process
+:
+Checks if the request is local, returning "::1" if it is.
+Attempts to retrieve the client's IP address from the HTTP_X_FORWARDED_FOR server variable, falling back to the REMOTE_ADDR server variable if necessary.
+If multiple IP addresses are found in HTTP_X_FORWARDED_FOR, it extracts and returns the first one (the client's original IP).
+Validates the extracted IP address to ensure it's a valid IP. If not, it returns an empty string.
+Catches exceptions, logging them and returning an empty string in case of an error.
+IsValidIPAddress(string addressToValidate)
+Purpose
+: 
+Validates whether a given string is a valid IP address.
+Process:
+Attempts to parse the input string as an IP address using System.Net.IPAddress.TryParse.
+Returns true if the parsing is successful, indicating a valid IP address; otherwise, returns false.
+Summary
+These utility methods provide essential functionalities for IP address management, input validation, and session state management, which are common requirements in web applications, especially those dealing with authentication and security.
+ URL:/spaces/ED/pages/2776334337/ICSSOAuthentication

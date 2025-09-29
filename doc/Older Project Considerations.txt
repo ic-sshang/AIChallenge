@@ -1,0 +1,12 @@
+Both 
+CRM
+ and 
+MyIIS
+ fall into this category.  It is important to take special care with these projects as they are an old visual studio project type 
+website
+.   Not the more modern 
+Web Application
+ type of project.  Because of this, certain challenges exist that do not exist in other projects.  In particular, satellite assemblies stored in the 
+/bin
+ folder are included in source control.  This is because it doesn’t use nuget packages in the traditional sense.  So as a result, these files stored in bin folder are used.  They are only updated when necessary and special care must be taken when merging a pull request to ensure they are only overwritten when absolutely necessary.
+ URL:/spaces/ED/pages/2852126878/Older+Project+Considerations

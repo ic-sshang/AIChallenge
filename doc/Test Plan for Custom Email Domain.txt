@@ -1,0 +1,483 @@
+Red rows are not validated.
+note
+Objective:
+To ensure that outbound emails are being successfully sent from the configured custom domain, not the default (e.g., @invoicecloud.net), across 37 email types.
+Test Scope:
+Validate “From” address in the actual email headers.
+Confirm successful delivery of email for all configured email types.
+
+
+Objective:
+To ensure that outbound emails are being successfully sent from the configured custom domain, not the default (e.g., @invoicecloud.net), across 37 email types.
+Test Scope:
+Validate “From” address in the actual email headers.
+Confirm successful delivery of email for all configured email types.
+
+
+General Notification
+Email Queue ID
+ACH Reject/Chargeback Notices
+25
+Account Deactivation Notification
+89
+Conveyed Customer Notification
+63
+Credit/Debit Card Expiration Notification
+30
+Multiple Registered Customers Welcome Email
+65
+Password Reset Notification
+91
+Payment Method Block Notification
+97
+Registered Customer Welcome Email
+19
+:information_source:
+2139
+ℹ️
+#F4F5F7
+Steps to Trigger from Dev Environment:
+Go to EmailQueue Table
+Insert a record in EmailQueue table with particular EmailQueueTypeID (In below list, EmailQueueTypeID is mentioned for each email type)
+If there is no entry found then there is a sql procedure in that just pass EmailQueueTypeID as a parameter to get BID in which you will get entry.
+Make update for emailrecipient and emailsentdate as NULL
+Run the skybot job
+List of all Email Types
+:info:
+atlassian-info
+#FF8F73
+Email Type 1: ACH Reject/Chargeback Notices
+EmailQueueTypeID: 
+25
+Trigger Point:
+Triggered when an ACH transaction is rejected or a chargeback is initiated.
+Steps to Trigger:
+Yet to define
+Comment: No easy way to do these.  They are triggered from processor file imports.
+Email Type 2: AutoPay Off Confirmation
+EmailQueueTypeID: 
+61
+Trigger Point:
+When a registered/non-registered payer turns off AutoPay.
+Steps to Trigger:
+Login to Payer portal
+Go to Autopay from my profile dropdown
+Edit any available accounts
+Choose - No, I do not want AutoPay & Save
+Reference Image:
+Email Type 3: AutoPay Registration Completed Notification
+EmailQueueTypeID: 
+75
+Trigger Point:
+When a registered/non-registered payer turns on AutoPay
+Steps to Trigger:
+Login to Payer portal
+Go to Autopay from my profile dropdown
+Add new autopay setup
+Complete the process by filling mandatory details and Save
+Reference Image:
+Email Type 4: AutoPay Registration Notification
+EmailQueueTypeID: 
+21
+Trigger Point:
+If a registered or non-registered payer attempts to enroll in AutoPay and the biller has disabled the default AutoPay Email Confirmation step, the system sends a confirmation email with a registration link instead of completing the AutoPay setup.
+Prerequisites:
+Ensure that invoice type ID 10 (Customer Portal - Skip AutoPay Email Confirmation Step (on by default)) is disabled.
+Steps to Trigger:
+same as Email Type 3 (AutoPay Registration Completed Notification)
+Email Type 5: AutoPay Reminder Notification
+EmailQueueTypeID: 
+33
+Trigger Point:
+when a registered payer, which is already enrolled in autopay and having an open invoice and the due date must be 3 days ahead of today’s date.
+Steps to Trigger:
+Must have one active autopay
+Due date must be 3 days ahead of today’s date
+:info:
+atlassian-info
+#FF8F73
+Email Type 6: AutoPay with Paperless Registration Completed
+EmailQueueTypeID: 
+102
+Trigger Point:
+Steps to Trigger:
+Comment: Getting 2 email one for autopay and another for paperless
+Email Type 7: Biller User Create Password
+EmailQueueTypeID: 
+111
+Trigger Point:
+Triggers when a new user account is being added to the Biller account.
+Steps to Trigger:
+Go to CRM
+Select Test Biller
+Click on User
+Click On New User
+Enter Details & Save
+Reference Images:
+Email Type 8: Biller User Reset Password
+EmailQueueTypeID: 
+109
+Trigger Point:
+Triggers when a biller forgets their password and request for new one.
+Steps to Trigger from CRM:
+Go to CRM
+Select Test Biller
+Click on User
+Click on edit icon for your test user
+Click on Reset Password
+Steps to Trigger from Biller Login Page:
+Open Login page
+Click on “click here to reset your password“
+Reference Image:
+CRM Portal
+Biller Login page
+:info:
+atlassian-info
+#DEEBFF
+Email Type 9: Check 21 Payment Receipt
+EmailQueueTypeID: 
+52
+Trigger Point:
+Triggered when a payment is processed via Check 21
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+ 
+Email Type 10: Consolidated Payment Transaction Receipt
+EmailQueueTypeID: 
+112
+Trigger Point:
+If a registered or non-registered payer pays multiple invoices and the biller has enabled Option 133 (Consolidated Payment Receipts), the payer will receive a single consolidated receipt instead of individual ones.
+Prerequisites:
+Ensure that option 133 is checked
+There must be more than 1 invoice to pay
+Steps to Trigger:
+Go to Payer portal
+Click on “Pay My Invoices”
+Select more than 1 invoice & make payment
+:info:
+atlassian-info
+#FF8F73
+Email Type 11: Conveyed Customer Notification
+EmailQueueTypeID: 
+63
+Trigger Point:
+NA
+Steps to Trigger:
+Comment: You can convey a Customer in the Biller Portal Customer Profile.  This was trigger the email.  Conveyance must be turned on for your test Biller through CRM
+:info:
+atlassian-info
+#DEEBFF
+Email Type 12: Credit/Debit Card Expiration Notification
+EmailQueueTypeID: 
+30
+Trigger Point:
+Triggered when a debit/credit card is about to be expired.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 13: Declined Auto Pay Transaction
+EmailQueueTypeID: 
+3
+Trigger Point:
+Triggered when an AutoPay transaction is declined.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 14: Declined Scheduled Payment Notification
+EmailQueueTypeID: 
+4
+Trigger Point:
+Triggered when a scheduled payment is declined
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 15: First Invoice Email Notification
+EmailQueueTypeID: 
+1
+Trigger Point:
+Whenever an invoice is added for a biller using a BIF file, it automatically includes three specific values, (first, second, & third invoice notification) which are default set to null. On the specified dates, an email will be sent to the corresponding account holder. These values are stored in the invoice table.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#FF8F73
+Email Type 16: FlexPay Auto Enrollment
+EmailQueueTypeID: 
+106
+Trigger Point:
+NA
+Steps to Trigger:
+NA
+:info:
+atlassian-info
+#DEEBFF
+Email Type 17: FlexPay Confirmation Notification
+EmailQueueTypeID: 
+42
+Trigger Point:
+when a FlexPay transaction is being made.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 18: Late Fee Email Notification
+EmailQueueTypeID: 
+2
+Trigger Point:
+When an invoice is added via a BIF file, default values for 
+LateFeeAmount
+ (set to 
+0.00
+) and 
+LateFeeEmailNotice
+ are included. The system uses these to send a late fee notification email to the payer on the specified date. Both values are stored in the 
+Invoices
+ table.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 19: Linked Accounts First Invoice Notification
+EmailQueueTypeID: 
+55
+Trigger Point:
+If a linked account has a due invoice and its first email notification date matches that of the primary account, the primary account holder will also receive the email notification.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 20: Linked Accounts Second Invoice Notification
+EmailQueueTypeID: 
+57
+Trigger Point:
+If a linked account has a due invoice and its second email notification date matches that of the primary account, the primary account holder will also receive the email notification.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 21: Linked Accounts Third Invoice Notification
+EmailQueueTypeID: 
+59
+Trigger Point:
+If a linked account has a due invoice and its third email notification date matches that of the primary account, the primary account holder will also receive the email notification.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 22: Multiple Registered Customers Welcome Email
+EmailQueueTypeID: 
+65
+Trigger Point:
+Go through Virtual Site and register customer by selecting multiple invoices.
+Steps to Trigger:
+Go to virtual site
+Search of accounts
+select more than one account
+Register customer
+:info:
+atlassian-info
+#DEEBFF
+Email Type 23: Online Bank Direct Payment Receipt
+EmailQueueTypeID: 
+50
+Trigger Point:
+Triggered when a payment is made directly through online banking
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 24: Paperless Off Confirmation
+EmailQueueTypeID: 
+47
+Trigger Point:
+Triggers When a registered/non-registered payer turns off Paperless
+Steps to Trigger:
+Login to Payer Portal
+Click on Paperless option or go to profile & select Paperless
+Select No radio button and Save
+Reference Image:
+:info:
+atlassian-info
+#DEEBFF
+Email Type 25: Paperless Registration Completed Notification
+EmailQueueTypeID: 
+76
+Trigger Point:
+Triggers when a registered/non-registered payer turns on Paperless.
+Steps to Trigger:
+Login to Payer Portal
+Click on Paperless option or go to profile & select Paperless
+Select Yes radio button and Save
+Reference Image:
+:info:
+atlassian-info
+#DEEBFF
+Email Type 26: Paperless Registration Notification
+EmailQueueTypeID: 
+23
+Trigger Point:
+Triggers when a user not enrolled in paperless. Pay an open invoice, leave the 
+Paperless registration
+ option unchecked at the time of Payment. A notification email will then be sent with details on how to register.
+Steps to Trigger:
+Login to payer portal
+Click on Pay My Invoices
+Select one of the invoices
+During Review Your Information, keep Enroll me in Paperless uncheck
+Process Payment
+:info:
+atlassian-info
+#DEEBFF
+Email Type 27: Password Reset Notification
+EmailQueueTypeID: 
+91
+Trigger Point:
+Triggered when a customer requests a password reset(Both in Biller/Customer portal)
+Steps to Trigger:
+Go to Payer portal Login page
+Click on “
+Forgot your password?
+”
+Enter your email id
+Click on “Recover My Password”
+Reference Image:
+:info:
+atlassian-info
+#DEEBFF
+Email Type 28: Payment Method Block Notification
+EmailQueueTypeID: 
+97
+Trigger Point:
+Triggered when a payment method is blocked.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 28: Payment Transaction Receipt
+EmailQueueTypeID: 
+5
+Trigger Point:
+Triggered when a payment transaction is completed.
+Steps to Trigger:
+Login to Payer Portal
+Click on Pay My Invoice
+Select any Invoice
+Make a payment
+:info:
+atlassian-info
+#F4F5F7
+Email Type 29: Recurring Scheduled Payment Canceled
+EmailQueueTypeID: 
+69
+Trigger Point:
+Triggered when a recurring scheduled payment is canceled.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 30: Recurring Scheduled Payment Confirmation
+EmailQueueTypeID: 
+67
+Trigger Point:
+Triggered when a recurring scheduled payment is confirmed.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 31: Registered Customer Welcome Email
+EmailQueueTypeID: 
+19
+Trigger Point:
+Triggered when a new customer registers.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 32: Scheduled Payment Confirmation
+EmailQueueTypeID: 
+32
+Trigger Point:
+Triggered when a scheduled payment is confirmed.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 33: Scheduled Payment Reminder
+EmailQueueTypeID: 
+44
+Trigger Point:
+Triggered as a reminder for an upcoming scheduled payment.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 34: Second Invoice Email Notification
+EmailQueueTypeID: 
+37
+Trigger Point:
+Whenever an invoice is added for a biller using a BIF file, it automatically includes three specific values, (first, second, & third invoice notification) which are default set to null. On the specified dates, an email will be sent to the corresponding account holder. These values are stored in the invoice table.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 35: Third Invoice Email Notification
+EmailQueueTypeID: 
+38
+Trigger Point:
+Whenever an invoice is added for a biller using a BIF file, it automatically includes three specific values, (first, second, & third invoice notification) which are default set to null. On the specified dates, an email will be sent to the corresponding account holder. These values are stored in the invoice table.
+Steps to Trigger:
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain#Steps-to-Trigger-from-Dev-Environment%3A
+ 
+:info:
+atlassian-info
+#DEEBFF
+Email Type 36: Account Deactivation Notification
+EmailQueueTypeID: 
+89
+Trigger Point:
+Trigger when biller deactivate the account of customer from the biller portal.
+Steps to Trigger:
+Go to Biller Portal
+Search for the customer using name, invoice, email or account number
+Go to Customer Profile
+Go to Customer Info
+Click on Deactivate Account & Submit
+Reference Image:
+ URL:/spaces/PE/pages/4198629400/Test+Plan+for+Custom+Email+Domain

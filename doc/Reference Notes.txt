@@ -1,0 +1,285 @@
+Thread 2 — Processor Integration & Payment Routing (verbatim from Aug 14 session)
+1) American Express (processing path) & TPSP sunset
+Facts stated
+Team wants to escalate within Amex to confirm if 
+OptBlue
+ can remain an option; it’s seen as “the least amount of work.” A meeting was set for 
+Aug 25
+ with 
+Neil
+ (Amex account manager level), with recognition that escalation to 
+Amex leadership
+ may be required.
+Amex previously 
+funded $300,000
+ toward a 
+Braintree strategic aggregator
+ build and may expect InvoiceCloud to continue on an aggregator path.
+The current 
+TPSP model is planned to sunset
+; timelines have slipped because many clients remain on it, but the stated direction is to end TPSP.
+Two 
+strategic aggregator
+ options were discussed: 
+(a)
+ direct to Amex; 
+(b)
+ 
+conveyance via Chase
+ (Amex product routed through Chase). Conveyance would require Chase dev work to send specific mapping fields back to Amex so they can retain account history continuity.
+Chase 
+conveyance
+ is on a 
+2026 roadmap
+ (no committed quarter/resource assignment). Amex has 
+escalated
+ with Chase; Chase would need to add development either way (OptBlue or conveyance).
+For 
+strategic aggregator
+ (either path), 
+settlement is net-only
+ (discount fees/chargebacks deducted). OptBlue was characterized as a lighter lift.
+Implications discussed
+Net-only from Amex aggregator conflicts with many 
+gross-deposit
+ expectations; could create 
+FBO negative balance risk
+ if IC pays billers gross while receiving net from Amex. 
+Reserves
+ and daily fee debits were mentioned as considerations.
+Open questions captured
+Whether 
+OptBlue
+ is truly allowed given IC’s scale; whether 
+executive approval
+ can secure it.
+Actual 
+funding timing
+ and any 
+delays
+ when routing via Chase vs direct Amex aggregator.
+2) POS / Card-present (Bluefin, Datacap, BYOD)
+Facts stated
+Bluefin
+ is 
+not PayFac-certified on Chase Commerce
+ today; path forward unclear. 
+NMI
+ was mentioned but 
+not PF-certified
+; 
+Datacap
+ was raised as 
+PF-certified
+ and recommended by Chase.
+A large installed base of 
+existing devices
+ was noted (example: PSN ~
+500
+ devices); 
+device swaps
+ are 
+slow and painful
+; 
+BYOD
+ under PayFac was said to be 
+not supported
+ and would need replacement.
+There was debate on whether POS must be 
+day-1
+ vs 
+staged
+ by cohorts; some argued it’s strategically important and should be ready day-1; others noted migration realities may push POS later in the program.
+Open questions captured
+Whether 
+Bluefin
+ will engage for PayFac on Commerce; 
+Chris/Steve will own 
+Datacap
+ outreach - in progress
+3) Sub-merchant model & ID strategy (Merchant Order Number)
+Facts stated
+Team aligned on using 
+Merchant Order Number (MON)
+ as the 
+primary key
+ for reporting/settlement reconciliation with Chase; Chase returns MON in files/reports for lifecycle tracking (success, failures, chargebacks).
+Proposed MON composition discussed: 
+Biller ID (BID) + Invoice Type (aka “invoice type ID”) + per-payment transaction suffix
+, ensuring readability (BID visible) and uniqueness. 
+Chase API supports 
+up to ~40 characters
+; 
+22
+ was also mentioned in current IC context—both values surfaced in the dialogue.
+MCC
+ needs to be 
+captured per invoice type
+ and 
+sent
+ to Chase alongside MON.
+Funding instructions
+ can vary 
+per invoice type
+; in many cases they may also roll up to a single account—both patterns exist today in practice.
+A future 
+“super-biller” reporting hierarchy
+ was discussed (parent/brand/locations model). Today, processing/reporting remains at 
+BID
+ level; super-biller was framed as 
+reporting roll-up
+, not a processing entity. {Roopa to work with Sarah to understand need for future proofing.}
+Terminology debate captured
+Whether to label the parent 
+Biller
+ as 
+Merchant
+ or 
+Sub-merchant
+; and what to call the invoice-type level. No final naming decision was taken; agreement to revisit after walking through 
+funding
+ and 
+boarding
+ flows.
+4) Settlement modes & fee handling (gross / net / daily debit)
+Facts stated
+Three flavors
+ discussed:
+(a)
+ 
+Gross deposit
+ to biller with 
+monthly
+ invoicing of fees;
+(b)
+ 
+Gross deposit
+ with 
+daily debit
+ of merchant/processing fees (to reduce float);
+(c)
+ 
+Net
+ settlement (deposit already reduced by fees/chargebacks).
+For 
+Amex strategic aggregator
+, 
+net-only
+ was reiterated (both via Chase conveyance and direct).
+Concerns: 
+FBO negative
+ scenarios if IC fronts gross while receiving net; 
+interchange
+ uncertainty until settlement; 
+daily fee debit
+ could add 
+noise/complexity
+ for billers.
+Past processor experience (non-EBPP vertical) indicated some PayFacs 
+preferred net
+ for cleaner cash use; others in IC’s space 
+see gross
+ as simpler for reconciliation—both views were recorded.
+It was noted 
+Chase
+ (as acquirer) can deposit 
+gross
+ and 
+debit fees
+, and there was discussion about the ability to 
+designate net
+ into the FBO for specific slices (e.g., cost-plus) vs Chase’s general stance—this needs confirmation in funding design. 
+Different MIDs
+ at Chase may be required for 
+net vs gross
+ processing, per the discussion.
+Open questions captured
+Granularity of settlement mode
+ (parent vs invoice-type vs finer slices like 
+invoice type × payment source × method
+)—raised as a funding-config topic.
+5) Routing policy & slices
+Facts stated
+The team wants routing that can slice by 
+invoice type
+, 
+payment source
+, and 
+payment method
+; each slice could map to different 
+bank accounts
+ and potentially different 
+settlement modes
+ (net/gross).
+For 
+non-Chase rails
+ (e.g., 
+PayPal
+, 
+Fiserv RPPS
+), existing identifier patterns differ: PayPal uses vendor-specific IDs (MID/MAID); RPPS is per-BID. IC currently uses constructs like 
+BID|terminal
+ for PayPal mapping.
+Open questions captured
+How to 
+normalize
+ cross-rail IDs with the 
+MON
+ strategy, and where to 
+store vendor-specific identifiers
+ alongside MON for consistent reporting.
+6) Migration & coexistence
+Facts stated
+Expect 
+parallel
+ processing during migration (legacy vs PayFac) while device swaps and routing changes progress; 
+POS-heavy
+ cohorts might be deferred later in the program.
+7) Tokenization & Card Updater (related, not a day-1 dependency)
+Facts stated
+Network tokenization
+ is 
+not required
+ for PayFac 
+day-1
+; it is 
+related but independent
+. 
+Card updater
+ demand is 
+rising
+ (especially insurance/up-market).
+Options under exploration: 
+Chase
+ account updater vs 
+third-party
+ vs 
+direct with networks
+; 
+Chase
+ cannot support network tokenization 
+outside Chase cards
+. No vendor choice or timing was decided in this meeting.
+8) Bank account validation pricing (context impacting funds movement)
+Facts stated
+Chase
+ validation pricing was cited around 
+$0.21
+ (dropping to 
+$0.19) per validation, viewed as 
+too expensive
+ relative to prior 
+Certegy
+ costs (
+$0.03–$0.04
+, “not apples to apples”). 
+EWS
+ (Early Warning) was noted as underlying for many vendors. This isn’t a day-1 routing dependency but affects overall payments cost structure.
+9) What the group explicitly parked to future sessions
+Funding configuration
+ depth (where to set net/gross; per-slice granularity; UI walk-through).
+Boarding/CRM wizard
+ alignment with the sub-merchant model and funding flow (include India team; end-to-end configuration walk-through).
+Terminology
+ (merchant vs sub-merchant vs invoice type) to be finalized after funding/boarding reviews.
+ URL:/spaces/EA/pages/4591222864/Reference+Notes

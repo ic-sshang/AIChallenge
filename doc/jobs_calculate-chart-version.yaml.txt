@@ -1,0 +1,32 @@
+Code-Generated Docs
+Description
+
+calculates the full version of a chart to use given an identifier
+for example, if the latest version published was '1.5.9', you can provide a chart version of '1' or '1.5' - either should resolve to the latest version
+the full version will later be accessible as the variable 'chartVersion'
+
+Parameters
+Parameter
+Default
+Description
+chartName
+n/a
+name of the chart
+chartVersion
+n/a
+for example, if the latest version published was '1.5.9', you can provide a chart version of '1' or '1.5' - either should resolve to the latest version the full version will later be accessible as the variable 'chartVersion
+pool
+sbx-agents
+name of the agent pool where this will run. must have bash and powershell
+variables
+n/a
+variables object, make sure you provide auth here
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/helm-deploy.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/calculate-chart-version.yaml
+ URL:/spaces/platform/pages/3633119727/jobs+calculate-chart-version.yaml

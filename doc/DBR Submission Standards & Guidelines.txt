@@ -1,0 +1,89 @@
+📌 Purpose
+This document outlines the standards and formatting guidelines for submitting 
+Database Requests (DBRs)
+ to the 
+Data Services team
+. The goal is to ensure all requests are 
+clear, actionable, and traceable
+, reducing turnaround time and minimizing back-and-forth communication.
+✅ General Guidelines
+When submitting a DBR, please ensure the following:
+Be specific
+: Include exact IDs (e.g., PaymentID, TerminalID, InvoiceID).
+State the action
+: Clearly describe what needs to be updated, inserted, or recalculated.
+Provide context
+: Reference related tickets or reports (e.g., DS-####).
+Use structured formatting
+: Follow the appropriate template below.
+Group related items
+: If multiple updates are related, submit them in a single request.
+🧩 Section 1: Ticket Update Requests
+Use this section for requests involving updates to payment statuses, ledger entries, batch recalculations, or other database-level changes.
+🧾 Template
+This request is to [brief summary of the request].
+
+### Action Items:
+1. [e.g., Reset ChargebackDisputeID 710 by setting FundsRecovered date to NULL and RecoveryPaymentID to 0.]
+2. [e.g., Insert an offsetting ledger entry for Terminal ID 3426 for –$133.09 related to Payment ID 11669419.]
+
+### Details:
+- **System**: [e.g., ICGW_Master]
+- **Terminal ID**: [e.g., 3426]
+- **Payment ID(s)**: [e.g., 11669419]
+- **Amount(s)**: [e.g., –$133.09]
+- **Reference(s)**: [e.g., dHJhbnNhY3Rpb25fOXltcGRnOXM]
+
+### Related Ticket(s):
+- [e.g., DS-9583]
+
+✅ Examples
+Resetting a Chargeback Dispute
+Recalculating a Settled Batch
+Updating Test Payments
+Voiding Unapproved Payments
+📊 Section 2: Reporting Requests (Custom Report Generation)
+Use this section when requesting 
+custom reports
+ or 
+data extracts
+ from the database to support investigations, audits, or operational analysis.
+🧾 Template
+This request is to generate a custom report to support [brief business purpose or investigation].
+
+### Report Requirements:
+- **Report Name**: [e.g., Manual Refunds via Braintree – May 2025]
+- **Time Range**: [e.g., 05/01/2025 – 05/31/2025]
+- **Filters**:
+  - TerminalID IN (3426, 24)
+  - PaymentStatusID = 12
+  - Source = 'Braintree'
+- **Fields Needed**:
+  - PaymentID
+  - TerminalID
+  - Amount
+  - PaymentDate
+  - RefundMethod
+- **Output Format**: [e.g., CSV or Excel]
+
+### Related Ticket(s):
+- [e.g., DS-9612]
+✅ Examples
+A list of all manual refunds processed via Braintree in a specific month
+Payments with status “Voided” across a set of terminals
+Ledger entries tied to a specific funding source or refund method
+📬 Submission Process
+Prepare your request
+ using the appropriate template above. Using the template is not required, but encouraged.
+Submit the request
+ via the DBR portal:
+👉 
+https://invoicecloud.atlassian.net/servicedesk/customer/portal/11
+ 
+Seek approval
+ in the 
+#sre-triage
+ Slack channel.
+Monitor for follow-up
+ questions or confirmations from the Data Services team.
+ URL:/spaces/DS/pages/4467032073/DBR+Submission+Standards+Guidelines

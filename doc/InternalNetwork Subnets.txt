@@ -1,0 +1,555 @@
+FirewallNetwork
+10.0.10.0/24
+10.0.10.0 - 10.0.10.255
+Route Table before traffic flow change: None
+Connected Devices
+Orphaned Resources that need cleaned up
+Classification: 
+NonDMZ
+IC-WAFAppGateway
+10.0.60.0 - 10.0.60.255
+Route Table before traffic flow change: 
+IC-RT-AppGateway
+Connected Devices
+None
+Classification: 
+Delete
+IC-NGINX
+10.0.62.0/24
+10.0.62.0 - 10.0.62.255
+Route Table before traffic flow change: None
+Connected Devices
+Orphaned Resources that need cleaned up
+Classification: 
+NonDMZ
+IC-F5
+10.0.61.0 - 10.0.61.255
+Route Table before traffic flow change: 
+IC-RT-AppGateway
+Connected Devices
+None
+Classification: 
+Delete
+subnet_redis_for_iaas_non_prod
+10.0.59.0 - 10.0.59.255
+Route Table before traffic flow change: None
+Connected Devices
+None
+Classification: 
+Delete
+subnet_redis_for_iaas_prod
+10.0.58.0 - 10.0.58.255
+Route Table before traffic flow change: None
+Connected Devices
+None
+Classification: 
+Delete
+ExternalKeySettingsKeyVaultPVESubnet
+10.0.35.64/26
+10.0.35.64 - 10.0.35.127
+Route Table before traffic flow change: 
+IC-RouteTable
+Connected Devices
+ExternalAppSettings KeyVault Private Endpoint that has no Private DNS Configuration 
+ 
+Perhaps the DNS is managed in ADDS
+Classification: 
+NonDMZ
+FuncAppVNETIntegrationSubnet
+10.0.35.128/26
+10.0.35.128 - 10.0.35.191
+Route Table before traffic flow change: 
+IC-RouteTable
+Connected Devices
+None but is delegated to 
+Microsoft.Web/serverFarms
+Classification: 
+NonDMZ
+RedisCache
+10.0.30.0/24
+10.0.30.0 - 10.0.30.255
+Route Table before traffic flow change: None
+Connected Devices
+The 4 Legacy Redis Cache Private Endpoints that have no Private DNS Configuration 
+ 
+Perhaps the DNS is managed in ADDS
+Classification: 
+NonDMZ
+GatewaySubnet
+10.0.0.0/24
+10.0.0.0 - 10.0.0.255
+Route Table before traffic flow change: None
+Connected Devices
+Not sure what is connected to this
+Classification: 
+NonDMZ
+SemaphoreTestSubnet
+10.0.31.0 - 10.0.31.255
+Route Table before traffic flow change: None
+Connected Devices
+None
+Classification: 
+Delete
+Internal-LoadBalancers
+10.0.3.0/24
+10.0.3.0 - 10.0.3.255
+Route Table before traffic flow change: 
+IC-LoadBalancer-RT
+Connected Devices
+15 Load Balancers, some used some orphaned
+Classification: 
+NonDMZ
+IC-Acct-Bot
+10.0.50.0/24
+10.0.50.0 - 10.0.50.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+NonDMZ
+IC-AD
+10.0.14.0/24
+10.0.14.0 - 10.0.14.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+1 Load Balancer and 2 “DNS” VMs that are probably not being used.
+Classification: 
+NonDMZ
+IC-AppGateway
+10.0.29.0 - 10.0.29.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-CertTest-Temp
+10.0.40.0 - 10.0.40.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-Firewall-Web-Test
+10.0.45.0 - 10.0.45.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-Linux
+10.0.27.0 - 10.0.27.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-PacketCapture
+10.0.22.0/24
+10.0.22.0 - 10.0.22.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+1 orphaned NIC
+Classification: 
+NonDMZ
+IC-Web-TLS
+10.0.15.0 - 10.0.15.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-Zensar-Contractor
+10.0.26.0/24
+10.0.26.0 - 10.0.26.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+1 NIC for shutdown Zensar Contractor VM
+2 NICs for shutdown Rob Script Test VMs
+Classification: 
+NonDMZ
+MultiFactorAuth
+10.0.24.0/24
+10.0.24.0 - 10.0.24.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+1 orphaned NIC
+Classification: 
+NonDMZ
+IC-CS-Term
+10.0.8.0/24
+10.0.8.0 - 10.0.8.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Internal
+Connected Devices
+NIC for Segment Test VM that is shut down
+NIC for 
+IC-CSTerm
+Classification: 
+NonDMZ
+IC-Production-Term
+10.0.35.0/24
+10.0.35.0 - 10.0.35.63
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Internal
+Connected Devices
+5 Shutdown Prod Term VMs
+Orphaned NIC
+VM 
+VM-MOei-test
+Classification: 
+NonDMZ
+TermServer
+10.0.5.0/24
+10.0.5.0 - 10.0.5.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Internal
+Connected Devices
+Shut Down Term Servers
+On Term License Servers
+Orphaned Selenium VM NIC
+2 likely not used Private Endpoints
+Classification: 
+NonDMZ
+IC-JitBitWeb
+10.0.13.0/24
+10.0.13.0 - 10.0.13.255
+Route Table before traffic flow change: 
+IC-RouteTable
+Connected Devices
+4 Orphaned NICs
+Classification: 
+NonDMZ
+WAF-APPGateway
+10.0.34.0/24
+10.0.34.0 - 10.0.34.255
+Route Table before traffic flow change: 
+IC-RouteTable
+Connected Devices
+None
+Classification: 
+Delete
+IC-Dev-App
+10.0.18.0/24
+10.0.18.0 - 10.0.18.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-Term-Contractor
+10.0.25.0/24
+10.0.25.0 - 10.0.25.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Internal
+Connected Devices
+IC-Contractor-Term1 (running)
+IC-Contractor-Term1 (stopped)
+Classification: 
+NonDMZ
+SQL-Management
+10.0.12.0/24
+10.0.12.0 - 10.0.12.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-DelphixSQL1
+ (running)
+IC-DelphixSQL
+ (stopped)
+IC-DelphixSQL1-nsg
+ seems to be orphaned
+ic-sqlsentry340
+ (orphaned NIC)
+Classification: 
+NonDMZ
+Management
+10.0.2.0/24
+10.0.2.0 - 10.0.2.255
+Route Table before traffic flow change: 
+IC-RouteTable
+Connected Devices
+AuditTest-nsg
+ (orphaned)
+ic-selenium-1230
+ (orphaned NIC)
+Management1
+ (running)
+AlienVaultEast
+ (running)
+linuxterm1-snap-endpt
+ (disk access private endpoint)
+MFS1East
+ (stopped)
+mfs2east641
+ (orphaned NIC)
+mfs2eastslave744
+ (orphaned NIC)
+WSUS
+ (stopped)
+IC-BuildAgent1
+ (running)
+IC-BuildAgent2
+ (running)
+Classification: 
+NonDMZ
+IC-Dev-Web
+10.0.16.0/24
+10.0.16.0 - 10.0.16.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+ic-qa-web1
+ (orphaned NIC)
+ic-qa-web2
+ (orphaned NIC)
+IC-QA-WebReg1
+ (running)
+RescueVM-nsg
+ (orphaned NSG)
+Classification: 
+DMZ
+IC-Accounting
+10.0.28.0/24
+10.0.28.0 - 10.0.28.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+IC-Gateway-Web
+10.0.19.0/24
+10.0.19.0 - 10.0.19.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-Gateway1
+ thru 
+3
+ (running)
+Classification: 
+DMZ
+IC-NATgw-Test
+10.0.39.0/24
+10.0.39.0 - 10.0.39.255
+Route Table before traffic flow change: None
+Connected Devices
+None
+Classification: 
+Delete
+IC-Dev-Proxy
+10.0.17.0/24
+10.0.17.0 - 10.0.17.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-QA-ProxyReg1
+ (running)
+IC-DTL-ProxyLB
+ (empty Backend and no Rules)
+Classification: 
+NonDMZ
+DMZ-SFTP
+10.0.7.0/24
+10.0.7.0 - 10.0.7.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+MCC-FTP
+ (running)
+IC-SFTP1
+ (running)
+IC-SFTP2
+ (running)
+Classification: 
+DMZ
+IC-Apps
+10.0.6.0/24
+10.0.6.0 - 10.0.6.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+SkyBot VMs
+PDF Extract VMs
+App VMs
+Classification: 
+NonDMZ
+PaloTest2
+10.0.33.0/24
+10.0.33.0 - 10.0.33.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Test
+Connected Devices
+None
+Classification: 
+Delete
+PaloTest1
+10.0.32.0/24
+10.0.32.0 - 10.0.32.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute-Test
+Connected Devices
+None
+Classification: 
+Delete
+Palo-WebMove-Test
+10.0.47.0/24
+10.0.47.0 - 10.0.47.255
+Route Table before traffic flow change: 
+IC-PaloTest1
+Connected Devices
+None
+Classification: 
+Delete
+IC-Proxy
+10.0.9.0/24
+10.0.9.0 - 10.0.9.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+ic-proxy1388
+ (orphaned NIC)
+ic-proxy2916
+ (orphaned NIC)
+ic-proxy3948
+ (orphaned NIC)
+ic-proxy4516
+ (orphaned NIC)
+ic-proxy5247
+ (orphaned NIC)
+ic-proxy6397
+ (orphaned NIC)
+ic-proxyipmov123
+ (orphaned NIC)
+IC-ProxyPre1
+ (running)
+IC-ProxyPre2
+ (running)
+ic-proxytemp1546
+ (orphaned NIC)
+IC-ProxyTemp7-nsg
+ (orphaned NSG and NIC)
+IC-ProxyTemp1
+ thru 
+10
+ (running)
+Classification: 
+NonDMZ
+MCC-Application
+10.0.4.64/26
+10.0.4.64 - 10.0.4.127
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+None
+Classification: 
+Delete
+MCC-Database
+10.0.4.128/26
+10.0.4.128 - 10.0.4.191
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-SQLRestore-nsg
+ (orphaned NSG)
+MCC-PS01
+ (running)
+MCC-WS03-2
+ (running)
+MCC-WS03
+ (stopped)
+MCCDB3
+ (stopped)
+Classification: 
+NonDMZ
+MCC-Web-DMZ
+10.0.4.0/26
+10.0.4.0 - 10.0.4.63
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+MCC-WEB1
+ (running)
+MCC-Web2
+ (running)
+LB-MCCWeb-Internal
+ (used)
+Classification: 
+DMZ
+PublicFacing
+10.0.1.0/24
+10.0.1.0 - 10.0.1.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-LB-Web2
+ (orphaned Load Balancer with no Backends in the Pool and no Rules)
+IC-DR-Test-Web
+ (stopped)
+IC-Web1
+ thru 
+10
+ (running)
+IC-WebPreview1
+ thru 
+2
+ (running)
+Classification: 
+DMZ
+Management2
+10.0.23.0/24
+10.0.23.0 - 10.0.23.255
+Route Table before traffic flow change: 
+IC-PaloDefaultRoute
+Connected Devices
+IC-Management2
+ (running)
+Classification: 
+NonDMZ
+PenTest
+10.0.11.0/28
+10.0.11.0 - 10.0.11.15
+Route Table before traffic flow change: 
+RG-Pentest
+Connected Devices
+IC-PenTest2020
+ (stopped)
+rustwave-PenTest-2024-v4
+ (stopped)
+Trustwave-PenTest-2024-v3
+ (stopped)
+ic-trustwavepentest2266
+ (orphaned nic)
+Classification: 
+Skip in May
+ and 
+Delete in June
+Per 
+ and 
+ these resources and this Subnet can be deleted.
+ASE
+10.0.20.0/23
+10.0.20.0 - 10.0.21.255
+Route Table before traffic flow change: 
+ASE-Route
+Connected Devices
+Not sure if anything is connected, nothing shows up but it is Delegated to App Service Environment resource type.
+Classification: 
+Skip in May
+ and 
+Delete in June
+There is only 1 App Service Environment (ASE) and it has 2 Apps within it, both are stopped.  These ASE Resources and the Subnet can be deleted.
+ic-proxy4516
+IC-Contractor-Term2
+ URL:/spaces/platform/pages/4252499980/InternalNetwork+Subnets

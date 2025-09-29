@@ -1,0 +1,10 @@
+This outlines the creation of a workspace level OAuth token endpoint.  The tokens created by this endpoint can be used with other OAuth plugins enabled in the workspace that have the Global Credentials settings enabled.
+Create the upstream
+Name: oauth_authentication_service
+Create the service
+Name: oauth_authentication_service
+Create the route
+Name: oauth_authentication_service_oauth_token_post
+Create OAuth plugin scoped to the route
+Be sure to enable the Global Credential setting
+ URL:/spaces/EA/pages/4645060617/Workspace+OAuth+Route+-+Kong

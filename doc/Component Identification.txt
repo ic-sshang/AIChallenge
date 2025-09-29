@@ -1,0 +1,5982 @@
+Baseline Identified Components
+Configurations
+ConfigurationManager.AppSettings
+Azure Key Vault 
+IC.Azure.KeyVault
+Database Connectivity
+IC.Database - DatabaseProxy
+IC.Database.Authentication
+Logging
+IC.Serilog
+NewRelic.Api.Agent.NewRelic.NoticeError
+File System
+System.IO
+Misc
+IC.Logins
+IC.Azure.Blob -AzureBlobService
+Cryptography
+CloudCrypto
+IC.ServiceProxies.Services.CryptoService
+External Service Connectivity
+ICCryptoService
+Certegy
+Cdyne
+CloudTransactionProcessing
+CloudCreditCardProcessingV2
+Prompt1 Identified Components - Ankita’s version
+Identified Dependencies
+ICRESTAPI\Models\APIResponses\Validation\InvalidUsernameResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\Validation\InvalidPasswordResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\Validation\InvalidCourtesyEmailAddressResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleGenerator.vb",
+"Results": [
+	{
+		"Dependency": "HTTP clients",
+		"Component": ["System.Net.Http"]
+	},
+	{
+		"Dependency": "APIs",
+		"Component": ["System.Web.Http.Description"]
+	},
+	{
+		"Dependency": "File Systems",
+		"Component": ["
+System.IO
+"]
+	},
+	{
+		"Dependency": "Caching",
+		"Component": ["System.Runtime.InteropServices"]
+	},
+	{
+		"Dependency": "Networking",
+		"Component": ["System.Net.Http.Headers"]
+	},
+	{
+		"Dependency": "Databases",
+		"Component": ["System.Collections.Generic", "System.Collections.ObjectModel"]
+	},
+	{
+		"Dependency": "Logging Systems",
+		"Component": ["System.Diagnostics.CodeAnalysis"]
+	},
+	{
+		"Dependency": "Configuration",
+		"Component": ["System.ComponentModel"]
+	},
+	{
+		"Dependency": "Cloud Providers",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Queues",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Key Vaults",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Authentication Services",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Authorization Services",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Email Services",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Payment Services",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Search Engines",
+		"Component": ["Custom"]
+	},
+	{
+		"Dependency": "Monitoring Systems",
+		"Component": ["Custom"]
+	}
+],
+"Variables": []
+}
+ICRESTAPI\Models\APIResponses\Validation\GenericInvalidEmailAddressResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\SampleDirection.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\TextSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\TextSample.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ObjectGenerator.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ObjectGenerator.vb", "Results": [{"Dependency": "NA", "Component": ["NA"]}], "Variables": []}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ImageSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ImageSample",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\InvalidSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\InvalidSample",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleKey.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleKey.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\Models\HelpPageApiModel.vb
+{
+	"FilePath": "ICRESTAPI/Areas/HelpPage/Models/HelpPageApiModel.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\SimpleTypeModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ParameterDescription.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterAnnotation.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ParameterAnnotation.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameHelper.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameHelper",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameAttribute.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameAttribute.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.vb
+{"FilePath": "ProjectDir\\ModelDescriptionGenerator.vb", "Results": [{"Dependency": "NA", "Component": ["NA"]}], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelDescription.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\IModelDocumentationProvider.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumValueDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\EnumValueDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\KeyValuePairModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\EnumTypeModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\DictionaryModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ComplexTypeModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\CollectionModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\CollectionModelDescription",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\App_Start\HelpPageConfig.vb
+{
+	"FilePath": "ProjectDir\\HelpPageConfig.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\Controllers\HelpController.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Web References\CloudCreditCardProcessingV2\Reference.vb
+{
+	"FilePath": "ProjectDir\\CloudCreditCardProcessingV2.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		}
+	],
+	"Variables": [
+			{ "Key": "ICRESTAPI_CloudCreditCardProcessingV2_CloudCreditCardProcessingV2", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Service References\wsCertegy\Reference.vb
+{
+	"FilePath": "ProjectDir\\wsCertegy.vb",
+	"Results":[
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+afe7ba4e-fe99-4841-86df-44bbbaf19a0a
+Unable to process code file
+ICRESTAPI\Service References\svcCdyne\Reference.vb
+{
+	"FilePath": "svcCdyne.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Service References\svcICCrypto\Reference.vb
+{
+	"FilePath": "svcICCrypto.vb",
+	"Results":[
+		{
+			"Dependency": "Services",
+			"Component": ["ICCryptoService"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLogin.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerBanks.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Crypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerCreditCards.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Crypto",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLoginAccount.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}	
+ICRESTAPI\Models\Enums\SmsType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\SmsDisplayOption.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\WebMethod.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\MessagingResponseCode.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\Enums\InvoiceTypeSetting.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\Enums\RequestStatus.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\EmailQueueType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\DataPumpType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\IntegrationPartner.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\CustomerLoginType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\ChangeRequestor.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\BillerOption.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": [
+	]	
+}
+ICRESTAPI\Models\Enums\BankAccountType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\UsernameOrEmailRequiredResponse.vb
+{
+	"FilePath": "ProjectDir\\UsernameOrEmailRequiredResponse.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\ActionSource.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\AuthenticationType.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Enums\ACHValidationPartner.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateOriginalPaymentAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateLoginAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateInvoiceAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateCustomerAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\ServiceUnavailableAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\UnableToCreateInvoiceAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\SendPaymentLinkEmailResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\SendPayByTextMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\PayNearMeConfirmResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\PayNearMeAuthorizeResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\LimitationTimeAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\MultipleLoginLocatedAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidPhoneNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidLoginGUIDResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidEmailAddressResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidCustomerGUIDResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidCustomerAccountNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidInvoiceNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InternalServerErrorAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\GenericBadRequestAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\InvalidConvenienceFee.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\EmptyRequestResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\EmailMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\DuplicateCustomerAccountResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\CustomerAccountExistResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\DuplicateUserNameResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\BaseApiResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\ApiResponseWrapper.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\APIResponseData.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\ApiResponseUtilities.vb
+{
+	"FilePath": "ProjectDir\\ApiResponseUtilities.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\APIResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseContent.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Filters\IHttpActionResults\InvalidCredentialResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseMessage.vb
+{
+	"FilePath": "ProjectDir\\ApiHttpResponseMessage.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI.DB\Object\SettingsService.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		}
+	],
+	"Variables": [
+			{ "Key": "UseManagedIdentity", "Source": "Settings/Configuration" },
+			{ "Key": "ConnectionString", "Source": "Settings/Configuration" },
+			{ "Key": "Setting", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Areas\HelpPage\HelpPageConfigurationExtensions.vb
+{
+	"FilePath": "ICRESTAPI/Areas/HelpPage/HelpPageConfigurationExtensions.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\XmlDocumentationProvider.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Areas\HelpPage\HelpPageAreaRegistration.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI.DB\KeyVault\KeyVaultClient.vb
+{
+	"FilePath": "ProjectDir\\KeyVaultClient.vb",
+	"Results":[
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["IC.Azure.KeyVault"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": [
+			{ "Key": "ClientId", "Source": "Settings/Configuration" },
+			{ "Key": "VaultName", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI.DB\Database\Database.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["IC.Azure.KeyVault"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": [
+			{ "Key": "ClientId", "Source": "Settings/Configuration" },
+			{ "Key": "VaultName", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Areas\HelpPage\ApiDescriptionExtensions.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ApiDescriptionExtensions",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI.DB\Database\FileName.vb
+{
+	"FilePath": "ProjectDir\\HealthCheck",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI.DB\KeyVault\FileName.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Utilities.vb
+{
+	"FilePath": "ProjectDir\\Utilities.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.HttpWebRequest"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["System.Net.IPAddress"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\WebServicesLogging.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic", "IC.Serilog"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["IC.Azure.Blob"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.Database"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\SystemsAndSoftware.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": [
+			{Key: "BillerID", Source: "NA" },
+			{Key: "CustomerID", Source: "NA" },
+			{Key: "serviceVersion", Source: "NA" }
+	]	
+}
+ICRESTAPI\Services\Feature.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\SmsMessage.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["svcCdyne.IsmsClient"]
+		}
+	],
+	"Variables": [
+			{ "Key": "LICENSEKEY", "Source": "Hardcoded" }
+	]	
+}
+ICRESTAPI\Models\TimeReference.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\PaymentLinkEmail.vb
+{
+	"FilePath": "ProjectDir\\PaymentLinkEmail.vb",
+	"Results":[
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": [
+			{ "Key": "MessagingServiceErrorEmailRecipients", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Models\PayNearMeHandler.vb
+{
+	"FilePath": "ProjectDir\\PayNearMeHandler.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic", "IC.Serilog"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\SmsMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\PayByTextMessage.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Notifications.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\InvoiceUtilities.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\OutputFilterStream.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\LinkedAccount.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\InvalidInvoiceGUIDResponse.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\EmailUtilities.vb
+{
+	"FilePath": "ProjectDir\\EmailUtilities.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\EmailMessage.vb
+{
+	"FilePath": "ProjectDir\\EmailMessage.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\clsCertegy.vb
+{
+	"FilePath": "ProjectDir\\clsCertegy.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["System.Security.Cryptography"]
+		},
+		{
+			"Dependency": "Email",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": [
+			{ "Key": "certegyStationID", "Source": "Settings/Configuration" },
+			{ "Key": "certegyBackupEndpointUri", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Models\Datapump.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\CustomerUtilities.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Database.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	],
+	"Variables": []
+}	
+ICRESTAPI\Models\Customer.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\Crypto.vb
+{
+	"FilePath": "ProjectDir\\Crypto.vb",
+	"Results":[
+		{
+			"Dependency": "Services",
+			"Component": ["IC.ServiceProxies"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\BillerCredential.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Encryption",
+			"Component": ["CloudCrypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": [
+			{ "Key": "apiKey", "Source": "Function Parameter" },
+			{ "Key": "headerBillerGuid", "Source": "Function Parameter" },
+			{ "Key": "encryptionKey", "Source": "Hardcoded" }
+	]	
+}
+ICRESTAPI\Models\BillerUtilities.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\clsBlobStorage.vb
+{
+	"FilePath": "ProjectDir\\clsBlobStorage.vb",
+	"Results":[
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["IC.Azure.Blob"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Models\CardSupportDetails.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\BillerInvoicePayNowButton.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\Models\BillerPrincipal.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.vb
+{
+	"FilePath": "ProjectDir\\CustomRedirectHttpModule.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.HttpWebRequest"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["System.Security.Principal.GenericIdentity"]
+		},
+		{
+			"Dependency": "Encryption",
+			"Component": ["CloudCrypto"]
+		}
+	],
+	"Variables": [
+			{ "Key": "encryptionKey", "Source": "Hardcoded" }
+	]	
+}
+ICRESTAPI\Models\AutoPaySync.vb
+{
+	"FilePath": "ProjectDir\\AutoPaySync.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": [
+			{ "Key": "billerID", "Source": "Method Parameter" },
+			{ "Key": "customerID", "Source": "Method Parameter" },
+			{ "Key": "autoPay", "Source": "Method Parameter" }
+	]	
+}
+ICRESTAPI\Models\Biller.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Logger\ApiLogger.vb
+{
+	"FilePath": "ProjectDir\\ApiLogger.vb",
+	"Results":[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.RequestValidation.vb
+{
+	"FilePath": "ProjectDir\\CustomRedirectHttpModule",
+	"Results":[
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Filters\LogExceptionFilter.vb
+{
+	"FilePath": "ProjectDir\\Main",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\CustomerPortalController.vb
+{
+	"FilePath": "Controllers/CustomerPortalController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": [
+			{ "Key": "BillerID", "Source": "Database" },
+			{ "Key": "LoginID", "Source": "Database" },
+			{ "Key": "CustomerID", "Source": "Database" },
+			{ "Key": "InvoiceTypeID", "Source": "Database" },
+			{ "Key": "EmailAddress", "Source": "Database" },
+			{ "Key": "EmailAddressCC", "Source": "Database" },
+			{ "Key": "EmailOptOut", "Source": "Database" },
+			{ "Key": "UserName", "Source": "Database" },
+			{ "Key": "AuthenticationTypeID", "Source": "Database" }
+	]	
+}
+ICRESTAPI\Filters\BillerAuthorizeAttribute.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Filters\BillerAuthenticateAttribute.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}	
+ICRESTAPI\Extensions\DataTableExtensions.vb
+{
+	"FilePath": "ProjectDir\\DataTableExtensions",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\PayController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\PayController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["CloudTransactionProcessing.CloudTransactionProcessing"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["Crypto"]
+		}
+	],
+	"Variables": [
+			{ "Key": "Biller.BillerGUID", "Source": "Custom" },
+			{ "Key": "Biller.BillerID", "Source": "Custom" },
+			{ "Key": "Biller.WebServiceKey", "Source": "Custom" },
+			{ "Key": "Biller.SafeSubscriberGUID", "Source": "Custom" },
+			{ "Key": "Biller.SafeWebServiceKey", "Source": "Custom" }
+	]	
+}
+ICRESTAPI\Extensions\AutoMapperExtensionsvb.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\ValidateController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\ValidateController",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\UserCreditCardController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\UserCreditCardController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\UserBankController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\UserBankController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Authorization",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\PayNearMeController.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		}
+	],
+	"Variables": []
+}	
+ICRESTAPI\Controllers\HealthCheckController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\HealthCheckController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.Logins"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["IC.Azure.Blob"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["CloudCrypto", "IC.Azure.KeyVault"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\MessagingController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\MessagingController.vb",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Email Services",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\InfoController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\InfoController",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\CustomerController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\CustomerController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["IC.Logins.AccountOwnerLogin", "IC.Database.Authentication"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\CreditCardController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\CreditCardController",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["BillerAuthenticate"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["Crypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["NewRelic"]
+		}
+	],
+	"Variables": []
+}
+a4bee170-cf90-404d-a945-4baf11aac49b
+Unable to process code file
+ICRESTAPI\Controllers\BillerDatapumpController.vb
+{
+	"FilePath": "ICRESTAPI/Controllers/BillerDatapumpController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\BillerController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\BillerController.vb",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Controllers\BankController.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["BillerAuthenticate"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["Crypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["NewRelic"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\Global.asax.vb
+{
+	"FilePath": "ProjectDir\\WebApiApplication.vb",
+	"Results":[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["CloudCrypto", "IC.Azure.Blob", "ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.ServiceProxies", "IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.ServicePointManager"]
+		}
+	],
+	"Variables": [
+			{ "Key": "ClientId", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\Business\CloudflareRedirect.vb
+{
+	"FilePath": "ProjectDir\\CloudflareRedirect.vb",
+	"Results":[
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		}
+	],
+	"Variables": [
+			{ "Key": "CloudflareRedirectTimeSeconds", "Source": "Settings/Configuration" }
+	]	
+}
+ICRESTAPI\App_Start\WebApiConfig.vb
+{
+	"FilePath": "ProjectDir\\WebApiConfig",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\App_Start\RouteConfig.vb
+{
+	"FilePath": "NA",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+ICRESTAPI\App_Start\FilterConfig.vb
+{
+	"FilePath": "ProjectDir\\FilterConfig.vb",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+Comparison
+Configurations
+ ConfigurationManager.AppSettings
+Azure Key Vault 
+ IC.Azure.KeyVault
+Database Connectivity
+ IC.Database - DatabaseProxy
+ IC.Database.Authentication
+Logging
+ IC.Serilog
+ NewRelic.Api.Agent.NewRelic.NoticeError
+File System
+ System.IO
+Misc
+ IC.Logins
+ IC.Azure.Blob -AzureBlobService
+Cryptography
+ CloudCrypto
+ IC.ServiceProxies.Services.CryptoService- Identified only as IC.ServicePorxies (Due to no segregaation in query)
+External Service Connectivity
+ ICCryptoService
+ Certegy
+ Cdyne
+ CloudTransactionProcessing
+ CloudCreditCardProcessingV2
+Custom and False Positives
+Identified from Import statements(Will not generate code, Insufficient data)
+HTTP clients  - Custom, System.Net.Http  
+APIs  -  Custom, System.Web.Http.Description  
+Networking  - System.Net.Http.Headers 
+Databases  - System.Collections.Generic, System.Collections.ObjectModel
+Logging Systems  - System.Diagnostics.CodeAnalysis
+Configuration- System.ComponentModel
+Caching  - System.Runtime.InteropServices
+Custom (Will be avoided for HealthCheck)
+Payment Services  - Custom    
+Search Engines  - Custom  
+Monitoring Systems  - Custom  
+Queues  - Custom
+Authorization - Custom  
+Email Services -Custom
+Authentication-Custom
+Partial Implementation -(Should not generate code, Insufficient data)
+Authentication-IC.Logins.AccountOwnerLogin, BillerAuthenticate
+Email Services -ICFramework.Utilities.Email
+Prompt2 Identified Components -  Jose’s Version
+Identified Dependencies
+ICRESTAPI\Models\APIResponses\Validation\InvalidPasswordResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\Validation\InvalidCourtesyEmailAddressResponse.vb
+{
+	"FilePath": "ProjectDir\\InvalidCourtesyEmailAddressResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\Validation\InvalidUsernameResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\TextSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\TextSample.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\Validation\GenericInvalidEmailAddressResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\SampleDirection.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ObjectGenerator.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ObjectGenerator.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\InvalidSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\InvalidSample.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleGenerator.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http.Description"]
+		},
+		{
+			"Dependency": "File Systems",
+			"Component": ["
+System.IO
+"]
+		},
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleKey.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleKey.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ImageSample.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ImageSample",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\Models\HelpPageApiModel.vb
+{
+	"FilePath": "ICRESTAPI/Areas/HelpPage/Models/HelpPageApiModel.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ParameterDescription.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\SimpleTypeModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterAnnotation.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ParameterAnnotation.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameHelper.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameHelper",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameAttribute.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameAttribute.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelDescriptionGenerator.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelDescription.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\KeyValuePairModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\DictionaryModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\IModelDocumentationProvider.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumValueDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\EnumValueDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\EnumTypeModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\CollectionModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\CollectionModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\App_Start\HelpPageConfig.vb
+{
+	"FilePath": "ProjectDir\\HelpPageConfig.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ComplexTypeModelDescription",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\Controllers\HelpController.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+3387c2bb-f948-4ba7-ab2f-9f6d4752fda2
+Unable to process code file
+ICRESTAPI\Web References\CloudCreditCardProcessingV2\Reference.vb
+{
+	"FilePath": "ProjectDir\\CloudCreditCardProcessingV2.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Service References\wsCertegy\Reference.vb
+{
+	"FilePath": "wsCertegy.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Service References\svcICCrypto\Reference.vb
+{
+	"FilePath": "svcICCrypto.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Services",
+			"Component": ["ICCryptoService"]
+		}
+	]
+}
+ICRESTAPI\Service References\svcCdyne\Reference.vb
+{
+	"FilePath": "svcCdyne.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerCreditCards.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerBanks.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Crypto",
+			"Component": ["CloudCrypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLogin.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLoginAccount.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\SmsType.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\WebMethod.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\SmsDisplayOption.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\InvoiceTypeSetting.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\RequestStatus.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\MessagingResponseCode.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\IntegrationPartner.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\EmailQueueType.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\ChangeRequestor.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\DataPumpType.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\CustomerLoginType.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\BillerOption.vb
+{
+	"FilePath": "ProjectDir\\EnumFile",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\BankAccountType.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\ActionSource.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\AuthenticationType.vb
+{
+	"FilePath": "ProjectDir\\AuthenticationType",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UsernameOrEmailRequiredResponse.vb
+{
+	"FilePath": "ProjectDir\\UsernameOrEmailRequiredResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\Enums\ACHValidationPartner.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateOriginalPaymentAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateLoginAPIResponse.vb
+{
+	"FilePath": "ProjectDir\\UnableToLocateLoginAPIResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateInvoiceAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UnableToLocateCustomerAPIResponse.vb
+{
+	"FilePath": "ProjectDir\\UnableToLocateCustomerAPIResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\UnableToCreateInvoiceAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\SendPayByTextMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\ServiceUnavailableAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\SendPaymentLinkEmailResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\PayNearMeConfirmResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\PayNearMeAuthorizeResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\MultipleLoginLocatedAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidPhoneNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\LimitationTimeAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidLoginGUIDResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidInvoiceNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidEmailAddressResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidCustomerAccountNumberResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidConvenienceFee.vb
+{
+	"FilePath": "ProjectDir\\InvalidConvenienceFee.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InvalidCustomerGUIDResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\InternalServerErrorAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\EmptyRequestResponse.vb
+{
+	"FilePath": "ProjectDir\\EmptyRequestResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\DuplicateCustomerAccountResponse.vb
+{
+	"FilePath": "ProjectDir\\DuplicateCustomerAccountResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\GenericBadRequestAPIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\EmailMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\DuplicateUserNameResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\CustomerAccountExistResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\BaseApiResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\ApiResponseUtilities.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\ApiResponseWrapper.vb
+{
+	"FilePath": "ProjectDir\\ApiResponseWrapper.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\APIResponseData.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\APIResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseMessage.vb
+{
+	"FilePath": "ProjectDir\\ApiHttpResponseMessage.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\HelpPageConfigurationExtensions.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageConfigurationExtensions.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		}
+	]
+}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseContent.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Filters\IHttpActionResults\InvalidCredentialResponse.vb
+{
+	"FilePath": "ProjectDir\\InvalidCredentialResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\XmlDocumentationProvider.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\XmlDocumentationProvider.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\HelpPageAreaRegistration.vb
+{
+	"FilePath": "ProjectDir\\HelpPageAreaRegistration.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI.DB\Object\SettingsService.vb
+{
+	"FilePath": "ProjectDir\\SettingsService.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		}
+	]
+}
+ICRESTAPI\Areas\HelpPage\ApiDescriptionExtensions.vb
+{
+	"FilePath": "ProjectDir\\Areas\\HelpPage\\ApiDescriptionExtensions",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI.DB\KeyVault\KeyVaultClient.vb
+{
+	"FilePath": "ProjectDir\\KeyVaultClient.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["IC.Azure.KeyVault"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\Utilities.vb
+{
+	"FilePath": "ProjectDir\\Utilities.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Mail", "System.Web.Http"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Environment"]
+		}
+	]
+}
+ICRESTAPI.DB\KeyVault\FileName.vb
+{
+	"FilePath": "ProjectDir\\HealthCheck",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI.DB\Database\FileName.vb
+{
+	"FilePath": "ProjectDir\\HealthCheck.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Models\WebServicesLogging.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic", "IC.Serilog"]
+		},
+		{
+			"Dependency": "File Systems",
+			"Component": ["IC.Azure.Blob"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Services\Feature.vb
+{
+	"FilePath": "ProjectDir\\Feature.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Caching",
+			"Component": ["CachedFeatureManager"]
+		}
+	]
+}
+ICRESTAPI.DB\Database\Database.vb
+{
+	"FilePath": "ProjectDir\\Database.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database", "IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\TimeReference.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\SystemsAndSoftware.vb
+{
+	"FilePath": "ProjectDir\\SystemsAndSoftware.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\PayNearMeHandler.vb
+{
+	"FilePath": "ProjectDir\\PayNearMeHandler.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic", "IC.Serilog"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["System.Security.Cryptography"]
+		}
+	]
+}
+ICRESTAPI\Models\PayByTextMessage.vb
+{
+	"FilePath": "ProjectDir\\PayByTextMessage.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Net.HttpStatusCode"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		}
+	]
+}
+ICRESTAPI\Models\SmsMessageResponse.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\SmsMessage.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\PaymentLinkEmail.vb
+{
+	"FilePath": "ProjectDir\\PaymentLinkEmail.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Email Service",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\Notifications.vb
+{
+	"FilePath": "ProjectDir\\Notifications.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\OutputFilterStream.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "File Systems",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\LinkedAccount.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Models\InvalidInvoiceGUIDResponse.vb
+{
+	"FilePath": "ProjectDir\\InvalidInvoiceGUIDResponse.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Models\InvoiceUtilities.vb
+{
+	"FilePath": "ProjectDir\\InvoiceUtilities.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\EmailUtilities.vb
+{
+	"FilePath": "ProjectDir\\EmailUtilities.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Email",
+			"Component": ["ICFramework.Utilities.Email"]
+		}
+	]
+}
+ICRESTAPI\Models\EmailMessage.vb
+{
+	"FilePath": "ProjectDir\\EmailMessage.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Email Service",
+			"Component": ["ICFramework.Utilities.Email"]
+		}
+	]
+}
+ICRESTAPI\Models\clsCertegy.vb
+{
+	"FilePath": "ProjectDir\\clsCertegy.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["wsCertegy.CKAuthClient"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["System.Security.Cryptography"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["IC.Azure.KeyVault"]
+		},
+		{
+			"Dependency": "Email",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["ApiLogger"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["ICRESTAPI.DB", "ICRESTAPI.wsCertegy"]
+		}
+	]
+}
+ICRESTAPI\Models\Datapump.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\CustomerUtilities.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\Database.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Models\Customer.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\Crypto.vb
+{
+	"FilePath": "ProjectDir\\Crypto.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Services",
+			"Component": ["IC.ServiceProxies"]
+		}
+	]
+}
+ICRESTAPI\Models\clsBlobStorage.vb
+{
+	"FilePath": "ProjectDir\\clsBlobStorage.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["IC.Azure.Blob"]
+		}
+	]
+}
+ICRESTAPI\Models\CardSupportDetails.vb
+{
+	"FilePath": "ProjectDir\\CardSupportDetails.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Models\BillerUtilities.vb
+{
+	"FilePath": "ProjectDir\\BillerUtilities.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\BillerInvoicePayNowButton.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		}
+	]
+}
+ICRESTAPI\Models\AutoPaySync.vb
+{
+	"FilePath": "ProjectDir\\AutoPaySync.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Models\BillerPrincipal.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Models\BillerCredential.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Encryption",
+			"Component": ["CloudCrypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.vb
+{
+	"FilePath": "ProjectDir\\CustomRedirectHttpModule.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.HttpWebRequest", "System.Net.HttpWebResponse"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["CloudCrypto"]
+		}
+	]
+}
+ICRESTAPI\Models\Biller.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.RequestValidation.vb
+{
+	"FilePath": "ProjectDir\\CustomRedirectHttpModule.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Controllers\UserCreditCardController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\UserCreditCardController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Authorization",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Logger\ApiLogger.vb
+{
+	"FilePath": "ProjectDir\\ApiLogger.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Filters\LogExceptionFilter.vb
+{
+	"FilePath": "ProjectDir\\LogExceptionFilter.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		}
+	]
+}
+ICRESTAPI\Filters\BillerAuthenticateAttribute.vb
+{
+	"FilePath": "NA",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Filters\BillerAuthorizeAttribute.vb
+{
+	"FilePath": "ProjectDir\\BillerAuthorizeAttribute.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Controllers\ValidateController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\ValidateController",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["
+System.Net
+"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Extensions\AutoMapperExtensionsvb.vb
+{
+	"FilePath": "ProjectDir\\AutoMapperExtensionsvb",
+	"Dependencies": [
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Extensions\DataTableExtensions.vb
+{
+	"FilePath": "ProjectDir\\DataTableExtensions.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Controllers\PayNearMeController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\PayNearMeController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["
+System.Net
+"]
+		}
+	]
+}
+ICRESTAPI\Controllers\CustomerPortalController.vb
+The code provided is a .NET code for a Customer Portal Controller. It includes various functionalities such as getting and updating customer information, handling customer login, managing invoice and payment history, and managing customer subscriptions. 
+Here is the JSON representation of the dependencies and their respective components:
+json
+{
+    "FilePath": "ProjectDir\\Controllers\\CustomerPortalController.vb",
+    "Dependencies": [
+        {
+            "Dependency": "Database",
+            "Component": ["IC.Database"]
+        },
+        {
+            "Dependency": "HTTP Clients",
+            "Component": ["System.Net.Http"]
+        },
+        {
+            "Dependency": "Logging Systems",
+            "Component": ["Newrelic"]
+        },
+        {
+            "Dependency": "Configuration",
+            "Component": ["System.Configuration.ConfigurationManager"]
+        },
+        {
+            "Dependency": "Services",
+            "Component": ["ICRESTAPI.CustomerLogin", "ICRESTAPI.CustomerLogin.LoginsByCustomerID", "ICRESTAPI.CustomerLogin.LoginByLoginGUID"]
+        },
+        {
+            "Dependency": "Authentication",
+            "Component": ["IC.Database.Authentication"]
+        },
+        {
+            "Dependency": "APIs",
+            "Component": ["IC.MicroService.DAL.EntityFramework"]
+        },
+        {
+            "Dependency": "Cloud Providers",
+            "Component": ["IC.Azure.Blob"]
+        }
+    ]
+}
+This JSON file represents the dependencies found in the provided .NET code. The dependencies include database operations, HTTP clients, logging systems, configuration management, services, authentication, APIs, and cloud providers. The components tied to these dependencies are also listed.
+ICRESTAPI\Controllers\PayController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\PayController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Encryption",
+			"Component": ["Crypto"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["CloudTransactionProcessing"]
+		}
+	]
+}
+ICRESTAPI\Controllers\UserBankController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\UserBankController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["Custom"]
+		}
+	]
+}
+ICRESTAPI\Controllers\MessagingController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\MessagingController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Email Services",
+			"Component": ["ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Authentication Services",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["
+System.Net
+"]
+		}
+	]
+}
+ICRESTAPI\Controllers\HealthCheckController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\HealthCheckController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["ICRESTAPI.DB"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Serilog"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.Logins"]
+		},
+		{
+			"Dependency": "Cloud Providers",
+			"Component": ["IC.Azure.Blob"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["CloudCrypto", "KeyVaultClient"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http.HttpResponseMessage"]
+		}
+	]
+}
+ICRESTAPI\Controllers\CustomerController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\CustomerController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Newrelic"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["
+System.Net
+"]
+		}
+	]
+}
+ICRESTAPI\Controllers\InfoController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\InfoController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\Controllers\CreditCardController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\CreditCardController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Encryption",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ee722dd1-9e9d-450f-8501-a48b5a3a9bc2
+Unable to process code file
+ICRESTAPI\Controllers\BillerDatapumpController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\BillerDatapumpController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Global.asax.vb
+{
+	"FilePath": "ProjectDir\\WebApiApplication.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["IC.Serilog", "Newrelic"]
+		},
+		{
+			"Dependency": "Key Vaults",
+			"Component": ["CloudCrypto", "IC.Azure.Blob", "ICFramework.Utilities.Email"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.ServiceProxies", "ICDatabaseService"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["IC.Database.Authentication"]
+		},
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Networking",
+			"Component": ["System.Net.ServicePointManager"]
+		},
+		{
+			"Dependency": "Caching",
+			"Component": ["CachedFeatureManager"]
+		}
+	]
+}
+ICRESTAPI\Controllers\BankController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\BankController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Authentication",
+			"Component": ["BillerAuthenticate"]
+		},
+		{
+			"Dependency": "Cryptography",
+			"Component": ["Crypto"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["NewRelic"]
+		}
+	]
+}
+ICRESTAPI\Controllers\BillerController.vb
+{
+	"FilePath": "ProjectDir\\Controllers\\BillerController.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.Database"]
+		},
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["System.Net.Http"]
+		},
+		{
+			"Dependency": "APIs",
+			"Component": ["System.Web.Http"]
+		},
+		{
+			"Dependency": "Monitoring Systems",
+			"Component": ["Newrelic"]
+		}
+	]
+}
+ICRESTAPI\Business\CloudflareRedirect.vb
+{
+	"FilePath": "ProjectDir\\CloudflareRedirect.vb",
+	"Dependencies": [
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		}
+	]
+}
+ICRESTAPI\App_Start\WebApiConfig.vb
+{
+	"FilePath": "ProjectDir\\WebApiConfig",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\App_Start\FilterConfig.vb
+{
+	"FilePath": "ProjectDir\\FilterConfig",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+ICRESTAPI\App_Start\RouteConfig.vb
+{
+	"FilePath": "ProjectDir\\RouteConfig",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+Comparison
+Configurations
+ ConfigurationManager.AppSettings
+Azure Key Vault 
+ IC.Azure.KeyVault
+Database Connectivity
+ IC.Database - DatabaseProxy
+ IC.Database.Authentication
+Logging
+ IC.Serilog
+ NewRelic.Api.Agent.NewRelic.NoticeError
+File System
+ System.IO
+Misc
+ IC.Logins
+ IC.Azure.Blob -AzureBlobService
+Cryptography
+ CloudCrypto
+  IC.ServiceProxies.Services.CryptoService-  Identified only as IC.ServicePorxies (Due to no segregaation in query)
+External Service Connectivity
+ ICCryptoService
+ Certegy
+ Cdyne
+ CloudTransactionProcessing
+ CloudCreditCardProcessingV2
+Custom and False Positives
+Identified from Import statements(Will not generate code, Insufficient data)
+HTTP Clients- 
+System.Net.Http, System.Net.HttpWebRequest,, System.Net.HttpWebResponse, System.Net.Mail, System.Web.Http, Net.HttpStatusCode  
+APIs- 
+System.Web.Http.Description, System.Web.Http, ICRESTAPI.DB 
+Networking - 
+System.Net, System.Net.ServicePointManager   
+Encryption - System.Security.Cryptography 
+False Results which do not exist in code at all
+Configuration  - System.Environment
+APIs- IC.MicroService.DAL.EntityFramework
+Custom (Will be avoided for HealthCheck)
+HTTP Clients- Custom
+File Systems  - Custom
+APIs- Custom
+Configuration - Custom
+Services- Custom
+Authentication - Custom 
+Partial Implementation(Should not generate code, Insufficient data)
+APIs- ICRESTAPI.CustomerLogin, ICRESTAPI.CustomerLogin.LoginsByCustomerID  ,ICRESTAPI.CustomerLogin.LoginByLoginGUID  
+Services  -ICFramework.Utilities.Email , ICDatabaseService  
+Caching  - CachedFeatureManager     
+Logging Systems - ApiLogger   
+Email - ICFramework.Utilities.Email 
+Prompt3 Identified Components - Tarun’s Version
+Identified Dependencies
+ICRESTAPI\Models\APIResponses\Validation\InvalidPasswordResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\Validation\InvalidCourtesyEmailAddressResponse.vb
+{"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}
+ICRESTAPI\Models\APIResponses\Validation\InvalidUsernameResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Models\APIResponses\Validation\GenericInvalidEmailAddressResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\InvalidSample.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas\\HelpPage\\InvalidSample",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\SampleDirection.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas.HelpPage",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\TextSample.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas\\HelpPage\\TextSample",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ObjectGenerator.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\ImageSample.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ImageSample", "Results": ["NA"], "Variables": []}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleGenerator.vb", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\Models\HelpPageApiModel.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\SampleGeneration\HelpPageSampleKey.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\HelpPageSampleKey.vb", "Results": ["NA"], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterAnnotation.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ParameterAnnotation",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ParameterDescription.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameHelper.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameHelper", "Results": ["NA"], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelNameAttribute.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelNameAttribute",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ModelDescription.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ModelDescription.vb", "Results": "NA", "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\KeyValuePairModelDescription",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\EnumValueDescription.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\ComplexTypeModelDescription.vb", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Areas\HelpPage\ModelDescriptions\CollectionModelDescription.vb
+{"FilePath": "ProjectDir\\Areas\\HelpPage\\ModelDescriptions\\CollectionModelDescription",
+ "Results":[],
+ "Variables": []}
+ICRESTAPI\Areas\HelpPage\Controllers\HelpController.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Service References\svcICCrypto\Reference.vb
+{"FilePath": "ProjectDir\\svcICCrypto.vb",
+"Results": [
+    {
+        "external dependency Category": "Cryptography",
+        "implementation Category": ["Custom"]
+    }
+],
+"Variables": []
+}
+ICRESTAPI\Areas\HelpPage\App_Start\HelpPageConfig.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Service References\svcCdyne\Reference.vb
+{"FilePath": "ProjectDir\\svcCdyne.vb", "Results": [], "Variables": []}
+ICRESTAPI\Web References\CloudCreditCardProcessingV2\Reference.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\Main",
+    "Results":[
+        {
+            "external dependency Category": "Internal service",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}
+}
+b1b84655-3012-43a0-aa5a-d926980056c3
+Unable to process code file
+ICRESTAPI\Service References\wsCertegy\Reference.vb
+{"FilePath": "ProjectDir\Main", "Results":[], "Variables": []}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLoginAccount.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CustomerLoginAccount",
+    "Results":[
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\MultiCustomerLogin\CustomerLogin.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CustomerLogin",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerBanks.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\clsCustomerBanks",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\MultiCustomerLogin\clsCustomerCreditCards.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\clsCustomerCreditCards",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\Enums\WebMethod.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Models\Enums\SmsType.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\SmsDisplayOption.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\MessagingResponseCode.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\EmailQueueType.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\RequestStatus.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\InvoiceTypeSetting.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\DataPumpType.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\IntegrationPartner.vb
+{"output.json": {"FilePath": "NA", "Results":[], "Variables": []}}
+ICRESTAPI\Models\Enums\CustomerLoginType.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\BillerOption.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\ChangeRequestor.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\ACHValidationPartner.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Models\Enums\AuthenticationType.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\BankAccountType.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\Enums\ActionSource.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\UnableToLocateInvoiceAPIResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Models\APIResponses\UnableToLocateLoginAPIResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Models\APIResponses\UsernameOrEmailRequiredResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\UnableToLocateOriginalPaymentAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\UnableToCreateInvoiceAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\ServiceUnavailableAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\SendPaymentLinkEmailResponse.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\UnableToLocateCustomerAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidPhoneNumberResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InvalidPhoneNumberResponse.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\SendPayByTextMessageResponse.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\PayNearMeConfirmResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\PayNearMeAuthorizeResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\MultipleLoginLocatedAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\LimitationTimeAPIResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Models\APIResponses\InvalidInvoiceNumberResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InvalidInvoiceNumberResponse",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidLoginGUIDResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InvalidLoginGUIDResponse",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidEmailAddressResponse.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidConvenienceFee.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InvalidConvenienceFee.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidCustomerAccountNumberResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InvalidCustomerAccountNumberResponse.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InternalServerErrorAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InternalServerErrorAPIResponse",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\InvalidCustomerGUIDResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\GenericBadRequestAPIResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\EmptyRequestResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Models\APIResponses\DuplicateUserNameResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\EmailMessageResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\EmailMessageResponse",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\DuplicateCustomerAccountResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\ApiResponseUtilities.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\ApiResponseUtilities",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\BaseApiResponse.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\CustomerAccountExistResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CustomerAccountExistResponse.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\ApiResponseWrapper.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\APIResponse.vb
+{"FilePath": "ProjectDir\\APIResponse.vb", "Results": "NA", "Variables": []}
+ICRESTAPI\Models\APIResponses\APIResponseData.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseMessage.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\ApiHttpResponseMessage.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\APIResponses\ApiHttpResponseContent.vb
+{"FilePath": "ProjectDir\\ApiHttpResponseContent.vb", "Results":[], "Variables": []}
+ICRESTAPI.DB\KeyVault\KeyVaultClient.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\KeyVaultClient.vb",
+    "Results":[
+        {
+            "external dependency Category": "Keyvaults",
+            "implementation Category": ["IC.Azure.KeyVault.KeyVaultReader"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        }
+    ],
+    "Variables": [
+            { "Key": "ClientId", "Source": "Settings/Configuration" },
+            { "Key": "VaultName", "Source": "Settings/Configuration" }
+    ]
+}"""
+ICRESTAPI.DB\Object\SettingsService.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        },
+        {
+            "external dependency Category": "Configurations",
+            "implementation Category": ["ConfigurationManager.Appsettings"]
+        }
+    ],
+    "Variables": [
+            { "Key": "UseManagedIdentity", "Source": "Settings/Configuration" },
+            { "Key": "ConnectionString", "Source": "Settings/Configuration" },
+            { "Key": "Setting", "Source": "Settings/Configuration" }
+    ]
+}"""
+ICRESTAPI\Filters\IHttpActionResults\InvalidCredentialResponse.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Areas\HelpPage\XmlDocumentationProvider.vb
+{"FilePath": "ProjectDir\\Main", "Results": "NA", "Variables": []}
+ICRESTAPI\Areas\HelpPage\HelpPageConfigurationExtensions.vb
+{"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}
+ICRESTAPI\Areas\HelpPage\HelpPageAreaRegistration.vb
+{"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}
+ICRESTAPI\Areas\HelpPage\ApiDescriptionExtensions.vb
+{"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}
+ICRESTAPI.DB\KeyVault\FileName.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\HealthCheck",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\WebServicesLogging.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\WebServicesLogging",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        },
+        {
+            "external dependency Category": "Storage",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI.DB\Database\FileName.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\HealthCheck",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\Utilities.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Utilities.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        },
+        {
+            "external dependency Category": "Internal service",
+            "implementation Category": ["IC.Login"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI.DB\Database\Database.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Keyvaults",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": [
+            {"Key": "ClientId", "Source": "Settings/Configuration" },
+            {"Key": "VaultName", "Source": "Settings/Configuration" }
+    ]
+}}
+ICRESTAPI\Services\Feature.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[
+        {
+            "external dependency Category": "Caching",
+            "implementation Category": ["CachedFeatureManager"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Models\SystemsAndSoftware.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\SystemsAndSoftware.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\TimeReference.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\TimeReference.vb",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\PaymentLinkEmail.vb
+'''output.json
+{
+    "FilePath": "ProjectDir\\PaymentLinkEmail.vb",
+    "Results":[
+        {
+            "external dependency Category": "Email",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        },
+        {
+            "external dependency Category": "Configurations",
+            "implementation Category": ["ConfigurationManager.Appsettings"]
+        }
+    ],
+    "Variables": [
+            { "Key": "MessagingServiceErrorEmailRecipients", "Source": "Settings/Configuration" }
+    ]
+}'''
+ICRESTAPI\Models\PayNearMeHandler.vb
+{"FilePath": "ProjectDir\\PayNearMeHandler.vb",
+ "Results": [
+    {
+        "external dependency Category": "Databases",
+        "implementation Category": ["DatabaseProxy"]
+    },
+    {
+        "external dependency Category": "Monitoring systems",
+        "implementation Category": ["Newrelic"]
+    }
+ ],
+ "Variables": []
+}
+ICRESTAPI\Models\SmsMessage.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\SmsMessage",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": [
+            {"Key": "LICENSEKEY", "Source": "Hardcoded" }
+    ]
+}}
+ICRESTAPI\Models\SmsMessageResponse.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}}
+ICRESTAPI\Models\PayByTextMessage.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\PayByTextMessage",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\OutputFilterStream.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[
+        {
+            "external dependency Category": "NA",
+            "implementation Category": ["NA"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Models\InvoiceUtilities.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\InvoiceUtilities",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\EmailUtilities.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\EmailUtilities",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\Notifications.vb
+{"output.json": {"FilePath": "ProjectDir\\Notifications", "Results":[], "Variables": []}}
+ICRESTAPI\Models\LinkedAccount.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\LinkedAccount",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Models\Datapump.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Datapump",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\InvalidInvoiceGUIDResponse.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Models\EmailMessage.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\EmailMessage.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Email",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\clsCertegy.vb
+{"FilePath": "ProjectDir\\clsCertegy.vb",
+ "Results":[
+    {
+        "external dependency Category": "Databases",
+        "implementation Category": ["Custom"]
+    },
+    {
+        "external dependency Category": "Cryptography",
+        "implementation Category": ["Custom"]
+    },
+    {
+        "external dependency Category": "Configurations",
+        "implementation Category": ["ConfigurationManager.Appsettings"]
+    },
+    {
+        "external dependency Category": "Keyvaults",
+        "implementation Category": ["KeyVaultClient"]
+    },
+    {
+        "external dependency Category": "Internal service",
+        "implementation Category": ["Custom"]
+    }
+ ],
+ "Variables": [
+    {"Key": "certegyStationID", "Source": "Settings/Configuration" },
+    {"Key": "certegyBackupEndpointUri", "Source": "Settings/Configuration" }
+ ]
+}
+ICRESTAPI\Models\CustomerUtilities.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CustomerUtilities",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        },
+        {
+            "external dependency Category": "Email",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\Database.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Database.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Models\Customer.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Customer.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\clsBlobStorage.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\clsBlobStorage.vb",
+    "Results":[
+        {
+            "external dependency Category": "Storage",
+            "implementation Category": ["AzureBlobService"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\Crypto.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Crypto.vb",
+    "Results":[
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["CryptoService"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\CardSupportDetails.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CardSupportDetails.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Models\BillerUtilities.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\BillerUtilities.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\BillerCredential.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\BillerCredential.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Models\BillerInvoicePayNowButton.vb
+{"FilePath": "ProjectDir\\BillerInvoicePayNowButton.vb",
+"Results":[
+    {
+        "external dependency Category": "Databases",
+        "implementation Category": ["DatabaseProxy"]
+    }
+],
+"Variables": []
+}
+ICRESTAPI\Models\BillerPrincipal.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results":[], "Variables": []}}
+ICRESTAPI\Controllers\PayController.vb
+{"FilePath": "ProjectDir\\Controllers\\PayController.vb",
+"Results":[
+    {
+        "external dependency Category": "Databases",
+        "implementation Category": ["Database"]
+    },
+    {
+        "external dependency Category": "Cryptography",
+        "implementation Category": ["Crypto"]
+    },
+    {
+        "external dependency Category": "Monitoring systems",
+        "implementation Category": ["NewRelic"]
+    }
+],
+"Variables": [
+    { "Key": "Biller.BillerGUID", "Source": "Settings/Configuration" },
+    { "Key": "Biller.BillerID", "Source": "Settings/Configuration" },
+    { "Key": "Biller.WebServiceKey", "Source": "Settings/Configuration" },
+    { "Key": "Biller.SafeSubscriberGUID", "Source": "Settings/Configuration" },
+    { "Key": "Biller.SafeWebServiceKey", "Source": "Settings/Configuration" }
+]}
+ICRESTAPI\Models\Biller.vb
+{"output.json":
+{
+    "FilePath": "NA",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Logger\ApiLogger.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\ApiLogger",
+    "Results":[
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Models\AutoPaySync.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\AutoPaySync.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.vb
+{"FilePath": "ProjectDir\\CustomRedirectHttpModule.vb",
+ "Results":[
+     {
+         "external dependency Category": "Databases",
+         "implementation Category": ["DatabaseProxy"]
+     },
+     {
+         "external dependency Category": "Cryptography",
+         "implementation Category": ["Custom"]
+     },
+     {
+         "external dependency Category": "Monitoring systems",
+         "implementation Category": ["NewRelicLogger"]
+     },
+     {
+         "external dependency Category": "Logging",
+         "implementation Category": ["IC.Serilog"]
+     },
+     {
+         "external dependency Category": "Internal service",
+         "implementation Category": ["WebServiceLoggingClient"]
+     }
+ ],
+ "Variables": []
+}
+ICRESTAPI\Filters\LogExceptionFilter.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Main",
+    "Results":[
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\HttpModules\CustomRedirectHttpModule.RequestValidation.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CustomRedirectHttpModule",
+    "Results":[
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Filters\BillerAuthenticateAttribute.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\BillerAuthenticateAttribute",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Filters\BillerAuthorizeAttribute.vb
+{"output.json": {"FilePath": "NA", "Results": [], "Variables": []}}
+ICRESTAPI\Extensions\AutoMapperExtensionsvb.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\AutoMapperExtensionsvb",
+    "Results":[
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Extensions\DataTableExtensions.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\DataTableExtensions",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Controllers\ValidateController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\ValidateController",
+    "Results":[
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Controllers\UserBankController.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Controllers\\UserBankController.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Controllers\UserCreditCardController.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Controllers\\UserCreditCardController.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["NewRelicLogger"]
+        }
+    ],
+    "Variables": []
+}}
+ICRESTAPI\Controllers\PayNearMeController.vb
+{"FilePath": "ProjectDir\\Controllers\\PayNearMeController", "Results":[], "Variables": []}
+ICRESTAPI\Controllers\HealthCheckController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\HealthCheckController",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog"]
+        },
+        {
+            "external dependency Category": "Internal service",
+            "implementation Category": ["IC.Login", "AzureBlobService"]
+        },
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Keyvaults",
+            "implementation Category": ["KeyVaultReader"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Controllers\MessagingController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\MessagingController",
+    "Results":[
+        {
+            "external dependency Category": "Email",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Controllers\CustomerPortalController.vb
+{"FilePath": "ProjectDir\\Controllers\\CustomerPortalController.vb",
+"Results":[
+    {
+        "external dependency Category": "Databases",
+        "implementation Category": ["DatabaseProxy"]
+    },
+    {
+        "external dependency Category": "Monitoring systems",
+        "implementation Category": ["Newrelic"]
+    }
+],
+"Variables": []
+}
+ICRESTAPI\Controllers\InfoController.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\InfoController",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\Controllers\CustomerController.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\Controllers\\CustomerController.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["NewRelicLogger"]
+        },
+        {
+            "external dependency Category": "Internal service",
+            "implementation Category": ["IC.Logins"]
+        }
+    ],
+    "Variables": []
+}
+}
+ICRESTAPI\Controllers\CreditCardController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\CreditCardController",
+    "Results":[
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+1655d929-d43c-4124-8f8f-46e84dabea87
+Unable to process code file
+ICRESTAPI\Controllers\BillerDatapumpController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\BillerDatapumpController.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Global.asax.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\WebApiApplication.vb",
+    "Results":[
+        {
+            "external dependency Category": "Logging",
+            "implementation Category": ["IC.Serilog", "NewRelicLogger"]
+        },
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Keyvaults",
+            "implementation Category": ["KeyVaultReader"]
+        },
+        {
+            "external dependency Category": "Caching",
+            "implementation Category": ["CachedFeatureManager"]
+        },
+        {
+            "external dependency Category": "Internal service",
+            "implementation Category": ["AzureBlobService"]
+        }
+    ],
+    "Variables": [
+            {"Key": "ClientId", "Source": "Settings/Configuration" }
+    ]
+}"""
+ICRESTAPI\Controllers\BankController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\BankController",
+    "Results":[
+        {
+            "external dependency Category": "Cryptography",
+            "implementation Category": ["Custom"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Controllers\BillerController.vb
+"""output.json
+{
+    "FilePath": "ProjectDir\\Controllers\\BillerController.vb",
+    "Results":[
+        {
+            "external dependency Category": "Databases",
+            "implementation Category": ["DatabaseProxy"]
+        },
+        {
+            "external dependency Category": "Monitoring systems",
+            "implementation Category": ["Newrelic"]
+        }
+    ],
+    "Variables": []
+}"""
+ICRESTAPI\Business\CloudflareRedirect.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\CloudflareRedirect",
+    "Results":[
+        {
+            "external dependency Category": "Configurations",
+            "implementation Category": ["ConfigurationManager.Appsettings"]
+        }
+    ],
+    "Variables": [
+            { "Key": "CloudflareRedirectTimeSeconds", "Source": "Settings/Configuration" }
+    ]
+}
+}
+ICRESTAPI\App_Start\FilterConfig.vb
+{"output.json": {"FilePath": "ProjectDir\\Main", "Results": [], "Variables": []}}
+ICRESTAPI\App_Start\WebApiConfig.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\WebApiConfig",
+    "Results":[],
+    "Variables": []
+}}
+ICRESTAPI\App_Start\RouteConfig.vb
+{"output.json":
+{
+    "FilePath": "ProjectDir\\RouteConfig",
+    "Results":[],
+    "Variables": []
+}}
+Comparison
+Configurations
+ ConfigurationManager.AppSettings 
+Azure Key Vault 
+ IC.Azure.KeyVault
+Database Connectivity
+ IC.Database - DatabaseProxy
+ I
+C.Database.Authentication
+Logging
+ IC.Serilog
+ NewRelic.Api.Agent.NewRelic.NoticeError
+File System
+ System.IO
+Misc
+ IC.Logins
+ IC.Azure.Blob -AzureBlobService
+Cryptography
+ CloudCrypto
+  IC.ServiceProxies.Services.CryptoService - Identified as cryptoservice
+External Service Connectivity
+ ICCryptoService
+ Certegy
+ Cdyne
+ CloudTransactionProcessing
+ CloudCreditCardProcessingV2
+Custom and False Positives
+Identified from Import statements(Will not generate code, Insufficient data)
+False Results which do not exist in code at all
+Internal service-  WebServiceLoggingClient
+Custom (Will be avoided for HealthCheck)
+Cryptography - Custom
+Internal service - Custom  
+Logging- Custom
+Databases- Custom
+Storage - Custom
+Email - Custom 
+Partial Implementation(Will not generate code, Insufficient data)
+Caching - CachedFeatureManager
+ URL:/spaces/EN/pages/3063447753/Component+Identification

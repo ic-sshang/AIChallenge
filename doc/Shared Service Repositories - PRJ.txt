@@ -1,0 +1,141 @@
+Below is a list of code repositories that will be owned by the Shared Service team.  
+The items are sourced from the below spreadsheet where the owner was marked as Shared.
+https://invoicecloud360.sharepoint.com/:x:/r/sites/IC-Technology/_layouts/15/doc2.aspx?sourcedoc=%7BAA4EA5C4-7EE1-4471-BC46-2D54B1D89AAF%7D&file=SRC%20Code%20Repository%20Inventory.xlsx&action=default&mobileredirect=true
+ 
+Code Repository
+Type
+Description
+Qualified
+IC.ApplicationAuthService
+Library
+Used for MI token
+Yes
+IC.Azure.Blob (includes IC.Azure.KeyVault)
+Library
+Manages blobs
+Yes
+IC.Database.Authentication
+Library
+Used for MI token 
+Yes
+IC.Database.Authentication.AzureFunctions
+Library
+Used for MI token
+Yes
+IC.Interfaces
+Library
+Used for platform interface abstractions
+Yes
+IC.Logger
+Library
+Need to be deprecated.  Need to upgrade projects to IC.Serilog
+Yes, we need to move away from this and updated repos to use IC.Serilog.
+IC.NewRelic
+Library
+Used for instrumenting applications for New Relic metrics 
+Yes, should be migrated to OTEL SDK 
+IC.PlatformFeatures
+Library
+Used for features toggles 
+Yes, should move to Azure App Configurations for feature toggles
+IC.Powershell.Authentication
+Library
+Not in use, needs a official audit in usage
+Yes, but will likely get archived
+IC.Scheduling
+Library
+Integrates to Skybot APIs for job management
+Yes
+IC.Serilog
+Library
+Used for logging and configurations
+Yes
+IC.ServiceProxies
+Library
+Used to bootstrap common service communication to proxy services; ICDatabaseService
+Yes
+IC.ServiceProxies.Skybot
+Library
+Used to manage reads to the Skybot backend database (things that the API does not expose)
+Yes
+IC.Slack
+Library
+Post messages to Slack
+Yes
+IC.Threading
+Library
+Manages thread workflows
+Yes
+IC.VSTS
+Library
+Manages Azure DevOps integrations, code repo reports 
+Yes
+IC.Wcf.Helpers
+Library
+Used to configure and create WCF services (base classes) standard implementations.
+Yes
+IC.WebServicesLogging
+Library
+Logs request/response data to the database.
+Yes
+ICAzureMessageQueue
+Library
+Azure Storage Queue wrapper, publish and read messages 
+Yes
+ICBusinessService
+WCF Service
+Middleware for common business functions, audit activity it might be scoped to only a few repositories.  Change to a model of local code instead of a RPC.
+Yes
+ICDatabaseService
+WCF Service
+Middleware used for accessing MS SQL.
+Yes
+ICFramework.Business.Data
+Library
+Used to manage Biller Options
+Yes
+ICFramework.Email
+Library
+Mailgun integration wrapper for email reporting
+Yes
+ICFramework.Utilities.Email
+Library
+Mailgun integration wrapper for sending email
+Yes
+ICMonitoringService
+Windows Service
+Pulls data from Windows Event View, Perf Counter, post to New Relic 
+Yes
+ICSkybotService
+WCF Service
+Proxies Skybot database access for application integrations to get reporting data.
+Yes
+ICSkybotUtility
+Job
+Disables jobs, looks for running instances, used in pipelines.  Might not be in use now using HTTP API.  Need to audit
+Yes, decommission
+ICTunnelAPI
+Web API
+Proxies services for Azure PaaS systems like Azure Functions, Batch.  Solves network hurdles
+Yes
+ICVSTSReportGenerator
+Job
+Use the VSTS library to provide reporting on Azure DevOps code repositories.  Run daily on Skybot.  Code Coverage data.
+Yes, see VSTSReportGenerator.  We only need one of them.
+InternalEmailProcessing
+Job
+Pulls from a DB table queue to send emails (error emails, exceptions)
+Yes, need to create a project to move away from error email notifications directly from code, SRE project
+VSTSReportGenerator
+Job
+Use the VSTS library to provide reporting on Azure DevOps code repositories.  Run daily on Skybot.  Code Coverage data.
+Yes
+IC.Net.DataAccess.MsSql
+Library
+A data access library for SQL Server.  For .Net 4.8 and .Net 8. 
+Yes
+ICCryptoService
+WCF Service
+Centralized cryptography 
+Yes
+ URL:/spaces/EA/pages/4088365066/Shared+Service+Repositories+-+PRJ

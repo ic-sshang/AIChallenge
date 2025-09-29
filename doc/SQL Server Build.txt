@@ -1,0 +1,15 @@
+Core windows build
+Server 2022
+Follow Windows Server Build Baseline for baseline requirements
+https://invoicecloud.atlassian.net/wiki/x/JYB5v
+ 
+Add Data disk to match requirements of DB Server 
+Install SQL with the latest cumulative updates and patches
+set authentication to Entra ID with MFA
+Azure SQL Build
+Enable backups
+set retention policies
+Activate Microsoft Entra ID
+Turn on Transparent Data Encryption (TDE)
+Send logs to Log Analytics
+ URL:/spaces/icinfradoc/pages/3249406035/SQL+Server+Build

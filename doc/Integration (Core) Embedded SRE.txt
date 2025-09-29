@@ -1,0 +1,41 @@
+General Responsibilities
+Integration Standup
+The Integration team standup (AKA “Mayo Sauce”) occurs daily at 09:30 AM CST. Reach out to Marcus Steen if you need to be added to this list. 
+SRE Release Review
+Mondays & Wednesdays: 
+navigate to the 
+#releases-prod-engineering
+ channel on Slack and click the link for the Tuesday/Thursday release. Complete the 
+SRE Release Review
+ checklist and make sure to post a comment. 
+Note: Items may be added or removed throughout the day, so check back periodically. 
+Note: Even if the item has been reviewed for a past release, if the item is on this excel sheet, then it must be re-reviewed. 
+Bug Court
+Thursdays:
+ Integrations team attends bug court weekly on Thursdays. Be sure to attend if you have created a bug item for this team.
+Follow the 
+Confluence page for submitting bug items for the ITG board
+ (Integration’s triage Jira project). We do not directly create items on the INT Jira project. 
+General Information
+Integration vs Solutions Architecture 
+When code change are required for a fix or functionality update it is important to understand the distinction between creating an item for the Integration team or the Solutions Architecture team. 
+Generally if the required change is new functionality for an integration and will require an update to an integration’s confluence page (e.g. new DataPump request parameters, new DataPump payment codes, or new adding block statuses to RTDR), then the item should be made for the Solutions Architecture team. 
+If the required change is the fault of a logical error, missing validation, or any other 
+technical 
+issue - then an item for the Integration team should be made. 
+Integration vs Bill Presentment
+Integration is split into two teams: core and bill presentment. 
+Core handles writing code for biller/software partner integrations for DataPump, RTDR, File Processing (import and export). 
+Bill presentment writes code for HTML Templates, Remote Links, and PDF linking.
+Troubleshooting Common Issues
+Please see the triage guides for:
+DataPump
+RTDR
+Invoice File Processing
+Adjustment File Processing (missing)
+Misc. File Processing (missing)
+Payment Exports (missing)
+Biller File Split
+ICTemplates
+PDF Linking
+ URL:/spaces/DS/pages/3615490228/Integration+Core+Embedded+SRE

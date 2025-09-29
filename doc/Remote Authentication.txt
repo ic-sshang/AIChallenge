@@ -1,0 +1,40 @@
+Purpose:
+The purpose of this space is to share knowledge over remote authentication.
+Overview:
+Remote authentication is a multipurpose API (SOAP or REST) that encompasses around credentials of invoicecloud logins.
+Different Types of Uses
+Remote Authentication Token:
+URL: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RemoteAuthentication
+This function yields a token for remote authentication and the optional ability to apply CSS to Invoice Cloud pages the person is viewing.
+Request:
+Response:
+Refresh Authentication Token:
+URL: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/refreshauthenticationtoken
+This method will increase the expiration time of a valid passed in token.
+Request:
+Response:
+Retrieve User Accounts
+URL:  
+https://www.invoicecloud.com/remoteauthenticationapi/user/RetrieveUserAccounts?AccountNumber=123456&EmailAddress=cison@invoicecloud.com
+This method retrieves all customer accounts linked to a user.
+Request:
+Response:
+Retrieve Users
+URL: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RetrieveUsers?AccountNumber=123456
+This method retrieves all users that are linked to a customer account.
+Request
+Response
+Update Password
+Update Username
+Update Email Address
+Link Accounts
+Register Accounts
+Add Users
+Unregister Accounts
+Retrieve Customer Details
+Error code 100 (failed input validation)
+Data is typed wrong on the request.
+ URL:/spaces/DS/pages/2566586444/Remote+Authentication

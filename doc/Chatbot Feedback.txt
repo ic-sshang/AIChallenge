@@ -1,0 +1,157 @@
+Action / Feedback
+Date
+Category
+Current State
+Expected State
+Screenshot
+Try new LLM error message
+7/7
+General
+Certain responses prompt a 401 error and request to try new LLM model
+This should not prompt such a error to the payer. Instead it should be more user friendly and instruct payer how to reset session to continue conversation or instructions towards speaking with a representative.
+STILL NEED TO GET TO PROMPT
+Introductory message seems a bit too long now.
+(RESOLVED - NONPAYMENT INQUIRIES, JUST NEED TO MAKE MESSAGE CLEANER)
+7/7
+General
+Addressed non-payment inquirie statement. Just needs to be a little more short and concise.
+Example:
+Welcome to the Invoice Cloud Payments Agent Demo!
+I'm your AI assistant here to help you pay your utility bills (like water, electricity, and gas), check recent payments, manage invoices, and explore options like AutoPay and paperless billing.
+I can also answer FAQs about the City of Mishawaka and connect you with the right city departments.
+Your chat is secure. By continuing, you agree to our terms.
+Quick switch in intention
+(STILL TESTING)
+7/7
+General
+Switching for payment to non-payment inquiries or different functions result in: 
+Error: HTTP 401: . Try with another llm model pops up on bottom right
+No red error on the bottom of the widget. Red error requires refresh and restarting the conversation.
+Another Invoice Lookup
+Another Invoice Lookup (NEED NEW PROMPT TO HELP PAYER RESOLVE IF FUNCTIONALITY IS NOT IN MVP)
+7/1
+Payment
+Error: HTTP 401: . Try with another llm model pops up on bottom right. 2 invoices. One was already 0 balance. If you ask for another, you get a wrong LLM model message as seen on the bottom right.
+Should be able to look up another invoice. Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it done or to refresh the session to start a new payment session.
+Another Invoice Lookup (NEED NEW PROMPT TO HELP PAYER RESOLVE IF FUNCTIONALITY IS NOT IN MVP)
+7/7
+Payment
+Worked as expected.
+Should be able to look up another invoice. Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it done or to refresh the session to start a new payment session.
+Another New Invoice Look Up (NEED NEW PROMPT TO HELP PAYER RESOLVE IF FUNCTIONALITY IS NOT IN MVP)
+7/7
+Payment
+When trying to put in a new invoice after authorized, if you accidentally put in the wrong INV_ number, You can no longer choose an Invoice INV_Type. You can only select the one associated with the account
+Should be able to go back and look for another invoice due to wrong authentication. Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it done or to refresh the session to start a new payment session.
+Switch from Invoice to Making ACH Payment (RETRY WAS SUCCESSFUL - NEED CONSISTENCY, STILL TESTING)
+7/7
+Payment
+Switching for payment to non-payment inquiries or different functions result in: 
+Error: HTTP 401: . Try with another llm model pops up on bottom right
+Continue through with making a payment without need to restart conversation and refresh the page.
+Pay By Text (NEW PROMPT REQUIRED)
+7/7
+Payment
+Error: HTTP 401: . Try with another llm model pops up on bottom right
+Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it enable Pay by Text instead of Payer Agent doing it.
+Pay By Text (Reset) - (NEW PROMPT REQUIRED)
+7/7
+Payment
+I can help you with enabling Pay By Text. To proceed, you'll need to authenticate your account first by providing a valid invoice ID and invoice type.Please provide that information, and we can get started! It is still offering a message to do Pay by Text.
+Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it enable Pay by Text instead of Payer Agent doing it.
+Autopay Enable / Disable (STILL WORKING ON, NOT RETURNNIG CORRECT STATE)
+7/7
+Payment Related
+Good - just need to confirm if actually being enabled in the backend
+N/A
+How can I contact you?Can I speak to a live agent? How can I contact you for more help? (PROMPT ADJUSTMENT)
+7/7
+Non-Payment
+It is now prompting which is great; however, we need to make sure it is sharing the correct e-mails. When I asked it 2 general questions, it prompted to me e-mail the mayor@mishawaska and also another general question prompted me to ask mubilling@mishawaska.
+Payment related inqiuiries that cannot be addressed should be forwarded to mubilling@mishawaska and NON-payment related inquiries should be forwarded to mayor@mishawaska; or maybe even a general email that they have. Not sure if Mayor is the right one but we should have flexibility around that. New screenshot attached.
+Can you enable autopay with a new credit card?
+7/7
+Payment Related
+Going through successfully but message around Chatbot leveraging certain APIs is being displayed.
+Change status or prompt when loading. PROMPT MESSAGE SHOULD NOT SHOW WHAT IS LOADING. WE SHOULD HIDE WHEN READY FOR PAYER
+Can I enable pay by text?
+7/7
+PAyment Related
+I do not currently have that capability.
+Noted comment about not being included in MVP. If this cannot be done, the payer needs to be prompted on how to get it enable Pay by Text instead of Payer Agent doing it.
+Where is chatbot? (ISSUE IS IC EMPLOYEES NOT ON WARP CANNOT SEE IT)
+7/8
+General
+I don’t see where to begin the conversation?
+At least an icon to click, better would be the window open automatically.
+Prompt: How can I enable autopay?
+7/9
+Payment related
+The response provides instructions on how to do it on the customer portal dashboard AND prompts the payer to enable autopay on the chat window.
+Instructions should only populate for Pay by Text, as the chatbot currently supports autopay / paperless; there is no need to put instructions on how to do it on the dashboard.
+Prompt: Can I enable autopay?
+7/9
+Payment Related
+Response: Since there is no outstanding balance, you won't be able to set up AutoPay at this moment. AutoPay requires a valid payment method and an outstanding balance to process payments.If you have any other questions or need assistance with something else, feel free to ask!
+Should be able to enable autopay with or without an outstanding balance
+OpenAI filtering and block response prompts
+7/18
+Technical
+Depending on user input, OpenAI is filtering and blocking response prompts which lead to a red message ‘Try new LLM model’ to appear in widget
+Should be able to pass through prompt no matter the user input.
+Additional paperless prompt on top of autopay.
+7/18
+Payment related
+If autopay is enabled but paperless is not, prompt just confirms with autopay.
+Should prompt; something similar to “I see you have autopay enabled. Would you like to go paperless as well?
+Payment source identification
+7/18
+Technical
+Unable to identify payment source
+For tracking purposes, we should add a payment source field to determine where the payment is coming from (e.g. IVR or AI Agent)
+Automated website scraping
+7/18
+Technical
+Website information needs to be ingested through RAG
+Implement an automatic website scraper to extract relevant information from customer accounts or biller portals
+Name and Email capture
+7/18
+Technical
+Just pay through invoice, no e-mail, no phone number
+Want to be able to address text message notifications and provide receipts but unable to do so if we don’t have e-mail or phone number (should be able to retrieve once we authenticate, no?)
+Sending receipts after invoice paid
+7/18
+Technical
+No receipts provided
+Be able to send receipt confirmation to payers email after Invoice has been paid
+Design updates
+7/18
+Technical
+Margins a bit too thin / no top margin on chatbot
+Cleaner widget for external demos
+Thumbs up and down features to improve prompt and track feedback
+7/18
+Technical
+Not being used today
+Used for training and feedback
+Include min and max cap payments by biller
+7/18
+Payment Related
+Currently only minimum payments are included; however, for some billers due to compliance reasons, they are required to limit max amount as well
+Being able to pull in biller min AND max to payment amount.
+Inability to not add a payment method
+7/18
+Payment Related
+Currently you cannot add a payment method to the account without making a payment
+You should be able to add payment methods to the account with or without making a payment
+Data Warehousing / Reporting through Data Services on Tableau
+7/18
+Technical
+No current reporting for biller or internal.
+Biller and internal reporting dashboard via Tableau to track key success metrics and performance metrics on AI Assistant
+Enable “Do we solve your issue?” prompt
+7/21
+Technical
+Unable to determine resolution on non-payment inquiries
+Need a way to determine closed cases and unaddressed cases
+ URL:/spaces/PRODUCT/pages/4466737342/Chatbot+Feedback

@@ -1,0 +1,30 @@
+Release Schedule
+There are two Releases planned for each week. Tuesday and Thursday 10PM EST.
+Any change merged into the Main/Release branch before 8AM EST on Monday morning will be released on Tuesday night. 
+Any change merged into the Main/Release branch before 8AM EST on Wednesday morning will be released on Thursday night.
+Preparing Builds/Releases:
+Look for automated builds for the repos scheduled for the next Release cycle (follow cut off time decided by the Release team)
+If no build is found, then create a new build for the main/release branch. Inform the Release manager (rob) and/or DevOps Lead to setup auto builds.
+Take the new build version and find a Release for the Deployment pipeline for the repo. The matching build version number can be found in the release link title.
+If no release found, then create a new Release using the Deployment pipeline for the build version number found in the above step.
+Release WebApp:
+Make sure all web apps are tested deployed and tested in the PREVIEW stage. 
+After that promote the release to the PREVIEW stage (if exists).
+Then promote the release to web1/stage1.
+Finally, promote the release to All the Prod Web Servers/Stage2.
+Make sure to get a confirmation of post deployment checks in this stage from the change owners.
+Post an update in the Release-Prod-Engineering channel after a successful deployment.
+Release Jobs/Console App:
+If needed Hold jobs and cancel/complete any current execution in Skybot before releasing to Prod.
+Promote the release to Prod App Server
+Verify that the jobs are released after the release. By default, the pipeline releases a job upon successful deployment.
+Post an update in the Release-Prod-Engineering channel after a successful deployment.
+Rollback
+If any error or exception occurs during Post Deployment Checks, then roll back to the previous Production release.
+Starting from the REGRESSION stage, re-run the deployments on all the stages up to the PRODUCTION.
+Check if any DB or Infrastructure changes need to be rolled back or not. 
+Post an update in the Release-Prod-Engineering channel about the rollback and provide the rolled back release link.
+Monitoring/Verification
+After successful deployment and/or rollback event, verify that the app is functional. 
+Monitor the app in NewRelic for any exception logs.
+ URL:/spaces/PE/pages/4129357885/Application+Release+Check+List

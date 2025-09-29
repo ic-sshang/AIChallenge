@@ -1,0 +1,42 @@
+Code-Generated Docs
+Description
+
+this deploys to sbx, dev, and prd only. Do not use if you're on new infra; use `helm-deploy` instead.
+
+Parameters
+Parameter
+Default
+Description
+sbxInstance
+n/a
+devInstance
+n/a
+infrastructureVersion
+n/a
+spokeName
+n/a
+serviceName
+n/a
+tag
+default
+containerName
+n/a
+serviceAbbreviation
+n/a
+force
+False
+glbVersion
+1
+hostnamePrefix
+apibeta
+gitVersionConfigFile
+GitVersion.yml
+Path to GitVersion.yml
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/calculate-semver.yaml
+ URL:/spaces/platform/pages/3635380331/flows+linux-container-deploy.yaml

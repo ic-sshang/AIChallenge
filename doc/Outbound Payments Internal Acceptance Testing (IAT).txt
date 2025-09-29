@@ -1,0 +1,47 @@
+Runbook name
+Internal Acceptance Testing (IAT)
+Description
+On this page
+2
+Change Log
+Date
+Author
+Version
+Description
+ 4/30/25
+Chris Faria
+1
+IAT steps - Description
+Summary
+Implementation Acceptance Testing - IAT is the process all Implementation Managers must complete after Transcard configures the biller/integrator's SMART Hub instance and provisioned API credentials.
+Failed test cases can be discussed with a the Outbound Program Manager (Chris Faria), a Solutions Engineer, or a manager.
+Failed test cased may require a JIRA.
+Process
+Steps
+Description
+Role Responsible
+1
+Find IAT Sheet
+The IAT sheet is located in the project schedule as a task (template: 
+IAT Worksheet (Outbound)
+)
+Implementation Manager
+2
+Ensure Postman Access
+IAT for Outbound requires the IM to have access to Postman to run TC API calls. If you do not have Postman access, please submit a 
+IT Service Desk ticket
+ to get access. Then, reach out to the Outbound Program Manager (Chris Faria) or the SE team for guidance on running the APIs.
+Implementation Manager
+3
+Complete IAT
+The following sections are always required:
+Add IC and biller users to SMART Hub businesses
+Test payment methods via Postman
+Test token expiration and security question failure
+Test Cancel Payment via SMART Hub
+Implementation Manager
+4
+Questions
+Questions during IAT? Please consult with the team’s SMEs or your manager.
+Implementation Manager
+ URL:/spaces/Implementa/pages/4274290689/Outbound+Payments+Internal+Acceptance+Testing+IAT

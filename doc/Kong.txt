@@ -1,0 +1,358 @@
+1
+6
+false
+default
+list
+true
+NOTE: this document is out of date and needs to be updated.
+Introduction
+Intro
+Kong is a Router of Network Traffic, that will be used as InvoiceCloud's Layer 7 Network Router.  Kong uses the Protocol, Hostname, Port, and Path of incoming requests to route traffic to backend service endpoints such as a Virtual Machine, a pool of Virtual Machines, or a Kubernetes Cluster.  Public traffic will come into the InvoiceCloud Private Network via Cloudflare and then pass thru the Palo Alto Firewall (Layer 3 network appliance) and the Palo Alto Firewall will then forward traffic to Kong for Layer 7 Traffic Control (i.e. Routing, Authentication, Authorization, and Rate Limiting).  Currently the only Control Kong will provide is the Routing of traffic based on Protocol, Hostname, Port, and Path.
+Network Diagram
+2
+1
+0
+0
+3274539040
+3066921030
+1
+Untitled Diagram-1716919187804.drawio
+9
+9
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1716919187804.drawio
+0
+1491.9999999999995
+866.9999999999999
+Kong Software Architecture Diagram
+Kong Resource Types
+Service
+: The Backend Service to which Kong will route traffic.  A single Backend Service consists of the following attributes:
+Backend Service’s 
+Protocol
+Backend Service’s 
+Host
+ (can be the name of an Upstream resource)
+Backend Service’s 
+Port
+Backend Service’s 
+Path
+Route
+: Mapping of Incoming URLs that are associated and routed to a Backend Service.  A Service can be associated with many Routes.  A single Route consists of the following attributes:
+Incoming 
+Protocols
+ (http, https)
+Incoming 
+HTTP Methods
+ (GET, POST)
+Incoming 
+Hosts
+Incoming 
+Paths
+Incoming 
+Headers
+ (additional to Host Header)
+Preserve Host Header when Proxying to Backend Service
+Strip the Matching Path when Proxying to Backend Service
+Upstream
+: Enables Load Balancing allowing traffic with the same Route(s) to be routed to a pool of redundant Backend Services.  A single Upstream can be associated with one of more Targets.  The main attributes configured in the Upstream resource is:
+Healthchecks
+Passive
+Active  
+Target
+: A single Upstream Service instance belonging to a Pool of Upstream Targets.
+Backend Service Target’s 
+Host:Port
+Certificate
+: An SSL/TLS Certificate used by Kong to do SSL/TLS Termination at the Kong Proxy.  A Certificate resource consists of:
+Public Certificate
+ including any Intermediary Certificates
+Private Key
+SNI
+: A hostname tied to a SSL/TLS Certificate used to determine which Certificate to use to satisfy incoming requests.  An SNI resource consists of:
+Host
+Certificate ID
+Kong Instances
+InvoiceCloud has 2 instances of Kong, one for the NonProd Network Traffic and one for the Prod Network Traffic to achieve an air gapped Network Architecture.  Both instances are hosted in seperate and dedicated Azure Kubernetes Service (AKS) Clusters.  The Kong API Gateway application is deployed via a 
+Helm Chart
+ using Terraform and 
+Azure DevOps Deployment Pipeline
+.  Below is information concerning each one of those instances.
+NonProd Kong Instance
+Resource Group: 
+rg-pri-kong2-npd
+AKS Cluster: 
+aks-pri-kong2-npd
+  (must be on NonProd AVD to access K8s Admin API, i.e. K8s Control Plane)
+AKS Control Plane Managed Identity:  
+aks-pri-kong2-npd
+Postgres SQL Database: 
+psql-pri-kong2-npd
+Kong Admin GUI:  
+https://kong.dev.invoicecloud.com
+ (must be on NonProd AVD to access)
+Admin Username:  
+kong_admin
+Admin User Password:  Can be found in NonProd Environment KeyVault 
+here
+ (must be on NonProd AVD to access)
+Kong Admin API:  
+https://kong.dev.invoicecloud.com/api
+ (must be on NonProd AVD to access)
+Admin Username:  
+kong_admin
+Admin User Password:  Can be found in NonProd Environment KeyVault 
+here
+Use the following PowerShell commands to get the AKS Credentials needed to interact with the K8s Control Plane API, note remove the 
+--admin
+ flag on the 
+az aks get-credentials
+ command if you do not have Admin Privileges on the AKS Cluster.
+az account set -s Sandbox
+
+$aksRG="rg-pri-kong2-npd"
+$aksName="aks-pri-kong2-npd"
+
+az aks get-credentials --resource-group $aksRG --name $aksName --overwrite-existing --admin
+
+kubectl get all -n kong
+Prod Kong Instance
+Resource Group: 
+rg-pri-kong2-prd
+AKS Cluster: 
+aks-pri-kong2-prd
+  (must be on Prod AVD to access K8s Admin API, i.e. K8s Control Plane)
+AKS Control Plane Managed Identity: 
+aks-pri-kong2-prd
+Postgres SQL Database: 
+psql-pri-kong2-prd
+Kong Admin GUI:  
+https://kong.invoicecloud.com
+ (must be on Prod AVD to access)
+Admin Username:  
+kong_admin
+Admin User Password:  Can be found in Prod Environment KeyVault 
+here
+ (must be on Prod AVD to access)
+Kong Admin API:  
+https://kong.invoicecloud.com/api
+ (must be on Prod AVD to access)
+Use the following PowerShell commands to get the AKS Credentials needed to interact with the K8s Control Plane API, note remove the 
+--admin
+ flag on the 
+az aks get-credentials
+ command if you do not have Admin Privileges on the AKS Cluster.
+az account set -s "Enterprise Prod"
+
+$aksRG="rg-pri-kong2-prd"
+$aksName="aks-pri-kong2-prd"
+
+az aks get-credentials --resource-group $aksRG --name $aksName --overwrite-existing --admin
+
+kubectl get all -n kong
+Kong Observability
+Both Kong AKS Clusters have 
+NewRelic 
+and 
+OpenTelemetry 
+Agents installed via Helm charts which forward data to NewRelic for observability and monitoring purposes.  The following are links to valuable NewRelic blades.
+NonProd Kong NewRelic Dashboard Blades
+Kong OTEL Transactions and Traffic Monitoring
+Kong AKS Cluster Metrics
+ 
+Note to filter for Kong Application specific metrics filter by 
+k8s.namspaceName = 'kong'
+Kong AKS Cluster Logs
+ 
+Note to filter Kong Application specific logs filter by 
+namespace_name:"kong"
+Prod Kong NewRelic Dashboard Blades
+Kong OTEL Transactions and Traffic Monitoring
+Kong AKS Cluster Metrics 
+Note to filter for Kong Application specific metrics filter by 
+k8s.namspaceName = 'kong'
+Kong AKS Cluster Logs 
+Note to filter Kong Application specific logs filter by 
+namespace_name:"kong"
+Prod Kong Golden Metric Alert Blades
+Available Memory is Low
+CPU Pressure is High
+Error Rate is High
+Request Latency is High
+Prod Kong SLO Blades
+Availability
+Latency
+Azure DevOps
+The Infrastructure, Kong Application deployment and configuration, as well as the NewRelic Alerts and SLOs are all provisioned and managed by Terraform and deployed using Azure DevOps Piplines.
+Repo
+Deployment Pipeline
+Kong Service, Routes, Upstream, and Targets Configurations
+As mentioned above, the Kong Service, Routes, Upstream, and Targets configuration are provisioned and managed by Terraform.  An ease-of-use abstraction has been designed into the Terraform to make it easier to add or remove a single set of configurations.
+The main abstraction is the 
+kong_route_configurations
+ Variable in the Kong 
+app
+ Stack.  This Variable is used to combine the aspects of the Kong Service, Routes, Upstream and Targets into a single easily understandable configuration interface.  This Terraform Map of Objects is then used in combination with the Kong Terraform Provider to provision the 
+Kong Resources for each Variable Object
+.
+The configurations for 
+NonProd
+ and 
+Prod 
+can be found at the embedded links.
+Take a Target out of an Upstream Pool
+To take an Upstream Target, most likely a VM IP and Port combination in our Legacy Infrastructure, out of the Upstream Pool, simply delete the Target from the Upstream Pool and then readd it back in when ready.  This can be done via the Terraform Configuration, Kong API, or Kong UI.
+To do this via the Terraform configuration, simply modify the 
+backend_targets 
+attribute of the 
+kong_route_configurations
+ Variable mentioned above and deploy the changes with the 
+Kong_Infrastructure Apply Pipeline
+.
+To do this in the UI, simply login to the NonProd or Prod Kong Portal and navigate to the Upstream Pool you want to modify, and then click the 
+Delete
+ button on the Target to take it out of the Upstream Pool as shown below.  To add it back, simply click the 
+New Target
+ button on the UI shown below and provide the Target’s 
+IP:Port
+ and give it a weight of 
+100
+ (or whatever weight you want, 
+100
+ is the value of the other targets below so adding a new one with a weight of 
+100
+ will provide an equal balancing using the Ring/Round Robin Load Balancing Algorithm).
+Possible Issues and Potential Remedies
+Below are some possible issues that may arise or be alerted on and potential fixes for the issue.
+Available Memory is Low
+If we observe available memory is low on the AKS Node (whether by Alert or Dashboard) the remedy would be to increase the Node SKU for the Application Node Pool on the AKS Cluster.  This can be done via an update to the Terraform configuration for the affected Environment.  For NonProd we would update 
+this value
+.  For Prod we would update 
+this value
+.  
+Example Image for Production Terraform Variable File
+Then run the deployment Pipeline mentioned above and target the affected Environment and target the 
+azure
+ Deployment Stage.
+Example Image for Deployment Pipeline Run Variables
+The current Node VM SKUs are based on the 
+sizing recommendations from Kong
+.
+CPU Pressure is High
+Kong is deployed and configured with 
+Kubernetes Horizontal Pod Autoscaling
+ (HPA).  The autoscaling is based on saturation of the Kong Pod’s CPU Requests.  Currently the Kong Pod’s CPU Request is 
+900
+ milli-CPUs, split over two containers within the Pod each container requesting 
+450
+ milli-CPUs.  The HPA autoscaling threshold is based on the saturation of that CPU request and set at 60% saturation.  Therefore, if the CPU pressure of all the existing Pods goes above 
+60%
+ utilization then an additional Pod and Node will be scaled out.  The minimum amount of Pods for the HPA pool is 3 and maximum is 10.  This should allow for flexible autoscaling and avoid this issue, however if this issue does occur often we can change some of the calibrations mentioned.  Options to resolve an ongoing CPU pressure issue are outlined below.
+Change the minimum and maximum Pods and Nodes for the Environment affected.  This can be done via the Terraform Variable file for the target Environment.
+NonProd Pod Minimum
+NonProd Pod Maximum
+NonProd Node Minimum
+NonProd Node Maximum
+Prod Pod Minimum
+Prod Pod Maximum
+Prod Node Minimum
+Prod Node Maximum
+Once the configurations have been updated, run the deployment pipelined for the affected Environment and target the 
+azure
+ and 
+app
+ deployment stages.
+Example Image for Deployment Pipeline Run Variables
+Increase or decrease the CPU Requests for the API Gateway Container.  This is done in the Kong Helm Chart Value .yaml file.  It is currently the same for both NonProd and Prod (but can be made tailorable to each Environment in the future if needed).  The place to update is 
+here
+.  Once that value is updated run the deployment pipeline for the affected Environment and target the 
+app
+ deployment stage.
+Example Image for Deployment Pipeline Run Variables
+Increase the Node SKU for the Application Node Pool on the AKS Cluster.  This can be done via an update to the Terraform configuration for the affected Environment.  For NonProd we would update 
+this value
+.  For Prod we would update 
+this value
+.  Then run the deployment Pipeline mentioned above and target the appropriate Environment and target the 
+azure
+ Deployment Stage.
+Example Image for Deployment Pipeline Run Variables
+Error Rate is High
+If a high error rate is alerted or observed from the Kong instance, it will be critical to review the errors from the NewRelic Log mentioned above.  A good filter to apply when for looking for Error Logs once on the NewRelic blade is 
+namespace_name:"kong" message:"*error*"
+.
+Errors previously encountered and root causes are listed below:
+upstream timed out (110: Connection timed out) while reading response header from upstream
+Caused by the backend service running slow or the backend VM being shut down.  
+Fixed by increasing the backend service’s VM SKU or starting the backend service VM.
+failure to get a peer from the ring-balancer
+Caused by no Upstream Targets deemed as Healthy.
+Fixed by either:
+Updates to the Upstream’s Healthcheck configuration and then marking all the Upstream Targets as Healthy.
+Fixes to the backend service VM or IIS/Application configurations and then marking all the Upstream Targets as Healthy.
+Request Latency is High
+When we have observed request latency to be high in the past it has always been due to the slowness of the backend service.  When this occurs we normally look into increasing the SKU for the backend service VM or implementing application performance enhancements to enable the backend service’s application executable to run in a more performant manner.
+Kubernetes Deployment Topology Diagram
+The diagram below outlines the Kong Application deployment topology within each AKS Cluster, both NonProd and Prod have the same basic application architecture topology.
+2
+1
+0
+0
+3284074569
+3066921030
+1
+Untitled Diagram-1717176428836.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1717176428836.drawio
+0
+1426.9999999999998
+451.00000000000006
+Kong Application Versioning
+Kong’s Application Version is controlled by the 
+Kong Image Tag
+ specified in the 
+Kong Helm Chart values file
+.
+Currently the Version is 
+3.2
+.  As of this articles writing the latest version is 
+3.7
+.  For information on 
+Current Versions
+ and 
+changelogs 
+can be found at the embedded links.
+It is recommended that we upgrade to 
+3.7
+ sometime this year after the 6/9/2024 deployment.
+Kong Improvements Roadmap
+Upgrade Kong App Version to latest (
+3.7
+ as of this writing).
+Update to use Ephemeral OS Disk.
+https://www.mourtada.se/using-ephemeral-disks-in-azure-aks/
+ 
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool#os_disk_type
+ 
+Add a NewRelic Alert to signal when a Node or Pod Scale Out or Scale In event occurs or add a NewReli Alert to signal when we get to 80% of our Max Node/Pod Configuration.
+FROM K8sNodeSample SELECT uniqueCount(nodeName) WHERE clusterName = 'rg-pri-kong2-npd-managed-nodes' TIMESERIES  SINCE 30 days ago UNTIL now
+Kong License
+Finalized Kong Quote a8j1K00000050gw (1) (1)
+Kong Deployed Routes
+Kong Biller REST APIs - PRJ
+ 
+Additional Kong Knowledge Resources
+API Gateway - Kong - Engineering Architecture - Confluence
+Kong Gateway Microservice Architecture (youtube.com)
+GitHub - Kong/kong: 🦍 The Cloud-Native API Gateway and AI Gateway.
+kong - Official Image | Docker Hub
+Releases · Kong/kong (github.com)
+charts/charts/kong/values.yaml at main · Kong/charts · GitHub
+Docs overview | kevholditch/kong | Terraform | Terraform Registry
+Kong Support Home (konghq.com)
+Kong Gateway Licensing | Kong Docs (konghq.com)
+Command line tool (kubectl) | Kubernetes
+Getting error API route collides with an existing API
+ URL:/spaces/platform/pages/3066921030/Kong

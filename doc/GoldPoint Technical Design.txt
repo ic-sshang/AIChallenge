@@ -1,0 +1,1277 @@
+Page Navigation:
+Jira ticket 
+EBPP-957
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Integration Modifications
+INT-2482
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ITR
+14820
+Document status
+COMPLETE
+Green
+Document owner
+Solution engineer
+ 
+Salesforce SOW
+Salesforce URL
+Knowledge Transfer
+Gong URL
+API Documentation
+Partner Documentation Site URL: Unique per biller - will be provided on the Integration Coding Form
+Unique Biller Integration Values (will be provided on the Integration Coding Form): 
+X-institutionNumber 
+X-Token 
+PROD BASE URL (for all integrations): 
+https://api.goldpointsystems.com/
+Details
+IC Use
+Partner API Name
+Request
+Response
+RTDR: Balance Update
+ValidateAccount
+clientType = 8
+validationRequest = IC will pass loanAccount and [mailing] zipCode (IC does not need to pass anything for birthdate and lastFourSSN)
+X-institutionNumber = variable per biller - provided on the Integration Coding Form
+X-Token = variable per biller - provided on the Integration Coding Form
+clientType is configured in AdvancedSetting9
+Response Mapping is variable per biller (based on the calculations used to determine the amounts due on an account):
+US Auto:
+AllowPartialPayments = True/False 
+MinimumPayment2 = MinimumAmountDue
+TotalAmountDue: First look at GP pastdue field. if > 0, use the GP pastdue value for IC balancedue and IC totalamountdue. if GP pastdue =0, use GP totalamountdue for IC balancedue and IC totalamountdue
+All other values are ignored
+AmeriFirst:
+AllowPartialPayments
+ = 
+True/False
+PayoffAmount
+ = 
+TotalAmountDue 
+TotalAmountDue
+ = 
+BalanceDue 
+& Minimum Amount Due
+NextPaymentDue = IC Custom8 (Potential change - this field is not currently available)
+All other values
+ are ignored
+All Fields Returned
+Note: The following values are returned and can be mapped  according to the billers needs (AdvancedSetting81) See above for specific mapping.
+IC_DontSet = 0 'Pass a 0 into getBalanceByField() to not update that invoice field.
+PayoffAmount = 1
+NextPaymentDue = 2
+EffectiveDueDate = 3
+MinimumPayment = 4
+MaximumPayment = 5
+AllowPartialPayments = 6
+IrsOwnerCustomerName = 7
+IrsOwnerPhysicalAddress1 = 8
+IrsOwnerPhysicalAddress2 = 9
+IrsOwnerPhysicalCity = 10
+IrsOwnerPhysicalState = 11
+IrsOwnerPhysicalZip = 12
+IrsOwnerPhone = 13
+IrsOwnerEmail = 14
+TotalAmountDue = 15
+AccountMailingAddress1 = 16
+AccountMailingAddress2 = 17
+AccountMailingCity = 18
+AccountMailingState = 19
+AccountMailingZip = 20
+MinimumPayment2 = 21
+BalanceAmountDue = 22
+TotalAmountDue2 = 23
+PersonalIdNumber = 24
+LateChargeAmount = 25
+PastDueAmount = 26
+ApproachingPaymentAmount = 27
+Data Pump: Payment
+SubmitExternalPayment
+externalPayment:
+clientType = External
+transactionID
+ 
+= IC PaymentGUID
+realTime = true (If ‘realTime’ is passed as true, GP will timestamp the payment. If false, biller would know timestamp of payment posting but not actual payment time.)
+sourceID = IC payment source ID (Payment sources will be standard for the integration - see details in file below)
+loanAccount = account number
+amount = payment amount
+thirdPartyFee = service fee (this field is informational)
+paymentType = hardcoded
+ ExternalPayment
+paymentMethod = Ach for ACH/EFT or Debit for debit cards. 
+X-institutionNumber: (variable per biller - stored in CRM advanced settings)
+US Auto Credit Purchasing Center = 390
+AmeriFirst Home Improvement LLC = 382
+X-Token = variable per biller - provided on the Integration Coding Form
+processorID = 7 (IC has an ID of 7 in GP systems so we should always  receive a 7) 
+gpsTransactionID
+ 
+= this value needs to be stored with the payment that we originally passed. If a void occurs, we will need to pass this field back with the void
+Data Pump: Void
+VoidExternalPayment
+voidRequest:
+gpsTransactionID - pass back the GPStransactionID from GoldPoint (SubmitExternalPayment API)
+realTime = true (If ‘realTime’ is passed as true, GP will timestamp the payment. If false, biller would know timestamp of payment posting but not actual payment time.)
+sourceId = IC payment source (Payment sources will be standard for the integration - see details in PaymentSource file above)
+X-institutionNumber: (variable per biller - stored in CRM advanced settings)
+US Auto Credit Purchasing Center = 390
+AmeriFirst Home Improvement LLC = 382
+X-Token = variable per biller - provided on the Integration Coding Form
+Data Pump: Autopay
+AddExternalRecurringIndicator (On)
+Required. Loan account number payment is applied to. This includes the 4-digit office number and a dash. Example: 0001-123456
+DeleteExternalRecurringIndicator (Off)
+Loan account number of account to delete the recurring payment indicator. (Example format: XXXX-XXXXXX)
+X-institutionNumber: (variable per biller - stored in CRM advanced settings)
+US Auto Credit Purchasing Center = 390
+AmeriFirst Home Improvement LLC = 382
+X-Token = variable per biller - provided on the Integration Coding Form
+body = {"loanAccount": "XXXX-XXXXXX",}
+loanAccount is required, and it cannot be empty
+X-institutionNumber: (variable per biller - stored in CRM advanced settings)
+US Auto Credit Purchasing Center = 390
+AmeriFirst Home Improvement LLC = 382
+X-Token = variable per biller - provided on the Integration Coding Form
+body = {"loanAccount": "XXXX-XXXXXX",}
+loanAccount is required, and it cannot be empty
+AddExternalRecurringIndicator:
+DeleteExternalRecurringIndicator:
+Data Pump: Paperless
+UpdatePaperlessSetting
+clientType = External
+X-institutionNumber: (variable per biller - stored in CRM advanced settings)
+US Auto Credit Purchasing Center = 390
+AmeriFirst Home Improvement LLC = 382
+X-Token = variable per biller - provided on the Integration Coding Form
+body = {
+"loanAccount": "",
+"sendPaperStatement": false,
+"sendElectronicStatement": false
+}
+Data Pump: Customer Changes (U.S Auto Only)
+PostComments 
+POST: /loanservicingapi/api/v1/Loan/PostComments
+X-institutionNumber: 
+US Auto Credit Purchasing Center = 390
+X-Token(Beta) =”45ae60de-abd4-4b15-80b8-008dac018c1f”
+office:  the first two digits of the 8 digit account number (or the 3
+rd
+ and 4
+th
+ position of a 10-digit account number)
+account:  the last 6 digits of the account number, “0“ can be ignored
+tellerNumber:  you can use “7777” for testing purposes
+date:  See above format – we would like to see the time the comment is posted (but using just the date works as well)
+commentCode:  please use 
+ICCMNT
+ for all comment code updates
+comment:  Freeform text for the comment being added 
+e.g. account number: 02-005525 (“2“ is office, “5525“ is account)
+body = [
+{
+     "office": 2,
+     "account": 5525,
+     "tellerNumber": 12,
+     "date": "2023-06-29T11:15:38.618Z",
+     "commentCode": "ICCMNT",
+     "comment": "Test of IC Comment Code"
+}]
+This would be a change to the AutoPay data pump code only. 
+It depends on the customers AutoPay status, and the comment should include “AutoPay enrolled/unenrolled for email address 
+xxxx@xxx.com
+”. 
+The error handling on PostComments should not cause a full failure on data pump, as it is a non-critical update.
+If multiple events happen in one transaction, we will post comment individually
+File Mapping
+Invoice File
+File Extension: .bif
+File Naming Convention: BID_MMDDYYYY
+File Delimiter: pipe
+Specification: GoldPoint will be using the IC BIF format - see mapping and sample files for billers below
+File Transfer Frequency: Daily. New invoice records are sent to IC for new loans and once a payment is made to satisfy a previous amount owed. (Example: If a payment for $300 was due on 7/1 and made on 6/30, Invoice Cloud would receive a new invoice record on 7/1 with an updated amount and due date, regardless of how far into the future the due date is). If a partial payment is made that does not satisfy a previous amount owed to change the statement cycle, IC will use RTDR to update the balance, a new invoice record will not be sent to IC in the BIF.
+US AUTO BIF MAPPING
+note
+Note: Loan Types 40-44 and accounts in the following statuses are not included in the BIF (Closed, Bankruptcy, Charged Off and Repo,). If the loan type originates as 40-44 or one of the mentioned status and later changes to a value other than 40-44 or becomes active, it will be included in the BIF the following day.
+
+
+Note: Loan Types 40-44 and accounts in the following statuses are not included in the BIF (Closed, Bankruptcy, Charged Off and Repo,). If the loan type originates as 40-44 or one of the mentioned status and later changes to a value other than 40-44 or becomes active, it will be included in the BIF the following day.
+
+
+Sample File:
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+N/A  - Always FH
+File Header
+2
+BillerGUID
+Y
+TRUE
+N/A - Biller Guid assigned by IC
+ID provided by IC
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Date file was created
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Total amount of invoices in the file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Total invoice amount in the file
+File Header
+7
+RowType
+Y
+TRUE
+N/A - Always IH
+N/A
+N/A
+N/A
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N: An account will be flagged with “N” in SpecID 8 each time a new statement is generated. GPS generates monthly statements based on calculated information on the loan. Statements are generated in the afterhours according to the Due Date (LNDUDT) of that month’s cycle and the Coupon/Bill Cycle field (LNBCYC). For example, let’s say an account has LNBCYC set to “20 days before the due date,” and the Due Date is 09/03/2021, then on 08/14/2021, GPS would include the account in the BIF file and designate that account with “N” in SpecID 8 field. If the account were delinquent (e.g., two months late; Due Date was two months in the past from the month of statement generation), it would be calculated using the Due Date of that cycle and the Coupon/Bill Cycle for that month.
+For new, purchased, or converted loans, use “N” in SpecID if the Open Loan Posting Date (MRFUND) is equal to the run date (date the BIF file is generated).
+R: Send in “R” with accounts that have been updated with important information Invoice Cloud needs to display proper account information. This will be based off the Last Activity Date (LNACTV). Statement generation does not update the Last Activity Date. Transactions and field changes to accounts that do update the Last Activity Date include:
+Payments
+Reversing the payments
+Changing the Due Date
+Paying off a loan
+Accounts that have been in bankruptcy, charged-off, or flagged as repossession will be sent with “R” in SpecID 8, as well as marking the account as “I” (inactive) in SpecID 409 field.
+D: This will be used sparingly. Sending an account with this information indicates to delete the account on record. Clients will communicate with GOLDPoint Systems if they boarded a loan in error and now need to remove the account from Invoice Cloud. GOLDPoint Systems will send “D” in the SpecID field for the deleted account, should this ever occur.
+Invoice Header
+9
+InvoiceFormatGUID
+Y
+TRUE
+N/A
+GUID provided by IC
+GUID provided by IC
+GUID provided by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+N/A
+Numeric - PolicyNumberInstallmentNumber
+Field is made up of loan number and installment number. If both of these values do not add up to 13 characters, the value is padded with zeros
+13 characters
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+N/A
+MMDDYYYY
+InvoiceDate will be set to the date the record is generated
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Next Payment Date
+MMDDYYYY
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+See description field
+Money
+If the account is past due: WKTOTDUE unless a payoff is due - then I do a makeshift payoff calculation, or a pseudo payment would be due on the day the file ran - then I add in that extra payment
+If the account is current: LNPICN + LNLATE + LNFEES – LNPRTL
+When a payoff is due: LNPBAL + LNACIN + LNLATE + LNFEES + ((((LNRATE/100) * LNPBAL)/(case when LNIBAS = 101 then 365 when LNIBAS = 102 then 360 end)) * datediff(day,LNDLAC,@RUNDATE)
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Loan Partial Payment - See description field
+If the account is past due : LNPICN – LNPRTL
+If the account is current : $0.00
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+N/A
+ID provided by IC
+ID provided by IC
+ID provided by IC
+Invoice Header
+38
+Custom1*
+Y
+FALSE
+Branch #
+Invoice Header
+39
+Custom2*
+Y
+FALSE
+Collateral (Vehicle) Description
+Invoice Header
+40
+Custom3*
+Y
+FALSE
+VIN
+Invoice Header
+41
+Custom4*
+Y
+FALSE
+State Code
+Invoice Header
+42
+Custom5*
+Y
+FALSE
+Late Fees
+Invoice Header
+43
+Custom6*
+Y
+FALSE
+Other Fees
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Principle Balance
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Next Payment Due Amount
+LPICN
+9
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Loan Office Number (Branch), Loan Account Number 
+GPS will pass in what the length of the office number and account number is for the client. Pulled from GPS institution options LONB (loan office number digits) and LANB (loan account number of digits). Possible values are 2 or 4 for LONB and 6 for LANB.
+Example: 2,6
+3
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Statement Date
+MMDDYYYY
+Value will be used for AmeriFirst bill presentment
+Invoice Header
+58
+RowType
+Y
+TRUE
+N/A - Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+10-digit Loan Number
+####-#######
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Primary Borrower
+Customer Record
+61
+Address1
+Y
+FALSE
+Billing Address1
+Customer Record
+62
+Address2
+Y
+FALSE
+Billing Address2
+Customer Record
+63
+City
+Y
+FALSE
+Billing City
+Customer Record
+64
+State
+Y
+FALSE
+Billing State
+Customer Record
+65
+Zip
+Y
+FALSE
+Billing Zip
+Customer Record
+66
+PhoneNumber
+Y
+FALSE
+Primary Phone Number
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Primary Email Address
+Customer Record
+69
+RegistrationValue
+Y
+FALSE
+Primary Borrower Last Name
+Customer Record
+93
+BalanceDue
+Y
+FALSE
+See description field
+If the account is past due: WKTOTDUE unless a payoff is due - then do a makeshift payoff calculation, or a pseudo payment would be due on the day the file ran - then add in that extra payment
+If the account is current: LNPICN + LNLATE + LNFEES – LNPRTL
+when a payoff is due: LNPBAL + LNACIN + LNLATE + LNFEES + ((((LNRATE/100) * LNPBAL)/(case when LNIBAS = 101 then 365 when LNIBAS = 102 then 360 end)) * datediff(day,LNDLAC,@RUNDATE)
+Invoice Header
+192
+CreditCardServiceFee
+Y
+FALSE
+Invoice Header
+193
+AchServiceFee
+Y
+FALSE
+Always hard coded to 0.00
+Invoice Header
+373**
+DisplayAccountNumber
+Y
+FALSE
+8-digit Loan Number (the two leading zeros and dash are stripped from this value)
+#########
+REQUESTED CHANGE
+: Use the Custom9 field (field spec ID 46) to create this value. Custom9 will contain LONB,LANB (example: 
+2
+,
+6
+) and IC will use the following bold characters from the account number to create this value: ##
+##
+-
+######
+) 
+Customer Record
+409
+Active
+Y
+FALSE
+An Update record will be passed setting a customer record to inactive when the GoldPoint account status = Bankrupty, Charged Off and Repo
+Customer Record
+AMERIFIRST BIF MAPPING
+note
+Areas in blue below refer to custom logic for
+ BID 1768 only - biller no longer processing with IC
+Custom1 is used for InvoiceTypeID mapping (InvoiceTypeID value in BIF is ignored and replaced with this mapping). This mapping is setup in Advanced Setting 40. 
+Formatting example = 198(830,831)|199(840,841)|183(NA) 
+Groups are separated by a pipe
+Number outside the parenthesis is the InvoiceTypeID
+Branches values (from Custom1) are inside the parenthesis, comma separated 
+The last group is for defaults, anything not mapped on the previous groups will be set to the InvoiceTypeID for the (NA) group.
+Click here for branch mapping details
+If AmeriFirst adds new branches, an Integration Modification needs to be submitted to IT containing the branch values that need to be mapping to the appropriate InvoiceTypeID. Generally, when a new branch needs to be mapping, the biller also wants as new TD. Sample: Please map branches 999 and 000 to Invoice Type ID 44. 
+
+
+Areas in blue below refer to custom logic for
+ BID 1768 only - biller no longer processing with IC
+Custom1 is used for InvoiceTypeID mapping (InvoiceTypeID value in BIF is ignored and replaced with this mapping). This mapping is setup in Advanced Setting 40. 
+Formatting example = 198(830,831)|199(840,841)|183(NA) 
+Groups are separated by a pipe
+Number outside the parenthesis is the InvoiceTypeID
+Branches values (from Custom1) are inside the parenthesis, comma separated 
+The last group is for defaults, anything not mapped on the previous groups will be set to the InvoiceTypeID for the (NA) group.
+Click here for branch mapping details
+If AmeriFirst adds new branches, an Integration Modification needs to be submitted to IT containing the branch values that need to be mapping to the appropriate InvoiceTypeID. Generally, when a new branch needs to be mapping, the biller also wants as new TD. Sample: Please map branches 999 and 000 to Invoice Type ID 44. 
+
+
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+Always FH
+File Header
+2
+BillerGUID
+Y
+TRUE
+N/A 
+Biller Guid assigned by IC
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Date/Time the file was created by the Biller. Used for tracking purposes
+File Header
+5
+InvoiceCount
+Y
+TRUE
+This is the total number of invoices included in the file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+This the total dollar amount of invoices in the file
+File Header
+7
+RowType
+Y
+TRUE
+N/A
+Always IH
+2
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N: An account will be flagged with “N” in SpecID 8 each time a new statement is generated. GPS generates monthly statements based on calculated information on the loan. Statements are generated in the afterhours according to the Due Date (LNDUDT) of that month’s cycle and the Coupon/Bill Cycle field (LNBCYC). For example, let’s say an account has LNBCYC set to “20 days before the due date,” and the Due Date is 09/03/2021, then on 08/14/2021, GPS would include the account in the BIF file and designate that account with “N” in SpecID 8 field. If the account were delinquent (e.g., two months late; Due Date was two months in the past from the month of statement generation), it would be calculated using the Due Date of that cycle and the Coupon/Bill Cycle for that month.
+For new, purchased, or converted loans, use “N” in SpecID if the Open Loan Posting Date (MRFUND) is equal to the run date (date the BIF file is generated).
+R: Send in “R” with accounts that have been updated with important information Invoice Cloud needs to display proper account information. This will be based off the Last Activity Date (LNACTV). Statement generation does not update the Last Activity Date. Transactions and field changes to accounts that do update the Last Activity Date include:
+Payments
+Reversing the payments
+Changing the Due Date
+Paying off a loan
+Accounts that have been in bankruptcy, charged-off, or flagged as repossession will be sent with “R” in SpecID 8, as well as marking the account as “I” (inactive) in SpecID 409 field.
+D: This will be used sparingly. Sending an account with this information indicates to delete the account on record. Clients will communicate with GOLDPoint Systems if they boarded a loan in error and now need to remove the account from Invoice Cloud. GOLDPoint Systems will send “D” in the SpecID field for the deleted account, should this ever occur.
+1
+Invoice Header
+9
+InvoiceFormatGUID
+Y
+TRUE
+N/A
+GUID provided by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+OfficeNumber-AccountNumber-CycleDate (e.g., XXXX-XXXXXX-YYYYMMDD)
+Include leading/padded zeroes to ensure value always contains 20 characters. For example, if the account structure uses only a 2-digit office number (see SpecID 46), then pad the first two digits with zeroes.
+20
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Statement Cycle Date
+This date is a calculated date based on Due Date (LNDUDT) and the Coupon/Bill Cycle field (LNBCYC). For example, let’s say an account has LNBCYC set to “20 days before the due date,” and the Due Date is 09/03/2021, then on 08/14/2021, GPS would include the account in the BIF file and designate that account with “N” in SpecID 8 field. If the account were delinquent (e.g., two months late; Due Date was two months in the past from the month of statement generation), it would be the Due Date of that cycle and the Coupon/Bill Cycle for that month.
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Next Payment Date
+Next Due Date (format: MMDDYYYY). GPS mnemonic is: LNDUDT
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+See description field
+Money
+Calculated field determined by GOLDPoint Systems. This is the total amount based on what is owed/due at the time of the statement cycle. It’s the total amount to bring the account current. Includes current payment plus any past due payment amount, fees, and late charges.
+9
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Always 174*
+*Unless custom logic implemented
+This value is 
+ignored
+ from the file for AmeriFirst. See ‘Custom1’ below for mapping details
+3
+Invoice Header
+38
+note
+Custom1
+
+
+Custom1
+
+
+Y
+FALSE
+note
+Branch #
+
+
+Branch #
+
+
+note
+Branch ID used for 
+invoice type ID mapping. Click here for details.
+ 
+
+
+Branch ID used for 
+invoice type ID mapping. Click here for details.
+ 
+
+
+4
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Vehicle Description
+It collateral on the loan includes a vehicle, this is the description of the vehicle. GPS mnemonic: CFPRDS
+40
+Invoice Header
+40
+Custom3
+Y
+FALSE
+VIN
+If collateral on the loan includes a vehicle, this is the VIN for that vehicle. GPS mnemonic: CFVIN1
+40
+Invoice Header
+41
+Custom4
+Y
+FALSE
+State Code
+State code on the account. GPS mnemonic: LTSTCD
+2
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Late Charges
+Late charges due on the account. GPS mnemonic: LNLATE
+9
+Invoice Header
+43
+Custom6
+Y
+FALSE
+Other Fees
+Outstanding miscellaneous fees on the account. GPS mnemonic: LNFEES
+9
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Principal Balance
+Principal balance on the loan. GPS mnemonic: LNPBAL
+9
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Next Payment Due Amount
+Amount of the next payment due. GPS mnemonic: LNPICN
+9
+Invoice Header
+46
+Custom9
+Y
+FALSE
+LONB,LANB
+GPS will pass in what the length of the office number and account number is for the client. Pulled from GPS institution options LONB (loan office number digits) and LANB (loan account number of digits). Possible values are 2 or 4 for LONB and 6 for LANB.
+3
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Statement Date
+Statement Date for Billing cycle - MM/DD/YYYY
+Invoice Header
+58
+RowType
+Y
+TRUE
+N/A - Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Loan Number
+Loan number, including office number and excluding check digit (e.g., 0001-123456). GPS mnemonic: LN4NBR
+*Some institutions use a 2-digit office and others use a 4-digit office. See SpecID 46 field for which account structure is used by the institution.
+10
+Customer Record
+60
+CustomerName
+Y
+TRUE
+IRS Owner Name
+IRS owner last and first name on the account (e.g., Jones, Joan). GPS mnemonic: MNLNAM, MNFNAM, with MNIRS# selected.
+40
+Customer Record
+61
+Address1
+Y
+FALSE
+Address Line 1, alphanumeric
+Address line 1 where the IRS owner on the account resides. GPS mnemonic: MNADD1
+40
+Customer Record
+62
+Address2
+Y
+FALSE
+Address Line 2, alphanumeric
+Address line 2 where the IRS owner on the account resides. GPS mnemonic: MNADD2
+40
+Customer Record
+63
+City
+Y
+FALSE
+City, alpha
+City where the IRS owner on the account resides. GPS mnemonic: MNCITY
+40
+Customer Record
+64
+State
+Y
+FALSE
+State, alpha
+State where the IRS owner on the account resides. GPS mnemonic: MNSTAB
+2
+Customer Record
+65
+Zip
+Y
+FALSE
+Zip Code, numeric
+Zip code for where the IRS owner on the account resides. GPS mnemonic: MNZIPC
+5
+Customer Record
+66
+PhoneNumber
+Y
+FALSE
+Phone Number, numeric
+Primary phone number of the borrower. GPS mnemonics are: P0PHAC, P0PHON, P0PHPF with P0PRIP selected.
+10
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Email Address, numeric
+Primary email address of the borrower. GPS mnemonics are: E0EMEL with E0PEML selected. 
+80
+Customer Record
+69
+Registration Value
+Y
+FALSE
+Primary Borrower Last Name, alpha
+Last name of the primary borrower
+20
+Customer Record
+409
+Active
+Y
+FALSE
+N/A- A= active, I = Inactive
+Indicator used to designate active or inactive account. Inactive accounts are all accounts that are in bankruptcy; have been charged off; or are flagged as repossession.
+1
+Customer Record
+192
+CreditCardServiceFee
+Y
+FALSE
+Immediate Credit/Debit Card Fee, Recurring Credit/Debit Card Fee, Future Credit/Debit Card Fee
+If a fee was part of the credit/debit card payment, the amount of the fee can be sent to Invoice Cloud. Not every institution charges a fee for credit/debit card payments.
+5
+Invoice Header
+193
+AchServiceFee
+Y
+FALSE
+Immediate ACH Fee, Recurring ACH Fee, Future ACH Fee
+If a fee was part of the ACH payment, the amount of the fee can be sent to Invoice Cloud. Not every institution charges a fee for ACH payments.
+5
+Invoice Header
+373**
+DisplayAccountNumber
+Y
+FALSE
+8-digit Loan Number (the two leading zeros and dash are stripped from this value)
+#########
+REQUESTED CHANGE
+: Use the Custom9 field (field spec ID 46) to create this value. Custom9 will contain LONB,LANB (example: 
+2
+,
+6
+) and IC will use the following bold characters from the account number to create this value: ##
+##
+-
+######
+) 
+10
+Customer Record
+Payment/Lockbox File
+File Extension: .txt
+File Naming Convention: BID_MMDDYYYY
+File Delimiter: pipe delimited
+Specification: 
+Sample File: 
+File Transfer Frequency: Daily
+File Mapping
+note
+Note: Web Service payments should not be included in this file. This daily file is used to compare payments that closed in the batch with what IC passed in the Data Pump. If payments are missing from the Data Pump, this file will be used to post them to the account.
+
+
+Note: Web Service payments should not be included in this file. This daily file is used to compare payments that closed in the batch with what IC passed in the Data Pump. If payments are missing from the Data Pump, this file will be used to post them to the account.
+
+
+Field
+Details
+Data Type
+Sample
+InvoiceNumber
+ 
+COM0022221-06655889
+InvoiceGUID
+Randomly generated ID associated with the invoice
+FDB55555-B222-4000-AA2B-C90CBC1BB999
+AccountNumber
+ 
+COM0012222
+CustomerName
+ 
+JUDY SMITH
+PaymentGUID
+Randomly generated ID associated with the payment
+e99fc166-9d990-4a99-bb16-99fe155ebf99
+PaymentDate
+Converted to biller's time zone
+date
+10/3/2019 10:31:27 AM
+PaymentTypeID
+IC PaymentTypeID
+1
+PaymentTypeDesc
+Write out of the payment type - “Credit Card” for PaymentTypeID 1 and “ACH” for anything else
+Credit Card
+PaymentAmount
+Amount of payment
+Money
+1.2300
+ConvenienceFee
+Amount of convenience fee (if applicable)
+Money
+0.0000
+PaymentReference
+Randomly generated ID in case the payment needs to be tracked for any reason
+varchar(8)
+X7X3X3X5
+PaymentMessage
+The response from the payment processor
+varchar(15)
+APPROVED 885577
+Approved
+True/False if the transaction was approved or declined
+True
+BillerReference
+Input made by the biller upon payment submission
+Note1234
+Offline
+Offline payments can be entered to update the account balance but not processed through IC
+False
+LocationReference
+Used for branding – generally n/a
+ 
+WSReportID
+Used by IC in the settled batch records to track if the payments have been exported
+1
+CheckNumber
+Optional check number provided by the customer/payer at the time of payment via a CSR in the biller portal
+ 
+Void
+True if void payment
+True, False
+False
+SourceIdentifier
+IC Payment Source
+integer
+4
+gpsTransactionID
+GPStransactionID from SubmitExternalPayment API
+ response
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: JSON
+File Naming Convention: ICChangeLog_MMDDYYY (e.g. ICChangeLog_09142023)
+File Delimiter: comma delimited
+Sample File: Simply convert the field table to JSON tags
+SFTP File Path: 
+PROD: usautoprod\FromInvoiceCloud\ChangeLogs (No FileType - InvoiceCloud JSON Format) 
+TEST: usautotest\FromInvoiceCloud\ChangeLogs (No FileType - InvoiceCloud JSON Format)
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email Address
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Address1
+Varchar
+100
+Address of the customer
+City
+Varchar
+100
+City of the customer
+State
+Varchar
+2
+State of the customer
+Zip
+Varchar
+10
+Zip code of the customer
+Address(City, State, Zip) change date
+Datetime
+MMDDYYYYHHMMSS
+Date Address, City, State, Zip was changed on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Registered
+Varchar
+15
+Registration status of the customer
+Registration date
+Datetime
+MMDDYYYYHHMMSS
+Registration date of the customer
+Block Payments
+Varchar
+15
+Block payments status of the customer
+Block Payments CC
+Varchar
+15
+Block payments on credit card status of the customer
+Block Payments EFT
+Varchar
+15
+Block payments on EFT status of the customer
+{
+    "AccountNumber": "Account Number from IC database",
+    "AutopayEnrollment": "Date customer completed enrollment in AutoPay",
+    "AutopayUnenrollment": "Date customer completed un - enrollment in AutoPay",
+    "EmailAddress": "Customer email address",
+    "EmailAddressChangeDate": "Date email address was change on IC",
+    "Address1": "Address of the customer",
+    "City": "City of the customer",
+    "State": "State of the customer",
+    "Zip": "Zip code of the customer",
+    "AddressChangeDate": "Date Address, City, State, Zip was changed on IC",
+    "PhoneNumber": "Phone number of the customer",
+    "PhoneNumberChangeDate": "Date phone number was changed on IC",
+    "PaperlessEnrollment": "Date customer completed enrollment in paperless",
+    "PaperlessUnenrollment": "Date customer un-enrolled in paperless",
+    "Registered": "Registration status of the customer",
+    "RegistrationDate": "Registration date of the customer",
+    "BlockPayments": "Block payments status of the customer",
+    "BlockPaymentsCC": "Block payments on credit card status of the customer",
+    "BlockPaymentsEFT": "Block payments on EFT status of the customer"
+}
+Advanced Settings
+The code is using the web service URL (
+https://api.goldpointsystems.com/paymentapi/api/v1/Payment
+/SubmitExternalPayment
+) and changes the last portion of the URL based on the function needed. Example: For a void, the code uses Advanced Setting 11 and replaces ‘SubmitExternalPayment’ with “VoidExternalPayment”.
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL	
+https://api.goldpointsystems.com/paymentapi/api/v1/Payment/ValidateAccount
+N
+9
+RTDR Username if Applicable
+x-institutionnumber|clientID (example: 999|8)
+Y
+10
+RTDR Key or Password if Applicable
+Key from Goldpoint
+Y
+11
+DataPump Payments EndPoint/WebService URL	
+https://api.goldpointsystems.com/paymentapi/api/v1/Payment/SubmitExternalPayment
+N
+12
+DataPump Payments EndPoint/WebService Username
+x-institutionnumber
+Y
+13
+DataPump Payments EndPoint/WebService Password
+Key from Goldpoint
+Y
+40
+Generic Transaction Sequence
+Previously used for AmeriFirst to map branches to invoice type IDs - biller no longer processing with IC (2022)
+64
+DataPump Payments CC Code
+Debit
+N
+65
+DataPump Payments ACH Code
+ACH
+N
+81
+RTDR Service Version
+Versioning used to properly map the GP values returned in RTDR to the IC values
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL	
+**Used for Voids
+https://api.goldpointsystems.com/paymentapi/api/v1/Payment/VoidExternalPayment
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+on biller questionnaire - BIF customization
+AutoPayCollectionDate
+on biller questionnaire - BIF customization
+BalanceForward
+Required - BIF customization
+CreditCardServiceFee
+N/A 
+FirstNotifyRequestedDate
+on biller questionnaire - BIF customization
+InvoiceDate
+on biller questionnaire - BIF customization
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A 
+LocationReference
+N/A 
+MinimumAmountDue
+in BIF
+PaymentExpirationDate
+N/A  
+PaymentExpirationMessage
+N/A 
+PromptPayExpirationDate
+N/A 
+RegistrationValue
+N/A 
+SecondNotifyRequestedDate
+on biller questionnaire - BIF customization
+ThirdNotifyRequestedDate
+on biller questionnaire - BIF customization
+User Interaction and Design
+Data Flow - Invoice
+att175243265
+105021455
+1
+Template_Data Flow
+IM
+att175210497
+att175177729
+0
+Data Flow - Adjustment
+att180289586
+105021455
+1
+GP Adjustments
+IM
+att180289581
+att180256778
+0
+Data Flow - Payment
+DATA PUMP:
+att329580553
+105021455
+1
+payment
+IM
+att329580548
+att328073222
+0
+DAILY RECONCILIATION FILE:
+att327745587
+105021455
+1
+daily recon file
+IM
+att329580611
+att329580606
+0
+Data Flow - Void
+att328007721
+105021455
+1
+voids
+IM
+att329842731
+att329908251
+0
+Data Flow - AutoPay 
+Data Flow - Paperless
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+U.S. Auto is currently the only GoldPoint biller using CloudPay for CSR/CIM payments. U.S. Auto uses CloudPay for 
+debit card payments only.
+Billers will use GoldPoint’s EZPay page to make payments via Invoice Cloud’s Cloud Pay product. Biller will access the ‘EZPay’ screen, choose the Type of Payment, Payment Amount and whether or not GoldPoint is going to ‘waive’ the service fee for the payer. (Note: EZPay only routes Debit Card payments to Invoice Cloud. ACH payments will remain being sent directly to the bank, outside of IC). Once the payment is submitted, you will see the payment on the account in multiple places, pictured below:
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ n/a
+ 
+ 
+ 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-2482
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Dec 2021
+Only in TEST BID 1927
+All values passed in standard BIF format without intervention from IC during the time of import 
+Goldpoint is going to create a generic BIF for all billers. Custom9 will provide values which dictate the number of digits from the AccountNumber value that should be used to create the DisplayAccountNumber value. IC will create the DisplayAccountNumber and insert into the file for import.
+Example: GoldPoint will pass the following values in the BIF:
+AccountNumber = 0055-999999
+Custom9 = 2-6
+IC will use the two values above to create the DisplayAccountNumber = 55-999999 
+(The 2 from Custom9 refers to the last two characters right justified from the value before the hyphen. The 6 from Custom9 refers to the 6 characters right justified from the value after the hyphen.)
+INT-6808
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+09/14/2023
+N/A
+Send AutoPay changes via Data Pump to GoldPoint Comment API
+AutoPay enrolled/unenrolled for email address 
+xxxx@xxx.com
+Since we cannot access customer changes, we would like this to focus on calling Goldpoint’s PostComments API after the AutoPay Registration API. This would be a change to the AutoPay data pump code only.
+INT-7263
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+TBD
+N/A
+Biller would like a JSON file format instead of csv. IC will send a changelog file at the end of the day to address all customer changes. 
+Add a new File Type InvoiceCloud JSON Format in FTP export.  Fields should only be populated when changes occur.
+ URL:/spaces/IM/pages/105021455/GoldPoint+Technical+Design

@@ -1,0 +1,773 @@
+Page Navigation
+Jira ticket
+ 
+ITR
+ 
+Release Date
+ 
+Document status
+Done
+Green
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+ 
+Salesforce SOW
+ 
+Knowledge Transfer
+ 
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+Account Endpoints: 
+https://fusion.centralsquare.com/Fusion/Suite/NaviLine/MenuGroup/NaviLine.Utilities.AccountInformation
+Payment Endpoint: 
+https://fusion.centralsquare.com/Fusion/Suite/NaviLine/Method/FusionServices.Controllers.PaymentController.PostPayment(System.Net.Http.Formatting.FormDataCollection)
+Leavensworth Testing Environment
+X-APPID   252c0475
+X-APPKEY  6b1aae04b730475afffd8cfff0c63544
+TEST BASE URL (for Leavenworth - each biller will be different):  
+https://fusion.lvnwater.org:4443
+PROD BASE URL
+ (for Leavenworth each biller will be different): 
+https://fusion.lvnwater.org:
+ 
+DO NOT USE FOR TESTING SEE NOTE ABOUT DATA PUMP PAYMENTS
+Test Accounts:
+IC Use
+Partner API Name
+Description
+Request
+Response
+Response
+Specifications
+RTDR: Blocked Account
+GET: FusionServices/v3/Naviline/Utilities/{customerNumber}/{locationNumber}
+CustomerNumber = First part of account number
+LocationNumber = Second part of account number
+{
+    "ServerElapsedTime": "00:00:00.3329737",
+    "Rows": 
+null
+,
+    "OutputParms": {
+        "CustomerName": "TORRES KEANA N",
+        "LocationAddress": "1208 CHEYENNE",
+        "LocationCity": "LEAVENWORTH",
+        "LocationState": "KS",
+        "LocationZip": "660481229",
+ 
+       "AmountDue": "000007239",
+        "PendingAmount": "000007239-",
+        "AmountDueWithoutPending": "000000000",
+        "PendingMiscCharges": "000000000",
+        "AmountDueWithoutPendingAndMiscCharges": "000000000",
+    
+    "DelinquentAmount": "000007239",
+        "DueDateOfLastBill": "04212023",
+        "CutoffDate": "05022023",
+        "LastPaymentAmount": "000007201-",
+        "LastPaymentDate": "03212023",
+        "LastBillAmount": "000007239",
+        "LastBillDate": "04072023",
+        "PendingPayment": "000007239",
+        "LastBillCharge": "000007239",
+        "Telephone": "8183910924",
+        "AccountStatusCode": "A",
+        "AccountStatusDescription": "ACTIVE",
+        "CustomerTypeCode": "OW",
+        "CustomerTypeDescription": "OWNER",
+        "CashOnly": "N",
+        "AutoPayCode": "N",
+        "AutoPayDescription": "NO AUTO PAY",
+        "PaperlessBilling": "N",
+        "EMail": "",
+        "ErrorCode": "0000",
+        "ErrorMessage": ""
+    }
+}
+Make sure bill date matches bill date in Invoice Cloud or don’t update balance due or past due
+AmountDue = BalanceDue 
+DelinquentAmount = PastDueAmount
+Set Block / Unblocked status from Cash Only Flag
+Data Pump: Payment
+POST:
+/FusionServices/v2/Naviline/Payment/Utilities
+Posts a payment to an account
+ApplCode: “
+CX
+” (for utility payments)  (will be different for each biller)
+OrigCode: 11 (for third party) (will be different for each biller)
+Modifier: Blank
+ForeignKey: IC PaymentGUID (PaymentGUID is unique even across shopping cart transactions)
+PaymentDate: YYYYMMDD
+Payment Time: HHMMss
+PaymentStatus: 99 (default for third party payments)
+PaymentAmount: amount of payment (without service fee)
+PaymentDesc: Invoice Cloud
+CustomerID: From Account Number (first part)
+LocationID: From Account Number (second part)
+TotalPaidAmount:
+ 
+Same as Payment Amount (without service fee)
+ReferenceNumber: 
+Blank
+{
+"ServerElapsedTime": "00:00:00",
+"Rows": null,
+"OutputParms": {
+"ErrorCode": "0000",
+"ErrorMessage": "Payment records successfully written",
+"ErrorResponse": "OK",
+"RoutingID": "000000000000867"
+}
+}
+Data Pump: Void
+Data Pump: ACH Reject 
+ACH Reject Requirements:
+C-Code Rejects included? Yes or No
+Data Pump: Paperless Enrollment
+POST:
+/FusionServices/v3/Naviline/Utilities/NotificationInfo
+Updates an account ebilling information
+customerNumber
+locationNumber
+Active: Y = Enable N = Disable
+NoticeType: 1 = Ebilling, 
+2 = Both,
+ 
+3 = Print only
+EmailAddress: EmailAddress
+BillNumber: leave blank
+{
+"ServerElapsedTime": "00:00:00.7980649",
+"Rows": null,
+"OutputParms": {
+"Active": "Y",
+"NoticeType": "2","
+“EmailAddress”: ““,
+BillNumber": "",
+"ErrorCode": "0000",
+"ErrorMessage": "",
+"TestHtml": "",
+"PaymentDue": ""
+}
+}
+Paperless = 1, Not Paperless = 2 (3 returns an error)
+Active: Y
+Data Pump: AutoPay Enrollment
+POST:
+/FusionServices/v3/Naviline/Utilities/AutopayUpdate
+Updates an account autopay enrollment
+customerNumber
+locationNumber
+transactionCode: U = Update
+autopayTypeCode: N = None, R = Credit Card C = 
+ACH
+{
+"ServerElapsedTime": "00:00:00.6016743",
+"Rows": [],
+"OutputParms": {
+"AutoPayTypeDescription": "CHECKING ACCOUNT",
+"CustomerLevelAutoPayOnly": "\u0000",
+"ErrorCode": "0000",
+"ErrorMessage": ""
+}
+}
+For unenrolling send N, 
+For both CC and ACH autopay send 'R'
+Data Pump: Customer Changes
+Data Transmission: Invoice
+File Mapping
+Invoice File
+This invoice file is a custom file made just for Leavenworth (2754).  Leavenworth is using the 16th column for messages to display on the customer portal.  All other Fusion billers are not using the 16th field for comments and can use this field for email address.  Please note this is configurable in the Advanced Settings and documented within this section.
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .csv
+File Naming Convention: 
+File Delimiter: ',' separated
+Specification Leavenworth (2754): 
+Sample File Leavenworth (2754): 
+Other CentralSquare Fusion Billers - Sample File (City of Bozeman [3570])
+SFTP File Path:
+File Transfer Frequency:
+Bill Detail File: NOT CURRENTLY BEING USED
+This file contains information at the bill detail level and will mainly be used for Consumption information This is not the file that will be used to create the bills.
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+Set by IC - Always 'FH'
+File Header
+2
+BillerGuid
+TRUE
+Set by IC 
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+Set by IC 
+File Header
+5
+InvoiceCount
+TRUE
+Set by IC 
+File Header
+6
+TotalInvoiceAmount
+TRUE
+Set by IC 
+File Header
+7
+RowType
+TRUE
+Set by IC - Always ‘IH’
+Invoice Header
+8
+RecordType
+TRUE
+Set by IC - Always 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Set by IC 
+Invoice Header
+10
+InvoiceNumber
+TRUE
+AccountNumber-
+BillDate
+Invoice Header
+11
+InvoiceDate
+TRUE
+BillDate
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+DelinquentDate
+Invoice Header
+13
+TotalAmountDue
+TRUE
+CurrentCharges (
+Negative balance
+)
+Invoice Header
+38
+Custom1
+FALSE
+CustomerID (First Part of Account Number field)
+Invoice Header
+39
+Custom2
+FALSE
+LocationID (Second Part of Account Number field)
+Invoice Header
+40
+Custom3
+FALSE
+Service Address 1
+Invoice Header
+41
+Custom4
+FALSE
+Service Address 2
+Invoice Header
+42
+Custom5
+FALSE
+BillingAddress3
+Invoice Header
+93
+BalanceDue
+FALSE
+TotalDue
+Invoice Header
+407
+PastDue
+FALSE
+Previous Balance
+Invoice Header
+58
+RowType
+TRUE
+Set by IC - Always ‘CR’
+Customer Record
+59
+AccountNumber
+TRUE
+AccountNumber
+Customer Record
+60
+CustomerName
+TRUE
+Customer Name
+Customer Record
+61
+Address1
+FALSE
+Billing Address 1
+Customer Record
+62
+Address2
+FALSE
+Biling Address 2
+Customer Record
+63
+City
+FALSE
+Billing Address 4
+Customer Record
+64
+State
+FALSE
+Billing Address 4
+Customer Record
+65
+Zip
+FALSE
+Billing Address 4
+Customer Record
+67
+EmailAddress
+FALSE
+EmailAddress
+In some cases, multiple emails comma separated are sent in the file.  There is custom IC programming to only take the first email address if there are multiple.
+The email address must also be in the 16th column
+See advanced settings for email address.  Not all Fushion billers are passing email address and column 16 must be available in order to enable this setting.
+Customer Record
+70
+RowType
+TRUE
+Set by IC - Always ‘ID’
+Invoice Detail
+Standard UTBFGI Invoice File
+Standard UTBFGI Invoice File
+File Summary/Purpose: The UTBFGI file is a standard file generated out of Central Square for all billers. 
+This file will include duplicate records for the same customer. Logic was added to look at field GI3PTY (Third Party Flag), position 773 and will ignore any records with the value “Y”.
+File Extension: *.fgi
+File Naming Convention: utb.fgi
+File Delimiter: Fixed Width
+InvoiceTypeID: 1 (Water)
+File Format: CentralSquare UTBFGI Invoices
+Specification:
+Sample File:
+SFTP File Path: /ToInvoiceCloud/Invoices/UB/Regular
+Search Pattern for FTP IMPORT MANAGEMENT - FILE SETTINGS: *
+File Transfer Frequency: Daily, Weekly, Monthly, Bi-Monthly
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always IH
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC to generate - Always N
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A - IC to generate - GICSAT-DUEDATE
+AccountNumber-MDDYYYY
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+GIBDAT
+Numeric - MDDYYYY
+BILL DATE 
+position - 249, 8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+GIDDTE
+Numeric - MDDYYYY
+DUE DATE
+position - 257, 8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+ GICURT
+Numeric
+TOTAL CURRENT CHARGES
+position - 553, 11
+Invoice Header
+38
+Custom1
+Y
+FALSE
+GICUS - remove any leading 0’s. Should match first part of the AccountNumber.
+Numeric
+CUSTOMER
+position - 28, 9
+Invoice Header
+39
+Custom2
+Y
+FALSE
+GILOC - remove any leading 0’s. Should match second part of the AccountNumber.
+Numeric
+LOCATION
+position - 37, 9
+Invoice Header
+40
+Custom3
+Y
+FALSE
+GIADR1
+Char
+CUST ADDR1
+position - 99, 31
+Invoice Header
+41
+Custom4
+Y
+FALSE
+GIADR2
+Char
+CUST ADDR2
+position - 130, 31
+Invoice Header
+42
+Custom5
+Y
+FALSE
+GIADR3
+Char
+CUST ADDR3
+position - 161, 31
+Invoice Header
+43
+Custom6
+Y
+FALSE
+GICTSZ
+Char
+CUST CITY,ZIP,ST
+position - 192, 31
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+GITOTD
+Numeric
+TOTAL AMOUNT DUE
+position - 592, 11
+252
+InvoiceTypeID
+N
+TRUE
+Invoice Header
+407
+PastDue
+Y
+FALSE
+GIBALF
+Numeric
+BALANCE FORWARD
+position - 488, 11
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - IC to generate - Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+GICSAT = CUSTOMER-LOCATION (separated by dash)
+Numeric
+COSMETIC ACCT NO
+position - 223, 19
+Customer Record
+60
+CustomerName
+Y
+TRUE
+GICUSN
+Char
+CUSTOMER NAME
+position - 68, 31
+Customer Record
+61
+Address1
+Y
+FALSE
+GISVCA
+Char
+SERVICE ADDRESS
+position - 292, 40
+Customer Record
+63
+City
+Y
+FALSE
+GISVCZ - 
+Parse City from this field
+Char
+SERVICE CITY,ST,Z
+position - 332 , 31
+Customer Record
+64
+State
+Y
+FALSE
+GISVCZ - Parse State from this field.
+Char
+SERVICE CITY,ST,Z
+position - 332, 31
+Customer Record
+65
+Zip
+Y
+FALSE
+GISVCZ - Parse Zip from this field.
+Char
+SERVICE CITY,ST,Z
+position - 332, 31
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+GIEADD - Add second email after ; to EmailAddressCC
+Char
+Account EMail Addr
+position - 908, 100
+Customer Record
+408
+EmailAddressCC
+Y
+FALSE
+GIEADD - Email address after ; if present.
+Char
+Secondary Email Address
+position - 908, 100
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - IC to generate - Always ID
+Invoice Detail
+Change Log File 
+Not needed for now, autopay and paperless handled through API
+Advanced Settings
+Setting
+Description
+Value
+8
+RTDR EndPoint/WebService URL
+[baseURL]/FusionServices/v3/Naviline/Utilities/AccountInfo/{0}/{1}
+9
+RTDR Username if Applicable
+[X-APPID]
+10
+RTDR Key or Password if Applicable
+[X-APPKEY]
+11
+DataPump Payments EndPoint/WebService URL
+[baseURL]/FusionServices/v2/Naviline/Payment/Utilities
+12
+DataPump Payments EndPoint/WebService Username
+[X-APPID]
+13
+DataPump Payments EndPoint/WebService Password
+[X-APPKEY]
+14
+DataPump Paperless EndPoint/WebService URL
+[baseURL]/FusionServices/v3/Naviline/Utilities/NotificationInfo
+17
+DataPump AutoPay EndPoint/WebService URL
+[baseURL]/FusionServices/v3/Naviline/Utilities/AutopayUpdate
+64
+DataPump Payments CC Code
+[PaymentStatus]
+110
+DataPump Payment Type Code
+[InvoiceTypeID]([ApplCode])|…
+131
+JSON Configuration
+Ignore the CashOnly flag: { "NaviLineFusion": { "RTDRConfig": { "IgnoreCashOnlyFlag": true } } }
+The below must be set in order to have email address in BIF.  The reason for this is some of the Fusion billers are using column 16 for different purpose.
+{ "NavilineCentralSquareFusion" : { "InvoiceConfig" : { "MapEmailAddress" : true } } }
+To enable both the CashOnly flag and Email, JSON would be entered as:
+{ "NaviLineFusion" : { "InvoiceConfig" : { "MapEmailAddress" : true }, "RTDRConfig" : { "IgnoreCashOnlyFlag" : true } } }
+To enable use the field AmountDueWithoutPending for the BalanceDueField, JSON would be entered as (e.g. BID 4302 ): 
+{ "NaviLineFusion" : { "RTDRConfig" :{ "RefreshFieldNames": { "BalanceDueField" : "OutputParms.AmountDueWithoutPending" } } } }
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+Biller By Biller
+AutoPayCollectionDate
+Biller by Biller
+BalanceForward
+Yes
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller By Biller
+InvoiceDate
+Set in BIF mapping
+InvoiceDueDate
+Set in BIF mapping
+InvoiceFormatGuid
+Set in BIF mapping
+InvoiceTypeID
+Set in BIF mapping
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+Biller By Biller
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller By Biller
+ThirdNotifyRequestedDate
+Biller By Biller
+User Interaction and Design
+Data Flow - Invoice
+att2200240140
+2000486473
+1
+Chart1
+IM
+att2200567825
+att2200338439
+0
+Data Flow - Adjustments
+att2199519281
+2000486473
+1
+Chart2
+IM
+att2200436748
+att2198601761
+0
+Data Flow - Payment
+att2200764436
+2000486473
+1
+Chart3
+IM
+att2200764431
+att2200338444
+0
+Data Flow - Void
+Manually through biller portal
+Data Flow - ACH Reject
+Manually
+Data Flow - Change Log
+att2199191647
+2000486473
+1
+Chart4
+IM
+att2200436753
+att2199879687
+0
+Data Flow - Bill Presentment
+Varies for each biller
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller Portal
+User Stories
+WaterSmart Implementation - Leavenworth
+WaterSmart will not receive adjustments / payments. For this reason, WaterSmart will not display the balance on the bill (will redirect to IC for that) and will only show their frontend portal with usage data. Leavenworth will send WaterSmart the version of the bill file they need AND send IC the version of the extract needed to create bills.
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-2314
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+4/26/2024
+Cashonly flag can’t be ignored due to Naviline not having the ability to specify what payment method needs to be blocked.
+Allow Invoice Cloud to ignore the cash only flag we are getting when pulling balances.
+Add Advanced Setting to ignore cashonly flag if Biller needs. This configuration is by Biller preference
+INT-10566
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Fusion billers were not passing email address in the current file in column 16.
+When email address is passed in column 16, ensure that it is part of the BIF file and save to customer record.
+Add Advanced setting to enable column 16 to have email address.  Some Fusion billers are using column 16 for comments to display on the customer portal.
+ URL:/spaces/IM/pages/2000486473/CentralSquare+Fusion+Technical+Design

@@ -1,0 +1,46 @@
+Categories ensure that certain tests, such as integration tests or long-running tests, are not executed during the build pipeline, thereby optimizing build times and resource usage.
+Use a standard well-known test category name to avoid confusion and errors.
+NUnit Test Fixture Example
+The attribute 
+Category
+ is used to group tests either individual or fixtures.  “IntegrationTests” is used to denote a fixture of integration tests.  The test runner can run specific categories or exclude categories.
+c#
+[TestFixture]
+[Category("IntegrationTests")]
+public class ShoppingCartRepositoryTests
+{
+
+}
+Build Pipeline Example
+The 
+testFilter
+ parameter, line 25, is used to exclude tests with the attribute category “IntegrationTests” via the 
+!=
+ operator.
+yaml
+trigger:
+- main
+resources:
+  repositories:
+    - repository: pipeline-templates
+      type: git
+      name: QA_Src/pipeline-templates
+      ref: refs/heads/main
+variables:
+  version: 1.0
+  patch: $[counter(variables['Build.SourceBranchName'], 0)]
+pool:
+  name: 'IC-Azure'
+extends:
+  template: web.yaml@pipeline-templates
+  parameters:
+      projectName: ICBoardingAPI
+      solution: '**ICBoardingAPI.csproj'
+      version: $(version)
+      patch: $(patch)
+      sonarscan: false
+      ignoreTestErrors: false
+      configuration: Release
+      buildFullSolution: false
+      testFilter: "Category!=IntegrationTests"
+ URL:/spaces/ED/pages/3517644826/Integration+Test+Category

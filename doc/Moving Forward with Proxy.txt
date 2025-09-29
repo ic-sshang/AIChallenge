@@ -1,0 +1,56 @@
+1
+6
+false
+default
+list
+true
+Results
+Testing failed due to long running requests of the Proxy Services.
+Long running requests and AKS Windows nodes do not mix. We were unable to successfully get queries over 4 minutes to complete successfully. AKS Windows Nodes won’t allow us to apply the necessary high risk 
+system ctl
+ keep-alive settings. We can add the keep-alive to the app, but then we’d need to update every consumer of that app to work with the keep-alive setting.
+Other Options
+Azure Container Instances
+Still get independently hosted services
+Still use load balancer on top
+Azure Web Apps
+Still get independently hosted services
+Still use load balancer on top
+Azure Functions
+Requires lots of big changes to the services
+Ansible new Proxy Servers (similar to web server effort)
+Ideally each service would get its own server
+Load balancer goes in front
+Break out the services
+Crypto and Business had 0 long running queries and could run in Kubernetes today
+Database only had about a half dozen apps using long running queries and could move with minimal changes to those apps
+RTDR has lots of long running queries and would probably go on a VM by itself
+AKS + Ansible Combo
+New Proxy servers for RTDR and Database (separate servers for each)
+Run Business and Crypto in AKS
+Load Balancer sends traffic where it needs to go
+Path Forward Proposal
+POC ACI / Web Apps - if we can get this running on PaaS instead of servers, we should
+If that doesn’t work, go with the AKS + Ansible combo approach
+More info from a Slack Thread
+https://invoicecloud.slack.com/archives/C090DR928TE/p1756332417293759
+ 
+Path Forward Consensus
+Continue moving forward with K8s Migration. 
+Canary Rollout of DatabaseService, BusinessService, and CryptoService updating the connection string of applications that do not have 4 minute or more requests
+RTDRService cannot canary rollout because the long running requests are based on the BillerID and not a consuming application.
+Integrations Team is looking into this issue and seeing what can be done to refactor logic or workflow to move below the 4 minute requests.
+Identify the Applications that are causing long running operations for DatabaseService and BusinessService and add those Applications to the migrate to K8s hosted exception list
+Also begin to work with app teams to either refactor the long running calls to be below 4 minutes or go directly to backend data sources.
+Eventually all applications will be off VM hosted Proxy Services and we can move forward with full decommission.
+NewRelic Data
+DatabaseService
+https://onenr.io/0PwJbYpmZw7
+SELECT count(*), average(TotalProcessTime) FROM DatabaseServiceTransactions WHERE TotalProcessTime > 300000 AND Machine Like '%TEMP%' ORDER BY TotalProcessTime DESC LIMIT MAX FACET SQL SINCE 90 days ago
+BusinessService
+ICBusinessService - production < New Relic
+RTDRService
+https://onenr.io/02R5JgAqkjb
+CryptoService
+No transactions above 4 minutes
+ URL:/spaces/platform/pages/4611178573/Moving+Forward+with+Proxy

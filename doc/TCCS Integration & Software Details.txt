@@ -1,0 +1,139 @@
+Page Navigation:
+Document status
+COMPLETE
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+Gong URL
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+BIF
+Web Services
+TCCS will code to the IC BIF format and send to IC using IC web services
+Adjustment 
+TCCS ‘Balance Update’ Web Services
+RTDR
+IC updates the BalanceDue and the TotalAmountDue fields
+Payment 
+TCCS ‘Pay Input’ Web Services
+Data Pump
+ACH Reject
+TCCS ‘Insufficient Funds Report’ Web Services
+Data Pump
+C-Code Rejects not included
+Void
+Not Supported
+Change Log - AutoPay Enrollment
+TCCS 'Recurring Payments' Web Services
+Data Pump
+Change Log - Paperless Enrollment
+TCCS ‘Paperless Billing’ Web Services
+Data Pump
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images
+PDF Linking - Supported
+PDF Extraction - Supported - see details
+Template - Not Supported
+TCCS ‘Retrieve Bill Image’ Web Services 
+The IC/TCCS integration supports PDF Linking. If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller. Template is not supported.
+Supported Products and Features
+Products
+Type
+Definitions/Details
+CloudPay
+Not Supported
+CloudPay Web Services
+Supported
+Used for policy down payments (binding)
+CloudStore
+Supported - see details
+Not implemented with the first biller. Payments would not be sent through the data pump
+CSRConnect
+Not Supported
+IVR
+Supported
+Search method suggestion: UtilitySearch2 by account number
+Kiosk
+Supported - see details
+Not implemented with the first biller.
+OBD
+Supported - see details
+Not implemented with the first biller.
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Type
+Definitions/Details
+Account Registration:
+Supported
+Standard IC Customer Portal Linking
+ 
+Account Linking
+Supported
+IC Customer Portal
+       Multi-User Log In
+Supported
+IC Customer Portal
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported
+BIF customization
+Batch Closure
+Auto or Custom Supported
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Not Supported
+       Open Item Billing
+Required
+Block Payment
+Supported
+Managed in the biller portal
+Conveyance
+Not Supported
+Data Conversions
+Supported - see details
+Data conversions need to be coordinated directly with the biller, if needed
+Email Notification Schedule
+Supported
+BIF customization
+Expire Bill for Payment
+Not Supported
+Could be supported by setup as a BIF customization, if necessary
+Minimum Payment
+Supported
+in BIF - each client can choose whether or not they want to use this field
+Paperless
+Supported
+Partial Payments
+Supported
+in BIF - each client can choose whether or not they want to use this field
+Past Due
+Not Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Not Supported
+ URL:/spaces/IM/pages/291143731/TCCS+Integration+Software+Details

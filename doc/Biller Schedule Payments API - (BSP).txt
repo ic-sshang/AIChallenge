@@ -1,0 +1,7 @@
+Overview
+Today billers use the Biller Portal to manage schedule payments for their Payers ( payment plans etc…). 
+Part of the Oracle CIS system integration requires the importing of recurring payment file(s), creating and updating TBD, for the purposes of managing scheduled payments on behalf of the biller.  
+Proposal
+Create an biller facing API to manage CRUD operations around the current scheduled payment database tables.  A import process will pull the files from a FTP site and process the file contents against the API, create the corresponding export response file, and upload it to the FTP site.
+ 
+ URL:/spaces/EN/pages/3094577198/Biller+Schedule+Payments+API+-+BSP

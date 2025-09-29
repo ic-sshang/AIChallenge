@@ -1,0 +1,111 @@
+none
+Objective
+The goal is to refactor the 
+ICOAuthTokenProcessor
+ project to improve 
+flexibility
+, 
+maintainability
+, and 
+testability
+ by leveraging 
+Dependency Injection (DI)
+ to decouple components, modernizing the framework with 
+.NET 8
+ or a DI container, and adding 
+unit tests
+ to ensure reliability and robustness. Additionally, challenges faced during testing and framework migration will be addressed to ensure a smooth transition and minimize disruptions.
+Challenges Faced During Unit Test Implementation
+While attempting to implement unit tests with the current codebase, the following issues were encountered:
+Tightly Coupled Code
+:
+The current implementation is tightly coupled, making it difficult to mock dependencies and isolate individual components for testing.
+For example, classes like 
+DatabaseHandler
+ and 
+DatabaseProxyHealthCheck
+ directly invoke methods on other layers, which cannot be mocked easily.
+Un mockable Next-Layer Calls
+:
+Calls to the next layer (e.g., database proxies, external services) are not abstracted behind interfaces, leading to exceptions during unit test execution.
+This results in cascading failures across layers, making it impossible to test individual components in isolation.
+Unintended Alerts
+:
+During testing, exceptions in other layers triggered real alerts to on-call engineers, causing unnecessary disruptions.
+For instance, the 
+EmailHandler.SendErrorEmail
+ method was invoked during test execution, sending real email alerts.
+Implementation Complexity
+:
+Refactoring the codebase to introduce Dependency Injection (DI) will take time because it requires significant changes to the existing tightly coupled code or bad design.
+Additional testing will be required to ensure that the refactored code does not break existing functionality.
+Both the 
+CaselleProcessor 
+and 
+MajescoProcessor 
+inherit the same interface, 
+IOAuthProcessorBase
+. However, their implementations are tightly coupled to specific logic and dependencies.
+This shared interface design requires architectural changes to make the processors loosely coupled and allow for better dependency injection and mocking during testing.
+The 
+OAuthProcessorBase 
+abstract class is following a bad design pattern. It contains tightly coupled dependencies like 
+ILogHandler 
+and 
+IDatabaseHandler 
+.
+This design violates the Single Responsibility Principle (SRP) and makes it difficult to extend or test the class without affecting other parts of the system.
+Due to these challenges, proceeding with Dependency Injection (DI) is necessary to decouple components and improve testability. However, the implementation will require careful planning and testing to avoid introducing new issues.
+Proposed Solutions for Introducing Dependency Injection (DI)
+To address the above challenges, two solutions for implementing DI are proposed:
+1. Short-Term Solution: Introduce a DI Container in .NET Framework 4.8  (Current Target version)
+Steps:
+Introduce a DI Library
+:
+Use 
+Unity
+ or 
+Autofac
+ to manage dependencies.
+Create a DI Container
+:
+Centralize dependency registration and resolution.
+Limitations
+:
+Time-Intensive
+: Even the short-term solution will require significant testing to ensure that the introduction of DI does not break existing functionality.
+Requires refactoring existing architecture to incorporate DI.
+Limited by .NET Framework 4.8 capabilities.
+Requires maintaining an external DI library.
+2. Long-Term Solution: Upgrade to .NET 8 with Built-in DI
+Steps:
+Upgrade to .NET 8
+: Use 
+Microsoft Upgrade Assistant
+ to migrate the project to .NET 8.
+Use Built-in DI
+: Configure dependency injection lifecycle in 
+Program.cs
+.
+Re architect / design the existing implementation .  
+Refactor the existing code to loosely coupled manner to incorporate DI
+Benefits
+:
+Leverages .NET 8's performance improvements and built-in DI.
+Simplifies dependency management and aligns with modern .NET practices.
+Limitations
+:
+Version Dependencies
+: Some legacy libraries, such as 
+ICFramework.Utilities.Email
+, are not compatible with .NET 8. This creates a blocker for migration.
+Time-Intensive
+: The migration to .NET 8 will require significant effort to resolve compatibility issues, refactor the codebase, and replace outdated libraries.
+Testing Overhead
+: The long-term solution will require extensive testing to ensure that the migrated code works as expected and does not introduce regressions.
+Conclusion
+Short-Term
+: Use a DI container like Unity to decouple components and improve testability on .NET Framework 4.8. However, this solution will still require significant testing to ensure that the introduction of DI does not break existing functionality.
+Long-Term
+: Upgrade to .NET 8 to leverage built-in DI, modern features, and better performance. However, this solution is time-intensive due to version dependencies and compatibility issues with legacy libraries.
+ URL:/spaces/PE/pages/4174938159/PRISM-145+-+Spike+-+Identify+and+improve+the+code+coverage+with+the+unit+test+cases+for+ICOAuthTokenProcessor

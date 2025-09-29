@@ -1,0 +1,275 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Knowledge transfer
+Summary
+Summary
+Details
+Software Partner Name
+Harris Cayenta
+Software Product Name
+Cayenta Utilities
+Software Cashiering System
+Cayenta Utilities 
+Cashiering system is launched out of Cayenta Utilities. 
+Supported Versions
+TBD*
+*Joe Patterson to provide when he has his next quarterly call with Cayenta. 
+Integration Requirements and Pre-Requisites
+For Billers running the Cayenta Customer Self Service portal (which we have a SSO with) and are running it as an ‘on premise’ solution, we need the Biller to set up an external server. Biller may need to purchase a new external server and 
+Cayenta helps Biller configure the external server. 
+Invoice Cloud is not involved in the request process at all and it is handled between Cayenta and the Biller. 
+Cayenta needs to provide IC with endpoints. 
+IP addresses will be whitelisted directly through Cayenta and/or the Biller. Cayenta and the Biller’s IT should get the whitelist.
+Biller must be on CU Version 7.9.0 or higher and CSS gen 3 to support POSConnect
+Vertical
+GUB
+Sample Biller Implementation
+City of Roseville (BID 827) – SSO
+DPU City of Orangeburg (BID 1003) – SSO
+City of Gresham (BID 1236) – SSO
+Planning
+Test Portals
+IC Hosted Test Portal: 
+Harris Cayenta Test (BID 161)
+Partner Hosted Test Portal
+:
+Invoice Cloud does not have access to Cayenta Test Portal. 
+Biller Test Portal:
+Best practice is to set up a production and test portal in CRM for each biller. Check with your Cayenta team to determine if this is needed. 
+Occasionally the same web service info is used and pointed to test during test, then pointed to prod at go live. If the same web service info is used in Prod and Test, a test portal cannot be set up (two portals using the same Web Service URLs is not supported in IC).
+Rules of Engagement
+Prior to the kickoff call, reach out to Ricky Chiang (
+RChiang@harriscomputer.com
+) and Donna Parker (
+dparker@cayenta.com
+) at Cayenta and see if they are ready to start the project and what their timeline to start will be. 
+Make sure to include Cayenta contacts on kick-off call and project status meetings.
+Timeline
+Estimated timeframe to complete implementation
+90 - 120 Days
+Configuration
+Invoice Types
+42- Utility
+Additional invoice types can be supported (see Macon Water BID 1167: invoice type is determined based on the 'Account_Class_Dflt' field in the invoice file. Configured by IT in Advanced Setting 86 Cayenta - Commercial Utility Codes)
+Example: Below is an example of an Account_Class value of ‘COM’ mapped to Invoice Type ID 6 using Advanced Setting 86. 
+<Account_Class>COM</Account_Class>
+Virtual Site
+Required Options
+ID
+Option Description
+Details
+18
+Allow ACH Reject Reversals
+This option will allow Billers to perform reversals of ACH Rejects in the Biller Portal.
+Disabled/Unchecked
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+No required options - enable/disable for SSO integration and biller preference
+Coding Requirements
+Fill out the ‘To Cayenta” tab on the below spreadsheet to provide the Partner Coding Requirements to Cayenta. Have Cayenta fill out the 'From Cayenta’ tab on the below spreadsheet to gather the Invoice Cloud Coding Requirements. 
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Cayenta 
+After kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+BID TEST
+Cayenta 
+After kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+BID PROD
+Cayenta 
+After kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+Biller GUID TEST
+Cayenta 
+After kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+WebService Key TEST
+Cayenta 
+After kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+Biller GUID PROD
+Cayenta 
+After Kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+WebService Key PROD
+Cayenta 
+After Kick-off call using Cayenta Data Points spreadsheet 
+Located within CRM on the Profile Tab. 
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Cayenta
+After kick-off call 
+Data is unique/specific to each biller
+Bill Presentment
+If PDF Linking, URL comes from Cayenta
+ or Biller’s Bill Print Vendor.
+If PDF Extraction, images provided by Biller. 
+After Kick-Off Call
+PDF Linking - 
+URL and credentials required, Sample Biller: City of Clearwater; City of Lexington
+PDF Extraction - 
+Standard setup
+RTDR API - PROD
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+Examples:
+https://cayentarouter.acwd.com/cayentaws/service/API
+https://you.greshamoregon.gov/cayentaws/service/API
+https://billpay2.pwcsa.org/cayentaws/service/API
+The following RTDR API configuration must be set properly on the Cayenta API (set by Cayenta). Confirm the below with Cayenta:
+RTDR Passcode - PROD
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+RTDR API - TEST
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+RTDR Passcode - TEST
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+DataPump API - PROD
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+DataPump Passcode - PROD
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+DataPump API - TEST
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+DataPump Passcode - TEST
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+SSO URL
+Cayenta
+After Kick-Off Call
+Data is unique/specific to each biller
+Whitelisting IP Addresses
+Invoice Cloud
+After Kick-Off Call
+IP addresses will be whitelisted directly through Cayenta and/or the Biller. Cayenta and the Biller’s IT should get the whitelist.
+Payment Codes
+Biller
+ 
+After Kick-Off Call
+Request payment code mapping from the Biller for IC configuration.
+Block CC Flag
+Biller
+After Kick-Off Call
+Biller configures block CC flag and will need to provide the ‘alert code’ to IC for configuration.
+Block ACH Flag
+Biller
+After Kick-Off Call
+Biller configures block ACH flag and will need to provide the ‘alert code’ to IC for configuration.
+Contacts
+Relationship Contacts:
+Name
+Title
+Company
+Phone
+Email
+Ricky Chiang
+Business Systems Analyst
+Cayenta
+RChiang@harriscomputer.com
+Donna Parker
+Customer Relationship Manager
+Cayenta
+dparker@cayenta.com
+Ali Coloroso
+Application
+Consultant, Professional Services
+Cayenta
+604-291-0742
+acoloroso@cayenta.com
+Bradley Tarrant
+Project Manager,
+Professional Services
+Cayenta
+P: 604-570-4300 x447
+M: 623-217-1145
+btarrant@cayenta.com
+Escalation Contacts: 
+Name
+Title
+Company
+Phone
+Email
+Erik Ewen
+Manager, Research
+& Development
+Cayenta
+604-570-4300 ext 307
+eewen@cayenta.com
+Larissa Wong
+Director, BI Services
+Cayenta
+604-570-4300 ext 464
+LWong@cayenta.com
+ URL:/spaces/IM/pages/2252570625/Cayenta+Implementation+Details

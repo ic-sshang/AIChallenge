@@ -1,0 +1,85 @@
+CONTENTS
+1
+7
+Q/A not listed here?
+  Try the 
+https://support.pendo.io/hc/en-us
+.
+Guide Management
+Hierarchy
+I would like to simultaneously display multiple guides on the same page, but it seems only a single guide at a time will appear, regardless of activation.  Is this at all possible?
+The scenario you described is not possible since triggering more than one 
+Guide
+ at the same time is not available by design. The way 
+Guides
+ trigger resembles that of a waiting queue; Meaning, one 
+Guide
+ gets triggered and once it's dismissed the next in line gets triggered if it meets the conditions. There are different considerations as to why Pendo 
+Guides
+ do not trigger simultaneously, among them is load balancing and not overloading/spamming the website's memory.
+Majd Kharman (Pendo) - Apr 18, 2022, 9:45 EDT
+When multiple public guides are active and configured to display automatically on the same page, what order will the guides be displayed?
+You can find the order of automated 
+Guides
+ under the 
+"Ordering"
+ tab… more about it in this article: 
+Throttling and Ordering
+.
+Majd Kharman (Pendo) - Apr 18, 2022, 9:45 EDT
+I understand the order of throttled guides can be adjusted, but it is unclear how hierarchy works for non-throttled automatic guides.  I believe those are shown before throttled guides - correct?
+You are correct, 
+Guides
+ that ignore throttling will trigger first before the ones that have priority designated to them. That is why Guides that ignore throttling are found at the top in the 
+"Ordering"
+ section. Guides that ignore throttling will exist in the ordering list since between them you can change the order but not between throttling and non-throttling. 
+Majd Kharman (Pendo) - Apr 20, 2022, 12:45 EDT
+Notifications
+Is there a setting that enables specific users to be notified via email, or maybe within Pendo, when a guide is set to staged?
+Unfortunately, we don't have that feature available right now. I also verified with our product team in case I missed something. Right now we only have edit history and looking at guide list but no internal notification system.
+Jocelyn Casanova (Pendo) - Sep 15, 2021, 13:19 EDT
+Permissions
+In some instances, we do not want guides to be edited, regardless of a Pendo user's permissions.  Is it possible to create read-only guides?
+Unfortunately, at the moment Pendo only does this at a Global setting. We don't have the ability to do this per guide.
+Juan Polanco (Pendo) - May 14, 2021, 16:14 EDT
+Poll Style
+Is there a character limit for the user response?
+There is technically no limit on the number of characters that can be submitted in an open-text response field, and I know that this has been tested with 5,000 characters and there were no issues, so your users should be able to provide as much feedback as needed!
+Richard Walter (Pendo) - Aug 27, 2021, 10:57 EDT
+Positioning
+Can a guide be embedded on a page?
+Due to how our guides are delivered from Pendo and loaded for your visitors, it would not be possible have a guide to display on a page indefinitely.
+Malcolm Nunley (Pendo) - Apr 6, 2022, 15:19 EDT
+Is there a method to place a guide relative to a target element with the ability to offset its relative positioning?
+You can reposition a guide relative to a target element in the guide designer. However, if your would like to adjust anything such as the offset or the relative position, that may be possible with custom CSS on your part. We do not have any best practices or support for this type of customization at this time.
+Malcolm Nunley (Pendo) - Apr 9, 2022, 8:36 EDT
+Scheduling
+“…a guide scheduled to expire Jan 5, 2022 at 11:45pm EST was disabled by the Pendo system on Jan 6, 2022 at 12:10am EST” (based on the 
+View edit history
+ log).  Is there a standard time frame (i.e., buffer) that we should expect and factor in when scheduling guides to start or expire?
+This appears to be a front end/display delay with the app not reflecting the guide state change and change in the edit history of the back-end.  However please be assured the guide will expire at your scheduled time off your website.
+Imdad Miah (Pendo) - Jan 25, 2022, 13:23 EST
+Segments
+“Is there a Pendo feature to view or extract how many of the same Account/Visitor IDs exist across segments?
+At this time, the ability to compare segments and determine overlap is not a functionality within Pendo.
+Charles Helms (Pendo) - Apr 18, 2022, 10:00 EST
+Troubleshooting
+Design Mode
+When attempting to launch the Pendo Designer, why does it open the Biller login page?
+A URL from an active test biller portal session is required - this is an indication that the session expired.  Reopen the test biller portal to the applicable page, then copy that URL into the designer prompt.
+Filters
+A guide is not listed under the expected Product Area.  How do I locate the guide?
+When a Product Area filter is applied, clear it, then search all guides.
+Preview Mode
+Why doesn’t a guide advance, or start over upon clicking Restart Preview, when in preview mode?
+This could be the result of a specific action (e.g., clicking a button with snooze functionality will temporarily prevent reappearance), or it could be an indicator of an invalid configuration, especially when multiple guide steps are involved.  Refresh the browser tab and try again.  If the same unexpected behavior occurs at a particular guide step/action, exit preview mode and open in design mode to recheck the setting.
+Guide settings appear to be correct, and look good in designer, but seem different in preview.  Why?
+Occasionally, preview mode displays or behaves quirky causing text or buttons to seem misaligned.  When this occurs, it is sometimes resolved by refreshing the browser while in preview mode.
+Status
+A guide is listed as 
+Public
+ after the designated Expiration Date/Time.  Why?
+If the guide expired shortly before noticing the outdated status, this is most likely just a display issue within Pendo.  If the guide no longer appears in a portal, then the Pendo system simply has not yet updated the status to 
+Disabled
+.  Wait until at least 30 minutes have passed and recheck the status.
+ URL:/spaces/PRODUCT/pages/1994424321/Guide+FAQ

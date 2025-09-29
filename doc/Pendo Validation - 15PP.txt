@@ -1,0 +1,10 @@
+Verify Pendo visitor tracking is working.  
+Signin to the Payer Portal and navigate to a converted 1.5 page, 
+MyIIS Session Support - 15PP
+ . 
+Once the page has loaded open the browser's developer tools (F12)
+Run the JavaScript code 
+pendo.validateInstall()
+ in the console window.  
+Verify the console output provides the pendo visitor id (Unique Visit ID + Biller GUID) and account id (Biller DBA) metadata for the given session.
+ URL:/spaces/ED/pages/3001384961/Pendo+Validation+-+15PP

@@ -1,0 +1,88 @@
+Environment
+Which Redis?
+ADO Env
+Plan
+Status
+dev
+new 
+dev
+Immediate Cutover
+Migration Complete
+iat
+new
+iat
+Immediate Cutover
+Deployed
+Not Migrated
+qar
+old
+qar
+Immediate Cutover
+Infra Deployed
+App Issues
+Not Migrated
+xat
+old
+Preview
+Canary Rollout
+Infra Deployed
+Apps Not Deployed
+Not Migrated
+prd
+old
+Production
+Canary Rollout
+Not Started
+XAT will stay one step ahead of PRD. 
+Important Note: 
+While legacy and modern server pools coexist, application deployments will need to target both pools. 
+We’ll need to do something about the deployment to IC-Web1 preceding the deployment to the rest of the web servers. Ideally, we can just deploy to all web servers at once, which minimizes downtime. Do testers gain much from this staged deployment?
+Legacy XAT has 2 servers; PRD has 10.
+Add secondary test binding to 
+xat
+ and certify that it’s running as expected to the best of our ability (i.e. 
+www.invoicecloud-beta.com
+)
+Introduce 
+Modern XAT
+ to get minimal traffic from 
+preview.invoicecloud.com
+, keeping all legacy servers up and running
+Add secondary test binding to 
+prd
+and certify that it’s running as expected to the best of our ability (i.e. 
+www-cert.invoicecloud.com
+)
+Add secondary test binding to 
+xat
+ and certify that it’s running as expected to the best of our ability (i.e. 
+cert-xat.invoicecloud.com
+)
+Introduce 
+Modern PRD
+ to get minimal traffic from 
+www.invoicecloud.com
+, keeping all legacy servers up and running
+Slowly increase percentage of traffic hitting new servers in both 
+xat
+ and 
+prd
+ until all traffic targets new servers
+Once satisfied that cutover is successful, decommission legacy servers
+Follow-up:
+Following the full cutover, update ADO environment names so that 
+Preview
+ becomes 
+xat
+ and 
+Production
+ becomes 
+prd
+Update 
+qar
+, 
+xat
+ and 
+prd
+ to use new Redis instances
+ URL:/spaces/platform/pages/4503863984/New+Web+Server+Promotion+Path

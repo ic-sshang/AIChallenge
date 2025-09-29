@@ -1,0 +1,113 @@
+1
+2
+false
+none
+list
+true
+Overview
+Kubernetes is an open-source platform designed to automate the deployment, scaling, and management of containerized applications. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF).
+Here are some key features of Kubernetes:
+Orchestration
+: Kubernetes automates the deployment and management of containers, ensuring that applications run smoothly and efficiently.
+Scaling
+: It can automatically scale applications up or down based on demand, ensuring optimal resource utilization.
+Self-Healing
+: Kubernetes can automatically restart containers that fail, replace containers, and reschedule them when nodes die.
+Load Balancing
+: It distributes network traffic across multiple containers to ensure that no single container is overwhelmed.
+Storage Management
+: Kubernetes can automatically mount and manage storage resources for containers.
+Declarative Configuration
+: You can define the desired state of your application using YAML or JSON files, and Kubernetes will maintain that state.
+Here at InvoiceCloud we use the 
+Azure Kubernetes Service
+ PaaS offering for our Kubernetes Infrastructure needs.  
+Kubernetes Manifests
+Kubernetes 
+manifests
+ are configuration files used to define the desired state of objects in a Kubernetes cluster. These files are typically written in 
+YAML
+ (or sometimes JSON) and are used with 
+kubectl apply
+ or 
+kubectl create
+ to deploy and manage resources like Pods, Deployments, Services, ConfigMaps, etc.
+🧱 Basic Structure of a Kubernetes Manifest
+Every manifest file includes:
+apiVersion
+: Specifies the API version.
+kind
+: Type of Kubernetes object (e.g., Pod, Deployment).
+metadata
+: Metadata like name, labels.
+spec
+: Specification of the desired state.
+📄 Example 1: Pod Manifest
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+      ports:
+        - containerPort: 80
+
+This creates a simple Pod running an NGINX container.
+📄 Example 2: Deployment Manifest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-container
+          image: nginx
+          ports:
+            - containerPort: 80
+
+This creates a Deployment that manages 3 replicas of an NGINX Pod.
+📄 Example 3: Service Manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+This exposes the Pods labeled 
+app: my-app
+ on port 80 within the cluster.
+📄 Example 4: ConfigMap Manifest
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  APP_ENV: production
+  LOG_LEVEL: debug
+
+This stores configuration data that can be mounted into Pods or used as environment variables.
+Examples of Kubernetes Manifests deployed and managed via Terraform here at InvoiceCloud:
+k8s-app-deployment.tf - Repos
+deployment.tf - Repos
+k8s-scaled-job.tf - Repos
+deployment.tf - Repos
+Helm Charts
+ URL:/spaces/PMK/pages/4151836704/Kubernetes+Deployment

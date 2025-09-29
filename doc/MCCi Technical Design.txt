@@ -1,0 +1,100 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+SA-1059
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+in Progress
+Yellow
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Cloud Payments V2
+Purpose/Summary:  MCCi has implemented a CPV2 integration which is configurable by biller and invoice type ID.
+Configuration
+Prior to using the CPV2 integration by MCCi, the Configure Payment Page Settings must be completed by the biller.  The biller should have the ability to set this screen up once they obtained the necessary API Key and BillerGUID from the Invoice Cloud biller portal.
+Field
+Required
+Comments
+APIKey
+Yes
+Biller accesses Invoice Cloud biller portal and navigates to Support → Documentation/APIs → Application API Keys to generate the API key.  The key is then copied to the payment page settings screen,
+billler-guid
+No
+Biller accesses Invoice Cloud biller portal and navigates to Support → Documentation/APIs → Integration Documentation to obtain the billerGUID.  The billerGUID  is then copied to the payment page settings screen.  This is not required for Cloud Pay V2.
+type-id
+Yes
+This value is the Invoice Cloud Invoice Type ID.  It is available from a drop-down menu.  In the event an Invoice Type ID is missing, CloudPermit will need to be contacted to add it to the dropdown.
+Maximum bill total $ amount payable online
+No
+This value controls the maximum amount to be paid on the CloudPermit portal.  This is not mandatory and can be left blank. portal.  This is not mandatory and can be left blank.
+CustomReturnSiteName
+No
+When a 
+ReturnUrl
+ is provided, the tooltip text of the sign out button will change to “Sign out and Return to 
+<SiteName>
+”. 
+<SiteName>
+ defaults to the Biller DBA but can be customized by providing a value for 
+CustomReturnSiteName
+.
+Sample Request
+{
+    "CreateCustomerRecord": true,
+    "Customers": [
+        {
+            "AccountNumber": "MCCiTestAccount1",
+            "Name": "John Doe",
+            "Address": "123 Any Street",
+            "City": "Anytown",
+            "State": "NC",
+            "Zip": "12345",
+            "EmailAddress": "mdas@invoicecloud.com",
+            "Invoices": [
+                {
+                    "InvoiceNumber": "MCCiTest0127202501",
+                    "TypeID": 6,
+                    "DueDate": "08/31/2025",
+                    "InvoiceDate": "08/01/2025",
+                    "BalanceDue": 125.00,
+                    "CCServiceFee": 0.00,
+                    "AchServiceFee": 0.00,
+                    "MinimumAmountDue": 25.00,
+                    "AllowPartialPayments": true
+                }
+            ]
+        }
+    ]
+}
+User Stories:
+CloudPermit and Invoice Cloud - CPV2
+Workflow
+Story
+Assumptions/Requirements
+Sample
+Retrieve Invoice to Pay
+User navigates to CloudPermit portal and retrieves invoice number to pay. 
+Customer and Invoice must already exist on Invoice Cloud systems.
+Pay Invoice
+User clicks PAY ONLINE button.  This executes Cloud Pay V2 and the Invoice Cloud screen displays.
+Invoice Cloud Receipt
+After the user completes their payment, the Invoice Cloud receipt page displays.
+Return to Home Page
+User has completed payment and clicks Return to Home Page.  The CloudPermit portal page is displayed.
+The Invoice is marked as PAID (blue highlighting).
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/4148559919/MCCi+Technical+Design

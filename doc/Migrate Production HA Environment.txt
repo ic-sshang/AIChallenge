@@ -1,0 +1,173 @@
+Create deployment profile:
+To create a deployment profile, you must have a 
+Customer Support Portal account
+ (CSP) and access to an 
+activated credit pool
+.
+Before you begin, estimate the number of firewalls that will use the configuration in the deployment profile. You don’t have to deploy all the firewalls at once.
+Step 1:
+If you already have a credit pool, log into the account, and from the dashboard, select 
+Assets, Software NGFW Credits, Create Deployment Profile
+If you have just activated a credit pool you see the
+Create Deployment Profile form.
+Select the VM-Series firewall type.
+Select the PAN-OS version.
+Fixed Models
+(
+VM-Series Models
+)
+Flexible vCPUs (PAN-OS 10.0.4 and above)
+Click Next
+Select 
+Products, Assets, Software NGFW Credits 
+and click the Details
+link on the credit pool you used to create your profile.
+On the far right, select the vertical ellipsis (More Options) and select
+Provision Panorama
+ and then click 
+Migrate Existing
+The CSP displays all virtual Panorama devices associated with your account.
+Select the check box for each virtual Panorama to be migrated.
+Click 
+Migrate
+.  Verify that the  Current Support Expiration Date  has been updated. Additionally, you can expand each row to view the individual licenses applied to the selected Panorama.
+Step 2:
+VM-Series profile.
+Profile Name
+.
+Name the profile.
+Number of Firewalls
+.
+Enter the number of firewalls this profile deploys, assuming you have sufficient credits. You do not have to deploy them all at once.
+Firewall Model
+      Choose a VM-Series model.
+Planned vCPU/Firewall
+      (PAN-OS 10.0.4 or above).
+      Enter the number of vCPUs per firewall. (8 today)
+Security Use Case:
+      Choose a use case. (ignore, chose custom)
+Customize Subscriptions
+      After selecting a use case, you can add or remove security services.
+(optional)
+      Use Credits to Enable VM Panorama
+Choose the Panorama use case(s)—Management and/or Log Collector.
+( optional ) Hover over the question mark following
+Protect more, save more to see how your credit allocation affects savings.
+Click 
+Calculate Estimated Cost 
+to view the credit total, and the number of credits available before the deployment.
+( optional ) Hover over the question mark following the estimate to view the credit breakdown for each component.
+Create the Deployment Profile
+You might have to wait several seconds for the profile to appear in the Current Deployment Profiles tab list. Before the allocation is complete, the Credits Consumed/Allocated column shows 0 and Update Pending.  Scroll to the bottom and go to the last page to find your profile.
+To view your deployment profile later on, click the 
+Details 
+button on the parent credit pool and select
+Current Deployment Profiles.
+Note the Auth Code for your profile on the far right; Software NGFW credit auth codes start with D.
+The 
+Credits Consumed/Allocated
+ column shows 0 and 
+Update Pending
+ before the allocation is complete.
+The 
+Audit Trail
+ tab shows 
+Credit Transactions
+ and the 
+Deployment Profiles
+you manage. You can also search for a profile by time in this tab.
+Use search to locate your profile, and expand the row to view the configuration you specified when you created the profile.
+Migrate Panorama to flex licensing
+Select 
+Products, Assets, Software NGFW Credits 
+and click the 
+Details 
+link on the credit pool you used to create your profile.
+On the far right, select the vertical ellipsis (
+More Options
+) and select 
+Provision Panorama 
+and then click
+Migrate Existing.
+The CSP displays all virtual Panorama devices associated with your account.
+Select the check box for each virtual Panorama to be migrated.
+Serial numbers of production Panoramas
+000702432240
+000702613625
+Click 
+Migrate
+.
+Migrate Firewalls to flex licensing from Panorama
+This process does not disrupt traffic moving through the firewall.
+Log in to the VM-Series firewall web interface.
+Verify the Palo Alto Networks update server configuration.
+Select 
+Device, Setup, Services
+Confirm that 
+Update Server
+ is set to
+updates.paloaltonetworks.com
+Confirm that 
+Verify Update Server Identity 
+is selected.
+Log in to the CSP and 
+Create a Deployment Profile
+. If the license you want to migrate is for a VM-Series firewall with an ELA or perpetual license, you must choose 
+Fixed Models
+and use the same VM-Series model and number of vCPUs when you 
+create the SW NGFW deployment profile
+ for the flexible license.
+You will use the auth code from this profile. An auth code for a flexible firewall license begins with the letter D, as shown below.
+Select 
+Device, Licenses
+.
+If the current VM-Series model and the VM-Series model you are migrating to are different, select the
+Upgrade VM Capacity
+ link.
+If the VM-Series model is the same before and after migration, select the
+Activate
+ feature using authorization code link.
+Enter the VM-Series authorization code from the new deployment profile.
+Click 
+OK 
+to confirm the license upgrade. The firewall contacts the Palo Alto Networks update server and consumes the tokens required for your firewall based on the VM-Series model.
+(Optional) Verify the migration.
+Repeat this process for each VM-Series firewall in your deployment.
+Migrate Firewalls to flex licensing from Firewalls
+This process does not disrupt traffic moving through the firewall.
+Log in to the VM-Series firewall web interface.
+Verify the Palo Alto Networks update server configuration.
+Select 
+Device, Setup, Services
+Confirm that 
+Update Server
+ is set to
+updates.paloaltonetworks.com
+Confirm that 
+Verify Update Server Identity 
+is selected.
+Log in to the CSP and 
+Create a Deployment Profile
+. If the license you want to migrate is for a VM-Series firewall with an ELA or perpetual license, you must choose 
+Fixed Models
+and use the same VM-Series model and number of vCPUs when you 
+create the SW NGFW deployment profile
+ for the flexible license.
+You will use the auth code from this profile. An auth code for a flexible firewall license begins with the letter D, as shown below.
+Select 
+Device, Licenses
+.
+If the current VM-Series model and the VM-Series model you are migrating to are different, select the
+Upgrade VM Capacity
+ link.
+If the VM-Series model is the same before and after migration, select the
+Activate
+ feature using authorization code link.
+Enter the VM-Series authorization code from the new deployment profile.
+Click 
+OK 
+to confirm the license upgrade. The firewall contacts the Palo Alto Networks update server and consumes the tokens required for your firewall based on the VM-Series model.
+(Optional) Verify the migration.
+Repeat this process for each VM-Series firewall in your deployment.
+Testing
+ URL:/spaces/icinfradoc/pages/3142615102/Migrate+Production+HA+Environment

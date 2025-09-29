@@ -1,0 +1,190 @@
+INFRA-1963
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+As yesterday’s 
+release
+ was failure, After making the following changes : 
+Added missing path for stratus C:\Data\AppData\Files\StratusDump
+Added Apple pay certs [imported from bitwarden] in cert manager
+Added 
+invoicecloud.com
+ hostfile entry as we received 502’s [just to be sure added entries for greensboro, sso, stratus, ncf,nsp as well]
+Had to set the BITS serve to Manual start (too many restarts were observed during this windows)
+CloudEMV had issues with keyvault, newrelic entity - this is resolved now
+Adding back the server again in this release.
+Production Server Update – Monday, 09-09-2025
+We have provisioned the new 2025 production Windows servers and deployed all required applications. On 
+Monday, 09-09-2025 at 11:40 AM IST
+, we will add one of these new servers to the backend pool alongside the existing servers. This will allow production traffic to be served by the new server, enabling us to monitor application performance and stability in a live environment.
+Monitoring Plan:
+Monitoring responsibilities will be shared among respective product owners as outlined below.
+Checkpoints will be conducted 
+hourly
+, with collaboration happening via a dedicated 
+Slack channel
+.
+A 
+Go/No-Go decision
+ will be made at 
+3:30 PM IST
+ to determine whether the new server remains in the pool or is removed.
+Product Teams
+Repo
+Platform
+Product SRE
+Notes Platform
+Notes Product
+Dev Notes
+ICCRM
+Preetham & Vaibhav
+Abhi & Nithin
+ 
+ 
+www.invoicecloud.com
+Preetham & Vaibhav
+Abhi & Nithin
+ 
+ 
+ 
+MYIIS
+Preetham & Vaibhav
+Abhi & Nithin
+ 
+ 
+RESTAPI
+Preetham & Vaibhav
+Abhi & Nithin
+ 
+ 
+ICDOCUMENTATION
+Jai & JP
+Abhi & Nithin
+ 
+ 
+PRISM/PULSE
+CLOUDCONNECT
+Jai & JP
+ 
+ 
+PRISM/PULSE
+SSOAUTH
+Jai & JP
+ 
+ 
+ 
+PRISM/PULSE
+KIOSKAPI
+Jai & JP
+ 
+ 
+PRISM/PULSE
+BILLER PORTAL
+Preetham & Vaibhav
+ 
+ 
+PRISM/PULSE
+CloudEMVAPI
+Jai & JP
+ 
+ 
+ 
+ 
+SPARK\NEXUS
+SMS
+Swarna & Maalavya
+ 
+ 
+ 
+SPARK\NEXUS
+ICRECAPTCHA
+Swarna & Maalavya
+ 
+ 
+SPARK\NEXUS
+REMOTEAUTH
+Swarna & Maalavya
+ 
+ 
+ 
+SPARK\NEXUS
+REMOTEAUTHAPI
+Swarna & Maalavya
+ 
+ 
+ 
+ 
+SPARK\NEXUS
+ICCLOUPAYMENTAPI
+Swarna & Maalavya
+ 
+ 
+ 
+ 
+SPARK\NEXUS
+ICREDIRECT
+Swarna & Maalavya
+ 
+ 
+ 
+SPARK\NEXUS
+AGENTCONNECTAPI
+Swarna & Maalavya
+ 
+ 
+ 
+PACE
+CTP
+Preetham & Vaibhav
+ 
+PACE
+BSASOFTWARE
+Preetham & Vaibhav
+ 
+ 
+CCON
+ICTEMPLATES
+Deepthi & Surya
+ 
+Looks good. No abnormal errors or spikes
+ 
+CCON
+STRATUSWEBSERVICES
+Deepthi & Surya
+No new errors reported. APM Metrics are similar to other servers
+ 
+CCON
+SandS
+Deepthi & Surya
+ 
+No new errors reported. APM Metrics are similar to other servers. Throughput is less when compared to other servers
+ 
+CCON
+ICREMOTELINKING
+Deepthi & Surya
+Looks good no abnormal metric/logs/errors
+ 
+CCON
+ICSKYNET
+Deepthi & Surya
+ 
+Except IC-Web1 not servers data is reporting to newrelic for this service
+ 
+CCON
+http://stratus.invoicecloud.com
+ 
+Deepthi & Surya
+Nothing outstanding. Looks good
+ 
+TBD
+ICCSRConnectAPI
+ 
+ 
+ 
+ 
+TBD
+ICTunnelAPI
+ 
+ 
+ 
+ 
+ URL:/spaces/platform/pages/4641128468/2025-09-09

@@ -1,0 +1,418 @@
+Kubernetes KEDA POC
+POC Overview
+This Proof of Concept (POC) demonstrates how to use 
+KEDA (Kubernetes Event-Driven Autoscaler)
+ to automatically scale Kubernetes workloads based on 
+Azure Service Bus queue message count
+.
+The 
+Publisher app
+ sends messages to an Azure Service Bus queue.
+The 
+Consumer/Worker app
+ processes these messages.
+KEDA monitors the queue length
+ and automatically scales the number of consumer pods up or down, depending on the number of messages waiting.
+When the queue has more messages, KEDA increases the number of consumer pods to handle the load. Once messages are processed and the queue becomes empty, KEDA scales the pods back down.
+This POC validates that Kubernetes can dynamically scale applications based on 
+external event sources
+ (in this case, Azure Service Bus).
+Prerequisites
+Before starting the POC, ensure the following tools are installed and configured:
+Docker Desktop
+ – Required to build and run containerized applications.
+👉 
+Download Docker Desktop
+kubectl
+ – Kubernetes command-line tool to interact with the cluster.
+👉 
+Install kubectl
+Minikube
+ – A lightweight local Kubernetes cluster for testing in local.
+👉 
+Download Minikube
+Chocolatey (choco)
+ – A package manager for Windows to easily install tools like Helm.
+👉 
+Install Chocolatey
+Helm (installed via choco)
+ – Package manager for Kubernetes used to install KEDA.
+choco install kubernetes-helm
+Steps to Run KEDA Scaling
+1. Start local Docker Desktop and  Minikube
+Minikube often uses the 
+Docker driver
+ (
+--driver=docker
+). On macOS and Windows, that driver is provided by 
+Docker Desktop. 
+Building images with 
+docker build
+ becomes immediately usable by the cluster (no external registry needed) when Minikube shares the same Docker daemon.
+Docker Desktop provides the Linux VM for the Docker daemon; keep Desktop running while you use Minikube.
+This initializes and starts a local Kubernetes cluster with allocated CPU and memory resources.
+minikube start --cpus=4 --memory=1.8g
+--cpus=4
+Gives the Minikube node 
+4 CPU cores
+. This is a limit for the VM/container that runs your Kubernetes node.
+--memory=1.8g
+Gives the node 
+1932 MB (~1.8 GB)
+ of RAM. Kubernetes will reserve some for the OS and kube components, so your “Allocatable” memory will be a bit less.
+Note: 
+On macOS/Windows with the 
+Docker driver
+, these limits must be 
+≤ Docker Desktop’s
+ resource limits (Settings → Resources). If Docker Desktop is capped at 1 GB, Minikube can’t use 1.8 GB and startup may fail or downscale.
+2. Connect Docker to Minikube's environment
+In short, that PowerShell line wires your local 
+Docker CLI
+ to talk to the 
+Docker daemon inside your Minikube node
+, so any 
+docker build
+, 
+docker images
+, etc. you run will affect the cluster directly—no pushing to a registry
+minikube docker-env | Invoke-Expression
+minikube docker-env
+ prints a set of env-var assignments (like 
+DOCKER_HOST
+, 
+DOCKER_TLS_VERIFY
+, 
+DOCKER_CERT_PATH
+, 
+MINIKUBE_ACTIVE_DOCKERD
+) that point Docker CLI at Minikube’s in-cluster Docker. 
+| Invoke-Expression
+ executes those assignments in your 
+current PowerShell session
+. After that, 
+docker ...
+ commands operate 
+inside Minikube’s daemon
+, so images become instantly available to your pods.
+3. Build the Docker image of the consumer
+Builds the worker/consumer application that will process messages from the Azure Service Bus queue.
+Changes your current working directory to the 
+project folder
+ that contains your Dockerfile and app source.
+cd C:\source\repos\RebusPOC
+
+docker build -t local-queue-consumer:v1 .
+docker images
+docker build
+ — runs the build process.
+-t local-queue-consumer:v1
+ — 
+tags
+ the image as 
+local-queue-consumer
+ with the 
+tag
+ 
+v1
+.
+.
+  the 
+build context
+ (everything in the current folder is sent to the Docker daemon).
+As previously we ran 
+minikube docker-env | Invoke-Expression
+, our CLI points to 
+Minikube’s
+ Docker daemon, so the image becomes 
+immediately usable by your Minikube cluster
+ (no push needed).
+4. Install KEDA
+KEDA (Kubernetes Event-Driven Autoscaling)
+ adds an operator and a metrics API server so Kubernetes can scale your workloads based on external events (queues, Kafka lag, HTTP rates, etc.). It also installs CRDs like 
+ScaledObject
+, 
+ScaledJob
+, and 
+TriggerAuthentication
+helm repo add kedacore https://kedacore.github.io/charts
+Registers the 
+KEDA Helm repository
+ with our local Helm client so you can install the 
+keda
+ chart from it.
+helm install keda kedacore/keda
+keda
+ is your Helm release name.
+kedacore/keda
+ points to the 
+keda
+ chart in the 
+kedacore
+ repo.
+This installs KEDA into your 
+current namespace
+ (often 
+default
+) unless you specify one. It deploys the operator, metrics API server, RBAC, and 
+creates the CRDs
+ required by KEDA.
+5. Deploy Worker App
+Deploys the consumer application into the Kubernetes cluster. This is the workload that will scale based on queue messages.
+Deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queue-consumer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queue-consumer
+  template:
+    metadata:
+      labels: 
+        app: queue-consumer
+    spec:
+      containers:
+        - name: consumer
+          image: local-queue-consumer:v1 # local new image
+          imagePullPolicy: IfNotPresent # For local images only
+          resources:
+            requests:
+              cpu: "250m" #0.25 CPU
+              memory: "256Mi"
+            limits: 
+              cpu: "500m"
+              memory: "512Mi"
+          ports:
+            - containerPort: 80
+          env: 
+            - name: ServiceBus_ConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: servicebus-connection-secret
+                  key: connection
+            - name: ServiceBus_QueueName
+              value: datapump_test
+kubectl apply -f Deployment.yaml
+# To delete:
+kubectl delete deployment queue-consumer-deployment
+
+Creates or updates
+ the Kubernetes 
+Deployment
+ defined in 
+Deployment.yaml
+ in your 
+current context/namespace
+.
+6. Deploy Secret and TriggerAuthentication
+Stores credentials (like Azure Service Bus connection string) securely using Kubernetes 
+Secrets
+ and sets up 
+TriggerAuthentication
+ to let KEDA use those credentials.
+Convert to Base64 String (PowerShell)
+Secrets (like connection strings) need to be encoded in Base64 before being stored in Kubernetes Secrets.
+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("Hello"))
+[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("SGVsbG8="))
+Secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: servicebus-connection-secret
+type: Opaque
+data:
+  connection: <base64 encoded string>
+Trigger-authentication.yaml
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-servicebus-auth
+spec:
+  secretTargetRef:
+    - parameter: connection
+      name: servicebus-connection-secret
+      key: connection
+kubectl apply -f Secret.yaml
+kubectl apply -f trigger-authentication.yaml
+
+kubectl apply -f Secret.yaml
+Creates/updates a 
+Kubernetes Secret
+ (key-value sensitive data like passwords, tokens, connection strings). Secrets let you keep credentials out of pod specs and images, and you can author them with 
+data
+ (base64) or the convenience field 
+stringData
+ (plain text that the API server encodes for you). 
+kubectl apply -f trigger-authentication.yaml
+Creates/updates a 
+KEDA TriggerAuthentication
+ (a CRD). This object tells KEDA 
+how to fetch credentials
+ for a scaler (e.g., from a Secret, env vars, or cloud/pod identity) so your 
+ScaledObject
+ can authenticate to queues/metrics without hard-coding secrets. There’s also a cluster-scoped variant, 
+ClusterTriggerAuthentication
+Verify:
+kubectl get secret
+kubectl get triggerauthentication
+7. Deploy Azure Service Bus ScaledObject
+The 
+ScaledObject
+ defines how KEDA should scale the worker app based on the number of messages in the Azure Service Bus queue.
+Scaled-object.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: queue-consumer-scaler
+spec:
+  scaleTargetRef:
+    name: queue-consumer-deployment # match same name of deployment 
+  pollingInterval: 10 # check every 10 seconds
+  cooldownPeriod: 60 # scaledown after 60 seconds of inactivity
+  minReplicaCount: 1 
+  maxReplicaCount: 20 # max 10 pods 
+  triggers:
+    - type: azure-servicebus
+      metadata:
+        queueName: datapump_test
+        queueLength: "3"
+      authenticationRef:
+        name: keda-servicebus-auth
+scaleTargetRef
+: which resource to scale; the name must be in the same namespace. KEDA will create/manage an 
+HPA
+ for it. 
+Polling/cooldown/min/max
+: control how often KEDA checks the trigger, how long it waits to scale back down, and your replica bounds. (Defaults: polling 
+30s
+, cooldown 
+300s
+, 
+min=0
+, 
+max=100
+.) 
+triggers
+: one or more scalers (Azure Service Bus example above). Each scaler defines required 
+metadata
+ and can reference credentials via 
+authenticationRef
+ (a 
+TriggerAuthentication
+ or 
+ClusterTriggerAuthentication
+)
+kubectl apply -f scaled-object.yaml
+It 
+creates or updates
+ a KEDA 
+ScaledObject
+ in our current cluster/namespace. A ScaledObject tells KEDA 
+which workload to scale
+ and 
+based on which trigger(s)
+ (Azure service bus queues, Kafka lag, HTTP, etc.). 
+8. Run the Publisher App to create messages and observe scaling
+This step simulates load by publishing messages to the queue. KEDA will detect the queue length and automatically scale up/down the worker pods.
+We’ll run a 
+Publisher app
+ that pushes messages onto your azure service bus queue. KEDA 
+ScaledObject
+ watches that queue. When the queue length crosses your trigger threshold, KEDA raises the target Deployment’s replicas (via an HPA). When the queue drains, it scales back down—often to zero if 
+minReplicaCount: 0
+.
+How scaling decisions are made
+KEDA polls our trigger every 
+pollingInterval
+ seconds (default 30).
+It computes a desired replica count roughly like:
+desired = ceil(current_queue_length ÷ target_per_pod)
+,
+then clamps it between 
+minReplicaCount
+ and 
+maxReplicaCount
+.
+After messages drop below the activation threshold, KEDA waits 
+cooldownPeriod
+ seconds before scaling down.
+kubectl get pods -w
+kubectl get pods -w
+ will show new pods starting (
+ContainerCreating
+ → 
+Running
+).
+Additional Commands
+View Logs
+To check consumer logs and verify message processing.
+kubectl logs <pod-name>
+# Example:
+kubectl logs queue-consumer-deployment-75556ff85f-cdm6l
+View Minikube Config
+To see current Kubernetes configuration and context.
+kubectl config view
+POC on Horizontal Pod Autoscaling (HPA) in Minikube
+Below the steps to set up and verify 
+Horizontal Pod Autoscaling (HPA)
+ using 
+kubectl
+ and 
+metrics-server
+ in a Minikube environment.
+Prerequisites
+Minikube installed and running
+kubectl
+ CLI configured
+A running deployment (e.g., 
+consumer
+) to be autoscaled
+Step 1: Apply HPA Configuration
+Create an HPA resource for your deployment using the provided YAML file:
+consumer-hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: datapumpconsumer-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: queue-consumer-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 2
+kubectl apply -f consumer-hpa.yaml
+This will configure autoscaling for the 
+consumer
+ deployment based on CPU utilization (or other metrics defined in your YAML).
+Step 2: Enable Metrics Server in Minikube
+HPA requires metrics to function. Enable the 
+metrics-server
+ addon in Minikube:
+minikube addons enable metrics-server
+Check that the 
+metrics-server
+ is running properly:
+kubectl get deployment metrics-server -n kube-system
+You should see the 
+metrics-server
+ deployment in the 
+kube-system
+ namespace with the desired number of pods available.
+Validation
+Ensure your 
+consumer
+ deployment scales up and down automatically when workload changes.
+Use the following command to monitor HPA behavior:
+kubectl get hpa
+kubectl get pods -w
+This will show CPU utilization and current replica count.
+📖 References
+https://helm.sh/
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+Getting Started | KEDA
+ URL:/spaces/PE/pages/4584177681/SPIKE+Datapump+Consumer+app+K8s+KEDA+autoscaling+and+K8s+Horizontal+pod+autoscaling+on+CPU+usage+metric

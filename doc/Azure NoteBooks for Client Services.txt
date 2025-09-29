@@ -1,0 +1,19 @@
+1
+7
+Introduction
+The current challenges in servicing the billers exposed us to problems where not all information is readily available and the Client Services team relies on DevSupport to piece in the information together. In order to bring the information closer to the Client Services. The idea is to provide product NoteBooks that will help to piece in the information mimicking the way DevSupport right now uses the DB queries to understand and explain what has happened.
+Nearly 50 to 60 % of tickets filed to DS are research in nature and with notebooks, we aim to reduce this by 50%
+Proposal
+The idea is DevSupport would work to develop the Notebooks for each of the product areas and checkin the Notebooks in the Azure Code Repository following the production SDLC process. This involves Data Services to review the Notebooks. These Notebooks will be available to Client Service Tier 3 in the CS Term and they connect to the standby production Database - West for running these Notebooks. DevSupport will create a pipeline to copy the files to a shared folder created in the CS Term machine. The Azure Data Studio will be used to run these Notebooks.
+Access
+CS Term to have the ability to connect Prod DB - West
+DB access requirements and controls are to be determined by the Data Services team
+Process
+Dev Support will develop the Notebooks
+Data Service will review and Dev Support will follow the same SDLC process to checkin the code
+Dev Support will create a pipeline to copy the files to the CS Term each time there is a new release of Notebooks
+Sample Notebook in Action
+We can explore on 
+https://dotnettutorials.net/lesson/why-we-need-views-in-sql-server/
+  DB Views to restrict table access. 
+ URL:/spaces/DS/pages/2572156933/Azure+NoteBooks+for+Client+Services

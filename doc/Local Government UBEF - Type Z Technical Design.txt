@@ -1,0 +1,1070 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+N/A
+Release Date
+Document status
+DRAFT
+Document owner
+ 
+ 
+Solution engineer
+ 
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+Attaching Local Gov doc here for reference - we need to compare this information to the ‘integrations’ we’ve already coded 
+Bill Presentment (Template Detail)
+Sample Template: 
+Mapping:
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: NA (Fixed length)
+Spec Sheet: 
+Sample File: 
+Straus File Path: 
+File Delimiter: NA (Fixed length)
+File Transfer Frequency: Once a month?
+NOTE: if the Line contains “999-99999-99  “, skip the line.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Description/Notes
+Partner Field Start Position
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+Always IH
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Always IH
+Invoice Header
+8
+RecordType
+TRUE
+Hardcoded to N
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+InvoiceDate (
+MMddyyyy
+) + UB + AccountNumber (with - chars removed)
+Invoice Header
+11
+InvoiceDate
+TRUE
+Obtained once from the last line of the file.
+25
+10
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+47
+10
+Invoice Header
+13
+TotalAmountDue
+TRUE
+13
+13
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+Invoice Header
+35
+CustomerShipState
+FALSE
+Invoice Header
+36
+CustomerShipZip
+FALSE
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+UBMFIL-DELINQ-DATE
+26
+10
+Invoice Header
+39
+Custom2
+FALSE
+Service Address
+247
+35
+Invoice Header
+40
+Custom3
+FALSE
+Service Address 2
+282
+35
+Invoice Header
+41
+Custom4
+FALSE
+UBMFIL-GROSS-AMT
+36
+11
+Invoice Header
+42
+Custom5
+FALSE
+UBMFIL-PREV - READ - Date
+227
+11
+Invoice Header
+43
+Custom6
+FALSE
+UBMFIL-CURR-READ-DATE
+237
+10
+Invoice Header
+44
+Custom7
+FALSE
+UBMFIL-GS-METER-NO
+217
+10
+Invoice Header
+45
+Custom8
+FALSE
+UBMFIL-WA-METER-NO
+327
+10
+Invoice Header
+46
+Custom9
+FALSE
+UBMFIL-LATE-NOTICE
+337
+1
+Invoice Header
+47
+Custom10
+FALSE
+UBMFIL-ACCT-TYPE
+Invoice Header
+48
+Custom11
+FALSE
+UBMFIL-BILL-CODE
+339
+1
+Invoice Header
+49
+Custom12
+FALSE
+UBMFIL-MESSAGE-NO
+340
+1
+Invoice Header
+50
+Custom13
+FALSE
+UBMFIL-COPIES
+341
+2
+Invoice Header
+56
+Custom19
+FALSE
+Invoice Header
+93
+BalanceDue
+FALSE
+Same as TotalAmountDue
+13
+13
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+Hardcoded to 42 (Utility)
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+Invoice Header
+346
+BillerBillYear
+FALSE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Always 1
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Always CR
+Customer Record
+59
+AccountNumber
+TRUE
+Prepend “UB” and strip “-” chars
+Ex: 12-345-6 → 
+UB123456
+1
+12
+Customer Record
+60
+CustomerName
+TRUE
+57
+35
+Customer Record
+61
+Address1
+FALSE
+127
+35
+Customer Record
+62
+Address2
+FALSE
+162
+35
+Customer Record
+63
+City
+FALSE
+Parse the City out of the City/State field.
+Split by spaces/commas and return the first element.
+If unable, return the whole City/State.
+197
+20
+Customer Record
+64
+State
+FALSE
+Parse the State out of the City/State field.
+Split by spaces/commas and return the last element.
+197
+20
+Customer Record
+65
+Zip
+FALSE
+217
+10
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+4581
+120
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+92
+35
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Same logic as AccountNumber
+Customer Record
+409
+Active
+FALSE
+Always 1
+Customer Record
+70
+RowType
+TRUE
+Always ID
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+Hardcoded to 
+Utility Bill Detail
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+UBMFIL-DETAIL
+The Following CustomField Fields are captured if the dataline char count is >= 1485
+343
+52 Each
+262
+CustomField66
+FALSE
+343
+52
+Invoice Detail
+263
+CustomField67
+FALSE
+395
+52
+Invoice Detail
+264
+CustomField68
+FALSE
+447
+52
+Invoice Detail
+265
+CustomField69
+FALSE
+499
+52
+Invoice Detail
+266
+CustomField70
+FALSE
+551
+52
+Invoice Detail
+267
+CustomField71
+FALSE
+603
+52
+Invoice Detail
+268
+CustomField72
+FALSE
+655
+52
+Invoice Detail
+269
+CustomField73
+FALSE
+707
+52
+Invoice Detail
+270
+CustomField74
+FALSE
+759
+52
+Invoice Detail
+271
+CustomField75
+FALSE
+811
+52
+Invoice Detail
+272
+CustomField76
+FALSE
+863
+52
+Invoice Detail
+273
+CustomField77
+FALSE
+915
+52
+Invoice Detail
+274
+CustomField78
+FALSE
+969
+52
+Invoice Detail
+275
+CustomField79
+FALSE
+1019
+52
+Invoice Detail
+276
+CustomField80
+FALSE
+1071
+52
+Invoice Detail
+277
+CustomField81
+FALSE
+1123
+52
+Invoice Detail
+278
+CustomField82
+FALSE
+1175
+52
+Invoice Detail
+279
+CustomField83
+FALSE
+1227
+52
+Invoice Detail
+280
+CustomField84
+FALSE
+1279
+52
+Invoice Detail
+281
+CustomField85
+FALSE
+1331
+52
+Invoice Detail
+282
+CustomField86
+FALSE
+1383
+52
+Invoice Detail
+283
+CustomField87
+FALSE
+1435
+52
+Invoice Detail
+MESSAGE
+The Following CustomField Fields are captured if the dataline char count is >= 1693
+1487
+52 Each
+CustomField88
+FALSE
+1487
+52
+Invoice Detail
+CustomField89
+FALSE
+1512
+52
+Invoice Detail
+CustomField90
+FALSE
+1537
+52
+Invoice Detail
+CustomField91
+FALSE
+1562
+52
+Invoice Detail
+UBMFIL-MM-HIST-X
+The Following CustomField Fields are captured if the dataline char count is >= 1902
+1785
+9 Each
+83
+CustomField1
+FALSE
+1787
+9
+Invoice Detail
+84
+CustomField2
+FALSE
+1796
+9
+Invoice Detail
+85
+CustomField3
+FALSE
+1805
+9
+Invoice Detail
+86
+CustomField4
+FALSE
+1814
+9
+Invoice Detail
+87
+CustomField5
+FALSE
+1823
+9
+Invoice Detail
+88
+CustomField6
+FALSE
+1832
+9
+Invoice Detail
+89
+CustomField7
+FALSE
+1841
+9
+Invoice Detail
+90
+CustomField8
+FALSE
+1850
+9
+Invoice Detail
+91
+CustomField9
+FALSE
+1859
+9
+Invoice Detail
+92
+CustomField10
+FALSE
+1868
+9
+Invoice Detail
+208
+CustomField11
+FALSE
+1877
+9
+Invoice Detail
+209
+CustomField12
+FALSE
+1886
+9
+Invoice Detail
+210
+CustomField13
+FALSE
+1895
+9
+Invoice Detail
+EL-HIST-X
+The Following CustomField Fields are captured if the dataline char count is >= 2188
+1902
+22 Each
+211
+CustomField14
+FALSE
+1904
+22
+Invoice Detail
+212
+CustomField15
+FALSE
+1926
+22
+Invoice Detail
+213
+CustomField16
+FALSE
+1948
+22
+Invoice Detail
+214
+CustomField17
+FALSE
+1970
+22
+Invoice Detail
+215
+CustomField18
+FALSE
+1992
+22
+Invoice Detail
+216
+CustomField19
+FALSE
+2014
+22
+Invoice Detail
+217
+CustomField20
+FALSE
+2036
+22
+Invoice Detail
+218
+CustomField21
+FALSE
+2058
+22
+Invoice Detail
+219
+CustomField22
+FALSE
+2080
+22
+Invoice Detail
+220
+CustomField23
+FALSE
+2102
+22
+Invoice Detail
+221
+CustomField24
+FALSE
+2124
+22
+Invoice Detail
+222
+CustomField25
+FALSE
+2146
+22
+Invoice Detail
+223
+CustomField26
+FALSE
+2168
+22
+Invoice Detail
+EL-HIST-X
+The Following CustomField Fields are captured if the dataline char count is >= 2474
+2190
+22 Each
+223
+CustomField27
+FALSE
+2190
+22
+Invoice Detail
+224
+CustomField28
+FALSE
+2212
+22
+Invoice Detail
+225
+CustomField29
+FALSE
+2234
+22
+Invoice Detail
+226
+CustomField30
+FALSE
+2256
+22
+Invoice Detail
+227
+CustomField31
+FALSE
+2278
+22
+Invoice Detail
+228
+CustomField32
+FALSE
+2300
+22
+Invoice Detail
+229
+CustomField33
+FALSE
+2322
+22
+Invoice Detail
+230
+CustomField34
+FALSE
+2344
+22
+Invoice Detail
+231
+CustomField35
+FALSE
+2366
+22
+Invoice Detail
+232
+CustomField36
+FALSE
+2388
+22
+Invoice Detail
+233
+CustomField37
+FALSE
+2410
+22
+Invoice Detail
+234
+CustomField38
+FALSE
+2432
+22
+Invoice Detail
+235
+CustomField39
+FALSE
+2454
+22
+Invoice Detail
+SW-HIST-X
+The Following CustomField Fields are captured if the dataline char count is >= 2759
+2476
+22 Each
+236
+CustomField40
+FALSE
+2476
+22
+Invoice Detail
+237
+CustomField41
+FALSE
+2498
+22
+Invoice Detail
+238
+CustomField42
+FALSE
+2520
+22
+Invoice Detail
+239
+CustomField43
+FALSE
+2542
+22
+Invoice Detail
+240
+CustomField44
+FALSE
+2564
+22
+Invoice Detail
+241
+CustomField45
+FALSE
+2586
+22
+Invoice Detail
+242
+CustomField46
+FALSE
+2608
+22
+Invoice Detail
+243
+CustomField47
+FALSE
+2630
+22
+Invoice Detail
+244
+CustomField48
+FALSE
+2652
+22
+Invoice Detail
+245
+CustomField49
+FALSE
+2674
+22
+Invoice Detail
+246
+CustomField50
+FALSE
+2696
+22
+Invoice Detail
+247
+CustomField51
+FALSE
+2718
+22
+Invoice Detail
+248
+CustomField52
+FALSE
+2740
+22
+Invoice Detail
+GS_HIST-X
+The Following CustomField Fields are captured if the dataline char count is >= 3046
+2762
+22 Each
+249
+CustomField53
+2762
+22
+Invoice Detail
+250
+CustomField54
+2784
+22
+Invoice Detail
+251
+CustomField55
+2806
+22
+Invoice Detail
+252
+CustomField56
+2828
+22
+Invoice Detail
+253
+CustomField57
+2850
+22
+Invoice Detail
+254
+CustomField58
+2872
+22
+Invoice Detail
+255
+CustomField59
+2894
+22
+Invoice Detail
+256
+CustomField60
+2916
+22
+Invoice Detail
+257
+CustomField61
+2938
+22
+Invoice Detail
+258
+CustomField62
+2960
+22
+Invoice Detail
+259
+CustomField63
+2982
+22
+Invoice Detail
+260
+CustomField64
+3004
+22
+Invoice Detail
+261
+CustomField65
+3028
+22
+Invoice Detail
+Additional Amounts and Dates
+The Following CustomField Fields are captured if the dataline char count is >= 3563
+262
+CustomField94
+UBMFIL-RECAP-PREV-BILL
+3416
+11
+Invoice Detail
+263
+CustomField94
+UBMFIL-RECAP-ACT-BILL
+3427
+11
+Invoice Detail
+264
+CustomField94
+UBMFIL-HIST-PAYM-AMT
+3438
+66
+Invoice Detail
+265
+CustomField95
+UBMFIL-HIST-PAYM-DATE
+3504
+66
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2503966721/Local+Government+UBEF+-+Type+Z+Technical+Design

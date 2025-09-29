@@ -1,0 +1,86 @@
+If you are part of client services, please use the automation in Salesforce. Otherwise please submit tickets using this service desk like: 
+https://invoicecloud.atlassian.net/servicedesk/customer/portal/4/group/16/create/57
+.
+Introduction
+Writing effective support tickets is crucial for ensuring timely and accurate resolution of issues. This guide is designed for IC personnel who need to report problems or request services from the Product Reliability team. The more detailed and clear the information provided, the better the team can assist. 
+Essential Information to Include in a Ticket
+Summary of the Issue or Request
+Title
+: A brief, descriptive title of the issue or request.
+Description
+: A concise summary of the problem or request.
+Detailed Information
+Expected Behavior
+: Describe how the system should behave. Include relevant details such as account numbers, invoice references, etc.
+Observed Behavior
+: Explain how the system is currently failing or not working as expected.
+Symptoms
+: List any indicators that show the system is not behaving correctly.
+Steps to Reproduce
+: Provide a step-by-step guide on how to recreate the issue. This helps engineers understand the problem better.
+Attachments
+: Include logs, screenshots, and any other relevant files. Actual files are preferred over screenshots for better analysis.
+Context and Background
+Background
+: Provide context about the issue or request. Explain why it is important and any relevant history.
+Research Objective
+: If the ticket involves research, specify the desired outcomes and deliverables.
+Frequency and Impact
+Frequency
+: Indicate how often the issue occurs (e.g., every time, intermittently, etc.).
+Impact
+: Describe the impact on business operations. This helps prioritize the issue based on its severity.
+Escalation Reason
+Urgency
+: If the issue is urgent, explain why it needs immediate attention.
+Additional Actions
+Expected Actions
+: Outline any additional actions required, such as data cleanup or configuration changes.
+What to avoid
+Ensure the ticket is well-written and free of grammatical errors.
+Avoid vague or unclear descriptions. Be as specific and detailed as possible.
+Tips for Writing Effective Tickets
+Be Clear and Concise
+: Use simple language and avoid jargon.
+Provide Complete Information
+: Include all relevant details to help engineers understand and resolve the issue.
+Use Templates
+: Follow the provided templates to ensure consistency and completeness. 
+https://invoicecloud.atlassian.net/wiki/x/BgD7pw
+ 
+Acceptable Ticket Description:
+Title
+: Payment Processing Error for Account #12345
+Description
+: The payment processing system is failing to complete transactions for account #12345.
+Expected Behavior
+: The system should process payments without errors.
+Observed Behavior
+: Payments are being rejected with error code 502.
+Symptoms
+: 
+Payment rejection
+Error code 502 displayed
+Steps to Reproduce
+:
+Log in to the customer portal.
+Select invoice #12345.
+Attempt to process a payment.
+Observe the error code 502 is shown in the confirmation page.
+Attachments
+: 
+Error logs
+Screenshot of the error message
+Background
+: This issue started  on DD/MM/YYYY at 09:00 PM CST after a recent terminal information update.
+Frequency
+: Occurs every time a payment is attempted by a population of billers. It seems to be intermittent. 
+Affected population
+: It seems to be somehow related to Invoice Type 12, and it only affect BID 1234.
+Impact
+: High impact, as it prevents customers from completing transactions.
+Escalation Reason
+: Urgent, as it affects multiple customers.
+Additional Actions
+: No additional actions required. If possible, provide a list of failed payments, including the invoice number.
+ URL:/spaces/DS/pages/2793046029/DS+Ticket+Submission+Guide

@@ -1,0 +1,40 @@
+Purpose
+To ensure the reliability, availability, and performance of web applications and APIs by implementing standardized health checks.
+Scope
+This applies to all web applications and APIs developed and maintained by the organization.
+Health Check
+Verifies if the application or API is running.
+Ensures that all critical dependencies (e.g., databases, external services) are operational.
+Implementation Guidelines
+Endpoint Creation
+:
+Create a dedicated endpoint ( 
+/health
+) for health checks that supports the HTTP GET METHOD
+Ensure the endpoint returns a status code of 200 for healthy and appropriate status code 500 for unhealthy state.
+Response Format
+:
+Use a consistent response format (e.g., JSON) with clear status indicators.
+Example response:
+json
+{
+  "version":"0.1.13+ddb9bfaa025e03379388ad84dc5017d6eae5d805",
+  "buildDate":"2024-12-13T21:45:58+00:00",
+  "serverDate":"2025-01-24T19:21:44.3305307+00:00",
+  "uptime":"5 hours 6 minutes 57.281 seconds"
+}
+
+Monitoring and Alerts
+:
+Integrate health checks with monitoring tools ( New Relic ) to provide real-time status updates and alerts..
+Documentation
+:
+Document the health check endpoints and their expected responses in the web application or API documentation.
+Best Practices
+Guard Against False Positives
+: Implement retries, timeouts, and fallbacks to avoid false positives
+Regular Testing
+: Periodically test health check endpoints to ensure they are functioning correctly.
+Scalability
+: Ensure health checks are efficient and do not introduce significant overhead.
+ URL:/spaces/ED/pages/3938320393/Health+Check+Implementation+for+Web+Applications+and+APIs

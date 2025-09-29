@@ -1,0 +1,7 @@
+Example alert: 
+https://invoicecloud.atlassian.net/jira/ops/teams/03124ad6-e200-417e-bcd6-08acf2e00444/alerts/41df1bc6-558a-448f-be6d-705d1bffa43e-1751958620174
+Description
+SEMCOBlockCCAccounts is a Skybot job that runs every 2 minutes. It essentially just updates the CC block status for accounts on Semco’s prod BID and 3 test BIDs. 
+Resolution
+Since this job runs every two minutes and is only responsible for updating the BlockPaymentsCC flag, you should not need to run the repo yourself or do any cleanup. You can just find the CustomerID(s) that failed and make sure they are updated successfully on the next run.
+ URL:/spaces/IM/pages/4492132377/SEMCOBlockCCAccounts+-+BIF

@@ -1,0 +1,195 @@
+1
+6
+false
+default
+list
+true
+Data Pump Definition
+Data Pump is a service provided by Invoice Cloud to Billers that posts 
+transactions
+, 
+autopay statuses
+, 
+paperless statuses
+, 
+ACH Rejects,
+ 
+etc
+. to a Biller/Software-Partner’s accounting software by calling their Software Partner’s API methods. 
+Triaging Data Pump issues can involve the “Data Pump History” page on the Biller Portal,  T-SQL calls in our Database, and a look into our Data Pump code repository. 
+Finding Data Pump Records in the Biller Portal
+You can view the Data Pump History for any customer by navigating the Biller Portal as shown below: 
+Finding Data Pump Records in the Database
+As of 12/16/2022, there are 10 types of Data Pump records that Invoice Cloud posts using a Biller/Software Partner API. These can be seen in the “Common T-SQL Queries” section under "To find what Data Pump Type you are searching for". 
+The most common Data Pump record types are Payment Processing, Paperless Sync, and Autopay Sync. Be sure that you are aware of the Data Pump Type and the corresponding Data Pump Type ID that is associated with the record you are looking for. 
+E.g. If a biller is concerned that a payment made on 12/03/2022 received an error, then the DataPumpTypeID is 1 which corresponds to “Payment Processing”. 
+The DataPump Table
+The DataPump table in our database is used as a Queue for the Data Pump Controller job on Automate Scheduler (A.K.A Skybot) to know which datapump records need to be processed. Records in the DataPump table with a DateDelivered field of NULL have not been posted yet and are considered “queued for DataPump”, and records with a non-NULL value in the DateDelivered field are considered “processed“ (with or without errors). 
+There will only be one DataPump record per set of post attempts. For example, if a record attempts to post through Data Pump 3 times, there will still only be one DataPump record. This record will record the result of the latest attempt to post. 
+The DataPumpDetail Table
+This table will record all attempts to post for a specified DataPump record based on the DataPumpID. The Success field, Message field, and Resent field can give you more information about the attempt in question. If you want to find a record that occurred at a specific time, this is the Table to use. 
+The SystemsAndSoftwareQueue Table
+If the Biller’s software partner is Systems and Software (A.K.A S&S), then they may be using a different table and code repository to process their Data Pump records. This information can be found in CRM → DataPump Management → General DataPump Configurations. If the DataPump Type is set to “Invoice Cloud” then they will be using the DataPump table, DataPumpDetail table, and the DataPump repository. Moreover, this configuration (where the software partner is S&S and their DataPump Type is set to “Invoice Cloud”) is considered “S&S V2” for Datapump. If this setting is set to “Systems And Software”, then they are using the SystemsAndSoftwareQueue table, DataPumpDetailSAndS table, and the SystemsAndSoftwareQueueProcessing repository; this configuration is considered “S&S V1” or “Legacy S&S DataPump“. 
+Note: the “DataPump Type” can also be found in the database . See the section “Common T-SQL Queries” under “To find if the Biller uses S&S Datapump“ for more information. 
+This table is equivalent to the DataPump table but for billers that use the S&S V1 configuration. This table’s “ID” field is considered the “DataPumpID”.
+The DataPumpDetailSAndS Table
+This table is equivalent to the DataPumpDetail table but for billers that use the S&S V1 configuration. Use the “ID” field from the SystemsAndSoftwareQueue Table for the “DataPumpID” when querying this table.  
+Common T-SQL Queries
+For the following queries, anything in [ ] is referencing a context-sensitive value (E.g. [CustomerID] is referencing the CustomerID of the Customer in question)
+-- To find if the Biller uses S&S Datapump
+SELECT * FROM BillerDataPump
+SELECT * FROM TBLDataPump 
+
+-- To find what Data Pump integration the biller is using
+SELECT * from Billers -- The PartnerID is the value we are looking for here
+
+-- To find what Data Pump Type you are searching for
+SELECT * from TBLDataPumpType
+
+-- To find the most recent Data Pump errors with a specified error message:
+SELECT TOP 100 * FROM DataPump WHERE Response like '%XXXXX%' ORDER BY DateRecAdded DESC
+SELECT TOP 100 * FROM DataPumpDetail WHERE Message like '%XXXXX%' ORDER BY DateRecAdded DESC
+
+-- To find a DataPump Message for a specific payment record:
+SELECT * FROM Payments WHERE InvoiceID = XXX
+SELECT * FROM DataPump Where DataPumpTypeID = 1 AND FKID = [PaymentID] ORDER BY DateRecAdded DESC
+
+-- To find a DataPump Message for a specific paperless sync record:
+SELECT * FROM Customers WHERE CustomerID = XXX
+SELECT * FROM DataPump Where DataPumpTypeID = 2 AND FKID = [CustomerID] ORDER BY DateRecAdded DESC
+
+-- To find a DataPump Message for a specific autopay sync record:
+SELECT * FROM Customers WHERE CustomerID = XXX
+SELECT * FROM DataPump Where DataPumpTypeID = 3 AND FKID = [CustomerID] ORDER BY DateRecAdded DESC
+
+-- For S&S integration below table will have the datapump records
+select * from systemsandsoftwarequeue
+
+--Find how many times a particular issue has occured per day
+select format(daterecadded,'yyyyMMdd'), count(datapumpid) from datapumpdetail where message like '%XXXXX%' group by format(daterecadded,'yyyyMMdd')
+
+-- Group DataPump records by response, also group similar reponses
+WITH GroupedResponses AS (
+    SELECT 
+        dp.DateRecAdded,
+        CASE 
+            WHEN dp.response like '%IC: An error ocurred when sending the Datapump record: The request channel timed out while waiting for a reply%' THEN 'IC: Timeout Error'
+            ELSE dp.response
+        END AS GroupedResponse,
+        dp.datapumpid,
+		dpt.datapumptypedesc
+    FROM 
+        datapump dp
+	LEFT JOIN tblDataPumpType dpt on dpt.datapumptypeid=dp.datapumptypeid
+    WHERE 
+        success = 0
+		
+)
+SELECT 
+    YEAR(DateRecAdded) AS 'Year',
+    MONTH(DateRecAdded) AS 'Month',
+    DAY(DateRecAdded) AS 'Day',
+	DataPumpTypeDesc,
+    GroupedResponse,
+    Format(COUNT(datapumpid),'N0') AS 'Count DataPump'
+FROM 
+    GroupedResponses
+GROUP BY 
+    YEAR(DateRecAdded),
+    MONTH(DateRecAdded),
+    DAY(DateRecAdded),
+	DataPumpTypeDesc,
+    GroupedResponse
+ORDER BY 
+    1 DESC, 
+    2 DESC, 
+    3 DESC,  
+    COUNT(datapumpid) DESC;
+Searching the Code Repository
+The Data Pump product uses the DataPump repository which can be found 
+here
+. The first half of troubleshooting Datapump involves identifying which Data Pump configuration/integration a biller uses on the Module1.vb page. The second half of troubleshooting involves looking at the relevant methods in the Software Partner’s base Class for Payments/Autopay/Paperless/Etc. 
+The DataPump repository is split into 2 distinct parts: Module1.vb and the base Classes. Module1.vb is used to determine what base Class is to be used when processing records that are queued up in the DataPump table on our database. Base Classes are separated by software partner and are used to determine how the data is to be posted. 
+Module1.vb is broken up into a 2 large VB Switches (called a Case) that segregate base Classes by both BillerID and by Software Partner ID (called the IntegratorID or PartnerID). The PartnerID can be found by using the query in this page’s Common T-SQL Queries section under “To find what Data Pump integration the biller is using“. Once the PartnerID has been identified, then you should use this ID to search for a corresponding Case statement in the Main method. For example, if the PartnerID is 71, then look for “Case 71” in the Main method. Each Case statement in the Main method will call another method for each DataPumpType that this Partner is setup for. For example, Harris Cayenta (PartnerID 71) is setup for Payments, Paperless, Autopay, and ACHRejects, so it will call a different method to process each of these types. 
+Once you know the DataPumpType (Payments, Autopay Sync, etc) that you are searching for, then you can go to the definition of the corresponding method in the Case statement. Be sure to keep track of the DataPumpModuleID that is passed into this method. This value will be used for the next large Case statement and is almost always the same value as the PartnerID. From here you will end up in the method responsible for calling the base Class' post method. Follow the Case statement based on the DataPumpModuleID that is passed in and watch the conditions that need to be met for the post method to occur. For example, if you end up in the BillerPayment() method, then the code will eventually call the base Class' PostPayment() method after pulling data on the Customer record and Payment record. There may be conditions based on the AdvancedSettings that the biller is setup for (like service versions). Find these settings on the CRM and apply them when necessary. 
+From here, simply go to the definition of the post method (for example, baseClass.PostPayment() is used for most payment posting) and follow the code logic as normal.  
+Note: In the integrations folder of the project we have 2 folders, Biller and Software.  The Biller folder handles extreme custom classes and the software folder handles software partner logic.  Both are based off the Integration Framework format.
+Tips
+For faster searching, clone the DataPump Repo on MS Visual Studios and use the “Find in Files” feature (Ctrl + Shift + F). Search for “Case XXX” where XXX is the PartnerID of the biller in question. 
+Access Data Pump Logs (App Servers)
+Prerequisite: Need to have the Shortcuts folder on the Term Server. Shortcuts folder contains the IC-App Servers, IC-PDF Servers, IC-SFTP Servers, IC-Web Server. Access the folder from DevSupport Share.
+After opening ‘Shortcuts’ folder, click on ‘IC-App Servers’. All the data pump logs are in this folder.
+Click on any one of the app servers to start searching for the data pump log.
+Click on EDataLogs -> DataPumpLogs.
+(Note: You can also look up a Biller ID when you are in the EDataLogs directory)
+Note: There are two types of Data Pump logs, one based on Biller and the other based on Software Partner.
+Access Data Pump Logs (New Relic)
+Prerequisite: Need to have a New Relic Account with access to the Logs portion of the site (see image below):
+Navigate to the Logs page and enter the following information to find the logs for a Data Pump record into the Query logs search bar: 
+entity.name:"DataPump" Message.Properties.BillerId:"[BillerID]" 
+If you are looking for a specific record, you can try to add the following data to your query, but depending on how the engineer chose to log the request, your results may vary. 
+message:*[DataPumpID or CustomerID]*
+Replace [BillerID] with the Biller ID in question and replace [DataPumpID or CustomerID] with the Data Pump ID of the Data Pump record in question or the CustomerID of the account in question. See 
+Common T-SQL Queries
+ above to get the Data Pump ID. 
+Make sure that the correct timeframe is selected on the top-right of the page: 
+You can click on the resulting Data Pump record by clicking on a result. It should look something like this:
+Email Notifications
+Repo: DataPumpErrorNotifications
+Automate Job: STAGING-DataPumpErrorSummary
+Frequency: Daily at 8AM CST
+If Biller Portal → Settings (Gear icon) → Email Management → Email Recipients indicates the Biller has added one or more email addresses to receive emails of Email Type - “Data Pump Error Summary”, they will receive emails of DataPump Errors within the last 24 hours 
+from the time the job is initiated (8AM CST)
+.
+If DataPump transactions are initially unsuccessfully posted but are later successfully resent 
+prior to 8AM CST
+ of the next day, the Biller 
+would not
+ receive DataPump Error Notification email as the DataPump record would already have been updated to reflect the successful repost.
+How to Run the DataPump Project for Testing
+Note: You should only run Data Pump when you are certain that your project is connecting to the DevTest database. 
+Remove or comment-out the following piece of code in Module1.vb:
+vb
+If Debugger.IsAttached AndAlso billerDT.Rows(0).Item("DemoAccount") = False Then
+  clsLogging.WriteLine(log_billerid, "You are running a Live Biller! Comment this out if you meant to do this.")
+  exit_code = 1
+  Return exit_code
+End If
+Right-click on the DataPump project (not the solution) and select Properties. Select the Debug tab on the left side of the screen and click on the text box labeled “Command line arguments:”. The DataPump project expects 2 command line arguments to determine which biller to process. These command line arguments are BillerID and PSGroup, so type something like this:
+-BillerID=[BillerID] -PSGroup=[PaymentSourceID]
+Replace [BillerID] with the BillerID of the biller you will be using to test and replace [PaymentSourceID] with the PaymentSourceID of the payment in question. If you are testing non-payments, set the PSGroup value to 0. 
+We determine which Data Pump integration to use based on the BillerID or the PartnerID of the biller in question. You can use the following SQL query to find this data:
+sql
+SELECT * FROM Billers
+The Module1.vb page uses large VB Case statements to determine which DataPumpType to use. Search this page for a case statement of either the BillerID or PartnerID.
+For example, if the biller’s PartnerID is 64 (Harris Advanced) then you can search for “case 64”. There may be multiple references to this case statement, but you are searching for the case statement that calls the DataPumpType methods. Here is an example, for PartnerID 64 where there are 5 DataPumpType configurations:
+vb
+Case 64 'Harris Advanced
+    BillerChangeLogs(String.Format("{0} [HarrisAdvanced]", billerDT.Rows(0).Item("BillerDBA")), CInt(Configuration.Item("BillerID").ToUpper), 64)
+    BillerPayment(String.Format("{0} [HarrisAdvanced]", billerDT.Rows(0).Item("BillerDBA")), CInt(Configuration.Item("BillerID").ToUpper), 64)
+    BillerPaperless(String.Format("{0} [HarrisAdvanced]", billerDT.Rows(0).Item("BillerDBA")), CInt(Configuration.Item("BillerID").ToUpper), 64)
+    BillerAutoPay(String.Format("{0} [HarrisAdvanced]", billerDT.Rows(0).Item("BillerDBA")), CInt(Configuration.Item("BillerID").ToUpper), 64)
+    BillerAutoPayPaymentMethodChange(String.Format("{0} [HarrisAdvanced]", billerDT.Rows(0).Item("BillerDBA")), CInt(Configuration.Item("BillerID").ToUpper), 64)
+Comment out the DataPumpType methods that you are not testing so only the desired type remains. 
+DataPump works as a queue, so there must be a record in the DataPump table that you will use to debug. Inside each of the DataPumpType methods exists a function call called “selDatapumpToProcess“. Normally this method retrieves all unprocessed records in the DataPump table and attempts to process them, but since we are debugging a specific record, you need to edit this method. Navigate to the definition of the selDatapumpToProcess method and update the “sql” assignment to use: 
+vb
+Dim sql = "selDataPumpToProcessDebug @DataPumpID =[DataPumpID]"
+Replace [DataPumpID] with the DataPumpID of the record that you want to debug. 
+Once this is done, navigate to the definition of the DataPumpType method (e.g. BillerPayment) and search again for the BillerID/PartnerID in a case statement. Inside this method’s case statement, you will see the object instantiation using the Base Class associated with this PartnerID: 
+vb
+Case 64 'Integrator/PartnerID 64 [Harris Advanced] Director
+    Dim director As New clsAdvancedDirector With {.BillerID = BillerID, .DataPumpType = 1}
+    ErrMsg = director.postPayment(DatapumpRow.Item("DataPumpID"), dtPayment.Rows(0))
+    director = Nothing
+Each DataPumpType method will call the Base Class' post method (in the example above, it is postPayment). This method is where you can begin to debug or research issues. 
+Training and Knowledge Materials
+Guru Cards:
+DataPump Changes
+DataPump Payments Not Posting - Terminal Option
+Portal Customization - Data Pump Feature
+Voids
+BS&A Data Pump
+After additional review, BS&A has confirmed webservice payments do not need to be passed through the Data pump and I have updated this setting in IC. As discussed, I am marking these as manually processed in IC. Moving forward, you should no longer see the error "UNABLE TO LOCATE CUSTOMER RECORD" for your over the counter payments. - 
+Salesforce Reference
+ 
+ URL:/spaces/DS/pages/2402713614/Data+Pump

@@ -1,0 +1,20 @@
+This document details the changes to Microf made by We’ll Do It Live! as they switched from OracleOFSLL to LoanPro.
+Worked On By:
+Katelyn Espinoza (Assignee)
+Stephanie Ivie (Reporter)
+Victor Cavada (Test Engineer)
+Related Items:
+EBPP-18162
+EBPP-18318
+Microf’s Technical Design Doc
+At A Glance:
+Previously, Microf used OracleOFSLL. Due to this, we implemented custom logic to show the following pages for any OracleOFSLL biller:
+Account Summary
+Transaction History
+View Pay off Quote
+Collateral Details 
+Each of these pages pulled the customer’s lease information from OracleOFSLL’s API. To do this, clsOracleOFSLL was created to house the call and assignment of the API response. Recently, Microf switched to using LoanPro’s services instead of OracleOFSLL’s.  After confirming Microf was the only biller to use OracleOFSLL, we decided to remove the Transaction History, View Pay Off Quote, and Collateral Details pages as well as the clsOracleOFSLL class.  Microf still wanted to utilize the Account Summary page while using LoanPro’s web services. We created clsLoanPro to house the API call to LoanPro.
+LoanPro API call:
+The credentials necessary to call LoanPro’s endpoint can be found in the CRM in the advanced settings under options 8, 9, and 10. 
+Account Summary Page:
+ URL:/spaces/PE/pages/3195011073/Account+Loan+Summary+Page+-+Microf

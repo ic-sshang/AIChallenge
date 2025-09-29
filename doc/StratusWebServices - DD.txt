@@ -1,0 +1,13 @@
+Stratus Web Services - Out of Memory Exception
+Subject: [New Relic] Azure - StratusWebServices - McLogin query result is > 2.0 on 'System Out Of Memory Exception'
+Alert email box: 
+alert@invoicecloud.opsgenie.net
+SME: 
+Description: There was a request to StratusWebServices that caused an out of memory exception. This is usually caused by a biller uploading a very large file (400MB+). There is a Stratus client update which will zip files before sending which should mitigate this issue.
+Common Issues:
+In the alert, look for the IP address in the StratusFileProcessor table in the IC_Perflogging DB for the biller ID.
+Stratus client will auto retry file uploads based on the stratus task setup in CRM. The incident will close itself out if a retry to upload the file succeeds (usually 2-3x).
+In the event the alert stays open, CS should be contacted to get the file manually and install 
+Stratus 2.6
+ which has the file zipping code.
+ URL:/spaces/IM/pages/3719299137/StratusWebServices+-+DD

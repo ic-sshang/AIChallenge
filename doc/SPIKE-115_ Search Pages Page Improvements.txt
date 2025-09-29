@@ -1,0 +1,104 @@
+Objective
+The objective of this document is to outline the improvements to the invoice view functionality. It provides a high-level overview of the current implementation and introduces the proposed enhancements that will make the invoice view more user-friendly, modern, and aligned with best practices.
+Current Implementation
+User Interface Behavior
+The invoice table currently includes:
+VSOutputID
+ as a static column (no hyperlink).
+A 
+View Invoice
+ option under an unnamed column.
+Invoice numbers
+ may or may not be displayed depending on Virtual Site Output configuration. 
+Technical Flow (High-Level) 
+Links are built dynamically during the 
+RowDataBound
+ event.
+If a 
+custom URL
+ is available, it is used. Otherwise:
+For remote viewing, the invoice is opened via a URL with parameters replaced dynamically (e.g., InvoiceGUID, Custom fields).
+For local viewing, the system redirects to 
+InvoiceViewer.aspx
+ with the relevant GUID and Biller information.
+Code snippet: 
+The final link always opens the invoice in a 
+new browser tab
+.
+New Implementation
+The new implementation introduces a modernized, more interactive approach to invoice viewing. The planned changes will require approximately 
+4 sprints of effort
+.
+1. Invoice Number Availability & Actions Column
+If 
+InvoiceNumber
+ is configured as a Virtual Site Output → display a 
+Bill # column
+ with hyperlinks.
+If not configured → Bill # column shows neutral text, with a fallback 
+View Invoice
+ option under a new 
+Actions column
+.
+The unnamed column will be replaced by a dedicated 
+Actions column
+ using a 
+Kebab menu
+ for options such as:
+View Invoice
+Set Reminder
+Related Invoices
+Technical Change: replace the existing data grid with 
+datatable.net
+ that will allow us to add hyperlink, custom button and Kebab menu.
+Estimated Effort: 
+1–2 sprints
+.
+New Implementation UI: 
+💡 
+Reference: Implementation similar to 
+BillerEmailDomainManagement.aspx
+ in Biller Portal.
+2. Invoice Number → Modal Preview
+Clicking a hyperlinked invoice number opens the invoice in a 
+popup modal preview
+ (instead of a new tab).
+Technical Change: Create a reusable control 
+ctrlModalPopup.ascx
+ for modal functionality.
+Estimated Effort: 
+1 sprint
+.
+New Implementation UI:
+💡 
+Reference: Modal popup implementation in 
+CustomEmailSetUp.aspx
+ and 
+BillerEmailDomainManagement.aspx
+.
+3. Modal Expansion & Download Options
+From the modal, the user can 
+expand to full screen
+, which redirects to a new tab for a complete PDF view.
+Options to 
+download or save
+ the invoice will be included.
+Technical Change: Extend modal functionality to support expansion and download.
+Estimated Effort: 
+1 sprint
+.
+New Implementation UI:
+Summary
+Current State
+Only supports a View Invoice link inside the table.
+Always redirects to a new tab (local or remote).
+Lacks modal preview, expansion, download, and accessibility improvements.
+New State
+Adds Bill # column with clickable invoice numbers.
+Introduces a dedicated Actions column with multiple options.
+Supports modal preview for inline invoice viewing.
+Enables Expand and Download options inside modal.
+Provides a more 
+accessible 
+and modern user experience.
+ URL:/spaces/PE/pages/4623466521/SPIKE-115+Search+Pages+Page+Improvements

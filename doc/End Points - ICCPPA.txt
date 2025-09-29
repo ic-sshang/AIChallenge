@@ -1,0 +1,49 @@
+IC Chase Payment Processing API
+The table below lists the available endpoints. For environments refer to the table in the next section.
+End Point
+Methods
+Description
+/api/v1/sale
+POST
+Process new payment transactions (Credit Card or ACH)
+/api/v1/refund
+POST
+Process refund requests for existing payments. Includes full and partial refunds.
+/api/v1/void
+POST
+Process void requests for  payments (payment needs to be either authorized for CC or PendingApproval for ACH)
+/health
+GET	
+Comprehensive health status with detailed system information
+/health/live
+GET	
+Kubernetes liveness probe - simple health check for pod restart decisions
+/health/ready
+GET	
+Kubernetes readiness probe - check if pod is ready to receive traffic
+/health/startup
+GET	
+Kubernetes startup probe - verify container has started successfully
+/health/version
+GET	
+Get application version information
+/health/builddate
+GET	
+Get application build date and timestamp
+/health/uptime
+GET	
+Get application uptime statistics
+Environment Base URLs
+Environment
+Base URL
+Dev
+https://api-dev.invoicecloud-beta.com/payer/ic-chase-payment-processing-api/health
+IAT
+https://api-iat.invoicecloud-beta.com/payer/ic-chase-payment-processing-api/health
+QAR
+https://api-qar.invoicecloud-beta.com/payer/ic-chase-payment-processing-api/health
+XAT
+https://api.invoicecloud-beta.com/payer/ic-chase-payment-processing-api/health
+PROD
+https://api.invoicecloud.com/payer/ic-chase-payment-processing-api/health
+ URL:/spaces/ED/pages/4375838731/End+Points+-+ICCPPA

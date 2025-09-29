@@ -1,0 +1,963 @@
+Page Navigation:
+Jira 
+INT-2321
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ITR
+15988
+Document status
+complete
+Green
+Document owner
+ 
+ 
+Solution engineer
+ 
+Salesforce SOW
+Link to SOW
+Knowledge Transfer
+https://app.gong.io/call?id=1143823465808988466&listen=true
+API Documentation
+Multi-Speak APIs are utilized for this integration. Multi-Speak is a 3rd party web service provider instead of a hosted web service provided by a software partner. IC Madison (formerly PSN) already has a subscription to Multi-Speak APIs.
+https://multispeakorg.net/
+user:  ICmultispeak
+pass:  newIntDaffron$
+Specifications:
+Additional Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+RTDR: Balance Update/ Payment Methods
+GetPayableItemsList
+The Requester requests from the CB a list of payableitems for a specific account. The CB returns a payableItemList object.
+xml
+POST /content/multispeak/specifications/30ac/CB_Server.asmx HTTP/1.1
+Host: multispeakorg.net
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+SOAPAction: "http://www.multispeak.org/Version_3.0/GetPayableItemsList"
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <MultiSpeakMsgHeader Version="string" UserID="string" Pwd="string" AppName="string" AppVersion="string" Company="string" CSUnits="feet or meters or USSurveyFeet or other" CoordinateSystem="string" Datum="string" SessionID="string" PreviousSessionID="string" ObjectsRemaining="integer" LastSent="string" RegistrationID="string" AuditID="string" MessageID="string" TimeStamp="dateTime" BuildString="string" xmlns="http://www.multispeak.org/Version_3.0" />
+  </soap:Header>
+  <soap:Body>
+    <GetPayableItemsList xmlns="http://www.multispeak.org/Version_3.0">
+      <accountNumber>string</accountNumber>
+    </GetPayableItemsList>
+  </soap:Body>
+</soap:Envelope>
+Field Mapping:
+accountNumber = AccountNumber
+xml
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: length
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <MultiSpeakMsgHeader Version="string" UserID="string" Pwd="string" AppName="string" AppVersion="string" Company="string" CSUnits="feet or meters or USSurveyFeet or other" CoordinateSystem="string" Datum="string" SessionID="string" PreviousSessionID="string" ObjectsRemaining="integer" LastSent="string" RegistrationID="string" AuditID="string" MessageID="string" TimeStamp="dateTime" BuildString="string" xmlns="http://www.multispeak.org/Version_3.0" />
+  </soap:Header>
+  <soap:Body>
+    <GetPayableItemsListResponse xmlns="http://www.multispeak.org/Version_3.0">
+      <GetPayableItemsListResult>
+        <payableItem>
+          <pastDueAmount>float</pastDueAmount>
+          <currentAmount>float</currentAmount>
+          <description>string</description>
+          <chargeCode>string</chargeCode>
+          <dueDate>dateTime</dueDate>
+          <disconnectDate>dateTime</disconnectDate>
+          <lastPaymentAmount>float</lastPaymentAmount>
+          <lastPaymentDate>dateTime</lastPaymentDate>
+        </payableItem>
+        <payableItem>
+          <pastDueAmount>float</pastDueAmount>
+          <currentAmount>float</currentAmount>
+          <description>string</description>
+          <chargeCode>string</chargeCode>
+          <dueDate>dateTime</dueDate>
+          <disconnectDate>dateTime</disconnectDate>
+          <lastPaymentAmount>float</lastPaymentAmount>
+          <lastPaymentDate>dateTime</lastPaymentDate>
+        </payableItem>
+        <allowableTransactionTypes>
+          <transactionType>string</transactionType>
+          <transactionType>string</transactionType>
+        </allowableTransactionTypes>
+      </GetPayableItemsListResult>
+    </GetPayableItemsListResponse>
+  </soap:Body>
+</soap:Envelope>
+All Current Amounts from each service extension should be added together to get the total amount due.
+All Past Due Amounts from each service extension should be added together to get the total past due amount.
+Prepaid accounts will have this extension:
+xml
+<extensionsList>
+                    <extensionsItem>
+                        <extName>remainingBalance</extName>
+                        <extValue>4.93</extValue>
+                        <extType>decimal</extType>
+                    </extensionsItem>
+                    <extensionsItem>
+                        <extName>remainingDays</extName>
+                        <extValue>1</extValue>
+                        <extType>decimal</extType>
+                    </extensionsItem>
+</extensionsList>
+Field Mapping:
+currentAmount = BalanceDue** (All extensions added together, no exclusions)
+**If the ‘prepaid’ extension exists, use: extValue (under remaining balance)= BalanceDue
+pastDueAmount = PastDue (All extensions added together, no exclusions)
+AllowableTransactionTypes= Allow/Block payment types based on allowed transaction types
+Cash Only- Block ACH
+if this extension is available, we should block CC: 
+<extensionsItem>
+<extName>preventCreditCard</extName>
+<extValue>Y</extValue>
+<extType>string</extType>
+Testing user ID and password:
+UserID: InvoiceCloud
+Password: IC2020$!
+Data Pump: Payment
+CommitPaymentTransaction
+Publisher requests that CB process a set of transactions that the PP has previously authorized and that have been sent as part of a paymentTransactionsList. CB returns information about the transactions to the Publisher.
+xml
+<<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Header>
+        <MultiSpeakMsgHeader xmlns="http://www.multispeak.org/Version_3.0"
+            UserID="asProvided" Pwd="asProvided" />
+    </Header>
+    <Body>
+        <CommitPaymentTransaction xmlns="http://www.multispeak.org/Version_3.0">
+            <transactions>
+               <paymentTransaction>
+               <accountNumber>35909001</accountNumber>
+               <creditCardPayment>
+                <tender>
+                 <extensionsList>
+                  <extensionsltem>
+                   <extName>transactionld</extName>
+                    <extValue>e4deba7f-86e7-4850-8226-d6a2fbfb0ab6</extValue>
+                 </extensionsltem>
+               </extensionsList>
+               <amount>232.1</amount>
+               <authorizationCode>A01 - Approved (EXACT MATCH)</authorizationCode>
+               <paymentMode>WEB</paymentMode>
+              </tender>
+             </creditCardPayment>
+            </paymentTransaction>
+          </transactions>
+        </CommitPaymentTransaction>
+    </Body>
+</Envelope
+Field Mapping
+:
+accountNumber= account number
+extName = transactionId
+extValue = authorizationCode
+Controlled by an Advanced setting 131 (JSON Configuration).  If advanced setting 131 exist, the <extValue> = PaymentGUID.  If advanced setting does not exist, use authorizationcode.
+Payment Array= 
+achPayment 
+cashPayment 
+CreditCardPayment 
+eCheckPayment
+Amount= Transaction amount only (no service/convenience fees)
+A recent modification was made (IC references it as ‘ServiceVersion2’ to alter the format used to send amounts to the Daffron system through data pump. More details can be found here: 
+INT-2321
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Authorization Code= Approval Code
+paymentMode= 
+As of 3/2/2023 Please change OBD to OBD instead of WEB or EFT. Int Mod: (To be linked once ITG is approved.)
+Testing user ID and password:
+User ID: InvoiceCloud
+Password: IC2020$!
+This extension should be added to all payment transactions
+<ns1:extensionsItem>
+              <ns1:extName>transactionId</ns1:extName>
+              <ns1:extValue>18</ns1:extValue>
+            </ns1:extensionsItem>
+The value should be the full approval code
+Add this extension to all Kiosk transactions:
+                        <ns1:extensionsItem>
+                           <ns1:extName>billerReference</ns1:extName>
+                           <ns1:extValue>
+BHappy
+</ns1:extValue>
+                        </ns1:extensionsItem>
+Value should be the Kiosk ID provided by Dynatouch
+Int Mod can be found here:
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header>
+      <MultiSpeakMsgHeader Company="Daffron and Associates, Inc." AppName="Toolbox iXp"
+         AppVersion="2.0" Version="3.0" SessionID="2013-01-01_010101"
+         xmlns="http://www.multispeak.org/Version_3.0"/>
+   </soapenv:Header>
+   <soapenv:Body>
+      <CommitPaymentTransactionResponse xmlns="http://www.multispeak.org/Version_3.0">
+         <CommitPaymentTransactionResult>
+            <paymentTransaction>
+               <accountNumber>267002</accountNumber>
+               <creditCardPayment>
+                  <tender>
+                     <amount>0.10</amount>
+                     <authorizationCode>123456</authorizationCode>
+                     <responseCode>Success</responseCode>
+                  </tender>
+               </creditCardPayment>
+            </paymentTransaction>
+         </CommitPaymentTransactionResult>
+      </CommitPaymentTransactionResponse>
+   </soapenv:Body>
+</soapenv:Envelope>
+Data Pump: Paperless Enrollment
+ModifyCBDataForCustomer - Add/Remove Paperless Billing
+xml
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+       xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <MultiSpeakMsgHeader UserID="InvoiceCloud" Pwd="password"     
+              xmlns="http://www.multispeak.org/Version_3.0" />
+  </soap:Header>
+  <soap:Body>
+     <ModifyCBDataForCustomer xmlns="http://www.multispeak.org/Version_3.0">
+       <customerData>
+         <customer objectID="1001">           
+<extensionsList>
+<extensionsItem>
+<extName>EBILL</extName>                    
+<extValue>Y</extValue>                            
+<extType>double</extType>                     
+</extensionsItem>
+</extensionsList>
+          </customer>
+       </customerData>
+     </ModifyCBDataForCustomer>
+   </soap:Body>
+ </soap:Envelope>
+Field Mapping: 
+customer objectID is base+sub
+extName must = EBILL
+To enroll extValue must be Y, To un-enroll must be N
+**DO NOT SEND unless enrolling or un-enrolling
+Testing user ID and password:
+User ID: InvoiceCloud
+Password: IC2020$!
+Data Pump: AutoPay Enrollment
+WriteAccountHistoryComments
+xml
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+       xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <MultiSpeakMsgHeader UserID="InvoiceCloud" Pwd="password"                     
+              xmlns="http://www.multispeak.org/Version_3.0" />
+  </soap:Header>
+  <soap:Body>
+<ns1:WriteAccountHistoryComments xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.multispeak.org/Version_3.0">
+  <ns1:comments>
+    <ns1:historyComment>
+      <ns1:customerID>1001</ns1:customerID>                                    
+      <ns1:serviceLocationID>321045080002</ns1:serviceLocationID>  location must be sent*
+      <ns1:logTime>2020-08-06T00:01:32-05:00</ns1:logTime>
+      <ns1:comment>AUTOPAY ON</ns1:comment>            
+    </ns1:historyComment>
+  </ns1:comments>
+</ns1:WriteAccountHistoryComments>
+Field Mapping:
+send AUTOPAY ON or AUTOPAY OFF
+customerID is base+sub
+Testing user ID and password:
+User ID: InvoiceCloud
+Password: IC2020$!
+Data Pump: Scheduled Payments
+*Only for Lowell Light & Power BID 2661
+INT-11451
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WriteAccountHistoryComments
+Post scheduled payments for Daffron to display in their system
+xml
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+       xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <MultiSpeakMsgHeader UserID="InvoiceCloud" Pwd="password"                     
+              xmlns="http://www.multispeak.org/Version_3.0" />
+  </soap:Header>
+  <soap:Body>
+<ns1:WriteAccountHistoryComments xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.multispeak.org/Version_3.0">
+  <ns1:comments>
+    <ns1:historyComment>
+      <ns1:customerID>1001</ns1:customerID>                                    
+      <ns1:serviceLocationID>321045080002</ns1:serviceLocationID>  location must be sent*
+      <ns1:logTime>2020-08-012T00:01:32-05:00</ns1:logTime>
+      <ns1:comment>SCHED_PAY 01012025 15075.25 121940013401</ns1:comment>            
+    </ns1:historyComment>
+  </ns1:comments>
+</ns1:WriteAccountHistoryComments>
+Field Mappings:
+customerID
+ = AccountNumber (base+sub)
+serviceLocationID
+ = Custom4 (from FileSpecID 41)
+logTime
+ = current date/time in 
+yyyy-MM-dd"T"hh:mm:ss[+|-]hh:mm
+ format
+comment
+ = string (max 70 characters) that Daffron will parse in one of the following formats:
+When a new payment is scheduled, 
+comment
+ = 
+SCHED_PAY {ScheduledPaymentDate} {ScheduledPaymentAmount} {InvoiceNumber}
+When a scheduled payment is canceled, 
+comment
+ = 
+SCHED_PAY_CNCL {ScheduledPaymentDate} {ScheduledPaymentAmount} {InvoiceNumber}
+When a scheduled payment is updated,
+comment
+ = 
+SCHED_PAY_UPDT {ScheduledPaymentDate} {ScheduledPaymentAmount} {InvoiceNumber}
+Field formats:
+ScheduledPaymentDate
+ format = 
+MMDDYYYY
+ScheduledPaymentAmount
+ format = 
+156.25
+Example XML: 
+<comment>SCHED_PAY 08152024 156.25 121940013401</comment>
+Testing user ID and password:
+User ID: InvoiceCloud
+Password: IC2020$!
+Bill Presentment
+PDF Linking
+PDF Linking Specification: 
+Port 8086
+Definitions:
+ACCT = Account Number
+SUB = Sub
+BCTR = Bill Control Number
+LDMO = Bill Date
+IC supports 4 versions of PDF Linking with Daffron. The service version is configured by Advanced Setting 119 Remote PDF Service Version: 
+Note - If Custom9 has "INV" or "EBIL" the code will force v2 for that invoice regardless of the setup version.
+*To enable functionality for IC to only pass the value after the “-” in Custom10
+, must configure Advanced Setting 131 (see Advanced Settings below)
+Versions
+Mapping
+Example BID(s)
+1 - Default
+PROCESSING_TYPE=HISTORY
+ACCT={Invoice.Custom2}
+SUB={Invoice.Custom3}
+2778 City of Manassas VA Utilities
+2
+PROCESSING_TYPE=HISTORY
+ACCT={Invoice.Custom2}
+SUB={Invoice.Custom3}
+BCTR={Invoice.Custom10}*
+2738 Grundy Electric Cooperative, Inc
+3
+PROCESSING_TYPE=HISTORY
+ACCT={Invoice.Custom2}
+SUB={Invoice.Custom3}
+BCTR={Invoice.Custom10}*
+LDMO={Invoice.InvoiceDate.Year + Invoice.InvoiceDate.Month}
+2557 Benton Municipal Light and Waterworks
+4
+PROCESSING_TYPE=HISTORY
+ACCT={Invoice.Custom2}
+SUB={Invoice.Custom3}
+BCTR={Invoice.Custom10}*
+LDMO={Invoice.InvoiceDate.Year + Invoice.InvoiceDate.Month}
+PRINT_FORM=TRUE
+2661 Lowell Light & Power
+File Mapping
+Invoice File
+File Extension: BIF
+File Naming Convention: 
+ BID_MMDDYYYY
+File Delimiter: 
+ pipe
+Specification: 
+ Daffron is sending us the IC BIF format.  Sample file below.
+Sample File: 
+SFTP Path:
+File Transfer Frequency: Upon Billing
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+N/A- IC Requirement- Always FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A- IC Requirement
+File Header
+4
+FileCreationDate
+Y
+TRUE
+N/A- IC Requirement- File Date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+N/A- IC Requirement- Invoice Count
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+N/A- IC Requirement- Total Invoice Amount
+File Header
+7
+RowType
+Y
+TRUE
+N/A- IC Requirement- Always IH
+Invoice Header
+8
+RecordType
+Y
+TRUE
+R
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A- IC Requirement
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+BLPMOHST
+Max BPBCTR for this account/sub (concat acctsub number if needs to be unique)
+ 
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BLPMOHST
+BPDATE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+BLPDUEDT
+DUDLDT
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+BLPMOHST
+BLPTDUE
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Account Base Number
+Numeric
+Base account number (customer number)
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Account Sub Number
+Numeric
+Sub account number (account number)
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Location Number
+Numeric
+Location ID
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Bill control number
+Numeric
+Invoice Header
+47
+Custom10
+Y
+TRUE
+Base Account-Billing Control Number
+Examples: 1234-12345, 5245-12345, 857725-12345
+Used either for bill presentment (details above and in advanced settings) OR
+Value used to ‘group’ invoices to process one autopay transaction per group. Functionality only available for United Cooperative BID 3337
+Invoice Header
+407
+PastDue
+Y
+FALSE
+BP Prior Balance
+CURRENCY
+Invoice Header
+58
+RowType
+Y
+TRUE
+N/A- IC Requirement- Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+BLPMSTR
+MSACCT-MSUB
+Customer Record
+60
+CustomerName
+Y
+TRUE
+BLPNAMST
+NANAME
+Customer Record
+61
+Address1
+Y
+FALSE
+BLPNAMST
+NAADD1
+Customer Record
+62
+Address2
+Y
+FALSE
+BLPNAMST
+NAADD2
+Customer Record
+63
+City
+Y
+FALSE
+BLPNAMST
+NAADD3
+Customer Record
+64
+State
+Y
+FALSE
+BLPNAMST
+NAADD3
+Customer Record
+65
+Zip
+Y
+FALSE
+BLPNAMST
+NAZIP
+Customer Record
+66
+Phone
+Y
+FALSE
+BLPNAMST
+NATEL1
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+BLPNAMST
+NAEMAIL
+Customer Record
+356
+BlockPaymentsCC
+Y
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+Advanced Settings 
+Setting ID
+Description
+Value
+Details & Logic
+Is Value Unique Per Biller? (Y/N)
+3
+SSO Customer Login URL
+Usually the biller’s home URL
+Y
+6
+Customer Portal - Supress Change Email
+0 or 1 (defaults to 0 if not set)
+Y
+8
+RTDR EndPoint/Webservice URL
+Ex. http://72.14.78.243:8083/tbx-daily/services/CB
+Y
+9
+RTDR Username if Applicable
+Ex. InvoiceCloud
+N
+10
+RTDR Key of Password if Applicable
+Ex. IC2020$!
+N
+11
+DataPump Payments EndPoint/Webservice URL
+Ex. http://72.14.78.243:8083/tbx-daily/services/CB
+Y
+12
+DataPump Payments EndPoint/Webservice Username
+Ex. InvoiceCloud
+N
+13
+Datapump Payments EndPoint/Webservice Password
+Ex. IC2020$!
+N
+14
+Datapump Paperless EndPoint/Webservice URL
+Ex. http://72.14.78.243:8083/tbx-daily/services/CB
+Y
+15
+Datapump Paperless EndPoint/Webservice Username
+Ex. InvoiceCloud
+N
+16
+Datapump Paperless EndPoint/Webservice Password
+Ex. IC2020$!
+N
+17
+Datapump Autopay EndPoint/Webservice URL
+Ex. http://72.14.78.243:8083/tbx-daily/services/CB
+Y
+18
+Datapump Autopay EndPoint/Webservice Username
+InvoiceCloud
+N
+19
+Datapump Autopay EndPoint/Webservice Password
+IC2020$!
+N
+20
+Remote PDF EndPoint/Webservice URL
+http://72.14.78.243:8086/eprint/
+Y
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+1
+N
+35
+Service Version
+1 or 2 (defaults to 1 if not set)
+Y
+64
+DataPump Payments CC Code
+<paymentSourceID>(<code>)
+pipe delimited “|“
+Ex. 0(WEB)|2(CSRWEB)|8(POS)
+Y
+65
+DataPump Payments ACH Code
+<paymentSourceID>(<code>)
+pipe delimited “|“
+Ex. 0(WEB)|2(CSRWEB)|8(POS)
+Y
+119
+Remote PDF Service Version
+1, 2, 3 or 4
+Specific to bill presentment version (version details above)
+N
+131
+JSON Configuration
+{"PdfConfig":{"BCTRModifier":"ValueAfterDash"}
+Specific to bill presentment and Custom10 value used
+N
+131
+JSON Configuration
+{ "Daffron": { "DataPumpConfigs": { "SkipDonationTypes": true } } }
+Specific to Donation InvoiceType and BID 2495
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Biller Questionnaire - BIF customization
+AutoPayCollectionDate
+Biller Questionnaire - BIF customization
+BalanceForward
+Required BIF customization
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGuid
+Invoice Cloud will set the InvoiceFormatGUID going forward - it should be Daffron - PDF Remote Link: (BA1CEC36-997C-48E3-8406-437640EDFF84)
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+In BIF
+PaymentExpirationDate
+Biller Quesitonnaire - BIF customization
+PaymentExpirationMessage
+Biller Quesitonnaire - BIF customization
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+ThirdNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+User Interaction and Design
+Data Flow - Invoice
+att559448065
+361234436
+1
+Daffron Invoice FIles
+IM
+att559415297
+att559349773
+0
+Data Flow - Adjustments
+att1826914400
+361234436
+1
+Daffron Adjustments
+IM
+att1829535765
+att1829797906
+0
+Data Flow - Post Payment
+att1829404748
+361234436
+1
+Daffron Payments
+IM
+att1829437455
+att1826783358
+0
+Data Flow - Change Log
+att1826848849
+361234436
+1
+Daffron Change Logs
+IM
+att1829208119
+att1829175347
+0
+Payer Experience - One Time Pay/Customer Portal Single Sign On
+Payer Experience - Customer Portal Single Sign On - Prepaid
+Payer Experience - Mobile Customer Portal SSO
+Biller Experience
+User Stories
+Story
+Notes
+Agreed Solution
+IC Standard Approach
+New Account, New E-mail Address
+Pirmary e-mail for the account. No user associated with it. One e-mail address per utility account, always associated with Owner
+CIS- unlimited number of e-mail addresses associated with an account. can have more than 1 e-mail address before user is registered.
+Ebiz- associates e-mail address with profile, but matches primary account on profile- Reset password- Notifications from ebiz, prepaid notifications
+E-mail Address will be sent in the Invoice File to Invoice Cloud. E-mail address will be used as the primary address in CIS, and a temporary Owner record in Invoice Cloud
+CIS Includes e-mail address in BIF
+CSR inputs new email address in Daffron CIS to existing account that is not currently registered
+E-mail is updated in CIS with no user registration
+Update customer registration
+Update E-mail Address (remote registration)
+Rest-- Customer Portal- Update Customer E-mail address
+Retrieve User accounts
+if no- remote registration
+If yes-
+update e-mail address
+Will create login types for each e-mail (user)
+Co-Owner will be permission for each user.
+To register and Link accounts, Daffron will pass in all accounts (Account + Sub) in remote registration.
+Daffron will call IC Web Services (REST):
+Remote Authentication> Update E-mail Address
+CIS includes e-mail address in BIF
+CSR modifies e-mail address in CIS on existing account that is previously registered
+Remote Registration- Update E-mail Address
+Daffron will call IC Web Services (REST): Remote Authentication> Update E-mail Address
+CIS includes e-mail address in BIF
+User registers for Daffron customer portal (eBiz)
+No e-mail address on file
+Same e-mail address on file
+Different e-mail address on file
+Brand New Customer: Enter information, update primary e-mail address with/ E-mail. No e-mail address on file- 
+Register Accounts for user, send username and e-mail address
+Customer with Same e-mail address on file: 
+Register accounts send username and e-mail address
+Customer with different e-mail address on file:
+Register accounts send username and e-mail address
+Secondary e-mail addresses stored in CIS will not be sent to Invoice Cloud.
+Daffron will call IC Web Services (REST): Remote Authentication> Register Accounts (Will pass both username and e-mail address)
+*Daffron will call IC Web Services (REST): Remote Authentication> Register Accounts (Will pass both username and e-mail address)
+**Daffron will call IC Web Services (REST): Remote Authentication> Register Accounts (Will pass both username and e-mail address)
+User updates e-mail address in Daffron Customer Portal after initial registration
+Update customer e-mail address
+Daffron will call IC Web Services (REST): Remote Authentication> Update E-mail Address
+Call update e-mail webservice
+User updates password in Daffron Customer Portal after initial registration
+Remote Registration: Update Password
+Daffron will call IC Web Services (REST): Remote Authentication> Update Password
+Call update password Webservice
+User invites additional eBiz profiles to register for the same utility account
+No Invitations,
+Permissions are all co-owner
+linking a second account to existing account- Remote Registration: Link Accounts
+(Happens in Daffron)
+User modifies phone number in CIS
+Daffron will call IC Web Services (SOAP): Cloud Management> Update Customer Record
+CSR Make Payment - Workflow in progress** ETA Q3-Q4
+Cloudpay V2
+Will not show in IC that CSR made payment
+All web service payments = CSR payments
+Without Stored information
+Use Saved Payment Method
+IC Report back to Daffron CSR made payment- Daffron will store this information if a payment is made when someone is routed to CPV2.
+IC reports show CSR made Payment
+Biller Portal payment, Search payments will show who made payment
+Make payment using multiple user profiles (not only Owner  Jira-1192)
+CSR Connect-  1,6,7,8
+CSR sign user up for AutoPay
+Must use Biller Portal
+IC report back to Daffron CSR signed user up for Autopay
+IC Reports reflect CSR sign up
+CSR sign user up for Paperless
+Signup completed in Daffron CIS
+Signup in Daffron > Daffron calls updatepaperless API.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+https://www.invoicecloud.com/portal/webservices/CloudInvoicing.asmx/UploadInvoiceFile
+Load Invoice Files
+RegisterAccountsForUser
+Registering new accounts 
+linkaccounts
+Linking accounts to existing user registration 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5475
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Estimated 1/12/23
+Use Custom10 value for bill presentment (details above)
+Use only a portion of the Custom10 value for bill presentment
+Custom10 is going to be used for autopay grouping functionality (see below) and this field will be modified. The full value will be used for the autopay grouping but only a portion will be used for bill presentment.
+EBPP-8383
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Estimated 1/17/23
+No functionality to ‘group’ autopay payments 
+Value in Custom10 will be associated with a ‘group’ of accounts and invoices that should be consolidated to process one transaction during the autopay run. (This works in conjunction with CRM Option 128)
+This applies to linked/grouped accounts that have 2 or more accounts. This functionality will group the accounts/invoices when running autopay so only one transaction completes and one transaction receipt is sent to the payer.
+EBPP-8383
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Estimated 1/17/23
+When retrieving an existing invoice in IC via CloudPayV2, IC displayed the ‘Balance Due’ from the IC invoice record and ignored the ‘Balance Due’ from the CloudPayV2 web service call.
+When retrieving an existing invoice in IC via CloudPayV2, display the ‘Balance Due’ from the CloudPayV2 web service call (regardless of what’s on the IC invoice record).
+EBPP-1659
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Prepaid accounts always have a due date and a current balance, no options to e-mail balance notifications.
+Create prepaid accounts with prepaid balances displayed properly, balance threshold to trigger e-mail notifications, new UI for prepaid
+Create prepaid accounts with prepaid balances displayed properly, balance threshold to trigger e-mail notifications, new UI for prepaid
+EBPP-1647
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+E-mail history is only available in Invoice Cloud
+All e-mail history is available in the Daffron biller portal instead of looking in multiple systems.
+All e-mail history is available in the Daffron biller portal instead of looking in multiple systems.
+INT-8007
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+1/23/2024
+Autopay Status is posted without serviceLocationID
+Autopay Status is posted with serviceLocationID
+Configured the Advanced Setting 131 JSON to fix the location issue. This fix only applies to BID 2495. 
+{ "Daffron": { "DataPumpConfigs": { "SkipDonationTypes": true } } }
+INT-11451
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Scheduled payment notifications are not sent to Daffron
+Scheduled payments are sent to Daffron via data pump
+Daffron receives notifications of scheduled payments to their 
+WriteAccountHistoryComments
+ endpoint via data pump
+ITG-3014
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Datapump payments is receiving errors since the authorization code is not unique.  This only happens when 2 payments are made for difference invoices on the same day.  This field is used at Daffron to indicate if a duplicated was being sent.
+To make the authorization code a unique value, add the payment GUID to the end, but still truncate at 50 characters.  Example:  "A01 - Approved (EXACT MATCH) - 1C24B6E3-32EB-43F3"
+By adding the payment GUID to the end of the authorization number, this field will be distinct.
+ITG-3305
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+ITG-3014 was incorrectly done since the API “CommitPaymentTransaction” API section in this documentation was outdated.
+In error, an advanced setting 131 was created to add the payment GUID to the end of the authorization code, but still truncate at 50 characters.  This was the incorrect field to modify and it should have been <extValue>.
+1 - Change authorizationCode to use AuthCode.  This is how it was prior to ITG-3014.
+There is a field in the API called <extValue> which currently = AuthCode.  This field should be the field controlled by the advanced setting 131 to use paymentGUID instead of AuthCode.  If advanced setting does not exist, still use AuthCode as the <extValue> value.
+The <extValue> is used by Milsoft to determine if a duplicate payment has been sent to their systems.  By using paymentGUID in this field, payment GUIDs are unique and will not cause any duplicates.
+This was done as an Advanced setting (131) to not effect all billers
+ URL:/spaces/IM/pages/361234436/Daffron-Milsoft+Technical+Design

@@ -1,0 +1,254 @@
+The following variances were observed between the code hosted in 
+the Azure DevOps repository
+ and the code hosted on the database server. Note that any database screenshots below were taken based on connection to 
+ic-dbtest-east-server1.database.windows.net,1433
+.
+Note that this list does not purport to be a complete list of variances/diffs in 
+DBMaster_GoldAzure
+ schema objects between the repository and server. The items listed below were impactful for recreating the end-to-end seeding process in a local copy of the database server running inside of a Docker container.
+Further analysis should be conducted on 
+DBMaster_GoldAzure
+ to determine what additional items should be modified in the existing repository definitions to match the versions deployed on the server. This is highly impactful for Disaster Recovery operations.
+1. dbo.Billers
+The 
+CREATE TABLE
+ script between 
+the repository
+ & server for 
+dbo.Billers
+ is different - with the server-deployed version containing additional properties & constraints.
+Repository - Missing additional params that are present on server.
+DBMaster_AzureGold
+ - includes additional params.
+2. dbo.BillerDomains
+The 
+dbo.BillerDomains
+ table is missing in the repository - but exists on the server and is required for the 
+dbo.insBillers
+ to work properly.
+Repository - Missing 
+dbo.BillerDomains
+DBMaster_AzureGold
+ showing the 
+dbo.BillerDomains
+ table.
+3. dbo.insCreateBillerShard
+The 
+insCreateBillerShard_mcl
+ stored procedure does not exist in the repository - but does on the server. A nearly identical Stored Procedure, 
+insCreateBillerShard
+, 
+DOES exist in the repository
+, however it excludes some critical logic - notably the difference in the 
+@PoolId
+ value and lack of a template database 
+OrigDBName
+This stored procedure is called from 
+ICCRM
+ in the 
+Biller Wizard to initiate the setup of a Biller Shard
+.
+Repository - Missing 
+insCreateBillerShard_mcl
+Presence of 
+insCreateBillerShard_mcl
+ stored procedure in 
+DBMaster_AzureGold
+4. dbo.insBillers
+The 
+insBillers
+ stored procedure in the 
+DBMaster_AzureGold repository
+ is quite different from the server deployed version. Notably - the repository version is missing the 
+@DomainID
+, 
+@DomainTypeID
+, and 
+@AuthenticationTypeID
+ params, and the call to 
+INSERT
+ for 
+dbo.BillerDomains
+ is missing entirely.
+Repository - Missing 
+@DomainID
+, 
+@DomainTypeID
+, and 
+@AuthenticationTypeID
+ + 
+INSERT
+ into 
+dbo.BillerDomains
+.
+DBMaster_AzureGold
+ - Includes 
+@DomainID
+, 
+@DomainTypeID
+, and 
+@AuthenticationTypeID
+. Also includes 
+INSERT
+ into 
+dbo.BillerDomains
+ utilizing some of these values (not pictured).
+5. 
+mcl
+ Schema
+All objects contained in the 
+mcl
+ schema are missing from the repository - however, they are present on the server.
+Tables (1)
+mcl.tblAuthenticationType
+Stored Procedures (2)
+mcl.lstAuthenticationType
+mcl.spCheckBillerAuthenticationChange
+mcl
+ schema folder missing from the repository
+mcl.tblAuthenticationType
+ on the server.
+mcl.lstAuthenticationType
+ & 
+mcl.spCheckBillerAuthenticationChange
+ on the server.
+5. 
+itg
+Schema
+All objects contained in the 
+itg
+ schema are missing from the repository - however, they are present on the server.
+Tables (16)
+itg.BillerFileSplit
+itg.FieldMappings
+itg.IntegratorProfiles
+itg.ProfileAdvancedSettings
+itg.ProfileBIFCustomizations
+itg.ProfileBillerFileSplitConfig
+itg.ProfileDataPumpConfig
+itg.ProfileDataPumpParams
+itg.ProfileFields
+itg.ProfileFtpFileConfig
+itg.ProfileFtpFileExportConfig
+itg.ProfileFtpPdfConfig
+itg.ProfileFtpZipConfig
+itg.ProfileStratusAvailableFormats
+itg.ProfileStratusConfig
+itg.ProfileTerminals
+Stored Procedures (50)
+itg.delBillerFileSplit
+itg.delProfileBillerFileSplitConfig
+itg.insBillerFileSplit
+itg.insFieldMappings
+itg.insIntegratorProfiles
+itg.insProfileAdvancedSettings
+itg.insProfileBIFCustomizations
+itg.insProfileBillerFileSplitConfig
+itg.insProfileDataPumpConfig
+itg.insProfileDataPumpParams
+itg.insProfileFields
+itg.insProfileFtpFileConfig
+itg.insProfileFtpFileExportConfig
+itg.insProfileFtpPdfConfig
+itg.insProfileFtpZipConfig
+itg.insProfileStratusAvailableFormats
+itg.insProfileStratusConfig
+itg.insProfileTerminals
+itg.selBillerFileSplit
+itg.selFieldMappings
+itg.selIntegratorProfiles
+itg.selProfileAdvancedSettings
+itg.selProfileBIFCustomizations
+itg.selProfileBillerFileSplitConfig
+itg.selProfileDataPumpConfig
+itg.selProfileDataPumpParams
+itg.selProfileFields
+itg.selProfileFtpFileConfig
+itg.selProfileFtpFileExportConfig
+itg.selProfileFtpPdfConfig
+itg.selProfileFtpZipConfig
+itg.selProfileStratusAvailableFormats
+itg.selProfileStratusConfig
+itg.selProfileTerminals
+itg.updBillerFileSplit
+itg.updFieldMappings
+itg.updIntegratorProfiles
+itg.updProfileAdvancedSettings
+itg.updProfileBIFCustomizations
+itg.updProfileBillerFileSplitConfig
+itg.updProfileDataPumpConfig
+itg.updProfileDataPumpParams
+itg.updProfileFields
+itg.updProfileFtpFileConfig
+itg.updProfileFtpFileExportConfig
+itg.updProfileFtpPdfConfig
+itg.updProfileFtpZipConfig
+itg.updProfileStratusAvailableFormats
+itg.updProfileStratusConfig
+itg.updProfileTerminals
+itg
+ folder missing from the repository
+itg
+ tables on the server
+itg
+ stored procedures on the server
+6. 
+stg
+Schema
+All objects contained in the 
+stg
+ schema are missing from the repository - however, they are present on the server.
+Tables (11)
+stg.BillerAmexIDs
+stg.BillerElasticOptions
+stg.BillerEmailProcessList
+stg.Billers
+stg.Billers_ProdBackup
+stg.BillerUsers_Master
+stg.ChaseBillerMIDs
+stg.Employees
+stg.icBillStatementData_Master
+stg.prdInvoicing_Master
+stg.VirtualSites_Master
+Stored Procedures (20)
+stg.insBillerForTestDB
+stg.spFlushBillerAmexIDs_Master
+stg.spFlushBillerElasticOptions
+stg.spFlushBillerEmailProcessList
+stg.spFlushBillers_Master
+stg.spFlushBillerUsers_Master
+stg.spFlushChaseBillerMIDs
+stg.spFlushEmployees
+stg.spFlushPrdInvoicing_Master
+stg.spFlushVirtualSites_Master
+stg.spLoadBillerAmexIDs_Master
+stg.spLoadBillerEmailProcessList_Master
+stg.spLoadBillers_Master
+stg.spLoadBillerUsers_Master
+stg.spLoadEmployees
+stg.spLoadprdInvoicing_Master
+stg.spLoadVirtualSites_Master
+stg.spRefreshBillerElasticOptions
+stg.spRefreshChaseBillerMIDs
+stg.spRevertBillersUpdate_Master
+7. dbo.ChangeLogs
+The 
+dbo.ChangeLogs table
+ is missing the 
+UserFKID
+ column that is present on the server.
+dbo.ChangeLogs
+ definition in the repository
+dbo.ChangeLogs
+ definition on the server.
+7. dbo.Integrators
+The 
+dbo.Integrators
+ table in the repository is missing the column definition for 
+DivisionID
+, which is present on the server.
+dbo.Integrators
+ definition in the repository
+dbo.Integrators
+ definition on the server.
+ URL:/spaces/EA/pages/4611670117/Diffs+-+Repository+vs.+Server

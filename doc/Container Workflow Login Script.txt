@@ -1,0 +1,70 @@
+The following PowerShell script can be used to execute bulk logins for all services you will use when executing a container workflow - feel free to save this off locally, modify it, convert it to Bash, etc.
+powershell
+param (
+    [Parameter(Mandatory)]
+    [string]$AzContainerRegistry,
+    [switch]$RunAzLogin,
+    [switch]$UsePodman
+)
+
+$ACR_USER_NAME="00000000-0000-0000-0000-000000000000"
+
+# Login to Azure via az CLI.
+if($RunAzLogin) {
+    Write-Host "Logging into Azure CLI" -ForegroundColor Green
+    az login
+}
+
+Write-Host "Logging into ACR $AzContainerRegistry via Azure CLI" -ForegroundColor Green
+
+Write-Host "az acr login --name $AzContainerRegistry --expose-token --output tsv --query accessToken"
+$TOKEN=$(az acr login --name $AzContainerRegistry --expose-token --output tsv --query accessToken)
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Failed to login to ACR $AzContainerRegistry" -ForegroundColor Red
+    exit 1
+}
+
+
+if($UsePodman) {
+    Write-Host "Logging into ACR $AzContainerRegistry via podman CLI" -ForegroundColor Green
+
+    Write-Host "podman login '$($AzContainerRegistry).azurecr.io' --username '$($ACR_USER_NAME)' --password $TOKEN"
+    podman login "$($AzContainerRegistry).azurecr.io" --username "$($ACR_USER_NAME)" --password $TOKEN
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Failed to login to ACR $AzContainerRegistry via podman CLI" -ForegroundColor Red
+        exit 1
+    }
+} else {
+    Write-Host "Logging into ACR $AzContainerRegistry via docker CLI" -ForegroundColor Green
+
+    Write-Host "docker login '$($AzContainerRegistry).azurecr.io' --username '$($ACR_USER_NAME)' --password $TOKEN"
+    docker login "$($AzContainerRegistry).azurecr.io" --username "$($ACR_USER_NAME)" --password $TOKEN
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Failed to login to ACR $AzContainerRegistry via docker CLI" -ForegroundColor Red
+        exit 1
+    }
+}
+
+Write-Host "Logging into ACR $AzContainerRegistry via Helm CLI" -ForegroundColor Green
+
+Write-Host "helm registry login '($AzContainerRegistry).azurecr.io' --username $($ACR_USER_NAME) --password $TOKEN"
+helm registry login "$($AzContainerRegistry).azurecr.io" --username "$($ACR_USER_NAME)" --password $TOKEN
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Failed to login to ACR $AzContainerRegistry via Helm CLI" -ForegroundColor Red
+    exit 1
+}
+Usage
+bash
+# Run the script without running 'az login' - default to Docker.
+C:\> .\container-login.ps1 -AzContainerRegistry acrglbimages1sbx
+
+# Run the script with 'az login' as the first task - default to Docker.
+C:\> .\container-login.ps1 -AzContainerRegistry acrglbimages1sbx -RunAzLogin
+
+# Run the script with 'az login' as the first task - use Podman instead of Docker.
+C:\> .\container-login.ps1 -AzContainerRegistry acrglbimages1sbx -RunAzLogin -UsePodman
+ URL:/spaces/PMK/pages/4309287042/Container+Workflow+Login+Script

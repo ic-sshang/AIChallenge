@@ -1,0 +1,214 @@
+Idea #1: Optimize registration (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+InvoiceCloud currently has a confusing and inconsistent registration process. This limitation on our payer site prevents higher adoption rates for auto-pay, the metric linked most directly to retention and satisfaction. In order to compete in the industry, we need to update the UI and workflow around customer registration, which will result in greater adoption of online payments, autopay, paperless, and pay-by-text. 
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Registered users make 3% more payments a month than those who aren't registered.
+AutoPay: registered users are using autopay at a 4% higher rate than unregistered users
+Paperless: registered users are signing up for paperless at a 3% higher rate than unregistered users
+Pay-by-text: registered users are using pay-by-text at a 1% higher rate than registered users
+Who is the end user of this product / feature?
+Payers
+What will this product / feature do better than other available alternatives?
+It will use existing infrastructure to optimize the registration process
+No need to create a whole new integration to register people
+How will we make money on this product / feature?
+Registered users make 3% more payments online than non-registered users:
+If registration goes up only 1%, it has the potential to significantly boost the IC payments received. In the last 12 months, $24,771,800,309 were paid towards invoices.
+To calculate the potential increase in income if the registration rate increases by 1%, you would multiply the total payments received in the last 12 months by the product of the increase in payments made by registered users (3%) and the increase in registered users (1%).
+Here's the calculation: $24,771,800,309 * 3% * 1% = $7,431,540.09
+So, if you can increase your registered users to 21% from the current 20%, you could potentially increase your income by approximately $7,431,540.09.
+registered users are using autopay at a 4% higher rate than unregistered users
+Autopay users are making payments over 50% more often than non-autopay users. Last year, autopay payments generated $6,852,666,222. 13.4% of total users use autopay. 
+Currently, 5% of our registered users are using autopay. With a user base of 5.6 million unique users per month (according to Pendo), a 1% increase in user registration would result in an increase of autopay users by 0.05%, which translates to around 2,800 new autopay users.
+Given the current average invoice amount of $181.75 for autopay, calculated from last year’s autopay-generated payments of $6,852,666,222 divided by the total number of autopay invoices (37,703,647) these new autopay users could potentially generate significant additional revenue. If registration goes up by 1%, resulting in the addition of 2,800 autopay users, there would be an increase of $508,900 in revenue with each registration percentage gain.
+What happens if we don’t build this product / feature (now)?
+user registration will remain low and security issues will not be addressed
+Idea #2 Remove the obstacle that searching/registering/linking invoice accounts presents (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing? 
+ 
+Payers find it very difficult to find the invoice they are looking for in order to pay it,
+ 
+which is the main function on our site
+! and Payers with multiple accounts especially find it very difficult.  They have continually expressed that they want to be able to either follow a link from their email notification directly to the invoice that is due (for unlogged users), or to log in and see one aggregated list of ALL invoice accounts of any type that they have,  with the ones due highlighted at the top, without having to search for them or to link their accounts together.  They want to be able to select multiple invoices of any type from that list, and put them into a cart to checkout, in one transaction with one set of fees. 
+ The search parameters seem arbitrary to them, they don’t want to have to go look for their account number or customer number (or other criteria), they think name and service address should be sufficient.  
+The input fields do not allow copying and pasting data into them, and the validation is too strict when it comes to things like dashes, so that even when they have the right info, the system doesn’t find results if they don’t enter criteria in exactly right. 
+Payers don’t understand why they still have to search for their invoices even after logging in.
+The search results are very confusing, with no ability to sort or search through them to find the invoice that is due. There are many complaints that the latest invoice is at the bottom of the list, so not even on the first page of results in some cases. The 0 balance invoices being mixed in confuse them too.  
+Payers do not understand the concept of “registering” an invoice, or why they would want to do that, nor do they understand why they would need to manually link invoice accounts of different types for the same biller under one profile login.
+Users with multiple accounts often forget or are unsure which invoice account they are working with, especially since they tend rely on service address to differentiate, and we don’t display the service address on an account level or offer a mechanism to easily allow them to switch between accounts.
+Users with multiple accounts say they have to use a different email address to log in to each one, which is frustrating as they often only use one main email account.
+With separate logins for each invoice account, they receive separate notifications instead of one aggregated notification. 
+Some landlords might have 90 accounts, and they received 90 invoices! 
+Then they have to separately log in to each,  and  input all the same account info and payment info for each, which is incredibly time consuming, rather than doing it once and having that info apply to all their accounts. They have to set up separate Autopays rather than just one that covers all their invoices due.  They have to make separate payments, and are charged separate fees for each account. 
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+If we are able to implement a unique identifier for a user profile, so that a user is able to log in and quickly see the aggregated list of all their invoices/accounts, with the ones currently due highlighted, it makes it so much quicker and easier to pay their bills, and would make them more likely to adopt our system, according to their feedback. 
+Who is the end user of this product / feature?
+Payers with multiple invoice type accounts under the same biller would be the primary target audience, but even Payers with only one invoice account would benefit from a streamlined search
+What will this product / feature do better than other available alternatives?
+Offering a high-level, aggregated view
+ of their invoice accounts and enabling users to pay as many of them as they desire in one transaction will likely improve adoption of and satisfaction with our Payer product.
+How will we make money on this product / feature?
+Increased adoption by multiple account holders
+What happens if we don’t build this product / feature (now)?  
+Adoption will stagnate as Payer complaints on our main value proposition remain un-addressed
+Idea #3 Consolidation of and re-framing of future payment options (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+Right now, we have several different types of “future payment” options.  AutoPay is one.  Scheduled payments are another.  Recurring payments is another.  Flexpay may be another…there are potentially more- we need to find a way to inventory the differences, and then make sure they’re all seamlessly defined and communicated in a single experience.  We need to standardize on terminology.  The differences are HIGHLY confusing for billers, payers, and even internal people. 
+Additionally, given that those account services are our money makers, we don’t have a good strategy for framing them and promoting them consistently throughout our apps. Payers not only don’t understand what they are, but they do not understand what the implications are of signing up for any of these (ie. on what schedule their payments are made from which payment methods, how fees mught differ, etc.). They also aren’t clear on how to get info on or manage their enrollments once signed up. Ultimately they do not know how these flexible options might benefit them. 
+Payers want more flexibility in selecting payment dates and timeframes (ie. quarterly), and are also frustrated at the limits on payment amount
+ 
+per transaction, which often forces them to pay a large bill in separate transactions where they incur separate fees.
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Helping Payers understand the flexibility we offer in ways to pay their invoices can only benefit both the Payers and Invoice Cloud.
+Who is the end user of this product / feature?
+Payers, and peripherally Billers
+What will this product / feature do better than other available alternatives?
+ TBD
+How will we make money on this product / feature?
+Presumably, helping Payers to understand their options better will lead to better adoption of them, and more revenue for IC. 
+What happens if we don’t build this product / feature (now)? 
+We could potentially lose out on the fees/revenue associated with enrolling in these services. 
+Idea #4 Take the burden of support off of the Billers by automating Payer support on our side (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+Payers often contact Billers for support with our Payer application. This makes us look bad and makes billers unhappy as well as the payers.  We could eliminate that burden, without having to hire additional support reps, by automating Payer support on our side in the following ways:
+Adding in contextual Help modules to assist the user at painful touchpoints in the app screens
+Creating a Knowledgebase of FAQs that address basic questions
+Offering a way to send an email message &/or to call support at IC (requires staff to handle it)
+Alternatively, adding a Help widget in-app that incorporates the above, but additionally could provide a live chat (chatbot), either pre-coded with responses or AI-driven
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+If Payers are immediately able to find the answers to their questions in-app, they will be less inclined to complain to billers about IC
+Who is the end user of this product / feature?
+Payers
+What will this product / feature do better than other available alternatives?
+Currently the Payers have to email or call Billers, who may not even be able to answer their questions, whereas this proposal puts the answers right in front of them in-app 
+How will we make money on this product / feature?
+While it might require an initial up front investment of time and money, ultimately it would save us both by the support being automated.
+What happens if we don’t build this product / feature (now)?
+Payers have no clear route for support on the IC side, and take their complaints to our Billers
+Example: 
+ 
+Idea #5 Rethink invoice(s) presentation (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+ Across the Payer application, the way that invoice lists are presented is incredibly confusing to our Payers
+It is not clear which invoices are due, and when,  what their total balance due is, or how to pay it(!) 
+This is the most basic information that Payers come to our application for! 
+Invoices are not shown in chronological order so that the latest open invoice is at the top of the list (this may have been recently fixed?)
+The search fields are not on the same screen as the results, and there are no additional sort or filter options on the results lists
+0 balance invoices are mixed in with the others in lists, which is very confusing.
+Payers don’t understand the difference between Paid and Closed invoices. 
+Payers do not understand why they would ever care about Related invoices. 
+Users find it difficult to determine where they can find their invoice history, and have complained that it is not comprehensive enough.
+On the logged in Dashboard, the different buckets for invoices (Closed Invoices, Payment History, Scheduled Payments, Adjustment History) don’t really make sense to them. Payers request a more traditional
+ aggregated transaction list, with filters for type
+, rather than separating them out. 
+The call to action to Pay an invoice needs to be much more clear
+Utility Payers request the ability to see more details about their utility usage over time when viewing recent invoices
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Our application purportedly makes it easy for Payers to view and pay their invoices online, but in practice that is not the case.  Cleaning up invoices presentation will align us better with our value prop. 
+Who is the end user of this product / feature?
+Payers
+What will this product / feature do better than other available alternatives?
+TBD
+How will we make money on this product / feature?
+Helping Payers quickly and easily view and pay their invoices will result in more completed payments
+What happens if we don’t build this product / feature (now)? 
+Payers will continue to find our application frustrating and may be less likely to adopt it
+Idea #6 Redesign the Reports functionality and consolidate all the options into a Report Builder (Biller)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+There are a variety of reports available to billers today that are very hard to find in the portal. Currently they have to go into Reports>Custom Reporting>Scheduled and then click New Scheduled Report, and then click into the Report Type dropdown in order to see what is available, which is ridiculous. They would prefer to see a list of options up front on the dashboard. 
+Additionally, these reports should be more configurable, ie. they would like to be able to view by date ranges. 
+They would also like the ability to automate reports on a configurable schedule, and see the summaries on their dashboard (and even be emailed them), with the ability to export details to a PDF or XLS. 
+Results should be searchable, sortable, filterable. The number of records should not be limited as they are currently, and pagination should be more intuitive.
+For the Donations report (unable to find an example to show here), billers have said there is a choice between a high level summary or a full report view; they need something in the middle, like a monthly summary with filters.
+For the
+ 
+OBD Reports, email notifications don't match the deposit totals for Billers, which many of them complain about
+On the EFT/ACH Rejects screen, there should be a better way to cross reference the Payer record
+Other requests include a summary total of payments processed for the month, better defined AutoPay reporting, and the ability to pull a report of customers and emails when they run Paperless campaigns, without having to call Support for it- will need to do some research to narrow down issues with these
+The email notification history report is not granular enough, they can't tell if the email was opened or read.
+Make it easier to get a list of accounts no longer used so they can be deleted
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Making the popular reports easier to find and use, with more flexibility and a simpler presentation,  will likely lead to Billers using them more regularly
+Who is the end user of this product / feature?
+Billers
+What will this product / feature do better than other available alternatives?
+Currently Billers tend to find manual hacks or just don’t even know what is available to them, this will increase transparency
+How will we make money on this product / feature?
+ TBD
+What happens if we don’t build this product / feature (now)? 
+Billers will remain unaware of the scope of and utility of the reports we offer for their use
+Idea #7 Redesign the Email Admin tool (Biller)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+The current email management tool desperately needs to be redesigned. There are too many options listed in each available droplist (such as the different templates), and no clear explanation on how this tool is used.  Example: 
+ 
+This would ideally be changed to a more 
+WYSIWYG design
+, with some pre-designed templates inherent, and the ability to switch back and forth between editing content, and previewing. Ideally we can move to a tool with more functionality for managing campaigns, segmenting users, scheduling, analytics etc.
+Given the move towards enterprise where billers want more self-service options, we might consider combining email administration into a
+ general configuration tool
+ that includes virtual site and customer portal administration as well- pulling all of that out of the CRM and putting it into the Biller portal.  We should offer a few templates with limited color palettes (billers would sample the primary color in their logo and use the closest template that corresponds to that color) and font selections, sizes, etc., and in general create UI standards, to reign in the Billers' ability to create disastrous UIs. 
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+In general, a revised email admin tool would give the billers more independence, as well as cleaning up our outdated templates.  A larger administration tool which includes the Payer site would go a long way to help us standardize and modernize the UI, while catering to the Billers' self service needs. 
+Who is the end user of this product / feature?
+Billers
+What will this product / feature do better than other available alternatives?
+TBD
+How will we make money on this product / feature?
+Better emails might attract more attention and adoption from Payers, and will satisfy 
+Billers who currently find the admin tool subpar
+What happens if we don’t build this product / feature (now)? 
+Status quo with bad emails and bad email administration experience
+Idea #8 Clean up and implement the Autopay/Payment Methods management screens that we already have fleshed out (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+Autopay is our primary revenue driver, and Payers often complain they do not understand how Autopay works and often do not complete their registration unknowingly, causing their payment to be missed. Design already put a lot of work into redesigning these 
+user flows
+, which we should pick up again, refine, and release. 
+Users don’t really know what Autopay means- which invoices will be paid on which schedule, by which payment method, starting on what date? Is there a fee? 
+Autopay registration triggers an email, and unless this has been changed since we last looked, the Payer is required to click a link in that email to confirm their registration before it is complete, so they often miss that and thus their bill is not paid automatically on the next round, as they expect it should be. 
+Autopay enrollment depends on the payer having set up a valid, default payment method on their account first. The current flow jumping back and forth from those two sections is very confusing for them. Payers need a little more handholding, maybe a wizard, to help complete the steps of the set up.
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Simplifying the user flow around adding a default payment method, registering for Autopay including clicking the link in the email, and providing more transparency on how it works (on what dates etc), will go a long way towards user adoption and satisfaction with our main revenue driver. 
+Who is the end user of this product / feature?
+Payers
+What will this product / feature do better than other available alternatives?
+TBD
+How will we make money on this product / feature?
+Need data
+What happens if we don’t build this product / feature (now)? 
+Payers often complain that their Autopay “doesn’t work”
+Idea #9 - Open VS landing pages to search engines (Payer)
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+Today Virtual Sites are blocked from search engines, meaning IC is reliant upon billers creating a straightforward path from the biller site to us. However 
+billers
+ 
+often
+ 
+bury
+ links, providing obstacles to adoption. We should open VS landing pages (only) to search engines to so payers can find our sites organically. 
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity?
+Opening our pages up to search engines will allow payers to search “Pay my bill (insert biller name)” to find us directly. 
+Who is the end user of this product / feature?
+Payers
+What will this product / feature do better than other available alternatives?
+(Competitive info needed – currently this is at least a gap with 
+doxo
+, who hijacks links from us)
+How will we make money on this product / feature?
+92% of global traffic comes from Google
+, and we convert one out of every (insert actual number users). By driving more traffic, we should drive greater adoption. 
+What happens if we don’t build this product / feature (now)? 
+Lost revenue/adoption opportunity due to biller misconfiguration 
+Idea #10
+What problem or opportunity is the customer experiencing? Why is this problem meaningful and worth addressing?
+Simplify the Customer Profile.
+What value proposition does this product / feature provide for the end user? How will it address the core problem or opportunity? 
+Today the customer profile is hard to navigate and have an IA that is unintuitive. There are many paths for billers to access the info that they want. We can reduce the # of clicks and convoluted navigation.
+Who is the end user of this product / feature? Billers / admin
+Billers admin 
+What will this product / feature do better than other available alternatives? 
+Provide a better admin tool than other biller systems that is easy to use.
+How will we make money on this product / feature?
+Better tool for billers to control customer settings.
+What happens if we don’t build this product / feature (now)? 
+The multiple customer profile tabs are not accessible.
+ URL:/spaces/PRODUCT/pages/3315695652/Idea+Capture+Worksheet+-+UX

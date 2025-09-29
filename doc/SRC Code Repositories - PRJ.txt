@@ -1,0 +1,1555 @@
+Table Of Code Repositories
+Scrum Team
+ - Owner
+Not In Use
+ - Indicates that the code repository was either created and never operationalized or it is obsolete and not used in production.  If it needs to be archived add it to 
+ADO Archive Retired Code Bases - PRJ
+ 
+Type
+ - Indicates the type of project
+Job - Skybot job runs on a schedule or a job that is kicked off by another process
+Web App - User interface used in web browsers
+Web API - Application interface used over HTTP (SOAP or RESTful)
+Az Function - Job that is hosted in Azure using the Function runtime
+Az Batch - Job that is hosted in Azure Batch
+Library - Shared code used in one or more code repositories
+Desktop App - User interface used in Windows OS
+Windows Service - Service code hosted in Windows OS that runs background work and/or exposes internal APIs
+Critical 
+- Indicates that the business has categorized the code repository for use in prioritizing / defining work streams  
+ADO Project
+Business Service
+Code Repository
+Scrum Team
+Not In Use
+Type
+Critical
+Notes
+Src
+Chargebacks
+AcculynkChargebackProcessing
+Wicked Tendies
+Yes
+Job
+Yes
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+Batch Closures
+AchAutoClose
+Wicked Tendies
+Job
+Yes
+Src
+Ach Rejects
+AchRejectBlocking
+BMS
+Job
+Src
+Ach Rejects
+AchSwapTableManagement
+Job
+Yes
+Src
+Batch Closures
+AdaptikBatchClose
+Wicked Tendies
+Yes
+Job
+Yes
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+Other
+AmexGRRCN_Import
+Wicked Tendies
+Job
+Src
+Other
+AmexResidualImport
+Job
+Tony to review
+Src
+File Processing
+AmsFileSplit
+Integrations
+Job
+Src
+File Processing
+AMSFTPProcessing
+Integrations
+Job
+Src
+Other
+ApiGateway
+Si Mas Mas
+Yes
+Src
+AutoPay
+AutoPaymentProcessing
+SPAM
+Job
+Yes
+remove any related job schedules in skybot
+Src
+AutoPay
+AutoPaymentReceiptLinkProcessing
+Wicked Tendies
+Yes
+Job
+Src
+AutoPay
+AutoPaymentReminders
+SPAM
+Job
+remove any related job schedules in skybot
+Src
+AutoPay
+AutoPaymentsProcessingMultiInvoice
+SPAM
+Job
+remove any related job schedules in skybot
+Src
+AutoPay
+AutoPaySchedulePayChainComplete
+SPAM
+Yes
+Job
+Need to archive, remove any related job schedules in skybot
+Src
+AutoPay
+AutoPayService
+Si Mas Mas
+Yes
+Web API
+Src
+Other
+AzureBatchLateStartMonitor
+SPAM
+Yes
+Job
+Confirmed with SPAM we can archive it. Holding job on skybot
+Src
+Other
+AzureSkybotChecker
+Shared
+Job
+Src
+Other
+AzureVMMaintenanceNotifier
+Shared
+Job
+Src
+Batch Closures
+BatchCloseAlternateAudit
+Wicked Tendies
+Job
+Src
+Batch Closures
+BatchCloseListProcessor
+Wicked Tendies
+Job
+Yes
+Src
+Other
+BatchJobRunHistory
+Dinesh / SRE
+ empty project but has you doing the only commit
+Src
+File Processing
+BelmontLightFileSplit
+INT - Best Integrator Friends
+Job
+Src
+File Processing
+BillerAPIDataImport
+INT - Best Integrator Friends
+Job
+Src
+CRM
+BillerBankChangedProcessing
+Wicked Tendies
+Az Function
+Yes
+Src
+Realtime Data Refresh
+BillerBulkRTDR
+INT - Best Integrator Friends
+Job
+Src
+FIle Processing
+BillerFileSplit
+INT - Best Integrator Friends
+Job
+Src
+BillerFileUpload
+Integrations
+Library
+Src
+BillerFTPExportProcessing
+Integrations
+Job
+Src
+BillerFtpPdfProcessing
+Integrations
+Job
+Src
+BillerFtpProcessing
+Integrations
+Job
+Src
+BillerPDFRemoteLinkingReferenceProcessing
+Integrations
+Job
+Src
+BillerReportGenerator
+BMS
+Job
+Yes
+Src
+BillerReportScheduler
+BMS
+Job
+Yes
+Src
+BillerService
+Si Mas Mas
+Yes
+No Code
+MH: Needs to be deleted
+Src
+BillerService.Common
+Si Mas Mas
+Yes
+No Code
+MH: Needs to be deleted
+Src
+BillerSpamNotifications
+SPAM
+Job
+Src
+BluefinEmvAuthorizationMonitor
+BMS
+Az Function
+Src
+BostonBreakupInvoiceFile
+INT - Best Integrator Friends
+Job
+Src
+BostonFeesInterest
+Si Mas Mas
+Job
+Src
+BostonFileUploadConfirmation
+INT - Best Integrator Friends
+Job
+Src
+BostonMoveFiles
+Integrations
+Job
+Src
+BouncedEmailMonitor
+SPAM
+Job
+Src
+BouncedEmailProcessing
+SPAM
+Job
+Src
+BridgePayReconciliation
+Wicked Tendies
+Job
+Src
+BSAAutopayWeeklyRTDR
+INT - Best Integrator Friends
+Job
+Src
+BSASoftwareProcessing
+Web API
+Yes
+Does not belong to Integrations
+Src
+Cass.Reporting
+Wicked Tendies
+Job
+Src
+CassApplyScheduledLedgerEntries
+Wicked Tendies
+Job
+Src
+CassBankActivityImport
+Wicked Tendies
+Job
+Src
+CassDepositReconciliation
+Wicked Tendies
+Job
+Src
+CASSFileReceiptProcessing
+Wicked Tendies
+Job
+Src
+CassNachaFileCreation
+Wicked Tendies
+Job
+Yes
+Src
+ChandlerDailyReportExport
+Integrations
+Job
+Src
+ChandlerLinkedAccounts
+INT - Best Integrator Friends
+Job
+Src
+ChaseChargebacks
+Wicked Tendies
+Job
+Yes
+Src
+ChaseDFRFiles
+Wicked Tendies
+Job
+Yes
+Src
+ChaseDFRFiles_Import
+Wicked Tendies
+Job
+Yes
+Src
+ChaseGlobalBin
+Wicked Tendies
+Job
+Yes
+Src
+ChaseNOCs
+Wicked Tendies
+Job
+Yes
+Src
+ChasePCL3FileImport
+Wicked Tendies
+Job
+Yes
+Src
+ChaseRejects
+Wicked Tendies
+Job
+Yes
+Src
+ChaseRetrievalRequests
+Wicked Tendies
+Job
+Yes
+Src
+ChaseTimeoutMonitor
+Wicked Tendies
+Job
+Src
+ChaseTransactionReconciliation
+Wicked Tendies
+Job
+Yes
+Src
+ChaseTransactionSync
+Wicked Tendies
+No Code
+MH: Needs to be deleted
+Src
+ChathamCountyDailyFileRetrieval
+Integrations
+Job
+Src
+CirrusUtilities
+SPAM
+Web App
+Yes
+Src
+CloudConnect
+BMS
+Desktop App
+Yes
+Src
+CloudConnectAPI
+BMS
+Web API
+Yes
+Src
+CloudConnectAPI_COM
+BMS
+Yes
+Src
+CloudConnectWS
+BMS
+Web API
+Yes
+Src
+CloudPOSPay
+BMS
+Desktop App
+Yes
+Src
+clsInvoiceData
+Integrations
+Library
+Src
+ConveyedAccountsPostOp
+Integrations
+Job
+Src
+CreateAzureBiller
+BMS
+Job
+Src
+CreateLateFees
+SPAM
+remove any related job schedules in skybot
+Src
+CreditCardAutoClose
+Wicked Tendies
+Yes
+Src
+CTP
+Wicked Tendies
+Web API
+Yes
+Src
+CustomAccountLinking
+INT - Best Integrator Friends
+Src
+CustomBatchClose
+Wicked Tendies
+Yes
+Yes
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+DailyBillerMgtReportEmail
+BMS
+Job
+Yes
+Src
+DataPump
+Integrations
+Src
+DataPumpController
+Integrations
+Src
+DataPumpErrorNotifications
+Integrations
+Src
+DataPumpErrorResets
+Integrations
+Src
+DataPumpMonitor
+Integrations
+Src
+DeclineRateMonitor
+Wicked Tendies
+Src
+DemoPortals
+Shared
+Src
+DirectoryCleanUp
+TC: No clear owner
+MH: evolve to be a shell script to clean up temporary files off servers
+Src
+DiscoverBinFileImport
+Wicked Tendies
+Job
+Src
+EFTRejects
+Wicked Tendies
+Yes
+Src
+elastic-db-tools
+TC: No clear owner
+MH: might not be in use
+Src
+EmailQueueProcessing
+Shared
+Yes
+SPAM could take
+Skybot: Clean up old job schedules
+Src
+EmailQueueProcessor
+Shared
+Az Function
+maybe SPAM
+Src
+EmailQueueStats
+SPAM
+Job
+Src
+EmailRegistrationManagement
+SPAM
+Job
+is this still used? 
+ 
+Src
+FedBanksUpdater
+BMS
+Yes
+Job
+No
+No longer used 
+ 
+Src
+FileImportMonitor
+INT - Best Integrator Friends
+Src
+FileImportNotifications
+INT - Best Integrator Friends
+Src
+FlexPayAutoEnrollScheduleGenerator
+SPAM
+Job
+Src
+FMHistoricalBilling
+Wicked Tendies
+Yes
+Src
+fnComputeBillerRevenue
+Wicked Tendies
+Yes
+Src
+FTPFileMonitor
+Integrations
+Src
+GitFlowDemo
+Yes
+TC: We can prob archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+GutsPvdBulkDataRefresh
+INT - Best Integrator Friends
+Src
+GutsPvdFileProcessing
+INT - Best Integrator Friends
+Src
+HawaiianTelcomRejects
+Wicked Tendies
+Job
+Yes
+Src
+HawaiiBatchClose
+Wicked Tendies
+Job
+Yes
+Src
+HighVolumeAutoPay
+SPAM
+Job
+Src
+IC.ApplicationAuthService
+Shared
+Src
+IC.Azure.Batch
+Shared
+SPAM should take
+Src
+IC.Azure.Blob
+Shared
+Src
+IC.Azure.ContainerInstances
+Yes
+TC: First time I’ve ever seen this
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.BatchClose
+Wicked Tendies
+Src
+IC.BatchCloseHelpers
+Wicked Tendies
+Src
+IC.BIF.Customizations
+INT - Best Integrator Friends
+Src
+IC.BlockPaymentMethodNotification
+Wicked Tendies
+Src
+IC.Common.Core
+Yes
+TC: Empty
+MH: Archive
+Src
+IC.Common.Standard
+TC: Empty
+MH: Needs to be cleaned up from OneTimePaymentService, Archive
+Src
+IC.CustomBatchClose
+Wicked Tendies
+ I think this is the work Rene did and was scrapped
+Src
+IC.Database.Authentication
+Shared
+Library
+Src
+IC.Database.Authentication.AzureFunctions
+Shared
+Library
+Src
+IC.Devices.CardReaders
+SPAM
+Library
+Src
+IC.DigitalWallet
+Wicked Tendies
+Src
+IC.EmailQueueLoader
+Shared
+SPAM should take
+Src
+IC.FileTransfer
+Wicked Tendies
+Src
+IC.Gateway
+Wicked Tendies
+Library
+Src
+IC.Hmac
+Si Mas Mas
+Library
+Src
+IC.Hmac.Web
+Si Mas Mas
+Library
+Src
+IC.IdentityService.Common
+Si Mas Mas
+Yes
+Library
+MH: Needs to be archived
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.Interfaces
+Shared
+Library
+Src
+IC.JWT
+Si Mas Mas
+Library
+Src
+IC.Logger
+Shared
+LIbrary
+Src
+IC.Logins
+SPAM
+Library
+Src
+IC.ManagedIdentities.SDK
+Yes
+TC: First time I’ve seen this
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.MicroService.DAL.DatabaseProxy
+Si Mas Mas
+Library
+Src
+IC.MicroService.DAL.EntityFramework
+Si Mas Mas
+Library
+Src
+IC.MicroService.Model
+Si Mas Mas
+Library
+Src
+IC.MicroService.Runtime
+Si Mas Mas
+Library
+Src
+IC.MicroService.Runtime.DatabaseProxy
+Si Mas Mas
+Library
+Src
+IC.MicroService.Runtime.EntityFramework
+Si Mas Mas
+Library
+Src
+IC.MicroService.Testing.EntityFramework
+Si Mas Mas
+Src
+IC.NetFramework.DAL.EntityFramework
+Si Mas Mas
+Yes
+Library
+Was to be used in CRM but was never operationalized by Luke
+Src
+IC.NetFramework.DAL.EntityFramework.TokenProvider
+Si Mas Mas
+Yes
+Library
+Was to be used in CRM but was never operationalized by Luke
+Src
+IC.NewRelic
+Shared
+Src
+IC.OpsGenie
+SPAM
+LIbrary
+Src
+IC.PdfExtractionTools
+Integrations
+Src
+IC.PlatformFeatures
+Shared
+Library
+Src
+IC.PowerBI
+Shared
+Src
+IC.Powershell.Authentication
+Shared
+Src
+IC.PricingAndFees
+Wicked Tendies
+Src
+IC.RedisCache
+Shared
+Src
+IC.Salesforce
+SPAM
+LIbrary
+Src
+IC.Scheduling
+Shared
+Src
+IC.Security.Certificates
+TC: Empty
+MH: Archive, Referenced in CRM needs to be removed
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.Serilog
+Shared
+LIbrary
+Src
+IC.ServiceProxies
+Shared
+LIbrary
+Src
+IC.ServiceProxies.Skybot
+Shared
+LIbrary
+Src
+IC.SingleSignOn
+Shared
+LIbrary
+SPAM or BMS
+Src
+IC.Slack
+Shared
+LIbrary
+Src
+IC.SupportTools
+Yes
+TC: Empty
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.Testing.WebApi
+Yes
+TC: Empty
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+IC.Threading
+Shared
+LIbrary
+Src
+IC.VSTS
+Shared
+Src
+IC.Wcf.Helpers
+Shared
+Src
+IC.WebServicesLogging
+Shared
+Src
+IC.WorkItems
+Shared
+Src
+IC-AlertMonitor
+Azure Logic App
+TC: Can prob be archived
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+ICApplicationPopupNotifications
+Integrations
+Src
+ICAutoPayController
+SPAM
+Job
+Src
+ICAutoPayScheduledPayRemindersController
+SPAM
+Job
+Src
+ICAzureBatchRunner
+SPAM
+Job
+Src
+ICAzureKeyVaultTester
+IT Tool
+TC: Can prob be moved to Misc
+Src
+ICAzureMessageQueue
+Shared
+Src
+ICAzureStratusUploadJob
+BMS
+Src
+ICBatchCloseExecutor
+Wicked Tendies
+Src
+ICBatchCloseProcessor
+Wicked Tendies
+Yes
+Src
+ICBundlePendingImports
+Integrations
+Yes
+Src
+ICBusinessService
+Shared
+Windows Service
+Yes
+Src
+ICCayentaFramework
+Integrations
+Src
+ICChaseTransactionProcessor
+Wicked Tendies
+Az Function
+Yes
+Src
+ICChatBotApi
+Yes
+TC: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+ICCloudPaymentsAPI
+SPAM
+Web API
+Yes
+Src
+ICCRM
+Shared
+Web App
+Yes
+Src
+ICCSRConnectAPI
+SPAM
+Web API
+Yes
+Src
+ICDatabaseService
+Shared
+Windows Service
+Yes
+Src
+ICDigitalWalletAPI
+SPAM
+Yes
+Web API
+Src
+ICDocStorageAPIGateway
+SPAM
+Yes
+Web API
+Src
+ICDocumentation
+Shared
+Web App
+Src
+ICEmailQueueController
+SPAM
+Job
+Src
+ICEmailTemplates
+SPAM
+Job
+Src
+ICEngineeringMgmtMonitor
+Shared
+Yes
+Src
+ICEntitySecUpdater
+Shared
+Src
+ICFramework.Business.Data
+Shared
+Library
+Src
+ICFramework.Email
+Shared
+Library
+maybe SPAM
+Src
+ICFramework.Transactions.Sage
+Shared
+Library
+Src
+ICFramework.Utilities.Email
+Shared
+Library
+maybe SPAM
+Src
+ICFramework.Utilities.Pdf
+Shared
+Library
+Src
+ICFramework.Web
+Shared
+Library
+Src
+ICFTPExportProcessor
+Integrations
+Src
+ICFTPExportProcessorMonitor
+Integrations
+Src
+ICGatewayAutoClose
+Wicked Tendies
+Job
+Yes
+Src
+ICGBoarding
+Wicked Tendies
+Job
+Yes
+Src
+ICGenerateAgentReport
+BMS
+Src
+ICGStatements
+Wicked Tendies
+Job
+Yes
+Src
+ICInvoiceFileMapper
+Integrations
+Desktop
+Src
+ICKioskAPI
+BMS
+Web API
+Yes
+Src
+ICMonitor
+Shared
+Web App
+Yes
+Src
+IC-Monitor-AutoPaymentProcessing
+SPAM
+Logic App
+Src
+IC-Monitor-AutoPaymentProcessingCompleted
+SPAM
+Logic App
+Src
+ICMonitoringService
+Shared
+Windows Service
+Yes
+Src
+ICNetSuiteFramework
+Integrations
+Yes
+Src
+ICOAuthTokenProcessor
+BMS
+Src
+ICOBDAutoMatchController
+BMS
+Src
+ICOBDAutoMatchProcess
+BMS
+Src
+ICPaperlessReporting
+TC: I recall Intg but not certain
+Src
+ICPaymentProcessingAPI
+Wicked Tendies
+Web APIs + Jobs
+Yes
+Src
+ICPingdomSetStatus
+Shared
+Src
+ICPrelimCreatorFramework
+Yes
+TC: Empty
+MH: Delete
+Src
+ICProcessNotifier
+Yes
+Azure Function
+TC: Archive
+MH: Need to delete Azure resources
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+ICRecaptchaAPI
+SPAM
+Web API
+Yes
+Src
+ICRedirect
+SPAM
+Web API
+Yes
+Src
+ICRedisCacheProcessor
+Shared
+Src
+ICRemoteAuthenticationAPI
+BMS
+Web API
+Yes
+Src
+ICRemoteLinking
+Integrations
+Src
+ICRESTAPI
+SPAM
+Web API
+Yes
+Src
+ICRTDRService
+INT - Best Integrator Friends
+Yes
+Src
+ICServiceManager
+Shared
+Src
+ICServicesTester
+Shared
+Src
+ICSilverBlazeCustomerExport
+Yes
+TC: Empty
+MH: Delete
+Src
+ICSkybotJobMonitor
+Shared
+Src
+ICSkybotService
+Shared
+Yes
+Src
+ICSkybotUtility
+Shared
+Src
+ICSKYNET
+Integrations
+Yes
+Src
+ICSMSProcessing
+SPAM
+Yes
+Web API
+SC: I can confirm this is not in use.  You can remove/archive since we are moving to service bus instead of message queue.
+Src
+ICSSOAuthentication
+BMS
+Yes
+Src
+ICTemplates
+Integrations
+Yes
+Src
+ICTestPortalRefresh
+Yes
+Job
+TC: Looks Intg related but uncertain
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+ICTunnelAPI
+Shared
+Web API
+Yes
+Src
+ICUserInviteQueueProcessor
+SPAM
+Az Function
+Src
+ICVirtualSiteEmbeddedDemo
+Yes
+TC: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+ICVSTSReportGenerator
+Shared
+Src
+ICWebServiceLoggingProcessor
+Shared
+Src
+IdentityService
+Si Mas Mas
+Yes
+Src
+ImageWorker
+Yes
+TC: Archive
+Src
+ImportAccountingFiles
+TC: Possible archive
+MH: Archive, need to delete Skybot configurations
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+InternalEmailProcessing
+Shared
+Src
+InvoiceService
+Si Mas Mas
+Yes
+Src
+InvoiceService.Common
+Si Mas Mas
+Yes
+Library
+Src
+LowAssociatesIncomingFTPPreProcess
+Integrations
+Src
+MailgunDeclineMonitor
+SPAM
+Job
+Src
+MailgunSpamComplaints
+SPAM
+Job
+Src
+MasterCardBinFileImport
+Wicked Tendies
+Yes
+Yes
+ MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+MC_RPPS
+BMS
+Job
+Yes
+Src
+MC_RPPS_Import
+BMS
+Job
+Yes
+Src
+MicroService.Common
+Si Mas Mas
+Library
+Src
+MicroService.Common.Runtime
+Si Mas Mas
+Library
+Src
+MinolPaymentFileFTP
+Integrations
+Src
+MinolPaymentFileFTP-AZURE
+Integrations
+Src
+MonthEndBillingFinalize
+Wicked Tendies
+Yes
+Src
+MonthEndBillingStaging
+Wicked Tendies
+Yes
+Src
+MonthlyAccountingReport
+Wicked Tendies
+Yes
+Src
+MonthlyOutboundCampaignProcessing
+BMS
+Src
+MonthlyOutboundPaymentsProcessing
+BMS
+TC: Part of Outbound Payments work
+Src
+MonthlyOutboundRevShareProcessing
+BMS
+TC: Part of Outbound Payments work
+Src
+MotorVehicleLinking
+INT - Best Integrator Friends
+Src
+MyIIS
+Shared
+Web App
+Yes
+Src
+NCRAutoClose
+Wicked Tendies
+Yes
+Src
+NCRJetPayChargebacks
+Wicked Tendies
+Yes
+Src
+NCRJetPayRejects
+Wicked Tendies
+Yes
+Src
+NCRJetPayTestHarness
+Wicked Tendies
+Src
+NCRTransactionProcessor
+Wicked Tendies
+Src
+NewportNewsFileSplit
+INT - Best Integrator Friends
+Src
+NewRelicConditionsAutomator
+Yes
+Job
+TC: Can prob be archived
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+NewRelicEventsAgent
+Shared
+Job
+Log shipping before agents
+Src
+OneTimePaymentService
+Si Mas Mas
+Web API
+Yes
+Src
+OracleOfsllDataImport
+INT - Best Integrator Friends
+Src
+OutboundIVRProcessing
+TC: Audit code, possible archive
+Src
+PaperlessService
+Si Mas Mas
+Src
+PayerAccountService
+Si Mas Mas
+Web API
+Yes
+Src
+PayerBrandingService
+Si Mas Mas
+Web API
+Yes
+Src
+PayerPayByTextService
+Si Mas Mas
+Web API
+Yes
+Src
+PayerPayByTextUI
+Si Mas Mas
+Web App
+Yes
+Src
+PayerPortal
+Si Mas Mas
+Web App
+Yes
+Src
+PayerRejectProcessing
+BMS
+Job
+Yes
+Src
+PayerSupportService
+Si Mas Mas
+Web API
+Yes
+Src
+PayerSupportUI
+Si Mas Mas
+Web App
+Yes
+Src
+PayerUserService
+Si Mas Mas
+Web API
+Yes
+Src
+PaymentService
+Si Mas Mas
+Yes
+Web API
+Src
+PaymentService.Common
+Si Mas Mas
+Yes
+Library
+Src
+PayNearMeAutoClose
+Wicked Tendies
+Yes
+Src
+PayPalACHRejectProcessing
+Wicked Tendies
+Src
+PayPalChargebackProcessing
+Wicked Tendies
+Yes
+Src
+PdfDeleteQueueProcessing
+Integrations
+Src
+PdfEmailNotification
+Integrations
+Src
+PdfQueueByExtraction
+Integrations
+Src
+PdfQueueByFilename
+Integrations
+Src
+PinlessDebitBinFileImport
+Wicked Tendies
+Yes
+Src
+PrintSpoolPDFGenerator
+Integrations
+Src
+ReactHost
+Si Mas Mas
+Web App (Image Base)
+Src
+ReconciliationReports
+Wicked Tendies
+Src
+RecurringScheduledPaymentsGenerator
+SPAM
+Job
+Yes
+remove any related job schedules in skybot
+Src
+RegisterAutoPay
+INT - Best Integrator Friends
+Job
+Src
+RegisterCustomers
+INT - Best Integrator Friends
+Job
+Src
+RegisterPaperless
+INT - Best Integrator Friends
+Job
+Src
+RemoteAuthentication
+BMS
+Web API
+Yes
+Src
+RichmondIncomingFTPPreProcess
+Integrations
+Checking
+Src
+SageBatchRecon
+Wicked Tendies
+Yes
+Src
+SageTimeOutMonitor
+Wicked Tendies
+Src
+ScheduledPaymentBalanceCheck
+SPAM
+Job
+Yes
+remove any related job schedules in skybot
+Src
+ScheduledPaymentProcessing
+SPAM
+Job
+Yes
+remove any related job schedules in skybot
+Src
+ScheduledPaymentProcessingMultiInvoice
+SPAM
+Job
+Yes
+remove any related job schedules in skybot
+Src
+ScheduledPaymentReminders
+SPAM
+Job
+remove any related job schedules in skybot
+Src
+ScheduledPaymentsFeeRecalculator
+SPAM
+Job
+Src
+scripts
+ 
+MH: Can this get moved to another ADO project?  Seems DevOps related.
+Src
+SEMCOBlockCCAccounts
+Wicked Tendies
+Src
+ServiceFeeIncreaseEmailer
+SPAM
+Job
+Src
+Sms
+SPAM
+Web API
+Yes
+Src
+SmsNotifications
+SPAM
+Job
+Yes
+Src
+SoftwareSolutionsMoveFile
+Integrations
+Src
+SpotsyInvoiceDetail
+INT - Best Integrator Friends
+Src
+SpotsylvaniaConsolidationReportExport
+Integrations
+Src
+SpotsylvaniaMultiPDFParsing
+Integrations
+Src
+SpotsylvaniaSplitJob
+INT - Best Integrator Friends
+Src
+Stratus
+Integrations
+Src
+http://stratus.invoicecloud.com
+ 
+Integrations
+Src
+StratusCommNotification
+Integrations
+Src
+StratusFileProcessor
+INT - Best Integrator Friends
+Src
+StratusWebServices
+Integrations
+Yes
+Src
+SystemsAndSoftware4.0
+Integrations
+Yes
+Src
+SystemsAndSoftwareQueueProcessing
+Integrations
+Src
+TrackEmailReminder
+Shared
+Job
+maybe SPAM - no one has touched it since 2016 except for appsec/reference updates
+Src
+Training
+Yes
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+TTechAchRejects
+Wicked Tendies
+Job
+Yes
+Src
+TulareAccountLinking
+INT - Best Integrator Friends
+Src
+UpdateGhostInspector
+Yes
+MH: Archive
+MH: 
+ADO Archive Retired Code Bases - PRJ
+ 
+Src
+UploadWSReportFiles
+BMS
+Src
+VendorPdfArchiving
+Integrations
+Src
+VisaDebitBin
+Wicked Tendies
+Job
+Yes
+Src
+VSTSReportGenerator
+Shared
+Job
+Src
+WebServiceLoggingFinder
+Build Breakers
+Yes
+Job
+MH: Move to Misc
+Src
+WebServiceMonitor
+Shared
+Job
+TC: Needs to be migrated to New Relic
+Src
+WellsFargoBatchClose
+Wicked Tendies
+Job
+Yes
+Src
+WellsFargoRejects
+Wicked Tendies
+Yes
+Src
+Wiki
+Yes
+seems this has been disabled for a long time, replaced by Confluence
+Src
+UpgradeBankDetails
+Wicked Tendies
+Job
+MH: One off update for banks, remove from Skybot after use, archive
+ URL:/spaces/EA/pages/3374841867/SRC+Code+Repositories+-+PRJ

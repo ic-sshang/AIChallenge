@@ -1,0 +1,83 @@
+TODO - Some of this is useful and can be integrated into other documentation. However, this is mostly obsolete with the presence of the 
+QuickStart Guide
+.
+Overview
+Kubernetes Event-Driven AutoScaler, or 
+KEDA
+, for short is a lightweight Kubernetes component that can be deployed into a cluster and provide out-of-the-box scaling capabilities with minimal configuration. Utilizing KEDA will allow higher-volume messages to be handled concurrently by multiple instances of the same consumer.
+Prerequisites
+Prerequisites for this section are optional but highly beneficial to understand.
+Some knowledge of both 
+Docker
+ & 
+Kubernetes
+Skim the 
+KEDA Documentation
+.
+Read a little on 
+Azure Service Bus Best Practices
+Your consumer should be
+Built, Tested, and Containerized.
+Deployed to Azure Container Registry for use by Kubernetes.
+Planning Steps
+Determine necessary scale
+Create a KEDA 
+ScaledObject
+ or 
+ScaledJob
+ for your consumer.
+Test scaling with KEDA
+1. Determine Scale
+First, let’s discuss 
+back pressure
+. 
+Back pressure
+ is a term that comes from physics & engineering proper and describes what occurs when there is a 
+resistance 
+to the flow of fluid through pipes. You can see how this concept can also effectively describe something similar happening with our producers and consumers - as our volume of messages grows, if there are an inadequate number of consumers to consume them, then we will end up with a massive backlog of messages which can introduce large amounts of latency or even major system faults if the volume grows too large.
+Dealing with back pressure is a common scenario in a distributed software system and can be accomplished 
+in many different ways.
+ For our purposes here, we’re specifically looking at a 
+horizontal scaling
+ approach to deal with back pressure - effectively just increasing the number of consumers that we have available to handle messages when producers are producing faster than the current number of consumers can consume.
+This step may end up being an ongoing activity and you may find that your scale needs to be increased or decreased based on monitoring, performance, or resource utilization. That is an expected situation, and it is okay if you don’t immediately have the minimum and maximum replica count off the top of your head. 
+Kubernetes provides the great benefit of offloading much of the configuration management of our applications into a centralized service so we can more easily deploy our applications and consume shared configurations without needing to make a lot of configuration/deployment changes or writing code.
+Given that there are a multitude of factors that come into play when deciding how far a job should scale under load, a general rule to keep in mind is 
+to start small and grow as needed.
+ It is better to begin below optimal scale and have the capability to grow into it rather than start above optimal scale and allocate Kubernetes CPU/Memory making it unavailable for other resources to utilize.
+To tie this section up, just be aware of the default scale limits that are present when using a KEDA 
+ScaledObject
+ or 
+ScaledObject
+. These are posted below, but it is good to be aware of the documentation for both of these in case you need a deeper reference
+ScaledObject specification | KEDA
+ScaledJob specification | KEDA
+Scaled Object Defaults
+  pollingInterval:  30  # Optional. Default: 30 seconds
+  cooldownPeriod:   300 # Optional. Default: 300 seconds
+  initialCooldownPeriod:  0 # Optional. Default: 0 seconds
+  idleReplicaCount: 0   # Optional. Default: ignored, must be less than minReplicaCount
+  minReplicaCount:  1   # Optional. Default: 0
+  maxReplicaCount:  100 # Optional. Default: 100  
+Scaled Job Defaults
+TODO - Note, there are some additional settings for jobs that are more than just numerical values. These will be documented soon.
+2. Create KEDA 
+ScaledObject
+ or 
+ScaledJob
+Creating a 
+ScaledObject
+ or 
+ScaledJob
+ is relatively easy and just involves the application of Deployment 
+yaml
+ to the Kubernetes cluster.
+TODO - Finish this up.
+3. Test Scaling with KEDA
+Summary
+In this section we looked at some considerations for determining the boundaries of scale for a workload deployed in Kubernetes, how to utilize KEDA to apply scaling rules to a workload, and how to troubleshoot the workload.
+Resources
+Azure Service Bus
+Best practices for improving performance using Azure Service Bus - Azure Service Bus | Microsoft Learn
+Azure Service Bus throttling - Azure Service Bus | Microsoft Learn
+ URL:/spaces/EA/pages/4112810088/Obsolete+6.+Utilize+KEDA+to+Scale+Consumer+Workloads+in+Kubernetes

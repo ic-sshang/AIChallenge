@@ -1,0 +1,668 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+N/A
+ITR
+N/A
+Release Date
+N/A
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+N/A
+Salesforce SOW
+N/A
+Knowledge Transfer
+N/A
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+X
+X
+TEST BASE URL (for all integrations): 
+PROD BASE URL (for all integrations): 
+API Authentication Method: Basic / OAuth (1/2) / API Key / Web service key
+Renewal process: URL for renewal token, etc.
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Data Pump: Payment
+Include Credits & Chargebacks?
+Credits?
+Yes/No
+Chargebacks?
+Yes/No
+Sent a Negative value, using dash indicator?
+Yes/No
+Alt. credit indicatator :
+Data Pump: Void
+Data Pump: ACH Reject 
+ACH Reject Requirements:
+C-Code Rejects included? Yes or No
+Data Pump: Paperless Enrollment
+Data Pump: AutoPay Enrollment
+Data Pump: Customer Changes
+Bill Presentment
+Bill Presentment (Template Detail)
+HTML Template: (Avitar DL Template)
+Type: 
+HTML Template
+Code Repository:
+ ICTemplate
+ICTemplate Name and location: 
+InvoiceFormatID
+: 164
+InvoiceFormatGUIDID
+: 2B68EF05-1556-4B1B-9909-59578418BE77
+InvoiceFormatTemplateName: Avitar DL Template
+InvoiceType: 
+13-Dog License
+Known Biller using template: 
+628
+Sample PDF File: 
+Mapping:
+Location Number
+IC Field
+Biller Usage
+1
+Custom10
+ (BID628 Only), 
+Custom4
+Renewal ID
+2
+Custom13 
+(BID628 Only), 
+Custom5
+Code
+3
+CustomField19
+Notice Date
+4
+CustomField1
+Service Title. e.g “Dog License Renewal Notice”
+5
+Message is stored throughout the following CustomFields
+CustomField20,CustomField21,CustomField22
+CustomField28,CustomField29,CustomField30
+CustomField36,CustomField37,CustomField38
+CustomField44,CustomField45,CustomField46
+Biller Message
+6
+CustomField2
+Owner
+7
+CustomField3
+Dog Name
+8
+CustomField4
+Rabies Expiration
+9
+NA
+Phone Number
+10
+CustomField5
+Breed
+11
+Custom7
+Existing License Tag
+12
+AccountNumber
+AccountNumber
+13
+InvoiceNumber
+InvoiceNumber
+14
+CustomField6
+Service Rendered: e.g “Neutred/spayed”
+15
+CustomField7
+Service Cost
+16
+Invoice.TotalAmountDue
+Total Due
+17
+CustomerName
+Customer Name
+18
+Address1
+Customer Address
+19
+City
+Customer City
+HTML Template: (CloudPayments / CloudStore)
+Type: 
+HTML Template
+Code Repository:
+ ICTemplate
+ICTemplate Name and location: /templates/InvoiceCloud/GenericView.aspx
+InvoiceFormatID
+: 148
+InvoiceFormatGUIDID
+: BA679843-E93F-4995-9551-EF17B16ED8D6
+InvoiceFormatTemplateName: GenericView.aspx
+InvoiceType: 
+All cloud store items
+Known Biller using template: 
+1437
+Sample PDF File: 
+Mapping:
+Location Number
+IC Field
+Biller Usage
+1
+Biller Image URL
+Biller Name/Logo
+2
+CustomerName (From Payment Record)
+Customer Name
+3
+Customer Address (From Payment Record)
+Customer Address
+4
+Customer City (From Payment Record)
+Customer City
+5
+Customer State (From Payment Record)
+Customer State
+6
+Customer Zip (From Payment Record)
+Customer Zip
+7
+Invoice.InvoiceNumber
+InvoiceNumber
+8
+Invoice.InvoiceDate
+Invoice Date
+9
+Invoice.TotalAmountDue
+Total Amount Due
+10
+Invoice.InvoiceDueDate
+Due Date
+11
+Invoice.BalanceDue
+Balance Due
+12
+Biller.BillerDB
+Biller Name
+13
+CorporateAddress.Address1
+Biller Address
+14
+CorporateAddress.City
+Biller City
+15
+CorporateAddress.State
+Biller State
+16
+CorporateAddress.Zip
+Biller Zip
+17
+CustomerServicePhoneNumber.PhoneNumber
+Bill Customer Service Number
+File Mapping
+Invoice File
+WebMethod Description
+Avitar based billers do not use batch-based invoice files that require conversion. Instead they use our SOAP webservice to pass us BIF formatted invoice files:
+WebMethodID
+: 20
+Description:
+ UploadInvoiceFile
+Official Documentation link:
+ 
+https://www.invoicecloud.com/Documentation/WebServices/CloudInvoicing/UploadInvoiceFile.aspx?path=Web+Services+(SOAP)%2FCloud+Invoicing%2FUploadInvoiceFile
+SOAP Request Info:
+Web Reference Url: 
+ 
+https://www.invoicecloud.com/portal/webservices/CloudInvoicing.asmx
+ 
+Web Service Name: 
+UploadInvoiceFile
+Description: 
+This web service can be used to upload a single invoice to Invoice Cloud.
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+FileContents
+String
+na
+Adjustment/Daily Balance File
+WebMethod Description
+Avitar based billers do not use batch-based adjustment files that require conversion. Instead they use our SOAP webservice to pass us BIF formatted adjustment files.
+WebMethodID
+: 49
+Description:
+ UploadEncodedAdjustmentFile
+Official Documentation link: 
+https://www.invoicecloud.com/Documentation/WebServices/CloudPayments/UploadEncodedAdjustmentFile.aspx?path=Web+Services+(SOAP)%2FCloud+Payments%2FUploadEncodedAdjustmentFile
+SOAP Request Info:
+Web Reference Url: 
+ 
+https://www.invoicecloud.com/portal/webservices/CloudPayments.asmx
+ 
+Web Service Name: 
+UploadEncodedAdjustmentFile
+Description: 
+This may be used to upload a Base 64 encoded Adjustment File.
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+Base64EncodedFileContents
+String
+MAX
+FileUploadResponse
+Type
+Character Limit
+Success
+Boolean
+5
+Message
+String
+50
+Filename
+String
+75
+Invoice Update File
+Avitar based billers do not make use of a Invoice Update File
+WebMethod Description
+Customer Update File
+Avitar based billers do not make use of a Customer Update File
+Field Mapping
+Conveyance File
+Avitar based billers do not make use of a conveyance File
+Payment/Lockbox File
+Avitar based billers do not make use of a payment file export and instead use a variety of WebService Calls to retrieve their payment information
+Known used Webmethods:
+96	BillerDepositReconSummary (list of settled batches)
+118	BillerDepositReconSummary2 (list of settled batches based on InvoiceTypeID)
+98	BillerDepositReconSubmitterDeposit1 (Visa, MasterCard, Discover, and EFT Transactions)
+99	BillerDepositReconSubmitterDeposit2 (Amex)
+96	BillerDepositReconSummary (list of settled batches)
+Specification: 
+ACH Reject Requirements:
+C-Code Rejects included?
+No
+Include Credits & Chargebacks?
+Credits?
+No
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+No
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+StartDate
+Date/Time
+EndDate
+Date/Time
+Returns: DataSet
+Fields
+Field Type
+Character Limit
+SettledDate
+Date/Time
+n/a
+NetworkResponse
+String
+36
+TotalItems
+Integer
+n/a
+VisaVolume
+Decimal (2)
+MCVolume
+Decimal (2)
+EFTVolume
+Decimal (2)
+DiscoverVolume
+Decimal (2)
+VisaVolume
+Decimal (2)
+AmexVolume
+Decimal (2)
+TotalDeposits
+Decimal (2)
+CloudStoreCount
+Integer
+SubmitterProgram
+Integer
+118	BillerDepositReconSummary2 (list of settled batches based on InvoiceTypeID)
+Specification: 
+ACH Reject Requirements:
+C-Code Rejects included?
+No
+Include Credits & Chargebacks?
+Credits?
+No
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+No
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+StartDate
+Date/Time
+EndDate
+Date/Time
+InvoiceTypeID
+Integer
+Returns: DataSet
+Fields
+Field Type
+Character Limit
+SettledDate
+Date/Time
+n/a
+NetworkResponse
+String
+36
+TotalItems
+Integer
+n/a
+VisaVolume
+Decimal (2)
+MCVolume
+Decimal (2)
+EFTVolume
+Decimal (2)
+DiscoverVolume
+Decimal (2)
+VisaVolume
+Decimal (2)
+AmexVolume
+Decimal (2)
+TotalDeposits
+Decimal (2)
+CloudStoreCount
+Integer
+SubmitterProgram
+Integer
+OriginalSettledDate
+Date/Time
+n/a
+98	BillerDepositReconSubmitterDeposit1 (Visa, MasterCard, Discover, and EFT Transactions)
+Specification: 
+ACH Reject Requirements:
+C-Code Rejects included?
+No
+Include Credits & Chargebacks?
+Credits?
+No
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+No
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+NetworkResponse
+String
+Returns: DataSet
+Fields
+Field Type
+Character Limit
+InvoiceNumber
+String
+50
+InvoiceGUID
+String
+36
+AccountNumber
+String
+50
+CustomerName
+String
+100
+PaymentGUID
+String
+36
+PaymentDate
+Date/Time
+PaymentTypeID
+Integer
+1
+PaymentTypeDesc
+String
+PaymentAmount
+Decimal (2)
+ConvenienceFee
+Decimal (2)
+BillerReference
+String
+50
+PaymentReference
+String
+50
+PaymentMessage
+String
+50
+Approved
+Bit
+1
+Offline
+Bit
+1
+LocationReference
+String
+50
+SettledBatchID
+Integer
+CheckNumber
+String
+99	BillerDepositReconSubmitterDeposit2 (Amex)
+Specification: 
+ACH Reject Requirements:
+C-Code Rejects included?
+No
+Include Credits & Chargebacks?
+Credits?
+No
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+No
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+NetworkResponse
+String
+Returns: DataSet
+Fields
+Field Type
+Character Limit
+InvoiceNumber
+String
+50
+InvoiceGUID
+String
+36
+AccountNumber
+String
+50
+CustomerName
+String
+100
+PaymentGUID
+String
+36
+PaymentDate
+Date/Time
+PaymentTypeID
+Integer
+1
+PaymentTypeDesc
+String
+PaymentAmount
+Decimal (2)
+ConvenienceFee
+Decimal (2)
+BillerReference
+String
+50
+PaymentReference
+String
+50
+PaymentMessage
+String
+50
+Approved
+Bit
+1
+Offline
+Bit
+1
+LocationReference
+String
+50
+SettledBatchID
+Integer
+CheckNumber
+String
+Change Log File
+WebMethod Description
+Avitar based billers do not export change log files. Instead they use our SOAP webservice to export change log information.
+WebMethodID
+: 61
+Official Documentation link: 
+https://www.invoicecloud.com/Documentation/WebServices/CloudReporting/ChangeLogReportingPaperlessByDateRangeDataSet.aspx?path=Web+Services+(SOAP)%2FCloud+Reporting%2FChangeLogReportingPaperlessByDateRangeDataSet
+SOAP Request Info:
+Web Reference Url: 
+ 
+https://www.invoicecloud.com/portal/webservices/CloudReporting.asmx
+ 
+Web Service Name: 
+ChangeLogReportingPaperlessByDateRangeDataSet
+Description: 
+This web service will return all customer initiated "Paperless" changes that have occurred within the selected Date Range values.
+Parameters Name
+Type
+Character Limit
+BillerGUID
+String
+36
+WebServiceKey
+String
+36
+StartDate
+DateTime
+EndDate
+DateTime
+Returns
+Type
+Character Limit
+ChangeDate
+Date/Time
+FieldName
+String
+75
+OldValue
+String
+MAX
+NewValue
+String
+MAX
+AccountNumber
+String
+50
+InvoiceTypeID
+Integer
+InvoiceTypeDesc
+String
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2499903558/Avitar+Associates+Technical+Design

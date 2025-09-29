@@ -1,0 +1,190 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Jira ticket 
+ITR
+Document status
+DRAFT
+Document owner
+Solution engineer
+File Mapping
+Invoice File
+File Extension: TXT
+File Naming Convention: Year - Month - Day
+File Delimiter: N/A
+Specification: 
+Sample File: 
+IC FileSpecID
+IC Field
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+10
+Invoice Number
+11
+Invoice Date
+12
+Invoice Due Date
+Column 101-109
+YYYYMMDD
+DueDate
+8
+13 
+Total Amount Due
+Column 89-100
+00000000.00
+TOTDUE
+11
+187
+Late Fee Date
+Column 110-118
+YYYYMMDD
+GRACEDATE
+8
+345
+Biller Installment Number
+Column 56-58
+00
+QTR
+2
+38
+Custom 1
+Column 54-56
+00
+RECNUM
+2
+TBD Based Off Partner’s Response
+346
+Biller Bill Year
+Column 50-54
+YYYY
+YEAR
+4
+59
+Account Number
+Column 9-41
+00000…
+ACCOUNT
+40
+60
+Customer Name
+Missing
+61
+Address 1
+Missing
+62
+Address 2
+Missing
+63
+City
+Missing
+64
+State
+Missing
+65
+Zip
+Missing
+Adjustment/Daily Balance File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Notes: Adjustments will be split out from the invoice file using the same account number and invoice number. 
+Specification: 
+Sample File: 
+IC FileSpecID
+IC Field
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+Payment/Lockbox File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Change Log File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow
+Payer Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/161611785/DNU+-+Hamer+Technical+Design+OLD

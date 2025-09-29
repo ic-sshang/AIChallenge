@@ -1,0 +1,104 @@
+Table of Contents
+1
+6
+false
+none
+list
+true
+Background
+One of Megabyte Go-Live blockers is for them to receive the Authentication Order Number (RejectReference in the Payments table) back to the Biller using the Postback Data send back to the PostbackURL when making a payment using 
+CPv2 (ICCloudPaymentAPI) 
+endpoints.
+Links to the Stories
+WDIL-164
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-31
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-162
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-107
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Technologies
+For this change the team leveraged the work used for the Postback Data version 1.1, creating a new 1.2 allowed version in ICCloudPayments repo as well as support for version 1.2 post back data body in MyIIS.
+Every PostBackData class version inherits from the version previous, this helps the developers create small scalable changes.
+ It also allows to cast older versions to a new version if needed in code which saves in code complexity.
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=/IC.Common/Models/Payments/CloudPaymentPostback/CloudPaymentPostbackDetailsVersion_1_2.vb&_a=contents&version=GBrelease
+ 
+For comparing the post back data version in context when making a payment the logic uses a dictionary as an Enum since decimal values are not valid for Enums in 
+VisualBasic.NET
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=%2FIC.Common%2FModels%2FPayments%2FCloudPaymentPostback%2FPostbackDataVersions.vb&_a=contents&version=GBrelease
+ 
+Code Changes
+ICCloudPayments was updated to allow the new PostbackURL 1.2 version
+Changes are minimal for this repo since the new post back data version does not have any changes to the request body for the CPv2 endpoint.
+Pull Requests with changes to the code base:
+https://dev.azure.com/invoicecloud/Src/_git/ICCloudPaymentsAPI/pullrequest/34507
+ 
+MyIIS logic was updated to support the new Postback data version which includes the RejectReference in the post back response coming from the Payments table after the CPv2 invoice is paid and the customer reaches the confirmation page.
+The logic that was used for version 1.1 was refactored to be able to support extra post back versions in the future.
+Pull Requests with changes to the code base:
+https://invoicecloud.visualstudio.com/Src/_git/MyIIS/pullrequest/34527
+ 
+Testing Process
+For testing changes to the PostBack data version process first update ICCloudPaymentsAPI to allow a new data version and send a post request to the endpoint to create a new CPv2 request in DB with the new data version.
+Example Body Request for CPv2
+Endpoint: 
+http://www.invoicecloud.com/cloudpaymentsapi/v2
+Method: 
+POST
+json
+wide
+760
+{
+    "CREATECUSTOMERRECORD": true,
+    "CUSTOMERS":[
+        {
+            "ACCOUNTNUMBER": "TestingCustomerForCloudPayment",
+            "NAME": "Testing Customer",
+            "ADDRESS": "42 Test St",
+            "CITY": "Testville",
+            "STATE": "TX",
+            "ZIP": "55555",
+            "EMAILADDRESS": "test@test.com",
+            "INVOICES":[
+                {
+                    "INVOICENUMBER": "TestingCustomerForCloudPayment_1",
+                    "TYPEID": 1,
+                    "BALANCEDUE": 100.00,
+                    "DUEDATE": "10/01/2025",
+                    "INVOICEDATE": "09/30/2025",
+                    "CCSERVICEFEE": 2.00,
+                    "ACHSERVICEFEE": 1.00
+                }
+            ]
+        }
+     ],
+    "AllowSwipe": true,
+    "AllowCCPayment": true,
+    "AllowACHPayment": true,
+    "ReturnURL": "https://www.google.com/",
+    "PostbackDataVersion" : 1.2,
+    "PostBackURL": "https://webhook.site/e424445e-adaa-49c5-91b8-59c3d1da6872",
+    "BillerReference": ""
+}
+T
+o be able to capture the post back data body 
+after making a successful payment you need to generate a unique URL by going to 
+https://webhook.site/
+ that will display the information sent by InvoiceCloud to the biller when completing a payment.
+Follow the link to the newly created invoice created by CPv2 and complete the whole payment process to arrive to the confirmation page.
+Once the payment is complete go back to the unique URL generated in webhook.site and you will be able to see the postback data sent with the payment information that the Biller would receive.
+Example of Postback Data
+BillerGUID=bf30dfdb-5692-4ea8-8050-05bf74d2b6d5&Approved=True&PaymentDate=9/9/2025 9:56:21 AM&InvoiceNumber=TestInvoice012&CustomerName=Mr Test&CustomerAddress=123 Test St&CustomerCity=Test&CustomerState=TX&CustomerZip=12345&PaymentGUID=bdaeec14-f773-41a8-ba51-a09205ac8bc9&PaymentAmount=12&PaymentDescription=Credit Card ending in 1111&PaymentMessage=APPROVED 564526&BillerReference=Biller Reference Example 08182025&ConvenienceFee=2&RemoteIP=8.29.230.189&CardType=Visa&PaymentTypeID=1&AccountNumber=TestUser01&AuthOrderNumber=E5J09I5621869
+Useful Links
+Biller Documentation Page
+https://www.invoicecloud.com/Documentation/FileSpecifications/CloudPayments_v2.aspx?path=Specifications%2FCloud+Payments+v2
+ URL:/spaces/PE/pages/4634247266/Post+Back+Data+Version+1.2+-+Megabyte+Integration

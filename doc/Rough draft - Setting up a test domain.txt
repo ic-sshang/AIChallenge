@@ -1,0 +1,21 @@
+We will be using a test domain to test this functionality.  We don’t add new domains often, especially for cases like this.  This is how I think we can set one up.  We may need to follow some form of this for every Biller domain we want to support, as automated as possible.
+Helpful links
+https://help.mailgun.com/hc/en-us/articles/360026833053-Domain-Verification-Setup-Guide?_gl=1%2Apqlwmg%2A_gcl_au%2ANzM5NjUwNzg4LjE3MzcwNDI5MTk.%2A_ga%2AMjg2OTU4NDc2LjE3MzcwNDA5NzE.%2A_ga_PZB2JSMCGC%2AMTczNzA0NTM4OS4yLjEuMTczNzA0NjUwMS4wLjAuMTA4NjAxNDgzNg..
+ 
+Login in Mailgun and go to Domains
+https://app.mailgun.com/mg/sending/domains
+ 
+Click Add new domain
+https://app.mailgun.com/mg/sending/new-domain
+ 
+Looks like there is API support to add domains
+Fill out domain details
+Added domain will show up in Domains area
+https://app.mailgun.com/mg/sending/domains
+ 
+Click on the Domain added for additional settings changes
+We will need to add new SMTP credentials for the new domain.  Click Add new SMTP user.
+Fill out new SMTP credentials
+New credential should show up in list of SMTP Credentials
+We may need 1 set of SMTP credentials per biller domain,.  Sounding like we will need to have a table at shard level with non-sensitive biller domain details there, and the sensitive stuff in keyvault
+ URL:/spaces/EA/pages/3909255214/Rough+draft+-+Setting+up+a+test+domain

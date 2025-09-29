@@ -1,0 +1,123 @@
+ACH/EFT Rejects Definition
+WIP
+Processing
+ACH Reject Type ID
+ACH REJECT TYPE
+REPO
+JOB
+1
+Chase
+/ChaseRejects/ChaseRejects.vb
+STAGING-ChaseDFRImportChain (Automate)
+2
+Sage
+/EFTRejects/EFTRejects.vb
+STAGING-SageEFTRejects
+3
+RP Solutions
+4
+WellsFargo/CyberSource
+/WellsFargoRejects/Module1.vb
+STAGING-WellsFargoReject
+5
+First Hawaiian Bank
+/HawaiianTelcomRejects/Module1.vb
+STAGING-HawaiianTelcomRejects
+6
+PayPal/Braintree
+/PayPalACHRejectProcessing/Program.cs
+STAGING-BraintreeRejects
+N/A
+/PayerRejectProcessing/Module1.vb
+STAGING-PayerRejectProcessing
+N/A
+NCR JetPay Rejects
+/NCRJetPayRejects/Program.cs
+STAGING-NCRJetPayRejects
+Common issues:
+mcl.LoginUserActivity table is showing a message like “
+Customer processed payment for $100.00 using bank account 0000000/XXXXXX0000. Declined
+”. Check the MICR table and confirm if the 
+RTE/Account Number
+ combo are listed.
+ACH Reject not sent
+Confirm the type of ACH Reject
+Go to the corresponding job, find the log for the day it was supposed to be sent
+Look for the method corresponding to inserting the email notification to the email queue. (e.g. SendRejectEmail for Chase Ach Rejects)
+Chase DFR File Not Imported
+Job: STAGING-ChaseDFRImportChain
+Example error:
+System.IO.IOException: The file 'E:\Data\AppData\ChaseDFRFiles\PinlessBinRanges\246065.50617.0123h.out.PBIN' already exists.
+   at 
+System.IO
+.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   at System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   at ChaseDFRFiles.ChaseRejects.Main(String[] args) in C:\agent\_work\103\s\ChaseDFRFiles\Module1.vb:line 109
+Usually results in an Incident
+Emails may need to be sent by manually running the project tdb: identify manual reject branch
+Master Shard: SELECT TOP 10 * FROM ChaseRejects WHERE ReturnDate = 'XX/YY/ZZZZ'
+Payment Returned Email Not Received
+Job: STAGING-PayerRejectProcessing
+Job usually begins running at 11:00 PM CST.
+Ensure that this job has ran before assuming the email has been sent out. 
+Common T-SQL Queries
+-- Ideal query for payments when working on a Rejects task
+select RejectReference,* from payments where invoiceid in (select invoiceid from invoices where customerid = 00000) order by 1 desc
+
+select * from achrejects where RecDfiRTE like '061000227' and RecDfiDda like 'XXXXXX0000' order by 1 desc --where ACHRejectTypeID = 4 order by 1 desc --where customername like '%nat%gold%'
+select * from tblachrejecttype
+select * from micr where rte like '000000' and accountnumber like 'XXXXXX0000'
+
+--Find all rejects tied to a customer's invoices
+select * from achrejects 
+where RejectReference 
+in (select RejectReference from payments where invoiceid in (select invoiceid from invoices where customerid = 00000))
+
+
+-- Email Related
+select * from achrejects where customername like '%tim%' order by 1 desc
+select * from achrejects where rejectreference like 'B2K26O3833938'
+select * from emailqueue where emailqueuetypeid in (8,25) order by 1 desc
+select * from emailqueuelog where emailqueuetypeid in (8,25) order by 1 desc
+PinLess Debit and Convenience Fees
+If the Biller has convenience fees but no payments related to those convenience fees the issue could be related to the Terminal’s Pinless configuration.
+Queries to determine the root cause, please be very caution when dropping the temp table, if you have any questions ask 
+ .
+-- Sample payment
+select receiptguid,rejectreference,paymentsourceid,* from payments where invoiceid = xxxxx order by paymentid desc
+
+-- Find transactions with only one payment
+
+drop #richardtmp
+
+select receiptguid, count(receiptguid) as 'dup'
+into #richardtmp
+from payments
+group by receiptguid
+having count(receiptguid) = 1
+
+--Find the fee payments with no related payment record
+select * from payments 
+where receiptguid in (select receiptguid from #richardtmp)
+and paymentamount = 2.95
+order by invoiceid
+
+-- Find all the payments related to the invoice number for the Fee's in question
+select * from payments where invoiceid in 
+	(select invoiceid from payments 
+	where receiptguid in (select receiptguid from #richardtmp)
+	and paymentamount = 2.95)
+order by invoiceid
+Review the Terminals table to see if the 
+pinlessdebit 
+value matches in the
+ 
+terminals for the fees without payments.
+If the pinlessdebit values do not match this could be the root cause of your issue.
+Related Code
+https://dev.azure.com/invoicecloud/Src/_git/CTP?path=/CloudTransactionProcessingSOAP/Models/clsCertegy.vb
+ 
+Glossary
+Automated Clearing House (ACH)
+Electronic Fund Transfer (EFT)
+ URL:/spaces/DS/pages/2533359623/ACH+EFT+Rejects

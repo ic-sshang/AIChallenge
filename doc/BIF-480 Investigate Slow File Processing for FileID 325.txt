@@ -1,0 +1,22 @@
+Item: 
+BIF-480
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Results:
+These are the 3 most time-intensive function calls:
+getInvoiceDetail → AddInvoiceDetailRow (38.82%)
+Concatenating 3 times for every record (i.e. 
+IDLine &= "71~" & ProductID & "|"
+) is eating up a lot of processing time. We can make use of a StringBuilder to speed this up.
+RemoveEmptyFields also takes a lot of processing time, about a third of which is used by InStr(). I think we could speed this up because InStr is being used to determine whether the first occurrence of ~ in the string is at the end.
+EndDataLineBlock → Regex ctor (8.11%)
+The EndDataLineBlock function initializes a new Regex object 3 times every run rather than define them at the class level. This accounts for ~10% of the total runtime of ToBif(). We can easily move the Regex initializations outside that function.
+AddInvoicesIntegratorTools → WriteIHLine (6.57%)
+This function uses lots of other functions and doesn’t have an easily optimizable piece.
+Next Steps:
+Move the Regex initializations out of EndDataLineBlock()
+Update AddInvoiceDetailRow() to use a StringBuilder
+Update WriteIHLine() to use a StringBuilder
+Update RemoveEmptyFields() to use IndexOf instead of InStr (more efficient)
+ URL:/spaces/PE/pages/4666884099/BIF-480+Investigate+Slow+File+Processing+for+FileID+325

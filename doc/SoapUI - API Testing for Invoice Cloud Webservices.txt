@@ -1,0 +1,21 @@
+For guidance on invoking Invoice Cloud APIs using SoapUI, please refer to this guide.
+SOAP Protocol
+Launch SoapUI (You may close the Endpoint Explorer and SoapUI Start Page - see screenshot below).
+Select File → New SOAP Project.
+Navigate to the 
+Invoice Cloud API Documentation Website
+.
+From the Navigation Toolbar, expand “Web Services (SOAP)”.
+Expand the Service you want and select which API you want to test
+For this example, we will be using Cloud Invoicing → UploadInvoice
+Select the Web Reference URL (blue text) and then “Service Description”. 
+Copy the the URL (it should end in “WSDL” (see screenshot below).
+Back in SoapUI, paste the WSDL URL into the “Initial WSDL” text box. 
+You may name the Project whatever you like.
+Ensure the “Create sample requests for all operations?” checkbox is checked.
+The list of API methods will appear in your Navigator. You want to use the APIs under the service that ends with “Soap12” (see screenshot, highlighted in blue), so you can collapse the items under the regular Soap service. 
+Right Click on the API that you want to use, select “New Request”, and Name the request whatever you like. A request window will be added to your project. 
+Replace the ? characters in on the left pane with your API parameters.
+When ready, select the green Play Button on the top-left of the Request window. 
+You may review the API response on the right pane. 
+ URL:/spaces/DS/pages/3928621072/SoapUI+-+API+Testing+for+Invoice+Cloud+Webservices

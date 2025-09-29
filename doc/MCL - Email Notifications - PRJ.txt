@@ -1,0 +1,90 @@
+Identified Technical Problems
+Hardcoded logic determines who receives what notifications not permission sets – this can lead to mismatches between expected vs actual notification recipients
+Email logic - Unclear where this lives & unclear what email notifications users receive nor are these notification recipients defined
+Common EmailQueueTypeID Values (from code analysis):
+Based on the comments and usage in the codebase, here are some common EmailQueueTypeID values:
+ID
+Description (from comments)
+1 
+Invoice notification 
+2 
+Late fees notification 
+3 
+Autopay decline notifications 
+4 
+Scheduled payment decline 
+5 
+Payment confirmation/receipt 
+9 
+System/error notifications 
+19 
+Registered customer welcome 
+21 
+Autopay registration notification 
+23 
+Paperless registration notification 
+25 
+ACH rejects 
+30 
+Credit card expiring 
+32 
+Scheduled payment confirmation 
+33 
+Autopay reminder 
+41 
+Payment confirmation (alternative) 
+44 
+Scheduled payment reminder 
+46 
+Payment receipt 
+50 
+Payment confirmation 
+63 
+Conveyance notifications 
+67 
+RSP (Recurring Scheduled Payment) confirmation 
+69 
+RSP cancelled 
+75 
+AutoPay confirmation 
+76 
+Paperless confirmation 
+97 
+Payment method blocked 
+Usage:
+The 
+EmailQueueTypeID
+ is used throughout the system to:
+Categorize different types of emails in the 
+EmailQueue
+ table
+Configure email templates and subjects in 
+BillerEmailConfig
+Control email processing logic in various stored procedures
+Emails Sent By Login Type (EmailQueueProcessing)
+From 
+Helper.vb
+, the system defines 6 login types:
+NONE
+ (0) - Not Available
+Account_Owner
+ (1) - Account Owner
+Account_Oversight
+ (2) - Account Oversight
+Account_Guest
+ (3) - Account Guest
+Group_Oversight
+ (4) - Group Oversight
+Account_CoOwner
+ (5) - Account Co-Owner
+For ALL Login Types (0-5):
+All invoice notifications (first, second, third)
+All payment receipts and confirmations
+Welcome and registration emails
+Payment decline notifications
+All administrative notifications
+Password recovery emails
+System notifications
+ONLY for Account_Owner (type 1):
+Emails containing OneClickPay payment links (when conditions are met)
+ URL:/spaces/EA/pages/4611309660/MCL+-+Email+Notifications+-+PRJ

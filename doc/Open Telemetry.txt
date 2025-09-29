@@ -1,0 +1,15 @@
+OpenTelemetry is an open-source observability framework designed to help developers collect, process, and export telemetry data—metrics, logs, and traces—from their applications and infrastructure. It provides a vendor-neutral
+ 
+integration to observability platforms.
+As of this writing OpenTelemetry usage is scoped to decouple the .Net 8 application level metric and tracing data from our observability platform, removing the need to use New Relic SDKs in the applications (New Relic).  
+New applications in .Net 8 will use OTEL SDKs for application level metrics and tracing.  Logging, pod, and node APM data are being collected outside of the application and is not in scope for application OTEL SDK configurations.  
+ 
+.Net Framework 4.8 applications will embed the New Relic APM agent into the container image and continue to use the New Relic SDKs for APM, metrics, and tracing. 
+Related Content:
+Open Telemetry Setup - .Net Web API
+ 
+Open Telemetry Setup - .Net Job
+ 
+https://opentelemetry.io/docs/languages/dotnet/
+ 
+ URL:/spaces/PMK/pages/4152229908/Open+Telemetry

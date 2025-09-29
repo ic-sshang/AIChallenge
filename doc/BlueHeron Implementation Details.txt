@@ -1,0 +1,137 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+DRAFT
+ 
+Document Owner
+ 
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+BlueHeron
+ Specifically work with Oracle CC&B
+Software Product Name
+Oracle Customer Care and Billing
+Software Cashiering System
+N/A
+Supported Versions
+All
+Currently 7 versions listed in technical design 
+Integration Requirements and Pre-Requisites
+Yes
+Ensure webservice connectivity.  Confirm whitelisting has been completed by biller
+Vertical
+GUB
+Sample Biller Implementation
+Clark County Water Reclamation District
+BID 1815
+Planning
+Test Portals
+IC Hosted Test Portal: BID 1183
+Partner Hosted Test Portal: No
+Biller Test Portal - Yes- Needed and Required
+Rules of Engagement
+Refer to the integration as the 'Invoice Cloud Integration Feature' for the biller
+Timeline
+60-90 days
+Configuration
+Invoice Types
+3- Sewer, 42- Utility (Sewer is used for residential electric, 42 used for non-residential electric)
+Virtual Site
+Required Options
+ID
+Option Description
+Details
+1
+Allow Adjustments on Closed Invoices
+Enable this option if Payments and Adjustments can be applied to an Invoice that is considered closed. There are cases in which the recommended functionality is to disable this option. One case is Balance Forward, which by definition the balance of the previous Invoice is adjusted out and moved to the new Invoice. No more payments or adjustments should be allowed on that closed Invoice.
+2
+Paperless Checkbox Default
+When Registering, or when making a Payment via ExpressPay, the user is presented with the option to Go Paperless with a checkbox. The Biller may choose to have this either checked by default, or not checked.
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Blue Heron
+Is the data generic or unique/specific to each biller?
+Adjustment File
+Blue Heron
+Is the data generic or unique/specific to each biller?
+Payment File
+Blue Heron
+Bill Presentment
+Blue Heron
+Is the data generic or unique/specific to each biller?
+RTDR API
+Is the data generic or unique/specific to each biller?
+RTDR Passcode
+Is the data generic or unique/specific to each biller?
+DataPump API (same as RTDR API)
+Is the data generic or unique/specific to each biller?
+DataPump Passcode (same as RTDR Passcode)
+Is the data generic or unique/specific to each biller?
+Multi-Database Name (not always applicable)
+SSO URL
+PDF URL
+Is the data generic or unique/specific to each biller?
+Whitelisting IP Addresses
+Invoice Cloud
+Partner Coding Requirements
+What
+Provided To
+When
+Biller Name
+Blue Heron
+Project Assignment 
+BID
+Blue Heron
+Project Assignment 
+Invoice Format ID
+Blue Heron
+Project Assignment 
+Invoice Format GUID
+Blue Heron
+Project Assignment 
+Biller GUID TEST
+Blue Heron
+Project Assignment 
+WebService Key TEST
+Blue Heron
+Project Assignment 
+Biller GUID PROD
+Blue Heron
+Project Assignment 
+WebService Key PROD
+Blue Heron
+Project Assignment 
+Invoice Type ID
+Blue Heron
+Project Assignment 
+Products Biller Signed Up For
+Blue Heron
+Project Assignment 
+Biller Contact Information
+Blue Heron
+Project Assignment 
+Contacts
+ URL:/spaces/IM/pages/1676967943/BlueHeron+Implementation+Details

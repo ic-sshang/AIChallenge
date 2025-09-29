@@ -1,0 +1,34 @@
+Autopay Failures troubleshooting/fixing:
+Troubleshooting and rerunning failed autopay is a lengthy laborious process that is burned upon developers.
+Alerts are triggered when, for example, 10% of AP payments don't process correctly. The solution to this is manual.
+The developer must open the log file (a lengthy process):
+The Azure portal contains numerous log files, and the developer needs to locate the correct one.
+The process differs for each biller. The developer must check the CRM, look up the biller, and determine their priority and time zone. Log locations vary depending on whether the job is still running.
+Download the log files
+Manually scan to find the discrepancy
+Note the failed invoice ID
+Access the database using a query saved in Slack to check the invoice status
+Access the production AVD, then clone or set up the autopay processor repo
+Make local changes to uncomment specific code and apply the IDs selected from the database
+Run the VS Code as a developer
+Repeat this manual process for every failed invoice of every biller
+We have a smoother process for reruns, so we need to communicate that to our engineers (and anyone else supporting reruns).
+re: logs → when the AP/SP chain completes for all billers, the email summary contains all the failed InvoiceIDs for all billers along with the exception
+re: AVD → you only need to clone the AP/SP repos 
+once
+, but we 
+do 
+need to query the db to see if the affected invoice still needs a rerun or was paid another way / is no longer picked up by the job(s) – 
+this is where a tool could be used 
+where we can see all the impacted invoices and their current status instead of querying data in each shard (which is faster than searching in the individual biller portals, but still manual and time-consuming)
+Problems:
+Identifying the issue is overly complex:
+It should be as simple as clicking a button in a web page to rerun AP payments/particular invoice.
+100%
+Developers spend too much time on support work that non-technical staff members should be able to handle independently
+disagree, in the sense that we should improve the product to reduce overall support time, regardless of if it’s CS/DS/SPAM
+Developers are having to do this in the middle of nights, when they are on rotation
+reruns are generally happening during biz hours, usually when the initial daily job (for all billers) completes – if this is 
+not
+ the case, I’d like to know what scenarios it’s happening, I’ll ask the team for examples
+ URL:/spaces/PE/pages/3550019638/Autopay+Failures

@@ -1,0 +1,27 @@
+Pre-Patching 
+Log into the WSUS(10.0.2.8) server
+Open Windows Server Update Service(WSUS)
+Under Computers>All Computers Create a new group for the month of Updates
+Approve the new critical updates to that new created computer group
+All Non-Prod servers are added to the group and patching is done on a schedule through Azure Automation
+When ready to work on Production Servers they need to be added one by one to the group. This releases the patches to the server.
+ProxyTemp Servers 1-10
+Notify the engineering maintenance Channel in Slack which server you are planning to patch. 
+Log into WSUS server and move servers needed to patch. 
+Log into Azure portal. 
+Navigate to Azure Load Balancers
+Click IC-Proxy-LB-Temp>Backend Pools
+Take the server you plan to out of the load balancer by checking the box you want and clicking remove.
+Run the updates and when server is ready to restart, restart it. 
+Once Servers is back up the ServiceTester.exe needs to be run to test the services before putting it back in the load balancer. 
+Tester can be found here E:\Data\Apps\ICServiceTester\icservicetester.exe
+Tester needs to be run from Command Prompt
+once service come back clear can put it back in load balancer
+if something fails open services on the servers and restart the service failing Usually Crypto service. 
+Web Servers 1-10 + IC-GW1, 2
+To be documented
+App Servers 1-10
+To be documented
+Term Servers
+To be documented
+ URL:/spaces/icinfradoc/pages/2675998739/Patching+Procedure

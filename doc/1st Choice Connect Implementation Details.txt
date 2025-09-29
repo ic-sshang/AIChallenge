@@ -1,0 +1,155 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+n/a 
+Summary
+Summary
+Details
+Software Partner Name
+1stChoiceConnect
+Software Product Name
+Insured Connect
+Software Cashiering System
+N/A
+Integration Requirements and Pre-Requisites
+None
+Vertical
+FS
+Sample Biller Implementation
+BID 2214
+Planning
+Test Portals
+IC Hosted Test Portal: BID 2767
+Partner Hosted Test Portal N/A
+Biller Test Portal - Up to the biller
+Rules of Engagement
+1stChoiceConnect will be contacted for Biller implementations for supporting UAT and Production deployments. 1stChoiceConenct PM listed in contacts to be consulted for work from 1stChoiceConnect.
+Timeline
+30 days to implement
+Configuration
+Invoice Types
+164
+Virtual Site
+Account number referred to as policy number. Search inputs are up to each biller - suggestion below:
+Required Options
+No required options
+ - enable/disable for SSO integration and biller preference
+ID
+Option Description
+Details
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+1stChoiceConnect
+When a policy is issued and invoices generated for installments through daily batch file through FTP
+The data is unique/specific to each biller
+Payment File
+IC
+Daily Batch File through FTP
+Bill Presentment
+1stChoiceConnect
+PDFs sent through FTP site usually the next day after an invoice is sent and incase of holidays/weekend, may take up to 3 days to get to IC
+Date of PDF creation is unique per biller. Format generic across billers
+Whitelisting IP Addresses
+Invoice Cloud
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+1stChoiceConnect
+Project Assignment 
+BID
+1stChoiceConnect
+Project Assignment 
+Invoice Format ID
+1stChoiceConnect
+Project Assignment 
+Invoice Format GUID
+1stChoiceConnect
+Project Assignment 
+Biller GUID TEST
+1stChoiceConnect
+Project Assignment 
+WebService Key TEST
+1stChoiceConnect
+Project Assignment 
+Biller GUID PROD
+1stChoiceConnect
+Project Assignment 
+WebService Key PROD
+1stChoiceConnect
+Project Assignment 
+Invoice Type ID
+1stChoiceConnect
+Project Assignment 
+Products Biller Signed Up For
+1stChoiceConnect
+Project Assignment 
+Biller Contact Information
+1stChoiceConnect
+Project Assignment 
+Contacts
+1500
+1stChoiceConnect Contact list
+200
+ URL:/spaces/IM/pages/2064646356/1st+Choice+Connect+Implementation+Details

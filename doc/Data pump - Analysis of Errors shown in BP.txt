@@ -1,0 +1,51 @@
+Purpose
+As part of this we want to analyze how we can display the error message / graph / chart on biller portal (specific to Data Pump)
+Current State
+ 
+As of today we do no have any visual represent of Data pump related error or details specific to data pump processing performance
+Expected Outcome
+The analysis is documented in confluence (will share the placeholder page)
+Reach out to arch team to get the existing solution for displaying charts/graphs on home page of biller page.
+Currently, we are displaying the Data Pump history in the Biller Portal, with the image below showing the failed records. However, apart from these failed records, no other Data Pump-related information is being displayed.
+In biller portal, as of now we are using few libraries for displaying the payments data in graphical representation. And, dynamically we are displaying some errors like this,
+Proposal
+We can display the types of errors occurred in the specific period of time per Biller in the Biller Portal.
+We can represent the count of errors based on status code. Like below
+We are thinking of using the same library, Chart.JS/High Chart, for creating this chart. We can display the types of errors like 4xx and 5xx, and other errors. We can fetch the data from New Relic and display it here. The chart represents the whole day's data per biller. On the X-axis dates ranging, on the y-axis the count of errors.
+or this way is good,
+This chart represents the daily count of errors per biller.
+We can display information messages/warning messages like this:
+We can display these errors using 
+HTML
+, 
+CSS
+, and 
+JavaScript
+.
+We can display response time threshold like below:
+We can fetch the data from New Relic and display the average response time here.
+The average response time is available in New Relic. 
+OR
+We can fetch the response duration from the database.
+To store the average response time, we can create a new column and calculate the duration using the start time and end time. The average response time will be computed on a daily basis.
+We can send an email notification to Biller with message. 
+Ex: Data Pump experiencing slowness…
+Currently we are using:
+Dynamic Error Representation:
+Graphical Representation
+For visualizing data on the web pages, we are utilizing the following 
+Chart.js libraries
+:
+·       
+Chart-1.1.1.min.js
+·       
+Chart.bundle.min.js
+·       
+Chart.min.js
+·       
+excanvas.js
+Additionally, the 
+gridList.js
+ library is also integrated to enhance the graphical representation and data layout.
+ 
+ URL:/spaces/PE/pages/4156751937/Data+pump+-+Analysis+of+Errors+shown+in+BP

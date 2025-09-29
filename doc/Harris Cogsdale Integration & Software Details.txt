@@ -1,0 +1,203 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+Pipe-Delimited CSV with header
+Web Services
+Stratus must be active in CRM for Cogsdale to send a billers invoice data
+Files are transferred to IC raw via a custom webservice that’s baked into StratusWebServices called HarrisCogsdale.vb that uses 
+https://www.invoicecloud.com/stratuswebservices/HarrisCogsdale
+ to send over WebService contents that is then converted into a pipe delimited file.
+Adjustments/Balances
+Cogsdale GetAccountBalance web service
+RTDR
+InvoiceCloud uses logic to determine whether or not to update the balance but does not support an Open Item model. When IC attempts to update balances, IC checks the  
+StatementNumber
+ from the response to confirm if 
+BillerInvoiceNumber
+ matches.
+00831707-0253-431c-a342-b5eadbefea28
+DECIDED
+2b09c77f-778f-4a17-83a4-9d8ebc967fbe
+IF YES: Update the Balance Due (using the 
+BalanceDue
+ value in the respond) and update Past Due (using the BalancePastDue field).
+DECIDED
+dcb9d775-5926-4e21-93cc-340bc03af6f3
+IF NO: Do not update the Balance Due or Past Due. IC will display an error message "unable to update balance, new bill has been generated"
+IF YES: Update the Balance Due (using the 
+BalanceDue
+ value in the respond) and update Past Due (using the BalancePastDue field).
+IF NO: Do not update the Balance Due or Past Due. IC will display an error message "unable to update balance, new bill has been generated"
+Payments
+Cogsdale web services, depending on Payment Type:
+CC: SubmitCreditCardPayment
+Cash/Kiosk: SubmitCashPayment
+EFT: SubmitECheckPayment
+Data Pump
+ACH Rejects Posting
+Not Supported
+Void
+Not Supported
+Change Log - AutoPay Enrollment
+Cogsdale SetAutoPayStatus web services
+Data Pump
+Change Log - Paperless Enrollment
+Cogsdale SetEBillingStatus web services
+Data Pump
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images 
+PDF Linking - Supported
+PDF Extraction - Supported*
+Template - Not Supported
+Remote Linking to Cogsdale Web Service (Preferred)
+This method does not require an additional URL and is not configured in CRM Advanced Settings. Remote Linking is completed as part of the integration for Cogsdale. This service uses the same configuration as the rest of the real-time aspects of the integration.
+*Remote Linking and/or PDF Extraction to PDF Vendor can be supported and handled by implementations
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+Biller will manually post payments into Cogsdale
+CSRConnect
+*Supported - see details
+POS and CSR connect do not work in a Citrix environment (some Cogsdale billers are using Citrix) - check with Cogsdale PM before moving forward with either product.
+CSRConnect can be used/configured by Cogsdale for two purposes:
+Deposit payments (no invoice present in IC - routes CSR to one-time payment route)
+Invoice payments (invoice present in IC - routes CSR to IC customer portal)
+Biller Experience Guide
+EMV
+Supported
+IVR
+Supported
+SearchByAccountNumber
+Kiosk
+Supported
+Cash Kiosk Payments are pushed through the Data Pump 
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+*Supported - see details
+Biller Experience Guide
+Product is supported, with the following limitations:
+CloudPOSConnect is not supported for use with RemoteApp. RemoteApp is a specific type of RDP client. It is like RDP, but instead of logging into the box, and then using GP/CSM on the box, you are presented only with GP/CSM.
+CloudPOSConnect is not compatible with Citrix
+Cogsdale Pre-requisites: 
+Minimum of GP 2013 and CSM 29.
+.Net framework 4.6 or better.
+Add-On Requests:
+ 
+Once the Product is enabled in CRM, the biller needs to submit a Cogsdale Support Ticket and Cogsdale will send the external ftp link for software and documentation for CloudPOSConnect. If there are issues with the install, the Cogsdale support team will route the ticket appropriately
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+       Multi-User Log In
+Not Supported
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Supported
+AutoPay Collection Date
+Supported
+BIF Customization 
+Batch Closure
+Custom
+Custom to match the batch close time in Cogsdale
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+InvoiceCloud uses logic to determine whether or not to update the balance but does not support an Open Item model. When IC attempts to update balances, IC checks the  
+StatementNumber
+ from the response to confirm if 
+BillerInvoiceNumber
+ matches.
+98e7f7ed-f827-4c70-bec4-f8b010c174c4
+DECIDED
+c29a7e39-6495-4b19-9fae-3ba1acd1b155
+IF YES: Update the Balance Due (using the 
+BalanceDue
+ value in the respond) and update Past Due (using the BalancePastDue field).
+DECIDED
+8629e541-b003-4a0c-94ca-029f8ff47432
+IF NO: Do not update the Balance Due or Past Due. IC will display an error message "unable to update balance, new bill has been generated"
+IF YES: Update the Balance Due (using the 
+BalanceDue
+ value in the respond) and update Past Due (using the BalancePastDue field).
+IF NO: Do not update the Balance Due or Past Due. IC will display an error message "unable to update balance, new bill has been generated"
+       Open Item Billing
+Not Supported
+Block Payment
+Supported
+Handled via RTDR for Version 3 only. Advanced setting 32 is also configured to ensure the block payments flags are not in set in IC by a biller portal user, and only updated via RTDR.
+Conveyance
+Not Supported
+Auto Conveyance is not supported for Cogsdale Billers, since the Invoice Cloud Account number will always change if the location changes names.
+Data Conversions
+Email Notification Schedule
+Supported
+BIF Customization 
+Expire Bill for Payment
+Not Supported*
+Setting could be configured as a BIF Customization but generally is not used.
+Flex Pay
+Not Supported*
+Feature could be turned on but is generally not used.
+Minimum Payment
+Not Supported*
+Setting could be configured as a BIF Customization but generally is not used.
+Paperless
+Supported
+Partial Payments
+Supported
+BIF Customization 
+Past Due Payments
+Supported*
+Version 3 only
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Not Supported
+Other EMV Devices
+Not Supported
+ URL:/spaces/IM/pages/2241921125/Harris+Cogsdale+Integration+Software+Details

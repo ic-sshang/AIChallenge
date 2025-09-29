@@ -1,0 +1,131 @@
+Email Logs
+The 
+Email Log
+ option in the CRM Tools section allows users to manage and review email communications.
+Overview:
+ This document explains how to check email logs in the IC CRM system and details where the data is sourced.
+Files Involved:
+ToolEmailLogs.aspx
+:
+ The front-end interface for viewing email logs.
+ToolEmailLogs.aspx.vb
+: The backend code that fetches email logs.
+Data Source:
+ The code in 
+ToolEmailLogs.aspx.vb
+ fetches email logs from the Mailgun API. This API is an external service and does not retrieve data from our internal database.
+Email Queue Statistics 
+RptEmailQueueStats.aspx.vb
+Stored Procedure:
+ 
+rptCRMEmailQueueStatistics
+Database Tables:
+EmailQueueStats
+: Contains statistics related to the email queue.
+tblEmailQueueType
+: Provides details about the types of email queues.
+Description:
+ We are fetching the Email Queue Statistics using the stored procedure 
+rptCRMEmailQueueStatistics
+. This stored procedure is designed to generate statistics and reports related to the email queue within the CRM (Customer Relationship Management) system. It utilizes the 
+EmailQueueStats
+ table and performs an inner join with the 
+tblEmailQueueType
+ table to provide comprehensive statistics on the email queues.
+Email Queue Monitor 
+I did not find anything related to the Email Queue monitor in the code. When we check it, it gives us a blank page in both production and development environments.
+Tables
+EmilQueue Table:
+When an email is sent through the Biller Portal, the system captures and logs the details of the email in the 
+EmailQueue table
+. This ensures tracking, auditing, and retry mechanisms can be applied as necessary. SP : 
+insEmailQueue
+EmailTracking Table: 
+ 
+EmailTracking table stores data related to customer emails sent by the biller.
+How the Email sent from Biller portal for test emails
+SendTestEmail.aspx.vb
+line 339.
+1. 
+Inserting into the Email Queue Table
+sql = "exec 
+insEmailQueue
+ ..."
+This runs a 
+stored procedure
+ called insEmailQueue
+It 
+inserts a row into the 
+EmailQueue
+ table
+ (or a similar queue table in your database)
+That row contains: 
+Email template ID
+Recipient email address
+Invoice type ID
+Biller ID
+(Optionally) Sample Invoice ID or test data
+📩 2. 
+Adding a Message to Azure Queue
+AzureQueueStorage.AddToGenericQueue(...)
+This adds a 
+message
+ to an 
+Azure Queue
+ (QueueName: 
+testemailqueue
+)
+The message might look like:
+ "1234|12|5678"
+ Where: 
+1234 = Biller ID
+92 = Email Template ID (Password reset Notification)
+5678 = ID of the row inserted into the EmailQueue table
+⚙️ 3. 
+Sky Bot Processing
+Sky bot Job is processing the email from the Email queue table, based on my understanding and the information provided by the PRISM team.
+Skybotname: EmailQueueProcessing
+How Emails are sending via ICCRM: ￼
+Email.vb: 
+By default, sending mails using Mail gun.
+The switch expression checks the value of emailProvider (which is an enum).
+•	For each possible value:
+•	If 
+AuthSmtp
+, it calls 
+SendEmailWithAuthSmtp.
+•	If 
+SMTP
+, it calls 
+SendEmailWithSmtpDotCom.
+•	If 
+Mailgun
+, it calls 
+SendEmailWithMailGun
+.
+•	For any other value (the _ case), it defaults to 
+SendEmailWithMailGun
+.
+ 
+ 
+Questions: ￼
+What is the name of the Azure function that picks up the message from the queue?
+We are not using Azure Functions for sending emails. Instead, email processing from the queue is handled by a Skybot job named 
+EmailQueueProcessing
+, 
+What is the implementation logic of that Azure function? Is it internally using Mailgun API to send the email
+Yes, Inside SKybot we are using mailgun.
+What is the link between 
+EmailQueue
+ and 
+EMailTracking 
+table? 
+Based on my understanding there is no direct relationship between the EmailQueue and EmailTracking tables, though a foreign key relationship exists. The EmailQueue table stores information about emails triggered from the Biller Portal, while the EmailTracking table stores data related to customer emails sent by the biller.
+In Biller Portal, are we not using Mailgun API to send the emails? 
+We are using skybot job to process the emails and inside skybot we are using mailgun.
+Did you check the implementation of this utility method? 
+Above I attached the implementation screenshots.
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4308107421/SPIKE+-+Mailgun+Setup+and+Check+how+Email+Logs+are+Logged

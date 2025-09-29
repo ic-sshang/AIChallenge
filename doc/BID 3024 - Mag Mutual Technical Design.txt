@@ -1,0 +1,674 @@
+Page Navigation:
+Jira tickets
+INT-5159
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+Details
+Oasis Out of the Box integration (has multiple Invoice Types)
+Using SAML SSO with Salesforce
+Custom Point and Epic Batch Integration with no Payment File or Change Log File
+API Documentation
+Summary: 
+Data Pump and RTDR Authentication (This is different than out of the box Oasis/Delphi Authentication) - If this new authentication method is adopted by other Oasis/Delphi billers in the future, the functionality can be leveraged for reuse. The authentication is applied if Advanced Setting 149 - OAuth Audience is included. 
+Postman Collection: 
+ 
+Authentication Details
+Authentication
+A token is retrieved from Auth0. All values will be entered in the Body of the request. 
+Base URL
+https://oasis-apis.dev.magmutual.com/
+ 
+Token URL
+https://magmutual-develop.auth0.com/oauth/token
+ 
+clientSecret
+HV5NYtxIZc0A3JAwj7fSe4Fl-tzRt4fl7Eevr5zZ1tFVVXihLBXZVNEhRaBkUZmh 
+clientId
+eZDmacmjbSWvs2lkvCmzhxqGBWMwIqTH  
+Audience
+https://oasis-apis.dev.magmutual.com/
+Additional Details 
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Token Creation for Bill Presentment 
+MagMutual is going to provide client_id and client_secret to Invoice Cloud directly. Invoice Cloud is responsible for storing this information securely and keep it accessible only by their IT personnel. These credentials are used in a machine-to-machine M2M OAuth2 client credentials flow, allowing InvoiceCloud to obtain an access token and authenticate requests to our internal API.
+Client Secret: oFnQjnI0J458K_Ad8IV5AWwj-uYZnYocrTIy8fFhNkg2713D5OAINtxDWB_aM969
+Secret ID: SGN1vg7Fpc3hLH6ep8BTFMM0IB6VovPq
+GET 
+https://invoice-cloud.dev.magmutual.com/invoice-cloud-account-mapping/auth0/token?clientId=SGN1vg7Fpc3hLH6ep8BTFMM0IB6VovPq&clientSecret=oFnQjnI0J458K_Ad8IV5AWwj-uYZnYocrTIy8fFhNkg2713D5OAINtxDWB_aM969
+Token is available for 24 hrs. 
+Bill Presentment
+Bill Presentment API
+Bill Presentment API used to receive Bill Image that will be reflected to the user per Invoice. 
+Header: 
+Authorization: Bearer {access_token}
+GET 
+https://invoice-cloud.dev.magmutual.com/invoice-cloud-account-mapping/file?invoiceNumber=165621
+Invoice Numbers available for testing: 237538, 170337, 165621, ,185169, 229772
+HTTP/1.1 200 OK Content-Type: application/pdf
+The internal API will return one of the following response codes:
+ 200 OK : Invoice returned successfully as application/pdf 
+204 OK : No content available for the given invoice number 
+400 : Missing or invalid authentication credentials 
+401 Unauthorized : Unauthorized access or invoice file access expired 
+403 Forbidden : Forbidden access to the invoice file or missing scopes 
+404 Not Found : Invoice file not available 
+429 Too Many Requests : Too many invoices request for the given time period 
+500 : Internal server error
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Record Type
+1
+RowType
+TRUE
+File Header
+2
+BillerGuid
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+TRUE
+Invoice Header
+11
+InvoiceDate
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+Invoice Header
+13
+TotalAmountDue
+TRUE
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+Invoice Header
+35
+CustomerShipState
+FALSE
+Invoice Header
+36
+CustomerShipZip
+FALSE
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+40
+Custom3
+FALSE
+Invoice Header
+41
+Custom4
+FALSE
+Invoice Header
+42
+Custom5
+FALSE
+Invoice Header
+43
+Custom6
+FALSE
+Invoice Header
+44
+Custom7
+FALSE
+Invoice Header
+45
+Custom8
+FALSE
+Invoice Header
+46
+Custom9
+FALSE
+Invoice Header
+47
+Custom10
+FALSE
+Invoice Header
+93
+BalanceDue
+FALSE
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+Invoice Header
+346
+BillerBillYear
+FALSE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+TRUE
+Customer Record
+60
+CustomerName
+TRUE
+Customer Record
+61
+Address1
+FALSE
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+FALSE
+Customer Record
+64
+State
+FALSE
+Customer Record
+65
+Zip
+FALSE
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+83
+CustomField1
+FALSE
+Invoice Detail
+84
+CustomField2
+FALSE
+Invoice Detail
+85
+CustomField3
+FALSE
+Invoice Detail
+86
+CustomField4
+FALSE
+Invoice Detail
+87
+CustomField5
+FALSE
+Invoice Detail
+88
+CustomField6
+FALSE
+Invoice Detail
+89
+CustomField7
+FALSE
+Invoice Detail
+90
+CustomField8
+FALSE
+Invoice Detail
+91
+CustomField9
+FALSE
+Invoice Detail
+92
+CustomField10
+FALSE
+Invoice Detail
+208
+CustomField11
+FALSE
+Invoice Detail
+209
+CustomField12
+FALSE
+Invoice Detail
+210
+CustomField13
+FALSE
+Invoice Detail
+211
+CustomField14
+FALSE
+Invoice Detail
+212
+CustomField15
+FALSE
+Invoice Detail
+213
+CustomField16
+FALSE
+Invoice Detail
+214
+CustomField17
+FALSE
+Invoice Detail
+215
+CustomField18
+FALSE
+Invoice Detail
+216
+CustomField19
+FALSE
+Invoice Detail
+217
+CustomField20
+FALSE
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Record Type
+305
+RowType
+TRUE
+File Header
+306
+BillerGuid
+TRUE
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+File Header
+309
+AdjustmentCount
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+File Header
+311
+RowType
+TRUE
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer CLOUD STORE payment data from IC to the biller
+File Extension: .csv or .xlxs
+File Naming Convention: CloudStorePaymentsMMDDYY.csv or CloudStorePaymentsMMDDYY.xlxs
+Specification: Excel format report will be sent daily to 
+invoicecloud@magmutual.com
+File Transfer Frequency: Payment file will be sent every day 
+File Format Name: Excel format
+Field Mapping
+Field
+Data Type
+Values
+InvoiceType
+String
+Invoice Cloud Invoice Type Alias - MMIC CS, MMIA CS, MMPS CS, WVMIC CS, MMIC CS (Point)
+Name
+String
+Provided in Cloud Store Transaction
+Account Number
+String
+Provided in Cloud Store Transaction
+Policy Number	
+String
+Provided in Cloud Store Transaction
+Email Address	
+String
+Provided in Cloud Store Transaction
+Phone Number	
+Int
+Provided in Cloud Store Transaction - OPTIONAL Field, send blank if not provided
+Payment Amount	
+Double
+Provided in Cloud Store Transaction - Do not include Service Fee
+Comments
+String
+Provided in Cloud Store Transaction
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+20
+Remote PDF EndPoint/WebService URL	
+Y
+131
+JSON Configuration	
+Y
+144
+OAuth Endpoint	
+https://magmutual-develop.us.auth0.com/oauth/token
+Y
+145
+OAuth Client ID	
+eZDmacmjbSWvs2lkvCmzhxqGBWMwIqTH
+Y
+146
+OAuth Client Secret	
+HV5NYtxIZc0A3JAwj7fSe4Fl-tzRt4fl7Eevr5zZ1tFVVXihLBXZVNEhRaBkUZmh
+Y
+149
+OAuth Audience	
+https://oasis-apis.dev.magmutual.com/
+Y
+Site configuration 
+SSO Integration
+For Mag Mutual’s login process, they:
+Retrieve Customer Details – and if it fails
+Create Customer Record  - SFContactId used here
+Register Customer - Register using their email and integration password with the SFContactId Account
+Link Accounts - Link over rest of policy accounts (point) and Oasis FM Account Numbers
+The way Mag Mutual is working around the account number’s being PolicyID between IC and Oasis is by linking all PolicyID accounts on Invoice Cloud to the SalesForce ID account they have created. This way, the user will see all the Policy IDs that are linked together in the background with a webservice call. The SalesForceID account has to be created on Invoice Cloud to exist. This account doesn’t require an invoice or any data as this information will be on the PolicyID.
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Cloud Reporting: InvoiceDetail, InvoiceSummary, InvoicePaymentHistory, PaymentReportingDataSet 
+UploadEncodedInvoiceFile or UploadInvoiceFile
+Used to upload Invoice Files
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+BBQ-118
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+06/26/2025
+Currently Bill Presentment is not being used by Mag Mutual
+Addition of Bill Presentment to review bill images via PDF Remote Linking
+ URL:/spaces/IM/pages/2501312527/BID+3024+-+Mag+Mutual+Technical+Design

@@ -1,0 +1,205 @@
+Overview
+This section will cover common design patterns, when to use them, and when not to use them.
+Software Design Patterns are just a re-usable solution to a common problem - they are “templates” or “blueprints” for tackling scenarios that repeat themselves over and over in software projects. There are several sub-categories of design patterns that represent the problem space in which they are focused: 
+Behavioral, Creational, 
+and
+ Structural. 
+While design patterns exist in every programming paradigm (even in system & software architecture), focus generally comes from an Object-Oriented perspective and they can be seen more as a 
+Prerequisites
+Optional
+ - Familiarize yourself with 
+Cyclomatic Complexity
+An over-simplification of this concept is basically 
+how many possible results can occur given the number of logical branches in a method.
+Caveats
+There is a tendency, when learning about design patterns, to begin seeking out places to use them and often people begin finding themselves in the “All I have is a hammer and every problem is a nail” scenario.
+It is often best to first approach things with the 
+KISS Principle
+ in mind and start small. If requirements begin to indicate a need for ongoing work or flexibility in a part of the system (read “lots of future changes”) or if existing code is becoming difficult to maintain because there is TOO much going on - it is a good idea to evaluate whether a pattern implementation could simplify things or make things easier to test and maintain. 
+In general, design patterns are meant to make the codebase 
+easier
+ to work with, not harder - they are well-suited for situations when you need to more effectively manage complexity and/or break down larger processes into isolated, testable chunks. If you find yourself struggling to navigate the codebase under a mass of disjoint files, then it’s highly likely that patterns are being over-applied. 
+TODO
+
+
+
+
+1
+
+
+dfaf8445-30d1-4f05-8c2c-49284f9b95f8
+
+
+complete
+
+
+Repository
+
+
+
+
+
+
+2
+
+
+84c81ade-5183-4d3e-b467-0f4315d33306
+
+
+complete
+
+
+Strategy
+
+
+
+
+
+
+3
+
+
+9ee229d8-4cde-41d2-939e-8b8f0a0efeef
+
+
+complete
+
+
+Singleton
+
+
+
+
+
+
+4
+
+
+0937d543-9b14-4634-b061-912ad40303bc
+
+
+incomplete
+
+
+Chain of Responsibility
+
+
+
+
+
+
+5
+
+
+a544062d-70fb-4204-a82f-3463715356d5
+
+
+incomplete
+
+
+Factory + Abstract Factory
+
+
+
+
+
+
+6
+
+
+17d39f9d-8a54-428b-8eaa-8ca580d8dba0
+
+
+incomplete
+
+
+Mediator
+
+
+
+
+
+
+7
+
+
+aabe33f5-0e53-4eb8-85e6-c092b9825261
+
+
+incomplete
+
+
+Decorator
+
+
+
+
+
+
+8
+
+
+2d705e60-ba24-43d9-b687-fbc552523a54
+
+
+incomplete
+
+
+Façade
+
+
+
+
+
+
+9
+
+
+b07a818f-3843-486c-93f1-3ff6b7785fd4
+
+
+incomplete
+
+
+Adapter
+
+
+
+
+
+
+10
+
+
+3b4b7e71-caa8-4e00-84ff-573fc542b868
+
+
+incomplete
+
+
+Builder
+
+
+
+
+
+
+11
+
+
+b90efe09-dab8-465a-8d39-51289e335283
+
+
+complete
+
+
+Command
+
+
+
+
+Motivations on when to use them
+When not to use them 
+Resources
+The Catalog of Design Patterns
+ URL:/spaces/EA/pages/4138926138/Design+Patterns

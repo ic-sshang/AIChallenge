@@ -1,0 +1,146 @@
+Playbook
+CRM setup mapping & QC
+Description
+CRM setup for the completed Biller and Internal questionnaires. 
+Contents
+2
+Change Log
+Changes Made
+Date
+Author
+Version
+Description
+04/23/2024
+Lois Powers
+0.1
+Created Setup Mapping
+04/24/2024
+Lois Powers
+0.8
+Several edits were made to get to current version, added a downloadable word document. 
+Summary
+This gives the location of settings in the CRM that are captured on the Biller and Internal questionnaires. This is a guide for locating and setup. The setup for a CRM is also based on Integration and Prodcuts needed. 
+note
+Steps
+
+
+Steps
+
+
+Steps
+Action Item
+Description 
+1
+Biller Order Form (BOF)
+Review Biller Order Form.
+BOF review - Vertical, Software, Card Readers, Data Retention, Invoice Type Parameter Sheets (IP sheet), Products, and Services. 
+The sections in this Runbook on 
+Process Checklist
+ and 
+CRM Manual Information
+ will be helpful for the setup. 
+2
+Profile Section
+Configure and check that the information is correct according to the BOF.
+Configure or check information on these tabs Biller Info, Agreements, URL's, Options, Batch Close, Misc Settings, Data Retention.
+3
+Products Section
+Configure and check that the information is correct according to the BOF.
+Configure or check information on these tabs Credit/Debit Card, EFT, Online Bank Direct, Check 21 Cloud Payments / Cloud Store, Pay by Text, Kiosk, Cloud SSO Connect, Cloud POS Connect, Cloud CSR Connect, Cloud IVR Connect, Outbound IVR Messages, Bill Processor, Custom URL, Profile Document Storage, Outbound Campaigns, PayPal Brands, Outbound Payments, Agent Connect, POS Pay.
+4
+Invoice Types Section
+Select and add new Invoice Types as provided on the BOF IP Sheets.
+Select and add Invoice Types under the Support Invoice Type tab using Show All Invoice Types and add and Invoice Type if applicable for the Donation Fund Invoice Types tab this is for inline donations. 
+5
+Invoice Types Section
+Configure and check settings for the new Invoice Types.
+Invoice Type settings are determined from the Biller preferences as indicated on the Internal and External Questionnaires. Using these icons 
+ setup the settings and grids for the new invoice type. Check the calendar icon and arrow icon to see if the information is correct. 
+6
+Options Section
+Configure options needed for the integration.
+Defaults are automatically setup review and edit in accordance with the integration, products, and the Questionnaires from the project. 
+7
+Invoicing Section
+Configure tab sections for the integration. 
+Biller Order Form tab setup Biller Customer Service Email Address and check necessary items. Advanced Configuration Tab defaults will be checked configure based on integration. IVR Configuration Tab add IVR number and IVR vendor, if applicable to project.
+8
+Integration Summary
+Configure and fill out each integration summary for each Invoice Type.  
+The Integration Summary needs to be completed based on integration and the project questionnaires. These Status for each of these integration summaries must all show COMPLETE (
+green
+) before Go-Live.
+Process Configuration Setup Checklist
+DOCUMENT
+LINK
+Responsible 
+CRM Checklist - Configuration Setup
+ 
+IM
+CRM Manual Information 
+SharePoint Link 
+CRM Manual.pdf
+note
+CRM QC Delivery Task
+
+
+CRM QC Delivery Task
+
+
+CRM QC uses the BOF, the Biller and Internal Questionnaires (found in Smartsheet), the CRM, and access of the Virtual Site and Biller Portal for the Biller. CRM QC is requested by the Implementation Manager or the Project Manger typically two weeks before Go-Live.
+Steps
+Action Item
+Description 
+Documentation
+1
+QC Profile
+Complete QC of Biller Info, Batch Close & Misc Settings Tabs in the CRM
+Check URLs first. This will link you to the Box for the BOF. 
+Look at the Profile section and go down the list.  
+Look at the Options tab, double check if the ACH (Automated Clearing House) Month End Fees box is checked or unchecked. If on the BOF under the section Biller Bank Info in the box Billing Method, ACH (Month End) Fees or Direct Debit is listed, then the ACH Month End Fees in the CRM should be checked. If this section says “Monthly Invoice” then the CRM box should be unchecked.  
+Be wary of the Batch Close tab. The requested time is on the Questionnaire under the Batch Close section. A Custom close time should be noted on the Questionnaire.  
+The Batch Close time in the CRM is in Central Standard time (CST) so if the Questionnaire shows a time with another time zone specified, you will need to convert it to CST and make sure the Batch Close time is set correctly.  
+Under Misc. Settings, Google the town and time zone to ensure this is correct.  Do not assume you know correct time zone.
+2
+QC Products
+Complete QC of Products including Cloud Payments, Cloud Store, Pay by Text, SSO Connect, POS Connect, Cloud CSR Connect, IVR Connect and Outbound Campaigns in the CRM
+Look in the Products section, here you will look at the BOF under Payment Methods and Products and Services. Verify BID is using Visa/MC etc., in the CRM. If using ACH/EFT, then make sure EFT is active. IF using OBD you double check the Questionnaire to make sure those settings are set up correctly, that is the only thing in OBD to check on.  If there is not one, it is Out of Scope. Follow the questions being addressed on the CRM QC. 
+Single Sign On (SSO) is in Advance Settings.
+3
+QC Users
+Complete QC to ensure User Set Up in the CRM
+Look in Users section.
+Should have a master account and make sure it has email and is active and billable checked (carrot). 
+Should have an IC Support account active and set as support user. 
+Should have at least one or two plus other accounts set up. 
+4
+QC Invoicing
+Complete QC of Biller Order Form and IVR Configuration Tabs in the CRM
+Look in Invoicing section.
+Biller Order Form tab – check Questionnaire about auto conveyance and if it should be checked. 
+Check for a customer service email address. If there is no CS address the Biller may not want it on the Virtual Site – but note it for the IM. 
+Make sure virtual path is correct and matches virtual path in the profile.
+Check IVR tab and make sure if using IVR that vendor and phone number are there. 
+5
+QC Integration Summary
+Complete QC for a portion of the Integration Summary in the CRM
+Look at each Invoice Type listed on the BOF. 
+Then click Invoice Type overview to view Integration Summary for that Invoice Type
+Integration Partner should match BOF and Biller Profile.
+If in-house software, still should identify as such.
+If Blank PM should address 
+Look at the BIF Customizations, if notifications or autopay are selected on the Biller Questionnaire - these customizations should match the Questionnaire.
+6
+QC Virtual Site/Customer Portal
+Complete QC to ensure Virtual Site Settings and Cloud Stores are as requested on the BOF
+Look at the Virtual Site section. 
+Make sure EBPP is listed, or Cloud Stores are listed as show on BOF. 
+You can go through everything on the actual Virtual Site and complete the Virtual Site QC which is generally requested at the same time as the CRM QC.
+Full CRM Review (Implementations and/or Delivery)
+CRM Datasheet Cheat Sheet
+ 
+The link below is a guide in Smartsheet to help familiarize new specialists with the CRM set up and how to review items for a full review of the Biller’s CRM.  This can be used in conjunction with the CRM, the project’s Biller Order Form (BOF), the project’s IM Questionnaire, and biller’s Virtual Site.  On the cheat sheet, check out the “QC Note” column for instructions. While this document is no longer used as a QC document by the Delivery Team, it is helpful information for review.
+ 
+QC - DATA - Cheat Sheet
+ 
+ URL:/spaces/Implementa/pages/3193143298/CRM+Setup+QC+Playbook

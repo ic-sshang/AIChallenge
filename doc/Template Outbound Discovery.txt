@@ -1,0 +1,421 @@
+Summary
+Document status
+TEMPLATE
+Company
+Transcard Outbound Solution
+Industry/Vertical
+Insurance - Worker’s compensation
+Insurance - Commercial  
+Claims Payments
+Agent Commissions
+Premium Refunds
+Mortgagee / Lien Holder use cases
+Website
+https://developer-sandbox.transcard.com/
+ 
+Software + Version
+Transcard v1  API
+Solutions Architect
+ 
+Integration Manager
+ 
+General Outbound solution Discovery questions
+1800
+General
+Internal Notes
+Response/Decision
+Date
+What are your overall business objectives with the Outbound payments ?
+2. Who are the primary recipients of these payments ?
+What are the deficiencies of the outbound payments ?
+ 
+TC’s internal goal is to enable digital payments via Virtual Cards ( Needs discussion with TC on what has worked in the past )
+Try if there is scope for VC payment in any of the outbound use cases. 
+During the sales process identify these key areas of the objective for this project
+Please note : 
+Typically the audience for the Discovery workshop are technical - Senior Architects, developer, Business Architects ( have close to day-to-day knowledge of the business operations) which provides additional context after the Sales process is completed. 
+Could you provide more insight into the specific outbound payment regulatory requirements that you would like your new solution to address? For example, requirements that may be specific to the recipient - individual or business - of outbound disbursement or adjustor payments.
+Demographic  - determine Business receipts ( Cheques or MC or RTP or  ACH or digital - virtual cards ) - keep business as usual.
+Determine path to digital
+During the sales process identify these key areas of the objective for this project
+Please note : since business architects and customer product owners are involved at this stage more close to business responses are provided.
+What is your current Direct Written Premium for all lines of business (LOB) ?
+Objective is to identify if we are implementing the solution on a smaller LOB vs larger LOB, what is the expect volume of payments
+During the sales process identify these key areas of the objective for this project
+Are you considering a phased approach to support other lines of business?
+Object is to identity the different phases of the implementation and how MRR is being realized
+During the sales process identify these key areas of the objective for this project
+Can you confirm the name and version of the core system used to initiate disbursements? 
+Example home grown core system - AS400 or ERP system or Guidewire.(If known from the presales, you could say something like "My presales colleagues told me it was X.)
+Who are the personas enable to disburse payments in the core system ?
+Personas ( examples below )
+Adjusters
+Internal claims adjudicators
+Account team
+Agent vs Agency or Broker commission
+Payroll recipient ( workers compensation )
+Mortgagee payee
+Lienholder
+Claimants or PolicyHolder
+Virtual cards for Claimants and others on the policy.
+Note: Knowing the personas who will access Outbound functionality may be helpful in future consulting efforts, especially regarding security aspects.
+Claims (Single and Multi-Party) 
+Premium Refunds ( from Billing system)
+Agent or Broker Commissions 
+Vendor Payments  ( Virtual card, Debit cards, or ACH/RTP )
+Lienholder ( Product evaluation in progress
+Which bank(s), if any, are you currently using for outbound disbursements?
+Determine if RTP payments can be offered and virtual card can be used - with or without Florida capital account.
+please provide a list of the core systems within your environment that are currently enabled to initiate outbound payments?
+please also include any relevant details such as the payment types supported (e.g., ACH, check, virtual card), API capabilities, and whether any third-party platforms are involved in the process.
+What Digital Payment Methods are in implementation scope? – check box list 
+ACH 
+RTP 
+Push to Debit or MC Send 
+Virtual Card 
+Wire 
+Select the applicable payment methods for the implementation.
+ACH 
+RTP 
+Push to Debit or MC Send 
+Virtual Card 
+Wire 
+Note: If the methods were discovered during pre-sales, position this question as more one to confirm our current understanding.
+What bank(s) do you use?
+05/2025
+( 
+Available 
+- ACH, RTP, Request for ACH, Wire, Check, Check balance, Cross border, push to debit, virtual card, Zelle)
+JPMC ( Not available - Wire , Check, Cross Broder)
+Wells Fargo ( Not available - RTP, Wire, Check, Cross Broder, Zelle)
+US Bank ( Note available - Cross Broder, Zelle)
+Bank of America ( Not available - Request for ACH payment, Wire, Check, Zelle)
+Jack Henry - ( Not available - Wire, Check, Cross Broder, Check balance, Zelle)
+BNY Mellon ( Not available - Wire, Check, Cross Broder, Zelle)
+Goldman Sachs ( Not available - Push to funds RTP, Cross Broder, Zelle)
+Monex - ( Not available - Push funds ACH, RTP, Payment ACH, Wire, Check, Check Balance, cross border, Push to Debit, Virtual Card, Zelle)
+Key Bank -  ( Not available - Push funds ACH, RTP, Payment ACH, Wire, Check, Check Balance, cross border, Push to Debit, Virtual Card, Zelle)
+TC’s bank integrations for Funding account is Key Florida bank which is a new setup to be requested and setup if any of the Not available methods are used for check payments.
+We recommend Funding Model will be used for digital payments?  Based on your banking relationship and capability to get the bank to integrate via Open Banking ?
+Note: Complete topics - consider educating the customer at this time that not all banks support all potentially desired payment methods.
+During the sales process ask these clarification add to the sales force
+Do you have one-time or natural calamity based payments or infrequent payments to businesses you do not want in your network? 
+By the way, by "network" I'm referring to your group of autobody shop providers, roofers, medical providers, and other vendors who are the recipients of an outbound payment as part of a claim.
+What is your targeted UAT readiness date ? ( Mock bank)
+What is your go-live date for Production ? ( Real bank)
+Note : Mock bank is used with Florida capital Funding account and Production will be using real bank RTP connectivity ( so penny testing is recommended)
+Request responses during the Sales Cycle to determine variation on the implementation kick off
+Do you know, or anticipate, any vendors or businesses in your network requiring recurring payments?
+Do you have any compliance requirements in addition to your current compliance process ?
+Note : e.g., auto repair shops, medical providers, legal firms) , workercomp claims to physical therapy chains, auto claims payments to national repair chains, 
+Allowing for the slow roll out, push payments on certain amounts, greater compliance ( align tax and reporting needs), cost optimization , Fraud control - KYC, KYB, OFAC( need to validate this with TC )
+Will you be needing Multi-party payments if so what are the approvers and are their emails or phone number available in the Core System initiating the Smart Disbursement ( discuss if the default workflow will be cheque ? )
+Product -  SMART Enroll
+Do you want to disburse payments to consumers without pre enrolling them into the solution? 
+Do you want to pre-enroll consumers/claimants into the payment solution before disbursing?
+Do you want to preboard network vendors?
+Do you want to use onboarding with a payment to onboard vendors? 
+Will you need the ability to override vendor’s preferred method of payment (MOP)?
+Will you need the ability to override consumer preferred method of payment (MOP)?
+Will you have or need Bulk Payments?
+For example: Multiple invoices or claims made to the same payee in one transaction with detailed remittance data.
+Will there be a need to approve payments with multiple endorsements ?
+If digital payments fail would cheque be the default payment method 
+or virtual cards?
+Check processing
+1800
+ 
+Check Setup 
+Internal Notes
+  
+Response/Decision
+Date
+What is the volume of cheques that are expected to be processed 
+Volume of cheques printed per day ?
+ 
+What is the max cheque amount for issuance
+What is the frequency of the cheque issuance requests
+If an digital payment method has a failure, how many days later would you like to issue the cheques
+Will the disbursement have cheque as an option
+Are there certain cheques which will require overnight or expediated shipping ? if so what is the volume / amount / frequency of the cheques ?
+Are all cheques shipped inside USA ? ( Only USD currency)
+non-US addresses are being support for the payee / claimant. 
+All countries vis GW CC / CM.
+**  discussion with Maudy pending ***
+Are there international addresses for the cheques to be dispatched ?
+Are there are other currency ( Canada or Mexico )
+Ask Maudy if non-us based - TySy (only USD currency type).
+All other currencies are out of scope. 
+Canadian dollars - question to Maudy.
+Ask during the sales process if only USD is required for their business processes. 
+ please take note on for MVS.
+What is the duration of the your current cheques shipping ? 
+Any needs for Fedex or overnight? 
+GW CC has a customization 
+Ask Maudy if TYSY supports overnight cheques.
+ (Identify this in the discovery and hash out an solution with TC → TYSY to overnight or same day - custom pieces built for TxM-> TYSY). James River has a checkbox is via Key Bank( other banks are not available), determine the banking institution.
+Are all the addresses in the core system, to which the cheques are issued address validated ?  Are there chances of the address being incorrect and check is being returned?
+** what are the default out of the box validations for cheques needs to be determined in the next call ***
+What kind of information on the cheque statuses does your business require ?
+KYB and KYC (DnB) - Checks are available at a cost via Lexis Nexis or JPMC ( free potentially).
+OFAC validations are performed ( at a per transaction cost)
+1. Virtual cards require checks if so when ?
+On-boarding to supplier to portal ( every business or individual ) needs to perform these validation. 
+Guidewire Accelerator displays the risk scores ( Vendors / claimants / contractors) with in the screens.  If there is a need to validate these scores per your business needs. This is an added feature that our platform provided at per transaction cost.
+Ask during the sales process, to determine if there interest in these features. 
+ please provide this structure in salesforce.
+SMART Disburse for single Recipient (Individual recipient)
+require API details v1( GW on-prem version), v2 (GW Cloud Version - currently Mammoth release ) and differences (country specific)
+Ask during the sales process to determine the GW versions and update salesforce.
+SMART Disburse for single Recipient (business recipient)
+require API details v1 , v2 and difference (country specific or template for emails / sms)
+SMART Disburse for multiple recipients ( both recipients
+receiving a payment. Business or individual recipients)
+require details about
+API request parameters
+Country specific settings 
+Banking details 
+How does default payment method work ?
+SMART Disburse for multiple recipients ( one recipient being an
+endorser and the other recipient receiving a payment)
+Different templates for the endorser, documentation review on the workflow.
+Claims payments
+1800
+Claims payment
+Internal Notes
+  
+Response/Decision
+Date
+Setting up the check number sequences in TC - Smart Hub ?
+Need to request TC - for the forms and different formats related to the setting up check numbers
+ 
+Setting up sftp feedback from the print vendor - Smart Hub
+Need to request TC - for the procedure for setting up the printed checks feedback sftp setup
+Fiserv Tool kit review and what are inputs related to the setup required for Smart Hub 
+Email distribution list to be provided from TC to KeyBank
+Shipping options set up on TC - FedEx or USPS
+Overnight check delivery flag , does TC require this input ?
+Email thread to be started with Maudy - Mrin
+Foreign Mail delivery options for the checks - how does this work ?
+Email thread to be started with Maudy - Mrin
+Positive Pay file workflow discussion with TC - how does this work ?
+Display of the positive pay file on Smart Hub, roles, and o
+ther capabilities
+different language supports used for the email template 
+English, French , Spanish ?
+Email template review
+Show the biller the email template to allow for them to adhere to the standard out of the box email templates
+Banking
+Internal Notes
+  
+Response/Decision
+Date
+Here are the list of Open Banking solutions ?
+What are there current banking solutions used at the carrier
+Does different lines of business use different bank accounts ?
+What is the primary bank account where checks are being issued from ?
+Are there use cases for same day checks issuance ?
+Are there use cases for same day money movement with Zelle ?if so what are the amounts that can be passed?
+US Region
+Open Banking
+RTP
+ACH
+Check
+Wire
+Zelle (JP Morgan)
+Sponsor Bank
+ACH
+Check
+Canadian Region
+Open Banking
+BMO Harris EFT
+RBC Interac
+Sponsor Bank
+EFT
+ Are there specifics to be discussed with each of these banking options
+ 
+Different environments ( Dev, UAT and Production)
+What is the flexibility available for customers
+what are the different types of discussions
+Test data for the various use cases Push to Debit ( card limits and error codes)
+International Push to Debit error codes for V2 version of the API
+Bulk payment API support and use cases
+What are the bulk API available and versions supported.
+Agent commissions
+1800
+ 
+Check Setup 
+Internal Notes
+  
+Response/Decision
+Date
+Setting up the check number sequences in TC - Smart Hub ?
+Need to request TC - for the forms and different formats related to the setting up check numbers
+ 
+Setting up sftp feedback from the print vendor - Smart Hub
+Need to request TC - for the procedure for setting up the printed checks feedback sftp setup
+Fiserv Tool kit review and what are inputs related to the setup required for Smart Hub 
+Email distribution list to be provided from TC to KeyBank
+Shipping options set up on TC - FedEx or USPS
+Overnight check delivery flag , does TC require this input ?
+Email thread to be started with Maudy - Mrin
+Foreign Mail delivery options for the checks - how does this work ?
+Email thread to be started with Maudy - Mrin
+Positive Pay file workflow discussion with TC - how does this work ?
+Display of the positive pay file on Smart Hub, roles, and o
+ther capabilities
+different language supports used for the email template 
+English, French , Spanish ?
+Email template review
+Show the biller the email template to allow for them to adhere to the standard out of the box email templates
+Banking
+Internal Notes
+  
+Response/Decision
+Date
+Here are the list of Open Banking solutions ?
+What are there current banking solutions used at the carrier
+Does different lines of business use different bank accounts ?
+What is the primary bank account where checks are being issued from ?
+Are there use cases for same day checks issuance ?
+Are there use cases for same day money movement with Zelle ?if so what are the amounts that can be passed?
+US Region
+Open Banking
+RTP
+ACH
+Check
+Wire
+Zelle (JP Morgan)
+Sponsor Bank
+ACH
+Check
+Canadian Region
+Open Banking
+BMO Harris EFT
+RBC Interac
+Sponsor Bank
+EFT
+ Are there specifics to be discussed with each of these banking options
+ 
+Different environments ( Dev, UAT and Production)
+What is the flexibility available for customers
+what are the different types of discussions
+Test data for the various use cases Push to Debit ( card limits and error codes)
+International Push to Debit error codes for V2 version of the API
+Bulk payment API support and use cases
+What are the bulk API available and versions supported.
+Premium refunds
+1800
+Check Setup 
+Internal Notes
+  
+Response/Decision
+Date
+Setting up the check number sequences in TC - Smart Hub ?
+Need to request TC - for the forms and different formats related to the setting up check numbers
+ 
+Setting up sftp feedback from the print vendor - Smart Hub
+Need to request TC - for the procedure for setting up the printed checks feedback sftp setup
+Fiserv Tool kit review and what are inputs related to the setup required for Smart Hub 
+Email distribution list to be provided from TC to KeyBank
+Shipping options set up on TC - FedEx or USPS
+Overnight check delivery flag , does TC require this input ?
+Email thread to be started with Maudy - Mrin
+Foreign Mail delivery options for the checks - how does this work ?
+Email thread to be started with Maudy - Mrin
+Positive Pay file workflow discussion with TC - how does this work ?
+Display of the positive pay file on Smart Hub, roles, and o
+ther capabilities
+different language supports used for the email template 
+English, French , Spanish ?
+Email template review
+Show the biller the email template to allow for them to adhere to the standard out of the box email templates
+Banking
+Internal Notes
+  
+Response/Decision
+Date
+Here are the list of Open Banking solutions ?
+What are there current banking solutions used at the carrier
+Does different lines of business use different bank accounts ?
+What is the primary bank account where checks are being issued from ?
+Are there use cases for same day checks issuance ?
+Are there use cases for same day money movement with Zelle ?if so what are the amounts that can be passed?
+US Region
+Open Banking
+RTP
+ACH
+Check
+Wire
+Zelle (JP Morgan)
+Sponsor Bank
+ACH
+Check
+Canadian Region
+Open Banking
+BMO Harris EFT
+RBC Interac
+Sponsor Bank
+EFT
+ Are there specifics to be discussed with each of these banking options
+ 
+Different environments ( Dev, UAT and Production)
+What is the flexibility available for customers
+what are the different types of discussions
+Test data for the various use cases Push to Debit ( card limits and error codes)
+International Push to Debit error codes for V2 version of the API
+Bulk payment API support and use cases
+What are the bulk API available and versions supported.
+Agent onboarding -SMARTExhange( https://us-21061.app.gong.io/call?id=4423588531998674298 )
+1800
+General
+Internal Notes
+ 
+Response/Decision
+Date
+List of use case by persona
+Vendor
+already existing vendor due to the previous client utilizing these vendors ( what is the workflow for verifying the previously existing payment method )
+SMART Exchange with a payment. (First time vendor receiving the
+payment )
+SMART Exchange without a payment. Payment notification to
+the supplier or vendor.
+What are the templates for the communication
+Email 
+SMS
+Frequency of the notification for the vendor
+Reports associated with the vendor utilization
+Access to vendor details by roles/ UI
+ 
+Vendor onboarding - Product not released
+1800
+General
+Internal Notes
+Response/Decision
+Date
+Vendor data analysis
+During the sales process identify the incoming vendor data.
+Duplication output to be provided to the biller during the start of the implementation process
+Compliance discussion
+Format of Vendor payments
+Additional Notes
+Vendor management - Product not released
+1800
+Discovery Doc From Transcard (WIP):
+Migration Plan US Template_ICrev1Apr25
+ - provided by TC to capture discovery questions for billers' vendor migration / preboarding tasks
+Lien Holder workflow ( not GA'ed yet) - Product not released
+1800
+ 
+General
+Internal Notes
+  
+Response/Decision
+Date
+Will you need a Leinholder solution?
+ 
+ 
+SMART Disburse for multiple recipients ( one recipient being an
+endorser and the other recipient receiving a payment)
+Different templates for the endorser, documentation review on the workflow.
+ URL:/spaces/IM/pages/3819044899/Template+Outbound+Discovery

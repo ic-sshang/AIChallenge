@@ -1,0 +1,33 @@
+1
+6
+false
+default
+list
+true
+Adding Users to Kong Instances
+When adding a Platform Team Member to Kong, use the following information to set them up in the different Environments:
+Provide the following access levels to Kong per Environment using the Email Address of the User as the Username:
+SBX: 
+https://kong-sbx.invoicecloud-beta.com/default/overview
+Belonged Workspace: 
+default
+Role: 
+super-admin
+ in default workspace
+DevTest: 
+https://kong.invoicecloud-beta.com/login
+Belonged Workspace: 
+default
+Role: 
+admin
+ in default workspace
+Production: 
+https://kong.invoicecloud.com/login
+Belonged Workspace: 
+default
+Role: 
+read-only
+ in default workspace
+SSO
+We reviewed and POC’ed using SSO integration to manage user access to Kong via both Okta and Azure Entra but both integrations were lack luster and did not provide the desired functionality at the time they were reviewed.  We can revisit this in the future as the Kong Platform evolves and improves.
+ URL:/spaces/platform/pages/4567236722/Kong+User+Management

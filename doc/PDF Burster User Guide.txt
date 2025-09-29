@@ -1,0 +1,61 @@
+ 
+The PDF Burster is designed to split large, unprocessed PDF files into smaller, individual PDFs. This helps prevent 
+out-of-memory exceptions
+ that can interrupt the PDF linking process. These issues typically occur when a biller submits a large PDF file, resulting in only a portion of the pages being successfully linked. 
+After bursting, the individual PDFs must still be placed in the appropriate FTP, PDF directories or PDF server folders to be processed.
+  Download the PDF Burster
+  Before using the PDF Burster
+Make sure your system has at least 
+5 GB of free disk space
+ before using the PDF Burster. The tool will burst up to the page that fits within this limit and will stop generating additional files to avoid exceeding available space.
+When running for the first time, if you encounter the “Windows protected your PC” make sure to click “More Info” and “Run Anyway”.
+Click on 
+More Info
+Click on Run anyway
+How to use the PDF Burster
+1. Select the PDF File
+Paste a valid PDF path into the input field, or click the 
+Search
+ button to browse and select the desired PDF file to burst.
+OR
+Make sure to erase the quotation marks from the copied path
+2. Enter the Biller ID
+Type in the numeric 
+Biller ID
+ associated with the PDF.
+Note: Only positive, numeric values are accepted.
+3. Define the Page Range
+To burst the entire PDF, enter 
+1
+ in 
+Start Page
+ and the last page number in 
+End Page
+.
+To burst only a portion of the PDF, enter the page number where the first individual PDF begins in 
+Start Page
+, and the page number where the last desired individual PDF ends in 
+End Page
+.
+Example of page count where bursting from first to last page.
+4. Set Pages per Split
+Specify how many pages each individual PDF should contain.
+Example:
+A 1,000-page PDF split into 2 pages per file will generate 500 individual PDFs between the selected start and end pages.
+Example output folder PDF count when bursting a 1000 page PDF with a 2 page per split.
+5. Ready to Burst
+Once a valid PDF path, numeric Biller ID, page range, and split value have been provided, the 
+Burst PDF
+ button will become clickable.
+ Video DEMO:
+  Important Note:
+The 
+PDF Burster
+ tool does 
+not support dynamic page splitting
+. It splits all PDFs using a 
+fixed number of pages per file
+—for example, every 1 page or every 2 pages—regardless of the content inside. Unlike the 
+PdfQueueByExtraction
+ process, which can split based on content (e.g., some invoices may need 1, 2, or 3 pages), PDF Burster applies the same rule to all created pdfs.
+ URL:/spaces/DS/pages/4643487791/PDF+Burster+User+Guide

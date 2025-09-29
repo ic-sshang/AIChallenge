@@ -1,0 +1,49 @@
+Immediate goals:
+Agree (or disagree) that we’re ready for exec approval
+Understand the big rocks involved in the project
+Identify the first stories the team can get working on in next sprint so Palash can start creating and grooming
+Assign owners to creation of documentation
+Requirements
+Architecture
+User/data flow diagrams
+Design mockups
+NOTE: we will get a dedicated SecureAuth CSM and architect once we sign a contract and exit the sales phase
+Question
+Answer
+What’s a workspace vs an organization vs an identity pool?  (we currently view billers as an organization)
+Workspace = biller portal
+Organization = biller
+Sub-organization = ?
+Identity pool = Groups of users?  How are they relevant at multiple levels? 
+ Need SA help
+Are identity pools movable?  (to capture org->suborg transition)
+What are the first config steps to take?
+Do we do an initial config of “default” roles and permissions?
+Where is the API documentation for controlling user config from within the BP?
+What information do we need from the biller to configure/link their IdP?
+Can we stand up a new test IdP to prove the use case?
+Email config: Do we want to use our own smtp or SecureAuth?  Does custom domains play a role, or is that only for payer?
+Email config: Are we able to customize the branding/styling on the emails?
+Branding themes/templates
+Should we use org/suborg or org/identitypool for managing users across billers?
+What are the user cases we need to satisfy?
+Which config activities are needed in the biller portal vs handled by our internal team?
+ Answered internally
+What does the initial launch look like from a rollout/config perspective?
+What does the go-forward boarding process look like?  Plug CRM into SecureAuth APIs?  Display users?  etc
+Is there an IC pool that allows IC employees to span across all billers, so they can log in without taking over a biller user account?
+How do we simulate an external IdP for demo/testing?
+Where are roles/permissions set up in SecureAuth portal?
+SCIM for keeping our roles/permissions in sync with external IdP?
+Plan to use Okta to manage IC users accessing biller accounts, needs to be a separate IdP not it’s own identity pool
+Set up organization templates (in SecureAuth) based on vertical?  or something else?
+Need to understand the use cases around:
+Biller needs 1 org
+Biller needs 1 org with multiple sub-orgs
+Biller needs multiple orgs with single sub-org
+Biller needs multiple orgs each with multiple sub-orgs
+This feels like the right default config to use
+Need to build an API script to move users from one identity pool to another
+Do we manage individual permissions in SecureAuth, or in BP?  Where are roles managed?
+Can use post-auth scripts to automate the creation of roles in BP
+ URL:/spaces/PRODUCT/pages/4352180615/SecureAuth+Deep+Dive+Questions

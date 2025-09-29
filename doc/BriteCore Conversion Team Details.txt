@@ -1,0 +1,76 @@
+Description
+BriteCore Conversions are handled by FS Team. This guide is for information only
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+A BriteCore Conversion refers to the transition of an existing client from the IMT or Town & Country system to a BriteCore CIS platform, requiring a full re-implementation. These projects follow a “roll-over” style approach, resembling a new BID implementation but without components like training and data conversions.
+ 
+Process
+Definitions
+·        API Key: A unique identifier used to authenticate requests between systems.
+·        BillerGUID: A globally unique identifier assigned to each biller in the Invoice Cloud system.
+·        Data Pump: A service that transmits payment and registration data between systems.
+·        IVR: Interactive Voice Response system used for phone-based payment interactions.
+·        SFTP: Secure File Transfer Protocol used for exchanging files between systems.
+Key Responsibilities
+·        Biller: Provides legacy system details and participates in testing and validation.
+·        Invoice Cloud Project Manager: Coordinates the integration process and confirms the maintenance window.
+·        BriteCore Implementation Team: Supplies API endpoints and supports configuration and testing.
+Quality Assurance
+·        Invoice Cloud QA: Validates data flow and confirms successful integration in staging.
+Roles
+Biller: The organization being integrated into the BriteCore platform.
+Invoice Cloud Project Manager: Oversees the integration project and coordinates with stakeholders.
+Provider: BriteCore, responsible for supplying technical integration support.
+Procedure
+BriteCore 
+notifies the Senior 
+Project Manager
+ that an existing IC biller has been sold.
+The 
+biller
+ opens a new Salesforce Biller Support Case to initiate the process.
+This will initiate a task for Invoice Cloud Sales teams to approach the biller with conversion paperwork.
+Once the paperwork is completed, the conversion is reviewed by Invoice Cloud’s Intake meeting team and assigned to Boarding & an 
+FS Implementation Project Manager.
+identify the BriteCore Project Managers who will partner with us through the implementation roll-over
+The assigned 
+Project Manager
+ prepares the project schedule and conducts a kickoff meeting with the biller and BriteCore.
+For 
+Existing Billers
+BriteCore
+ provides the necessary endpoints.
+Questionnaires are completed, using the original BIF customizations as a reference.
+Collect the “Base URL” and “API Key” from BriteCore, SFTP Setup, and API Key
+The coding sheet is finalized and filed.
+The IVR Questionnaire is completed in collaboration with the biller.
+Using the CRM, the IC implementations project manager also generates the SFTP credentials to provide to Mohammad along with the BillerGUID, IC API Key, and Webservice Key:
+Coding is completed, and test files are loaded into the system.
+User Acceptance Testing (UAT) is conducted and presented to the biller.
+The biller signs off on the new implementation.
+10.  The new environment is launched and set live.
+11.  The assigned Project Manager opens a Salesforce case to request switching Support Central logins to BriteCore users.
+12.  The Project Manager formally closes the project.
+Out of Scope
+·        Training: Not required, as the IC biller and customer experience remain unchanged.
+·        Conversions (Handled by FM PM): In roll-over style conversions, AutoPay and Paperless users must re-enroll upon policy binding or renewal.
+·        Marketing: Managed entirely by the biller. Invoice Cloud does not provide marketing support. Logos are transferred from the old BID to the new one.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4470374401/BriteCore+Conversion+Team+Details

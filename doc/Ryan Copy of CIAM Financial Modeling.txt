@@ -1,0 +1,228 @@
+Use this template to build out a financial model for your project.
+Expand each section for guidance on each area
+1. Adoption Modeling
+Objective:
+ Estimate how many clients will adopt SSO/MFA and at what pace
+Guidance
+Steps:
+Segment clients by vertical
+ (government, utility, municipal, insurance).
+Create adoption curves
+ (conservative, baseline, aggressive) using historical adoption rates of similar features or market research.
+Use a 
+time-based ramp
+ (e.g., 10% adoption in Year 1, 30% in Year 2, 50% in Year 3, etc.).
+Adjust adoption rate based on:
+Client size (by bill volume)
+Regulatory pressure
+ (e.g., stricter MFA requirements in government)
+Digital maturity
+ of the client
+Signals we have to estimate adoption:
+Biller survey, can be used to estimate percentages
+Per Sarah, we can estimate 75% adoption for non-IMT billers in the insurance space
+Per Ray, 60-70% large and medium carriers would adopt quickly - the rest over time
+Insurance
+County Tax
+Enterprise Util
+Mid-Market
+Large
+Yr1: 40%-70%
+Yr3: 60%-90%
+Yr1: 
+Yr3: 
+Yr1: 
+Yr3: 
+Yr1: 0-20%
+Yr3: 10-30%
+Medium
+Yr1: 40%-70%
+Yr3: 60%-90%
+Yr1: 
+Yr3: 
+Yr1: 
+Yr3: 
+Yr1: 
+Yr3: 
+Small
+Yr1: 10-30%
+Yr3: 30-50%
+Yr1: 
+Yr3: 
+Yr1: 
+Yr3: 
+Yr1: 
+Yr3: 
+Pricing
+Willing to Pay
+Included
+?
+?
+Insurance
+County Tax
+Enterprise Util
+1Yr
+20%
+2Yr
+30%
+3Yr
+50%
+Pricing
+Willing to Pay
+Included
+?
+2. Usage Modeling
+Objective:
+ Estimate how often users will authenticate, and which authentication methods will be used
+Guidance
+Steps:
+Use average number of 
+logins per user per month
+ (e.g., 3–5 times for B2B users).
+Estimate user base per client (e.g., 5 users per small utility, 100+ for large insurer).
+Break down login types:
+SSO only
+SSO + MFA
+MFA (SMS vs. email vs. app-based TOTP)
+Factor in password reset flows if you're also offering identity lifecycle management.
+Can charge based on MAU or authorizations
+Does charging based on authorization cover the full user lifecycle?
+MAU
+Would need count of users who authenticated at least once that month (we have this in IC)
+Authorizations
+How many active users do we have?  What’s the average be biller size segment?
+How many authorizations are being performed by each user on average?  Does this change by size or vertical?
+3. Cost Modeling
+Objective:
+ Identify and quantify direct and indirect costs
+Guidance
+Components:
+a. 
+Identity Provider (IdP) Licensing Fees
+Price per 
+monthly active user (MAU)
+ or 
+per authentication
+ (based on provider: Auth0, PingIdentity, Azure AD, etc.)
+Include 
+tiered pricing
+ or volume discounts
+Provider
+Cost per MAU
+Cost per Auth
+Notes
+Auth0
+$0.02–$0.05
+$0.001–$0.01
+Varies by tier
+PingIdentity
+Custom
+Custom
+Enterprise-heavy pricing
+Azure AD
+~$6/user/mo
+-
+For full P1/P2 features
+b. 
+MFA Delivery Costs
+Email:
+ $0.001–$0.005 per email
+SMS:
+ $0.01–$0.03 per message (US); varies internationally
+Push-based MFA (e.g., Authenticator apps):
+ Often no per-use cost, but platform fees apply
+c. 
+Support Costs
+Initial support ticket lift due to onboarding
+Ongoing support per auth incident (~$1–$5 per support ticket depending on severity)
+Costs for platform usage
+Auths
+600,000 auths costs $32,772.71 = $0.06
+250,000 auths costs $32,772.71 = $0.13 ← at current auth levels, this is our price point to break even for platform cost
+MAU
+14,000 MAU costs $32,772.71 = $2.34
+Rule of thumb, software = 80-90% gross margin, give room to discount
+Costs for MFA delivery
+Emails/SMS
+4. Revenue Modeling
+Objective:
+ Estimate revenue from offering SSO/MFA as a value-added service
+Guidance
+Steps:
+Define pricing strategy:
+Flat monthly fee per client
+Per MAU or per authentication
+Tiered pricing
+ (Basic, Advanced, Enterprise)
+Client Vertical
+Price/MAU
+Notes
+Government
+$0.20
+Likely to pay for security/compliance
+Utilities
+$0.15
+Price-sensitive, regulatory-driven
+Municipal
+$0.10
+Small budgets, value simplicity
+Insurance
+$0.25
+High security needs, can afford premium features
+Estimate 
+conversion rate
+ for paid tier
+Include 
+setup fees
+, if applicable
+Client Vertical
+Price/MAU
+Notes
+Government
+$0.20
+Likely to pay for security/compliance
+Utilities
+$0.15
+Price-sensitive, regulatory-driven
+Municipal
+$0.10
+Small budgets, value simplicity
+Insurance
+$0.25
+High security needs, can afford premium features
+5. Competitive Benchmarking
+Objective:
+ Understand what competitors charge and offer
+Guidance
+Steps:
+Identify direct competitors (e.g., Paymentus, ACI, Kubra, One Inc)
+Research:
+Do they offer SSO/MFA?
+Is it bundled or an add-on?
+What are the price points?
+Use public pricing or customer interviews to inform assumptions
+6. Sensitivity Analysis
+Objective:
+ Understand how variables affect financial outcomes
+Guidance
+Include key variables:
+Adoption rate (low/med/high)
+Number of authentications per user
+IdP pricing variance
+SMS volume and carrier pricing
+Revenue per client vs. costs
+Build scenarios:
+Best case:
+ High adoption, high per-client revenue
+Expected case:
+ Baseline assumptions
+Worst case:
+ Low adoption, high SMS usage
+7. Financial Model Output
+Guidance
+Deliverables:
+P&L impact by year (3–5 year projection)
+Per-client profitability
+Breakeven analysis
+CAC/LTV for SSO/MFA product line
+ URL:/spaces/PRODUCT/pages/4419092482/Ryan+Copy+of+CIAM+Financial+Modeling

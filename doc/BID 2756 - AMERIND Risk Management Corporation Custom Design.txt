@@ -1,0 +1,105 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Integrator Web Services
+Summary: Customization for Amerind on Default Integration 
+Sapiens Coresuite Technical Design
+ 
+Data Pump
+API Details
+ACH Rejects
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Data Pump: ACH Reject
+InvokeBillingActionRequest
+NSF/Reversal/Chargebacks from Invoice Cloud to BillingPro
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:bil="http://adaptik.com/ws/xml/billing">																											
+<soapenv:Header>																											
+	<wsse:Security soapenv:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">																										
+		<wsse:UsernameToken>																									
+			<wsse:Username>																								
+				<xsl:value-of select="xxx"/>	Values to be provided separately 																						
+			</wsse:Username>																								
+			<wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">																								
+				<xsl:value-of select="xxx"/>	Values to be provided separately 																						
+			</wsse:Password>																								
+		</wsse:UsernameToken>																									
+	</wsse:Security>																										
+</soapenv:Header>																											
+<soapenv:Body>																											
+	<bil:PWInvokeBillingActionRequest>																										
+		<TransRef>1</TransRef>																									
+		<ReqDateTime></ReqDateTime>																									
+		<ActionCode>createRemitReversal</ActionCode>																									
+		<PWAuthentication>																									
+			<UserLoginName>																								
+				<xsl:value-of select="xxx"/>	Values to be provided separately 																						
+			</UserLoginName>																								
+		</PWAuthentication>																									
+		<Data><![CDATA[																									
+			<remitBatch MC_ID="613000001" CT_ID="1" VERSION_NO="1" ExtAction="U">	MC_ID comes from the response from BP after payments are sent in from IC or from the remitBatchSearch request																							
+			<nsfInd>Y</nsfInd>				If the reversal is an NSF set to Y, otherwise N and the update is assumed to be just an unapply of the payment																				
+				<remit ID="x" ExtAction="U" MarkOccurrence="Y">			ID comes from the response from BP after payments are sent in from IC or from the remitBatchSearch request																				
+					<paymentID>12345</paymentID>																						
+					<nsfReasonCD>NSF</nsfReasonCD>			Current Sapiens configured NSF reason Codes																			
+				</remit>																				
+			</remitBatch>																				
+			]]
+>																						
+		</Data>																							
+	</bil:PWInvokeBillingActionRequest>																								
+</soapenv:Body>																								
+</soapenv:Envelope>																									
+ 
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">															
+   <SOAP-ENV:Header/>															
+   <SOAP-ENV:Body>															
+      <ns4:PWInvokeBillingActionResponse xmlns:ns4="http://adaptik.com/ws/xml/billing" xmlns:ns3="http://adaptik.com/ws/xml">															
+         <TransRef>1</TransRef>															
+         <ActionCode>createRemitReversal</ActionCode>															
+         <TransDateTime>2021-09-14T14:16:29.329-04:00</TransDateTime>															
+         <TransResult>															
+            <ReturnCode>SUCCESS</ReturnCode>															
+            <ReturnReasonCode>SUCCESS</ReturnReasonCode>															
+            <ReturnMessage/>															
+         </TransResult>															
+         <Data><![CDATA[<![CDATA[<?xml version="1.0" encoding="UTF-8"?><remitBatch CT_ID="1" ExtAction="U" GT_ID="1" MC_ID="613000001" VERSION_NO="1">															
+	<nsfInd>N</nsfInd>														
+	<remit>														
+		<paymentID>21321</paymentID>													
+	</remit>														
+</remitBatch>]]]]
+>><![CDATA[]]
+></Data>															
+      </ns4:PWInvokeBillingActionResponse>															
+   </SOAP-ENV:Body>															
+</SOAP-ENV:Envelope>															
+
+Do not include C Codes
+nsfInd
+ = Y for R01, else N
+paymentID 
+= IC PaymentGUID
+nsfReasonCD: IC Reject Code
+R01 - Insufficient Funds
+R02 - Account Closed
+R08 - Stop Pay
+R10 - Customer Advises not Authorized
+R14 - Account Holder Deceased
+R16 - Account Frozen
+API Call Details: 
+ URL:/spaces/IM/pages/3214409729/BID+2756+-+AMERIND+Risk+Management+Corporation+Custom+Design

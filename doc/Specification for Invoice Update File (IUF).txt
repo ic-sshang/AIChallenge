@@ -1,0 +1,234 @@
+Overview
+Georgia Farm Bureau has a need to update the PaymentBatchID value being stored in Custom2.  However, our current methods (BIF Type U & RDTR) don’t provide an easy way to update just this field.  An “update” file was requested to handle this.
+In this case, support for a JSON-formatted file was introduced in 
+EBPP-4041
+.  The file can be provided via FTP.  There is 
+another story
+ for exposing this as a RESTful web service, but this is being treated as a low priority / backlog item at the moment.
+The IUF is only for updating invoice-level details, and only the fields in the Field List below.  If there are other invoice-level fields you need added, please submit a product request to have them added.  Customer-level fields should be updated using the Customer Update File (CUF).
+Configuration
+The name of the file isn’t material.  It can be named anything as long as the name matches the Search Pattern in the Search Pattern field shown below, and is placed in the FTP path provide in the Path field.
+The File Type must be set to “Miscellaneous Files to IC“.
+The Miscellaneous File Formats must be set to “InvoiceCloud Invoice Update File”.
+InvoiceCloud Invoice Update File will need to be added to the dropdown under Available Files. 
+Field List
+There are only two required fields.  All other fields are optional, and updates will only take place if the field is provided.  If a field is not provided, that is NOT treated as instruction to clear that field in the IC database.
+The file is in JSON format.  See examples in the Sample section.  See 
+https://www.json.org/
+ for an overview of the JSON format.
+BIF Field ID
+Field Name
+Data Type
+Required?
+59
+AccountNumber
+varchar(30)
+10
+InvoiceNumber
+varchar(50)
+11
+InvoiceDate
+datetime
+12
+InvoiceDueDate
+datetime
+13
+TotalAmountDue
+money
+23
+FirstNotifyRequestedDate
+datetime
+24
+SecondNotifyRequestedDate
+datetime
+25
+ThirdNotifyRequestedDate
+datetime
+38
+Custom1
+varchar(250)
+39
+Custom2
+varchar(250)
+40
+Custom3
+varchar(75)
+41
+Custom4
+varchar(75)
+42
+Custom5
+varchar(75)
+43
+Custom6
+varchar(75)
+44
+Custom7
+varchar(75)
+45
+Custom8
+varchar(75)
+46
+Custom9
+varchar(75)
+47
+Custom10
+varchar(75)
+94
+Custom11
+varchar(75)
+95
+Custom12
+varchar(75)
+96
+Custom13
+varchar(75)
+97
+Custom14
+varchar(75)
+98
+Custom15
+varchar(75)
+99
+Custom16
+varchar(75)
+100
+Custom17
+varchar(75)
+101
+Custom18
+varchar(75)
+102
+Custom19
+varchar(75)
+103
+Custom20
+varchar(75)
+183
+LocationReference
+varchar(50)
+186
+LateFeeAmount
+money
+187
+LateFeeDate
+datetime
+188
+LateFeeDetailRecord
+bit
+189
+LateFeeDesc
+varchar(50)
+190
+EmailLateFeeNotice
+bit
+191
+ApplyLateFeeIfNoPaymentsOnly
+bit
+192
+CreditCardServiceFee
+money
+193
+AchServiceFee
+money
+194
+BalanceForward
+bit
+248
+AutoPayCollectionDate
+datetime
+249
+PromptPayDiscountAmount
+money
+250
+PromptPayExpirationDate
+datetime
+251
+PromptPayDesc
+varchar(150)
+317
+PaymentExpirationDate
+date
+318
+PaymentExpirationMessage
+varchar(250)
+345
+BillerInstallmentNumber
+int
+346
+BillerBillYear
+int
+347
+BillerInvoiceNumber
+varchar(50)
+375
+Active
+bit
+407
+PastDue
+money
+Samples
+ In this example, the file will update the Custom2 field for invoices 
+ABC-123-001
+ and 
+ABC-124-001
+.
+json
+{
+  "Invoices": [
+    {
+      "AccountNumber": "ABC123",
+      "InvoiceNumber": "58641546545",
+      "Custom2": "4123"      
+    },
+    {
+      "AccountNumber": "ABC999",
+      "InvoiceNumber": "23482390101",
+      "Custom2": "9381"
+    }
+  ]
+}
+ In this example, the file will update several fields for only one invoice.
+json
+{
+  "Invoices": [
+    {
+      "AccountNumber": "ABC127",
+      "InvoiceNumber": "ABC127.X01",
+      "InvoiceDueDate": "09/05/2023",
+      "AutopayCollectionDate": "09/01/2023",
+      "LocationReference": "SpecificValueHere",
+      "BillerInvoiceNumber": "34",
+      "BillerBillYear": "2022",
+      "PastDue": "123.45",
+      "Custom19": "SomeOtherValue"
+    }
+  ]
+}
+ In this example, the file will deactivate several invoices.
+json
+{
+  "Invoices": [
+    {
+      "AccountNumber": "A98765",
+      "InvoiceNumber": "22e3ef01-4af5-4967",
+      "Active": "0"      
+    },
+    {
+      "AccountNumber": "B11265",
+      "InvoiceNumber": "0c2d705f-6092-4896",
+      "Active": "0"      
+    },
+    {
+      "AccountNumber": "C45345",
+      "InvoiceNumber": "d65ec0fe-ffb6-4ba7",
+      "Active": "0"      
+    },
+    {
+      "AccountNumber": "D011910",
+      "InvoiceNumber": "ab8e734e-f449-49a0",
+      "Active": "0"
+    }
+  ]
+}
+ URL:/spaces/PRODUCT/pages/2350940169/Specification+for+Invoice+Update+File+IUF

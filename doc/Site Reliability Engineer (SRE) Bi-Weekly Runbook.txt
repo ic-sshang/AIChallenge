@@ -1,0 +1,246 @@
+Objective
+This runbook provides a structured approach for Site Reliability Engineers (SREs) to maintain system health, improve observability, and participate in 
+Scrum ceremonies
+ in a 
+two-week sprint cycle
+. This plan ensures proactive monitoring, incident resolution, and alignment with product teams.
+Bi-Weekly Sprint Overview
+Each sprint cycle follows a structured schedule that includes monitoring, incident review, system improvements, and participation in 
+Scrum ceremonies
+:
+Week 1:
+Monday:
+ Sprint Planning & Prioritization
+Tuesday:
+ Sprint Work - DSU
+Wednesday:
+ Sprint Work - DSU
+Thursday:
+ Sprint Work - DSU
+Friday:
+ Sprint Work - DSU
+Week 2:
+Monday:
+ Sprint Work - DSU
+Tuesday:
+ Sprint Work - DSU
+Wednesday:
+ Sprint Review Preparation & Post-Mortems
+Thursday:
+ Sprint Review & Knowledge Sharing
+Friday:
+ Sprint Retrospective & Next Sprint Prep
+In addition, SREs participate in 
+daily standups
+ and follow ongoing monitoring practices from the 
+Daily Runbook
+.
+Week 1: Laying the Foundation & Proactive Monitoring
+Monday: Sprint Planning & Prioritization
+Objective:
+ Align SRE tasks with the Scrum team's goals and define priorities for the sprint.
+Tasks:
+Sprint Planning Meeting
+ (with the Scrum team)
+Review and discuss 
+new features, infrastructure changes, or technical debt
+ impacting system reliability.
+Identify 
+SRE-focused stories
+ (e.g., improving monitoring, scaling optimizations, reducing toil).
+Commit to sprint tasks and estimate effort for assigned items.
+Review Open Incidents & Technical Debt:
+Identify unresolved 
+P1/P2 incidents
+ and prioritize their resolution.
+Document any 
+recurring issues
+ that need long-term fixes.
+Plan Proactive Monitoring Enhancements:
+Determine if 
+New Relic alerts, synthetic tests, or dashboards
+ need improvement.
+Tuesday: Performance Analysis & System Optimization
+Objective:
+ Focus on system performance improvements and ensure the application runs efficiently.
+Tasks:
+Analyze Performance Trends in New Relic:
+Identify slow transactions, 
+memory leaks, high CPU usage, and database bottlenecks
+.
+Investigate potential 
+service degradations
+ before they impact users.
+Work on Sprint Items Related to Performance & Observability:
+Optimize 
+APM instrumentation
+ and logging strategies.
+Fine-tune 
+alerts and thresholds
+ to reduce false positives.
+Capacity Planning & Scaling Checks:
+Review 
+auto-scaling configurations
+ for anticipated load increases.
+Wednesday: Incident Review & Automation Enhancements
+Objective:
+ Conduct a deeper analysis of past incidents and automate repetitive tasks.
+Tasks:
+Incident Review Meeting (if applicable):
+Discuss major incidents from the past sprint.
+Conduct a 
+Root Cause Analysis (RCA)
+ and update documentation.
+Determine 
+preventive actions
+ to avoid recurrence.
+Automate Repetitive Manual Tasks:
+Identify areas where automation can 
+reduce toil
+ (e.g., auto-healing scripts, and log analysis tools).
+Work on automating 
+runbook steps, monitoring improvements, or self-healing mechanisms
+.
+Update Confluence Documentation:
+Improve 
+troubleshooting guides, incident playbooks, and system architecture diagrams
+.
+Thursday: Knowledge Sharing & Documentation
+Objective:
+ Improve team knowledge and collaboration.
+Tasks:
+Internal Knowledge Sharing Session:
+Share 
+lessons learned from incidents, performance optimizations, and monitoring improvements
+.
+Encourage team members to contribute 
+queries, scripts, and debugging techniques
+.
+Update Troubleshooting & Runbooks:
+Improve 
+standard operating procedures (SOPs)
+ for issue resolution.
+Ensure 
+on-call documentation
+ is up to date.
+Friday: Mid-Sprint Checkpoint & On-Call Readiness
+Objective:
+ Ensure the sprint is on track and prepare for on-call responsibilities.
+Tasks:
+Mid-Sprint Review:
+Assess sprint progress and 
+identify blockers
+.
+Adjust 
+priorities
+ if necessary based on new incidents.
+Prepare for On-Call Handoff (if applicable):
+Verify 
+alert policies, escalation procedures, and incident response guidelines
+ are up to date.
+Ensure the on-call engineer is 
+briefed on ongoing issues and areas of concern
+.
+Week 2: Closing the Sprint & Continuous Improvement
+Monday: Stability & Capacity Review
+Objective:
+ Review system stability and ensure adequate resources are available.
+Tasks:
+Review System Load & Scaling Metrics:
+Ensure optimal 
+scaling configurations
+ for peak and off-peak hours.
+Check for Stability Issues from Last Week:
+Validate that recent 
+fixes and optimizations
+ are working as expected.
+Tuesday: Finalizing Sprint Tasks & Addressing Open Issues
+Objective:
+ Ensure all committed sprint tasks are nearing completion.
+Tasks:
+Finish & Validate Sprint Items:
+Ensure all 
+observability improvements, performance fixes, and automation tasks
+ are completed.
+Triage Any Remaining Issues:
+Identify any 
+carryover work
+ for the next sprint.
+Wednesday: Sprint Review Preparation & Post-Mortems
+Objective:
+ Prepare for the Sprint Review by summarizing completed work.
+Tasks:
+Conduct Post-Mortems on Major Incidents:
+Document 
+root causes, resolutions, and preventive actions
+.
+Update 
+monitoring configurations
+ if necessary.
+Prepare Sprint Review Slides or Reports:
+Highlight 
+performance optimizations, reliability improvements, and key findings
+.
+Thursday: Sprint Review & Knowledge Sharing
+Objective:
+ Showcase sprint accomplishments and share knowledge.
+Tasks:
+Sprint Review Meeting:
+Present 
+SRE-related improvements
+ (e.g., better monitoring, automation, performance gains).
+Demonstrate how 
+system reliability has improved
+.
+Internal Knowledge Sharing:
+Conduct a 
+short training session
+ or 
+discussion
+ on a relevant SRE topic.
+Friday: Sprint Retrospective & Next Sprint Prep
+Objective:
+ Reflect on the sprint and set the stage for the next one.
+Tasks:
+Sprint Retrospective Meeting:
+Discuss 
+what went well, what didn’t, and improvement opportunities
+.
+Identify 
+process changes to improve future sprints
+.
+Plan for the Next Sprint:
+Review 
+technical debt, incident trends, and monitoring gaps
+ to propose sprint items.
+Final System Stability Check Before the Weekend:
+Conduct a 
+final health check using New Relic dashboards
+.
+Ongoing Bi-Weekly Responsibilities
+Daily Standups (Monday - Friday, 15 minutes)
+Share updates on 
+ongoing investigations, sprint tasks, and incident resolutions
+.
+Proactive System Health Monitoring (Throughout the Sprint)
+Continuously monitor 
+New Relic dashboards, logs, and alerts
+.
+Collaboration with Developers & DevOps
+Work closely with developers to ensure 
+code changes are efficient and well-instrumented
+.
+Conclusion
+By following this 
+two-week sprint structure
+, SREs will:
+✅ Proactively improve 
+observability, incident response, and performance
+.
+✅ Align with 
+Scrum ceremonies and development priorities
+.
+✅ Ensure 
+continuous learning and automation
+.
+ URL:/spaces/DS/pages/3969187859/Site+Reliability+Engineer+SRE+Bi-Weekly+Runbook

@@ -1,0 +1,49 @@
+Stage
+Identifier Used
+Length
+File / Mapping Back
+Notes / Questions
+Credit Card Payment
+MO#
+22 chars
+Chargebacks (maps MO# to CC payments)
+Incoming reporting still work with 22 characters? 
+ACH Payment
+MO# → NACHA INDIVIDUAL IDENTIFICATION #
+15 chars
+ACH Returns/NOC (map MO# back)
+Should the length be 15? or is it 22? 
+Funding
+Batch sum → NACHA INDIVIDUAL ID #
+15 chars
+BRTS/BAI2 (beneficiaryId = INDIVIDUAL ID #)
+Maps to aggregated payments? Safe to use our own unique identifier? will be unique. 
+Incoming BRTS/BAI2
+BeneficiaryId (same as INDIVIDUAL ID #)
+15 chars
+Maps back to Funding instructions
+This accurate? 
+ACH Returns / NOC
+MO#
+15 chars
+Maps to individual ACH transactions
+This will come in new files where we map the MO#? or is it called something else? 
+ACH Trace File
+???
+???
+Possibly via filename
+How do we map this? What is the purpose of his file? 
+ACH Ack File
+???
+???
+Possibly via filename
+We plan on sending 2 files a day. One for credit and one for debits. Can we give it a unique file name and then what is the expected file name from ACH Ack file? 
+Chargebacks
+MO#
+22 chars
+Maps back to individual CC transactions
+Is it safe to go with 22 chars? or is it less? 
+Additional images to show mapping as described in the diagram above. 
+ 
+ 
+ URL:/spaces/EA/pages/4681531435/Transaction+Flow+Mappings

@@ -1,0 +1,267 @@
+1
+6
+false
+default
+list
+true
+Summary of Changes
+App server patching
+Proxy Server Patching
+Change routes to old Barracuda L3 firewall in 10.0.2.x and 10.0.20.x
+Install Crowdstrike on IC-Gateway3
+Update 
+stratus.invoicecloud.com
+ App Gateway Configuration to allow for sticky sessions using App Gateway Cookie based sticky session
+Scale down Minimum App Gateway Instances to 4
+Cleanup unused items related to GoDaddy DNS, Cloudflare DNS, and App Gateway
+Turn off the West Palo Alto VMs
+Create EDW Production Spoke so they can deploy AirFlow
+Add 
+10.0.19.6 ic-gateway2.invoicecloud.com
+ to ICG 2 Prod Server’s Host File
+Deallocate the Barracuda WAF VMs
+Move 
+payer-v3-iat.invoicecloud.com
+ to NonProd Network Lane 
+Pre-Steps
+In Sequence
+Put notification in DailyOps channels 
+ 
+Stop the Jobs - 
+Refer to Pre-maintenance steps related to Jobs here
+ 
+ 
+Put up the maintenance page 
+ 
+ 
+On 
+www
+ and 
+my
+Execution Plan
+App server patching 
+ 
+ and 
+ 
+Proxy Server Patching 
+ 
+ and 
+ 
+Install Crowdstrike on IC-Gateway3 
+ 
+Remove server from pool
+Run install
+Windows Server Build - Instructions by Step
+ 
+Locally test server
+Put server back in pool
+Update subnets 10.0.2.x and 10.0.20.x to move traffic away from old Barracuda L3 firewalls 
+ 
+PLAT-619
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/INFRA/queues/issue/INFRA-376
+Tests?
+App Service environment
+Management subnet
+Build agents
+Sonar cube
+Selenium
+Management servers
+WSUS
+Update 
+stratus.invoicecloud.com
+ App Gateway Configuration to allow for sticky sessions using App Gateway Cookie based sticky session 
+ 
+ 
+PLAT-477
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipelines - Run appgateway-azure-apply-0.15.2
+ 
+ 
+Scale down Minimum App Gateway Instances to 4 
+ 
+ 
+PLAT-574
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipelines - Run appgateway-azure-apply-0.15.2
+ 
+ 
+Deletes Scheduled for 7/28/2024 - Platform - Confluence (atlassian.net)
+ 
+ 
+ 
+PLAT-575
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pull request 27919: Added delete commands for orphaned Resources and DNS - Repos (azure.com)
+ 
+ 
+Pipelines - Run hub-infrastructure-apply-2.92.0 (azure.com)
+ 
+ 
+Turn off the West Palo Alto VMs 
+ 
+Panorama: shutdown guest OS on the palo vms 
+ 
+Deallocate Palo VMs 
+ 
+ 
+Pull request 27919: Added delete commands for orphaned Resources and DNS - Repos (azure.com)
+Create EDW Production Spoke so they can deploy AirFlow 
+ 
+Add object with cidr range to Palo Alto Production Firewalls 
+ 
+Tag object with Trusted_LAN 
+ 
+Run Terraform to create the spoke 
+ 
+ 
+Add 
+10.0.19.6 ic-gateway2.invoicecloud.com
+ to ICG 2 Prod Server’s Host File 
+ 
+ 
+Deallocate the Barracuda WAF VMs 
+ 
+ 
+PLAT-576
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Commands to Execute
+ 
+ 
+Move 
+payer-v3-iat.invoicecloud.com
+ to NonProd Network Lane 
+ 
+ 
+Pipelines - Run appgateway-azure-apply-0.15.2
+ 
+ 
+Command to Execute
+ 
+ 
+Test Plan
+Parallel Activities:
+Run the following set of K6 tests to test functional connectivity: 
+prod - Repos (azure.com)
+ 
+ 
+Smoke Test for 
+www.invoicecloud.com
+ & 
+my.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for 
+www.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for 
+my.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for UI and API Tests for Payer Next Gen in Production  
+ 
+ 
+Run Regression testing for 
+qa-regresssion.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for 
+my-qa-regresssion.invoicecloud.com
+ 
+ 
+ 
+Run Regression testing for 
+icg-payments-regression.invoicecloud.com
+ 
+ 
+ 
+Manual Regression testing for 
+sms2.invoicecloud.com
+ 
+ 
+ 
+ This can be removed in the future.  No traffic coming in through sms2.  
+Manual Regression testing for 
+sso.invoicecloud.com
+ 
+ 
+ 
+Manual Regression testing for 
+www1.mcc.net
+ 
+ 
+ 
+Manual testing for 
+stratus.invoicecloud.com
+ 
+ 
+ 
+ 
+Run Regression testing for 
+www.invoicecloud.com/stratuswebservices/stratus.asmx
+ 
+ 
+ and 
+ and 
+Run the Proxy Services Tester App/Script
+ or 
+ 
+Post-Steps
+In Sequence:
+Removing the maintenance page 
+ 
+ 
+Start the Jobs - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+Post finished message in DailyOps channel 
+ 
+Maintenance Window Support Team
+Server Patching SME: 
+ 
+ 
+App Gateway SME: 
+Palo Alto SME: 
+ 
+ 
+Cloudflare SME: 
+ 
+ 
+PSN: Will just monitor via Regression Testing
+Operations Team Representative: 
+Main Regression Tester: 
+ 
+Payer Next Gen Regression Tester: 
+ 
+ApplePay Tester: 
+SRE Representative: 
+Skybot Jobs SME: 
+ and 
+InvoiceCloud Web App SME: 
+ 
+MCC Web App SME: 
+Stratus Web App SME: 
+ 
+Payer NextGen SME: 
+ and 
+ICG SME: 
+SMS SME: 
+SSO SME: 
+IVR Tech: Ankur Jasrapuria (AJ)
+ URL:/spaces/icinfradoc/pages/3391619079/7+28+2024

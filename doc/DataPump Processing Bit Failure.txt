@@ -1,0 +1,37 @@
+1
+6
+false
+list
+brackets
+true
+Log query result is > 0.0 on ‘Datapump Processing Bit Failure’
+Description
+DataPump alerts through a New Relic log, indicating the Datapump.exe run failed to update the processing bit for billers. The list of billers are indicated in the DataPumpMonitor alert that will come in within a few minutes or less.
+Common Scenarios
+An uncaught exception is not being handled, erroring out DataPump before updating the processing bit.
+There is an issue with the app server from the alert, unexpected causing stuck billers.
+Steps to Resolve
+Go to the biller’s shard and search for tables 
+DataPump
+ and 
+BillerDataPump
+. 
+You could also go to the biller portal and check the 
+BillerSyncHistoryDataPump
+ page or in the CRM’s 
+DataPump Prod Billers 2 Min Delay
+ page in the 
+Reporting
+ tab.
+Look up all records in 
+DataPump
+ to see if they have a 
+DateDelivered
+.
+Ex. For 10 stuck payments, check if these 10 are being updated.
+Check the DataPump.DateDelivered fields every minute or so to see if these are getting updated.
+If no payments are being updated and the BillerDatapump.Processing has not been updated, the processing bit will need to be reset. 
+Go to the CRM under Tools/DataPumpProcessingManagement. 
+Select the billers that are needing to be reset.
+Confirm payments are posting or the processing bit is being updated consistently. 
+ URL:/spaces/IM/pages/4638343368/DataPump+Processing+Bit+Failure

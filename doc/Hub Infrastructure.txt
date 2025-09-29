@@ -1,0 +1,133 @@
+This article contains information concerning the InvoiceCloud next generation Network’s Hub Infrastructure, which is based on the InvoiceCloud next generation Network architecture outlined in the 
+Azure Infrastructure
+ article.
+2
+4
+Design
+The Next Generation Hub Infrastructure is designed in a Hub and Spoke Model with Environment Segmentation for secure traffic flow and a Primary and Secondary replicated regions to enable automatic Disaster Recovery/Resiliency response.  However currently not all Applications and Services have been migrated to the Next Generation Network Model requiring the Legacy 
+InternalNetwork
+ to be mounted on the Next Generation network breaking the Environment Segmentation and Disaster Recovery/Resiliency patterns.  This technical debt is planned to be paid off in the future.
+
+
+
+
+1
+
+
+incomplete
+
+
+  Define 
+InternalNetwork
+ technical debt target payoff date. 
+
+
+
+
+Below is a diagram of the current Network Architecture:
+1
+0
+2652012545
+2667642897
+1
+network-architecture-mvp1-v4.drawio
+0
+https://invoicecloud.atlassian.net/wiki
+network-architecture-mvp1-v4.drawio
+2444853251
+0
+kqf_aG30-MlXnVOoSkw8 1
+4016
+1
+818826847fe02a46301f98c19efb7b03a687cb65
+auto
+top
+1710
+Azure Resources
+Below are the Azure Resources used to create the Hub of the InvoiceCloud’s next generation Hub and Spoke network topology.
+Each 
+Region
+, Primary (
+pri
+) and Secondary (
+sec
+), will have identical Resource stacks to produce a redundant Hub Infrastructure to provide Highly Available functionality.
+The Highly Available Hub will be deployed to the 
+Sandbox Environment
+ and the 
+Production Environment
+.
+Resource Group
+A Resource Group to contain the Hub Resources
+Naming convention: 
+rg-{region}-hub{deployment_version}-{environment}
+Virtual Network
+A Virtual Network (VNet) that Compute Resources and Private Endpoint Resources within the Resource Group will connect to enabling private network connectivity.
+Naming Convention: 
+vnet-{region}-hub{deployment_version}-{environment}
+Azure Kubernetes Service (AKS) Cluster
+An AKS Cluster intended to be used for hosting shared services such as Azure DevOps Pipeline Agents and Keda Agents.
+Naming Convention: 
+aks-{region}-tooling{deployment_version}-{environment}
+Windows Jumpbox Virtual Machines
+One or more Windows based Virtual Machines which allows the user connectivity to Private Resources within the Network Topology of the 
+Environment
+.  The Virtual Machines can be accessed via the Private IP Address of the Virtual Machine if the User is logged into the Barracuda VPN (Azure configuration) on the Users local machine. 
+Naming Convention: 
+vm{vm_instance}-{region}-windows-jumpbox-{environment}
+*
+*
+deployment_version
+ will be added to the Naming Convention during the next Major Deployment Cycle.
+The Virtual Machine is integrated with Azure Active Directory for User Authentication.  For a User to be granted access, the User must be added to one of the following Azure Active Directory Groups:
+Admins: 
+windows-jumpbox-admins-{environment}
+Users: 
+windows-jumpbox-users-{environment}
+Linux Jumpbox Virtual Machines
+One or more Linux Ubuntu based Virtual Machines which allows the user connectivity to Private Resources within the Network Topology of the 
+Environment
+.  The Virtual Machines can be accessed via the Private IP Address of the Virtual Machine if the User is logged into the Barracuda VPN (Azure configuration) on the Users local machine. 
+Naming Convention: 
+vm{vm_instance}-{region}-linux-jumpbox-{environment}
+*
+*
+deployment_version
+ will be added to the Naming Convention during the next Major Deployment Cycle.
+The Virtual Machine is integrated with Azure Active Directory for User Authentication.  For a User to be granted access, the User must be added to one of the following Azure Active Directory Groups:
+Admins: 
+linux-jumpbox-admins-{environment}
+Users: 
+linux-jumpbox-users-{environment}
+More information on the Windows Jumpboxes.
+Azure DevOps
+InvoiceCloud currently uses Azure DevOps as a Source Code Management and Deployment platform.
+Below are the Azure DevOps resources related to the Global Singleton Infrastructure provisioning and management.
+Repo
+https://dev.azure.com/invoicecloud/Systems_Src/_git/Hub_Infrastructure
+Deployment Pipeline
+https://dev.azure.com/invoicecloud/Systems_Src/_build?definitionId=886
+Destroy Pipeline
+https://dev.azure.com/invoicecloud/Systems_Src/_build?definitionId=1337
+Variable Groups
+Sandbox/DevTest
+hub-infrastructure-sbx
+Production
+hub-infrastructure-prd
+Environments
+Sandbox/DevTest
+hub-sbx
+Production
+hub-prd
+Terraform Cloud
+InvoiceCloud currently uses Terraform Cloud Workspaces configured with the 
+Local
+ Execution Mode to host Remote State files per Environment.
+Below are the Terraform Cloud Workspaces related to the Hub Infrastructure provisioning and management.
+Workspaces
+Deployment Cycle 2
+Sandbox/DevTest
+hub-infrastructure-sbx-2
+Production
+hub-infrastructure-prd-2
+ URL:/spaces/icinfradoc/pages/2444853251/Hub+Infrastructure

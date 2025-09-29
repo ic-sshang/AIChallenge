@@ -1,0 +1,77 @@
+Kong OAuth Token 
+The following URL is a part of the OAuth plugin and becomes available when enabling the plugin on a route.  
+A root route will be used with OAuth plugin global credentials enabled.  Global credentials allow for credentials to be used by all OAuth plugins that have global credentials enabled in a workspace. 
+New URL (Kong)
+New METHOD
+https://api.invoicecloud.com/biller/v1/authentication/oauth2/token
+POST, OPTIONS
+The following table list the RESTful APIs that will be made available in Kong with OAuth 2.0.  Billers will be provided their OAuth 2.0 client credentials for accessing APIs via a manual process/side channel.
+Endpoint Scope
+Endpoints used by the Guidewire integration, 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/3061972993/Guidewire+Cloud+Native+Accelerator+Technical+Design#Invoice-Cloud-Web-Services
+ 
+Note: Guidewire SOAP endpoints have been converted to RESTful
+ICRESTAPI Endpoints
+Existing URL
+Existing METHOD
+New URL (Kong)
+New METHOD
+https://www.invoicecloud.com/api/v1/invoicepay/cc/sale
+POST
+https://api.invoicecloud.com/biller/v1/payments/creditcard/sales
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/invoicepay/ach/credit
+POST
+https://api.invoicecloud.com/biller/v1/payments/ach/credits
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/invoicepay/ach/sale
+POST
+https://api.invoicecloud.com/biller/v1/payments/ach/sales
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/creditcard/add
+POST
+https://api.invoicecloud.com/biller/v1/paymentmethods/creditcards
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/bank/add
+POST
+https://api.invoicecloud.com/biller/v1/paymentmethods/banks
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/customer/add
+POST
+https://api.invoicecloud.com/biller/v1/customers
+POST, OPTIONS
+https://www.invoicecloud.com/api/v2/cp/autopay
+PATCH
+https://api.invoicecloud.com/biller/v1/customers/(?<customerGuid>\S+)/autopay
+PATCH
+, PUT, OPTIONS
+https://www.invoicecloud.com/api/v1/biller/reporting/payment
+*SOAP migrated
+Deployed 1/30/2025
+GET
+https://api.invoicecloud.com/biller/v1/reporting/payments
+GET, OPTIONS
+https://www.invoicecloud.com/api/v1/invoicing/uploadinvoicefile
+*SOAP migrated
+Target 2/11/2025
+POST
+https://api.invoicecloud.com/biller/v1/invoicefiles
+POST, OPTIONS
+https://www.invoicecloud.com/api/v1/invoicing/invoice
+*SOAP migrated
+Target 2/11/2025
+POST
+https://api.invoicecloud.com/biller/v1/invoices
+POST, OPTIONS
+ICRemoteAuthenticationAPI
+This API will be added to Kong after ICRESTAPI is operationalized. 
+This API uses the same Basic authentication that ICRESTAPI uses and will have the same OAuth 2.0 request transformation.
+Existing URL
+Existing METHOD
+New URL (Kong)
+New METHOD
+https://www.invoicecloud.com/remoteauthenticationapi/customer/AddUsersToAccount
+POST
+https://api.invoicecloud.com/biller/v1/customers/(?<customerGuid>\S+)/users
+POST, OPTIONS
+ URL:/spaces/EA/pages/3900669970/Kong+Biller+REST+APIs+-+PRJ

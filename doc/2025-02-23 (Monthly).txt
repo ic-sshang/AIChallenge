@@ -1,0 +1,209 @@
+Change Teams
+Server Patching
+ 
+ 
+Script Running
+ 
+XAT KeyVault Seeding
+ 
+Pipeline Approving
+Release Manager: 
+ 
+Approver: 
+ 
+Pre work
+  Saturday Evening at 7 PM est run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+ 
+ Saturday Evening at 8:00 PM - 8:30PM est pull web servers IC-Web1 - 5 out of the App Gateway (agw-pri-appgateway0-prd) pool, and kick off updates manually from Azure Update Manager.
+ or 
+ 
+ Sunday morning 4:50 AM est MCC, IC-FTP, ProxyTemp1 - 5, App/PDF/Skybot servers - kick off updates manually (fetch cumulative update from MS)
+ & 
+ 
+ Sunday Morning at 4:45 AM run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+Day of:
+  Notify dailyops and maintenance slack channels of maintenance starting
+ 
+   Put pingdom in maintenance mode (only if putting up the maintenance page)(MCC Maintenance page is up)
+ 
+ 
+Enable the maintenance page on www and my by replacing pal.invoicecloud.com with icmaintenance.azurewebsites.net in Cloudflare under DNS N/A
+ 
+Changes
+ 
+Server Patching
+ 
+PLAT-1749
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+PLAT-1822
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ & 
+ 
+ 
+PLAT-1823
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ Palo Alto
+PLAT-1771
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Infrastructure_OneTime_Scripts
+ 
+PLAT-1722
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Script to Run
+ 
+ 
+PLAT-1568
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Script to Run
+ 
+ 
+PLAT-1824
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Global_Infrastructure
+ 
+PLAT-1594
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Tag: 
+platform-0/1.26.0
+Pipeline to Run
+ 
+Hub_Infrastructure
+ 
+PLAT-1594
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-1723
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Must wait for 
+Global_Infrastructure
+ change 
+ 
+Tag: 
+platform-0/2.106.0
+Pipeline to Run
+ 
+Seed XAT Environment KeyVault
+ 
+Run Updated 
+KeyVault sync pipeline
+ 
+Add 
+*.invoicecloud-beta.com
+ & 
+*.invoicecloud.com
+ TLS Certificate
+Run 
+Global_AAD
+ Service Principal Apply for XAT
+ 
+Kong_Infrastructure
+ 
+PLAT-1411
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Must wait for 
+Kubernetes Version 
+Upgrade 
+ 
+Tag: 
+platform-0/2.42.0
+Pipeline to Re-Run
+ 
+BillerReportingAPI
+ 
+PLAT-1411
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Must wait for 
+Kong_Infrastructure
+ change 
+ 
+Tag: 
+0.1.16
+Pipeline to Run
+ 
+BillerReportingChatAPI
+ 
+PLAT-1411
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Must wait for 
+Kong_Infrastructure
+ change 
+ 
+PR Pending
+Tag: 
+0.2.2
+Pipeline to Run
+ 
+Biller_Infrastructure
+ 
+INFRA-943
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Tag: 
+platform-0/0.5.1
+Pipeline to Run
+Test Plan
+ Run the Smoke Tests on 
+www.invoicecloud.com
+ 
+Run full regression tests on 
+www.invoicecloud.com
+ 
+Post-Steps
+ Remove maintenance page and purge the cache on Cloudflare - N/A
+ 
+ Start the Jobs for Product Integrations - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ Start the Jobs for Product Engineering - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ Notify dailyops and maintenance channels of maintenance finished and results
+ 
+Notes
+Review the next Maintenance Window either Wednesday/Thursday before the Sunday maintenance  at 9:30est so the India team can be present.
+As a Platform team, we should take initiative to get more people the knowledge and skills to assist in patching servers
+Continue to pause more alerts - engineering-issues-internal channel blows up during maintenance
+will reflect the steps needed to achieve this in our patching procedure document
+Some of the web servers (1-5) that were kicked off Saturday evening did not fetch the cumulative update initially. Steps to resolve this will also be added to our patching procedure document.
+Continue to Try to ensure any scripts that need to run are powershell
+Can we kick off second batch of web servers a bit earlier to avoid ending around 10-11 est? They take about 4 hours to finish. This is the second maintenance that goes over due to web patching. Suggesting finishing up the webs saturday night and starting the second batch before bed.
+ URL:/spaces/platform/pages/3886678082/2025-02-23+Monthly

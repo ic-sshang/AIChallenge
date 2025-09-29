@@ -1,0 +1,119 @@
+Components of a Good Hypothesis
+What’s
+ the idea you are testing?
+What specific & measurable 
+impact 
+do we expect the idea to have?
+Who 
+do you expect it to impact?
+By 
+how much
+ will it make an impact?
+After 
+how long
+ (will it make an impact)?
+Category
+Hypothesis (Examples)
+Plan
+Timeline
+Stakeholder
+Dependencies
+Security
+All users will be subject to MFA requirements due to them having access to the biller portal where cardholder data is stored. 
+Interview security team to validate whether all users are in scope. 
+1 week
+Security - Zach Howlett
+Pricing
+Billers will be willing to pay a premium for the additional security features that MFA offers. 
+Interview support and CSMs to get their input on billers input. 
+Interview billers to get input on the importance of security and understand what they are willing to pay for. 
+Interview sales to understand how often security comes up in their conversations
+5 weeks
+Stephen, Anita, Product Marketing, Sales?
+RFPs?
+Support
+We will have an alternative solution for billers who are not willing or not capable of supporting MFA. 
+Interview security to understand what options could be available for billers who cannot support 2 factor MFA.
+Interview support/CSM to understand what level of support should be provided for these scenarios
+Interview engineering to understand how we can support MFA non-adopters while complying with security requirements. 
+4 weeks
+Zach, Anita, Stephen, Randy, Adrian
+Feasibility
+All biller portal users will have the ability to do a 2 step verification process. 
+Interview CSM & client services to understand any biller limitations or concerns they feel billers will bring up. 
+Work with product marketing to get input from billers on whether this can be supported across the board. 
+Pendo survey to collect feedback from biller
+Do all billers have emails that can be used outside of their company? 
+Could we send a code to their cell? What if they don’t have a cell?
+What other requirements may be needed?
+4 weeks
+Stephen, Anita, Nathan
+Competitive Advantage
+Using MFA security will be a standard practice used by all of our competitors.
+Meet with product marketing to understand which of our competitors are already using this and how it's working. We should also identify which competitors are not using it as it would give us a competitive advantage. 
+Identify list of competitors and look for demos that may be online
+Meet with Sales to understand if this comes up in their discussions and whether there are RFPs that we’ve lost due to any types of compliance
+4 weeks
+Nathan
+Desirability
+We will develop a strong value proposition that billers will be eager to sign up for. 
+Work with product marketing to highlight the value this change would bring. 
+Are there options that could be bundled into MFA to extend their sign in time in the system, less clicks, time savings opportunities that could bring value to billers so that they would be eager to be an early adopter. 
+Interview CSM & support to understand what features would bring value to increase early adoption. 
+Interview billers - identify the right billers is key - variety of billers from their enterprise, smaller billers, mid-MFA level. Insurance/utilities
+4-6 weeks
+Nathan, Stephen, Anita
+RFPs
+Engineering
+We will have a “lite” biller portal option for billers who cannot support 2 factor authentication. 
+validate whether we could strip down access for users to meet compliance
+1 week
+Security, Randy, Adrian, Tony
+Compliance
+Billers who have access to any card data will be required to use MFA. 
+Billers will work with their PCI compliance provider to understand Compliance 4.0 will require MFA. 
+Interview security to understand if only seeing 4 digit card data requires compliance. Is it possible to reduce it to the last 2 digits to avoid compliance requirements?
+Interview engineers to understand the level of effort this would require to restrict to less than 4 digits. 
+Interview support to understand the impact to billers and what other alternatives might be useful. 
+1 week
+Zach, Randy, Adrian, Stephen, Anita
+Compliance
+MFA will be a requirement for all billers who have a log in for the BP. 
+Interview security to understand the requirements and any loop holes that may be available. 
+1 week
+Zach
+Compliance
+MFA will be out of scope of the SSO process. 
+Need to rule out there will not be any issues if a biller is using SSO.  
+2 weeks
+?
+Compliance
+Billers will be willing to adopt MFA because its being required by PCI compliance. 
+We need to collect feedback to understand if the compliance messaging will drive adoption - or if it is a limited driver. (Pendo, CS, CSMs, Sales)
+3 weeks
+PM, Anita, Stephen, Sales
+Cost Analysis
+Building an internal MFA solution will be cheaper to implement than using an outside solution. 
+Need to pull some data to understand what the costs would be to send data (texts or emails) and compare those costs to what an outside service would charge per biller  
+4 weeks
+PM, Engineering
+Risk Analysis
+Changes are being made within the biller portal which could cause an issue with folks using the BP. This could be a big deal because all billers use the BP and have multiple users. 
+Support will also experience an increase in cases because this is a new process and may have bugs to work out. 
+If emails are sent from our system, there could be a delay which would be a significant challenge for our billers to get logged into the BP. 
+This will be a large volume of emails/texts that will be sent out for MFA, there could likely be load issues with the increase in volumes. 
+There will likely be some bumps along the way and billers may express concerns thru NPS which could result in negative reviews. 
+Need to build out all risk scenarios to minimize any downtime within the BP. Look for ways for this to be turned on/off on a per biller basis. 
+Work with support to identify all possible scenarios where tickets or calls will be generated and be proactive in addressing those prior to launch. 
+Put a plan together to test/manage large amount of data being sent out by email/text to confirm the system can handle the additional volumes expected. 
+Determine plan if emails or texts are delayed for MFA login so billers can get logged in. Any details in logging in will result in a influx of calls/tickets/low NPS. 
+Determine plan for how/whether we need to address concerns with negative NPS scores. 
+3 weeks
+Engineering, PM, Anita, Stephen, NPS manager, 
+Future proofing
+Support SSO in the future
+The MFA process will eventually be required for the agent connect portal. 
+Need to develop phase 2 plan
+3 weeks
+PM, Engineering, security, Stephen, Anita. 
+ URL:/spaces/PRODUCT/pages/3287253019/Action+Plan+Template+-+MFA+-+Angie

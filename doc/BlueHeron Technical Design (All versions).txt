@@ -1,0 +1,2460 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+NA
+ITR
+NA
+Document status
+DRAFT
+ 
+Document owner
+ 
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Note: 
+Fields in Parameters in
+ 
+Orange 
+are
+ indicative of a change in name or function
+ with respect to the previous version
+The 
+Notes Section
+ in every version will have a description of the difference between version with respect to previous version if applicable
+Blue Heron V1
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+SOAP
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.acctID=AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.blockCCInd= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACHInd=Block ACH Transactions Flag (“Y” or “N”)
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+SOAP
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+IF
+response.status=”ok”
+Success:
+ELSE
+errMsg=response.statusMsg
+ Datapump Payment Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+SOAP
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+IF
+response.status=”ok”
+Success
+:
+ELSE
+response.statusMsg.Length>0
+ Paperless Enrollment Failure: 
+Unable to update account status
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+SOAP
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+IF
+response.status=”ok”
+Success:
+ELSE
+response.statusMsg.Length>0
+ 
+AutoPay Enrollment Failure: 
+Unable to update account status
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V2
+Notes:
+RTDR:
+V2’s
+ 
+request object is of type
+ PaymentIntegrationSoapService 
+while 
+V1’s
+ request object is of type 
+cmDataRefresh
+V2’s
+ 
+request object is of type 
+PaymentIntegrationSoapService  
+is WebService bound to the 
+http://service.pymt.ccb.cis.hrsd.com/
+ Namespace
+ V1’s
+ request object is of type 
+PaymentIntegrationSoapService  V1’s 
+is WebService bound to the 
+http://ouaf.oracle.com/spl/XAIXapp/xaiserver/cmDataRefresh
+ Namespace
+ V1 
+bypasses SSL certificates with ServerCertificateValidationCallback
+ 
+function, 
+V2
+ 
+does not need to do this
+DataPump
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.acctId =AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.blockCCInd= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACHInd=Block ACH Transactions Flag (“Y” or “N”)
+.
+statusMsg
+.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeronV2.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPayment?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V3
+Notes:
+RTDR:
+V2’s 
+client object is of type
+ PaymentIntegrationSoapService 
+while 
+V3’s
+ 
+clientobject is of type 
+CMDataRefreshPortTypeClient
+V3’s
+ 
+CMDataRefreshPortTypeClient
+ class makes use of 
+System.ServiceModel 
+making it a 
+SOAP
+ 
+request
+. 
+ V2
+’s PaymentIntegrationSoapService class makes use of 
+System.Web.Services
+ making it a 
+WCF service
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+WCF service
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.acctID=AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.blockCCInd= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACHInd=Block ACH Transactions Flag (“Y” or “N”)
+.statusMsgField.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeronV3.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPayment?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V4
+Notes:
+RTDR:
+V3’s 
+client object is of type
+ CMDataRefreshPortTypeClient 
+while 
+V4’s
+ 
+client object is of type 
+PaymentIntegrationSoapService
+V4’s
+ 
+PaymentIntegrationSoapService 
+class makes use of 
+System.Web.Services 
+making it a 
+SOAP
+ 
+request
+. 
+ V3
+’s 
+CMDataRefreshPortTypeClient 
+class makes use of 
+ System.ServiceModel
+ making it a 
+WCF 
+ 
+service
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+SOAP
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.acctID=AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.blockCCInd= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACHInd=Block ACH Transactions Flag (“Y” or “N”)
+statusMsg 
+= request.statusMsg
+address1 
+= request.address1
+city 
+= request.city
+state 
+= request.state
+zip 
+= request.zip
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeronV4.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPayment?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V5
+Notes:
+RTDR:
+V5’s
+ 
+client object is of type
+ CMDataRefreshPortTypeClient 
+while 
+V4’s
+ 
+client object is of type 
+PaymentIntegrationSoapService
+V4’s
+ 
+PaymentIntegrationSoapService 
+class makes use of 
+System.Web.Services 
+making it a 
+SOAP
+ 
+request
+. 
+ 
+V5’s
+’s
+ 
+CMDataRefreshPortTypeClient 
+class makes use of 
+ System.ServiceModel
+ making it a 
+WCF
+ 
+service
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+WCF
+ 
+service
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.
+accountId
+=AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.
+blockCC
+= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACH
+=Block ACH Transactions Flag (“Y” or “N”)
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeronV5.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPayment?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V7
+Notes:
+RTDR:
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+NA (Biller specific)
+Deliver most current balance information to biller from IC
+RTDR EndPoint/WebService URL:
+Production
+:
+https://ccbprd.
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh
+Test:
+https://ccbqa
+<BillerDomain>
+/ouaf/webservices/CM-DataRefresh?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+Parameters
+.accountId=AccountNumber
+.status=”ok”
+Success:
+.curBal=CurrentBalance
+.blockCC= Block Credit Card Transactions Flag (“Y” or “N”)
+blockACH=Block ACH Transactions Flag (“Y” or “N”)
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+clsBlueHeronV7.vb
+Data Pump: Payment
+NA (Biller specific)
+Deliver Payment Data from IC to Biller
+DataPump Payments EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPayment?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format: XML
+Parameters:
+.acctId = AccountNumber
+.checkNbr = checkNumber
+.payAmt =PaymentAmount
+.emailId = EmailAddress
+.payAmtSpecified = True
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: Void
+NA (Biller specific)
+NA
+NA
+NA
+NA
+Data Pump: ACH Reject
+NA (Biller specific)
+Deliver rejected ACH payment data from IC to Biller
+NA
+NA
+NA
+Data Pump: Paperless Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer enrollment
+DataPump Paperless EndPoint/WebService URL:
+Production:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushPaperlessSettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.paperlessInd = paperlessInd (“N” for no, “Y” for yes)
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Pump: AutoPay Enrollment
+NA (Biller specific)
+Deliver updates information to biller alerting them of customer autopay enrollment
+DataPump AutoPay EndPoint/WebService URL:
+Production
+:
+Test:
+https://ccbqa.
+<BillerDomain>
+/ouaf/webservices/CM-PushAutopaySettings?WSDL
+Where 
+<BillerDomain>
+ is biller specific
+Request Body:
+Format:XML
+.acctId = AccountNumber
+.emailId = EmailAddress
+.startDt = Start Date ("yyyy-MM-dd")
+.endDt = End Date ("yyyy-MM-dd")
+.status=”ok”
+Success:
+.statusMsg.Length>0
+Failure
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+clsBlueHeron.vb
+Data Transmission: Invoice
+NA (Biller specific)
+NA
+NA
+NA
+Blue Heron V9
+Notes: 
+Existing format for v7 RTDR, Data Pump Paperless and Data Pump Autopay should work with v9
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+Data Pump Payments
+CMPushPayment
+Posts payment 
+https://35.173.127.246:7002/ccb29/webservices/CM-DataPump?WSDL
+Format:XML
+.acctID 
+= AccountNumber
+.
+payAmt 
+= PaymentAmount
+.
+payType 
+= 
+ACH
+AMEX
+CC
+.
+paySource 
+= 
+2 Biller Portal
+3 Customer Portal
+4 Express Payments
+7 Online Bank Direct
+10 IVR
+14 Shopping Cart
+16 Scheduled Payment
+20 Mobile Express
+22 Recurring Payment
+23 Pay By Text
+.
+refNumber 
+= PaymentGUID
+Format XML
+acctID
+payAmt
+payType
+paySource
+reversalCd
+refNumber
+status
+statusMsg
+Blue Heron v2.2
+Notes:
+Set Advanced Setting 35 (Service Version) = 
+2.2
+Does not implement an external (or one-time) WSDL DDL directly in projects. It drives off web requests with an XML request string body and string response to object parsing according to the expected response format.
+Service Version determines only API expected request and response formats for Datapump and RTDR.
+Advanced Setting 131 - JsonConfigurations (Optional) to set payment and autopay codes.
+PayType
+PaymentTypeID (int)
+1
+ for Credit Card
+2
+ for ACH
+3734
+ for Amex Card
+PayTypeValue (String)
+PaySource
+PaymentSourceID (int)
+PaySourceValue (int)
+AutopaySources
+AutopaySourceID (int)
+AutopaySourceValue (string)
+Sample Json
+json
+{
+    "PayTypes": [
+        {
+            "PaymentTypeID": 1,
+            "PayTypeValue": "CC"
+        },
+        {
+            "PaymentTypeID": 3734,
+            "PayTypeValue": "AMEX"
+        },
+        {
+            "PaymentTypeID": 2,
+            "PayTypeValue": "ACH"
+        }
+    ],
+    "PaySources": [
+        {
+            "PaymentSourceID": 1,
+            "PaySourceValue": 14
+        },
+        {
+            "PaymentSourceID": 2,
+            "PaySourceValue": 14
+        }
+    ],
+    "AutopaySources": [
+        {
+            "AutopaySourceID": 1,
+            "AutopaySourceValue": "CCAS"
+        },
+        {
+            "AutopaySourceID": 2,
+            "AutopaySourceValue": "ACAS"
+        }
+    ]
+}
+IC Use
+Partner API Name
+Description
+Request Type:
+Request
+Response
+Specifications
+RTDR: Balance Update
+Blue Heron Oracle CCB v 2.2
+Deliver most current balance information to biller from IC. Use AcctID for account lookup. Block CC and ACH payment flags.
+HttpWebRequest XML Post 
+Basic Auth
+RTDR EndPoint/WebService URL:
+Test:
+https://ccbappdev.
+<BillerDomain>
+.com/spl/XAIApp/xaiserver/CM-RTDataRefresh
+Sample Soap WSDL for Testing:
+https://ccbappdev.sjwater.com/spl/XAIApp/xaiserver/CM-RTDataRefresh
+?WSDL
+Request Body:
+acctID (Required)
+xml
+<soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:cm=""http://oracle.com/CM-RTDataRefresh.xsd"">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-RTDataRefresh faultStyle=""wsdl"">
+         <cm:acctId>3216710772</cm:acctId>
+         <cm:perId></cm:perId>
+         <cm:name></cm:name>
+         <cm:curBal></cm:curBal>
+         <cm:payoffBal></cm:payoffBal>
+         <cm:blockCCInd></cm:blockCCInd>
+         <cm:blockACHInd></cm:blockACHInd>
+         <cm:status></cm:status>
+         <cm:statusMsg></cm:statusMsg>
+      </cm:CM-RTDataRefresh>
+   </soapenv:Body>
+</soapenv:Envelope>
+xml
+<?xml version="1.0" ?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body >
+
+<CM-RTDataRefresh xmlns="http://oracle.com/CM-RTDataRefresh.xsd">
+  <acctId>3216710772</acctId>
+  <perId>3652084146</perId>
+  <name>Thompson Amarteifio, Reuben</name>
+  <curBal>-429.15</curBal>
+  <payoffBal>-429.15</payoffBal>
+  <blockCCInd>N</blockCCInd>
+  <blockACHInd>N</blockACHInd>
+  <status>OK</status>
+  <statusMsg>Transaction successful.</statusMsg>
+</CM-RTDataRefresh>
+</soapenv:Body >
+</soapenv:Envelope>
+
+if Status = 
+OK
+Refresh Balance
+BalanceDue = curBal
+Update Block Flags
+y
+ or 
+n
+blockCCind
+BlockACHInd
+Code Repository
+:
+ICRTDRService
+FileName/ClassName
+:
+BlueHeronOracleCCBase.vb
+Data Pump: Payment
+Blue Heron Oracle CCB v 2.2
+Deliver Payment Data from IC to Biller
+HttpWebRequest XML Post 
+Basic Auth
+DataPump Payments EndPoint/WebService URL:
+Test:
+https://ccbappdev.
+<BillerDomain>
+.com/spl/XAIApp/xaiserver/
+CM-PushPayment
+Sample Soap WSDL for Testing:
+https://ccbappdev.sjwater.com/spl/XAIApp/xaiserver/CM-PushPayment
+?WSDL
+Fields
+:
+emailId (
+SA-272
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ )
+PayType Default Values:
+CC
+ACH
+AMEX
+JsonConfigurations
+PaySource:
+PaymentSourceID (IC Value)
+JsonConfigurations
+ReferenceNumber:
+Numeric value of PaymentMessage
+Request Body:
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushPayment.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushPayment faultStyle="wsdl">
+         <cm:acctId>0261020000</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         <cm:payAmt>100</cm:payAmt>
+         <cm:payType>CC</cm:payType>
+         <cm:paySource>14</cm:paySource>
+         <cm:refNumber>824488</cm:refNumber>
+         <cm:payEventId></cm:payEventId>          
+         <cm:status></cm:status>
+         <cm:statusMsg></cm:statusMsg>
+      </cm:CM-PushPayment>
+   </soapenv:Body>
+</soapenv:Envelope>
+xml
+<?xml version="1.0" ?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body >
+
+<CM-PushPayment xmlns="http://oracle.com/CM-PushPayment.xsd">
+  <acctId>0261020000</acctId>
+  <emailId>test@test.com</emailId>
+  <payAmt>100.00</payAmt>
+  <payType>CC</payType>
+  <paySource>14</paySource>
+  <refNumber>824488</refNumber>
+  <status>OK</status>
+  <statusMsg>Transaction successful.</statusMsg>
+</CM-PushPayment>
+</soapenv:Body >
+</soapenv:Envelope>
+
+if Status =
+OK
+mark as success
+Code Repository
+:
+DataPump
+FileName/ClassName
+:
+BlueHeronOracleCCBase.vb
+Data Pump: Paperless Enrollment
+Blue Heron Oracle CCB v 2.2
+Deliver updates information to biller alerting them of customer enrollment
+HttpWebRequest XML Post 
+Basic Auth
+DataPump Paperless EndPoint/WebService URL:
+Test:
+https://ccbappdev.
+<BillerSpecific>
+.com/spl/XAIApp/xaiserver/CM-PushPaperlessSettings
+Sample Soap WSDL for Testing:
+https://ccbappdev.sjwater.com/spl/XAIApp/xaiserver/CM-PushPaperlessSettings
+?WSDL
+Fields
+:
+acctID
+emailID
+paperlessInd
+y
+n
+Request Body:
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushPaperlessSettings.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushPaperlessSettings faultStyle="wsdl">
+         <cm:acctId>4012968245</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         <cm:paperlessInd>Y</cm:paperlessInd>
+         <cm:status></cm:status>
+         <cm:statusMsg></cm:statusMsg>
+      </cm:CM-PushPaperlessSettings>
+   </soapenv:Body>
+</soapenv:Envelope>
+xml
+<?xml version="1.0" ?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+<soapenv:Body >
+
+<CM-PushPaperlessSettings xmlns="http://oracle.com/CM-PushPaperlessSettings.xsd">
+  <acctId>4012968245</acctId>
+  <emailId>test@test.com</emailId>
+  <paperlessInd>Y</paperlessInd>
+  <status>OK</status>
+  <statusMsg>Transaction successful.</statusMsg>
+</CM-PushPaperlessSettings>
+</soapenv:Body >
+</soapenv:Envelope>
+
+if Status =
+OK
+mark as success
+Code Repository:
+DataPump
+FileName/ClassName:
+BlueHeronOracleCCBase.vb
+Data Pump: AutoPay Enrollment
+Blue Heron Oracle CCB v 2.2
+Deliver updates information to biller alerting them of customer autopay enrollment.
+For autopay enrollment, the software partner is expecting the start date without the end date.
+For autopay un-enrollment, the software partner is expecting the end date without the start date.
+Requests containing both start and end date may be declined by this version’s webservice as invalid.
+HttpWebRequest XML Post. 
+Basic Auth
+DataPump AutoPay EndPoint/WebService URL:
+Test:
+https://ccbappdev.
+<BillerSpecific>
+.com/spl/XAIApp/xaiserver/CM-PushAutopaySettings
+Sample Soap WSDL for Testing:
+https://ccbappdev.sjwater.com/spl/XAIApp/xaiserver/CM-PushAutopaySettings
+?WSDL
+Fields
+:
+acctID
+emailId (
+SA-272
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ )
+StartDT (Populate for enrollment)
+EndDT(Populate for un-enrollment)
+AutopaySource Default Values: (Determined by DefaultCreditCardID or DefaultBnkID from Autopay Record)
+CCAS
+ACAS
+(all non-card sources)
+Request Body: Enrollment
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushAutopaySettings.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushAutopaySettings faultStyle="wsdl">
+         <cm:acctId>4012968245</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         <cm:startDt>2023-05-23</cm:startDt>
+         <cm:endDt></cm:endDt>
+         <cm:autopaySource>ACAS</cm:autopaySource>
+         <cm:status></cm:status>
+         <cm:statusMsg></cm:statusMsg>
+      </cm:CM-PushAutopaySettings>
+   </soapenv:Body>
+</soapenv:Envelope>
+Request Body: Un-Enrollment
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushAutopaySettings.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushAutopaySettings faultStyle="wsdl">
+         <cm:acctId>4012968245</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         <cm:startDt></cm:startDt>
+         <cm:endDt>2023-05-23</cm:endDt>
+         <cm:autopaySource>ACAS</cm:autopaySource>
+         <cm:status></cm:status>
+         <cm:statusMsg></cm:statusMsg>
+      </cm:CM-PushAutopaySettings>
+   </soapenv:Body>
+</soapenv:Envelope>
+Enrollment
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushAutopaySettings.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushAutopaySettings faultStyle="wsdl">
+         <cm:acctId>4012968245</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         <cm:startDt>2023-05-23</cm:startDt>
+         </cm:endDt>
+         <cm:autopaySource>ACAS</cm:autopaySource>
+         <cm:status>OK</cm:status>
+         <cm:statusMsg>Transaction successful.</cm:statusMsg>
+      </cm:CM-PushAutopaySettings>
+   </soapenv:Body>
+</soapenv:Envelope>
+Un-Enrollment
+xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cm="http://oracle.com/CM-PushAutopaySettings.xsd">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cm:CM-PushAutopaySettings faultStyle="wsdl">
+         <cm:acctId>4012968245</cm:acctId>
+         <cm:emailId>test@test.com</cm:emailId>
+         </cm:startDt>
+         <cm:endDt>2023-05-23</cm:endDt>
+         <cm:autopaySource>ACAS</cm:autopaySource>
+         <cm:status>OK</cm:status>
+         <cm:statusMsg>Transaction successful.</cm:statusMsg>
+      </cm:CM-PushAutopaySettings>
+   </soapenv:Body>
+</soapenv:Envelope>
+if Status =
+OK
+mark as success
+Code Repository:
+DataPump
+FileName/ClassName:
+BlueHeronOracleCCBase.vb
+File Mapping
+Invoice Files
+Blue Heron Invoice File (Sewer, 3) (FileType ID#: 501) & Blue Heron Invoice File - Utility (Utility, 42) (FileType ID#: 534)
+Invoice File (Sewer, 3) & Invoice File (Utility, 42)
+File Summary/Purpose: 
+File Extension: .xml
+File Naming Convention: 
+File Delimiter: NA
+Code Repository: StratusWebServices
+FileName/ClassName: BlueHeron_Invoice_UB_File.vb
+Specification: NA
+Sample File: 
+https://invoicecloud.app.box.com/file/863291964209
+ 
+SFTP File Path: 
+Files to IC:     
+Payment Files to and From IC: 
+File Transfer Frequency: Each Billing Cycle
+File Creation Logic
+:
+Invoice file is sent in as a Single Level XML file
+Code reads through file extracting data for the xml tags (<example><example/>)  into  a datable with column headers that name the data accordingly
+Biller’s xml file 
+Data extracted by code into a DataTable
+3. Data for customer record is nested in the table (not shown).
+4. Code will iterate through all rows in the table and create the bif 
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Creation Logic/Conditions
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/a - IC to generate - Always 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+<invoiceNumber>
+InvoiceNumber
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+<invoiceDate>
+InvoiceDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+<invoiceDueDate>
+InvoiceDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+<invoiceAmount> 
+TotalAmountDue
+Invoice Header
+38
+Custom1
+Y
+FALSE
+<Custom1>
+If 
+invoice has <customFields> within the 
+<customerRecord> tag 
+Then:
+Custom1=<Custom1>
+Else:
+Custom1=””
+Invoice Header
+39
+Custom2
+Y
+FALSE
+<customfield02> or <custom2>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField02> within it
+ 
+Then:
+Custom2= data inside <customField02> tag
+Else:
+Custom2=””
+Invoice Header
+40
+Custom3
+Y
+FALSE
+<customfield03> or <custom3>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField03> within it
+ 
+Then:
+Custom3= data inside <customField03> tag
+Else:
+Custom3=””
+Invoice Header
+41
+Custom4
+Y
+FALSE
+<customfield04> or <custom4>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField04> within it
+ 
+Then:
+Custom4= data inside <customField04> tag
+Else:
+Custom4=””
+Invoice Header
+42
+Custom5
+Y
+FALSE
+customField05
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField05> within it
+ 
+Then:
+Custom5= data inside <customField05> tag
+Else:
+Custom5=””
+Invoice Header
+43
+Custom6
+Y
+FALSE
+customField06
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField06> within it
+ 
+Then:
+Custom6= data inside <customField06> tag
+Else:
+Custom6=””
+Invoice Header
+44
+Custom7
+Y
+FALSE
+customField07
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField07> within it
+ 
+Then:
+Custom7= data inside <customField07> tag
+Else:
+Custom7=””
+Invoice Header
+45
+Custom8
+Y
+FALSE
+customField08
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField08> within it
+ 
+Then:
+Custom8= data inside <customField08> tag
+Else:
+Custom8=””
+Invoice Header
+46
+Custom9
+Y
+FALSE
+customField09
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField09> within it
+ 
+Then:
+Custom9= data inside <customField09> tag
+Else:
+Custom9=””
+Invoice Header
+47
+Custom10
+Y
+FALSE
+customField10
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField10> within it
+ 
+Then:
+Custom10= data inside <customField10> tag
+Else:
+Custom10=””
+Invoice Header
+93
+BalanceDue
+FALSE
+<invoiceAmount>
+NA
+NA
+NA
+NA
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 8
+NA
+NA
+NA
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+NA
+NA
+NA
+NA
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+NA
+NA
+NA
+NA
+Invoice Header
+347
+Bill Number
+Y
+fALSE
+NA
+NA
+NA
+NA
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+<accountNumber>
+NA
+NA
+account Number
+NA
+Customer Record
+60
+CustomerName
+Y
+TRUE
+<customerName>
+NA
+NA
+customer Name
+NA
+Customer Record
+61
+Address1
+Y
+FALSE
+<address1>
+NA
+NA
+address1
+NA
+Customer Record
+63
+City
+Y
+FALSE
+<city>
+NA
+NA
+city
+NA
+Customer Record
+64
+State
+Y
+FALSE
+<state>
+NA
+NA
+state
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+<zip>
+NA
+NA
+zip
+NA
+Customer Record
+RegistrationValue
+Y
+FALSE
+<hoaNumber>
+NA
+NA
+Registration Number
+NA
+Customer Record
+DisplayAccountNumber
+Y
+FALSE
+<accountNumber>
+NA
+NA
+Same as account number
+NA
+Customer Record
+70
+RowType
+TRUE
+NA
+NA
+NA
+Invoice Detail
+Blue Heron Invoice File - Utility V2 (FileType ID#: 716) UNUSED
+Invoice File (Utility, 42)
+Blue Heron IF_HRSD - Invoice UB  (FileType ID#: 726)
+Invoice File (Utility, 42)
+File Summary/Purpose: 
+File Extension: .xml
+File Naming Convention: 
+File Delimiter: NA
+Code Repository: StratusWebServices
+FileName/ClassName: BlueHeron_Invoice_UB_HRSD.vb
+Specification: NA
+Sample File: 
+https://invoicecloud.app.box.com/file/863299554636
+ 
+SFTP File Path: 
+Files to IC:     
+Payment Files to and From IC: 
+File Transfer Frequency: Each Billing Cycle
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Creation Logic/Conditions
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to generate - Always FH
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to generate
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+N/A - IC to generate
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to generate
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to generate
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to generate
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to generate - Always 'IH'
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/a - IC to generate - Always 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+N/A - IC to generate
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+<invoiceNumber>
+InvoiceNumber
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+<invoiceDate>
+InvoiceDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+<invoiceDueDate>
+InvoiceDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+<invoiceAmount> 
+TotalAmountDue
+Invoice Header
+38
+Custom1
+Y
+FALSE
+<Custom1>
+If 
+invoice has <customFields> within the 
+<customerRecord> tag 
+And:
+<customFields> contains 
+<customField01>
+Then:
+Custom1=<customField02>
+Else:
+Custom1=””
+Invoice Header
+39
+Custom2
+Y
+FALSE
+<customfield02> or <custom2>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField02> within it
+ 
+Then:
+Custom2= data inside <customField02> tag
+Else:
+Custom2=””
+Invoice Header
+40
+Custom3
+Y
+FALSE
+<customfield03> or <custom3>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField03> within it
+ 
+Then:
+Custom3= data inside <customField03> tag
+Else:
+Custom3=””
+Invoice Header
+41
+Custom4
+Y
+FALSE
+<customfield04> or <custom4>
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField04> within it
+ 
+Then:
+Custom4= data inside <customField04> tag
+Else:
+Custom4=””
+Invoice Header
+42
+Custom5
+Y
+FALSE
+customField05
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField05> within it
+ 
+Then:
+Custom5= data inside <customField05> tag
+Else:
+Custom5=””
+Invoice Header
+43
+Custom6
+Y
+FALSE
+customField06
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField06> within it
+ 
+Then:
+Custom6= data inside <customField06> tag
+Else:
+Custom6=””
+Invoice Header
+44
+Custom7
+Y
+FALSE
+customField07
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField07> within it
+ 
+Then:
+Custom7= data inside <customField07> tag
+Else:
+Custom7=””
+Invoice Header
+45
+Custom8
+Y
+FALSE
+customField08
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField08> within it
+ 
+Then:
+Custom8= data inside <customField08> tag
+Else:
+Custom8=””
+Invoice Header
+46
+Custom9
+Y
+FALSE
+customField09
+If 
+invoice has <customFields>tag and
+<customFields> tag has 
+<customField09> within it
+ 
+Then:
+Custom9= data inside <customField09> tag
+Else:
+Custom9=””
+Invoice Header
+47
+Custom10
+Y
+FALSE
+customfield10
+If 
+invoice has <customFields> within the 
+<customerRecord> tag 
+And:
+<customFields> contains 
+<custom1>
+Then:
+Custom10=<customfield10>
+Else:
+Custom1=””
+Invoice Header
+93
+BalanceDue
+FALSE
+<invoiceAmount>
+NA
+NA
+NA
+NA
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+N/A - IC to generate - Always 8
+NA
+NA
+NA
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+NA
+NA
+NA
+NA
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+NA
+NA
+NA
+NA
+Invoice Header
+347
+Bill Number
+Y
+fALSE
+NA
+NA
+NA
+NA
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+<accountNumber>
+NA
+NA
+account Number
+NA
+Customer Record
+60
+CustomerName
+Y
+TRUE
+<customerName>
+NA
+NA
+customer Name
+NA
+Customer Record
+61
+Address1
+Y
+FALSE
+<address1>
+NA
+NA
+address1
+NA
+Customer Record
+63
+City
+Y
+FALSE
+<city>
+NA
+NA
+city
+NA
+Customer Record
+64
+State
+Y
+FALSE
+<state>
+NA
+NA
+state
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+<zip>
+NA
+NA
+zip
+NA
+Customer Record
+RegistrationValue
+Y
+FALSE
+<hoaNumber>
+NA
+NA
+Registration Number
+NA
+Customer Record
+DisplayAccountNumber
+Y
+FALSE
+<accountNumber>
+NA
+NA
+Same as account number
+NA
+Customer Record
+70
+RowType
+TRUE
+NA
+NA
+NA
+Invoice Detail
+Adjustment/Daily Balance File
+Generally not needed, handled through RTDR API
+Payment/Lockbox File
+Standard for integration is that most billers should use Data Pump Payments, some billers also receive a file (Las Vegas, Cloud Store)
+Change Log File
+Notes
+: This Software Partner does not have a Change Log file type built for it. However the following billers listed are users of Blue Heron software and have the following change log file types in use:
+City of Tallahassee - BID 2081
+FileName: Tallahassee_PaperlessChangelogExport.vb
+FileType ID: 28
+Code Repo: StratusWebServices
+NA
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+1
+N
+35
+Service Version
+Y
+131
+Json Configurations
+For 
+Advanced Setting 35 = 2.2
+ Only
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+Not needed
+AllowPartialPayments
+Biller by biller, BIF customization
+AutoPayCollectionDate
+BIF customization
+BalanceForward
+Since RTDR is done at account level this should typically be set to yes
+CreditCardServiceFee
+Not needed
+FirstNotifyRequestedDate
+Biller by biller, BIF customization
+InvoiceDate
+Not Needed
+InvoiceDueDate
+Not Needed
+InvoiceFormatGuid
+set in CRM (Integrations summary)
+InvoiceTypeID
+Not Needed
+LateFeeDate
+Biller by biller, BIF customization
+LocationReference
+In BIF (not used)
+MinimumAmountDue
+In BIF
+PaymentExpirationDate
+In BIF (not used)
+PaymentExpirationMessage
+In BIF (not used)
+PromptPayExpirationDate
+In BIF (not used)
+RegistrationValue
+In BIF (not used)
+SecondNotifyRequestedDate
+Biller by biller, BIF customization
+ThirdNotifyRequestedDate
+Biller by biller, BIF customization
+User Interaction and Design
+Data Flow - Invoice
+att2380070963
+1677033485
+1
+Diagram1
+IM
+att2381119491
+att2380759051
+0
+Data Flow - Adjustments
+att2380496937
+1677033485
+1
+Diagram2
+IM
+att2380759057
+att2380300306
+0
+Data Flow - Payment
+att2380333108
+1677033485
+1
+Diagram3
+IM
+att2380759062
+att2380136472
+0
+The standard should be Data Pump payments but some billers. Las Vegas has a separate payment file (but still uses RTDR). Some billers receive payment file for Cloud Store.
+Data Flow - Void
+Handled manually
+Data Flow - ACH Reject
+Handled manually
+Data Flow - Change Log
+att2380070975
+1677033485
+1
+Diagram4
+IM
+att2380070970
+att2380791824
+0
+Billers could also receive a daily changelog file (that they may have to handle manually) but this would vary from biller to biller
+Data Flow - Bill Presentment
+Varies from biller to biller
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller Portal
+User Stories
+Advanced Settings
+Advanced Setting
+Purpose
+Advanced setting 35: When set to 7|WSS , 
+wss-time-to-live
+ should be set in request to 10000
+For versions of Blue Heron / Oracle later than 
+?
+ this is needed for authentication 
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-3013
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Convenience fees were added to Paypal and Venmo transactions in datapump using clsBlueHeron_v7.
+Convenience fees should be excluded in both Paypal and Venmo specific to biller 1815 - Clark County Water when using clsBlueHeron_v7.
+Biller cannot reconcile with convenience fees in these payment methods.
+ URL:/spaces/IM/pages/1677033485/BlueHeron+Technical+Design+All+versions

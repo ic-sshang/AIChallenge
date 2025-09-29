@@ -1,0 +1,128 @@
+This section covers different file intake process and documentation.  
+This documentation also identifies application, services and resources that are not implemented in lower/development environment 
+(refer to diagram)
+.
+Additional documentation of the top 5 main components of the 
+Invoice File
+ intake process can be found here, which is focusing mostly for documenting the main functionality for Automation and Manual Testing purposes:
+EBPP-18543
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Documentation:
+Stratus Web Service (SOAP) - 
+documentation
+StratusFileProcessor - 
+documentation
+BillerFileSplit - 
+documentation
+BillerFTPProcessing - 
+documentation
+BillerFTPPDFProcessing - 
+documentation
+This was an effort as part of the Biller Portal - File Dashboard (Phase 1 - Invoice File).
+EBPP-8094
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-6964
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-11145
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-12205
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+File(s) in general includes:
+Zip
+PDF
+Regular files (BIF, BAF, CUF, TXT, etc.)
+Note: 
+Blue 
+- here represents a code repository
+File(s) sources
+.  Billers or IC internal users uploading files from the following point/source.  Each source has different limitations of what kind of file a user can upload:
+Stratus Client
+ 
+- a Windows Form executable that the end user installed from IC package location.
+FTP Client 
+- any third-party FTP client or executable like FileZilla
+CloudInvoicing 
+- part of Biller Portal (MyIIS solution)
+CRM 
+- internal use only and accept “Regular files” only (no zip)
+Other Repositories involved in file intake
+ - included here are statuses of current (as of 4/26/2024) Code Coverage and Unit Test.  The first 5 repositories are main components of processing an Invoice File.
+Stratus Web Service (SOAP)
+9.5% Code Coverage 
+122,439 lines to cover
+3.4k Unit Test
+StratusFileProcessor
+0.0% Code Coverage
+831 lines to cover
+12 Unit Test
+BillerFileSplit
+0.0% Code Coverage
+4,163 lines to cover
+244 Unit Test
+BillerFTPProcessing
+0.6% Code Coverage
+7,232 lines to cover
+7 Unit Test
+BillerFTPPDFProcessing
+0.0% Code Coverage
+840 lines to cover
+2 Unit Test
+PDFQueueByFileName
+PDFQueueByExtraction
+VendorPdfArchiving
+BillerPDFRemoteLinkingReferenceProcessing
+PrintSpoolPDFGenerator
+PDFQueue_LinkPDFsQT 
+- Azure Function
+PDFQueue_UpdateAccountNumberQT 
+- Azure Function
+PDFQueue_UpdateInvoiceNumberQT 
+- Azure Function
+IC-DBFileImportStarter
+ 
+- Azure Function
+IC-DB-ImportFiles
+ 
+- Azure Function
+IC-DB-FileImportMonitor
+ 
+- Azure Function
+Diagram
+This diagram shows a high level process of files from the time that a user upload all the way to the final stage (considered “completed” or “failed”).  The diagram also shows components that 
+does not exists in lower/development environment
+, it also shows if a component is a 
+code repository
+.   Big thanks to 
+ and 
+ for your inputs.
+1
+0
+3203596344
+3134783498
+1
+File_Intake_Detailed_V4.drawio
+1
+1
+1
+https://invoicecloud.atlassian.net/wiki
+1714148020849-File_Intake_Detailed_V4.drawio
+0
+rByhIxPIBgRzRyURLI2_ 1
+4203
+auto
+top
+1
+2321
+ 
+Initial assessments:
+ URL:/spaces/ED/pages/3134783498/File+Intake

@@ -1,0 +1,655 @@
+Epic:
+ EBPP-27053 - AI Report Gen - Phase 4 (GA)
+Target Release Date:
+ June 12th
+The AI Report Generator is moving to General Availability (GA) on June 12th, expanding from 25 Early Access billers to all 16,140 eligible users across targeted billers. This phased rollout leverages ongoing Early Access feedback to ensure stability and performance at scale while establishing comprehensive user education and internal team support processes.
+1. 
+Goal
+
+
+
+
+19
+
+
+d524d3a6-320e-484c-8c14-7f35c3ceaaaa
+
+
+complete
+
+
+Pre-Launch Optimization
+: Leverage 
+Early Access user feedback
+ to refine feature functionality and performance before the June 12th General Availability launch.
+
+
+
+
+
+
+20
+
+
+a4df54fa-9b88-44a3-bd64-c73ec77f2108
+
+
+complete
+
+
+Performance Assurance
+: Ensure 
+system stability, performance metrics, and resource utilization
+ can support the expanded user base moving from 25 Early Access billers (~900 users) to 16,140 eligible users.
+
+
+
+
+
+
+21
+
+
+e6882336-ec2f-4138-84b3-6af6f1563aef
+
+
+complete
+
+
+Successful Deployment
+: Execute a 
+controlled rollout
+ to all eligible users at GA using feature flag management.
+
+
+
+
+
+
+22
+
+
+f7b2c556-c68e-4b09-a1ce-9f098cfefe9f
+
+
+complete
+
+
+Continuous Improvement
+: Establish 
+post-GA feedback collection processes
+ to inform future feature enhancements tracked under Epic EBPP-27928.
+
+
+
+
+
+
+23
+
+
+dd59648d-3592-404d-a6ba-0d90c4189f19
+
+
+complete
+
+
+Comprehensive Enablement
+: Provide adequate education and support for both 
+end users
+ (through in-product materials) and 
+internal teams
+ (Support, Sales, CSMs).
+
+
+
+
+
+
+24
+
+
+f726152c-045f-498f-a067-0de1e259b855
+
+
+incomplete
+
+
+Business Impact Measurement
+: 
+Track and quantify feature adoption rates, user engagement, and business value
+ to demonstrate ROI and guide future development priorities.
+
+
+
+
+2. Scope
+Features
+:
+ 
+https://invoicecloud.atlassian.net/wiki/spaces/393217/pages/edit-v2/4372398116/
+  functionality including supported report types (Accounts, Invoices, Payments, ACH Rejects, Chargebacks, Expiring Cards, Scheduled Payments) and core features (natural language input, grid display, Excel export, error handling) as defined in 
+Epic EBPP-27053
+.
+Rollout Control:
+ Feature flag will be used to manage access.
+Early Access Users (Current):
+ ~25 eligible billers already enabled via biller option 161.
+GA Rollout (June 12th):
+ Enablement for all 
+16,140 
+targeted eligible users
+ (existing permissions for all reporting) for all billers.
+We’d like to see ~500 users within the first month, and ~2500 within 90 days,
+Post-GA Expansion (Phase 5):
+ Potential feature enhancements based on feedback and monitoring will be tracked in 
+EBPP-27928
+.
+User Education:
+ 
+In-product video
+ and 
+walkthroughs
+.
+Internal Enablement:
+ 
+FAQs
+, 
+talking points
+, and 
+support processes
+.
+Metrics:
+ Tracking technical performance, user adoption, and business impact.
+3. Phased Rollout Strategy
+Phase
+Timeline
+Enablement Scope
+Key Activities
+Goal
+Phase 1: Early Access               
+Ongoing (Pre-GA)      
+~25 Eligible Billers          
+Collect feedback via Pendo and direct channels. Monitor performance and stability.                            
+Validate core functionality, identify key areas for improvement, and ensure stability under initial load. 
+Phase 2: Internal Validation        
+Leading up to June 12th
+BMS team, Internal Support    
+Intensive scenario-based testing and validation. Develop internal enablement materials (FAQ, talking points). 
+Ensure internal readiness, identify edge cases, and prepare support/sales teams.                 
+Phase 3: General Availability (GA)  
+Starts June 12th      
+All targeted eligible billers 
+Enable biller option for all billers. Implement in-product user education (video, walkthrough).             
+Successfully deploy to a wide audience, maintain stability under 
+increased load,
+ and educate users. 
+Phase 4: Post-GA Monitoring & Refinement 
+After June 12th  
+All                           
+Ongoing performance monitoring. Daily analysis of user prompts and feedback. Gather adoption metrics.         
+Ensure ongoing stability, gather insights for future development, and understand feature usage/impact. 
+4. Monitoring & Alerting
+Category
+Details / Questions
+Owner / Action
+Monitoring Plan
+Define specific tools and log locations for AI Report Generator performance and usage. 
+ACTION: Martin / Sean / Byron
+Acceptable Stats / Thresholds
+Target values for key metrics (e.g., query latency, error rate, successful report generation rate).
+Query Latency
+Target:
+ 
+≤ 2 seconds (95th percentile)
+Acceptable Range:
+ ≤ 5 seconds (99th percentile)
+Notes:
+ For complex reports, up to 10 seconds may be tolerable if clearly communicated to users.
+Report Generation Time
+Target:
+ ≤ 5 seconds for standard reports
+Acceptable Range:
+ ≤ 15 seconds for complex reports
+Successful Report Generation Rate
+Target:
+ ≥ 95%
+Acceptable Range:
+ ≥ 90%
+Notes:
+ Includes successful completion without timeouts, errors or 
+AI hallucinations
+.
+Concurrent Report Requests
+Target:
+ Handle 
+50–300 concurrent users
+ without degradation
+Notes:
+ Depends on infrastructure, token limitations (150M per minute) caching strategies, etc.
+Response Steps
+Plan if thresholds are exceeded (triage, communication, Pendo alert). Define SLA for fixing issues (hotfix vs. monthly).
+John Whitworth will communicate any issues to Support and CSMs via #ai-report-generator Slack channel and enable a Pendo notice.
+Key Metrics (initial list)
+AI API response time
+AI API error rate
+report generation success/failure rate
+database load related to report generation
+user-reported issues and feedback
+ 
+ to coordinate monitoring with devs.
+John Whitworth to monitor user reported issues and feedback.
+Tools
+New Relic - view failed requests
+—
+Alerting
+Configure proactive alerts for critical metrics.
+—
+5. Feedback & Response Process
+Pendo guide (already implemented for Early Access).
+EA Feedback/issues are in 
+epic EBPP-25176
+.
+Epic EBPP-27928
+ will be used for Post-GA feedback/issues.
+Slack and email to John Whitworth.
+Monitoring user-reported issues through standard support channels. 
+Support process defined
+:
+Collect user feedback/issues
+Route to product via 
+#ai-report-generator Slack Channel
+.
+Do not attempt to fix AI issues directly.
+Analyzing usage data to understand user behavior and pain points.
+Daily analysis of user prompts
+ to identify common requests or failures.
+Plan communication for users on fixes/updates (e.g., Pendo popup).
+Use Kelsey's list of unsolved custom report requests to prioritize future enhancements (
+Epic EBPP-27928
+).
+6. Criteria to proceed (from Phase 2 to Phase 3 GA)
+Performance:
+ 
+Query latency and report generation time
+ consistently within defined acceptable stats.
+Stability:
+ 
+Error rates
+ consistently below defined acceptable stats. No major outages or critical bugs reported by Early Access users or internal teams.
+Resources:
+ Utilization
+ within acceptable limits under anticipated GA load.
+Bugs:
+ No outstanding critical/blocker bugs identified during Early Access or internal validation. Critical issues raised during Early Access 
+have been addressed
+ or have clear resolution plans according to defined SLAs.
+Feedback:
+ 
+Early Access feedback
+ is generally positive, or critical issues raised have been addressed or have clear resolution plans.
+Enabled:
+ 
+Internal teams are trained,
+ and materials are ready. User education materials are finalized and ready for deployment.
+7. Rollback Plan
+Triggers:
+ 
+Performance degradation
+, critical bugs affecting usability or stability, security vulnerability.
+Mechanism:
+ Disable the feature for affected billers.
+Procedure:
+ Disable the biller option and 
+a communication plan
+ for users and internal stakeholders.
+8. Communication
+
+
+
+
+1
+
+
+ddbd6a11-d368-4c3f-800f-28e46906c54a
+
+
+complete
+
+
+Add Pendo guide.  See next section for details.
+
+
+
+
+
+
+2
+
+
+31422b88-6e10-4e0e-8419-8dffefc206e6
+
+
+complete
+
+
+Add Pendo walkthrough guide (repeatable upon request).
+
+
+
+
+
+
+3
+
+
+6869670f-f6d6-401f-ba7f-43f7eb324d81
+
+
+complete
+
+
+Inform internal stakeholders
+ (Support, Sales, Training, CSMs) about the GA plan, timeline, and targeted user groups. See 
+#ai-report-generator Slack channel
+.
+
+
+
+
+
+
+4
+
+
+109afd23-6f08-4426-b792-885f87992c04
+
+
+complete
+
+
+Provide 
+internal FAQ
+ for Support/CSMs covering common user issues and basic access/permission questions.
+
+
+
+
+
+
+5
+
+
+07b4fc46-8e0e-4c37-862e-3a7d3a6efe4c
+
+
+complete
+
+
+Develop 
+value proposition and talking points
+ for Sales. 
+https://invoicecloud.atlassian.net/wiki/x/JICdBAE
+ 
+
+
+
+
+
+
+6
+
+
+16ba1db4-a9e7-4cf6-8f7a-70b33b756ed7
+
+
+complete
+
+
+Address security concerns in communications. No biller data is passed to 3rd party servers. The user request is converted to a GraphQL query and used against our own database. Results are then displayed to the user.
+
+
+
+
+
+
+7
+
+
+79f59e9a-ed75-485c-96ac-ca2fcddf364b
+
+
+complete
+
+
+Communicate clearly with billers
+ (Early Access participants regarding feedback, all eligible users regarding GA availability and how to provide feedback).
+
+
+
+
+
+
+8
+
+
+db7c4cf7-144e-4495-8e03-be93e9ee7704
+
+
+complete
+
+
+Provide 
+regular updates
+ during the rollout phases, especially regarding performance, feedback highlights, and any necessary adjustments, including communication on fixes/updates via Pendo popup or similar. See 
+#ai-report-generator Slack channel
+.
+
+
+
+
+
+
+9
+
+
+318d740e-9dd6-4b9f-8386-704911816850
+
+
+complete
+
+
+John to contact Chris ASAP regarding availability and process for creating the intro video.
+
+
+
+
+9. User Education (In-Product)
+
+
+
+
+10
+
+
+ae0bf67b-2660-401f-bb36-b1bc146dd975
+
+
+complete
+
+
+Work with Chris (training) on a 30-45 second 
+introductory video
+ explaining the tool, setting expectations, and providing tips on how to interact with it using natural language.
+
+
+
+
+
+
+11
+
+
+48166c7f-23e5-460a-a5ba-c338fa988df8
+
+
+complete
+
+
+Make this intro video 
+mandatory
+ via Pendo before a user can access the AI Report Generator tool for the first time.
+
+
+
+
+
+
+12
+
+
+02c2c349-bd25-4fd2-a9bd-5c0a7e4db7ed
+
+
+complete
+
+
+Implement a simple 3-4 step 
+interactive Pendo walk-through
+ guide immediately following the video. This guide should be repeatable via link on page.
+
+
+
+
+10. Internal Team Enablement
+
+
+
+
+13
+
+
+19367644-cbe7-42dc-8863-825189a9ac84
+
+
+complete
+
+
+Create a 
+comprehensive FAQ documen
+t
+ for Support and CSM teams. This document should include answers to common user issues, security talking points, and address basic access/permission questions.
+
+
+
+
+
+
+14
+
+
+b6ddc297-1b6d-4d59-9bab-a6f5239b8eaf
+
+
+complete
+
+
+Develop a clear value proposition and 
+talking points specifically for the Sales team
+ to use when discussing the AI Report Generator with prospects and clients.
+
+
+
+
+
+
+15
+
+
+1b54ecdd-b8e6-4c2d-923c-90d5c8c69fa6
+
+
+complete
+
+
+Define and communicate a 
+clear process
+ for the Support team to collect user feedback and report issues related to the AI Report Generator (see 
+#ai-report-generator Slack channel
+). The process should emphasize that Support agents should not attempt to troubleshoot AI-specific issues themselves but rather collect details and route them to the product team for investigation and resolution.
+
+
+
+
+11. Metrics & Adoption
+Track business and adoption metrics in addition to technical performance.
+Key adoption metrics to track include:
+Number of enabled users/billers.
+Number of active users (users who generate at least one report).
+Usage frequency (e.g., reports generated 
+per user per day/week/month
+).
+Stickiness (e.g., percentage of users who return to use the tool).
+
+
+
+
+17
+
+
+77d2bdf5-2ce8-4526-9264-be335b971bd4
+
+
+incomplete
+
+
+Plan efforts to quantify the usage and estimate the time/cost savings provided by the tool, including potential 
+reduction in custom report requests
+ (DBRs).
+
+
+
+
+
+
+18
+
+
+c0209137-89e5-4383-ab22-4d1234e14ce9
+
+
+complete
+
+
+Get an updated count from Kelsey on the total number of eligible users (users with admin status AND 
+full reporting access permissions
+) to establish a baseline for adoption tracking.
+
+
+
+
+Change log
+5/20/2025
+Added new sections:
+9. User Education (In-Product)
+ - Details mandatory video and interactive walkthrough via Pendo.
+10. Internal Team Enablement
+ - Outlines creation of FAQs for Support/CSM, sales talking points, and a defined support process for routing AI-related issues.
+11. Metrics & Adoption
+ - Specifies tracking enabled/active users, usage frequency, stickiness, and quantifying time/cost savings (including DBR reduction).
+Updated existing sections:
+1. Goal:
+ Added goals related to user/internal team education and tracking business impact.
+2. Scope:
+ Expanded scope to include user education, internal enablement, and metrics tracking.
+3. Phased Rollout Strategy:
+ Updated activities in phases 3 and 4 to include implementing user education, developing internal materials, and daily analysis of user prompts/feedback.
+4. Monitoring & Alerting:
+ Included defining SLA for fixing issues in Response Steps.
+5. Feedback & Response Process:
+ Detailed the support process for collecting feedback, added daily analysis of user prompts, planned communication on fixes, and noted using Kelsey's list for future enhancements.
+6. Criteria to proceed:
+ Added readiness of internal teams and user education materials as criteria. Included addressing critical issues according to defined SLAs.
+8. Communication:
+ Expanded details on internal communications, creating internal FAQs and sales talking points, addressing security, and planning communication on fixes/updates via Pendo or similar. Added action for John to contact Chris for video creation.
+ URL:/spaces/PRODUCT/pages/4331274241/AI+Report+Generator+-+Enablement+Plan

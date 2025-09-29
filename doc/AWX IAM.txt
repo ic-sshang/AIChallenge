@@ -1,0 +1,64 @@
+Overview
+AWX access is managed through 
+Okta integration
+ following InvoiceCloud’s company standards for secure and seamless login. Access is granted via 
+Active Directory (AD) groups
+ and Platform Team adding users to the right team.
+Step 1: Add User to the Correct AD Group
+Users must be added to one of the following AD groups depending on the environment and level of access required.
+NPD (Non-Production) AWX Groups
+ic-iac-awx-readers-npd
+ic-iac-awx-developers-npd
+ic-iac-awx-admins-npd
+PRD (Production) AWX Groups
+ic-iac-awx-readers-prd
+ic-iac-awx-developers-prd
+ic-iac-awx-admins-prd
+ Once added, the user will automatically see the 
+AWX application in Okta
+ and can log in.
+Step 2:  Group-to-Team Mapping in AWX
+Ideally, AD groups would map directly to AWX teams. However, this functionality is 
+blocked by an open bug
+ in the 
+Ansible AWX GitHub repository
+ (reference for context).
+As a workaround, we have created AWX 
+teams
+:
+Admins
+Developers
+Readers
+⚠️ Note: On first login via Okta, 
+all users are automatically assigned to the 
+Readers
+ team
+ by default.
+Step 3: Adjust Team Membership in AWX (If Needed)
+After the user’s initial login, 
+Platform Team
+ members can manually adjust their AWX team assignment:
+Move user to 
+Developers
+ or 
+Admins
+ team if required.
+Keep in 
+Readers
+ for read-only access.
+Step 4: Ownership & Responsibility
+Platform Team
+ is responsible for:
+Adding users to the appropriate 
+AD groups
+.
+Adjusting AWX 
+team memberships
+ post-login, if needed.
+Summary
+Add user to the correct AD group (NPD/PRD, role-based).
+User logs in via Okta → automatically added as 
+Reader
+ in AWX.
+Platform Team updates AWX team membership if elevated access is required.
+ URL:/spaces/platform/pages/4641128524/AWX+IAM

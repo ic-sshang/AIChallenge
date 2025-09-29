@@ -1,0 +1,411 @@
+ Overview
+What initiatives is the team committing to for the next quarter? What does success look like for each?
+What is the new 12-month plan?
+Team announces their next quarter commitments along with a refresh of their 12 month roadmap.
+Date
+Sept 29, 2025
+Team
+Payer (SPAM + SPARK + NEXUS + WDIL)
+Participants
+Next Quarter Commits
+List out next quarter commitments, with target date and definition of success for each item. 
+Jira Plans link can also be embedded below, but we want a full record of commitments for comparison at a later date. 
+Resource Allocations
+Payer Teams (SPAM, NEXUS, SPARK)
+Allocation Targets for Q4 
+(by Layer Cake)
+Only applicable for SPAM, SPARK, NEXUS  --- WDIL is included in Q4 priority comments but not % allocation targets
+Q3
+Q4 Targets
+Top Priorities
+customer commitments
+Blue
+ 
+17%
+~15%
+Q3: Doctors, TXFB, BS&A
+Q4: Safety, Doctors, TXMutual
+support & escalations
+Green
+ 
+13%
+~20% 
+ 
+Q3: Default Payment Method update
+Note: Resource reduction has driven up pressure with higher than normal # of churn items identified in Q3
+Q4: Multi-user, email performance, AutoPay enhancements, ApplePay iFrame, Biller specific 
+(Marion Co, SFB, Boston, Collier)
+roadmap
+Purple
+ 
+36%
+35%
+Q3: Custom email domains, search error improvements, ApplePay
+Q4: Custom email domains + templates, ‘Pay Now’ UI change
+tech roadmap
+Yellow
+ 
+17%
+~15%
+Q3: MFE Discovery
+Q4: MFE POC in Prod, AutoPay refactor, QA Automation
+innovation
+Yellow
+0%
+~5%
+Q3: 
+Q4: AI SDLC
+tech upkeep
+Red
+ 
+6%
+~5%
+loose items
+ 
+11%
+5% 
+ 
+Q3: 
+Accessibility
+Q4: Finish Accessibility (minor carryover from Q3)
+Commitments for Q4 
+(by Priority Area & Layer Cake)
+This includes SPAM, NEXUS, SPARK, and WDIL
+Priority Area
+Objective / Outcome
+Work Scoped
+Accessibility 
+Regulatory
+Red
+Complete remaining items for VBPU Oct deadline and to wrap up all of WCAG 2.1 AA items
+NEX-298
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM-467
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Go Live Blockers / Fast Follows
+customer commitments
+Blue
+ 
+Safety:
+ Enable migration from SAML SSO to CloudSSO and meet SOW requirements. All code shipped in Q4 with full Q1 testing 
+Doctors:
+ Resolve the PAC donation bugs and blockers for P2
+TXMutual: 
+Resolve go live blockers
+WDIL-212
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 12/11/2025
+WDIL-50
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 10/31/2025
+WDIL-354
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+10/31/2025
+WDIL-254
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 11/28/2025
+MCL Improvements 
+(Payer Only)
+support & escalations
+Green
+Enable 
+unique 
+email logins as a new authentication feature
+ 
+future biller migrations needed
+ 
+in 2026
+Mask last 4 of payment method for linked acct users
+Prevent improper account linking by limiting authentication to one account per login session
+SPAM-497
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM-343
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-27
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Support Issues
+support & escalations
+Green
+Email - 
+performance improvements
+Send AutoPay notifications 
+before 
+AutoPay runs
+Payment receipts in under 30 mins
+SPAM-485
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Escalations
+support & escalations
+Green
+Marion Co
+: Support more strict FlexPay requirements before next tax cycle starts in Dec
+Boston
+: Reduce call volume for motor vehicle invoices that should be paid to a 3rd party collection agency
+SFB
+: Add feature to support payment method blocks throughout the entire AgentConnect session
+AutoPay
+Check for expiration
+New option to prevent payments if RTDR fails
+Collier:
+ Additional column 
+ApplePay
+: Support in iFrame
+Billers:
+ Address the client escalation related to mismatched autopay logins by giving billers visibility into affected accounts and how to resolve any issues.
+SPAM-384
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PRO-64
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM-306
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPARK-476
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPARK-358
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+NEX-99
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+NEX-27
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-255
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Custom Email Domains
+major enhancements
+Purple
+30 EA Billers entered 1 new email address in Biller Portal self-service wizard by 
+ 
+Guru documentation complete
+Marketing campaign launched in November
+SPARK-302
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Custom Email Templates
+major enhancements
+Purple
+Complete POC of BeeFree integrated in Biller Portal
+SPARK-71
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Payer Adoption
+minor enh
+Purple
+ 
+Address top payer friction point 
+EBPP-27521
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MFE/Web Components 
+tech roadmap
+Yellow
+Q4 POC Launch in Production 
+(internal only, fork of 
+Cirrus Demo Portal
+)
+Confirm beta partner for Q1 
+(possibly CentralSquare?)
+NEX-277
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Tech Debt
+Tech roadmap
+Yellow
+AutoPay refactor: 
+Codescene/SonarQube 
+Increase code coverage by 
+XX%
+QA Automation: 
+Reduce the backlog of automation work that was previously de-prioritized due to biller delivery deadlines
+SPAM-484
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-209
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AI SDLC
+innovation
+Red
+Establish the foundation for AI-SDLC, finalize architecture & infrastructure, and deliver non-coding/testing agents.
+note: this work is part of the reserved capacity for SPARK & NEXUS with 4 HPEL’s + 1 Sr. Eng
+SPARK-659
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Below The Line / Stretch
+Reverse SSO:
+ Begin work but will not complete
+Payment Method Validation:
+ Complete usability testing
+FTL Escalation
+: Reconnect waiver
+Payer Adoption
+:
+Payment Decline UX
+Search Results Page Phase 2
+Pendo Improvements
+reCAPTCHA
+Biller Improvement:
+Allow hard coded verbiage to be customizable to direct payers how to cancel/update any type of recurring payment when set up with an ACH
+SPAM-1
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPAM-74
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+NEX-270
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-26263
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-27525
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-26176
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+EBPP-26824
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+WDIL-1
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Capacity Planning
+Reference: 
+Quarterly Planning Capacity Guide
+ 
+Capacity 
+(values in points)
+SPAM
+SPARK
+NEXUS
+WDIL
+Average Velocity Per Sprint
+91
+55
+60
+37.5
+Total Capacity for Quarter 
+(Avg Veloc * 6 sprints)
+546
+330
+360
+225
+Reserved Capacity
+Vacations (10%), Support (20%)
+(164)
++(30) bugs
+(99)
+(108)
+(40.5)
+Net Available Capacity for Quarter
+Total Capacity minus Reserved
+352
+231
+252
+162
+Planned Capacity Used
+Total of all committed items using 
+Quarterly Planning Capacity Guide
+, but with some pro-rated points applied for items that are already in progress going into the quarter
+365
+255
+285
+ New 12 Month Roadmap
+JPD Item
+Team
+Notes
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas?selectedIssue=EPD-21
+ 
+SPAM
+Q1’26 delivery
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/6357488?selectedIssue=EPD-22&issueViewSection=comments
+SPAM
+Major Enhancement
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/6357488?selectedIssue=EPD-220&issueViewSection=comments
+SPAM
+Q3'26 delivery
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/5793411?selectedIssue=EPD-327&issueViewSection=comments
+ 
+SPAM / SPARK
+Technical Roadmap
+EPD-222
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+NEXUS
+Q1’26 delivery
+EPD-55
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+SPARK
+Major Enhancement
+EPD-342
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL
+Major Enhancement (The Doctors)
+ Open Questions
+Provide a list of any discussion questions the team has, especially if there are decisions/actions needed to unblock the next quarter’s roadmap. 
+
+
+
+
+23
+
+
+23
+
+
+incomplete
+
+
+How to teach the rest of the engineering organization about accessibility, so it’s not just FE devs
+
+
+
+
+ URL:/spaces/PE/pages/4437147653/Next+Quarter+Commitment+-+Payer+Teams+2025Q4

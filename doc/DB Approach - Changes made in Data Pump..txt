@@ -1,0 +1,321 @@
+Purpose
+:
+We are working on enhancing the performance of the Datapump module in the Biller Portal. As part of this effort, we are introducing new metrics along with some visual representations to better analyze and monitor the data flow.
+To support this enhancement, we are planning to add a few new tables either at the shard level or at the centralized level, depending on the design and requirement. We are currently following a database-centric approach, and based on that, I have updated the required tables and database enhancements needed for this implementation.
+Current Structure: 
+Data Pump
+: This table stores the details of the record. It includes the record's inserted date time, and the processed date time. Only success or failure records are visible in this table. Failure retry information is stored in the 
+DataPumpDetails
+ table, allowing us to track how many times a record is retried.
+DateRecAdded:
+ 
+The date and time are updated when the record is inserted. 
+When user do the payment/paperless etc…Invoice Cloud uses a 
+Biller/Software Partner API 
+to post different types of Data Pump records.
+ 
+Repo Path: /BillerPortal.Business/Repositories/DataPumpRepository.cs
+Sample Records: 
+DateDelivered:
+ 
+This is updated to 1 when the record is successfully processed. If the record is not processed, this column will be null.
+ 
+If the response status is 
+"success"
+:
+It 
+updates the 
+datapump
+ table
+ by:
+Marking the response as 
+"OK"
+.
+Storing the current date/time (
+DateDelivered
+).
+If the response status is 
+"fails"
+: and got the response from webservice
+Making the response as 
+error message
+ 
+.
+Success = 0.
+Storing the current date/time (
+DateDelivered
+).
+DataPumpDetail: 
+This table will record all attempts to post for a specified Data Pump record based on the 
+DataPumpID
+. The 
+Success
+, 
+Message
+, and 
+Resent
+ fields provide more information about each attempt.
+ This table store all the retry post records. And logging only manual retries.
+One Day -Data in DAtaPump And DataPumpDetail tables.
+Proposal:
+We propose developing an application that will analyze 
+raw data
+ and generate 
+aggregated metrics
+, which will be stored in a dedicated database table. This job can be scheduled to run at regular intervals—
+every 30 minutes
+, 
+hourly
+, or based on configurable conditions.
+We can calculate the Response time by taking 
+StartDate
+ and 
+EndTime 
+.
+StartDate
+ will log the date and time 
+before hitting the API
+.
+EndTime
+ will log the date and time only if we receive a response from the web service, regardless of whether it is a success or failure.
+To calculate 
+ResponseTime
+, 
+StartDate
+, 
+EndTime 
+.
+ResponseTime
+. = 
+StartDate
+- 
+EndTime 
+To enhance metric calculation and monitoring, two new columns will be added to the 
+DataPump
+ table:
+ResponseTime
+ – Tracks the duration of each web service call.
+StatusCode
+ – Records the HTTP status code of the response.
+These additions support the new 
+Metric Aggregation
+ logic and enable better visualizations in the monitoring portal.
+Column Name
+Data Type
+Description
+ResponseTime
+FLOAT
+ or 
+DECIMAL(10,2)
+Time taken (in milliseconds or seconds) between request and response.
+StatusCode
+VarChar
+HTTP status code returned by the web service (e.g., 200, 500, 404).
+New Implementation: 
+New Tables for Metrics Aggregation 
+Three new tables have been introduced to support real-time analytics and flexible data grouping.
+1. 
+TimeStampType
+Defines time granularities for grouping metrics.
+TimeStampTypeID
+Name
+HierarchyLevel
+1
+Hourly
+1
+2
+Daily
+2
+3
+Weekly
+3
+2. 
+MetricType
+Stores definitions of computed metrics for analysis.
+MetricTypeID
+Name
+Unit
+Description
+1
+AvgResponseTime
+ms
+Time taken to respond
+2
+AvgErrorRate
+Percentage
+Percentage of failed requests
+3
+AvgTimeOutErrorRate
+Percentage
+Timeout errors
+ Metric Aggregation Tables
+Stores precomputed metrics for various time intervals.
+   1.DataPumpResponseTimeAggregation
+DataPumpResponseTimeAggregationID
+TimeStampTypeID
+StartTime
+EndTime
+RequestCount
+TotalResponseTime
+AvgResponseTime
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+1311
+110.5
+2025-04-10 01:00:05
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+121
+123.4
+2025-04-10 02:00:03
+3
+1
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+42000
+118.2
+2025-04-10 03:00:01
+4
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+294000
+132.7
+2025-04-10 00:10:00
+5
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+1800
+125.9
+2025-04-08 00:15:00
+2.DataPumpErrorAggregation
+DataPumpErrorAggregationID
+TimeStampTypeID
+StartTime
+EndTime
+RequestCount
+FailedRequests
+ErrorRate (%)
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+36
+2.00
+2025-04-10 01:00:10
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+25
+1.43
+2025-04-10 02:00:10
+3
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+42000
+820
+1.95
+2025-04-10 00:05:00
+4
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+294000
+5600
+1.90
+2025-04-08 00:20:00
+3.DataPumpTimeouErrorAggregation
+DataPumpTimeouErrorAggregationID
+TimeStampTypeID
+StartTime
+EndTime
+RequestCount
+TimeoutCount
+TimeoutRate (%)
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+15
+0.83
+2025-04-10 01:00:12
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+10
+0.57
+2025-04-10 02:00:12
+3
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+42000
+70
+0.17
+2025-04-10 00:06:00
+4
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+294000
+540
+0.18
+2025-04-08 00:25:00
+ Table for maintaining the batches which are not processed and failures in the job
+if we this table have > x number record at particular time send alert. 
+DataPumpMetricAggregationFailures
+QueueID
+MetricTypeId
+TimeStampTypeId
+StartDateTime
+EndDateTIme
+isSkipped
+isFilure
+1
+1
+2
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+0
+1
+2
+1
+2
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+1
+0
+DataPumpMetricAggregationJobLog
+DataPumpMetricAggregationJobLogID
+ShardIdWithFailures
+Summary
+JobStartDateTime
+JobEndDateTime
+1
+1212
+Job Failed for this biller
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+2
+Null
+Job succedded
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+ URL:/spaces/PE/pages/4197187642/DB+Approach+-+Changes+made+in+Data+Pump.

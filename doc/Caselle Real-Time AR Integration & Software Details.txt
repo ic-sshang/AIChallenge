@@ -1,0 +1,155 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice 
+TXT
+FTP/Stratus
+Output from Invoice Cloud Export report created by using Invoice Cloud Form Definition
+Adjustment 
+Utility Management GraphQL Interface - CustomerDetail type
+Web Services
+Caselle Connect API Supported on Version 2021.02.160 or later.
+Payment 
+Cash Receipting GraphQL Interface - create_receipt 
+Web Services
+Caselle Connect API Supported on Version 2021.02.160 or later.
+ACH Reject
+Not Supported
+ 
+Done Manually through Biller Portal
+Void
+Cash Receipting GraphQL Interface
+Web Services
+Caselle Connect API - Supported on Version 2021.02.160 or later.
+Email Updates 
+Accounts Receivable GraphQL Interface - update_customer
+Web Services
+Caselle Connect API - Supported on Version 2021.02.160 or later.
+AutoPay Enrollment 
+Not Supported 
+ 
+Available for Utility Billing but not AR
+Paperless Enrollment
+Accounts Receivable  GraphQL Interface - update_customer
+Web Services
+Caselle Connect API - Supported on Version 2021.02.160 or later.
+Bill Images
+Template or PDF Extraction
+FTP or Stratus
+IC can build a template based on the invoice file. If the biller has a 3rd party print vendor to provide PDFs, IC can support PDF extraction.
+Configuration 
+Invoice Types
+INVOICE TYPE 6 
+GOVERMENT SERVICES
+ IS THE ONLY INVOICE TYPE THAT CAN BE SUPPORTED.  
+Virtual Site
+VIRTUAL SITE ITEM NEEDS TO MATCH INVOICE TYPE ID 6
+Required Options
+Option 64 MUST BE TURNED ON
+Supported Products and Features
+Products
+Type
+Definitions/Details
+AgentConnect
+Not supported
+CloudPay
+Not supported
+CloudPay Web Services
+Not supported
+CloudStore
+Supported
+We will support the option of creating a lockbox file for cloud store invoice types. The file can be transmitted to the biller via Stratus or delivered via e-mail but they will need to manually import the file into Caselle. Any addition or changes to Caselle’s cloud stores will require and ITR to make sure that all items are set up with the corresponding GL#.
+IVR
+Supported
+Default IVR Search Method is “UtilitySearch2”
+OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+Not supported
+Biller can use swipe devices and biller portal for in-person payments
+Features
+Type
+Definitions/Details
+Account Registration:
+ 
+ 
+Account Linking
+Supported
+ Standard IC email and password to link accounts
+       Multi-User Log In
+Not Supported
+ 
+       Co-Owner Registration
+Not Supported
+ 
+ 
+ SSO
+Not Supported
+ 
+AutoPay Collection Date
+Supported
+Set via BIF Customization
+Batch Closure
+Supported
+ Set by the biller.  Recommendation 11:59 PM local time
+Bill Processor
+Not Supported
+ 
+Billing Options 
+ 
+ 
+       Balance Forward
+Supported
+Set via BIF Customization
+       Open Item Billing
+Not Supported
+ 
+Block Payment
+Supported
+ Can be done manually in the biller portal.
+Conveyance
+Supported
+ 
+Data Conversions
+Supported
+Can support Paperless and AutoPay conversions if data can be provided by the biller
+Email Notification Schedule
+Supported
+Set via BIF Customization
+Expire Bill for Payment
+Supported
+Set via BIF Customization
+Minimum Payment
+Supported
+ Set via BIF Customization
+Paperless
+Supported
+DataPump
+Partial Payments
+Supported
+Set via BIF Customizations
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Supported
+Supported for BIller Portal Swipe payments
+Ingenico EMV
+Not Supported
+ URL:/spaces/IM/pages/718143514/Caselle+Real-Time+AR+Integration+Software+Details

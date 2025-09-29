@@ -1,0 +1,30 @@
+The purpose of the Biller File Troubleshooting page in the CRM is to allow IC employees to test sample files for billers and see a detailed description of any issues that would come up during the file loading process.
+The Biller File Troubleshooting page will have two distinct user paths: uploading a file for validation and viewing validation results.
+Requirements
+Ability to upload a file for validation 
+Choose a biller, file type (Invoices/Adjustments/Payments/Misc), conversion type, and file
+Ability to search for uploaded files by biller
+Show historical files
+Show in-progress files
+View the conversion and validation logs for each file
+Download the logs for a file in an Excel file
+Validating a File (Tentative)
+User navigates to the Biller File Troubleshooting page in the CRM
+Click “Validate File” button, which opens a pop-up window
+Select a biller, a file type (invoices/adjustments/payments/misc), and a conversion type
+Select a file
+Click Upload
+The file will be dropped on an App Server for processing
+The StratusFileProcessor-Validation job will be kicked off
+The conversion and validation results will be stored in the database
+Viewing Validation Results (Tentative)
+User navigates to the 
+Biller File Troubleshooting
+ page in the CRM under Tools → Testing Tools
+Below the “Validate File” button, there is a field to choose a biller, and a Search button
+Choose a biller and click Search
+A table will appear with all the validation results for that biller
+We need to display the following data: File Name, Timestamp, File Type, File Format, Conversion Results (Pass/Fail), and Validation Results (Pass/Fail)
+We should also present a button to download the results in an Excel file
+Each entry in the table can be expanded to show the first 5 conversion results and the first 5 validation results, side by side
+ URL:/spaces/IM/pages/4309647456/Biller+File+Troubleshooting+Flow

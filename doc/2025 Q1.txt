@@ -1,0 +1,429 @@
+1
+6
+false
+default
+list
+true
+Overview
+Team announces their next quarter commitments.
+What initiatives is the team committing to for the next quarter? 
+What does success look like for each?
+Date
+ 
+Team
+InvoiceCloud Platform
+Participants
+ 
+ 
+ 
+ 
+Quarterly Team Velocity
+Sprints 13 - 18
+6 Sprints
+Team Member Points Per Sprint Estimate
+ : 5 (Contributing to Product Owner Duties, Testing Activities, INFRA Ticket Triage and Asignment)
+ : 0 (Focusing on India Engineer hiring and Contributing to Product Owner Duties and Testing)
+ : 7
+ : 7
+ : 7
+ : 4 (Working on-call and Ops INFRA Board Duties)
+ : 7
+ : 0 (on leave)
+ : 4 (Working on-call and Ops INFRA Board Duties, will be on leave starting Sprint 16)
+ : 4 (Working on-call and Ops INFRA Board Duties)
+Total Points Per Sprints 13 thru 15: 45
+3 * 45 = 135
+Total Points Per Sprints 16 thru 18: 41
+3 * 41 = 123
+11 Points from 
+ 
+Quarterly Velocity Estimate: 135 + 123 + 11 = 269
+Commitments
+Commitment
+Points Estimate
+Points Expended
+Target Date
+Actual Date
+Definition of Success
+1
+PLAT-1538
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+7
+7
+ 
+ 
+The Monthly patches are applied to the NonProd VMs prior to the Maintenance Window via WSUS.
+The Monthly patches are applied to the Prod VMs during the Maintenance Window via WSUS.
+2
+PLAT-1432
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+3
+3
+ 
+ 
+3
+PLAT-1535
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+~10
+7
+ 
+ 
+The 
+*.invoicecloud.com
+ TLS Certificate is renewed and applied to all hosts that needed, which currently encompasses all VM Hosts in all Environments and the AKS Clusters in Prod.
+4
+PLAT-1565
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+7
+9
+ 
+ 
+ 
+Upgrade AKS Clusters that have K8s Versions that are being deprecated to latest Long-Term Support K8s Version.
+5
+PLAT-1282
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+27
+25
+ 
+ 
+ 
+ 
+Onboard the ~6 Minimal Viable Increment API Services from ICRESTAPI for the use by Texas Mutual.
+6
+PLAT-1499
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+15
+24
+ 
+ 
+We are able to access the AWX Tower via a FQDN via both our Laptops and AVDs.
+We are able to login into the AWX Tower using Azure EntraID SSO.
+7
+ 
+PLAT-1485
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+22
+14
+ 
+ 
+ 
+The unexpected disconnects from AVDs (both Prod and NonProd) are no longer experienced by our user base.
+8
+PLAT-1537
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+~10
+1
+ 
+ 
+Ensure the Jellyfish integration with Azure DevOps is configured and working as required by Engineering Leadership.
+9
+PLAT-1536
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8
+9
+ 
+ 
+Setup Azure Resource Reservation for the next 1 years that cover at least 80% of the Compute Resources we use in Azure
+.
+Update SKUs on VMs to be in align with a more consolidated Reservation Strategy where we are using the latest version of a processor for a SKU Family.
+10
+PLAT-1539
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+9
+18
+ 
+ 
+The Monthly patches are applied to the NonProd VMs prior to the Maintenance Window by pulling the Patches directly from Microsoft
+The Monthly patches are applied to the Prod VMs during the Maintenance Window by pulling the Patches directly from Microsoft
+Upgrade the NewRelic Agent Versions
+11
+PLAT-1372
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+18
+42
+ 
+ 
+Align Resources for modern 
+Environment Stack
+.
+Payoff Tech Debt for DEV and XAT GLB Resources.
+12
+PLAT-1477
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+7
+8
+ 
+Rolling to Q2 due to technical issues encountered with Vendor Product
+All AKS Clusters that support Applications we develop have the Contrast Agent Injector Helm Chart installed and tested with 1 Application (
+PayerPayByTextService
+).
+13
+PLAT-1541
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+0
+0
+ 
+ 
+This was determined that there is nothing we need to do proactively to support this.
+14
+PLAT-1249
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+30
+66
+ 
+ 
+Create new DevTest Web Servers for new App Dev Teams in a codified and/or automated manner.
+Add the new DevTest Web Servers to the 
+invoicecloud-beta.com
+ DNS Zone, both Public and Private, and enable the 
+invoicecloud-beta.com
+ binding in IIS. 
+15
+PLAT-1540
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+9
+27
+ 
+ 
+The Monthly patches are applied to the NonProd VMs prior to the Maintenance Window via WSUS.
+The Monthly patches are applied to the Prod VMs during the Maintenance Window via WSUS.
+16
+PLAT-1542
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10
+9
+ 
+ 
+Install KEDA on AKS Clusters that need to use it.
+Create a Global Service Bus instance per Environment.
+17
+PLAT-1571
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+15
+13
+ 
+ 
+The 
+dev
+ Key Vaults and Storage Accounts are in the 
+Enterprise Dev/Test
+ Subscription and placed in the 
+rg-glb-resources1-npd
+ Resource Group.
+The 
+xat
+ Key Vaults and Storage Accounts are in the 
+Enterprise Prod
+ Subscription and placed in the 
+rg-glb-resources1
+ Resource Group.
+The Shared Storage Account is removed from both Resource Groups 
+rg-glb-resources1-npd
+ and 
+rg-glb-resources1
+.
+18
+PLAT-1545
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+5
+19
+ 
+ 
+The 
+xat
+ Payer Cluster is in the 
+Enterprise Prod
+ Subscription and the Production Network Lane and the XAT App Services hosted in the Cluster are working as expected.
+19
+PLAT-1555
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+15
+32
+ 
+ 
+The requested Application Pipelines are updated with the latest Build and Deploy Templates to enable SonarQube gates.
+20
+PLAT-1543
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+5
+5
+ 
+ 
+We have a CMDB Platform identified with an example Application catalogued using CRM as the example for cataloguing. 
+21
+PLAT-1546
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+13
+16
+ 
+ 
+The TLS Certificate Sonarqube uses will expire on 
+4/5/2025
+ and we do not have plans to renew TLS Certificates with that pattern 
+{env}.invoicecloud.com
+Existing FQDN: 
+sonarqube.sbx.invoicecloud.com
+New FQDN: 
+sonarqube.invoicecloud-beta.com
+The 
+aks-pri-tooling2-sbx
+ Cluster is destroyed.
+22
+PLAT-1752
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Injection
+7
+ 
+23
+PLAT-1789
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Injection
+16
+ 
+24
+PLAT-1714
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Injection
+10
+25
+PLAT-1927
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Injection
+3
+ 
+26
+PLAT-2014
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Injection
+1
+ 
+Update AVD terraform to utilize the 
+Windows_Client
+ license type.
+Update existing AVDs to utilize the 
+Windows_Client
+ license type.
+27
+Committed Estimate
+261
+391
+Velocity Estimate
+269
+Stretch Goals
+Stretch Goal
+Points Estimate
+Points Expended
+Target Date
+Actual Date
+Definition of Success
+1
+PLAT-1651
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10
+ 
+ 
+Define the IAM Strategy and Architecture.
+Begin rolling out the strategy in response to INFRA Access Requests.
+2
+PLAT-1544
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+11
+3
+Update 
+domain-landing-zone
+ to not require Approvals on Plans for Environments 
+sbx
+, 
+dev
+, 
+iat
+, 
+qar
+ and allow the person who Queued the Pipeline run to Approve Plans for Environments 
+xat
+ and 
+prd
+.
+If a Plan Stage has no changes, bypass the need to approve the Apply Stage so the Pipeline can automatically move onto the next Stack’s Plan Stage. 
+Only apply from Tags in upper Environments.
+3
+PLAT-1556
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Validate that the IP Scanning being observed is expected.
+Reduce the Error Alert noise and fatigue caused by the Error Alerts triggered by the IP Scanning.
+4
+PLAT-957
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Reduced manual support required by AVD IaC.
+Increased Observability into the AVD Metrics and Logs.
+Items that might have dependencies on Platform
+Team Spam Roadmap7
+Next Quarter Commitment - SPAM 2024Q4 - Product Engineering - Confluence
+Team Wicked Tendies Roadmap
+Next Quarter Commitment - Tendies 2024Q4 - Product Engineering - Confluence
+Team BMS Roadmap
+Next Quarter Commitment - BMS 2024Q4 - Product Engineering - Confluence
+Team WDIL Roadmap
+Next Quarter Commitment - WDIL 2024Q4 - Product Engineering - Confluence
+Team IVRT Roadmap
+Next Quarter Commitment - IVRT 2024Q4 - Product Engineering - Confluence
+ URL:/spaces/platform/pages/3815211062/2025+Q1

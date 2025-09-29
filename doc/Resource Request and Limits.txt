@@ -1,0 +1,215 @@
+3
+4
+false
+default
+list
+true
+ Requests
+Kubernetes Resource Requests provide several critical values and benefits that complement Resource Limits in cluster management:
+1. 
+Guaranteed Resource Allocation
+Scheduling assurance
+: Kubernetes scheduler only places pods on nodes with available requested resources
+Minimum resource guarantee
+: Ensures pods get at least the requested amount of CPU/memory
+Prevents resource starvation
+: Guarantees baseline performance even under resource pressure
+2. 
+Intelligent Pod Scheduling
+Bin-packing optimization
+: Scheduler efficiently places pods based on actual resource requirements
+Node selection
+: Helps scheduler choose appropriate nodes with sufficient available resources
+Cluster utilization
+: Enables better resource distribution across the cluster
+3. 
+Quality of Service (QoS) Classes
+Kubernetes uses requests (and limits) to assign QoS classes:
+Guaranteed QoS
+yaml
+resources:
+  requests:
+    memory: "1Gi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"    # Same as requests
+    cpu: "500m"      # Same as requests
+Burstable QoS
+yaml
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"    # Higher than requests
+    cpu: "1000m"     # Higher than requests
+BestEffort QoS
+yaml
+# No requests or limits specified
+resources: {}
+4. 
+Horizontal Pod Autoscaler (HPA) Foundation
+Scaling decisions
+: HPA uses CPU/memory requests as baseline for scaling calculations
+Target utilization
+: Scaling based on percentage of requested resources
+Predictable scaling
+: More accurate autoscaling behavior with proper requests
+5. 
+Resource Planning & Capacity Management
+Cluster capacity planning
+: Sum of all requests shows minimum required cluster capacity
+Cost optimization
+: Right-sizing based on actual resource usage patterns
+Node provisioning
+: Helps determine appropriate node sizes and counts
+6. 
+Performance Predictability
+Consistent performance
+: Applications get guaranteed resources regardless of cluster load
+SLA compliance
+: Enables meeting performance SLAs with predictable resource availability
+Reduced noisy neighbor issues
+: Protection from resource-hungry applications
+7. 
+Financial Benefits
+Cost optimization
+: Avoid over-provisioning cluster resources
+Resource efficiency
+: Better node utilization through accurate scheduling
+Predictable costs
+: Understanding minimum resource requirements for budgeting
+ Limits
+Kubernetes Resource Limits provide several critical values and benefits for cluster management and application reliability:
+1. 
+Resource Governance & Isolation
+Prevents resource starvation
+: Limits ensure no single pod can consume all available CPU/memory on a node
+Guarantees fair resource sharing
+: Multiple pods can coexist without one monopolizing resources
+Enforces resource boundaries
+: Creates predictable resource allocation patterns
+2. 
+Cluster Stability & Reliability
+Prevents node crashes
+: Memory limits prevent OOM (Out of Memory) conditions that could crash nodes
+Maintains cluster health
+: CPU limits prevent CPU-intensive pods from degrading overall cluster performance
+Enables predictable scheduling
+: Scheduler can make better placement decisions with known resource constraints
+3. 
+Cost Management & Efficiency
+Optimizes resource utilization
+: Prevents over-provisioning and waste
+Enables better capacity planning
+: Clear understanding of resource requirements
+Supports multi-tenancy
+: Different teams/applications can share clusters safely
+4. 
+Application Performance & SLA Management
+Predictable performance
+: Applications run within defined resource boundaries
+Quality of Service (QoS)
+: Kubernetes uses limits to assign QoS classes (Guaranteed, Burstable, BestEffort)
+Auto-scaling accuracy
+: HPA (Horizontal Pod Autoscaler) works better with defined limits
+5. 
+Security & Compliance
+Resource-based security
+: Prevents resource-based DoS attacks
+Compliance requirements
+: Many security frameworks require resource limits
+Audit trails
+: Clear resource usage patterns for compliance reporting
+ Resource Requests vs. Limits Summary
+Aspect
+Requests
+Limits
+Purpose
+ 
+Guarantee minimum resources 
+Prevent resource overconsumption 
+Scheduling
+ 
+Used by scheduler for placement 
+Not used for scheduling 
+Performance
+ 
+Ensures baseline performance 
+Prevents performance degradation 
+QoS
+ 
+Determines QoS class 
+Determines QoS class 
+Enforcement
+ 
+Guaranteed by kubelet 
+Enforced by cgroups 
+Resource requests are essential for predictable, efficient, and cost-effective Kubernetes operations. They provide the foundation for proper resource management and are crucial for production workloads.
+ Key Recommendations
+Always set both requests and limits
+ - Requests guarantee resources, limits prevent overconsumption
+Monitor resource usage patterns
+ - Use your NewRelic setup to understand actual vs. requested resources
+Implement resource quotas
+ - At namespace level for additional governance
+Regular review and adjustment
+ - Resource needs change over time
+Consider Vertical Pod Autoscaler (VPA)
+ - For automatic resource limit recommendations
+Resource limits are essential for production Kubernetes clusters as they provide the foundation for reliable, secure, and efficient container orchestration.
+ InvoiceCloud Helm Chart Support
+Resource Requests and Limits supported by the 
+InvoiceCloud Web Helm Chart
+.
+Example usage from BillerReportingAPI’s 
+DEV Helm Chart Values file
+:
+replicaCount: 2
+
+image:
+  repository: acrglbimages1npd.azurecr.io/biller-reporting-api
+
+ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+
+resources:
+  requests:
+    memory: "500Mi"
+    cpu: "50m"
+  limits:
+    memory: "1Gi"
+    cpu: "2000m"
+
+extraEnvVars:
+  - name: COMPlus_EnableDiagnostics
+    value: "0"
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Development"
+  - name: ConnectionStrings__MasterContext
+    value: "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433; Initial Catalog=DBMaster_GoldAzure; Authentication=Active Directory Default;"
+  - name: "ConnectionStrings__BillerContext"
+    value: "Server=tcp:ic-dbtest-east-server1.database.windows.net,1433; Authentication=Active Directory Default;"
+  
+       
+ingressPathRootName: biller
+
+hosts:
+  - tlsSecretName: star-invoicecloud-beta-com
+    hostnames:
+      - biller-v0-dev.invoicecloud-beta.com
+
+infrastructureVersion: v0
+
+secretProvider:
+  keyVaultName: "kv-pri-biller0-dev"
+  secretObjects:
+    - secretName: "Jwt-SigningCertificate"
+      envVarName: "Jwt__SigningCertificate"
+    
+nodeSelector:
+  agentpool: app
+ URL:/spaces/platform/pages/4485971969/Resource+Request+and+Limits

@@ -1,0 +1,12 @@
+Below are images of the UI and how it renders an account's pay by enrollment based on the CustomerSMS record.
+No SMS Record
+GET API Returns 404
+ 
+Pending Registration= true, Registered = false
+GET API returns 200, pendingRegistration = true
+Registered = true | PendingRegistration = false
+GET API returns 200, pendingRegistration = false
+Registered = false, PendingRegistration = false (User Canceled)
+GET API returns 404
+ 
+ URL:/spaces/EN/pages/2872444094/Pay+By+Text+Enrollment+UI+-+Various+States

@@ -1,0 +1,44 @@
+User Story Title
+- 
+EBPP-6017 As an IC user, I want my new PayPal chargeback fees to be utilized when calculating biller fees and generating a biller statement so I know I'm collecting the money
+Related Story
+Functional Understanding:
+FinMod is a console application that runs monthly to audit and generate monthly report for all the fees calculations and summary.
+The program is executed monthly for example it executes on 1 December to prepare a summary or report for the prior month that is 1st November to 30th November.
+The program basically gets list of all active billers, and it iterates over each biller to process for each, it calculates all the fees and saves the results into database.
+After that the program executes a Stored Procedure to summarize all the charges or fees to generate statements for each biller.
+The story EBPP-6017 is to include the Charge back fees along with the existing calculation process.
+The fees rate and specification is already there, we just need to use it inside the calculation.
+Technical Understanding
+Architecture wise the FinMod component is placed inside the InvoiceCloud box.
+The FinMod project’s code is in the FMHistoricalBilling repository.
+In the diagram shown below of the FinMod component there are two sub-components I and J.
+I block is responsible for doing all the calculation of fees and auditing.
+J block is responsible for the summarization and statement generation.
+Various date related work is done using the below 
+Stored Procedures:
+(DB: Shard2002)
+selActiveBillers_FM
+spCheckBillerPricingChange
+PurgePaymentRevenue
+selBillerFeeCalculations
+selPaymentsForRequeue
+spCreateBillSummary
+As per our current understating and conversation we need to add new condition for charge back fee. ProcessSingleBiller in process all biller.
+Solution need to verify with in generateMonthelySummary statement for chargback fee.  
+References -
+Recording FinModeHistoricalBilling
+Challenges:
+(As of Dec 29th) Not able to build project as IC Nuget packages are unable to install.
+Other notes:
+Job FinMode : Month End Job
+Job FinMode: Monthly Audit Job
+IC FMHistoricalBilling overview
+IC High Level System Overview
+Repository :- FMHistoricalBilling
+BillerID:- 
+DataBase :- shard<BillerId>
+Application:- Console (exe file)
+CRM IC :- Payment Code or type ChargeBack
+Referenced Area :- No
+ URL:/spaces/EN/pages/2532802711/Finance+Mode+Historical+Billing

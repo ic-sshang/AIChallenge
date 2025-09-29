@@ -1,0 +1,49 @@
+Code-Generated Docs
+Description
+
+Deployment flow for helm charts. Runs through the environments sbx, dev, uat, prd-pri, and prd-sec (these are hardcoded into the template)
+Runs a stage to calculate the chart version (uses the commit ID), then runs 'jobs/helm-deploy.yaml' targeting each environment.
+
+Parameters
+Parameter
+Default
+Description
+deploymentName
+" "
+name of the deployment. defaults to service name if not provided
+spoke
+n/a
+name of spoke. used to select variable groups and resources on Azure
+serviceName
+n/a
+name of service. used to select resources on Azure and in the target clusters
+chartName
+n/a
+name of the chart you'll be deploying
+chartVersion
+gitversion
+version of the chart you'll be deploying
+infrastructureVersion
+n/a
+version of the spoke infrastructure currently deployed
+resourceNameOverrides
+[]
+resource name patterns used by your spoke infrastructure. Check jobs/helm-deploy.yaml to see defaults
+gitVersionConfigFile
+GitVersion.yml
+location of the GitVersion config file
+environments
+{'sbx': {'testFilter': 'Category=smoke', 'testFilterExtension': '', 'instance': 'main'}, 'dev': {'testFilter': 'Category=integration', 'testFilterExtension': '', 'instance': 'main'}, 'uat': {'testFilter': 'Category=smoke', 'testFilterExtension': '', 'instance': 'main'}, 'prd-pri': {'testFilter': 'Category=smoke', 'testFilterExtension': '', 'instance': 'main'}, 'prd-sec': {'testFilter': 'Category=smoke', 'testFilterExtension': '', 'instance': 'main'}}
+environment specific values
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../jobs/helm-deploy.yaml
+../tasks/calculate-semver.yaml
+../jobs/calculate-chart-version.yaml
+../jobs/promote-images.yaml
+../jobs/list-images-to-promote.yaml
+ URL:/spaces/platform/pages/3634790511/flows+helm-deploy.yaml

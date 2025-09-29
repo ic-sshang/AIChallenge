@@ -1,0 +1,20 @@
+This is to guide on the research done for billers who are experiencing low OBD Matching Scores. Below are some steps that can be taken to analyze the data from the biller. 
+Steps:
+Get examples from the logs or from the Jira ticket. 
+Gather information about the entries from the logs and compare it to what we have in the database.
+For instance, IndividualID, Name, Amount, and Scores
+Get enough samples of Individual IDs from the RPPSEntries table and figure out the pattern with the format. (More than likely the IndividualID will need to get formatted to match the format we have for their customers' accounts.
+For the Amount, we need to verify that the BalanceDue column in the Invoices table matches the amount we received. If it doesn’t then we need to verify if the amount is 10% more or less than the  BalanceDue. (Multi-invoice or Multi-Installment could be affecting the payment amount score)
+For the Scores, we need to gather the 4 possibilities from the logs and check each invoice and the customer that invoice belongs to.
+Request a DBR to add the billers data to DBTest Shard 283 (OBD Testing Shard)
+Once data is transferred, we need to modify the balances, payments, the entries status ID
+Create a MasterCard and Fiserv Payment File with a lot of entries to test out multiple scenarios
+There is an Integration Test that can be ran to debug. It is called 
+ExecuteMatchProcess
+.
+Another test will be using the DevTest Skybot and adding the unprocessed files to their corresponding folder and analyzing the new scores and possibilities.
+This Scoring guide can help understand the scores:
+Please note:
+  There is one exception to the automatch combined scoring of 6 or greater.  If the biller is Fulton County, and it’s a multiinvoice payment (payment will be split between two invoices), we will auto match on a score of 5.  
+ 
+ URL:/spaces/ED/pages/3402924038/How+to+Research+OBD+Matching+for+Biller

@@ -1,0 +1,304 @@
+Objective
+ 
+Authentication Flow
+ 
+Biller Login Page
+ 
+Redirect from CRM
+ 
+Key Components
+ 
+Session Management
+ 
+Session Initialization
+ 
+Session Variables
+ 
+Challenges
+ 
+Recommendations (Unique Identifier)
+ 
+Objective
+To thoroughly assess and document the current authentication system of the Biller Portal, including authentication flows, session management. Identify any gaps and improvement areas to support SSO/MFA integration. Provide actionable recommendations for enhancing authentication security, including MFA setup and SSO optimization. Additionally, define a clear user configuration strategy to handle multiple users under the same email ID, ensuring smooth integration with SSO/MFA systems.
+Authentication Flow
+Biller Login Page
+Step 1: User Login
+Users provide their credentials (username and password) on login page:
+BillerLogin.aspx
+ (for billers).
+The credentials are validated against the database using methods like:
+clsBillers.AuthenticateBiller
+ (for billers).
+ If the credentials are valid:
+Session variables are set to track the user's authentication state (e.g., 
+ValidBillerSession
+).
+The user is redirected to the appropriate page (e.g., 
+BillerWelcome.aspx
+).
+The response is validated, and user information is extracted to establish a session.
+Step 2: Session Management
+ After successful authentication, session variables are set to manage the user's state and permissions.
+Examples of session variables:
+ValidBillerSession
+: Indicates whether the user is authenticated.
+Step 3: Authorization
+User permissions are loaded based on their role and associated biller.
+Permissions are typically stored in the database and retrieved using methods like 
+clsBillers.LoadBillerPermissions
+.
+Step 4: Redirect to Dashboard Page
+After authentication, users are redirected to the Dashboard (Home page) based on their role and permissions:
+For billers: 
+BillerWelcome.aspx
+.
+Key Components
+Login Pages
+BillerLogin.aspx
+: Handles login for biller users.
+Validates credentials using 
+clsBillers.AuthenticateBiller
+.
+Authentication Methods
+clsBillers.AuthenticateBiller
+: Validates the biller's credentials against the database.
+Returns the biller's details if authentication is successful.
+Session Management
+Session variables are used to track the user's authentication state and permissions.
+Examples: 
+Session("ValidBillerSession")
+Security Utilities
+clsCryptoService
+:
+Handles encryption and decryption of sensitive data, such as passwords.
+clsValidation
+:
+Validates user input, such as usernames and passwords.
+Security Mechanisms
+Password Encryption
+Passwords are encrypted using 
+clsCryptoService
+ before being stored in the database.
+During login, the provided password is encrypted and compared with the stored value.
+Session Timeout
+Sessions are configured to expire after a certain period of inactivity. This value is configurable, current value is
+ 4hours
+Error Logging
+Errors during authentication are logged using 
+Serilog
+ for debugging and auditing purposes.
+Example Code Snippet
+Biller Authentication (clsBillers.AuthenticateBiller)
+Public Function AuthenticateBiller(ByVal username As String, ByVal password As String) As clsBillers
+
+    Dim encryptedPassword As String = clsCryptoService.EncryptPassword(password)
+
+    Dim sql As String = "SELECT * FROM Billers WHERE Username = @Username AND Password = @Password"
+
+    Dim parameters As New List(Of SqlParameter) From {
+
+        New SqlParameter("@Username", username),
+
+        New SqlParameter("@Password", encryptedPassword)
+
+    }
+
+    Dim dt As DataTable = clsDatabase.GET_DATASET(sql, parameters).Tables(0)
+
+    If dt.Rows.Count > 0 Then
+
+        ' Load biller details
+
+        Return LoadBillerByBillerID(dt.Rows(0)("BillerID"))
+
+    Else
+
+        Return Nothing
+
+    End If
+
+End Function
+Session Management
+Session("ValidBillerSession") = True
+
+Session("BillerPortal_CurrentBiller") = biller
+Redirect from CRM
+1. CRM Redirect with Encrypted Data
+•	The CRM system redirects to the BillerLogin page with an encrypted query string parameter EBG.
+•	This parameter contains encrypted data, which includes:
+•	The BillerUserGUID (a unique identifier for the user).
+•	Additional user information such as EmployeeID and EmployeeName.
+2. Decryption of EBG
+•	The EBG parameter is decrypted using the 
+Crypto.Decrypt
+ method. The decryption key is the current date, ensuring the data is valid only for the current day.
+•	The decrypted data is split into parts using the | delimiter:
+•	The first part is the BillerUserGUID.
+•	The second and third parts (if present) are stored in the session as EmployeeID and EmployeeName.
+3. Validation of BillerUserGUID
+•	The decrypted BillerUserGUID is validated using the Validation.isValidGUID method to ensure it is a valid GUID.
+•	If the GUID is invalid or missing, the process ends (Response.End()).
+4. Database Lookup for User
+•	A database query (selBillerUsers) is executed to retrieve user details based on the BillerUserGUID.
+•	If no matching user is found, the process ends (Response.End()).
+5. Loading Biller and User Details
+•	If a matching user is found:
+•	The Biller object is populated with details such as BillerID, BillerAdminUser, BillerAdminUsername, and other user-specific information.
+•	The user's permissions are loaded using the LoadBillerPermissions method.
+•	The Biller and user details are stored in the session:
+•	Session("BillerPortal_CurrentBiller")
+•	Session("BillerPortal_CurrentBillerUser")
+•	Session("ValidBillerSession") = True
+6. Redirection to Welcome Page
+•	If all validations and setups are successful, the user is redirected to the BillerWelcome.aspx page.
+Session Management
+Session variables are used throughout the application to:
+Track the authenticated user's state.
+Store user-specific data, such as the current biller and user details.
+Apply custom branding styles based on the biller's configuration.
+Session Initialization
+Session variables are initialized during the Page_Load event and the login process:
+Clearing Session Variables
+When the Exit query parameter is set to 1, the following session variables are cleared:
+Session("ValidBillerSession")
+Session("BillerPortal_CurrentBiller")
+Setting Session Variables
+After successful authentication, the following session variables are set:
+Session("ValidBillerSession") = True
+Session("BillerPortal_CurrentBiller") = a_BILLER
+Session("BillerPortal_CurrentBillerUser") = billerUser
+Session("BillerUserID") = a_BILLER.BillerAdminUserID.ToString
+Session Variables
+The following session variables are set or cleared during the biller login process:
+Session("ValidBillerSession")
+•	
+Purpose:
+ Indicates whether the current session is valid for the logged-in biller.
+•	
+Set:
+ After successful authentication.
+•	
+Cleared:
+ When the user logs out or fails authentication.
+Session("BillerPortal_CurrentBiller")
+•	
+Purpose:
+ Stores the current biller's information (e.g., BillerID, BillerGUID, BillerAdminUserID).
+•	
+Set:
+ After the biller is successfully authenticated.
+•	
+Cleared:
+ When the user logs out.
+Session("BillerPortal_CurrentBillerUser")
+•	
+Purpose:
+ Stores the current biller user's details (e.g., UserFullName, Username, EmailAddress).
+•	
+Set:
+ After successful authentication using BillerUser.LoadBillerUser.
+Session("BillerUserID")
+•	
+Purpose: 
+Stores the BillerAdminUserID of the authenticated biller.
+•	
+Set:
+ After successful authentication.
+Session("CustomStyle")
+•	
+Purpose:
+ Indicates whether custom branding styles are applied for the biller.
+•	
+Set:
+ Based on the biller's branding configuration.
+Session("EmployeeID") and Session("EmployeeName")
+•	
+Purpose:
+ Stores employee-related information when the login is initiated from CRM or other systems.
+•	
+Set:
+ When the EBG query parameter is present.
+Challenges
+Multiple Users with the Same Email Address
+ 
+Current Behavior
+: 
+The application allows multiple users under the same biller to share the same email address but have different usernames.
+ 
+ 
+Challenge
+: 
+SSO/MFA systems typically use a unique identifier (e.g., email) to authenticate users. If multiple users share the same email, it will be difficult to distinguish between them during SSO/MFA authentication
+ 
+     
+Potential Solution
+:
+       •    Use a unique identifier like 
+Username
+ or BillerGUID instead of email for SSO claims.
+       •    Use Authenticator application for MFA (
+Need to check with Username as a unique identifier but      Authenticator App is still using the email for Login. More indept research is required
+). 
+       •    Ensure the Identity Provider (IdP) supports custom claims for user identification.
+ 
+Session Management
+ 
+Current Behavior
+: 
+User sessions are managed using session variables, and the session duration is fixed.
+ 
+ 
+Challenge
+: 
+SSO systems often rely on tokens (e.g., SAML assertions, OIDC tokens) for session management. Integrating token-based authentication with the existing session-based system may require significant changes.
+ 
+       Potential Solution
+:
+        •    Can be re-used session management system by using SecureAuth(Only SecureAuth support session management).    
+ •    Transition to a token-based session management system (e.g., JWT) or map SSO tokens to existing    session variables.
+ 
+Database-Driven Authentication
+ 
+Current Behavior
+: 
+User authentication is performed by fetching data from the database and validating credentials.
+ 
+Challenge
+: 
+SSO/MFA bypasses the database-driven authentication process, which may conflict with existing workflows that rely on database validation.
+ 
+      
+Potential Solution
+:
+  •    Implement a hybrid approach where SSO authentication is used for login, but user details are still fetched from the database for role and permission management.
+ 
+Role and Permission Mapping
+ 
+Current Behavior
+: 
+Roles and permissions are managed in the database and tied to the user session.
+ 
+Challenge
+: 
+SSO systems may not provide detailed role and permission information. Mapping roles from the IdP to the application's roles may require additional logic
+ 
+       
+Potential Solution
+:
+•    Implement a hybrid approach where SSO/MFA authentication is used for login, but user details are still fetched from the database for role and permission management.
+•    Use custom claims in the SSO/MFA response to include role information or fetch roles from the database after SSO/MFA authentication.     
+   
+Recommendations (Unique Identifier)
+Use a unique identifier (e.g., 
+username
+) as the primary key for SSO authentication.
+Map this unique identifier to the user's profile in the identity provider.
+Use 
+email
+ as a secondary attribute, primarily for communication and notifications.
+User Profile in Identity Provider:
+•	Store the unique identifier username claim in the user's profile.
+SSO Callback:
+•	After successful authentication, retrieve the sub claim to identify the user in the Biller Portal.
+•	Use the username to load the user's profile and permissions
+ URL:/spaces/PE/pages/4251058198/Spike+-+PRISM-204+-+Understand+the+current+Biller+Portal+Authentication+system

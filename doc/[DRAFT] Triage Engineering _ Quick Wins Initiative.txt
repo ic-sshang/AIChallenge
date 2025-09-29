@@ -1,0 +1,66 @@
+Purpose
+To enable the Triage Engineering teams to identify minor bugs and enhancements, write the necessary code, and move it through the SDLC with the assistance of scrum teams.
+Objectives
+For minor bugs and enhancements:
+Reduce the time to resolution by streamlining the process.
+Minimize context loss and handover.
+For triage engineering:
+Increase the team's technical proficiency.
+Reduce the tickets received from Client Services.
+Assist in the reduction of technical debt.
+Definitions
+Quick Win 
+Is a minor bug and enhancement or enhancement that meets the following criteria:
+Less than 5 lines of code for solution. Does not include testing code.
+Must have a unit tests. If the code is not unit testable, then it cannot considered a quick win.
+Story points must be less than 3.
+Roles
+Assignee:
+ Responsible for coding and initial testing.
+Tester:
+ Conducts peer reviews and tests the code.
+Internal Lead:
+ Oversees the initiative and ensures alignment with objectives. Conducts internal review and test.
+Scrum Lead:
+ Provides final review and approval.
+Process
+Identification and Initial Review:
+Minor bug or enhancement is identified during triage engineering work.
+An Jira item is created following the general standards.
+Initial review is conducted.
+Assignment:
+If accepted as a quick win, assign the ticket to a triage engineer aligned with the scrum team, preferably the one who identified the issue/enhancement.
+Identify an item tester.
+Sprint Allocation
+For this step use you best judgement.
+The item should be added to the current sprint if all the following criteria is met:
+There are available story points during the sprint.
+At least 3 business days remaining for the sprint.
+The tech lead accepts the item to be absorbed to the sprint.
+If not, then scrum team must absorb the item into the next sprint, and it must be discussed in the next sprint planning.
+Development and Review:
+The assignee completes the changes and creates a pull request.
+Add the tester, internal lead, and scrum lead as required reviewers in the pull request, and notify the tester.
+Approval Process:
+Tester reviews and approves. Notify internal lead.
+Internal lead reviews and approves. Notify scrum lead.
+Scrum lead reviews, approves, and moves the item through release readiness.
+Deployment:
+The item assignee joins the deployment call and tests the changes in production.
+Update the item appropriately.
+Additional Notes
+Integrations scrum teams will not participate in this effort until further notice.
+Each scrum team will allocate 3 story points per sprint for triage engineers to work on quick wins.
+The item should not be brought up to bug court, but the scrum lead should be made aware of the item.
+The item will not go into any prioritization by product managers.
+RACI Acronym Guide
+Responsible
+: The person or people who do the work to complete the task.
+Accountable
+: The person who is ultimately answerable for the correct and thorough completion of the task. There should be only one accountable person per task.
+Consulted
+: Those whose opinions are sought, typically subject matter experts, and with whom there is two-way communication.
+Informed
+: Those who are kept up-to-date on progress, often only one-way communication.
+RACI Chart
+ URL:/spaces/DS/pages/3776741398/DRAFT+Triage+Engineering+Quick+Wins+Initiative

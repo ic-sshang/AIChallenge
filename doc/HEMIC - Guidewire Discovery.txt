@@ -1,0 +1,229 @@
+Summary
+Company
+HEMIC
+Industry/Vertical
+Insurance
+Website
+HEMIC | HEMIC
+Guidewire Version
+Kufri
+Solutions Engineer
+ 
+Integration Manager
+Invoices
+Invoice Billing
+Internal Notes
+Response/Decision Date
+IC Biller Invoice File (BIF)
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+Daily Batch Process. Around 4:30 Hawaii Time
+Account/Policy Numbers
+Internal Notes
+Response/Decision Date
+Are Account Numbers unique per person? (Do you have customer numbers?)
+Can we use a combination of Account number and customer number to create unique account numbers per person?
+User -> account(unique) -> policy(unique) ”invoices”
+Additional Notes
+ 
+ 
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision Date
+How Balance Updates are handles with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+ RTDR/Datapump
+Additional Notes
+ 
+ 
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision Date
+How Autopay, Paperless, PaybyText are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+PaybyText is currently being worked on to be added to the Accelerator
+ Customers should be able to handle Autopay and Paperless. PaybyText not needed at this time.
+Additional Notes
+Payments from IC
+Payments from Invoice Cloud
+ 
+Description
+ 
+Response/Decision Date
+How Payments are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+ Virtual Site/ Customer Portal and CPV2 for existing customers with exisitng invoices
+How Rejects, Chargebacks, Voids, Credits are handled with IC
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+The Verbiage/Code sent by IC is customizable via Advanced Setting
+DataPump to BC
+Additional Notes
+Bill Presentment
+Bill Presentment
+  
+Response/Decision Date
+How Bill Presentment is handled with IC - PDF Linking
+ 
+Review Default Fields and Values - 
+Guidewire Cloud Native Accelerator Technical Design
+ 
+Additional Notes
+ 
+Payer Experience
+General Questions
+ Internal Notes
+  
+Response/Decision Date
+How do your customers make payments today?
+ ACH, Mail checks
+What are the customer touchpoints between your billing system and the current payment solution
+ They are not building iframe, they want redirects. 
+ 
+What are all the payment methods accepted by your system today?
+ 
+How do your customers access the payment system today?
+ Customer Portal and Virtual Site.
+SSOconnect and CPV2 is later. No agent connect.
+What additional payment features are important to your customers?
+ 
+ 
+Can I get a walk-through of the Payer / customer experience? Who should I contact to schedule that?
+ 
+ 
+Specifics
+ 
+ 
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ Customer Portal
+ 
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+What part of the user experience will be through your UI and what part of the User experience will be through ours?
+ 
+ 
+Will you need balance forward or is each invoice paid separately?
+ 
+ 
+Do you need multi user login?
+ 
+ 
+How will existing users be migrated?
+ 
+ 
+Do you need to link accounts?
+ 
+ 
+Do you need IVR payments?
+ No
+ 
+Do you want to offer 'Pay By Text'? 
+ No
+ 
+Additional Notes
+ 
+ 
+CSR/Agent Experience
+General
+Internal Notes
+  
+Response/Decision Date
+Do you have clerks/agents? 
+ Yes but not using IC for agents.
+How do CSRs / Clerks / Agents access and use the system today?
+ 
+ 
+How will this functionality be done on Invoice Cloud:  (Biller Portal, AgentConnect)
+ 
+ 
+Specifics
+ 
+ 
+Do your clerks / agents process payments over the phone?
+ 
+ 
+Can clerks/agents process payments by using a customer's stored payment method?
+ 
+ 
+Do clerks/agents assist customers with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+ 
+ 
+Do some clerks/agents need different permissions than others? (please explain)
+ 
+ 
+Do clerks/agents accept payments at the counter (in-person)? 
+ 
+ 
+IF YES:
+ 
+ 
+What type of payments are accepted (eg. Cash, Check, Card): 
+ 
+ 
+Do you use a separate system/software for counter payments and if so what software? 
+ 
+ 
+How do you accept cash payments? 
+ 
+ 
+How do you accept credit card payments?
+ 
+ 
+How do you accept paper checks? 
+ 
+ 
+Do you use a check scanner?
+ 
+ 
+Additional Notes
+ 
+ 
+Insurance Specifics
+Considerations
+ Internal Notes
+   
+Response/Decision Date
+How are quote payments captured?  Is the billing account number or policy number known at this time?  If yes, consider creating the account before a BIF arrives or creating one on the fly.  If no, consider using the Customer Renewal function later to move the Quote Number over to the actual billing/policy number.
+ User -> account(unique) -> policy(unique) ”invoices”
+Typically 1 account - 1 policy
+Insured can have 2 open invoices.
+ 
+Agent payments - do the agents need to act on the behalf of the policyholder for payments?  If yes, consider using Agent Connect without a LoginGUID.
+ N/A
+ 
+Agency payments - do the agency pay with their own agency payment method?  If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  In order to prevent long lists of linked accounts, it is recommended to link the account to the user and unlink after the transaction is complete.
+N/A 
+ 
+How are renewals handled - will the billing system call our Customer Renewal API? (i.e., does the policy/account number change every policy term? If so, call the API)
+ 
+ 
+Is multi-user needed?  Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.
+ N/A
+ 
+How is billing handled? Policy Based, Account Based or Both? 
+(This will decide on what the IC account number will be) 
+Tell us about how your quote system works and the issuance process of quotes/policies
+ 
+ 
+How many phases will there be for go live?
+Additional Notes
+ 
+ 
+ URL:/spaces/IM/pages/3569353237/HEMIC+-+Guidewire+Discovery

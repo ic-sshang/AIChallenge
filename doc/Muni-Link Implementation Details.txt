@@ -1,0 +1,225 @@
+Page Navigation
+1
+7
+Document Status
+Complete
+Green
+Document Owner
+Ryan Stewart
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+Muni-Link
+ 
+Software Product Name
+Muni-Link Utility Billing
+Other Products are Muni-Link WebPresence, Muni-Link Backflow Inspection Manager, Muni-Link Notifications
+Software Cashiering System
+Cashiering 
+This is built into Muni-Link although they do interface with specific receipt printers and check validators
+Supported Versions
+ All
+There is no specific version. All Muni-Link is supported
+Integration Requirements and Pre-Requisites
+Data Conversion
+See steps for data conversion 
+here
+Vertical
+GUB
+ 
+Sample Biller Implementation
+St Charles PWSD #2
+BID 2377
+Planning
+Test Portals
+IC Hosted Test- Portal Muni Link Test BID 2530
+Partner Hosted Test Portal- Partner does not have test portal that we have access to.
+Biller Test Portal - Optional  
+Rules of Engagement
+If the biller is already in production with Muni-Link reach out to Alex Dionis 
+adionis@muni-link.com
+If biller is in implementation phase with Muni Link reach out to Tim Ginger McCarthy 
+gmccarthy@muni-link.com
+During your sales de-brief the sales rep will provide you with this information
+Timeline
+60-90 Days
+Configuration
+IMPORTANT- All Muni-Link Billers require customer portal authentication type: USERNAME WITH PASSWORD:
+Virtual Site
+Optional per biller.  Recommend Account Number and Last Name
+Invoice Types
+Integration will use InvoiceTypeIDs 100-157
+InvoiceCloud’s InvoiceTypeIDs will correspond to the Muni-Link BillingGroupIDs. 
+NOTE: Muni-Link will send the BillingGroupID value in the BIF and InvoiceCloud will alter/map the value to the applicable InvoiceTypeID (add 100 to BillingGroupID value to get the InvoiceTypeID). 
+See examples.
+Billers will use the BillingGroupID’s differently in Muni-Link. Billers can configure BillingGroupIDs to contain different accounts or different changes.
+ See examples.
+The configuration of InvoiceTypeIDs to BillingGroupIDs allows for configuration of the name of the invoice type, deposits and balance forwarding.
+NOTE: The Invoice Types need to be set and configured with the Biller before the go live date and it needs to be communicated with the biller that they cannot add / remove Billing Group IDs without the assistance of InvoiceCloud. 
+Example 1: 
+BillingGroupIDs for Accounts
+Billing group contains water and sewer accounts (1 total billing group with BillingGroupID=2)
+BillingGroupID = 2 (water and sewer) maps to InvoiceTypeID = 102
+A value of 100 will be added to the Billing Group ID in Muni-Link so that their BillingGroupID = 1 maps to InvoiceTypeID = 101. A BillingGroupID = 2 maps to InvoiceTypeID = 102.
+Example 2: 
+BillingGroupIDs for Charges
+Billing groups are separate for water and sewer (2 total billing groups)
+BillingGroupID = 4 (water) maps to InvoiceTypeID = 104
+BillingGroupID = 5 (sewer) maps to InvoiceTypeID = 105
+A value of 100 will be added to the Billing Group ID in Muni-Link so that their BillingGroupID = 1 maps to InvoiceTypeID = 101. A BillingGroupID = 2 maps to InvoiceTypeID = 102.
+Required Options
+ID
+Option Description
+Details
+78
+Allow Co-Owners
+On
+This must be on for multi-user to work
+79
+Maximum number of co-owners per account
+10
+Allows 10 uses to be registered for one account
+64
+RTDR override previous 6 hour RTDR check
+On
+This allows RTDR more than once every 6 hours.
+74
+Enable Multiple Customer Log In Functionality
+On
+Allows multiple users on one account.  
+This must be on for multi-user to work
+93
+Virtual Site Display Registration Areas -
+Off
+Registration will happen on Muni-Link
+5
+Allow Registration / Customer Portal
+Off
+Registration will happen on Muni-Link
+41
+Block Customer Portal from Email Updates/Deletes
+Email updates will happen on Muni-Link
+108
+Disable Email Address Update from BIF
+On
+This will prevent the BIF from updating the email on an existing account.
+110
+Abort Invoice File if Duplicates are Found
+True
+The description of this setting is currently worded incorrectly. As of 3/7/22 turning this setting on will actually cause any duplicate to be skipped (and will not fail entire file)
+22
+Allow Paperless Registration outside Customer Portal
+ → Disable (enabled by default)
+Only registered payers should have access. Muni-Link has multiuser. Invoice Cloud updates ML on the account level and not on the user level.
+52
+Customer Portal - Display Paperless Settings for Non-Registered Customers 
+→ Leave disabled (disabled by default)
+Only registered payers should have access. Muni-Link has multiuser. Invoice Cloud updates ML on the account level and not on the user level.
+73
+Customer Portal - Allow AutoPay registration for non-registered Customers
+ → Leave disabled (disabled by default)
+Only registered payers should have access. Muni-Link has multiuser. Invoice Cloud updates ML on the account level and not on the user level.
+82
+Payment Route - Allow AutoPay Registration for One Time payments.
+ → Change to “only authenticated” (default is all customers)
+Only registered payers should have access. Muni-Link has multiuser. Invoice Cloud updates ML on the account level and not on the user level.
+98
+Allow Pay-By-Text Registration for One Time payments
+ → Leave disabled (disabled by default)
+Only registered payers should have access. Muni-Link has multiuser. Invoice Cloud updates ML on the account level and not on the user level.
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Venmo and Paypal
+When configuring Venmo and Paypal set the Payment Type Alias to none so that it posts back the correct payment type to Muni-Link
+Coding Requirements
+Coding Requirements - Jira
+Add the
+ 
+Muni-Link/IC Implementation Worksheet
+ to the SmartSheet Blueprint. This worksheet will need to be exported to Excel and password protected before being sent to Muni-Link.
+Instructions for export and password protection:
+Export to Excel
+Protect Sheet
+Sample Implementation Worksheet:
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Bill Presentment
+Muni-Link or Billers
+Project Start
+If biller prints in house IC will integrate to Muni-Link PDF linking.  Any other Bill Presentment will need to be integrated between IC and Biller or Bill Print Vendor.  Ask the biller if they are doing their printing in house.
+Coding Requirements - Integrations 360
+Advanced Settings
+Edit Advanced Settings to fill in the missing data in the square brackets using values in the excel spreadsheet provided by Muni-Link for the specific biller. IC Integrations will input values like the ones below for the IM to update:
+The following values will not change and will be set by IC Integrations and will not need to be updated:
+Muni-Link Value
+IC Advanced Setting
+Value
+Username TEST and PROD
+21, 89
+InvoiceCloud
+Using the implementation spreadsheet provided by Muni-Link, we can plug in these missing values. These values must be populated for the TEST and PROD portals. The examples below are from the TEST environment:
+Sample Implementation Worksheet for BID 2608 (prod) / 2813 (test):
+note
+The main difference between the TEST and PROD URLs is that the “ic” is no longer prepended
+
+
+The main difference between the TEST and PROD URLs is that the “ic” is no longer prepended
+
+
+Sample Advanced Setting configuration in CRM for BID 2813:
+CRM Advanced Setting input from Smartsheet Implementation Worksheet 
+Testing
+Real-Time Data Refresh
+To test RTDR, invoices must be loaded into the portal. Successful RTDR Response:
+Data Pump
+To test Data Pump, invoices must be loaded into the portal. Enroll/Unenroll an account from Paperless and check the Data Pump Response:
+Contacts
+For billers already in production with Muni-Link: Alex Dionis 
+adionis@muni-link.com
+ or Mariah Papi  
+mpapi@muni-link.com
+For billers in implementation with Muni-Link: Ginger McCarthy 
+gmccarthy@muni-link.com
+Common Errors/Situations
+Anyone using SSO that does not go directly through our portal, does not need Customer Experience training… it will not match us w/ the user experience (specifically for Muni-Link).
+If Muni-Link is not ready to train/demo, IC can do a basic walkthrough - 
+https://app.getguru.com/card/TEEzkXqc/Interactive-Demo-Tours-WalnutReprise
+ 
+Common Questions from Billers
+Ex-ACH/Chargebacks through Data Pump?
+Lessons Learned
+Any knowledge gained through previous implementations of other billers
+Conversion Details
+Any notes necessary for conversion team.  Ex-SSO with Multi User
+ URL:/spaces/IM/pages/1724547580/Muni-Link+Implementation+Details

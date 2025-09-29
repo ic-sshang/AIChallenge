@@ -1,0 +1,164 @@
+Page Navigation
+Document Status
+In Progress
+Yellow
+ 
+Document Owner
+ 
+Knowledge Transfer
+https://us-21061.app.gong.io/call?id=2162863163468542631
+ 
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF File
+SFTP
+Adjustments/Balances
+VertexOne Web Services
+RTDR
+Payments
+VertexOne Web Services
+VertexOne Payment File Spec
+DataPump and SFTP
+Desire is for payments to DataPump real time but also for VertexOne spec remittance file to be sent nightly
+ACH Rejects Posting
+VertexOne Payment File Spec
+SFTP
+ACH rejects will be sent in nightly remittance file.  
+Void
+VertexOne Payment File Spec
+SFTP
+Voids will be sent in nightly remittance file.  
+Change Log - AutoPay Enrollment
+VertexOne Web Services
+Data Pump
+Change Log - Paperless Enrollment
+VertexOne Web Services
+Data Pump
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images 
+PDF Linking - Not Supported*
+PDF Extraction- Not Supported* 
+Template- NOT SUPPORTED
+VertexOne does not create bill images. 
+*If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller. 
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+VertexOne has existing user proxy in their agent portal.  
+Check Free - FISERV - Cash
+Supported 
+Only supported if biller uses our Online Bank Direct Product. 
+This product would be used if municipalities allowed coordinating bill pay with customers banks. A payer will setup a recurring payment or autopay using their bank account and the bank sends over the paper check via FiServ to be applied to the customers account in IC.
+CloudPay
+Supported 
+CPV2 for one time pay and deposits
+CloudStore
+Supported
+EMV
+Supported
+Supported through CPV2
+IVR
+Supported
+Recommended search method-ACCOUNT NUMBER
+Kiosk
+Supported 
+Not in use for first implementation but can be supported in future implementations
+Online Bank Direct - OBD
+Supported 
+Outbound IVR
+Supported 
+.
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Customer can link accounts in VXEngage portal
+       Multi-User Log In
+Supported and Required
+Customers can add users to account in VXEngage portal
+       Co-Owner Registration
+Supported and Required
+ 
+ SSO
+Supported and Required
+SSO redirect pages- 
+2
+ = Customer Portal Paperless Settings
+3
+ = Customer Portal AutoPay Settings
+5
+ = Customer Portal Payment Options
+6
+ = Customer Portal Payment History
+8
+ = Customer Portal Open Bill Listing
+9
+ = Customer Portal Scheduled Payments Listing
+10
+ = Customer Portal Recurring Scheduled Payments Listing
+11
+ = Customer Portal Pay By Text Enrollment
+AutoPay Collection Date
+Supported 
+BIF Customization
+Batch Closure
+Supported
+Recommended Batch Close Time 11:59 PM Local Time
+Billing Options 
+       Balance Forward
+Supported and Required
+Block Payment
+Not Supported
+All blocking of ACH/CC must be done through Biller Portal
+Conveyance
+Not Supported
+Data Conversions
+Supported 
+Biller to provide data for conversion
+Email Notification Schedule
+Supported
+BIF Customization
+Minimum Payment
+Not Supported
+Paperless
+Supported 
+Partial Payments
+Supported 
+BIF Customization
+Past Due Payments
+Supported 
+Past Due Amount Sent in BIF
+Scheduled Payments
+Supported
+Payment Plans
+Not Supported
+Budget Billing
+Not Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Supported 
+IDTech SRED Key
+Supported 
+Ingenico EMV
+Supported 
+Other EMV Devices
+Supported 
+ URL:/spaces/IM/pages/2745597953/VertexOne+CIS+Integration+Software+Details

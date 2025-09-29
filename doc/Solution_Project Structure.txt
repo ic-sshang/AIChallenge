@@ -1,0 +1,94 @@
+Overview
+The goal of this document is to provide a basic structure guideline for new projects that will help with organization, refactoring, dependency injection, and unit testing.  It does not include every possible framework, design approach (DDD, etc…), tool, or feature that a particular application might require.  The structure allows for dependencies to be swapped out using modularity and encapsulation while introducing separation of concerns.  It is meant to be a guideline and not a hard rule.  There will be cases where you will need to break from the convention.
+Solution Structure
+Application References
+Core Project
+The Core project is the center of the application and all other dependencies reference it.  It should not have any dependencies on infrastructure and, in general, use just standard language types for models, classes, base classes, business logic, and interfaces (where necessary). Ideally this project will not have any references to other libraries or projects.  The project will not be executed by itself and should be a Class Library for ease of use.  
+Common naming conventions:
+<ProjectName>.Core
+<ProjectName>.Domain
+<ProjectName>.Business
+The project will contain the design of the business domain (inputs, outputs, events, contracts, business logic).
+Common Contents:
+Entities (not to be confused with EntityFramework entities)
+Models
+Commands
+Aggregates
+Events
+Interfaces
+Exceptions
+Add references to other libraries or projects
+Don't 
+Use standard language types (POCO models, events, interfaces)
+Do 
+Include infrastructure concerns (database, message queues, configuration, key vault, etc…)
+Don't 
+Model the business domain (models, aggregates, entities, events, exceptions, business logic)
+Do 
+Create interfaces to abstract out infrastructure concerns (like data access repositories, or an external HTTP service, logging)
+Do 
+Infrastructure Project(s)
+Infrastructure project(s) will provide implementations of Core interfaces that abstracted away the infrastructure from the business logic.   Infrastructure projects can include dependencies to other libraries and will encapsulate the infrastructure technology like MS SQL, Azure Message Queue, etc.  Core repository interfaces are a great example. The Core defines the aggregate and the infrastructure layer handles how to retrieve/store it and its child entities.  The application is never directly exposed to infrastructure SDKs/APIs; MS SQL, Blob Storage, NewRelic, etc. These projects will not be executed by themselves and should be Class Libraries for ease of use.  
+Common naming conventions:
+<ProjectName>.Infrastructure
+<ProjectName>.Services
+<ProjectName>.DataAccess
+<ProjectName>.Repositories
+<ProjectName>.DAL
+The projects will contain implementations for Core interfaces encapsulating the specifics to technologies for things like database, logging, message queues, storage, etc.
+Common Contents:
+Encapsulated database entities (like EntityFramework Entities)
+Core interface implementations 
+Encapsulated library APIs/SDKs
+Leak infrastructure concerns (expose infrastructure SDKs/APIs)
+Don't 
+Encapsulate infrastructures libraries and technologies (Entity Framework, 
+ADO.Net
+, FTP, File System, Blob Storage, Configuration, etc) through Core interface implementations and models.  
+Do 
+Application Project(s)
+Application project(s) are what users use to interact with the system.  They are used to bootstrap the dependencies and will have a reference to the Core project and Infrastructure project(s).  They are executing and can be MVC Web Apps, Web APIs, ConsoleApps, etc…
+Common naming conventions:
+<ProjectName>.WebApp
+<ProjectName>.WebApi
+<ProjectName>.ConsoleApp
+<ProjectName>.WPF
+The projects typically contain a IoC (inversion of control) container to manage dependencies, application layer specific technology, and the startup and shutdown routines.
+Common Contents:
+Console streams
+MVC controllers
+Razor views
+WPF views
+Main (ConsoleApps)
+IoC Container
+Data Transfer Objects (DTOs)
+Put business logic in the application layer
+Don't 
+Treat the application layer like a presentation layer and a host for the Core and Infrastructure libraries.
+Do 
+UnitTest Project(s)
+UnitTest project(s) are like the application layer.  The tests, like a user, interact with the business logic.  They reference the Core project, are executing, and bootstrap the dependencies.  You can isolate your testing by mocking the Core interfaces removing the need for infrastructure and just test the various inputs/outputs for your business domain.
+Common naming conventions:
+<ProjectName>.UnitTests
+Unit Test References
+Use infrastructure in unit tests, those are integration tests
+Don't 
+Mock Core infrastructure interfaces in unit tests so you are only testing your Core business domain code
+Do 
+IntegrationTest Project(s)
+IntegrationTest project(s) are like unit tests with one distinction, they will reference Infrastructure project(s).   Like unit tests, they are executing and bootstrap the dependencies.  You can isolate your testing of targeted infrastructure by mocking the Core interfaces.
+Common naming conventions:
+<ProjectName>.<InfrastructureProject>.IntegrationTests
+Integration Test References
+Automate these in build pipelines, build agents typically do not have access to the required infrastructure
+Don't 
+Use integration tests to enrich application development and testing in your development environment
+Do 
+ Tips and tricks 
+Create a Core interface for configuration settings.  You might find that the application type might dictate how these settings are retrieved in which case the implementation might be in your application layer (perhaps you are reading from a web.config which is WebApp specific or from command line arguments).  
+Environment variables are a great way to uniformly access settings and are the recommended approach as they can be used in most applications types and deployments.
+Create a separate infrastructure library for data access.  This will help isolate the data access library dependencies from other infrastructure libraries.  Data stores are commonly switched either by reason of change or perhaps as a feature (for example, the application can support either MS SQL or Postgresql).
+Create a Core interface for logging.  This will allow you to easily make changes to logging implementations.  You might find find that the application type might dictate how logging is handled (ConsoleApp vs WebApp) in which case it might make sense to implement the logging in the application layer.
+Ideally a solution will have only one primary executing application layer for ease in deployment.  However, you might find that your project has more than one application layer requirement and one solution is better for organization.  For example suppose your project has a web application that queues the work and a scheduled job that processes it.  If you have more than one application layer of the same type you can use a suggested naming convention of <ProjectName>.<Purpose>.<ApplicationType>.
+When you need to share dependencies between solutions publish the dependencies to a centralized location, like a nuget feed, so both solutions can keep the dependencies up to date. 
+ URL:/spaces/EA/pages/3466854401/Solution+Project+Structure

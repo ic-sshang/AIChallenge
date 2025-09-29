@@ -1,0 +1,74 @@
+Non-Submitter 
+Gross
+NET
+Keep Fees
+Debit the biller for the full amount. 
+ISsue 1
+Red
+ 
+Net out the full amount when funding the biller. 
+Do not keep Fees
+Debit the biller for the principal amount only.  
+Net out the principal amount only when funding the biller. 
+ISsue 2
+Red
+ 
+ISsue 1
+Red
+ 
+https://invoicecloud.atlassian.net/issues/?jql=text%20~%20%22BRAIN-1528*%22%20or%20summary%20~%20%22BRAIN-1528*%22%20or%20key%20=%20BRAIN-1528%20ORDER%20BY%20created%20DESC
+Bring up
+Yellow
+ 
+ISsue 1
+Red
+ Currently it looks like, when we’re processing the chargeback and the terminal is set to gross, the biller only gets debited the principal amount regardless if they keep the fee or not. According to Sara, we should debit the full amount. Seem like we never check if the terminal is set to fund the biller the fees and pass the 
+SubtractConvFee = 0
+, to the stored proc 
+VerifyDisputeFunding.
+There are two methods in the API to process a dispute:
+ACH_ChargebackDisputes
+This is the normal method. Given a list of disputes, the code will use the stored proc 
+VerifyDisputeFunding
+ and return the total amount to dispute. The stored proc has a bit parameter 
+SubtractConvFee
+ that if set to 1 will deduct the convenience fees for the total amount. By default, it’s 1, and it doesn’t look like we set it ever set it so we always deduct the fee.
+ACH_FullAmountRejects
+This method utilizes the method above, it will recreate a request to process a single dispute. However, we utilize the 
+ChargebackAmount 
+and 
+RMMFee 
+parameters to use logic that you can only access by passing a value to those two parameters. This would process whatever 
+ChargebackAmount 
+and 
+RMMFee 
+amount as 2 separate debits.  
+Bring up
+Yellow
+ 
+ISsue 2
+Red
+ Looks like we use the stored proc 
+selNonFundedChargebacks
+ in order to retrieve the chargebacks we are going to net out when funding a biller with a terminal set to repay mode 2. It looks like we never check if terminal is set to keep the fee and thus deduct the fee if they don’t keep the keep. 
+Possible solution
+Green
+ Use stored proc 
+VerifyDisputeFunding
+ 
+2
+1
+0
+0
+2964554256
+2965209336
+1
+Life time of a Payment and it's Dispute .drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Life time of a Payment and it's Dispute .drawio
+0
+2090.4999999999995
+2933.0000000000005
+ URL:/spaces/ED/pages/2965209336/Chargeback+Disputes+and+Failed+Recovery+Payments

@@ -1,0 +1,579 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+EBPP-633
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-1525
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ITR
+13639, 15994
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+Salesforce Link
+Knowledge Transfer
+Gong Recording
+API Documentation
+Unique value per client: Domain (example: 
+https://
+wcxpress.insurity.com
+/Tropics.WebAPI/InvoiceCloud/GetInsuredUnitBalance/{BillerGuid}/{AccountId}
+)
+Additional Details
+IC Use
+Partner API Name
+Request
+Response
+RTDR: Balance Update
+(Open invoicing)
+GetInsuredUnitBalanceHistory
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/GetInsuredUnitBalanceHistory/{BillerGuid}/{AccountId}
+METHOD: GET
+Parameters:
+BillerGuid: Biller Guid shared between Insurity and InvoiceCloud
+AccountId: Insured Unit Id - also known as Account Id
+Return:
+{
+"AccountNumber": string, (Account Number in the .bif file)
+"Success": bool,
+"Message": string
+"Invoices"[]:
+{
+"InvoiceNumber": string (Invoice Number in the .bif file)
+"InvoiceAmount": decimal (Total Amount Due in the .bif file)
+"InvoiceBalance": decimal (Balance Due in the .bif file)
+"InvoiceDate" : string (Invoice Date in the .bif file)
+}
+}
+Data Pump: Payment
+SubmitPayment
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/SubmitPayment
+Example Body Json:
+{
+          "BillerGuid": "0f93638f-d83e-4a25-84ce-c518d800cf60",
+          "AccountId": 57756,
+          "InvoiceId": "ISH5304495",
+          "PaymentAmount": 7777.77
+}
+Parameters:
+BillerGuid: IC Biller GUID
+AccountId: Account Number
+InvoiceId: Invoice Number
+PaymentAmount: Payment Amount (not to include the service fee)
+Json:
+{
+          "Success": bool,
+          "Message": string,
+          “FundId”: string}
+}
+IC will store the ‘FundId’ to be passed back with the NSFPayment web service
+Data Pump: ACH Reject
+NSFPayment
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/NSFPayment
+Headers: 
+Content-Type: application/json
+Example Body Json:
+{
+          "BillerGuid": "0f93638f-d83e-4a25-84ce-c518d800cf60",
+          "AccountId": 57756,
+          "FundId": "867856"
+}
+Parameters:
+BillerGuid: IC Biller GUID
+AccountId: Account Number
+FundId: FundId provided by Insurity as a result of the SubmitPayment API
+Json:
+{
+          "Success": bool,
+          "Message": string
+}
+Data Pump: Paperless Enrollment
+SetPaperlessBillingStatus
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/SetPaperlessBillingStatus
+Headers: 
+Content-Type: application/json
+Example Body Json:
+{
+          "BillerGuid": "0f93638f-d83e-4a25-84ce-c518d800cf60",
+          "AccountId": 57756,
+          "UsePaperlessBilling": "true"
+}
+Parameters:
+BillerGuid: IC Biller GUID
+AccountId: Account Number
+UsePaperlessBilling: True (enrolled) / False (un-enrolled)
+Json:
+{
+          "Success": bool,
+          "Message": string
+}
+Data Pump: AutoPay Enrollment
+SetAutoPay
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI
+/InvoiceCloud/SetAutoPay
+Headers:
+Content-Type: application/json
+Example Body Json:
+{             
+"BillerGuid": "0f93638f-d83e-4a25-84ce-c518d800cf60",
+              "AccountId": 57756,
+               "UseAutoPay": "true"
+}
+Parameters:
+BillerGuid: Biller Guid shared between Insurity and InvoiceCloud
+AccountId: Insured Unit Id – also known as Account Id
+UseAutoPay: bool to choose whether or not the insured uses Auto Pay
+Json:
+{
+               "Success": bool,
+               "Message": (string) UseAutoPay for 57756 set to Y
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Jira Request
+Release Date
+Necessary Settings
+Data Pump: Payment
+SubmitPayment
+Insurity wants to have automatic retries for datapump timeouts. They need to have a deduplication process in place on their end using the PaymentGuid.
+The retry would trigger only for DataPump Payment and when IC receives a failure sure as Timeout Error.
+“We would turn it on for all clients. It’s just that different clients adopt releases at points of their choosing so depending on which release a client has in production they might or might not yet have the change once we implement it. “ - Insurity
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/SubmitPayment
+Example Body Json:
+{
+  "BillerGuid": "0f93638f-d83e-4a25-84ce-c518d800cf60",
+  "AccountId": 57756,
+  "InvoiceId": "ISH5304495",
+  "PaymentAmount": 7777.77,
+  "PaymentGuid": "e99fc166-9d990-4a99-bb16-99fe155ebf99",
+  "PaymentDate": "10/3/2019 10:31:27 AM"
+}
+Parameters:
+BillerGuid: IC Biller GUID
+AccountId: Account Number
+InvoiceId: Invoice Number
+PaymentAmount: Payment Amount (not to include the service fee)
+PaymentGuid: PaymentGUID
+PaymentDate: Date/Time
+ Json:
+{
+          "Success": bool,
+          "Message": string,
+          “FundId”: string}
+}
+IC will store the ‘FundId’ to be passed back with the NSFPayment web service
+Biller needs to confirm that this feature is enabled with Insurity first before being turned on via IC
+[ITG-2734] Datapump automated retries turned on - JIRA (atlassian.net)
+Waiting for Q4 when Insurity is ready. 
+ 
+File Mapping
+Invoice File
+File Extension: BIF
+File Naming Convention: BID_MMDDYYYY------
+File Delimiter:  pipe
+Specification:  N/A - using IC BIF format
+Sample File: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+N/A - Uses IC required FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A - Generated by IC 
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+Blank field
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Today’s date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Invoice Count in file
+statementsInGroup.Count
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Total invoice amount in file
+Sum of transaction amounts for ar_transactions with type of ‘CHARGE’ for each billing statement
+File Header
+7
+RowType
+Y
+TRUE
+N/A - Uses IC required IH
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N for new invoices
+invoiceHeader += BuildInvoiceCloudFileRecord(8, action, 1);
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A - Generated by IC 
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+alpha numeric
+“BLS” prefix + BillingStatementId or “INS” prefix + InvoiceScheduleId
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BillingStatement.StatementDate or InvoiceSchedule.ScheduledPostDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+BillingStatement.StatementDueDate or InvoiceSchedule.ScheduledDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Sum of TransactionAmount in BillingStatementChargesSummary
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+BillingStatement.StatementAmount or PolicyUnit.AccountBalance
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+164 and 165.
+Each biller must have both invoice type IDs set up in CRM. The additional invoice type ID was created to allow billers to disable autopay for invoice type ID 165 if required.
+If a biller needs more Invoice Type IDs, 166/167/etc. can be used.  
+Each biller must have all invoice types setup in CRM
+Invoice Header
+340
+PDFFileName
+Y
+FALSE
+InsuredUnitId + "_BLS" + BillingStatementId
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+ PolicyYear
+Invoice Header
+375
+Active
+Y
+FALSE
+Invoice Header
+58
+RowType
+Y
+TRUE
+N/A - Uses IC required CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+InsuredUnitId
+this value is generally not exposed to the client - may need to be added to the statements for search capability (or possibly the billingstatementID with the prefix listed above)
+Customer Record
+60
+CustomerName
+Y
+TRUE
+DBA name 
+If no DBA name, Insurity sends the 
+InsuredUnit.Name
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+InsuredNumber - BusinessName
+#### - Alpha
+PolicyUnit.InsuredNumberAndBusinessName
+Customer Record
+61
+Address 1
+Y
+FALSE
+billingStatement.PolicyUnit.InsuredUnit.BillingAddress.Address1
+//customerRecord += BuildInvoiceCloudFileRecord(50, p_billingStatement.PolicyUnit.InsuredUnit.BillingAddress.Address1, 65);
+62
+Address2 
+Y
+FALSE
+billingStatement.PolicyUnit.InsuredUnit.BillingAddress.Address2
+//customerRecord += BuildInvoiceCloudFileRecord(50, p_billingStatement.PolicyUnit.InsuredUnit.BillingAddress.Address2, 65);
+63
+City
+Y
+FALSE
+billingStatement.PolicyUnit.InsuredUnit.BillingAddress.City
+//customerRecord += BuildInvoiceCloudFileRecord(50, p_billingStatement.PolicyUnit.InsuredUnit.BillingAddress.City, 65);
+64
+State
+Y
+FALSE
+billingStatement.PolicyUnit.InsuredUnit.BillingAddress.State 
+//customerRecord += BuildInvoiceCloudFileRecord(2, p_billingStatement.PolicyUnit.InsuredUnit.BillingAddress.State, 65);
+65
+Zip
+Y
+FALSE
+billingStatement.PolicyUnit.InsuredUnit.BillingAddress.PostalCodePart1
+//customerRecord += BuildInvoiceCloudFileRecord(50, p_billingStatement.PolicyUnit.InsuredUnit.BillingAddress.PostalCodePart1, 65);
+67
+EmailAddress
+Y
+FALSE
+Can send either the Insured Unit Contact email (UNIT) or the Insured Unit Billing Contact email (BILLING). Driven by the INVCLCNTYP preference
+70
+RowType
+Y
+TRUE
+N/A - Uses IC required ID
+Invoice Detail
+72
+Description
+Y
+FALSE
+Invoice Detail
+79
+LineItemTotal
+Y
+FALSE
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+ 8
+ RTDR EndPoint/WebService URL
+ 
+ See Steadpoint Insurance Group (BID: 1800) as example
+ Y
+ 11
+DataPump Payments EndPoint/WebService URL
+ 
+ See Steadpoint Insurance Group (BID: 1800) as example
+ Y
+ 14
+ DataPump Paperless EndPoint/WebService URL
+ 
+ See Steadpoint Insurance Group (BID: 1800) as example
+ Y
+ 17
+ DataPump AutoPay EndPoint/WebService URL
+ 
+ See Steadpoint Insurance Group (BID: 1800) as example
+ Y
+ 101
+ DataPump ACH Rejects EndPoint/WebService URL
+ 
+ See Steadpoint Insurance Group (BID: 1800) as example
+ Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF customization - on biller questionnaire
+AutoPayCollectionDate
+BIF customization - on biller questionnaire
+BalanceForward
+in BIF
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - on biller questionnaire
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF customization - on biller questionnaire
+ThirdNotifyRequestedDate
+BIF customization - on biller questionnaire
+User Interaction and Design
+Data Flow - Recurring Invoice
+att392364048
+183074825
+1
+Insurity Invoices
+IM
+att394297347
+att394264577
+0
+Data Flow- Self Reporting Invoice
+att465469466
+183074825
+1
+Insurity Self Reporting Invoice Flow
+IM
+att467173418
+att465698843
+0
+Data Flow - Adjustments
+att465862715
+183074825
+1
+Insurity Adjustment- RTDR Flow
+IM
+att465862710
+att467533865
+0
+Data Flow - Payment
+att465469458
+183074825
+1
+Insurity Payments
+IM
+att465862722
+att467533870
+0
+Data Flow - ACH Reject
+att467206207
+183074825
+1
+Insurity ACH Reject Flow
+IM
+att467533884
+att467468314
+0
+Data Flow - Change Log
+att465862745
+183074825
+1
+Insurity Change Log Flow
+IM
+att465862740
+att465338460
+0
+Data Flow - Bill Presentment
+att465469476
+183074825
+1
+Insurity PDF flow
+IM
+att465469471
+att467173425
+0
+Payer Experience- Recurring Billing
+Payers will log into the Insurity portal and be redirected to Invoice Cloud to make all payments via iFrames.
+Payer Experience- Self Reporting
+Biller Experience
+Biller will use IC Biller Portal for account management. 
+From ‘My Policies’ in side nav as an insured user (after user has logged into the portal)
+Click View
+Click Billing tab
+Click Pay Now
+ 
+ 
+Then opens to IC
+ 
+ 
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoiceFile
+Insurity sends BIF data
+Information Only
+Initial web service used for Balance Forward RTDR - no longer used
+IC Use
+Partner API Name
+Request
+Response
+RTDR: Balance Update
+GetInsuredUnitBalance
+URL: 
+https://wcxpress.insurity.com/Tropics.WebAPI/InvoiceCloud/GetInsuredUnitBalance/{BillerGuid}/{AccountId}
+ 
+Parameters:
+BillerGuid: IC Biller GUID
+AccountId: Account Number
+Json:
+{
+          "Balance": decimal,
+          "Success": bool,
+          "Message": string
+}
+ URL:/spaces/IM/pages/183074825/Insurity+WCXP+Technical+Design

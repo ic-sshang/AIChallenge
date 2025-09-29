@@ -1,0 +1,74 @@
+Scheduled Changes
+Pre work
+Saturday Evening at 8 PM run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+ 
+Saturday Evening at 9:30 PM pull web servers IC-Web6 - 10 out of pool and kick off updates 
+Sunday morning 4:30 AM Move App/Skybot, proxy, gateway, and SFTP servers into the October WSUS group and kick off updates 
+ 
+ 
+Sunday Morning at 4:45 AM run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+ 
+Day of:
+Notify dailyops and maintenance slack channels of maintenance starting 
+ 
+ 
+Put pingdom in maintenance mode (only if putting up the maintenance page) 
+ 
+ 
+ 
+Primary Work
+Patch Server Patch Web, App, Gateway, SFTP and Proxy Servers
+ 
+ 
+ 
+PLAT-1137
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Patching Procedure
+Update Tracking 10-20-2024.xlsx
+INFRA-453
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-872
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+PLAT-870
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+PLAT-964
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Test Plan
+Run the Smoke Tests on 
+www.invoicecloud.com
+ 
+ 
+Run full regression tests on 
+www.invoicecloud.com
+ 
+ 
+Post-Steps
+Start the Jobs - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+Notify dailyops and maintenance channels of maintenance finished and results
+ 
+ URL:/spaces/icinfradoc/pages/3634855986/10+20+2024

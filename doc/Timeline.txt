@@ -1,0 +1,35 @@
+Effort
+Notes
+Completion Date
+Completed
+Jira Story
+Move Tooling Cluster To Spoke vnet
+This is something that has been put off, but will ensure that we’re following simplified new gen routing patterns.
+We’ll need to lean on Scott and his team for this effort
+Note: Bypassing this step will create tech debt.
+8/31/2024 
+After PCI Compliance, and depends on bandwidth.
+ 
+Deploy AWX Operator to the Tooling Cluster
+https://ansible.readthedocs.io/projects/awx-operator/en/latest/
+ 
+9/6/2024
+Configure AWX to use Azure AD Authentication
+We’ll want to support Azure AD authentication to AWX to ensure we can manage everything from AAD instead of local accounts
+9/9/2024
+AWX R&D
+Spend time getting familiar with AWX
+9/13/2024
+Configure Hosts (Servers) to allow for WinRM management
+Windows servers require Ansible to use WinRM to run Ansible playbooks. We’ll want to explore using certificate based authentication per Jesse instead of static credentials
+9/20/2024
+Develop Windows Server patching runbook with Ansible
+Use existing community role to generate our patching automation 
+Ansible Windows Update Module
+9/27/2024
+Manual Run Windows Patch Playbook against Non-Production Hosts
+10/4/2024
+Manual Run Windows Patch Playbook against Production Hosts
+(Last maintenance window in October)
+Optional: Schedule patching to automate further
+ URL:/spaces/platform/pages/3403415580/Timeline

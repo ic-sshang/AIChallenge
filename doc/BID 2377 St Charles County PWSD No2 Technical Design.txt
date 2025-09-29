@@ -1,0 +1,445 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+ITR
+16806
+Document status
+Done
+Green
+Document owner
+ 
+File Mapping
+Invoice File
+File Extension: .csv
+File Naming Convention: billprint-2597-part1.csv
+File Delimiter: comma , 
+Specification: 
+https://invoicecloud.box.com/s/pkkts8idps17xf0sgduu0fiqtog1c5wr
+Sample File: 
+https://invoicecloud.box.com/s/7qrqseiy9wlzgsnurme2x9scermu9go7
+File Transfer Frequency: At billing
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Notes
+Partner Field Format
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC will need to map to FH
+ 
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC will need to map to BillerGUID
+ 
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC will need to use current date
+ 
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC will need to count invoices
+ 
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC will need to total dollar amount of invoices
+ 
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC will map to IH
+ 
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC will map to IH
+ 
+Invoice Header
+9
+InvoiceFormatGuid
+ N
+TRUE
+N/A - IC will map to InvoiceFormatGuid
+ 
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+Bill Number 
+BILL record row, position 2 
+Numeric
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill Date
+BILL record row, position 28
+MM/DD/YYYY
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+BILL record row, position 30
+MM/DD/YYYY
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Current Bill Amount
+BILL record row, position 40
+money
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Previous Reading
+MTR 1 Record Position 7
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Current Reading
+MTR 1 Record Position 8
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Usage
+MTR 1 Record Position 9
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Service From Date
+Bill Record Position 31
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Service To Date
+Bill Record Position 32
+Invoice Header
+43
+Custom6
+N
+FALSE
+Number of Days
+DateDif of Custom5 and Custom4
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Previous Balance
+Bill Record Position 33
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Payments
+Bill Record Position 34
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Adjustments
+Bill Record Position 35
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Last Payment Amount
+Bill Record Position 49
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Balance Due
+BILL record row, position 41
+Money
+Invoice Header
+94
+Custom11
+Y
+FALSE
+Service Address 1
+Bill record row, position 11
+String
+Invoice Header
+95
+Custom12
+Y
+FALSE
+Meter Type
+MTR 1 Record row, position 4
+Invoice Header
+96
+Custom13
+Y
+FALSE
+Meter 
+Type
+MTR 2 Record Row, Position 4
+Invoice Head
+er
+97
+Custom14
+Y
+FALSE
+Previous Reading
+MTR 2 Record Row, Position 7
+Invoice Header
+98
+Custom15
+Y
+FALSE
+Current Reading
+MTR 2 Record Row, Position 8
+Invoice Header
+99
+Custom16
+Y
+FALSE
+Usage
+MTR 2 Record Row, Position 9
+Invoice Header
+100
+Custom17
+Y
+FALSE
+Meter Type
+MTR 3 Record Row 2, Position 4
+Invoice Header
+101
+Custom18
+Y
+FALSE
+Previous Reading
+MTR 3 Record Row 2 Position 7
+Invoice Header
+102
+Custom19
+Y
+FALSE
+Current Reading
+MTR 3 Record Row 2, Position 8
+Invoice Header
+103
+Custom20
+Y
+FALSE
+Usage
+MTR 3 Record Row 2, Position 9
+Invoice Header
+104
+Custom21
+Y
+FALSE
+Message Text
+MSG Record Row, Position 4
+Invoice Header
+407
+PastDue
+Y
+FALSE
+Past Due Balance
+Bill Record Position 36
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account Number - Account Sequence
+BILL record row, position 5. This will need to be combined with Account Suffix (BILL record row, position 6) record separated with a dash. Example: A0300170-1
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Name on account
+BILL record row, position 8
+Customer Record
+61
+Address1
+Y
+FALSE
+Mail to Address 1
+BILL record, position 19
+Customer Record
+62
+Address2
+Y
+FALSE
+Mail to Address 2
+BILL record, position 20
+Customer Record
+63
+City
+Y
+FALSE
+Mail to City
+BILL record, position 21
+Customer Record
+64
+State
+Y
+FALSE
+Mail to State
+BILL record, position 22
+Customer Record
+65
+Zip
+Y
+FALSE
+Mail to ZIP
+BILL record, position 23
+Customer Record
+83
+CustomField1
+Y
+FALSE
+Service
+SVC Record Position 5
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Amount
+SVC Record Position 7
+Invoice Detail
+Adjustment/Daily Balance File
+File Extension csv
+File Naming Convention: cifexport.csv
+File Delimiter:  comma , 
+Specification: Daily balance file that contains the account number and the current balance of the account for all accounts in StCharles County
+Sample File: 
+File Transfer Frequency: Daily - Muni-Link will automate upload to IC SFTP on a daily basis
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Positon in File
+Partner Field Character Limit
+Record Type
+AccountNumber
+Y
+TRUE
+Account Number
+String
+Account Number
+1st position
+N/A
+Adjustment Record
+Amount Due
+Y
+TRUE
+BALANCE
+Money
+Balance of account
+3rd Position
+N/A
+Adjustment Record
+Payment/Lockbox File
+File Extension: .csv
+File Naming Convention: InvoiceCloudPayments_YYYYMMDD
+File Delimiter: Comma ,
+Specification: 
+Sample File: 
+Note: 
+File Transfer Frequency:  After nightly batch close
+Field
+Data Type
+Format
+Values
+Invoice Cloud Field
+Account
+String
+Account
+Amount
+Money
+Amount Paid
+PaymentDate
+Date
+MMDDYYYY
+Payment Date
+Reference
+String
+Paymentech Reference number
+Confirmation Number
+String
+This is the number the payer recieves i.e. “Approved 12345678”
+Confirmation number
+Change Log File
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: Pipe |
+Specification: 
+Sample File: 
+https://invoicecloud.box.com/s/f3ec0m02fzqroulhovcah8mlxw6alblg
+Notes:  This is identical to the Avondale project’s change log file. This file should contain headers.
+File Transfer Frequency:  Daily
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+String
+Account Number from IC database
+AutoPayEnroll
+String
+Y/N value upon enrollment
+AutoPayUnenroll
+String
+Y/N value upon unenrollment
+PaperlessEnroll
+String
+Y/N value upon enrollment
+PaperlessUnenroll
+String
+Y/N value upon unenrollment
+Email Address
+String
+Email address change
+ URL:/spaces/IM/pages/941260801/BID+2377+St+Charles+County+PWSD+No2+Technical+Design

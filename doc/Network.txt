@@ -1,0 +1,329 @@
+Table of Contents
+1
+6
+false
+default
+list
+true
+Introduction
+The Private Network Architecture for InvoiceCloud is evolving from Flat Network Architecture (what we call our Legacy Networks) that did not have any Environmental Segmentation to a 
+Modern Hub and Spoke Network Architecture
+ that achieves a full air-gapped Network Segmentation between the NonProd and Production Network Lanes following Network Security Best Practices.
+Diagram
+1
+0
+3557031988
+3537338401
+true
+network-architecture.drawio.svg
+2
+0
+68
+https://invoicecloud.atlassian.net/wiki
+network-architecture.drawio.svg
+0
+kqf_aG30-MlXnVOoSkw8 1
+9760.500000000002
+auto
+top
+1
+4049.344000000001
+The Modern Networks
+Prod Network Lane
+Enterprise Prod
+ Subscription
+vnet-pri-hub2
+10.211.0.0/16
+ :: 
+10.211.0.0 - 10.211.255.255
+This is the 
+Production Environment
+’s 
+Primary Region
+ Network Lane Hub VNet based on the 
+Hub and Spoke Network Architecture
+.  This VNet contains the Palo Alto Firewall appliance for Layer 3 traffic controller, the AppGateway Layer 7 traffic controller, the Kong API traffic controller, and a Tooling AKS Cluster that is being phased out in favor of a Tooling Cluster located in a Spoke Network.
+vnet-sec-hub2
+10.212.0.0/16
+ :: 
+10.212.0.0 - 10.212.255.255
+This is the 
+Production Environment
+’s 
+Secondary Region
+ Network Lane Hub VNet based on the 
+Hub and Spoke Network Architecture
+.  This VNet contains the Palo Alto Firewall appliance for Layer 3 traffic controller and a Tooling AKS Cluster that is being phased out in favor of a Tooling Cluster located in a Spoke Network.
+vnet-pri-eus-avd1
+10.242.0.0/22
+ :: 
+10.242.0.0 - 10.242.3.255
+This is a Spoke Network peered to the Production Environment’s Primary Region Hub that contains User AVD instances.
+vnet-sec-wus-avd1
+10.242.4.0/22
+ :: 
+10.242.4.0 - 10.242.7.255
+This is a Spoke Network peered to the Production Environment’s Secondary Region Hub that contains User AVD instances.
+vnet-pri-demo1-prd
+10.224.160.0/19
+ :: 
+10.224.160.0 - 10.224.191.255
+This is a Spoke Network peered to the Prod Hub that we want to begin to migrate Resources that support Demo Workloads into for better Network Segmentation Security modeling and so we can more easily identify which Resources host Demo Workloads versus which Resources host true Production Workloads.
+vnet-pri-paas-int1-prd
+10.224.64.0/19
+ :: 
+10.224.64.0 - 10.224.95.255
+This is a Spoke Network peered to the Prod Hub that enables PaaS Resources to communicate with our Prod SQL Servers via Private Endpoints which is required due to our Security Governance Model related to Network Access to data stores that contain Payment Card data.
+vnet-pri-payer3-prd
+10.224.0.0/19
+ :: 
+10.224.0.0 - 10.224.31.255
+This is a Spoke Network peered to the NonProd Hub that contains the Payer NextGen’s Production 
+Environment
+ AKS Cluster and related Resources.
+vnet-pri-synapse1
+10.241.0.0/16
+ :: 
+10.241.0.0 - 10.241.255.255
+This is a Spoke Network peered to the NonProd Hub that contains the Enterprise Data Warehouse (EDW) Team’s Production Synapse instance.
+vnet-pri-tooling1-prd
+10.224.96.0/19
+ :: 
+10.224.96.0 - 10.224.127.255
+This is a Spoke Network peered to the NonProd Hub that contains the Tooling Cluster instance that is intended to be long lived.  There is a Tooling Cluster connected to the Hub Network but we want to migrate away from that Tooling Cluster instance because it is preferred to have the Tooling Cluster traffic go thru the Firewall when connecting to other Resources due to Security and Auditing and the best practice to achieve that traffic pattern is to have the source of the traffic in a Spoke and not in the Hub itself to make the Route Tables manageable. 
+NonProd Network Lane
+Sandbox
+ Subscription
+vnet-pri-hub2-sbx
+10.152.0.0/16
+ :: 
+10.152.0.0 - 10.152.255.255
+This is the NonProd Network Lane's Hub VNet in a 
+Hub and Spoke Network Architecture
+ which contains the Palo Alto Firewall appliance for Layer 3 traffic controller, the AppGateway Layer 7 traffic controller, the Kong API traffic controller, and a Tooling AKS Cluster that is being phased out in favor of a Tooling Cluster located in a Spoke Network.
+vnet-pri-saucelabs1-sbx
+10.166.0.0/24
+ :: 
+10.166.0.0 - 10.166.0.255
+ 
+This is a Spoke Network peered to the NonProd Hub and contains the 
+SauceLab’s
+ Agent hosted in an Azure Container Instance (ACI).  The Agent allows for SauceLab’s SaaS Platform to access our non-publicly accessible Azure Resources. 
+Primary-Subscription
+vnet-pri-paas-int-cus1-npd
+10.192.160.0/21
+ :: 
+10.192.160.0 - 10.192.167.255
+This is a Spoke Network peered to the NonProd Hub and contains the VM 
+keith-test
+ and a VMMS related to our NonProd AzureBatch instance.
+Enterprise Dev/Test
+ Subscription
+vnet-pri-eus-avd1-npd
+10.168.4.0/22
+ :: 
+10.168.4.0 - 10.168.7.255
+This is a Spoke Network peered to the NonProd Hub that contains Users NonProd AVD instances.
+vnet-pri-paas-int1-npd
+10.192.64.0/19
+ :: 
+10.192.64.0 - 10.192.95.255
+This is a Spoke Network peered to the NonProd Hub that enables PaaS Resources to communicate with our NonProd SQL Servers via Private Endpoints which is required due to our Security Governance Model related to Network Access to data stores that contain Payment Card data.
+vnet-pri-payer3-dev
+10.192.0.0/19
+ :: 
+10.192.0.0 - 10.192.31.255
+This is a Spoke Network peered to the NonProd Hub that contains the Payer NextGen’s Development 
+Environment
+ AKS Cluster and related Resources.
+vnet-pri-payer3-iat
+10.197.0.0/19
+ :: 
+10.197.0.0 - 10.197.31.255
+This is a Spoke Network peered to the NonProd Hub that contains the Payer NextGen’s Internal User Acceptance Testing 
+Environment
+ AKS Cluster and related Resources.
+vnet-pri-payer3-qar
+10.186.0.0/19
+ :: 
+10.186.0.0 - 10.186.31.255
+This is a Spoke Network peered to the NonProd Hub that contains the Payer NextGen’s Quality Assurance (Quality Engineering) Testing 
+Environment
+ AKS Cluster and related Resources.
+vnet-pri-payer3-xat
+10.155.0.0/19
+ :: 
+10.155.0.0 - 10.155.31.255
+This is a Spoke Network peered to the NonProd Hub that contains the Payer NextGen’s External User Acceptance Testing 
+Environment
+ AKS Cluster and related Resources.
+vnet-pri-synapse1-dev
+10.195.0.0/16
+ :: 
+10.195.0.0 - 10.195.255.255
+This is a Spoke Network peered to the NonProd Hub that contains the Enterprise Data Warehouse (EDW) Team’s NonProd (Development) Synapse instance.  The EDW Team’s SDLC does not match the Application Development Teams SDLC so they only need one NonProd instance they use for both Development and Testing purposes.
+vnet-pri-tooling1-npd
+10.192.96.0/19
+ :: 
+10.192.96.0 - 10.192.127.255
+This is a Spoke Network peered to the NonProd Hub that contains the Tooling Cluster instance that is intended to be long lived.  There is a Tooling Cluster connected to the Hub Network but we want to migrate away from that Tooling Cluster instance because it is preferred to have the Tooling Cluster traffic go thru the Firewall when connecting to other Resources due to Security and Auditing and the best practice to achieve that traffic pattern is to have the source of the traffic in a Spoke and not in the Hub itself to make the Route Tables manageable. 
+Satellite Networks
+Enterprise Dev/Test
+ Subscription
+vnet-pri-load-test1-dev
+10.0.0.0/16
+ :: 
+10.0.0.0 - 10.0.255.255
+This is a Satellite Network (i.e. not peered to any of the other Networks) that contains our Azure Load Testing instance.
+The Legacy Networks
+Both Network Lanes
+Primary-Subscription
+ADDS-Network-East
+ 
+10.16.0.0/28
+ :: 
+10.16.0.0 - 10.16.0.15
+ 
+This Network contains the Azure Active Directory Service Hosts which are used by most Legacy VNets for Private DNS Resolution.
+Prod Network Lane
+Primary-Subscription
+InternalNetwork
+ 
+10.0.0.0/18
+ :: 
+10.0.0.0 - 10.0.63.255
+This is the main Legacy Network that contains the all the Legacy Production Virtual Machine (VM) Hosts, as well as the VM Hosts for the Quality Assurance (QA) and Preview 
+Environments
+.  It has become a Spoke of the Prod Network Lane but many characteristics are different from our Modern Spokes such as the Route Table signatures of the Subnets contained in the Network.
+vnet-east-akstooling-legacyapps
+ 
+10.150.0.0/19
+ :: 
+10.150.0.0 - 10.150.31.255
+This is the Network that contains the Legacy Selenium Grid that is used as a backup to the Quality Engineering (QE) Team’s main Browser Test Runner, 
+SauceLabs
+.
+AZBatch_Prod
+10.8.0.0/16
+ :: 
+10.8.0.0 - 10.8.255.255
+10.9.0.0/16
+ :: 
+10.9.0.0 - 10.9.255.255
+This Network contains the Virtual Machine Scale Set (VMSS) Runners for two of our Production Azure Batch instances 
+Standard_Notifications_Pool
+ and 
+icautopay_pool
+. 
+VNET-West2
+10.5.0.0/16
+ :: 
+10.5.0.0 - 10.5.255.255
+This Network contains the 
+AlienVault-West
+ VM used to ingest some data into the InvoiceCloud AlienVault instance.  This Network also contains many orphaned Network Interface Cards, Load Balancers, and an unused Virtual Network Gateway.  
+NonProd Network Lane
+Enterprise Dev/Test
+ Subscription
+vnet-east-infra-common-app-dev
+10.33.0.0/16
+ :: 
+10.33.0.0 - 10.33.255.255
+This Network contains NonProd VMs that are supposed to mirror the Production App Servers (Backend process servers) for the Development, QA, and Preview environments.
+vnet-east-infraQA1to6-dev
+10.32.0.0/16
+ :: 
+10.32.0.0 - 10.32.255.255
+This Network contains NonProd VMs that are supposed to mirror the Production Web Servers for the Development Environment.  Specifically, it contains what are known as DevTest VMs 1 thru 6.  It also contains a Load Balancer in front of the VMs and a Routing Rule for each VM which is not in a parity with Production
+vnet-east-infraQAcommon-dev
+10.31.0.0/16
+ :: 
+10.31.0.0 - 10.31.255.255
+This Network contains NonProd VMs that are supposed to mirror the Production Web Servers for the Development Environment.  Specifically, it contains what are known as DevTest VMs 8 thru 14.  It also contains a Load Balancer that is not fully or correctly setup.
+Satellite Networks
+Primary-Subscription
+AzBatch_Test
+10.10.0.0/25
+ :: 
+10.10.0.0 - 10.10.0.127
+10.10.1.0/25
+ :: 
+10.10.1.0 - 10.10.1.127
+10.10.2.0/25
+ :: 
+10.10.2.0 - 10.10.2.127
+This Network contains the Virtual Machine Scale Set (VMSS) Runners for one of our NonProd Azure Batch instances 
+AzBatch_Test_ControllerPool
+. 
+InternalNetwork-Test
+10.249.0.0/18
+ :: 
+10.249.0.0 - 10.249.63.255
+This Network contains a single VM named 
+Hatsh-Prod
+ that is running at ~1% CPU Utilization.
+Sandbox
+ Subscription
+IC-lftp-test-vnet
+10.0.0.0/16
+ :: 
+10.0.0.0 - 10.0.255.255
+This Network contains one VM named 
+IC-lftp-test
+ and is turned off. 
+Enterprise Dev/Test
+ Subscription
+vn-icdevapp-devtest
+10.0.0.0/16
+ :: 
+10.0.0.0 - 10.0.255.255
+This Network contains a Private Endpoint that no longer has a Resource behind it and Subnet Delegate to Server Farms, however, it is unclear if any Resources are actually using that Subnet Delegation.  This Network is not peered to any other Network but does have a Service Endpoint to Storage configured on the Subnet with the Delegation.
+No Longer Used Networks
+The following Networks are tentatively scheduled to be Deleted on 9/22/2024 because they have no Connected Devices:
+Primary-Subscription
+DTLICWilsonTest
+DTLJesusLab
+DTLJesusLab1
+DTLJesusLab2
+DTLQA-LAB
+DTLQA-Lab4
+DTLQA-Lab5
+DTLQALab2
+DTLQALab3
+DTLQALab4
+EndPointTest
+Hat.sh-Prod-vnet
+internalnetwork-asr
+ from 
+Primary_RG-asr-1
+internalnetwork-asr
+ from 
+Primary_RG-asr
+internalnetwork-asr
+ from 
+RG-PROD-TERM-asr
+internalnetwork-asr
+ from 
+RGSecurity-asr-1
+internalnetwork-asr
+ from 
+RGWeb-asr-1
+InternalNetworkWest
+ from 
+Primary_RG
+RG-Security-West-vnet
+RGSecurity-vnet
+RGWeb-vnet
+Sandbox
+ Subscription
+rg-east-qa-env-vnet
+rg-global-iv2-sbox-existingvms-vnet
+rg-global-iv2-sbox-existingvms2-vnet
+rob-winsvr-vnet
+vnet-aci-sbox
+vnet-packertraining
+vnet-pri-payer3-sbx
+Enterprise Dev/Test
+ Subscription
+AzBatch_DevTest
+ URL:/spaces/platform/pages/3537338401/Network

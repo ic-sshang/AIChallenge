@@ -1,0 +1,346 @@
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+:speech_balloon:
+1f4ac
+💬
+#DEEBFF
+3/9/2023
+ - Updated 
+Daily OBD Info (weekdays) 2-13-2023 to 3-8-2023.xlsx
+3/8/2023
+ - Attached 
+Daily OBD Info 2-13 to 3-7 (2023).xlsx
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ 
+ Dark Clouds Above
+ 
+ Bad Things, Man
+ 
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+IN PROCESS
+Yellow
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Problem Alignment
+Due to the OBD processing being in a single job, each biller has to wait until the billers ahead of them are finished. The unmatched payments can sometimes take several hours into the morning before becoming available in the biller portal Pending Payments section. Ideally the billers will have access to these first thing in the morning.
+High volume of OBD at the end of a quarter can already cause long processing times. Considering our number of OBD billers is ever increasing, this will eventually become a significant problem if it’s not addressed.
+We’d like to run multiple instances of the application instead of a single job, which would reduce the amount of time to process the entire run. We plan to implement this in the same way we do Auto Pay (Azure batch).
+ Objective
+This will reduce the amount of time and number of errors that occur during the RPPS process, which will improve biller satisfaction by allowing them to match payments earlier in the morning. This aligns with the company goal of increasing OBD adoption among existing and new billers in 2023. It will improve performance and allow us to accommodate for larger billers that will be signed in the future without negatively affecting our other billers. It allows us to scale up the system as needed.
+ Success Metrics
+List the project goals and metrics that will be used to determine its success.
+Goal
+Metric
+Current
+Good
+Great
+Improve biller satisfaction by allowing OBD user matching earlier in the day
+Average run time on weekdays
+153m
+90m
+<60m
+Reduce IT involvement
+Number of job failures that occur during process
+ 40%
+15%
+<5%
+Reduce Auto Match process time
+Duration of Auto Match process
+ TBD
+ 
+ 
+ Target Audience
+Group
+Impact
+OBD billers
+Billers have to wait until the OBD process finishes before they can go match payments in the biller portal.
+Engineering
+Engineering has to get involved when the OBD process fails, which takes up valuable time.
+Sales
+This would give them a better selling point by advertising a quicker time frame to access OBD payments.
+ 
+User Interaction and Design
+ Components Impacted
+What components within the Invoice Cloud platform will be impacted?
+Component
+Impact
+MC_RPPS application
+Check for import completion before running
+OBD auto match process 
+Reduce processing time to get through entries for a biller
+MC_RPPS import process
+TBD
+Azure batch
+Running MC_RPPS application per biller
+create batch account
+create new pool
+Azure batch runner
+Pass in skybot job MC_RPPS
+ Technical Architecture
+The file import process usually takes about 10 minutes to add 15K records to the rpps entries table for each biller found in the files.
+High level workflow for new OBD process
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Serviceability/Observability
+Log all metric data to NR to create dashboards and reports to gather high level information and craft alerting around key metrics.
+After application is deployed, check to see if we hit goal metrics. Compare to prior years to show the improvements.  The past 2 years of data was gathered in a separate endeavor and is available to verify improvement.
+Monitor number of errors to ensure this is decreased as expected.  We have a few items on the team that will help improve the error rate.  I talked to the team and most of the errors are usually resolved in 15 min or less.  Some uncommon ones can take 1-2 hours of research and updates/reruns.  We should follow up to make sure this frequency has decreased after release.
+For each biller in the months after the release, we should add additional visibility in the biller portal highlighting OBD status and overall progress, payments imported, percentage complete, and Auto-match rate for day/month/year.
+:info:
+atlassian-info
+#B3D4FF
+Continue to populate these items as the project continues
+ Project Participants
+Name
+Company
+Team
+Role
+Byron King
+Invoice Cloud
+Billing Me Softly
+Technical Lead
+John Whitworth 
+Invoice Cloud
+Billing Me Softly
+Product Manager
+Sean Concannon
+Invoice Cloud
+Billing Me Softly
+Software Engineer
+Chris Ison 
+Invoice Cloud
+Billing Me Softly
+Software Engineer
+Eddie Cuellar
+Invoice Cloud
+Billing Me Softly
+Software Engineer
+Taffy Sierra
+Invoice Cloud
+Billing Me Softly
+Software Engineer
+Yelena Malinin
+Invoice Cloud
+Billing Me Softly
+Software Engineer, Data
+ Requirements
+Change to rely on Jira, pull in epic details
+Requirement
+Importance
+Jira Link
+Notes
+Reduce frequency of errors in OBD process
+HIGH
+Red
+ 
+ 
+Reduce OBD job time
+HIGH
+Red
+ 
+ 
+ 
+Run multiple billers simultaneously 
+HIGH
+Red
+ 
+ 
+ 
+Add robust logging for visibility into metrics and processes currently lacking insight
+HIGH
+Red
+ 
+Retry logic and notifications upon job failure
+HIGH
+Red
+ 
+ Competitive Analysis
+Do our competitors offer this feature?  What do we know about it?  Do they charge for it?  Do we have existing clients who have experience with it?
+ 
+ Dependencies
+Dependency
+Team/Product
+Notes
+Define the dependency and need
+ 
+Who/What is the dependency with?
+ 
+ 
+ 
+ 
+ 
+ 
+ Assumptions
+List any assumptions you have about your users, technical constrains, business goals, etc.
+Spend 6-8 weeks on this project to allow scaling as we gain more OBD billers over time.
+Auto Match process will still consume a significant amount of time and likely needs to be addressed at some point
+ 
+ Timeline
+Event
+Date
+Confidence
+Status
+Kickoff call
+ 
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Design review
+ 
+ 
+Low
+Red
+ 
+INCOMPLETE
+Red
+ 
+Creation of IC OBD Controller application
+ 
+ 
+HIGH
+Green
+     
+INCOMPLETE
+Red
+ 
+Write code to generate check for successful import
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+OBD Azure batch application start
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+How long to set up a dev/test env for azure batch?
+BMS
+Here is the answer to that question
+Type // to add a date
+ Once the test plan is fleshed out, will it increase the overall time to complete the project?
+ BMS
+ 
+ 
+ 
+ 
+ 
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+ Auto Match process will not be modified. Likely needs to be addressed in another project.
+ 
+ 
+ Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+ 
+ 
+Early Access Billers
+ 
+ 
+All Billers
+ 
+ 
+Partners
+ 
+ 
+Internal \ Training
+ 
+ 
+Internal \ Support+CSM
+ 
+ 
+Internal \ Sales
+ 
+ 
+Internal \ Boarding
+ 
+ 
+Internal \ General
+ 
+ 
+Add rows if needed
+ 
+ 
+ Epic / Issues
+EBPP-6391
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+System JIRA
+type,key,summary,status,priority
+10
+"Epic Link" = EBPP-6391 
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+ Attachments
+ URL:/spaces/PRODUCT/pages/2567536675/OBD+Azure+batch+project

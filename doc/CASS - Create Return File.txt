@@ -1,0 +1,29 @@
+ Problem
+There was an issue with 4 individual returns not processing on CASS’s end which led to Customers not having their money returned back to them. 
+ Solution
+Stakeholders agreed this was a one-time scenario and we will create a Return File manually and have it processed on the next business day. 
+Get the return file where the return record was rejected.
+Documentation can be found in the MasterCard RPPS Technical Reference Guide.
+Using this example:
+“9“ Record - last line in the file.
+Blue - Total Number of batches in the file called Batch Count with the size of 6 characters.
+Green - Total number of Entry Detail in the file called Entry Count with the size of 8 characters.
+Yellow - Sum of all entry detail debit transactions. Dollar value unsigned; $$$$$$$$$ $¢¢.                  i.e: 0000002000 = $20.00
+Orange - Batch Number. Size is 7. first 3 characters are left padded julian date followed by (next 4 characters) incrementing number. i.e. if today is Jan. 2 then our julian date is 002. so the first batch header’s batch number is 0020001 followed by 0020002 and so forth.
+Purple - TraceNumber - Inverted of BatchNumber ({incrementingnumber}{juian date}. i.e. if today is Jan 2 - 1000002 and then 2000002, etc.
+Save the file in RPPS\out\mcrpps and make sure the filename has today's date and there is no .processed extension on the file.
+Once the file is there, the MC_RPPS -cassrun should be able to pick it up and send it to MasterCard via FTP.
+There are a lot of ways MC can reject the file - please check with the documentation to make sure we are passing in the correct format (Batch Header Record of the Concentrator Send Return).
+MasterCard will reject the record if there is a duplicate of the RPPSBillerID, BatchNumber, TraceNumber in the last 45 days.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@89f
+modified
+false
+true
+page
+kb-troubleshooting-article
+label = "kb-troubleshooting-article" and type = "page" and space = "ED"
+ URL:/spaces/ED/pages/2783346724/CASS+-+Create+Return+File

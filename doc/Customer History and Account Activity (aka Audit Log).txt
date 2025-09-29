@@ -1,0 +1,467 @@
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Epic Link: 
+EBPP-12619
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ Dark Clouds Above
+ Bad Things, Man
+ 
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+Started
+Yellow
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Timeline
+Timeline (click to expand)
+ Missing history, activity, and events
+Missing Information
+Missing Emails
+Late Fee Notification
+Credit/Debit Card Expiration Notifications
+Registered Customer Welcome Email
+AutoPay Registration Completed Notification (“Thank you for completing AutoPay enrollment.”)
+AutoPay Registration Notification (email with “Complete Registration” link)
+AutoPay Off Confirmation (“The Autopay setting for your account has been updated. Based on this request, we have revoked the Autopay election.)
+AutoPay with Paperless Registration Completed (“Thank you for completing AutoPay enrollment with Paperless Billing.”)
+Paperless Registration Completed Notification (“Thank you for completing Paperless enrollment.”)
+Paperless Registration Notification (email with “Complete Registration” link)
+Paperless Off Confirmation (“…You will no longer receive paper statements…”)
+Recurring Scheduled Payment Canceled
+Recurring Scheduled Payment Confirmation
+Flexpay Auto Enrollment
+Flexpay Confirmation Notification
+Account Deactivation Notification
+Password Reset Email
+Missing Activity
+Venmo/PayPal/PayPal Credit payment activity
+Who made Payment method changes? (which biller portal user?)
+payment processed (not shown in Customer Activity if processed by biller portal user)
+payment voided
+adjustment posted
+Block Payments for Credit/Debit Card
+Block Payments for EFT/ACH
+Signed up for Pay by Text (tracked in Pay by Text history, but not shown in Customer Activity tab)
+Withdrew from Pay by Text (tracked in Pay by Text history, but not shown in Customer Activity tab)
+ Business Logic
+Business Logic (click to expand)
+Overview
+The Biller Portal enhancement involves updates to the business logic to support new functionalities and improve existing ones. These updates are focused on providing a more coherent and comprehensive view of customer activities, invoice histories, and payment lifecycles. The key aspects include:
+Enhanced Data Tracking and Storage:
+Capture a broader range of customer activities, ensuring no significant event is missed.
+Display historical data in a structured manner that allows for easy retrieval and a chronological presentation.
+Improved History Tab Functionality:
+Differentiate and display invoice history and account history in a clear, non-overlapping manner.
+Organize events in a timeline format, providing a complete story of invoices, accounts, and payments.
+Segregation of Invoice and Account Histories:
+Categorize events accurately into invoice-related or account-related activities.
+Ensure overlapping events like email notifications are logically displayed in both histories where relevant, without redundancy.
+User-Driven Data Presentation:
+Allow users to choose filters in the History tab, enabling them to access the most relevant information quickly.
+By implementing these changes in the business logic, the Biller Portal will provide a more efficient, user-friendly, and comprehensive system for billers and support team members to track and understand customer activities, invoice histories, and payment lifecycles.
+ Problem Alignment
+Problem Alignment (click to expand)
+Biller portal users and our support team are face significant challenges in tracking and understanding customer activities. These challenges are primarily due to the limitations of the existing Customer Activity and Email History tabs. Billers have expressed the need for more information, particularly email history and account activity that isn’t available today. This inadequacy in tracking and understanding customer activities is leading to several issues:
+Loss of Important Information:
+ Critical customer activity information is being lost, particularly when email addresses are removed from an account. This loss of information impedes the billers' ability to effectively address customer concerns and manage their accounts.
+Customer Disputes:
+ The lack of comprehensive and accessible records of customer activities contributes to an increased likelihood of disputes with customers. These disputes often arise from misunderstandings or lack of clarity regarding past interactions and transactions.
+Support Overload:
+ The existing system's limitations have led to an increased number of support tickets. These tickets are primarily related to issues that could have been avoided with better tracking and retention of customer activity records.
+Dependence on Data Services:
+ Currently, support frequently relies on Data Services for assistance because they are unable to find or access necessary information within the biller portal or CRM. This reliance on DS not only strains resources but also indicates a gap in the system's capability to provide important information to support team members.
+ Objective
+Objective (click to expand)
+The primary objective of this project is to enhance the Biller Portal's functionality to better meet the needs of biller portal users and our support team. This includes:
+Enhanced Record Retention:
+ Improving the system to more effectively retain customer activity history, particularly for email address changes and for account registration and unregistering.
+Comprehensive Email History Tab:
+ Updating the Email History tab to include a broader range of email types, ensuring all communications sent to customers are documented and easily accessible.
+Additional Activity Tracking:
+ Include more types of biller activities into the Customer Profile, including Autopay Decline and ACH Reject emails, as well as various payment method and account change notifications.
+Reduced Support Tickets and DS Dependency:
+ By providing a more comprehensive and accurate data representation within the Biller Portal, the project aims to decrease the number of support tickets related to customer activity tracking and reduce the reliance on Data Services. The reduction in support tickets and DS requests, as well as the reduction in resolution time, will be key metrics for assessing the project's success.
+Implementation of Key Features and Flows:
+ Implementing key features and flows, such as preserving historical email addresses, extending the "Activity" field's character limit, and providing a detailed log for Payment Method changes.
+Overall, this project aims to address the current challenges faced by billers in tracking customer activities, which will enhance the efficiency and effectiveness of the Biller Portal.
+ Success Metrics
+Success Metrics (click to expand)
+Goal
+Metric
+Current
+Good
+Great
+Improve Customer Activity Tracking
+Reduction in support tickets related to customer activity
+High
+Moderate
+Low
+Enhance Email History Tab Functionality
+Number of missed or untracked customer emails
+High
+Low
+None
+Reduce Reliance on Data Services
+Number of support cases requiring DS intervention
+High
+Moderate
+Low
+Increase Accuracy of Customer Activity History
+Accuracy rate in tracking customer activity
+Low
+High
+Very High
+Improve Biller Portal User Satisfaction
+User satisfaction survey results
+Low
+High
+Very High
+Reduce Operational Inefficiencies
+Time spent by billers on tracking activities
+High
+Moderate
+Low
+ Target Audience
+Target Audience (click to expand)
+Group
+Impact
+Biller Administrators
+Enhanced functionalities will streamline their workflow and reduce the time spent on tracking customer interactions and researching disputes.
+Support Team
+Should experience a significant reduction in the number of support tickets as a result of more accessible and accurate customer activity data in the biller portal.
+For tickets that still come in, this functionality will help them to quickly address customer concerns more effectively. They will not require assistance from Data Services as often, which will facilitate quicker and more accurate support to billers.
+Finance and Compliance Teams
+Improved access to detailed customer activity records will help in compliance tracking and financial reporting. The system will provide better insights into customer account history, payment history, and complete audit trails.
+Data Services (DS)
+Reduced workload in terms of support inquiries and data retrieval requests due to the improved self-service capabilities of the Biller Portal. This allows DS to focus more on strategic tasks and in depth troubleshooting rather than routine data extraction and support.
+ User Interaction and Design
+User Interaction and Design (click to expand)
+Wireframe/mockup
+UI Approach
+The UI approach will be centered on user-friendliness, with a special focus on the presentation and organization of data to provide a coherent and comprehensive narrative of customer activities. The approach includes:
+User-Centric Design:
+ Tailoring the interface to the end-user’s needs, ensuring intuitive navigation and interaction. This involves a deep understanding of how billers and support team use the portal in their daily activities.
+Enhanced Data Representation:
+ Introducing improvements to the History tab. This includes adding more events and details to provide a complete chronological story of customer and biller interactions, specifically focusing on invoices and associated actions.
+Clear Segregation of Information:
+ Developing a distinct yet interconnected presentation of invoice history and account history. This will address the current overlap issues, especially for events like email notifications that pertain to both categories.
+Interactive and Responsive Elements:
+ Implementing interactive elements to allow users to easily navigate between invoice and account history.
+User Assistance and Feedback Tools:
+ Incorporating tooltips, guides, and contextual help for new features, and gathering user feedback for continuous improvement.
+Deliverables
+Wireframes and Mockups:
+ Including detailed layouts for the revised History tab, showcasing the new structure for invoice and account history.
+User Journey Maps:
+ Illustrating how users will interact with the updated History tab, highlighting the flow from general overview to detailed invoice/account history.
+Interactive Prototypes:
+ Simulating the new History tab, allowing for feedback specifically on the improved data organization and presentation.
+User Testing and Feedback Compilation:
+ Gathering and summarizing feedback from user testing, focusing on the effectiveness of the new History tab in providing a clear and chronological story of customer interactions.
+Strategy for Organizing Overlapping Data:
+ A specific plan for handling overlapping data between invoice history and account history, ensuring clarity and coherence in the presentation of information.
+These deliverables will ensure the Biller Portal’s History tab is not only functional and informative but also provides a clear and chronological narrative of customer and invoice activities.
+ Components Impacted
+Components Impacted (click to expand)
+Component
+Impact
+Biller Portal
+Audit Logging and Reporting
+ Technical Architecture
+Technical Architecture (click to expand)
+ Data Flow
+Data Flow (click to expand)
+ Testing Plan
+Testing Plan (click to expand)
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Serviceability/Observability
+Serviceability/Observability (click to expand)
+Questions
+Diagrams
+:info:
+atlassian-info
+#B3D4FF
+Continue to populate these items as the project continues
+ Project Participants
+Project Participants (click to expand)
+Name
+Company
+Team
+Role
+John Whitworth
+Invoice Cloud
+Billing Me Softly
+Product Manager
+Nicole Furi
+Invoice Cloud
+Design Lead
+Angela Lee
+Invoice Cloud
+Designer
+Byron King
+Invoice Cloud
+Billing Me Softly
+Tech Lead 
+Sean Concannon
+Invoice Cloud
+Billing Me Softly
+Tech Lead 
+Eddie Cuellar
+Invoice Cloud 
+Billing Me Softly
+Software Engineer
+Estefania “Taffy” Sierra
+Invoice Cloud 
+Billing Me Softly
+Software Engineer
+Chris Ison
+Invoice Cloud 
+Billing Me Softly
+Software Engineer
+Yelena Malinin
+Invoice Cloud 
+Billing Me Softly
+Database Engineer
+Arvind Gupta
+Billing Me Softly
+Software Engineer
+ Requirements
+Requirements (click to expand)
+Functional Requirements:
+Invoice History Tab Enhancement:
+Retain and enhance the existing History tab, now to be called the Invoice History tab.
+Ensure it includes all invoices with expandable details for associated events like payments, adjustments, and 
+related email events (new)
+.
+Payment Lifecycle
+Provide a detailed view of the payment lifecycle that is visible (or accessible) from the payment details page, which is already available in the invoice’s history.
+Account Activity Tab:
+Repurpose the Customer Activity tab into an Account Activity tab to capture all account-related actions and events.
+Include all events that are currently missing.
+Include new events like block payment settings.
+Include existing events from other tabs such as Paperless, AutoPay, and Pay by Text sign-ups and withdrawals.
+Include account-level email events.
+Display detailed information about who performed each action (e.g., payment processing, payment voiding, adjustments posting).
+Technical Requirements:
+Data Handling and Segregation:
+Categorize and display information in the respective Invoice History and Account Activity tabs.
+Ensure accuracy in displaying real-time data.
+Performance and Compatibility:
+Maintain system performance.
+User Experience Requirements:
+Intuitive User Interface:
+Design the Invoice History and Account Activity tabs to be user-friendly, with a clear separation and logical organization of information.
+Training and Documentation:
+Update user guides and training materials to reflect the new tab structure and functionalities.
+Data Presentation and Analytics:
+Event Organization and Accessibility:
+Organize events chronologically and contextually within each tab.
+Incorporate advanced filtering and to aid users in quickly finding specific events or invoice details.
+Testing and Quality Assurance:
+Comprehensive Testing Strategy:
+Perform extensive testing for both tabs, ensuring data integrity, user interface effectiveness, and overall system performance.
+Feedback Mechanism:
+Provide a feedback mechanism for users to report any issues or suggestions to allow for continuous improvement of the Customer Profile page.
+ Jira Issues
+Jira Issues (click to expand)
+ Competitive Analysis
+Competitive Analysis (click to expand)
+Do our competitors offer this feature?  What do we know about it?  Do they charge for it?  Do we have existing clients who have experience with it?
+ 
+ Dependencies
+Dependencies (click to expand)
+Dependency
+Team/Product
+Notes
+User Interface (UI) Design
+User Experience (UX) Design Team
+ Database Schema Update
+Database Administration (DBA) Team
+Documentation and Training Materials
+Training Team
+ Assumptions
+Assumptions (click to expand)
+Users
+Technical Constraints
+Business Goals
+Legal and Compliance Considerations
+ Timeline
+Timeline (click to expand)
+Event
+Date
+Confidence
+Status
+Product Design Review #1
+ 
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Product Design Review #2
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Complete biller interviews
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Complete wireframes
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Complete high fidelity mockups
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Begin development
+ 
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+Early Access
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+General Access
+HIGH
+Green
+ 
+INCOMPLETE
+Red
+ 
+ Open Questions
+Open Questions (click to expand)
+Question
+Owner
+Answer
+Date Answered
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Out of Scope
+Out of Scope (click to expand)
+List the features discussed which are out of scope of might be revisited in a later release.
+ Communication Checklist
+Communication Checklist (click to expand)
+Comm Audience
+Task
+Notes/Actions
+Project team members
+ 
+ 
+Early Access Billers
+ 
+ 
+All Billers
+ 
+ 
+Partners
+ 
+ 
+Internal \ Training
+ 
+ 
+Internal \ Support+CSM
+ 
+ 
+Internal \ Sales
+ 
+ 
+Internal \ Boarding
+ 
+ 
+Internal \ General
+ 
+ 
+Add rows if needed
+ 
+ 
+ URL:/spaces/PRODUCT/pages/3048865794/Customer+History+and+Account+Activity+aka+Audit+Log

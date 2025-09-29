@@ -1,0 +1,357 @@
+Release Notes 2025-05-13
+
+
+Fix Issue in the Virtual Site
+
+
+
+
+Fixed map columns in the Customer Locator Results page for improved layout and usability, enhancing user experience.
+
+
+
+
+ReCAPTCHA Whitelist Update
+
+
+
+
+SFB Test Bids added to reCAPTCHA whitelist
+ - This update enables smoother interactions for users testing Southern Farm BIDs, ensuring a hassle-free experience without unnecessary obstacles.
+
+
+
+
+5/9-NLC - Max Character Limitation
+
+
+
+
+Rollback Implemented:
+ We reversed previous changes to enhance stability and ensure a smoother user experience.
+
+
+Updated Error Messages:
+ Error messages have been refined for clarity, making it easier to understand issues and troubleshoot effectively.
+
+
+Validation Changed to 50 Characters:
+ Increased character validation limit to 50, allowing for more flexibility in data entry during customer registration.
+
+
+
+
+IMT- 05/06 - Push Default Payment Method Work to their Production BID
+
+
+
+
+Streamlined Testing Process:
+ Removed unnecessary tests, leading to quicker build times and reduced complexity.
+
+
+Enhanced Test Coverage:
+ Updated unit tests and added new test data rows for IMT's BIDs (3401 and 3243), ensuring better reliability and performance.
+
+
+Production Readiness:
+ Integrated IMT Prod with BID: 3401 using custom code, optimizing functionality tailored for our production environment.
+
+
+
+
+Enjoy these improvements that enhance system efficiency and boost your experience!
+
+
+Update Customer Management UI to Match Figma Design Specifications
+
+
+
+
+UI Enhancements
+: Updated UI elements to align with Figma design specifications for a more intuitive and appealing user experience.
+
+
+Linked Accounts Improvement
+: Refactored linked accounts functionality using DataTables for faster data processing and easier navigation.
+
+
+CSS Corrections
+: Fixed unintended CSS changes and organized styles, leading to a more consistent look and feel across the platform.
+
+
+Code Optimization
+: Added a missing class and made improvements to the repository structure, enhancing overall performance and maintainability. 
+
+
+
+
+Enjoy the smoother, more visually appealing updates designed just for you!
+
+
+Enhance Non-MCL Linked Accounts: Clear Messaging and Account Visibility
+
+
+
+
+User Authentication Improvements:
+ Enhanced Username Authentication delivers a smoother and more secure login experience.
+
+
+Clarity in Messaging:
+ Updated warning and success messages provide clearer guidance, helping users navigate seamlessly.
+
+
+Optimized Account Management:
+ Improved functionality for unlinking and removing accounts enhances user control and oversight.
+
+
+User Interface Refresh:
+ Updated visual elements, including icons, ensure a more modern and accessible design.
+
+
+
+
+🍀 User Persona - EnsurePaymentMethod
+
+
+
+
+Refactored payment method strategy factories for streamlined processing, enhancing overall performance.
+
+
+Introduced user personas in payment flows, leading to a tailored and more efficient payment experience.
+
+
+Improved error logging in the btnSave_Click method to simplify troubleshooting and enhance user feedback.
+
+
+Enhanced type safety for existingCard variable, increasing reliability in data handling.
+
+
+Added error handling and logging in payment methods, resulting in a more robust and user-friendly experience.
+
+
+Simplified ChangeRequestor ID processing by updating SQL commands to Int16, improving database interactions.
+
+
+Refactored payment method activity logging for better tracking and transparency.
+
+
+Replaced credit card handling with bank payment methods, expanding payment options for customers.
+
+
+Fixed edge case in AutoPay settings, ensuring that defaults are handled accurately, providing greater reliability.
+
+
+Improved test case handling for EBPP-27123 ensuring a smoother process under varied conditions.
+
+
+Refined parameter names in bank and credit card methods, increasing code clarity and maintainability.
+
+
+Standardized biller option check to use constants, promoting consistency in payment processing.
+
+
+Enhanced customer login functionality and logging, ensuring a smoother user experience during login.
+
+
+Enhanced customer payment methods with user tracking, leading to personalized engagement and improved service quality.
+
+
+
+
+🐤 Biller Portal - Prevent Autofill from Selecting Expiration Month and Year for Credit Card/Debit Card Payments
+
+
+
+
+Removed redundant condition to streamline code efficiency, enhancing system performance.
+
+
+Set default values for expiration date dropdowns, ensuring users always see appropriate options when entering payment information.
+
+
+Refactored validation processes to reduce errors during data entry, leading to a smoother user experience.
+
+
+Added dynamic error messages to provide clearer guidance, helping users quickly resolve any issues.
+
+
+Updated dropdown menus for better usability, making it easier for users to select their desired expiration dates.
+
+
+Merged the latest updates from the release branch to keep functionalities up-to-date and secure.
+
+
+
+
+We’re excited about these enhancements to your Biller Portal experience! Enjoy smoother and more reliable payment processing.
+
+
+Payer UI Enhancements
+
+
+User Experience Improvements
+
+
+
+
+Redesigned navigation styling to enhance visual appeal and ease of use, leading to a smoother browsing experience.
+
+
+Removed unnecessary popups and quick links, streamlining interactions and reducing user distraction.
+
+
+Implemented custom navigations and adjusted columns, helping to organize content more intuitively.
+
+
+
+
+Performance and Functionality Enhancements
+
+
+
+
+Moved JavaScript to its own module for improved performance and easier maintenance, ensuring faster load times.
+
+
+Fixed mobile link issues, guaranteeing that content displays correctly across devices for all users.
+
+
+Added thorough testing IDs to enhance the reliability of future updates and support.
+
+
+
+
+Accessibility and Design Compliance
+
+
+
+
+Updated hover and active link states according to design feedback, ensuring consistency across the interface.
+
+
+Improved ARIA attributes like 
+aria-expanded
+ to enhance accessibility for screen readers, making the portal more inclusive.
+
+
+
+
+Clean-Up and Maintenance
+
+
+
+
+Conducted extensive cleanup of unused classes and old JavaScript, resulting in a cleaner codebase that supports faster troubleshooting and updates.
+
+
+Consolidated external page resources for better cohesion and management, simplifying the maintenance process for ongoing support teams.
+
+
+
+
+Thank you for your continued support as we enhance your experience! Enjoy exploring the new features!
+
+
+Payer UI Release Notes: Update Nav Styling & Remove Sub Nav on the Virtual Site
+
+
+
+
+Streamlined Navigation:
+ Enhanced the navigation experience with improved hover states, making it easier for users to browse content seamlessly.
+
+
+Responsive Adjustments:
+ Updated mobile padding and desktop borders for a more polished look, ensuring a consistent experience across all devices.
+
+
+Removed Quick Links:
+ Simplified navigation by removing quick links, reducing clutter for a more intuitive design.
+
+
+JavaScript Optimization:
+ Separated CSS for navigation into its own module, improving site performance and load times.
+
+
+Design Team Improvements:
+ Addressed feedback from the design team for a more modern, user-friendly interface.
+
+
+Enhanced Accessibility:
+ Confirmed ARIA tags work correctly for submenus, aiding users who rely on assistive technologies.
+
+
+
+
+These updates aim to provide a cleaner, faster, and more enjoyable experience on the Virtual Site!
+
+
+🐤 Customer Portal - Prevent Autofill from Selecting Expiration Month and Year for Credit Card/Debit Card Payments
+
+
+
+
+Improved User Experience
+: We have updated the expiration date dropdowns for credit card payments to enhance usability by preventing autofill selections, making it easier and more intuitive for customers to enter their payment information.
+
+
+Refined Error Messaging
+: The refactored error messages provide clearer guidance, helping users resolve issues quickly and efficiently.
+
+
+Enhanced Validation
+: Updates to validation processes ensure that information entered is accurate, improving overall transaction reliability.
+
+
+Code Optimization
+: Removal of unnecessary code streamlines performance, making the application faster and more responsive for users.
+
+
+
+
+We're excited about these enhancements and can't wait for you to experience a smoother payment process!
+
+
+🐤 Customer Portal Update: Improved Payment Experience
+
+
+
+
+Enhanced Control: Disabled autofill for expiration month and year fields in credit card/debit card payments.
+
+
+Smoother Transactions: Ensures that users select the correct expiration dates, reducing errors and improving payment accuracy.
+
+
+User-Friendly Interface: Promotes a better experience by preventing incorrect autofilled data, making payments quicker and hassle-free.
+
+
+
+
+We’re excited to bring you these improvements for a more reliable payment process!
+
+
+🐤 Customer Portal - Enhanced Credit Card Payment Experience
+
+
+
+
+Updated dropdown defaults for expiration dates:
+ Enjoy a seamless experience as the default values for expiration month and year dropdowns are explicitly set, enhancing usability in credit card and debit card payments. 
+
+
+Improved accuracy in selections:
+ Users can now ensure that the correct expiration dates are selected, reducing errors during transaction processing.
+
+
+Enhanced control in the payment process:
+ This change minimizes autofill issues, giving users more control and confidence while making payments.
+
+
+
+
+We are excited for you to experience these enhancements that make your payment process smooth and reliable!
+ URL:/spaces/PE/pages/4317741071/Release+Notes+-+EBPP+-+2025-05-13

@@ -1,0 +1,353 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+ITR
+Document status
+Done
+Green
+File Mapping
+Invoice File
+File Extension: XML
+File Naming Convention: 
+File Delimiter: n/a
+Specification: Tagged XML - see specs below for importing appropriate fields into IC BIF format
+Sample File: 
+https://invoicecloud.box.com/s/8xomah3l4xssg8lranp6kxiepg1dkmo3
+File Transfer Frequency: At billing
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Record Type
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC to populate
+ 
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC to populate
+ 
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - IC to populate
+ 
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - IC to populate
+ 
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - IC to populate
+ 
+File Header
+7
+RowType
+N
+TRUE
+N/A - IC to populate
+ 
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - IC to populate
+ 
+Invoice Header
+9
+InvoiceFormatGuid
+ N
+TRUE
+N/A - IC to populate
+ 
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+N/A - IC to populate
+Invoice number is not present in XML File
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill_dt=
+Tagged XML field
+MM/DD/YYYY
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due_dt=
+Tagged XML field
+MM/DD/YYYY
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Due=
+Tagged XML field
+Money
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due=
+Tagged XML field
+Money
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account No=
+Tagged XML field
+String
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Name=
+Tagged XML field
+String
+Customer Record
+61
+Address1
+FALSE
+Address_info Ssa=
+Tagged XML field
+String
+Customer Record
+63
+City
+Y
+FALSE
+B_city=
+Tagged XML field
+String
+Customer Record
+64
+State
+Y
+FALSE
+B_st=
+Tagged XML field
+String
+Customer Record
+65
+Zip
+Y
+FALSE
+B_zip=
+Tagged XML field
+String
+Customer Record
+67
+EmailAddress
+FALSE
+Email=
+Tagged XML field
+String
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+Adjustment/Daily Balance File
+File Extension: .XML
+File Naming Convention: 
+File Delimiter: n/a - tagged XML file
+Specification: 
+Sample File: 
+https://invoicecloud.box.com/s/8otoxpnya4zptsjhfn4vbg7bx3on7q5u
+File Transfer Frequency: Daily via SFTP
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+Header
+N/A
+Y
+F
+N/A
+Header
+Header
+N/A
+Y
+F
+N/A
+Header
+313
+AccountNumber
+Y
+TRUE
+Utility_Account Account=
+Tagged XML field
+String
+N/A
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+<Balance></Balance>
+If this field is empty, set balance to $0.00. Tyler InCode does not supply a value when balance = 0
+Tagged XML field
+Money
+N/A
+Adjustment Record
+Payment/Lockbox File
+File Extension: .txt
+File Naming Convention: InvoiceCloudPayments_YYYYMMDD.txt
+File Delimiter: Comma ,
+Specification: see below
+Sample File: 
+https://invoicecloud.box.com/s/2umy3lus8ih0kxltt3qz8n1hf3n7t8vg
+Note: This payment file format was used for Valley View Sewer District BID 2193
+File Transfer Frequency:  After nightly batch close
+Field
+Data Type
+Format
+Values
+Invoice Cloud Field
+Account
+String
+Account Number
+AccountNumber
+Payment Date
+Date
+MM/DD/YYYY
+Date of Payment
+Payment Amount
+Money
+Amount of Payment
+Reference
+String
+Confirmation number received by the payer
+Change Log File
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+Notes: Standard IC Change Log
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/1386446964/BID+2255+Valley+County+Water+District+Technical+Design

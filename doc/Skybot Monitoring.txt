@@ -1,0 +1,8 @@
+Workato Automation will create a daily Jira ticket and assign it to an SRE team member on a rotating schedule.
+As part of the tasks to close the ticket, the team member assigned should access Skybot (Automate).
+After accessing it, go through all production jobs to make sure they are not in failed, overrun, or skipped status.
+Team members assigned to the ticket should note in the comments section whether all jobs ran accordingly or if anything failed.
+The ticket should be closed within the day of the assignment.
+If any issues are found, the team should add a note to the ticket and report it on the SRE Triage slack channel.
+Once the issue is notified to the SRE Triage Slack channel, the team member should identify the Product Team responsible for the failed job and inform them through Slack that there’s a failure.
+ URL:/spaces/DS/pages/3419766832/Skybot+Monitoring

@@ -1,0 +1,27 @@
+This is an instruction for developer to test quick find API locally. 
+ Instructions
+Clone repo to your dev machine and run application (Set BillerSearchAPI.WebAPI as startup project). 
+BillerSearchAPI - Repos
+Generate token using generate token API. 
+Enable generate token API in Swagger.  Comment out this line in Token controller
+Use Swagger UI to generate token
+Important: Biller GUID needs to be lowercase. 
+Copy and paste JWT token to the Swagger authorization input box. 
+Test Search API by giving a search term.
+If any item is found, you will see a Json response in the response body. 
+ Testing Quick Find API with Biller Portal
+Clone MyIIS repo, set BillerPortal as startup project. 
+MyIIS - Repos
+Under BillerPortal project, find web.config file
+Update BillerSearchAPIUrl to your localhost url, for example 
+https://localhost:7041/api/v1/search
+b. Start project, now you can test quick find API in biller portal.
+Testing Locally in PROD AVD
+Get JwtSignature from BP (using ExternalAppSettings keyvault) and apste it in BillerSearchAPi app.config
+Get the MasterConnection from the helm file in prod and apste that also.
+ Related articles
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/4607836175/Quick+Find+Customer+Search+with+Azure+AI+Search?atlOrigin=eyJpIjoiNTAwNTJmMTljOTA2NDBlMGE4ZmY5YzI1YzM5MGZjYjEiLCJwIjoiYyJ9
+ 
+https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/4618747905/Quick+Find+Overview?atlOrigin=eyJpIjoiNjdmZjMzMmVjZTNmNGJiOTg3NGQwODVmZTJiMTQ4MjkiLCJwIjoiYyJ9
+ 
+ URL:/spaces/ED/pages/4626448467/How+to+test+Quick+Find+API+in+local

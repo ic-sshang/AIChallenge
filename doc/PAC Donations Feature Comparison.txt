@@ -1,0 +1,90 @@
+The Doctors Company and Texas Farm Bureau both have their own PAC that members can contribute to. This document looks at requirements for both Billers and compares their needs so we can create a holistic product feature for delivery in 2025.
+Category
+Requirement
+Doctors
+TFB
+1-time payment
+Fixed
+ 
+1-time payment
+Custom Suggested
+ 
+ 
+AutoPay add-on
+Fixed
+ 
+ 
+AutoPay add-on
+Fixed Suggested
+ 
+ 
+AutoPay add-on
+Custom
+ 
+Entity type
+Select in the UI
+ 
+ 
+Data syncing
+Entity type
+Data syncing
+Name & Address
+Data syncing
+AutoPay add-on enrolled or unenrolled
+UI Prompt
+T&C
+Discovery Items
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/5793411?selectedIssue=EPD-235&issueViewSection=comments
+ 
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/6357488?selectedIssue=EPD-93&issueViewSection=comments
+ 
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/5793411?selectedIssue=EPD-220
+ 
+Payment Amount Options Matrix
+Amount Options
+Custom or Fixed
+Sub-category
+Dynamic/Suggested or Static
+Definition
+Custom
+Dynamic/Suggested
+Custom
+ Amount Option can be changed by the Payer.
+Dynamic
+ Amount is a 
+Suggested
+ amount that the Biller sends through in the BIF to be presented to the payer.
+Use Case: 
+A custom, dynamic amount can be changed by the Payer and is a pre-suggested amount from the Biller that is sent in the BIF.
+For example, The Doctors Company will use this for the 1-time payment route where they will send us the pre-suggested contribution amount and payers can change it.
+Custom
+Static
+Custom
+ Amount Option can be changed by the Payer.
+Static
+ Amount is not sent in the Biller Invoice File (BIF). It is set in the CRM and does not change.
+Use Case:
+ A custom, static amount can be changed by the Payer and is configured in the CRM.
+Fixed
+Dynamic/Suggested
+Fixed
+ Amount Option can not be changed by the Payer.
+Dynamic
+ Amount is a 
+Suggested
+ amount that the Biller sends through in the BIF to be presented to the payer.
+Use Case:
+ A fixed, dynamic amount can not be changed by the Payer and is a pre-suggested amount from the Biller that is sent in the BIF.
+For example, The Doctors will use this amount option for AutoPay.
+Fixed
+Static
+Fixed
+ Amount Option can not be changed by the Payer.
+Static
+ Amount is 
+not
+ sent in the Biller Invoice File (BIF). It is set in the CRM and does not change.
+Use Case:
+ A fixed, static amount can not be changed by the Payer and is configured in the CRM. 
+For example, Texas Farm will use this option for AutoPay where the Payers will be presented an option to add a $5 AGFUND contribution to their AutoPay enrollment.
+ URL:/spaces/PE/pages/4102782977/PAC+Donations+Feature+Comparison

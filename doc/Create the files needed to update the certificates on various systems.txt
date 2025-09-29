@@ -1,0 +1,64 @@
+For Azure App Service ICCertTest and App Gateway
+Need to combine private key, root & secondary certs, and the GoDaddy cert into PFX
+Install openssl on your avd
+Pull down the certificate zip file from GoDaddy and extract it in a dedicated directory
+Copy the x.crt file and name it both.crt
+Open both.crt and gd_bundle-g2-g1.crt, copy the contents of the gd_bundle-g2-g1.crt to the bottom of the both.crt file.
+Export the pfx file from IC-Web1 where it was created from certificates in IIS Manager and copy it to the above directory
+Run the following command to extract the private key from the pfx file:
+openssl pkcs12 -in _.invoicecloud.com-2026.pfx -nocerts -out _.invoicecloud.com-2026.key
+Run the following command to create the new PFX file that includes the root and secondary certs
+openssl pkcs12 -export -in both.crt -inkey _.invoicecloud.com-2026.key -out _.invoicecloud.com-2026.pfx
+Import the file into the certificates area on the key vaults (kv-glb-vault1, kv-glb-vault1-npd)
+Upload the new PFX and PEM files to the kv-glb-vault1-npd per these:
+Key vault cert name                                              File to upload
+star-invoicecloud-com-pfx                                  PFX File
+Go to Object, Certificates
+Click on the certificate name
+Click on New Version
+Upload the pfx file
+Disable the old cert
+Open the new cert
+Go to the bottom of the page and copy the fault from Secret Identifier
+Refresh the cert  on the agw-pri-appgateway0-npd app gateways:
+Edit the cert on the app gateway choosing the same key vault and certificate name and save.
+Open the Listeners
+Click on the cert name to change
+Click on Edit
+Choose the Vault
+Paste Secret Identifier value in the Certificate field and save
+Upload certs to Cloudflare
+In the Cloudflare portal go to the section for the domain you are adding the cert to.
+Click on SSL/TLS and choose Edge Certificates
+Click on Upload Custom SSL Certificate
+Copy the contents of Both.cert from above to the SSL Certificate section
+Copy the contents of the xxxxx.crt file from Cloudflare to the SSL Certificate section
+Copy the contents of the private key from above to the Private Key section
+Extract the unencrypted private key with this command:
+openssl rsa -in star.invoicecloud-beta.com-2026.key -out star.invoicecloud-beta.com-2026-rsa.key -traditional
+Copy the contents of the private key of the file above to the Private Key section
+For Bundle Method choose Compatible
+For the Legacy Client Support choose Legacy
+Save it
+Check the certs on this site:  
+https://www.sslshopper.com/ssl-checker.html
+ 
+Create the PEM file for Kubernetes and install on key vault
+Create a blank txt file and copy the ssl cert, the private key and the contents of the root and intermediate certificate bundle (gd_bundle-g2-g1.crt).
+Save the file with a similar name to star-invoicecloud.com.pem
+Open the key vault from an AVD in the correct lane for prod or dev, go to certificates, open the star-invoicecloud-com certificate and upload the new one, and disable the old one
+Kubernetes will auto refresh the certificate
+Key vault cert name                                              File to upload
+star-invoicecloud-com                                         PEM File
+Send PEM file for Saleforce to Lauren
+In the zip file from GoDaddy there is a file similar to this b242d54f262ece5b.pem, send that file to Lauren and have them upload it to the test sight initially, and on the day of the cert rotation upload the pem file to the production site
+Updating the Kong TLS certificate
+Use the attached 
+pipeline 
+to run which will update the cert to the Kong NPD  and PRD cluster.
+Make sure to update the certs in the key vault(kv-glb-vault1-npd, kv-glb-vault) first.
+Once done, run the pipeline with the selected stages 
+Azure,Helm, and Kong
+ and then select the targeted env like NPD. SBX. PRD and hit run.
+Validate the plan of the terraform and deploy it.
+ URL:/spaces/icinfradoc/pages/3884810241/Create+the+files+needed+to+update+the+certificates+on+various+systems

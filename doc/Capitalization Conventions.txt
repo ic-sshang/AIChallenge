@@ -1,0 +1,27 @@
+To differentiate words in an identifier, capitalize the first letter of each word in the identifier. Do not use underscores to differentiate words, or for that matter, anywhere in identifiers. There are two appropriate ways to capitalize identifiers, depending on the use of the identifier:
+PascalCasing
+camelCasing
+The PascalCasing convention, used for all identifiers except parameter names, capitalizes the first character of each word (including acronyms over two letters in length), as shown in the following examples:
+PropertyDescriptor HtmlTag
+A special case is made for two-letter acronyms in which both letters are capitalized, as shown in the following identifier:
+IOStream
+The camelCasing convention, used only for parameter and variable names, capitalizes the first character of each word except the first word, as shown in the following examples. As the example also shows, two-letter acronyms that begin a camel-cased identifier are both lowercase.
+propertyDescriptor ioStream htmlTag
+✔️ DO use PascalCasing for all public member, type, and namespace names consisting of multiple words.
+✔️ DO use camelCasing for parameter names. (variables, too)
+✔️ DO use ALL CAPS when declaring constants. (IC standard)
+Do
+❌ DO NOT capitalize each word in so-called closed-form compound words. (e.g. endpoint)
+❌ DO NOT assume that all programming languages are case sensitive. They are not. Names cannot differ by case alone.   
+Do Not
+Related
+Exception Guidelines
+ 
+Logging Standards
+Quick Tips
+ 
+SQL Standards
+ 
+See Also
+Microsoft Capitalization Conventions
+ URL:/spaces/ED/pages/2806382602/Capitalization+Conventions

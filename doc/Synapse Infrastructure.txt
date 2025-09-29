@@ -1,0 +1,175 @@
+This article provides an outline of the Azure Resources created to satisfy the 
+Synapse Infrastructure Requirements
+.
+3
+3
+false
+list
+false
+Environmental Instances
+The set of Azure Resources that comprises the Synapse Infrastructure will be deployed to the following 
+Environments 
+with parity of Resources within each Environment.  The set of Azure Resources are meant to satisfy the 
+Infrastructure Requirements document here
+.
+Sandbox
+This will be an ephemeral environment used by the Infrastructure team to develop and test their Infrastructure as Code (IaC) and Azure DevOps Deployment Pipelines which will apply the IaC configurations to each Environment.
+DevTest
+This will be a permanent environment used by the Enterprise Data Warehouse (EDW) team to develop data processing pipelines within the Synapse Workspace and the Linux Airflow Virtual Machine.
+Production
+This will be a permanent environment used by the Enterprise Data Warehouse team to process Production data within the Synapse Workspace and the Linux Airflow Virtual Machine.
+The Production set of Azure Resources has not yet been deployed, but can be deployed when the EDW team is ready for it with 1 or 2 days prior notice. 
+Below is breakdown of the Azure Resources provisioned per Environment.
+Resource Group
+All the Azure Resources related to the Synapse Infrastructure will be contained inside a single Resource Group per Environment.  The Resource Group will also be used a one of the RBAC boundaries used to provide RBAC access to the Synapse Infrastructure for the EDW team.
+Naming Convention: 
+rg-{region}-synapse{deployment_version}{-lower_environment_specifier}
+Examples:
+Sandbox Environment:  
+rg-pri-synapse1-sbx
+DevTest Environment
+:   
+rg-pri-synapse1-dev
+More info on 
+region
+, 
+deployment_verison
+, and 
+lower_environment_specifier
+.
+Synapse Workspace
+A Synapse Workspace per Environment to be used for ingesting data into either the SQL Pool or the connected Storage Account, as well as processing the data, and preparing the data for other uses.
+Naming Convention: 
+syn-{region}-synapse{deployment_version}{-lower_environment_specifier}
+Sandbox Environment: 
+syn-pri-synapse1-sbx
+DevTest Environment
+: 
+syn-pri-synapse1-dev
+To access the Development plane of the Synapse Workspace, use the links below for the associated Synapse Studio for each environment.
+Sandbox Environment Synapse Studio
+DevTest Environment Synapse Studio
+Dedicated SQL Pool
+The Synapse Workspace uses the Dedicated SQL Pool provisioned within each Environmental Synapse Resource Group.  Currently it is set to Performance Level 
+DW100c
+ .
+Naming Convention: 
+sqlpool{region}synapse{deployment_version}{lower_environment_specifier}
+Sandbox Environment: 
+sqlpoolprisynapse1sbx
+DevTest Environment
+: 
+sqlpoolprisynapse1dev
+Storage Accounts
+There are two Storage Accounts per Environment.  One Storage Account that is connected to the Synapse Workspace, and one Storage Account not connected intended to be used a Data Staging area for external integrations.  Both Storage Accounts are configured as Azure Data Lake Storage Generation 2 (ADLS Gen2) instances.
+Synapse Workspace Connected
+Naming Convention: 
+sa{region}synapse{deployment_version}{lower_environment_specifier}
+Sandbox Environment: 
+saprisynapse1sbx
+DevTest Environment
+: 
+saprisynapse1dev
+Data Staging
+Naming Convention: 
+sa{region}snowflake{deployment_version}{lower_environment_specifier}
+Sandbox Environment: 
+saprisnowflake1sbx
+DevTest Environment
+: 
+saprisnowflake1dev
+Key Vault
+A Key Vault per Environment to store Secrets, Keys, and Certificates related to EDW projects.
+Naming Convention: 
+kv-{region}-synapse{deployment_version}{-lower_environment_specifier}
+Sandbox Environment: 
+kv-pri-synapse1-sbx
+DevTest Environment
+: 
+kv-pri-synapse1-dev
+Virtual Machines
+There are two Virtual Machines per Environment.  Both configured with the OS Type 
+Linux Ubuntu 22.04
+.  One for use with Airflow application hosting needs and one for use for Data Governance application hosting needs.
+Airflow VM
+Naming Convention: 
+vm-{region}-airflw{deployment_version}{4_letter_randomizer}{-lower_environment_specifier}
+Sandbox Environment: 
+vm-pri-airflw1qjwp-sbx
+DevTest Environment
+: 
+vm-pri-airflw1expo-dev
+Data Governance VM 
+Naming Convention: 
+vm-{region}-datagovrn{deployment_version}{4_letter_randomizer}{-lower_environment_specifier}
+Sandbox Environment: 
+vm-pri-datagovrn1itbl-sbx
+DevTest Environment
+: 
+vm-pri-datagovrn1pqjn-dev
+Virtual Network
+All the Resources contained within the Synapse Resource Group have their Data Planes protected via Private Endpoints connected to the Synapse Virtual Network, one Virtual Network per Environment.  The Synapse Virtual Network is a Spoke within the 
+InvoiceCloud NextGeneration Network Topology
+.  The InvoiceCloud NextGeneration Network Topology is segmented into Production Network Lanes and NonProd Network Lanes.  The Synapse Spokes are associated with the Network Hubs as outlined below:
+NonProd Primary Region’s Hub
+Sandbox Environment’s Synapse Spoke
+DevTest Environment’s Synapse Spoke
+Production Primary Region’s Hub
+Production Environment’s Synapse Spoke
+Naming Convention: 
+vnet-{region}-synapse{deployment_version}{-lower_environment_specifier}
+Sandbox Environment: 
+vnet-pri-synapse1-sbx
+DevTest Environment
+: 
+vnet-pri-synapse1-dev
+Enterprise Data Warehouse NextGen Network Jumpboxes
+To be able to access the Data Planes of the Private Endpoint protected Azure Resources, the User/Client must be on a Compute Plane within the InvoiceCloud NextGeneration Network Topology.  To enable this, there have been 2 Windows 11 Virtual Machines intended to be used by the EDW Team Members to develop and test the ETL pipelines and other EDW Applications that will be hosted by the Synapse Azure Resources.  These are intended to be a temporary solution while the InvoiceCloud NextGeneration AVD (personal VM’s that can connect to the InvoiceCloud NextGeneration Network Lanes) is finishing the development and rollout.  Once AVDs are provided to the EDW Team Members, these Jumpboxes will be destroyed.  Currently there are 2 EDW Jumpboxes in the VM set deployed within the NonProd Primary Region’s Hub which enable  access to the Sandbox and DevTest Environmental Resources.
+Naming Convention: 
+vm{set_count}-{region}-edw-jmpbx{deployment_version}{4_letter_randomizer}{-lower_environment_specifier}
+NonProd:
+vm0-pri-edw-jmpbx2gyav-sbx
+: 10.152.5.7
+vm1-pri-edw-jmpbx2jhxa-sbx
+: 10.152.5.6
+To access the Jumpboxes, the User must be logged onto the InvoiceCloud Azure Barracuda VPN.  For more information on signing into Windows Jumpboxes 
+please see this article
+.
+Jumpbox Uptime Schedule
+In order to minimize infrastructure cost and minimize the attack surface of InvoiceCloud infrastructure during non-working hours, the Jumpboxes are on an Auto-Shutdown and Auto-Start schedule as outlined below:
+Auto-Start via Azure DevOps Pipeline
+ @ 8 AM Eastern Time
+Auto-Shutoff @ 11 PM Eastern Time
+Azure Active Directory Groups for Resource Access
+The following Azure Active Directory (AAD) Groups have been created and will enabled the EDW Team Members access to the Azure Resources mentioned above.
+ic-iac-datawarehouse-team-readers{-lower_environment_specifier}
+This AAD Group provides Reader level access per Environment to the Synapse Resource Group and the Resources contained in the Resource Group.
+Reader
+ on the Resource Group which is then inherited to all Resources contained within.
+Synapse Monitoring Operator
+ on the Synapse Workspace.
+ic-iac-datawarehouse-team-developers{-lower_environment_specifier}
+This AAD Group provides Contributor/Developer level access per Environment to the Synapse Resource Group and the Resources contained in the Resource Group.
+Contributor
+ on the Resource Group which is then inherited to all Resources contained within.
+Storage Blob Data Contributor
+ on each of the Storage Accounts.
+Virtual Machine User Login
+ on the Airflow and Data Governance Virtual Machines.
+ic-iac-datawarehouse-team-admins{-lower_environment_specifier}
+This AAD Group provides Admin level access per Environment to the Synapse Resource Group and the Resources contained in the Resource Group.
+Owner
+ on the Resource Group which is then inherited to all Resources contained within.
+Storage Blob Data Contributor
+ on each of the Storage Accounts.
+Virtual Machine Administrator Login
+ on the Airflow and Data Governance Virtual Machines.
+ic-iac-datawarehouse-team-jumpbox-users-sbx
+The AAD Group provides User Login ability to the EDW Team’s NonProd Jumpboxes.
+Virtual Machine User Login
+ on each of the EDW Team’s NonProd Jumpboxes.
+ic-iac-datawarehouse-team-jumpbox-admins-sbx
+The AAD Group provides Admin Login ability to the EDW Team’s NonProd Jumpboxes.
+Virtual Machine Administrator Login
+ on each of the EDW Team’s NonProd Jumpboxes.
+ URL:/spaces/icinfradoc/pages/2672984131/Synapse+Infrastructure

@@ -1,0 +1,12 @@
+Summary
+The Sapiens GO for Workers Comp real-time integration provides a data synchronization solution (formats and web service endpoints) for invoice and customer account records, balance adjustments, ACH rejects, voids, autopay enrollment, paperless enrollment, and bill presentment (via PDF linking) between the Invoice Cloud SaaS Platform and the Sapiens GO for Workers’ Compensation core insurance system. Conveyance files are transmitted, however, through SFTP. The integration design includes the product features and web services required to implement supported user experiences and workflows.
+There are two types of employee benefit options:
+Installment: The employer pays the same amount in workers' compensation dues per month. The employer will receive a monthly statement.
+Pay As You Go: The employer pays an amount in workers' compensation dues based on the number of employees per month. The employer must log in to the PolicyGO portal to generate the policy statement amount. The payer/employer has to log in and manually take action for any invoice to be generated so there would be no future invoice automatically created on IC. Note: Sapiens uses the RemoteAuthenticationToken in CloudPayV2 to allow users to store payment methods to be used again in the future (this is generally used in a full EBPP solution but can be used with CloudPayV2 and invoices created on the fly.)
+Navigation 
+Sapiens GO Implementation Details
+Sapiens GO Integration & Software Details
+Sapiens GO Technical Design
+Knowledge Transfer
+Gong | Sapiens GO Integration Knowledge Transfer
+ URL:/spaces/IM/pages/1297580046/Sapiens+GO

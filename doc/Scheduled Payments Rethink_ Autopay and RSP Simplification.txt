@@ -1,0 +1,151 @@
+Problem Alignment
+Project
+Scheduled Payments Rethink: Autopay and RSP Simplification
+Objective
+Opportunity to address biller and payer’s payment needs, improve our user experience for billers and payers, and deliver a superior scheduled payment product offering to multiple markets. 
+Status
+IN SPEC
+Purple
+Jira
+Epic: 
+https://invoicecloud.atlassian.net/browse/EBPP-1253
+ 
+Target Release Date
+TBD
+Team
+PF Changes 
+The Problem 
+Problems our customers and payers have told us…
+Amount and Date Adjustment
+Payers need flexibility in how much they pay and when for a given bill that works with their budget. Billers likewise need to provide payers options of payment that allows payers to make payments on a schedule that works for them.
+•Billers need an option to defer a payment for a later date in case the payer can’t pay.
+•Payers don’t have restrictions in how much they pay for a scheduled payment.
+•Payers can’t start payments on a tax bill until the invoice is submitted and there fore can’t make payments through out the year. Specifics can found here: 
+Paying tax bills throughout the year
+ 
+Transparency and Usability
+Across all the scheduled payment products the amount due, invoice due date, and payment amount is unclear to the payer.
+•No visual indicators or messaging on the invoice due date in the checkout, Autopay, RSP or Flexpay workflows
+.
+•On RSP or one time scheduled payment there is no indication if user selects a payment date past the due the date
+•We need to make it easier for new payers to understand how to self-enroll in scheduled payment services when there is no saved payment method yet
+•Bring more attention on the Dashboard to enroll or correct issues.
+Notifications
+•Billers have to manually reenroll payers in Flexpay each year and there is no good indication a Flexpay, or RSP plan in coming to an end.
+•Additionally there is a lack of alerts, on upcoming scheduled payments or error with stored payments in the customer portal. 
+Finally for Invoice Cloud…
+•Maintaining three products is not scalable nor an effective use of resources. 
+Additionally competitive analysis shows IC’s schedule payment products meet the overall need in the market but are not superior in the feature set or usability. Autopay while enabled for 88% of billers does not have the flexibility of RSP that some billers and payers are looking for. IC’s FlexPay product does fit the need in the market and aligns with competitor’s positioning of a budget or installment plan solution. In fact, the FlexPay product is far more robust than competitors in terms of payment amount and date flexibility, but this obstructs from usability of the product or our ability to effectively optimize it.
+Why: How do we know this is a real problem and worth solving?
+Multiple billers and payers have asked for improvements to our Autopay, RSP, and Flexpay products. The flexibility in terms of amount and due date of each scheduled product only reaches so far. Instead of a holistic product encompassing all requests, there are three separate products that suffice some request but not all to meet payer and biller’s needs. Therefore we have an opportunity to address biller and payer’s payment needs, improve our user experience for billers and payers, and deliver a superior scheduled payment product offering to multiple markets. 
+Hypothesis 1:
+ Our approach should be to consolidate the Autopay and RSP products while optimizing in new features and usability. We should simplify FlexPay product but keep this separate as a stand alone “budget” payment product. We will promote two products: variable invoicing (Autopay + RSP), and a fixed payment plan or “budget plan”(FlexPay). Variable pricing will maintain all the customizations billers currently have and want. 
+We have incentives to do this to boost our Autopay payments, allow multiple payments across invoices incurring increased collection of service fees, and deliver a superior product that will hopefully drives sales. 
+Audience: Who are we building for?
+Payers - to provide payers with a simpler and more transparent scheduled payment plan with industry standard options for payment amount and timeline. 
+Billers - to provide billers with scheduled payment options that meet the demands of their payers, works with their existing systems and verticals. 
+IC - building this for IC so we don’t have to maintain and update three products.  
+Supporting Resources and Research
+Feature Set and Competitor Analysis: Shelby has on her PC.
+Biller and Payer Analytics to come in: 
+https://invoicecloud.atlassian.net/browse/DBS-2547
+ 
+Autopay
+FlexPay
+RSP
+Biller and Payer User Research Proposal: Paused
+High-level Approach
+Product Approach: 
+Our approach to scheduled payment options will be greatly staged in phases because of first level of effort o combine Autopay and RSP in a reasonable timeframe (Q4 2021), second the upcoming work on the new payer experience, and third the lack of use and interest in our current FlexPay product. 
+Q4 2021 - Manageable Autopay and RSP updates that billers have asked for 
+2022 - Autopay on to new payer experience with ideal feature set 
+2022 - Autopay/RSP combination on new payer experience 
+Late 2022 - Definition of FlexPay, budget, Installment solution 
+Consolidation of Autopay and RSP with usability and feature enhancements to reach industry standards in payment amount and schedule flexibility for both payer and biller. 
+Optimize our FlexPay product to a systematic and suggestive “budget” solution for scheduled payments.
+Success
+How do we know if we’ve solved this problem?
+We will know we succeeded if we can solve the pain points for our billers and payers as stated above and overall see more payments happening on our platform through any of the scheduled payment products. 
+Primary goals:
+Overall growth in scheduled payments enrollment and payments on IC platform
+Growth in Autopay payments by new payers. We will be looking for new Autopay adoption growth. 
+Growth of biller adoption of Autopay product from 88% to 98%. If we simply deprecate the RSP product we will increase the 88% to 91%. With added efforts and marketing around the new product we believe we can also shift none scheduled payment billers, and those on Flexpay to Autopay. 
+Increase in sales 
+Secondary goals: 
+reduction in IC development effort to maintain three products 
+reduction in IC payer support cases to support scheduled payments
+Solution Alignment
+Key Features
+Autopay encompasses the RSP options including:
+payer ability to select due date
+payer ability to select payment amount 
+payer ability to select due date and payment amount
+Autopay product with the above configurations maintain processing the payment when there is an invoice (ie not prepay)
+The Autopay configurations above are optional as they are now in RSP. The biller can select to allow, not allow any of the configurations for their payers.
+Autopay enrollment process will be simplified to be on one page (removal of the set to set up payment method on a different page). 
+All billers who have Autopay however will have the “default” Autopay solution - paying the bill amount on the bill due date. 
+New feature: Billers will also have the option to allow deferring an Autopay payment from the biller portal. Payers will have to contact billers outside the platform and billers will have the ability to elect to defer the payment to a future date. Payers will be notified in the customer portal that their Autopay is deferred. 
+New feature: Billers will have the ability for payers to elect to set a max Autopay cap on a payment. If billers elect to have this option in the customer portal payers will have the ability when setting up Autopay to set a maximum amount that will be processed for a given invoice regardless of the invoice amount.
+Migration process: billers who have payers on Autopay and RSP, we will move their payers using RSP to the Autopay product with their existing RSP settings in place. Billers who only have RSP enabled, only 3% of billers, will have a migration to the new Autopay product with their payer’s configurations in palce as well. 
+The below diagram attempts to list all available payment options based off IC’s current product offering, and a proposed offering. This includes Autopay, RSP AND FlexPay however for this project for now we are ONLY focusing on Autopay and RSP. The orange and green lines under the proposed options are product requests we’ve received from billers. While they are not payment options these are shown to represent these request would be included in the new product. 
+Note there is a version of this including Flexpay. 
+Key Flows  
+Virtual Site - Autopay registration will not change for MPV.  Payers who sign up for Autopay on one time payment route will be enrolled in our “default” Autopay product. Any edits they could make will have to be done in the customer portal. Edits of copy shown on the Autopay sign up or even allowing payer configurations on the onetime payment route will need further data and learning to see if this is valuable. 
+Biller Portal - Updates to the biller portal for consolidation of Autopay and RSP as a single “Autopay” product. This will effect various areas in the biller portal most notably customer profile, and reports. 
+Customer Portal - Sign up and management consolidation of Autopay and RSP under the single Autopay product. 
+Notifications - Autopay notifications will be updated to reflect the different variations of Autopay a payer could have. The notifications of an upcoming Autopay will have to account for the a varying amount and due date possibly. 
+CRM - We will need to update the CRM to include the current RSP setting underneath the Autopay settings. This will be changes to settings: 4,10, 23, and RSP configuration. 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+ 
+Sales
+Do you need sales enablement materials?
+Y
+ Needs: updated materials for Autopay and the new functionality. Action: introducing new Autopay product to sales, post analysis on new product impact for sales efforts
+Marketing
+Does this impact marketing?
+Y
+ Needs: monthly newsletter, separate release to billers possibly, analysis on marketing outreach effect
+Training
+Do you need to update support content or training?
+Y 
+Action: introduce new Autopay product to training, training will need updated documentation, Guru card, IKT. 
+Implementations
+Changes to questionnaire
+Y
+What is the questionnaire? 
+Delivery
+Set up and Enablement
+Y
+ Needs: yes, support 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Y 
+Action: discussion on enhanced feature we can sell as ad-ons, the features going to the new Autopay are not technically new and we don’t charge more for them now. We will need positioning on the new Autopay product 
+Support
+Biller questions and support
+Y
+Needs: common questions and response sheet, support training on new product, Guru card. Actions: post analysis on support volume
+Legal
+Are there potential legal ramifications?
+N
+ Possibly not since this new Autopay product will encompass features we already have? Action: will get legal input
+Reconciliations
+Questions from billers about charges
+?
+ 
+Jira list 
+System JIRA
+key,summary,type,created,assignee,reporter,priority,status,resolution,labels
+20
+filter = "Autopay, Recurring, FlexPay"   
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+Next Steps/ Other Ideas: 
+Custom and guaranteed Autopay processing line. Potential add on option for billers. 
+Changes to Autopay enrollment on the onetime payment route to include or simply surface there are more options.
+ URL:/spaces/PRODUCT/pages/1885732892/Scheduled+Payments+Rethink+Autopay+and+RSP+Simplification

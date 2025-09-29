@@ -1,0 +1,36 @@
+none
+About this library
+The log4net library is a tool from the Apache Logging Services Project, used by software developers for outputting log statements from their applications. This reliable, flexible, and configurable tool is widely used across diverse applications from small-scale to large enterprise systems, primarily for debugging and tracking program execution. Developers working with .NET languages like C#, VB.NET , and others commonly utilize log4net. The library is not deprecated and is still being maintained.
+Useful links:
+Apache log4net official site: 
+http://logging.apache.org/log4net/
+ 
+GitHub repository: 
+https://github.com/apache/logging-log4net
+ 
+Documentation: 
+https://logging.apache.org/log4net/release/manual/introduction.html
+ 
+Identified CVEs
+CVE
+Affected Version(s)
+Next Safest Version
+https://bugzilla.redhat.com/show_bug.cgi?id=1835982
+ 
+All versions before 2.0.10
+2.0.10
+Solutions
+Repository
+Cause
+Solution
+Learnings
+Jira Item
+ICAzureStratusUploadJob
+IC.Logger a legacy library has a dependency on the log4net package.
+Remove IC.Logger and implement Serilog with IC.Serilog
+Log4net has a next safest version of 2.0.10 but current best practices are to use IC.Serilog for Serilog logging configurations.
+EBPP-19149
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ URL:/spaces/ED/pages/3230695425/log4net

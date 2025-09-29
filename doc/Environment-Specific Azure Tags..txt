@@ -1,0 +1,164 @@
+Azure Tagging Strategy
+Introduction
+We apply a standardized set of tags across all Azure resources using 
+Terraform
+.
+Tags are defined per environment in 
+.tfvars
+ files and extended at the resource level when necessary.
+This ensures 
+consistent cost tracking and  ownership.
+Tagging Standards
+Tag Key
+Purpose
+Allowed Values / Rules
+Applicability
+environment
+Identifies the deployment environment
+prd
+, 
+xat
+, 
+iat
+, 
+qar
+, 
+sbx
+, 
+dev
+ 
+npd
+Mandatory for all resources
+component
+Classifies the workload tier or service
+app
+, 
+web
+, 
+database
+, 
+avd
+Mandatory for all resources
+network_lane
+Differentiates network zones
+prod
+ = Primary Subscription, Enterprise Prod 
+non-prod
+ = Enterprise Dev/Test, Sandbox 
+npd
+ = AVD Non-Prod
+Mandatory for all resources
+cost-of-revenue
+Flags revenue-related environments
+yes
+ = 
+prd
+, 
+xat
+ 
+no
+ = 
+sbx
+, 
+dev
+, 
+iat
+, 
+qar
+, 
+npd
+Mandatory for all resources
+owner
+Assigns responsibility for resource types
+platform
+ = compute resources 
+data-services
+ = database resources 
+avd-*
+ = AVD resource owner
+Optional
+ → used when resource requires accountability
+name
+Provides a unique, descriptive resource name
+Follows convention: 
+<service>-<project>-<region>-<environment>
+ (e.g., 
+avd-Abethina1-pri-eus-avd1-npd
+)
+Optional
+ → typically used for AVD or resources where extra clarity is required
+Environment-Specific Tagging
+Production (prd)
+ → 
+cost-of-revenue = yes
+, 
+network_lane = prod
+, 
+environment = prd
+User Acceptance (xat)
+ → 
+cost-of-revenue = yes
+, 
+network_lane = prod
+, 
+environment = xat
+Integration (iat)
+ → 
+cost-of-revenue = no
+, 
+network_lane = non-prod
+, 
+environment = iat
+Quality Assurance (qar)
+ → 
+cost-of-revenue = no
+, 
+network_lane = non-prod
+, 
+environment = qar
+Sandbox (sbx)
+ → 
+cost-of-revenue = no
+, 
+network_lane = non-prod
+, 
+environment = sbx
+Development (dev)
+ → 
+cost-of-revenue = no
+, 
+network_lane = non-prod
+, 
+environment = dev
+Non-Production Desktop (npd)
+ → 
+cost-of-revenue = no
+, 
+network_lane = npd
+, 
+environment = npd
+Resource-Specific Tagging
+Compute resources
+ (e.g., VMs, App Services): 
+owner = platform
+Database resources
+ (e.g., SQL Servers, Cosmos DB): 
+owner = data-services
+AVD resources
+ (e.g., Azure Virtual Desktops):
+component = avd
+environment = npd
+ (or applicable environment)
+cost-of-revenue = no
+ (in non-prod)
+network-lane = npd
+name
+ (optional, descriptive) → 
+avd-<project>-<region>-<environment>
+owner
+ (optional, user/team specific) → 
+avd-<team or user>
+ (e.g., 
+avd-aflaherty1
+)
+ URL:/spaces/platform/pages/4679204875/Environment-Specific+Azure+Tags.

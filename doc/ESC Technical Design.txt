@@ -1,0 +1,764 @@
+Page Navigation
+Jira ticket 
+INT-3314
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Release Date
+April 2022
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+Knowledge Transfer
+Knowledge transfer will be scheduled in Q3
+API Documentation
+Change: Proposed OAuth Authentication
+ - 
+INT-4041
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TEST:
+Client ID: CCS-TESTC417M1INVOICECLOUD0_APPID
+Client Secret: 1d0896bd-34f9-46fe-afa6-e21e90fd0aa7
+Allowed Scope: ugbucs-CCS-TEST-C417M1/rest/*
+Access Token URL:
+https://idcs-80cb39b0e1b143548d8f4ec2793ed4e7.identity.oraclecloud.com/oauth2/v1/token/
+Grant Type: client_credentials
+Original Authentication
+:
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+IC_USER
+s%*9!d379U&WQtp22BEV
+TEST BASE URL (for all integrations):  https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/
+PROD BASE URL (for all integrations): 
+API Authentication Method: Basic 
+Specification:
+ESC has decided to not data pump ACH Rejects and Chargebacks
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+retrieveBalance
+Gets most up to date balance on account
+GET 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/retrieveBalance?accountID=?
+OR
+GET 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/retrieveBalance?accountID=?billID=?
+<accountId mdField="ACCT_ID" required="true"/>
+<response type="group">
+    <balanceDueAmount/>
+    
+<blockPaymentsCC/>
+     <blockPaymentsEFT
+>
+</response>
+AccountID 
+= AccountNumber
+BillID - InvoiceNumber (optional)
+Some billers will want to use the invoice number as part of the RTDR.  Either setting will work with or without BillID as a parameter.
+Update:
+balance due with balancedue
+If blockPaymentsCC  is true, make sure CC is blocked, if false make sure is unblocked
+If blockPaymentsEFT is true, make sure is blocked, if false make sure is unblocked
+Data Pump: Payment
+Advanced Setting #131 - JSON Configuration
+IC will identify all payment methods using Payment Codes, which will be passed in the icTenderType field of the request.
+Add Payment
+Adds a payment to an account
+POST: 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/addPayment
+{
+  "httpMethod": "POST",
+  "accountId": "",
+  "paymentAmount": 1,
+  "icTenderType": "4",
+  "icReferenceId": "ic14",
+  "response": {
+    "status": "SUCCESS",
+    "messageCategory": "90000",
+    "messageNumber": "90500",
+    "description": "Successfully updated Account ()"
+  }
+}
+{
+"accountId": AccountNumber,
+"paymentAmount": Payment Amount (without service fee),
+"icTenderType": 1 = Credit Card, 2= ACH, 3= Check, 4 = Cash, 5 = Venmo/Paypal 6 = Other
+"icReferenceId": PaymentGUID,
+}
+Payment Codes below can be configured using 
+Advanced Setting #131 JSON Configuration
+Payment Code Mapping:
+Credit Cards:
+Visa = 1
+Mastercard = 2
+Discover = 3
+AmericanExpress = 4
+EFTCheck = 5
+Check = 6
+OnlineBankDirect = 7
+PayPal = 8
+PayPalCredit = 9
+Venmo = 10
+ESC has decided to not data pump ACH Rejects and Chargebacks
+Data Pump:  
+Voids
+cancelPayment
+Cancels a previously made payment
+POST: 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/cancelPayment
+{
+status
+MessageCategory
+messageNumber
+description
+}
+{
+“
+payorAccountID
+”: AccountNumber
+“
+ccsPaymentTender
+” -
+ leave blank 
+“
+icPaymentGUID
+”: PaymentGUID
+“
+cancelReason
+”:  (this will always be set to 8 because they are only sending voids through data pump)
+           
+1 
+- Chargeback
+            
+2 
+- Bank Account Not  
+              Found  
+            (C01, R03, R04, R43, 755, 763, A26)
+ 
+             3 - 
+ Bank Error 
+             (C02, C03, C04, R28, R80)
+ 
+4 
+- Insufficient funds
+              (R01)
+ 
+5
+ - bank account closed
+              (R02, 754)
+             
+6
+: Customer Request
+             (A05,A06,A09, A18)
+ 
+7 
+- Card declined 
+             (A11)
+ 
+8
+ - Invoice Cloud Others (VOID) +
+            (all others)
+(
+Voids to be included
+ as CancelReason 8)
+}
+Data Pump: Email Changes
+updateInfo
+used to update an email address on an account
+TEST:
+POST
+https://stg.utilities-cloud.oracleindustry.com/c417m1/test/ccs/rest/apis/cm/customers/accounts/updateInfo
+PROD:
+POST
+https://utilities-cloud.oracleindustry.com/c417m1/prod/ccs/rest/apis/cm/customers/accounts/updateInfo
+{
+    "input": {
+        "accountId": "<
+account ID
+>",
+        "updates": [
+            {
+                "object": "PRIMARYEMAIL",
+                "value": "<
+email
+>"
+            }
+        ]
+    },
+    "output": {
+        "updateFlg": "success",
+        "message": ""
+    }
+}
+ 
+{
+    "input":{
+        "accountId": "[AccountNumber]",
+        "updates":[
+               
+                {
+                    "object": "PRIMARYEMAIL",
+                    "value":”[newemailaddresss]
+                }
+        ]
+    }
+} 
+Data Pump: Paperless Enrollment
+updateAccount
+Updates autopay, paperless, etc status on account
+POST: 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/updateAccount
+{
+  "httpMethod": "POST",
+  "accountId": "",
+  "accountChangeType": "PL",
+  "newValue": "N",
+  "oldValue": "Y",
+  "response": {
+    "status": "SUCCESS",
+    "messageCategory": "90000",
+    "messageNumber": "90500",
+    "description": "Successfully updated Account ()"
+  }
+}
+{
+  "accountId": AccountNumber,
+  "accountChangeType": "PL", 
+  "activeFlag": “Y” or “N”
+  "updatedValue": ““
+}
+Data Pump: AutoPay Enrollment
+updateAccount
+Updates autopay, paperless status, etc on account
+POST: 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/updateAccount
+   "response":    {
+      "status": "SUCCESS",
+      "messageCategory": "90000",
+      "messageNumber": "90500",
+      "description": "Successfully updated Account ()"
+   }
+{
+  "accountId": Account Number,
+  "accountChangeType": "AP"
+  "activeFlag”: “Y” or “N”
+}
+Bill Linking
+getBillURL
+GET: : 
+https://stg.utilities-cloud.oracleindustry.com:443/c417m1/dev/ccs/rest/apis/cm/customers/invoiceCloud
+/getBillUrl?billId=?
+Response: Returns a URL to use for bill linking
+billId = BillID from invoice
+File 
+Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+Uploaded to SOAP webservices in BIF format
+Frequency: Each billing cycle
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+FH
+File Header
+2
+BillerGuid
+TRUE
+Will have to be set for each biller
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+TRUE
+Process Date 
+mm/dd/yyyy
+File Header
+5
+InvoiceCount
+TRUE
+Invoice Count
+File Header
+6
+TotalInvoiceAmount
+TRUE
+Total Invoice Amount
+File Header
+7
+RowType
+TRUE
+IH
+Invoice Header
+8
+RecordType
+TRUE
+N
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+If doing remote linking through ESC 
+ESC - Remote PDF Viewer (F7863F9F-8F94-44D3-959B-F5021F6D4E8E)
+If not, they would have a separate invoiceformatguid
+Invoice Header
+10
+InvoiceNumber
+TRUE
+Bill ID
+Invoice Header
+11
+InvoiceDate
+TRUE
+bill date
+mm/dd/yyyy
+Invoice Header
+12
+InvoiceDueDate
+TRUE
+bill due date
+mm/dd/yyyy
+Invoice Header
+13
+TotalAmountDue
+TRUE
+total amount due
+Invoice Header
+20
+AllowPartialPayments
+FALSE
+1
+Invoice Header
+23
+FirstNotifyRequestedDate
+FALSE
+BIF Customization
+Invoice Header
+24
+SecondNotifyRequestedDate
+FALSE
+BIF Customization
+Invoice Header
+25
+ThirdNotifyRequestedDate
+FALSE
+BIF Customization
+Invoice Header
+38
+Custom1
+FALSE
+Old account number
+ (legacy number)
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+40
+Custom3
+FALSE
+Invoice Header
+41
+Custom4
+FALSE
+Invoice Header
+93
+BalanceDue
+FALSE
+Current bill amount + past due
+Invoice Header
+186
+LateFeeAmount
+FALSE
+Invoice Header
+187
+LateFeeDate
+FALSE
+LPC Charge Date
+Invoice Header
+188
+LateFeeDetailRecord
+FALSE
+Invoice Header
+189
+LateFeeDesc
+FALSE
+Invoice Header
+190
+EmailLateFeeNotice
+FALSE
+1
+Invoice Header
+194
+BalanceForward
+FALSE
+1
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+42
+Invoice Header
+407
+PastDue
+FALSE
+Total Previous Balance
+Invoice Header
+58
+RowType
+TRUE
+CR
+Customer Record
+59
+AccountNumber
+TRUE
+Account ID
+Customer Record
+60
+CustomerName
+TRUE
+Primary / Main person (first and last name)
+Customer Record
+61
+Address1
+FALSE
+mailing address 1
+Customer Record
+62
+Address2
+FALSE
+mailing address 2
+Customer Record
+63
+City
+FALSE
+mailing city
+Customer Record
+64
+State
+FALSE
+mailing state
+Customer Record
+65
+Zip
+FALSE
+mailing postal
+Customer Record
+66
+Phone
+FALSE
+phone
+Customer Record
+67
+EmailAddress
+FALSE
+email address
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Cash only flag
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Cash only flag
+Customer Record
+371
+CustomerName2
+FALSE
+Secondary person (first and last name 2)
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+70
+RowType
+TRUE
+ID
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+[BaseURL]/cm/customers/invoiceCloud/retrieveBalance?accountId={0}
+- or -
+[BaseURL]/cm/customers/invoiceCloud/retrieveBalance?accountId={0}&billId={1} 
+Y
+billid (invoicenumber) is optional.
+11
+DataPump Payments EndPoint/WebService URL
+[BaseURL]/cm/customers/invoiceCloud/addPayment
+Y
+14
+DataPump Paperless EndPoint/WebService URL
+[BaseURL]/cm/customers/invoiceCloud/updateAccount
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+[BaseURL]/cm/customers/invoiceCloud/updateAccount
+Y
+20
+Remote PDF EndPoint/WebService URL	
+getBillUrl | TOKEN URL
+Y
+21
+Remote PDF EndPoint/WebService Username	
+CLIENTID | ALLOWEDSCOPE
+Y
+22
+Remote PDF EndPoint/WebService Password	
+CLIENT SECRET
+Y
+64
+DataPump Payments CC Code
+Tender type codes:
+1(1)|2(2)|5(3)|6(4)|15(5)|16(5)|17(5)|0(6)
+N - standard for the integration 
+81
+RTDR Service Version
+2
+Y - Turn off open billing and only refresh the invoice with the most recent InvoiceDate
+88
+Secondary RTDR EndPoint/WebService URL
+<TOKENURL>
+Y
+89
+Secondary RTDR Username if Applicable
+CLIENTID | ALLOWEDSCOPE
+Y
+90
+Secondary RTDR Key or Password if Applicable	
+CLIENT SECRET
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL
+[BaseURL]/cm/customers/invoiceCloud/cancelPayment
+Y
+131
+JSON Configuration
+ {
+    "PaymentCodeConfiguration":[
+      {"PaymentTypeID":1,"CardType":"Visa","PaymentCode":1},
+      {"PaymentTypeID":1,"CardType":"Mastercard","PaymentCode":2},
+      {"PaymentTypeID":1,"CardType":"Discover","PaymentCode":3},
+      {"PaymentTypeID":1,"CardType":"American Express","PaymentCode":4},
+      { "PaymentTypeID":2,"CardType": "", "PaymentCode": 5 },
+      { "PaymentTypeID":5,"CardType": "", "PaymentCode": 6 },
+      { "PaymentTypeID":11,"CardType": "", "PaymentCode": 7 },
+      { "PaymentTypeID":15,"CardType": "", "PaymentCode": 8 },
+      { "PaymentTypeID":16,"CardType": "", "PaymentCode": 9 },
+      { "PaymentTypeID":17,"CardType": "", "PaymentCode": 10 },
+    ]
+  }
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+ESC should be sending in file
+AutoPayCollectionDate
+BIF Customization
+BalanceForward
+ESC should be sending in file (should be set to yes)
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF Customization
+InvoiceDate
+Sent in BIF
+InvoiceDueDate
+Sent in BIF
+InvoiceFormatGuid
+Sent in BIF
+InvoiceTypeID
+Sent in BIF (Current Active InvoiceTypeID: 1, 8, 42, 53)
+LateFeeDate
+Sent in BIF
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization
+ThirdNotifyRequestedDate
+BIF Customization
+User Interaction and Design
+Data Flow - Invoice
+att2193162241
+2181038120
+1
+Flow1
+IM
+att2193129473
+att2193096705
+0
+Data Flow - Adjustments
+att2192801797
+2181038120
+1
+Flow2
+IM
+att2193129478
+att2192736261
+0
+Data Flow - Payment
+att2192769027
+2181038120
+1
+Flow3
+IM
+att2193293313
+att2193260545
+0
+Data Flow - Void
+att2192441355
+2181038120
+1
+Flow4
+IM
+att2192736266
+att2193326081
+0
+Data Flow - ACH Reject
+att2193195011
+2181038120
+1
+Flow5
+IM
+att2193293318
+att2193358849
+0
+Data Flow - Change Log
+att2193195016
+2181038120
+1
+Flow6
+IM
+att2193031173
+att2193424385
+0
+Payer Experience - Portal Payment
+See Data Flow - Payment, screenshots coming soon
+ - Q4 2022
+Payer Experience - Guest Payment
+User goes to ESC portal, searches for account number as a guest, IFrame is presented for payment route. Screenshots coming soon
+Biller Experience
+ESC portal does not contain much functionality for CSRs so Agent Connect was decided as not needed. Instead - CSRs will use the Invoice Cloud biller portal.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoiceFile
+Used to upload BIFs to Invoice Cloud
+RegisterAccount
+Used to register account in Invoice Cloud
+Remote Authentication
+Used to generate SSO token
+Link Accounts
+Used to link customer accounts
+SSO IFrames:
+https://www.invoicecloud.com/portal/remoteauth/customerportalredirect.aspx?RemoteAuthenticationToken=token&ViewMode=value&RedirectID=value&CSSUrl=value
+SSO Redirects being used:
+Open Bill Listing - 8
+Paperless - (Handled on ESC portal)
+Autopay - 3
+Saved Payment Methods - 5
+CloudPayV2
+Used to IFrame payment experience for guest checkout on ESC page
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-4041
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Est June 2022
+Prior to this change basic auth was used in their testing environment to code the integration
+Going forward all ESC billers will use this new OAuth standard for authentication
+Oauth
+INT-4063
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+July 2022
+Chargebacks not included in Data Pump
+Add chargeback posting through Data Pump
+Posting Chargebacks to billers ESC system
+INT-5253
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Chargebacks and ACH rejects are included in the data pump
+They only want voids to be posted back in the data pump
+Difficulty with chargebacks  / rejects
+No email changes were posted back to ESC because they use SSO and email changes are locked down on registered accounts
+They have a need to know the email on a guest account, specifically when it enrolls in paperless
+Paperless / Guest Email
+INT-7244
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/12/2023
+All of a customer’s invoice is being refreshed under ESC
+ESC would like IC modify their integration so that all billers refresh only a customer’s latest invoice. 
+We are setting the value for RunMultipleRequest to true in RealTimeDataRefresh.vb
+INT-14213
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+5/06/2025
+Integration was using payment sources for datapump.
+Integration will now allow for Payment Codes to be datapump for all payment methods.
+Created JSON configuration.
+ URL:/spaces/IM/pages/2181038120/ESC+Technical+Design

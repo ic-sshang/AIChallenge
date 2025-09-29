@@ -1,0 +1,348 @@
+This document describes the supported methods to form and execute parameterized SQL statements within client applications
+6
+1
+false
+default
+list
+true
+Context
+The majority of sql statements formed in our client applications take form using string concatenation or dynamic SQL.  This document is not intended to inform about the dangers of this practice but generally it is discouraged as it can lead to SQL injection attacks.  While there are some protections that are in place to help prevent SQL injection attacks, such as using only stored procedures, input validation, firewall-level protection, and dynamic sql parameterization, the recommended approach is to simply not use string concatenation to form sql statements, and instead use parameterized sql statements.  
+The good news is our client application database access methods support parameterized sql statements.  Usage of these methods can be seen sparingly throughout our code base.  It simply is just a bit more verbose to form a parameterized sql statement versus concatenating strings, which has led to continued growth of string concatenated sql statements with very light usage of parameterized statements.
+While it is more verbose, we must do this for the security of our applications, database and infrastructure.
+Parameterized Statement Support Per Access Method 
+ICDatabaseService / IC.ServiceProxies (v1.0.9216.27329+) / IC.Database (v1.0.9225.25620+)
+ICDatabaseService is a WCF service hosted on our Proxy tier of servers.  Most of our client applications are using this database access method today.  This method supports both string concatenated and parameterized sql statements.  
+IC.ServiceProxies is a library that uses 
+ChannelFactory
+ to simplify connecting to ICDatabaseService.  It uses the same interface as ICDatabaseService and therefore supports the same methods as ICDatabaseService.  It is available as a nuget package and is the preferred method to access database through ICDatabaseService.
+IC.Database is the library contained within ICDatabaseService that holds all the database execution logic.    ICDatabaseService exposes the same methods contained within IC.Database.  This library is available as a nuget package.  It is the preferred method when working with large datasets as it doesn’t go through a WCF service layer.  It goes direct to the database.
+The noted versions above are the latest versions of those libraries as today (4/28).  Past versions also support the same methods described below but only the recent ones have support for the newer 
+Boolean
+, 
+Decimal
+,  
+DateTime
+, and 
+Null
+ parameter value types. 
+String
+ and 
+Integer
+ parameter value types may be enough for your use case.  If not, please upgrade.
+Also note that when upgrading to the latest versions, it may come with an upgrade of 
+IC.Interfaces
+ to 
+2.3.3
+ that may require other dependencies in your project to get updated.  Those dependencies likely are already updated but you’ll need to get the latest of that package.
+These 3 methods are very much alike as described.  Below are the 4 core methods that you would use for 99% of the use cases today.  Note that the names are almost identical to the methods that support string concatenated sql statements, with the only difference between 
+_ADVANCED
+ appended to the name
+GET_DATASET_ADVANCED
+GET_DATATABLE_ADVANCED
+EXECUTE_COMMAND_NONQUERY_ADVANCED
+EXECUTE_COMMAND_SINGLE_RESULT_ADVANCED
+All these methods accept an 
+AdvancedConfiguration
+ object.  This object has properties you will need to set based on your use case.  Some of the properties were modeled off standard 
+ADO.NET
+ properties such as 
+CommandText
+ and 
+CommandType
+.  Others may have already been required through the non-advanced methods but the values passed in differently.
+ApplicationName
+ - The name of the client application
+CommandText
+ - In most cases this is the stored procedure name.  In more advanced cases this can be a full sql statement but this is rare.
+CommandType
+ - In most cases this is the 
+StoredProcedure
+ enum value.  In more advanced cases it can be the 
+Text
+ enum value but again, rare.
+CommandTimeout
+ - The execution timeout value
+Database
+ - In most cases it is either 
+DBMaster
+ or 
+DBLive
+.  
+BillerID
+ - The target BillerID the sql statement should be executed against. 
+If your stored procedure accepts parameters, there are list properties where you will need to add your parameter values to.  There is a list for every type of value you are passing in.  
+IntegerParameter
+, 
+StringParameters
+, 
+BooleanParameters
+, 
+DecimalParameters
+, 
+DateTimeParameters
+Most common parameter types
+BytesParameters
+, 
+DataTableParameters
+Used occasionally to do things such as pass image bytes or lists of values in table form
+NullParameters
+Some stored procedures support 
+NULL
+ values.  This is the proper way to pass in that value type. 
+If you’re familiar with 
+ADO.NET
+ parameterized statement support, you’ll notice that you can pass 
+object
+ types as parameters, simplifying the process of passing parameters, however, 
+AdvancedConfiguration
+ does not support this.  This is because the payload between the client app and receiving service does not support (or did not before) 
+object
+ types.  
+Once all these values are filled as needed, the 
+AdvancedConfiguration
+ object can be passed to your selected 
+_ADVANCED
+ method for execution.  
+Below are samples from our code base of how to create and execute a parameterized sql statement using these methods for various scenarios.  
+Passing string and integer parameters - 
+Link
+vb
+wide
+  Dim configuration As New AdvancedConfiguration() With {
+      .ApplicationName = "ICCRM",
+      .CommandText = "selOptBlueBillers",
+      .CommandTimeout = 500,
+      .CommandType = DatabaseCommandType.StoredProcedure,
+      .Database = DatabaseName.DBMaster,
+      .IntegerParameters = New List(Of IC.Interfaces.Database.IIntegerParameter) From {
+          New IntegerParameter() With {.Name = "@BillerID", .Value = billerID},
+          New IntegerParameter() With {.Name = "@TerminalID", .Value = terminalID}
+      },
+      .StringParameters = New List(Of IC.Interfaces.Database.IStringParameter)
+  }
+
+  If mid IsNot Nothing Then
+      configuration.StringParameters.Add(New StringParameter() With {.Name = "@MID", .Value = mid})
+  End If
+  If amexLive IsNot Nothing Then
+      configuration.IntegerParameters.Add(New IntegerParameter() With {.Name = "@Active", .Value = amexLive})
+  End If
+  If startDate IsNot Nothing Then
+      configuration.StringParameters.Add(New StringParameter() With {.Name = "@StartDate", .Value = startDate.ToString("yyyy-MM-dd HH:mm:ss")})
+  End If
+
+
+  optblueDataTable = _database.GET_DATASET_ADVANCED(configuration).Tables(0)
+Passing a table to a stored procedure - 
+Link
+vb
+wide
+  client = New ICDatabaseService.DatabaseClient()
+  Dim config As New ICDatabaseService.AdvancedConfiguration()
+  Dim tableParams As New List(Of ICDatabaseService.DataTableParameter)
+
+  'set basic vlaues
+  config.ApplicationName = My.Application.Info.ProductName
+  config.CommandType = ICDatabaseService.DatabaseCommandType.StoredProcedure
+  config.CommandText = "selcustomersByTable"
+  config.Database = ICDatabaseService.DatabaseName.DBLive
+
+  'set table params
+
+  'create table from list of invoiceid being passed in
+  Dim customers As New DataTable("Table1")
+  customers.Columns.Add(New DataColumn("CustomerID", GetType(Integer)))
+
+  'add rows for each item in list
+  customerIds.ForEach(Function(item) customers.Rows.Add(item))
+
+  'add table to table params
+  tableParams.Add(New ICDatabaseService.DataTableParameter() With {.Name = "@CustomerIDList", .Value = customers})
+  config.DataTableParameters = tableParams.ToArray()
+
+  config.BillerID = BillerID
+
+  'send to db
+  ds = client.GET_DATASET_ADVANCED(config)
+  client.Close()
+Inserts using string and integer parameters - 
+Link
+vb
+wide
+  Dim config As New AdvancedConfiguration()
+  config.ApplicationName = "CRM"
+  config.CommandText = "insBatchCloseMaintenance"
+  config.CommandTimeout = 300
+  config.CommandType = DatabaseCommandType.StoredProcedure
+  config.BillerID = billerID
+  config.Database = DatabaseName.DBLive
+
+  Dim intParams As New List(Of IntegerParameter) From {
+      New IntegerParameter() With {.Name = "@AutoCloseHour", .Value = Convert.ToInt32(ntbAutoCloseHour.Value)},
+      New IntegerParameter() With {.Name = "@CustomClose", .Value = Convert.ToInt16(ckCustomClose.Checked)},
+      New IntegerParameter() With {.Name = "@Active", .Value = Convert.ToInt16(ckActive.Checked)},
+      New IntegerParameter() With {.Name = "@BillerID", .Value = billerID}
+  }
+  Dim stringParams As New List(Of StringParameter) From {
+      New StringParameter() With {.Name = "@CustomCloseTime", .Value = FormatTime(tpCustomCloseHour.SelectedTime)},
+      New StringParameter() With {.Name = "@StartDate", .Value = Me.tpStartDate.SelectedDate.Value.ToString("yyyy-MM-dd HH:mm:ss")},
+      New StringParameter() With {.Name = "@EndDate", .Value = Me.tpEndDate.SelectedDate.Value.ToString("yyyy-MM-dd HH:mm:ss")}
+  }
+  config.IntegerParameters = intParams
+  config.StringParameters = stringParams
+
+  For attempt As Integer = 1 To maxRetries
+      Try
+          clsDatabase.EXECUTE_COMMAND_NONQUERY_ADVANCED(config)
+          success = True
+          Exit For
+      Catch ex As Exception
+
+      End Try
+  Next
+Scalar commands - 
+Link
+vb
+wide
+  Dim configuration As New AdvancedConfiguration() With {
+      .ApplicationName = "ICCRM",
+      .CommandText = "insOptBlueBiller",
+      .CommandTimeout = 500,
+      .CommandType = DatabaseCommandType.StoredProcedure,
+      .Database = DatabaseName.DBMaster,
+      .IntegerParameters = New List(Of IC.Interfaces.Database.IIntegerParameter) From {
+          New IntegerParameter() With {.Name = "@BillerID", .Value = billerID},
+          New IntegerParameter() With {.Name = "@TerminalID", .Value = terminalID},
+          New IntegerParameter() With {.Name = "@Active", .Value = amexLive}
+      },
+      .StringParameters = New List(Of IC.Interfaces.Database.IStringParameter) From {
+          New StringParameter() With {.Name = "@StartDate", .Value = startDate},
+          New StringParameter() With {.Name = "@MID", .Value = mid}
+      }
+  }
+  optBlueBillerID = _database.EXECUTE_COMMAND_SINGLE_RESULT_ADVANCED(configuration)
+IC.Net.DataAccess.MsSql (v0.1.3+)
+IC.Net.DataAccess.MsSql is a supported, and recently built, database access method.  This library only supports parameterized sql statements and is the preferred library for .NET (Core) applications.  This library is available as a nuget package.
+Full documentation for this library exists 
+here
+ but here is a short version.  The core methods on the library that line up closest to the methods from other database access methods are:
+ExecuteQueryDataSetAsync
+ - Equivalent of 
+GET_DATASET_ADVANCED
+ExecuteQueryDataTableAsync
+ - Equivalent of 
+GET_DATATABLE_ADVANCED
+ExecuteNonQueryAsync
+ - Equivalent of 
+EXECUTE_COMMAND_NONQUERY_ADVANCED
+ExecuteScalarAsync
+ - Equivalent of 
+EXECUTE_COMMAND_SINGLE_RESULT_ADVANCED
+ExecuteQueryAsync
+ - There is no equivalent to this in the other methods but it is the preferred method to return strongly typed values
+Each of these methods support:
+CommandText
+  - Most of the time it is the stored procedure name
+QueryParameter[]
+ - An array of parameters
+CancellationToken
+CommandTimeout
+As mentioned earlier, returning strongly typed values is the recommended practice when pulling data. 
+ExecuteQueryAsync
+ supports this.  Here is a small example that passes in a 
+QueryParameter[]
+ containing an @Active parameter to a well known stored procedure:
+c#
+wide
+using (var database = new IC.Net.DataAccess.MsSql.Database(connectionStringProvider))
+{
+	var billers =
+		( await database.ExecuteQueryAsync<Biller>("dbo.selAzureBillers", new QueryParameter[] { new QueryParameter("Active", true) }, CancellationToken.None) )
+		.ToArray();
+	foreach (var biller in billers)
+	{
+		Console.WriteLine($"BillerId: {biller.BillerId}");
+	}
+}
+Here is a list of functions that wrapped the rest of the above functions on a recent project:
+c#
+wide
+  private static BillerShardDatabaseFactory _dbFactory;
+  
+  public DataSet GET_DATASET(int billerId, string spName, QueryParameter[] parameters, int commandTimeout = 30)
+  {
+      using (var db = _dbFactory.Create(billerId))
+      {
+          return db.ExecuteQueryDataSetAsync(spName, parameters,new System.Threading.CancellationToken(),TimeSpan.FromSeconds(commandTimeout)).
+                                              GetAwaiter().
+                                              GetResult();
+  
+      }
+  }
+  
+  public DataTable GET_DATATABLE(int billerId, string spName, QueryParameter[] parameters, int commandTimeout = 30)
+  {
+      using (var db = _dbFactory.Create(billerId))
+      {
+          return db.ExecuteQueryDataTableAsync(spName, parameters, new System.Threading.CancellationToken(), TimeSpan.FromSeconds(commandTimeout)).
+                                              GetAwaiter().
+                                              GetResult();
+  
+      }
+  }
+  
+  public int EXECUTE_COMMAND_NONQUERY(int billerId, string spName, QueryParameter[] parameters, int commandTimeout = 30)
+  {
+      using (var db = _dbFactory.Create(billerId))
+      {
+          return db.ExecuteNonQueryAsync(spName, parameters, new System.Threading.CancellationToken(), TimeSpan.FromSeconds(commandTimeout)).
+              GetAwaiter().
+              GetResult();
+  
+      }
+  }
+  
+  public T EXECUTE_COMMAND_SINGLE_RESULT<T>(int billerId, string spName, QueryParameter[] parameters, int commandTimeout = 30)
+  {
+      using (var db = _dbFactory.Create(billerId))
+      {
+          return db.ExecuteScalarAsync<T>(spName, parameters, new System.Threading.CancellationToken(), TimeSpan.FromSeconds(commandTimeout)).
+              GetAwaiter().
+              GetResult();
+  
+      }
+  }
+Here is an example of a repository function calling the DAL layer above.  Note the creation of the 
+QueryParameter[]
+ array of parameters.
+c#
+wide
+  public DataTable GetEmailRecipients(int billerId, int ReportGeneratorQueueID)
+  {
+      return this._db.GET_DATATABLE(billerId,
+                                  "RPT.selReportGeneratorRecipients",
+                                  new IC.Net.DataAccess.MsSql.QueryParameter[] {
+                                      new IC.Net.DataAccess.MsSql.QueryParameter("@ReportGeneratorQueueID", ReportGeneratorQueueID)
+                                  });
+  }
+Here is another example that passes in multiple parameters in the 
+QueryParameter[]
+ object.
+c#
+wide
+  public void MarkReportAsProcessed(int billerID, int billerReportID, string generatedReportUrl)
+  {
+      if (billerReportID == 0) { return; }
+
+      this._db.EXECUTE_COMMAND_NONQUERY(billerID, "RPT.spMarkQueueReportProcessed",
+          new IC.Net.DataAccess.MsSql.QueryParameter[] {
+              new IC.Net.DataAccess.MsSql.QueryParameter("@ReportGeneratorQueueID", billerReportID),
+              new IC.Net.DataAccess.MsSql.QueryParameter("@GeneratedReportUrl", generatedReportUrl)
+          });
+
+  }
+Guidance on Existing Non-Parameterized SQL Statements
+As mentioned earlier, string concatenation sql statements are prevalent in our code base.  You will run into them if you have not already.  To aid in determining what your responsibilities are working with existing code bases where non-parameterized statements exist, please read this decision tree.
+Original PlantUML for future edits > 
+ 
+ URL:/spaces/ED/pages/4252336309/Using+Parameterized+SQL+Statements

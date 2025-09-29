@@ -1,0 +1,1387 @@
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Integrator Web Services
+Summary: 
+Bill Presentment (Template Detail)
+Sample Template: 
+ 
+Mapping:
+Current Reading Date
+ on the Mail Bill copy maps with field number 40 on the MSI layout
+Previous Reading Date
+ on the Mail Bill copy maps with field number 39 on the MSI layout
+Type of Reading
+ on the Mail Bill copy maps with field number 26 on the MSI layout
+Current Reading
+ on the Mail Bill copy maps with field number 55 on the MSI layout
+Previous Reading
+ on the Mail Bill copy maps with field number 72 on the MSI layout
+Consumption
+ on the Mail Bill copy maps with field number 65 on the MSI layout
+File Mapping
+Examples
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .DAT
+File Naming Convention: 1738_20240701151814_EBILL.fde108dc-28e5-4fb0-b736-fbcbf6ff9f36.DAT
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Position
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+Record Type
+1
+VarChar
+ALWAYS “H” FOR HEADER
+1
+File Header
+2
+BillerGuid
+N
+TRUE
+Set by IC “8bcdaa04-0cc9-47ed-8259-e24a23e3ab2a”
+File Header
+3
+ThirdPartyFileReference
+N
+FALSE
+Set by IC
+File Header
+4
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+Calculated by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Calculated by IC
+File Header
+7
+RowType
+N
+TRUE
+IH
+Invoice Header
+8
+RecordType
+N
+TRUE
+N
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+62609576-8A17-4DD7-83A4-9F9E051DBD80
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+"AccountNumber") & "-" & "TenantCode". “BillDate”
+Account Number - The unique number assigned to the service address
+Field Length 10
+Position 21 - 30 
+Tenant Code - The unique number assigned to the tenant at a service address.
+Field Length 2 
+Position 31 –32 
+Bill Date - The date of the utility billing (YYYMMDD)
+ Field Length 8 
+Position 33 – 40
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill Date
+33 – 40
+YYYMMDD
+The date of the utility billing
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+BILL-DUE-DATE
+794 – 801
+YYYYMMDD
+The date the bill is due.
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Net Amount Due
+1047 – 1056
+Money
+Previous balance + deposit amount + service 1 amount + service 2 amount + service 3 amount + service 4 amount + service 5 amount + miscellaneous billing amount 1 + miscellaneous billing amount 2 + miscellaneous billing amount 3 + tax 1 amount + tax total amount 2 + tax total amount 3. Libertyville will not have amounts in all of these fields.
+10
+Invoice Header
+20
+AllowPartialPayments
+N
+FALSE
+Yes - BIF Customization
+Invoice Header
+23
+FirstNotifyRequestedDate
+N
+FALSE
+BIF Customization
+Invoice Header
+24
+SecondNotifyRequestedDate
+N
+FALSE
+BIF Customization
+Invoice Header
+25
+ThirdNotifyRequestedDate
+N
+FALSE
+BIF Customization
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Service Address
+183 – 212
+varchar
+The address where the service was used.
+30
+Invoice Header
+93
+BalanceDue
+N
+FALSE
+Taken from TotalAmountDue
+Invoice Header
+194
+BalanceForward
+N
+FALSE
+Set to “1”
+Invoice Header
+248
+AutoPayCollectionDate
+Y
+FALSE
+BILL-DUE-DATE
+794 – 801
+YYYYMMDDYYYYMMDD
+8
+Invoice Header
+252
+InvoiceTypeID
+N
+True
+Always ‘42’
+Invoice Header
+346
+BillerBillYear
+N
+FALSE
+BILL-DUE-DATE
+794 – 801
+YYYY
+Taken from Invoice Date
+4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+("AccountNumber") & ("TenantCode")
+21-30
+&
+31-32
+varchar
+Account Number
+The unique number assigned to the service address.
+Tenant Code
+The unique number assigned to the tenant at a service address.
+10 & 2
+Invoice Header
+375
+Active
+N
+FALSE
+Set to 1
+Invoice Header
+58
+RowType
+N
+TRUE
+Always “CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+("AccountNumber") & ("TenantCode")
+21-30
+&
+31-32
+varchar
+Account Number
+The unique number assigned to the service address.
+Tenant Code
+The unique number assigned to the tenant at a service address.
+10 & 2
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Bill To Name 1
+41 – 70
+varchar
+The first name line where the bill is to be sent.
+30
+Customer Record
+61
+Address1
+Y
+FALSE
+Bill To Address 1
+101 – 130
+varchar
+The 1st address line where the bill is to be sent.
+30
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Bill to City
+161 – 180
+varchar
+20
+The city where the bill is to be sent.
+Customer Record
+64
+State
+Y
+FALSE
+Bill To State
+181 – 182
+varchar
+2
+The State where the bill is to be sent.
+Customer Record
+65
+Zip
+Y
+FALSE
+BILL TO ZIP CODE
+02 – 10
+varchar
+The zip code of the address to which the bill is being sent.
+9
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+Bill To Name 2
+71 – 100
+varchar
+The second name line where the bill is to be sent. Could be blank
+30
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+("AccountNumber") & ("TenantCode")
+21-30
+&
+31-32
+varchar
+Account Number
+The unique number assigned to the service address.
+Tenant Code
+The unique number assigned to the tenant at a service address.
+10 & 2
+Customer Record
+70
+RowType
+N
+TRUE
+Always “ID”
+Invoice Detail
+71
+ProductID
+N
+FALSE
+“Header Record”
+Invoice Detail
+72
+Description
+N
+FALSE
+“Header Record from MSI”
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+Message #1
+02-61
+varchar
+1st message line
+60
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Message #2
+62 – 121
+varchar
+2nd message line
+60
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+Message #2
+62 – 121
+varchar
+2nd message line
+60
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+Message #3
+122 – 181
+varchar
+3rd message line
+60
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Message #4
+182 – 241
+varchar
+4th message line
+60
+Invoice Detail
+70
+RowType
+N
+TRUE
+Always “ID”
+Invoice Detail
+71
+ProductID
+N
+FALSE
+“Detail Record”
+Invoice Detail
+72
+Description
+N
+FALSE
+“Detail Record from MSI”
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+SERVICE 3 Reading
+946 – 952
+varchar
+The current reading for service 3. This is not used by Libertyville.
+7
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Net Amount Due
+1047 – 1056
+varchar
+Previous balance + deposit amount + service 1 amount + service 2 amount + service 3 amount + service 4 amount + service 5 amount + miscellaneous billing amount 1 + miscellaneous billing amount 2 + miscellaneous billing amount 3 + tax 1 amount + tax total amount 2 + tax total amount 3. Libertyville will not have amounts in all of these fields.
+10
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+SERVICE 3 AMOUNT
+842 – 851
+varchar
+The amount of service 3. Not used by Libertyville at this time.
+10
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+Service 4 Reading Description
+623 – 652
+varchar
+The type of reading for service 4. Not used by Libertyville.
+30
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Bill To Address 2
+131 – 160
+varchar
+The 2nd address line where the bill is to be sent.
+30
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+Filler2
+323 – 382
+varchar
+Spaces
+60
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+Duplicate Y/N
+1102
+varchar
+This would be "Y" if it sent to the owner of a property. In that case, is a duplicate bill being a message should be printed stating it is a duplicate owner bill. Do not pay.
+1
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+Account Number
+21-30
+varchar
+The unique number assigned to the service address
+10
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+SERVICE-5-QUANTITY
+1039 – 1046
+varchar
+The quantity used for service 5. Not used by Libertyville.
+8
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+Service 3 Reading Description
+593 – 622
+varchar
+The type of reading for service 3.
+30
+Invoice Detail
+208
+CustomField11
+Y
+FALSE
+SERVICE-2-DESC
+223 – 232
+varchar
+The description of the second service.
+10
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+SERVICE-5-DESC
+253 – 262
+varchar
+The description of the Fifth service.
+10
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+Bill Usage 2
+1197 - 1204
+varchar
+Prior usage 2
+8
+Invoice Detail
+211
+CustomField14
+Y
+FALSE
+SERVICE 1 AMOUNT
+822 – 831
+varchar
+The amount of water charges, or zeroes if the account is sewer only.
+10
+Invoice Detail
+212
+CustomField15
+Y
+FALSE
+SERVICE-4-QUANTITY
+1031 – 1038
+varchar
+The quantity used for service 4. Not used by Libertyville.
+8
+Invoice Detail
+213
+CustomField16
+Y
+FALSE
+Service 1 Reading Description
+533 – 562
+varchar
+The type of reading for water and sewer (Actual, Estimate, Final). Or spaces if sewer only account.
+30
+Invoice Detail
+214
+CustomField17
+Y
+FALSE
+Bill To Address 1
+101-130
+varchar
+The 1st address line where the bill is to be sent.
+30
+Invoice Detail
+215
+CustomField18
+Y
+FALSE
+MISC-BILL-ITEM-3-DESC
+743 – 772
+varchar
+The description of a third miscellaneous charge.
+8
+Invoice Detail
+216
+CustomField19
+Y
+FALSE
+SERVICE 2 READ DATE
+975 – 982
+varchar
+This is zeros. Not used by Libertyville.
+8
+Invoice Detail
+217
+CustomField20
+Y
+FALSE
+SERVICE-3-DESC
+233 – 242
+varchar
+The description of the third service.
+10
+Invoice Detail
+218
+CustomField21
+Y
+FALSE
+MISC 3 AMOUNT
+892 – 901
+varchar
+The amount of the 3rd miscellaneous billing. Not used by Libertyville at this time.
+10
+Invoice Detail
+219
+CustomField22
+Y
+FALSE
+SERVICE 2 Reading
+939 – 945
+varchar
+The current reading for service 2. This is not used by Libertyville.
+7
+Invoice Detail
+220
+CustomField23
+Y
+FALSE
+COMPOUND-USAGE-Y/N
+775
+varchar
+If the usage for the bill is compound usage (usages of two meters added together), this would be "Y". I don't know what the outsource vendor does with it.
+1
+Invoice Detail
+221
+CustomField24
+Y
+FALSE
+Bill Usage 4
+1221 - 1228
+varchar
+Prior usage 4
+8
+Invoice Detail
+222
+CustomField25
+Y
+FALSE
+EXCHANGE-USAGE-Y/N
+774
+varchar
+If the usage for this bill included a meter exchange, this would be "Y" We usually then put an * next to the usage field to denote exchange or rollover usage, don't know how Libertyville's outsource vendor does I with it.
+1
+Invoice Detail
+223
+CustomField26
+Y
+FALSE
+Filler5
+473 – 502
+varchar
+Spaces
+30
+Invoice Detail
+224
+CustomField27
+Y
+FALSE
+SERVICE-4 Previous Reading
+1088 – 1094
+varchar
+The previous reading for service 4 Not used by Libertyville.
+7
+Invoice Detail
+225
+CustomField28
+Y
+FALSE
+SERVICE-4-DESC
+243 – 252
+varchar
+The description of the FOURTH service.
+10
+Invoice Detail
+226
+CustomField29
+Y
+FALSE
+DEPOSIT-AMOUNT
+812 – 821
+varchar
+Any deposit amount being charged. This would print after any service or miscellaneous billed amounts and before the total current charges
+10
+Invoice Detail
+227
+CustomField30
+Y
+FALSE
+BILL-DUE-DATE
+794 – 801
+YYYYMMDD
+The date the bill is due.
+8
+Invoice Detail
+228
+CustomField31
+Y
+FALSE
+Bill To State
+181 – 182
+varchar
+The State where the bill is to be sent.
+2
+Invoice Detail
+229
+CustomField32
+Y
+FALSE
+SERVICE-1-QUANTITY
+1007 – 1014
+varchar
+This is the quantity being billed for service 1 and 2 if they have water and sewer. If they are water only or sewer only, this would be zeroes
+8
+Invoice Detail
+230
+CustomField33
+Y
+FALSE
+Filler6
+503 – 532
+varchar
+Spaces
+30
+Invoice Detail
+231
+CustomField34
+Y
+FALSE
+SERVICE 4 READ-DATE
+991 – 998
+varchar
+This is zeros. Not used by Libertyville
+8
+Invoice Detail
+232
+CustomField35
+Y
+FALSE
+Filler4
+443 – 472
+varchar
+Spaces
+30
+Invoice Detail
+233
+CustomField36
+Y
+FALSE
+Service To Date
+786 – 793
+YYYYMMDD
+The date of the current read on the meter.
+8
+Invoice Detail
+234
+CustomField37
+Y
+FALSE
+SERVICE-3-QUANTITY
+1023 – 1030
+varchar
+The quantity used for service 3. Not used by Libertyville
+8
+Invoice Detail
+235
+CustomField38
+Y
+FALSE
+MISC-BILL-ITEM-1-DESC
+683 – 712
+varchar
+The description of a miscellaneous charge included on this bill for a particular customer. Example: TURN ON FEE. Not used by Libertyville at this time. If these charges were used, they would print under the last regular service and before total current charges
+30
+Invoice Detail
+236
+CustomField39
+Y
+FALSE
+MINIMUM-BILL-Y/N
+773
+varchar
+If the bill is a minimum bill, this would be "Y" and a message should be printed saying MINIMUM BILL
+1
+Invoice Detail
+237
+CustomField40
+Y
+FALSE
+Bill Usage 6
+1245 - 1252
+varchar
+Prior usage 6
+8
+Invoice Detail
+238
+CustomField41
+Y
+FALSE
+Bill To Name 2
+71 – 10
+varchar
+The second name line where the bill is to be sent. Could be blank.
+30
+Invoice Detail
+239
+CustomField42
+Y
+FALSE
+TAX 2 TOTAL
+912 - 921
+varchar
+The amount of the 2nd tax. Not used by Libertyville at this time
+10
+Invoice Detail
+240
+CustomField43
+Y
+FALSE
+Tenant Code
+31 –32
+varchar
+The unique number assigned to the tenant at a service address.
+2
+Invoice Detail
+241
+CustomField44
+Y
+FALSE
+SERVICE-2-QUANTITY
+1015 - 1022
+varchar
+The quantity used for service 2. Not used by Libertyville.
+8
+Invoice Detail
+242
+CustomField45
+Y
+FALSE
+Bill Usage 5
+1233 - 1240
+varchar
+Prior usage 5
+8
+Invoice Detail
+243
+CustomField46
+Y
+FALSE
+Service 5 Reading Description
+653 – 682
+varchar
+The type of reading for service 5. Not used by Libertyville.
+30
+Invoice Detail
+244
+CustomField47
+Y
+FALSE
+SERVICE 5 READ-DATE
+999 – 1006
+varchar
+This is zeros. Not used by Libertyville.
+8
+Invoice Detail
+245
+CustomField48
+Y
+FALSE
+SENIOR-DISCOUNT-Y/N
+776
+varchar
+If the account gets a senior citizen or handicap discount, there would be a "Y" in this field. The outsource vendor then prints a message that this discount has been applied.
+1
+Invoice Detail
+246
+CustomField49
+Y
+FALSE
+SERVICE-1-DESC
+213 – 222
+varchar
+The description of the first service. In Libertyville's case, this is WATER SERVICE or spaces for their sewer only accounts.
+10
+Invoice Detail
+247
+CustomField50
+Y
+FALSE
+SERVICE 1 Reading
+932 – 938
+varchar
+The current reading for the water and sewer charge. This would be zeroes if they are a sewer only account
+7
+Invoice Detail
+255
+CustomField51
+Y
+FALSE
+PREVIOUS-BALANCE-DUE
+802 – 811
+varchar
+The amount the customer owed before this billing
+10
+Invoice Detail
+256
+CustomField52
+Y
+FALSE
+FILLER3
+383 – 442
+varchar
+Spaces
+60
+Invoice Detail
+257
+CustomField53
+Y
+FALSE
+Bill Usage 3
+1209 - 1216
+varchar
+Prior usage 3
+8
+Invoice Detail
+258
+CustomField54
+Y
+FALSE
+SERVICE 4 AMOUNT
+852 – 861
+varchar
+The amount of service 4. Not used by Libertyville at this time
+10
+Invoice Detail
+259
+CustomField55
+Y
+FALSE
+Group Bill Number
+11 – 20
+varchar
+A billing group identifier used if one person owns various properties and wants to receive all of their bills with a summary bill. Used by Libertyville
+10
+Invoice Detail
+260
+CustomField56
+Y
+FALSE
+SERVICE-5 Previous Reading
+1095 - 1101
+varchar
+The previous reading for service 5 Not used by Libertyville.
+7
+Invoice Detail
+261
+CustomField57
+Y
+FALSE
+BILL TO ZIP CODE
+02 – 10
+varchar
+The zip code of the address to which the bill is being sent.
+9
+Invoice Detail
+262
+CustomField58
+Y
+FALSE
+Current Charges
+1171 – 1180
+varchar
+NET AMOUNT DUE(69) – PREVIOUS BALANCE DUE(41)
+10
+Invoice Detail
+263
+CustomField59
+Y
+FALSE
+SERVICE-2 Previous Reading
+1074 – 1080
+varchar
+The previous reading for service 2. Not used by Libertyville.
+7
+Invoice Detail
+264
+CustomField60
+Y
+FALSE
+Service Days
+1168 – 1170
+varchar
+# of days from service-from- date to service-to-date
+3
+Invoice Detail
+265
+CustomField61
+Y
+FALSE
+Bill Usage 1
+1185 - 1192
+varchar
+Prior usage 1
+8
+Invoice Detail
+266
+CustomField62
+Y
+FALSE
+Bill Date
+33 – 40
+YYYYMMDD
+The date of the utility billing
+8
+Invoice Detail
+267
+CustomField63
+Y
+FALSE
+MISC 1 AMOUNT
+872 – 881
+varchar
+The amount of the 1st miscellaneous billing. Not used by Libertyville at this time.
+10
+Invoice Detail
+268
+CustomField64
+Y
+FALSE
+TAX 1 TOTAL
+902 – 911
+varchar
+The amount of the 1st tax. Not used by Libertyville at this time.
+10
+Invoice Detail
+269
+CustomField65
+Y
+FALSE
+SERVICE 4 Reading
+953 – 959
+varchar
+The current reading for service 4 This is not used by Libertyville.
+7
+Invoice Detail
+270
+CustomField66
+Y
+FALSE
+Bill to City
+161 – 180
+varchar
+The city where the bill is to be sent
+20
+Invoice Detail
+271
+CustomField67
+Y
+FALSE
+E-Mail Address
+1103 – 1067
+varchar
+E-Mail address where bill is to be sent.
+65
+Invoice Detail
+272
+CustomField68
+Y
+FALSE
+Bill History Month 3
+1205 - 1208
+varchar
+Prior billing month 3 – Ex. “Apr.”
+4
+Invoice Detail
+273
+CustomField69
+Y
+FALSE
+Bill History Month 2
+1193 - 1196
+varchar
+Prior billing month 2 – Ex. “May ”
+4
+Invoice Detail
+274
+CustomField70
+Y
+FALSE
+Bill History Month 1
+1181 - 1184
+varchar
+Prior billing month 1 – Ex. “Jun.”
+4
+Invoice Detail
+275
+CustomField71
+Y
+FALSE
+MISC 2 AMOUNT
+882 – 891
+varchar
+The amount of the 2nd miscellaneous billing. Not used by Libertyville at this time.
+10
+Invoice Detail
+276
+CustomField72
+Y
+FALSE
+Bill History Month 6
+1241 - 1244
+varchar
+Prior billing date 6 – Ex. “Jan.”
+4
+Invoice Detail
+277
+CustomField73
+Y
+FALSE
+Bill History Month 4
+1217 - 1220
+varchar
+Prior billing month 4 – Ex. “Mar.”
+4
+Invoice Detail
+278
+CustomField74
+Y
+FALSE
+SERVICE-1 Previous Reading
+1067 – 1073
+varchar
+The previous reading for water and sewer usage. This will be zeroes if the account is sewer only.
+7
+Invoice Detail
+279
+CustomField75
+Y
+FALSE
+SERVICE 1 READ-DATE
+967 – 974
+varchar
+This is zeros. Not used by Libertyville.
+8
+Invoice Detail
+280
+CustomField76
+Y
+FALSE
+FILLER1
+264 – 322
+varchar
+NOT used at this time
+59
+Invoice Detail
+281
+CustomField77
+Y
+FALSE
+Bill History Month 5
+1229 - 1232
+varchar
+Prior billing month 5 – Ex. “Feb.”
+4
+Invoice Detail
+282
+CustomField78
+Y
+FALSE
+Service From Date
+778 – 785
+YYYYMMDD
+The date of the prior read on the meter.
+8
+Invoice Detail
+283
+CustomField79
+Y
+FALSE
+SERVICE 2 AMOUNT
+832 – 841
+varchar
+The amount of sewer charges, or zeroes if the account is water only
+10
+Invoice Detail
+284
+CustomField80
+Y
+FALSE
+Service 2 Reading Description
+563 – 592
+varchar
+The type of reading for service 2.
+30
+Invoice Detail
+285
+CustomField81
+Y
+FALSE
+Bill To Name 1
+41 – 70
+varchar
+The first name line where the bill is to be sent.
+30
+Invoice Detail
+286
+CustomField82
+Y
+FALSE
+MISC-BILL-ITEM-2-DESC
+713 – 742
+varchar
+The description of a second miscellaneous charge.
+30
+Invoice Detail
+287
+CustomField83
+Y
+FALSE
+Record Type
+01
+varchar
+1
+Invoice Detail
+288
+CustomField84
+Y
+FALSE
+TAX 3 TOTAL
+922 – 931
+varchar
+The amount of the 3rd tax. Not used by Libertyville at this time.
+10
+Invoice Detail
+289
+CustomField85
+Y
+FALSE
+SERVICE 5 Reading
+960 – 966
+varchar
+The current reading for service 5. This is not used by Libertyville.
+7
+Invoice Detail
+290
+CustomField86
+Y
+FALSE
+SERVICE 3 READ DATE
+983 – 990
+varchar
+This is zeros. Not used by Libertyville.
+8
+Invoice Detail
+291
+CustomField87
+Y
+FALSE
+SERVICE-3 Previous Reading
+1081 – 1087
+varchar
+The previous reading for service 3. Not used by Libertyville
+7
+Invoice Detail
+292
+CustomField88
+Y
+FALSE
+Service Address
+183 – 212
+varchar
+The address where the service was used.
+30
+Invoice Detail
+293
+CustomField89
+Y
+FALSE
+DIRECT-DEBIT-Y/N
+777
+varchar
+If the customer is enrolled in direct debit, this field would be "Y". A message would then be printed that to not pay the bill and the amount would be deducted from their bank account on the bill due date.
+1
+Invoice Detail
+294
+CustomField90
+Y
+FALSE
+Gross Amount Due
+1057 – 1066
+varchar
+The net amount due + the amount the bill will be penalized if not paid by the due date.
+10
+Invoice Detail
+295
+CustomField91
+Y
+FALSE
+SERVICE 5 AMOUNT
+862 – 871
+varchar
+The amount of service 5. Not used by Libertyville at this time.
+10
+Invoice Detail
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AllowPartialPayments
+ Yes
+AutoPayCollectionDate
+ Invoice Due Date
+ (12|0)
+BalanceForward
+ Yes
+FirstNotifyRequestedDate
+ Invoice Date Plus 1 Day(s)
+ (11|1)
+InvoiceFormatGuid
+ Village of Newark - UB
+ (62609576-8A17-4DD7-83A4-9F9E051DBD80)
+SecondNotifyRequestedDate
+ Invoice Due Date Minus 5 Day(s)
+ (12|-5)
+ThirdNotifyRequestedDate
+ Invoice Due Date
+ (12|0)
+Advanced Settings
+Setting ID
+Required/Optional/N/A
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+Invoice Types
+Invoice Types
+Virtual Site
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+Integration SizingIntegration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+[SA-573] New Request for 1738-Village of Newark - JIRA (atlassian.net)
+Biller is requesting to add details of usage graphs to their templates.
+ URL:/spaces/IM/pages/3226501126/BID+1738-Village+of+Newark

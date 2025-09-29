@@ -1,0 +1,503 @@
+Purpose
+To enable performance monitoring and improved analytics within the portal, this initiative introduces a combination of database enhancements, a new metrics aggregation model, and a scheduled.NET console application. The core objective is to support auto-refreshing graphs and dashboards that visualize key service-level metrics such as response time, error rate, and throughput. This involves modifying the existing 
+DataPump
+ table to capture additional metadata, introducing new tables for storing aggregated metrics, and implementing a Kubernetes-triggered .NET console job that runs every x minute to process raw service data from multiple biller shards. The updated architecture ensures that the backend processing pipeline continuously feeds clean, structured data into the visualization layer, allowing users to view accurate, near real-time system health insights through the portal.
+Enhancements to Data Pump Detail Table
+Purpose of Change
+To enhance metric calculation and monitoring, two new columns will be added to the 
+DataPumpDetail
+ table:
+ResponseTime
+ – Tracks the duration of each web service call.
+StatusCode
+ – Records the HTTP status code of the response.
+These additions support the new 
+Metric Aggregation
+ logic and enable better visualizations in the monitoring portal.
+Column Name
+Data Type
+Description
+ResponseTime
+FLOAT
+ or 
+DECIMAL(10,2)
+Time taken (in milliseconds or seconds) between request and response.
+StatusCode
+VarChar
+HTTP status code returned by the web service (e.g., 200, 500, 404).
+How Values Are Populated
+ResponseTime
+:
+Calculated in the application logic as the difference between request start and response end timestamps.
+Inserted into the 
+DataPumpDetail
+ table alongside other data.
+StatusCode
+:
+Captured directly from the HTTP response.
+Inserted into the 
+DataPumpDetail
+ table.
+Impact of Changes
+Enables new metric types like:
+Average Response Time
+Average Error Rate
+Average Time Out
+Supports detailed aggregation in the 
+MetricAggregation
+ table.
+Improves visibility and monitoring through updated dashboards.
+New Tables for Metrics Aggregation
+Three new tables have been introduced to support real-time analytics and flexible data grouping.
+1. 
+TimeStampType
+Defines time granularities for grouping metrics.
+TimeStampTypeId
+Name
+HierarchyLevel
+1
+Hourly
+1
+2
+Daily
+2
+3
+Weekly
+3
+2. 
+MetricType
+Stores definitions of computed metrics for analysis.
+MetricTypeId
+Name
+Unit
+Description
+1
+AvgResponseTime
+ms
+Time taken to respond
+2
+AvgErrorRate
+Percentage
+Percentage of failed requests
+3
+AvgTimeOutErrorRate
+Percentage
+Timeout errors
+ Metric Aggregation Tables
+Stores precomputed metrics for various time intervals.
+   1.DataPumpResponseTimeAggregation
+DataPumpResponseTimeAggregationId
+TimeStampTypeId
+StartTime
+EndTime
+RequestCount
+TotalResponseTime
+AvgResponseTime
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+1311
+110.5
+2025-04-10 01:00:05
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+121
+123.4
+2025-04-10 02:00:03
+3
+1
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+42000
+212
+118.2
+2025-04-10 03:00:01
+4
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+294000
+312
+132.7
+2025-04-10 00:10:00
+5
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+1800
+2133
+125.9
+2025-04-08 00:15:00
+2.DataPumpErrorAggregation
+DataPumpErrorAggregationId
+TimeStampTypeId
+StartTime
+EndTime
+RequestCount
+FailedRequests
+ErrorRate (%)
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+36
+2.00
+2025-04-10 01:00:10
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+25
+1.43
+2025-04-10 02:00:10
+3
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+42000
+820
+1.95
+2025-04-10 00:05:00
+4
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+294000
+5600
+1.90
+2025-04-08 00:20:00
+3.DataPumpTimeoutErrorAggregation
+DataPumpTimeouErrorAggregationId
+TimeStampTypeId
+StartTime
+EndTime
+RequestCount
+TimeOutCount
+TimeoutRate (%)
+CreatedDate
+1
+1
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+1800
+15
+0.83
+2025-04-10 01:00:12
+2
+1
+2025-04-10 01:00:00
+2025-04-10 02:00:00
+1750
+10
+0.57
+2025-04-10 02:00:12
+3
+2
+2025-04-09 00:00:00
+2025-04-10 00:00:00
+42000
+70
+0.17
+2025-04-10 00:06:00
+4
+3
+2025-04-01 00:00:00
+2025-04-08 00:00:00
+294000
+540
+0.18
+2025-04-08 00:25:00
+Queue Table for maintaining the batches which are not processed in the job
+DataPumpMetricPendingAggregationQueue
+DataPumpMetricPendingAggregationQueueId
+MetricTypeId
+TimeStampTypeId
+StartDateTime
+EndDate
+isSkipped
+isFailure
+1
+1
+2
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+0
+1
+2
+1
+2
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+1
+0
+we will have alert mechanism for this table when the count of records reached to a certain number.
+DataPumpMetricAggregationJobLog
+This will have history of all job runs.
+DataPumpMetricAggregationJobLogID
+ShardIdWithFailures
+Summary
+JobStartDateTime
+JobEndDateTime
+1
+1212
+Job Failed for this biller
+2025-04-10 00:00:00
+2025-04-10 01:00:00
+2
+Null
+Job Succedded
+2025-04-10 02:00:00
+2025-04-10 03:00:00
+The Background Job Flow
+A .NET Console Application runs every 30 minutes via a 
+Kubernetes CronJob
+ to process data from multiple biller shards. It aggregates metrics required for performance monitoring and feeds them into the system for visualization.
+1. Job Triggered
+Triggered automatically via Kubernetes CronJob on a x-minute schedule.
+We will get billerIds from BillerElasticOptions table who have datapump configured.
+2. Call the Facade API (hosted in a separate WebAPI project) to compute metrics forall the billers:
+Response time
+Error rate
+Timeout Error frequency
+3. Shard-Wise Biller Iteration
+For each biller in the list:
+Step A: Connect to Shard
+Establish a connection to the biller’s specific database shard.
+Step B: Check Occupancy
+Query the 
+dbo.BillerDataPump
+ table 
+within the shard
+ to check if the biller is currently being processed (
+Processing = true
+).
+If occupied, mark isProcessed = true in in-memory.
+Step C: Process If Not Occupied
+If 
+Processing = false
+:
+Insert the computed data into 
+MetricAggregation
+ tables AvgResponseTimeAggregation, ErrorRateAggregation,AvgErrorTimeoutRateAggregation.
+Log the processing status and output.
+4. Repeat for All Billers
+Continue this connect-check-process loop for every biller in the configuration list.
+5. Retry Mechanism for Skipped Billers
+Billers that were skipped due to 
+Processing = true
+ .
+The retry mechanism attempts to process them within the same job run 
+after all other billers are checked
+.
+If still marked as 
+Processing = true
+ during retry, they are skipped with a final log entry in  DataPumpMetricFailures
+6. Log and Exit
+After processing insert the following into this table DataPumpMetricAggregationJobLog
+Log how many billers were successfully processed
+Log how many were skipped due to occupancy
+Capture and report any processing errors 
+Gracefully shut down the application instance.
+Data Insert and Update Strategy
+We handle data on 
+daily
+, 
+weekly
+, and 
+hourly
+ levels with the following approach:
+Hourly Records:
+Data is inserted 
+hourly
+ to capture real-time or fine-grained insights.
+Daily Records:
+A new record is 
+inserted at the start of each day
+ and is 
+updated throughout the day
+ with incoming data.
+Weekly Records:
+A new record is inserted at the 
+start of each week
+ (considering 
+Sunday to Saturday
+ as the weekly range). This record is 
+updated as the week progresses
+.
+Auto-Refreshing Graphs: AJAX + Redis + Facade API
+Real-Time Dashboard Refresh Process
+User Opens Dashboard
+Graph components and filters are initialized on page load.
+Frontend Initialization
+Fetches 
+MetricType
+ and 
+TimeStampType
+ metadata from Redis via API.
+Enables fast and responsive UI.
+Timer Setup
+A timer is configured to trigger every x minutes.
+When triggered, it sends an AJAX request to update the metric data.
+AJAX Request → Facade API (Separate Web API Project)
+The frontend sends an AJAX request to the 
+Facade API
+, a separate Web API service for metric computation and data retrieval for that BillerId.
+The request includes the following filters:
+• 
+MetricTypeID
+• 
+TimeStampTypeID
+• Time range
+Data Retrieval
+The Facade API processes the request and queries the 
+MetricAggregation
+ tables AvgResponseTimeAggregation, ErrorRateAggregation, AvgErrorTimeoutRateAggregation.
+Returns data in a chart-friendly JSON format.
+Frontend Update
+The frontend receives the updated data.
+Graphs are updated in place without reloading the page.
+Smooth transitions maintain a seamless user experience.
+Repeats For Every x Minutes
+The entire cycle repeats every x minutes.
+Ensures that graphs reflect the latest system metrics in near real-time.
+Facade API Overview
+The Facade API acts as a centralized Web API for 
+metric computation
+ and 
+retrieval
+. It supports two key operations:
+1. 
+POST /api/metricsForAll
+Purpose:
+Triggered by the .NET console job to 
+compute aggregated metrics
+ (Hourly, Daily, Weekly).
+Request Payload Includes:
+Biller-specific data
+Time window (JobStartDate, JobEndDate)
+Shard information
+Metric types to compute (e.g., AvgResponseTime, AvgErrorRate)
+Process Flow:
+Compute metrics on the fly
+Insert computed values into the appropriate 
+MetricAggregation
+ tables AvgResponseTimeAggregation, ErrorRateAggregation, AvgErrorTimeoutRateAggregation.
+Return success/failure status
+2. 
+GET /api/metrics/billerId
+Purpose:
+Called by the 
+frontend (dashboard)
+ to 
+fetch aggregated metric data
+ for graphs.
+Query Parameters:
+MetricTypeID
+TimeStampTypeID
+Process Flow:
+Query the correct tables AvgResponseTimeAggregation, ErrorRateAggregation, AvgErrorTimeoutRateAggregation.
+Return chart-friendly JSON data (timestamp + value pairs)
+These two endpoints work together to:
+POST
+: Feed and compute metric data (backend jobs)
+GET
+: Retrieve computed metrics (frontend graph display).
+Retry & Carry-Forward Mechanism for Skipped Billers
+To ensure that no biller is left behind due to temporary processing conflicts, the console job uses a two-tiered approach:
+1. In-Job Retry Mechanism
+During the job’s run, if a biller is found with 
+Processing = true
+, it is skipped and added to an 
+in-memory retry list
+.
+After all other billers are processed, the job attempts to process the retry list again.
+If 
+Processing = false
+ on retry, the biller is processed.
+If still 
+true
+, the biller is marked as 
+"Skipped after Retry"
+, and for that batch of records we will insert into a new queue table and logged accordingly.
+2. Carry-Forward to Next Schedule Run
+Billers that remain unprocessed even after retry are 
+automatically eligible for the next scheduled run
+.
+Since the job fetches a fresh biller list on every schedule and checks processing flags in real-time from each shard, previously skipped billers will be retried 
+naturally
+ during the next cycle.
+The job checks if we have the records from the  DataPumpMetricAggregationFailures
+ 
+if there are records. we will retry those records and update in the MetricAggregation Tableand purge the data in the DataPumpMetricAggregationFailures table.
+This ensures:
+No need for manual intervention
+Self-healing behavior across schedules
+Consistent coverage for all billers
+Another Approach with Elastic Sql job and Stored procedures
+Architecture Overview
+Stored Procedures
+: Handle aggregation logic within each biller's database.
+Elastic SQL Jobs
+: Orchestrate execution of stored procedures across all biller databases on a scheduled basis.
+Portal Flow
+: Remains mostly the same, except the Faced API retrieves already-aggregated results from the database using a stored procedure call instead of on-the-fly computation.
+ 
+How It Works
+1. 
+Stored Procedure Creation
+We will Create a new stored procedure 
+usp_GenerateMetricAggregation
+ in Golden Azure Shard.
+It performs aggregation logic based on data in the DataPump and DataPumpDetails table and populates the tables AvgResponseTimeAggregation, ErrorRateAggregation, AvgErrorTimeoutRateAggregation.
+We will create another Stored Procedure 
+usp_GetAggregatedMetrics
+which will be responsible for the retrieval of the data
+2. 
+Elastic SQL Job Setup
+An 
+Elastic Job Agent
+ is configured in Azure SQL to:
+Connect to all biller databases.
+Execute the stored procedure on a fixed schedule (e.g., every 10 minutes).
+Log status and handle failures gracefully.
+3. 
+Data Aggregation
+When executed, each stored procedure:
+Reads 
+DataPump
+ data.
+Calculates metrics such as response time, error rates, etc.
+Writes results into the 
+MetricAggregation
+ table with appropriate 
+MetricTypeID
+ and 
+TimeStampTypeID
+.
+4. 
+Portal Data Flow
+From the portal, the frontend flow remains unchanged.
+The 
+WebAPI
+ now calls a stored procedure (e.g., 
+usp_GetAggregatedMetrics
+) to retrieve the pre-computed metrics instead of querying and calculating on-the-fly.
+In this approach, the web api now only retrieves the data by calling a stored procedure.
+Sample Graphs
+These are the types of graphs we want to show in our Biller Portal.
+This is a sample graph for Daily Time Period
+This is a sample graph for Hourly Time Period
+This is a graph for Weekly Time period.
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4202856450/Database+Approach+for+the+DataPump+Metrics+and+Graphs

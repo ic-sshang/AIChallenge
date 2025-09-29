@@ -1,0 +1,28 @@
+ presented:
+Design review for components
+Items to update:
+All buttons need to be the same exact font-size
+All buttons that have icons need to have the icons fully interchangeable for any icon to be used in either position (beginning or end) - i.e. no hardcoding icons to a button
+Focus should naturally transition from the accordion element to any focusable child elements within the accordion (test this)
+Accordion’s focus outline needs to be 2px
+Helper text on input should not be a required prop (it will be sparingly used)
+All inputs should have a consistent height of 40px
+Fix the ‘X’ icon on the modals
+Fieldset legends should match the same styling as input labels (font-size and font-weight etc)
+ presented:
+one button to rule them all 
+ 
+takeaways:
+need new icon only button
+links will not have icons (need to check about table use cases)
+one button with lots of configuration would be harder for new FE devs to work with
+We will keep 4 or so button components separate
+primary pill buttons will come back to account for landing page, but have a future to go away long-term
+  walked through:
+file tempaltes:
+new one for marketing assets with vector device mockups
+new one for slide deck
+delete payer template
+plain language: what components are impacted?
+should we be using “enroll”?
+ URL:/spaces/PRODUCT/pages/3573022785/9+17+24+Notes

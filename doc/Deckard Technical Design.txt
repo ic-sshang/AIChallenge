@@ -1,0 +1,310 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+Partner Coding Requirements
+What
+Provided To
+When
+Biller Name
+Deckard
+Project Assignment
+Invoice Type ID
+Deckard
+Project Assignment
+API Key TEST
+Deckard
+Project Assignment
+API Key PROD
+Deckard
+Project Assignment
+API Documentation
+Invoice Cloud Web Services
+Deckard
+ integrate with 
+InvoiceCloud
+ using 
+CloudPaymentV2
+. This integration allows customers to access InvoiceCloud’s payment portal through 
+Deckard 
+platform when apply license and payment. The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Payment Processing Demo: 
+https://us-21061.app.gong.io/call?id=7626553259669281930
+ 
+Cloud Payments V2
+Purpose/Summary: This web service based payment integration allows 3rd party applications to utilize a "Pay Now" button within their application to redirect the user to the Invoice Cloud Payment Route where they can enter in all the payment information and submit the payment. Once the payment has been approved, the IC Payment Route will display a printable receipt and provide a method to return the user back to the calling application.
+Sample Request:
+CloudPaymentsV2 
+{
+  "CreateCustomerRecord": "false",
+  "Customers": [
+    {
+      "AccountNumber": "johnnatan.jaramillo@deckard.com",
+      "EmailAddress": "johnnatan.jaramillo@deckard.com",
+      "Invoices": [
+        {
+          "InvoiceNumber": "84",
+          "TypeID": 57,
+          "DueDate": "08/12/2025",
+          "InvoiceDate": "08/12/2025",
+          "BalanceDue": 180.0,
+          "CCServiceFee": 0.0,
+          "AchServiceFee": 0.0
+        }
+      ],
+      "Name": "Johnnatan"
+    }
+  ],
+  "AllowCCPayment": "true",
+  "AllowACHPayment": "false",
+  "AllowEMV": "false",
+  "PostBackURL": "https://str-registration-api.staging.deckard.com/az-coconino-city_of_flagstaff/postback/invoice_cloud",
+  "ReturnURL": "https://portal.staging.deckard.com/az-coconino-city_of_flagstaff-str-portal/payment-success"
+}
+Additional Details
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+Y
+ReturnURL
+Return URL
+PostBackURL
+False
+Y
+PostBackURL
+Post back URL
+BillerReference
+False
+N
+ViewMode
+False
+N
+Default
+CssUrl
+False
+N
+Customers
+True
+Y
+Customers
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+Y
+AccountNumber
+DisplayAccountNumber
+False
+N
+Name
+False
+Y
+Address
+False
+N
+City
+False
+N
+State
+False
+N
+Zip
+False
+N
+EmailAddress
+False
+Y
+Invoices
+False
+Y
+Invoices
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+Y
+InvoiceNumber
+TypeID
+False
+Y
+TypeID
+6, 57
+InvoiceDate
+False
+Y
+InvoiceDate
+Invoice date
+DueDate
+False
+Y
+DueDate
+Invoice due date
+BalanceDue
+False
+Y
+BalanceDue
+Total Invoice Amount
+CCServiceFee
+False
+Y
+CCServiceFee
+0.00
+ACHServiceFee
+False
+Y
+ACHServiceFee
+0.00
+MinimumAmountDue
+False
+N
+AllowPartialPayments
+False
+N
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+N
+AllowEMV
+False
+Y
+AllowEMV
+False
+EMVDeviceID
+False
+N
+EMVLocationID
+False
+N
+CashierName
+False
+N
+AllowCCPayment
+False
+Y
+AllowCCPayment
+True
+AllowACHPayment
+False
+Y
+AllowACHPayment
+False
+CreateCustomerRecord
+False
+Y
+CreateCustomerRecord
+False
+RemoteAuthenticationToken
+False
+N
+PageLoadOverride
+False
+N
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+N
+AllowRegisterAccount
+Optional
+N
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+N
+AllowRemove
+Optional
+N
+AllowViewRelated
+Optional
+N
+AllowRemindMe
+Optional
+N
+User Stories:
+Deckard Portal + InvoiceCloud Cloud Payments V2(CPV2)
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+User Apply and Pay for a new license
+User navigates to Deckard portal and apply for a new license.
+Customer and property information can be found in Deckard system
+Deckard launches CloudPayV2 when created a new license
+Cloud Payments V2 (ViewMode=0)
+Apply for new license
+Filling Information
+Creating License
+Pay for the license
+Redirect to InvoiceCloud
+Return page after payment
+WebServices
+Additional WebServices
+API Name
+API Use/Purpose
+Sample
+Invoice Types
+Invoice Types
+6 - Government Services (TOT Tax)
+57 - Business License
+93 - Government Services II (Cannabis Tax)
+Virtual Site
+Not Used 
+User Interaction and Design
+Data Flow - Payment
+Payments are made in the backend with REST Webservice calls with InvoiceCloud. GeoCivix is the owner of the UI/UX. 
+Data Flow - Void
+Voids will be processed through Biller Portal if needed.
+Data Flow - ACH Reject
+ACH Rejects can be reviewed through the Biller Portal. 
+Payer Experience
+Payers will process payments on the GeoCivix website. The payment portal will not have any InvoiceCloud verbiage as all payments will be processed in the backend. The data will be entered in GeoCivix and sent to InvoiceCloud via webservice. 
+https://us-21061.app.gong.io/call?id=7626553259669281930
+ 
+Biller Experience
+Payment reporting can be reviewed through the Biller Portal. 
+ URL:/spaces/IM/pages/4565336065/Deckard+Technical+Design

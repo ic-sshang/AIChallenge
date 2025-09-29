@@ -1,0 +1,48 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+artifact
+n/a
+version
+n/a
+managedIdentityAppName
+" "
+environments
+n/a
+Defined stages therefore enforced
+    environments
+targetDir
+n/a
+projectName
+n/a
+preDeploySteps
+[]
+postDeploySteps
+[]
+preDeployJob
+[]
+postDeployJob
+[]
+SkybotJobName
+manual_override_stages
+False
+IsSkybotJob
+True
+isEQP
+False
+If true, deploy to IC-App{1-8} + IC-App-Test1. Only EQP runs on IC-App-Test1, hence the param name
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+tasks/server-artifact-cleanup.yaml@pipeline-templates
+jobs/skybot.yaml@pipeline-templates
+flows/deployment-multi-job.yaml
+jobs/skybot-create-job.yaml@pipeline-templates
+ URL:/spaces/platform/pages/3633938899/console-app-deploy.yaml

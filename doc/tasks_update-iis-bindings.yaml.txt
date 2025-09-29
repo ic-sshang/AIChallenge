@@ -1,0 +1,28 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+bindings
+n/a
+iisPath
+n/a
+Get-IISSitetry{New-WebVirtualDirectory -Site "www2.invoicecloud.com\icgateway" -name ICGateway -PhysicalPath C:\Data\www\ICGateway\}catch{}
+                    Write-Host "New-WebApplication -site $iisPath
+folderPath
+n/a
+Get-IISSitetry{New-WebVirtualDirectory -Site "www2.invoicecloud.com\icgateway" -name ICGateway -PhysicalPath C:\Data\www\ICGateway\}catch{}
+                    Write-Host "New-WebApplication -site $iisPath -PhysicalPath $folderPath
+iisAppPoolName
+n/a
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+icgateway-deploy.yaml
+web-deploy.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+ URL:/spaces/platform/pages/3635019953/tasks+update-iis-bindings.yaml

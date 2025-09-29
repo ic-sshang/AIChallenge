@@ -1,0 +1,116 @@
+2
+4
+Infrastructure Requirements
+Is this a request for new Infrastructure or updates/enhancements to existing Infrastructure?
+New Infrastructure using existing Hub VNet for Networking.
+Is there an initial idea of which Azure Resources are needed and an initial Workload Architectural design?
+Yes
+New AKS Cluster per environment and environmental region
+New Postgres SQL Server/DB per environment and environmental region
+New A and CNAME Records in the the environment and environmental region Private DNS Zones that end in 
+invoicecloud.com
+If it is a new Workload, which Environment(s) does the new Workload need to exist?
+Sandbox: Resources and Resource Group in SBX connected to the SBX Hub Network
+DevTest: Resources and Resource Group in DEV connected to the SBX Hub Network
+Production: Resources and Resource Group in PRD connected to the PRD Hub Network
+If it is a new Workload, which Region(s) per environment should the Workload be deployed to?
+Sandbox
+Primary
+DevTest
+Primary
+Production
+Primary
+Secondary
+Does the Workload have resources that need be accessed via the Private Network?
+Yes
+Private Endpoint for the Control Plane of the AKS Clusters.
+Private Ingress Controller for the Workload(s) hosted within the AKS Cluster.
+Private Endpoint for Postgres SQL Server instances.
+Does the Workload need to access existing resources via the Private Network?
+No for Azure Resources directly
+Yes for existing API Endpoints to allow for API Routing to existing Services.
+Does the workload process data, and does that data need to be processed inside the Private Network.
+Yes, the AKS Cluster will be connected to existing Hub Networks and only be accessible via Private Network pathways.
+What is the Access Model for the internal team developing/utilizing the Workload?
+The following existing AAD Groups should get access
+global-aks-admins{-lower_environment}
+global-aks-developers{-lower_environment}
+The following new AAD Groups should be created and configured for access
+kong-team-admins{-lower_environment}
+kong-team-developers{-lower_environment}
+kong-team-readers{-lower_environment}
+What is the Access Model for public users of the Workload?
+Not against the Infrastructure directly.
+Potentially the Kong API Management Portal could be made available to Third Party or Client Developers for real-time integration development.
+TLS/SSL Certificate Strategy for Kong AKS Cluster
+Below is a diagram created by 
+ on 04/24/2023 representing our options:
+1
+0
+2674229251
+2676162594
+1
+KongCertManagerSession.drawio.svg
+0
+1
+1
+https://invoicecloud.atlassian.net/wiki
+KongCertManagerSession.drawio.svg
+0
+MJ36jRRs_-IqJwm6WG0I 1
+891
+auto
+top
+1
+611
+Outstanding Questions
+Do we use Cert Manager for SSL Certificate issuance or use Ingress Controller integrated with Cluster Level K8S2KV integration and use the Certificates hosted in an Environment wide Key Vault?
+Use Ingress Controller integrated with Cluster Level akv2k8sintegration and use the Certificates hosted in an Environment wide Key Vault.
+Related Jira
+Epic:  
+EBPP-11542
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Related Confluence Articles
+Kong Phase 1 (P1)
+ 
+References
+https://blog.darkedges.com/2020/05/04/cert-manager-kubernetes-cloudflare-dns-update/
+ 
+https://docs.konghq.com/gateway/latest/install/kubernetes/helm-quickstart/
+ 
+https://medium.com/@t.costantini89/deploy-an-nginx-https-ingress-controller-to-aks-using-terraform-7e95e9442e7e
+ 
+Make Ingress Controller Private
+https://cheatthing.com/2022/10/30/kong-ingress-controller-with-private-aks-cluster/
+ 
+https://fabianlee.org/2021/09/19/kubernetes-adding-and-removing-pod-template-annotations-using-kubectl/
+ 
+https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/
+ 
+Kong hostname based routing
+https://github.com/Kong/charts/releases
+ 
+https://github.com/Kong/charts
+ 
+Repos with Examples
+https://github.com/Kong/charts/blob/main/charts/kong/values.yaml#L669
+ 
+https://github.com/Kong/charts/tree/main/charts/kong/example-values
+ 
+https://github.com/GrantBirki/k8s-kong-terraform/tree/main/terraform/k8s/modules/kong
+ 
+TLS/SSL via AKV2K8S Integration
+https://blog.baeke.info/2020/12/07/certificates-with-azure-key-vault-and-nginx-ingress-controller/
+ 
+https://blog.baeke.info/2020/12/07/certificates-with-azure-key-vault-and-nginx-ingress-controller/
+ 
+https://akv2k8s.io/
+ 
+https://akv2k8s.io/installation/on-azure-aks/
+ 
+Kong Terraform
+https://registry.terraform.io/providers/philips-labs/kong/latest/docs/resources/upstream
+ 
+ URL:/spaces/icinfradoc/pages/2674229251/Kong+Infrastructure

@@ -1,0 +1,96 @@
+Components of a Good Hypothesis
+What’s
+ the idea you are testing?
+What specific & measurable 
+impact 
+do we expect the idea to have?
+Who 
+do you expect it to impact?
+By 
+how much
+ will it make an impact?
+After 
+how long
+ (will it make an impact)?
+Category
+Hypothesis (Examples)
+Plan
+Timeline
+Stakeholder
+Dependencies
+Security
+There will not be any changes to our security/compliance when we move to the boarding API. This will be the screening process for Chase.  
+Interview security/engineering/Sara to validate there will not be any changes that we need to make to our current security processes with this update.  
+2 weeks
+Security - Zach Howlett, Martin, Randy, Adrian, Sara
+Pricing
+Billers may be willing to pay a premium for the faster onboarding as they will be able to go live sooner. 
+There will be a significant time savings for boarding since billers will be entering their own information in the system. 
+Interview product marketing to understand what billers may be willing to pay for. 
+Interview boarding to understand the current process, and interview engineering to understand what the future boarding process will involve.   
+Interview sales to understand how often billers want to get onboarded quickly.
+5 weeks
+Stephen, Anita, Sales, Nathan
+Support
+Boarding may get additional questions on the boarding process from billers. 
+We will be able to easily update banking and address changes thru the new billing API. 
+We will be able to design a onboarding wizard for customer facing billers to enter their information to be consumed by IC/Chase for onboarding approval. 
+ 
+Interview and loop in Boarding so the boarding wizard is built to be very customer centric. 
+Interview boarding/engineering to understand requirements around bank changes/address updates. 
+Interview Support to understand if any of these changes will impact their team. 
+Interview boarding to understand the process and engage design to help pull a user friendly design together for a wizard. 
+4 weeks
+Anita, Stephen, Randy, Adrian, Sara, Courtney, Design 
+Feasibility
+The boarding API will be an easy process  Changing our process to use the boarding API with Chase will significantly reduce the time it takes to board/approve billers.  
+Interview Chase/Engineering to confirm the steps needed to board billers using the API. 
+Interview Chase/engineering/boarding to understand the steps needed to make address and banking updates. 
+Are there other changes that need to be made and can they be made thru the API
+How will we communicate those changes have been made back to the biller?
+5 weeks
+Martin, Randy, Adrian, Chase. Courtney, Anita/Stephen
+Competitive Advantage
+Use the boarding API will give us a competitive advantage because we can get billers live faster. The boarding process will reduce by nearly 10 business days.  
+By getting billers live faster, we also begin earning money sooner. 
+Meet with product marketing to understand how we could highlight this change to prospects. 
+Interview sales to understand how valuable this will be to billers. 
+Engage appropriate teams so they are aware of turnaround times and can project revenue accurately based on shortened boarding times. 
+4 weeks
+Nathan, Sales, Implementation? 
+Desirability
+We will develop a strong value proposition that billers will be happy about. When billers make the decision to change, they want a fast and easy process. 
+Work with product marketing to highlight the value this change would bring. 
+Quicker onboarding
+Earning revenue sooner
+4-6 weeks
+Nathan, 
+Engineering
+The boarding API will replace our existing manual onboarding process and bring a significant time savings for boarding as well as onboarding/approving billers faster. 
+The boarding API will also reduce the paperwork flow for banking and address changes as these can now be sent via the API. 
+A new biller facing boarding wizard will be created so billers can enter their own information which will be submitted thru the API. 
+validate what data will need to be passed thru the boarding API. 
+Need to investigate existing boarding wizards to help create a user friendly process for billers to enter their information. 
+Need to understand how changes will be passed back and forth with Chase thru the API.  
+8 weeks
+Martin, Randy, Adrian, Chase, Sara, Courtney
+Compliance
+Compliance requirements will not change as we will be sending less information to Chase than we do today. 
+We will not be storing any new personal information so there will not be any changes to compliance requirements. 
+Interview security/engineering to validate that there will not be any changes to the data we store. 
+Validate whether any additional changes will be needed as we pass data thru the APIs. 
+2 weeks
+Zach, Randy, Adrian, Courtney
+Cost Analysis
+Building the boarding API project internally will be less expensive to implement than using an outside solution. 
+validate whether this is something that could be supported by another team? Could this be a project that team India works on? 
+4 weeks
+PM, Engineering
+Risk Analysis
+If the boarding API is down, we will not be able to pass information back and forth to Chase. This will create a delay in onboarding billers or making updates to their accounts. Is there a back up process that we could use should this occur? 
+If the APIs are not functioning correctly at the time of roll out, we need to establish a plan to continue business as usual until the issue is resolved. 
+Need to build out all risk scenarios to minimize any downtime as this change is implemented. 
+We would require a roll back plan should there be significant issues at the time of roll out.  
+3 weeks
+Engineering, PM, Courtney
+ URL:/spaces/PRODUCT/pages/3470196737/Action+Plan+-+Boarding+API

@@ -1,0 +1,402 @@
+1
+6
+false
+default
+list
+true
+Change Teams
+Server Patching
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Release Manager Approver Persona
+ 
+Platform Team Member Approver
+ 
+Monitoring Team
+USA
+Check indicates successful monitoring post-maintenance. 
+ indicates lack of response/attendance. 
+  would indicate observed issues.
+SRE Team 
+Payer Domain (Spam) - 
+ 
+Biller Domain (BMS) - 
+ 
+Payments (Wicked Tendies) - 
+ 
+Go Live (We’ll Do it Live)
+Ingress Processes (BIF) - 
+ 
+Ingress processes / Bill Presentment (BBQ) - 
+ 
+Egress - 
+ 
+Platform Team - 
+ 
+India review team at the start of the India Monday
+Scrum Team Name
+Who is reviewing
+What are you reviewing
+ Payments Team
+ 
+Skybot jobs for batch closes → 
+ 
+Paypal → 
+ 
+cass ->
+ 
+etc
+Skybot scheduler is up, and jobs are picked up as per schedule -> 
+ 
+ Payer Teams
+ 
+ 
+Skybot jobs for EQP 
+ 
+Azure batch – AutoPay and EmailQueue
+ 
+Customer Portal 
+ 
+ Integration
+ 
+ 
+ICFTPExportProcessor → Tested 
+ 
+Datapump → Tested 
+ 
+StratusFileProcessor → Tested 
+ 
+BillerFileSplit → Tested 
+ 
+ 
+ 
+ 
+ KioskAPI → Verified HealthCheck API 
+ 
+ICRemoteAuthenticationAPI → Verified API Endpoints via postman 
+ 
+BillerPortal 
+ 
+Pre-Work 
+  Saturday Evening at 7 PM EST run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+ 
+  Saturday Evening at 10 PM EST (7:30AM IST) patching for 
+IC-Web1
+ thru 
+5
+ 
+ 
+ 
+ 
+ 
+Turn off alerting for IC-Web1 thru 5
+ 
+ Pull web servers IC-Web1 - 5 from the backend pool (backend-pool-invoicecloud-web) out of the App Gateway (agw-pri-appgateway0-prd) 
+ Pull web servers IC-Web1 - 5 out of the Internal Load Balancer (IC-LB-WebSVR-4AppSVR) 
+   Apply updates on Web1-5 using the new ansible automated patching 
+job
+ (Prd-Montly-Patching) by starting the workflow job and letting the Prd-Web1-5-Patching step run. 
+  After that step is completed, do sanity checks on IC-Web1 thru 5 
+Web Server Sanity Checks
+ 
+  If Sanity testing looks good, Turn on Alerting for IC-Web1 thru 5 
+  Put IC-Web1 thru 5 back in the App Gateway (agw-pri-appgateway0-prd) 
+  Put web servers IC-Web1 - 5 in the Internal Load Balancer (IC-LB-WebSVR-4AppSVR) 
+  Post on the 
+#eng-monthlymaintenance
+ channel the activities are done and Smoke Testing Can Begin 
+ 
+ 
+Day of
+ 
+ Sunday morning 4:15 AM Eastern (1:45 PM IST), disable Alerts per these instructions
+ 
+Patching Procedure Current
+ 
+Patching Procedure Current
+ 
+Patching Procedure Current
+ 
+Put Pingdom in maintenance mode for MCC Biller Portal 
+  Sunday afternoon 4:30 AM EST (2 PM IST) ensure IC-Web1 thru 5 are healthy and are put back in the pool. Then start patching for 
+IC-Web6
+ thru 
+10
+ through ansible by approving the 
+Approve Web6-10-Patching
+ stage.
+ 
+ 
+ 
+ 
+  Sunday Morning at 4:45 AM EST (2:15 PM IST) run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+ At 5 AM EST (2:30 PM IST), post maintenance message.
+ 
+Today we will be Releasing Changes for 
+2025-09-14
+ per our 
+Weekly Change Window Guidelines
+.
+
+
+
+
+145
+
+
+3ec95ae3-4818-460c-8c76-b4fd9c91ce27
+
+
+complete
+
+
+#platform-support
+
+
+
+
+
+
+146
+
+
+38719abe-e517-49e9-8756-4db4399ae8ad
+
+
+complete
+
+
+#engineering-maintenance
+
+
+
+
+
+
+147
+
+
+2426738d-493c-4401-bdc7-dba4a9545cf3
+
+
+complete
+
+
+#eng-monthlymaintenance
+
+
+
+
+
+
+148
+
+
+dca8a783-14f8-4523-9a43-8772b37a76b2
+
+
+complete
+
+
+#dailyopsissues
+
+
+
+
+Sunday afternoon at 5 AM EST (2:30 PM IST), all other changes not outlined in this section can begin.
+High Impact/Risk changes
+ 
+ 
+Migrate to new prod servers
+ 
+ 
+INFRA-2000
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ only new servers are in the pool now 
+ 
+Medium Impact/Risk Changes
+ 
+ 
+InternalNetwork
+ 
+ 
+PLAT-2372
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Script to execute
+ 
+Low Impact/Risk changes
+ 
+App, Skybot and PDF Servers
+JEDI-344
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Web Servers
+ 
+JEDI-343
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Management Servers
+JEDI-345
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Gateway Servers
+JEDI-368
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+MCC Database Server
+JEDI-346
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Patching Procedure Current
+ 
+ 
+Proxy Servers
+JEDI-347
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+SFTP Servers
+JEDI-348
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+IC-ProxyTemp-10
+INFRA-1913
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Proxy Temp 10 should show as healthy here after changes: 
+Deployment group - Azure DevOps Services
+ 
+All K8s Clusters except Tooling
+PLAT-2611
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Payer_Infrastructure
+PLAT-2567
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+PLAT-2588
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Pipelines - Run apply-payer-infrastructure-3.26.1
+ 
+ 
+Disable Legacy StratusFileProcessor Tasks on XAT and Prod Web Servers
+JEDI-255
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Script to execute
+ 
+ 
+All Production VMs
+PLAT-2637
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Testing
+Healthcheck Exercising
+ 
+Pipelines - Runs for healthcheck-automated-exercising
+ 
+ 
+Run after all the changes on Sunday
+Pipelines - Run 20250824.3
+prod - Repos
+ 
+ 
+Run after all the changes on Sunday
+Exercising of Proxy Healthchecks which are on the Servers will be done as part of putting the Servers back in rotation 
+ 
+Regression Testing
+Sunday Morning between 2 AM EST (11:30 AM IST) run the Smoke TESTs on 
+www.invoicecloud.com
+ after 
+IC-Web1
+ thru 
+5
+ are patched and put back in the Pool.
+ 
+ and 
+ to notify in 
+#eng-monthlymaintenance
+ 
+slack channel when 
+IC-Web1
+ thru 
+5
+ are back in the Pool and ready for Smoke Tests to be run
+ Sunday Morning around 8 AM EST (5:30 PM IST), run the Smoke Tests on 
+www.invoicecloud.com
+ after all changes are done.
+Notify in 
+#eng-monthlymaintenance
+ 
+slack channel when all changes are complete
+Sunday after Smoke Tests and no issues were found in the Smoke Tests, run full regression tests on 
+www.invoicecloud.com
+ after all changes are done and smoke tests are done.
+ 
+Post-Steps
+  Enable Alerts per these instructions
+ 
+Patching Procedure Current
+Patching Procedure Current
+Patching Procedure Current
+ Run 
+Finishing Maintenance
+ Stage of 
+Monthly-Maintenance
+ pipeline
+ 
+ Start the Jobs for Product Integrations - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+Start the Jobs for Product Engineering - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ Notify 
+dailyops
+ and 
+engineering-maintenance
+ and 
+eng-monthlymaintenance
+ slack channels of maintenance finished
+ 
+ URL:/spaces/platform/pages/4644864001/2025-09-14+Monthly

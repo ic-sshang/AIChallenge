@@ -1,0 +1,6 @@
+Currently the OBD controller logs are located within the node they were run from. There is a limited amount of time that they are kept. I’m assuming this is the case for the icbatchtest batch account. More looking into needs to be done on this part.
+To get to the logs, navigate to the nodes section of the OBDControllerPool and click on the idle node.
+There will be a series of folders navigate to the following location:
+Root/workitems/OBDAutoMatchController
+Here you will see the last jobs ran. When clicking into one of the job folders, navigate down until you find the stdout.txt & stderr.txt files. These files will have the controllers output logs.
+ URL:/spaces/PE/pages/2736979980/ICOBDAutoMatchController+Logs

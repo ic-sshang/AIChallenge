@@ -1,0 +1,87 @@
+Purpose and Scope
+THis domain manages the DNS records for the web tier using Cloudflare’s API. Terraform provisions CNAME records that points at our application load’balancer or endpoint, with low TTL and “proxied” enabled for DDoS protection.
+Detailed Architecture
+Terraform Implementation
+hcl
+# 1. Configure the Cloudflare provider
+provider "cloudflare" {
+  token = var.cloudflare_api_token
+}
+
+# 2. Select the appropriate record set
+locals {
+  dns_records = var.environment == "dev"
+    ? local.dns_records_dev
+    : local.dns_records_non_dev
+}
+
+# 3. Create CNAME records for each web instance
+resource "cloudflare_dns_record" "web_servers" {
+  for_each = local.dns_records
+
+  zone_id = var.cloudflare_zone_id
+  name    = each.value.name
+  type    = "CNAME"
+  content = var.content
+  ttl     = 1
+  proxied = true
+
+  depends_on = [module.web_servers]
+}
+Key Inputs and Outputs
+Name
+Type
+Description
+var.cloudflare_api_token
+string
+API token scoped to this DNS zone
+var.cloudflare_zone_id
+string
+Cloudflare Zone ID
+var.content
+string
+CNAME target (e.g. 
+npd.invoicecloud.com
+)
+local.dns_records
+map(object)
+Map of record names per environment
+Output
+Description
+cloudflare_dns_record.web_servers[<key>].id
+ID of each DNS record
+cloudflare_dns_record.web_servers[<key>].name
+Name of each DNS record
+cloudflare_dns_record.web_servers[<key>].content
+Target value of each DNS record
+cloudflare_dns_record.web_servers[<key>].proxied
+Whether record is proxied through CF
+Security and Access Controls
+API Token
+: scoped to manage DNS for only this zone.  
+Proxied
+: hides origin IPs and enables Cloudflare’s layer-7 protections.  
+TTL = 1
+: allows on-the-fly record updates with minimal cache delay.
+Operations and Runbook
+hcl
+#Placeholder code
+terraform init  
+terraform plan -var-file=env/${var.environment}.tfvars  
+terraform apply -var-file=env/${var.environment}.tfvars 
+Verify CNAME records exist under 
+Cloudflare Dashboard → DNS
+To change targets: update 
+var.content
+, then re-apply.  
+To add/remove records: adjust 
+var.web_server_identifiers
+ (dev) or 
+var.web_server_count
+ (non-dev).
+Links and References
+Terraform Cloudflare provider docs: 
+https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs
+ 
+CI/CD job: 
+ URL:/spaces/platform/pages/4263444571/External+DNS+CloudFlare

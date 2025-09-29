@@ -1,0 +1,67 @@
+Step 1: Identify a Feature or Workflow
+Analyze Usage
+: Identify a feature or workflow that has clear boundaries.
+Assess Complexity
+: Evaluate the feature complexity to ensure a manageable transition.
+Document Dependencies
+: List all dependencies, including database interactions, external services, and shared components.
+Step 2: Design Microservice APIs
+Define Business Logic
+: Extract the business logic related to the identified feature.
+Create API Contracts
+: Design RESTful API endpoints that encapsulate the business logic.
+Implement Microservices
+: Develop ASP.Net Core microservice APIs to handle the business logic.
+Secure APIs
+: Implement JWT authentication to secure the APIs.
+Step 3: Develop React Components Micro UI
+Component Breakdown
+: Break down the UI of the identified feature into reusable React components.
+API Integration
+: Integrate the React components with the microservice APIs to fetch and manipulate data.
+Styling
+: Apply consistent styling using the Invoice Cloud React Design System components and CSS
+Module Federation Setup
+:
+Configure Webpack
+: Set up Webpack Module Federation in your React project. Define the feature as a remote module.
+Expose Components
+: Expose the necessary React components and utilities from the feature module.
+Consume Components
+: In the legacy ASPX page or other micro UIs, consume the exposed components using Module Federation.
+Step 4: Build and Deploy the React Micro UI
+Build Process
+: Use docker to run your build process to generate the necessary JavaScript bundles for the React micro UI and serve via a ASP.Net Core API.
+Build Command
+: Use a build command 
+npm run build
+ to create production-ready bundles.
+ASP.Net Core Hosting:
+ Use the Invoice Cloud ASP.Net React Host base image and copy the built script bundles into the www folder
+Step 5: Import/Host Micro UI React Components in Legacy ASPX Page
+Build React App
+: Build the Host React application and generate the necessary JavaScript bundles.
+Embed Scripts
+: Embed the generated JavaScript bundles in the legacy ASPX page using script tags.
+Initialize Components
+: Initialize the React components within the ASPX page by targeting specific DOM elements.
+Authentication
+: Generate the JWT server side and render in either the ASPX markup or a response cookie for use in the React Host application.
+Step 6: Displace Legacy Feature or Workflow
+Feature Toggle
+: Implement feature toggles to switch between the legacy and new implementations during the transition.
+Gradual Rollout
+: Gradually roll out the new React-based feature to a subset of users to monitor performance and gather feedback.
+Monitor and Optimize
+: Monitor the performance and user experience of the new feature, and optimize as needed.
+Full Transition
+: Once the new feature is stable and performs well, fully transition all users to the new implementation and deprecate the legacy code and feature toggle.
+Step 7: Iterate and Repeat
+Review and Learn
+: Review the process and gather insights to improve future iterations.
+Next Feature
+: Identify the next feature or workflow to break out and repeat the process.
+Resources
+API-First Development
+ 
+ URL:/spaces/EA/pages/4066279426/Incrementally+Breaking+Down+an+ASPX+Monolithic+UI

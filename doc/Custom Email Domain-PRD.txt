@@ -1,0 +1,265 @@
+ Objective
+To implement the "Custom Email Domain" feature, allowing billers to send email notifications from their own domain instead of the Invoice Cloud domain. This aims to enhance legitimacy and trust for payers, thereby improving key metrics such as conversion rate, email open rate, CTR, and revenue.
+ Why it is important?
+Trust and Legitimacy
+: Payers are more likely to trust and engage with emails from a familiar domain.
+Improved Metrics
+: Enhanced trust can lead to higher conversion rates, better email open rates, increased CTR for reminders, and more timely payments, positively impacting revenue.
+Customer Demand
+: Billers have provided qualitative feedback indicating a strong desire for this feature to improve communication with their payers.
+ Release Plan
+Phase 1A : Alpha Testing
+: Conduct initial testing with a test biller account.
+Delayed
+Red
+ 
+Phase 1B: Beta Testing: 
+Release with 1 biller (Texas Mutual Insurance) and receive feedback.
+Delayed
+Red
+ 
+Phase 1C: Pilot Launch
+: Expand to 10 more billers to validate performance and feedback.
+Delayed
+Red
+ 
+Reason for delay
+The following phased rollout plan was initially proposed but was impacted due to resourcing constraints, scope adjustments, and multiple blockers in testing process.
+Expected Date for Release: 30th June
+Phase 2: 
+Biller Portal: 
+Allow biller to add custom domain by themselves.
+Incremental Rollout: 
+Incremental deployment to all billers based on feedback and stability.
+ Scopes
+In-Scope 
+ 
+Phase
+Release Date
+Scope
+Phase 1A
+30th May 
+Delayed
+Red
+ 
+Manually adding custom domain for Texas Mutual Insurance Test (BID-4357)
+Test outbound emails and validate trigger point [
+Outbound Email List
+] 
+Phase 1B
+30th May 
+Delayed
+Red
+ 
+Configuration & setup is done internally only via CRM- Part A
+Add Domain & ability to tag primary email
+Select Invoice Type
+One fixed Alias
+Handling Email Bounce
+Plan for Monitoring & Tracking of Email Activities
+Phase 1C
+24th Jun,25
+Delayed
+Red
+Configuration & setup is done internally only via CRM- Part B
+Ability to tag alias for each invoice type
+Validate configuration from CRM using Mailgun verify API
+Alerting for configuration issues
+User flow for Biller Portal domain setup is reviewed and documented.
+Phase 2.1: Foundational Setup for Custom Email Domain Management
+New Tab Creation:
+Add a new tab in the Biller Portal’s cogwheel section titled “Email Domain Management.”
+Update naming of existing tabs to avoid confusion.
+Add access permissions & control visibility for this.
+Basic Grid Setup:
+Create a grid layout with the following columns:
+Sender Name
+Email Address
+Notification Types
+Status
+Actions (Context menu)
+Context menu should include only the ability to view DNS Records & delete email entries.
+Add Email Functionality:
+Enable “Add Email” button for inputting email address.
+Automatically assign all notification types to the added email (no mapping UI yet).
+Verification Status Indicator:
+Display email status as “Verified” or “Unverified” in the grid based on Mailgun verification.
+Go Live Button:
+Add “Go Live” button that becomes active once at least one verified email is added.
+Ability to Take it offline also
+Phase 2.2: Notification Type Mapping to Verified Emails
+Deactivation Feature:
+Allow users to deactivate verified emails (deactivated emails appear visually faded and moved to the bottom of the list)
+Provide ability to reactivate the email.
+Domain Verification Options:
+Introduce a verification step post email entry.
+Present two options to the user:
+I will do it myself – guide user through step-by-step instructions for updating DNS records.
+Someone else will do it – allow user to download DNS records and share with IT/responsible person.
+UX Support for Delay in DNS Verification:
+Add “Check Progress” button to manually re-check verification status.
+Provide clear messaging(status) that DNS updates
+Consent Capture:
+For delegated verification, show consent text confirming records were shared and user understands the process.
+Phase 2.3: Domain Verification Options & Email Lifecycle Enhancements
+Domain Verification Options:
+Introduce a verification step post email entry.
+Present two options to the user:
+I will do it myself – guide user through step-by-step instructions for updating DNS records.
+Someone else will do it – allow user to download DNS records and share with IT/responsible person.
+UX Support for Delay in DNS Verification:
+Add “Check Progress” button to manually re-check verification status.
+Provide clear messaging(status) that DNS updates
+Consent Capture:
+For delegated verification, show consent text confirming records were shared and user understands the process.
+Deactivation Feature:
+Allow users to deactivate verified emails (deactivated emails appear visually faded and moved to the bottom of the list)
+Provide ability to reactivate the email.
+Phase 2.4
+Yet to define
+Out of Scope 
+ 
+Pricing & Invoicing
+GTM enablement
+Verified Mark Certificate (VMC)
+ Requirements
+Requirement List
+User Stories
+Custom Email Domain - Phase 1
+As a CRM admin, I want to add a custom email domain on behalf of a biller so that they can send emails from their own domain.
+As a CRM admin, I want to view the DNS records (sender, receiver, tracking) for a domain so I can provide them to the billers for verification.
+As a CRM admin, I want to check the verification status of domain so I know when DNS setup is complete.
+As a CRM admin, I want to add and manage multiple custom domains for a biller so they can support various email needs.
+Custom Email Domain - Phase 1 Extension
+As a CRM admin, I want to edit the alias and display name for each custom email address so it aligns with the biller’s brand identity.
+As a CRM admin, I want to configure a general alias and display name for notifications not linked to specific invoice types.
+Custom Email Domain - Phase 2
+As a biller, I want to access a new section 'Email Domain Management' under 'Email Management' in the biller portal cogwheel so that I can manage custom email domains.
+As a biller, I want to have permission-level control for Email Domain Management within the Biller Portal, so that I can grant access only to the appropriate responsible users.
+As a PO, I want to show the Email Domain Management section only to selected billers, So that the feature remains in a controlled testing environment and does not confuse or mislead other billers who are not part of the test phase.
+As a biller, I want to add a new email address and verify domain ownership so that I can send notifications from my own email domain.
+As a biller, I want to see a grid view listing sender name, email address, notification types, and status so that I can review and manage all my configured email addresses at a glance.
+As a biller, I want to choose between self-verification and delegated setup so that I can either configure DNS myself or share the details with my IT team if I’m not technically equipped.
+As a biller, I want to view and copy the required DNS records and submit my consent so that I can configure them directly in my DNS provider and begin domain verification.
+As a biller, I want to download the required DNS records and share them with my IT team so that they can complete the DNS configuration on my behalf and the verification process can begin.
+As a biller, I want to track the verification progress of my DNS records, so that I can see when the status changes from Unverified to Verified for each of the records and know when I’m ready to proceed with email notification configuration.
+As a biller, I want to assign specific invoices and general notifications to verified email addresses, so that each email address is only used to send the types of notifications it is explicitly assigned to, ensuring clear communication and better deliverability.
+As a biller, I want to see a progress tracker next to the “Go Live” button, so that I can clearly understand how many notification types have been assigned and how many are still pending, helping me complete the required setup before going live.
+As a biller, I want to send a test email from the interface if status of email is ready, so that I can verify that emails are being sent correctly from my domain and build confidence in the setup before taking live.
+As a biller, I want to see a confirmation dialog with a summary of my setup when I click “Go Live,” so that I can review all configured details and be confident everything is correct before making it live.
+As a biller, I want to manage my existing email entries using a context menu with options like Send Test Email, View DNS Details, Deactivate, Make as Default, Edit Sender Name and Set Notification Types, so that I have the flexibility to update or adjust email settings at any time based on operational needs or preferences without redoing the entire setup.
+As a biller, I want to edit the sender name associated with my custom email address, so that I can specify a recognizable or invoice-specific name that better aligns with the invoice types being communicated.
+As a biller, I want to view the DNS records associated with my custom email domain, so that I can reference or match them in the future if needed, making it easier to validate or troubleshoot configurations.
+As a biller, I want to set one of my verified email addresses as the default, so that any new notification types or invoice types added in the future are automatically linked to this email.
+As a biller, I want to update the notification types assigned to each email address, so that I can adjust my configurations as per any future business decisions or changes.
+As a biller, I want to delete an unverified email address, so that I can clean up my configuration page and remove unused or incorrect entries.
+As a biller, I want to deactivate a verified email address, so that I can temporarily remove it from active use while preserving the setup for future reactivation.
+Breaking down Custom Email Domain Phase 2
+User Story
+Task Breakdown
+As a biller, I want to access a new section 'Email Domain Management' under 'Email Management' in the biller portal cogwheel so that I can manage custom email domains.
+As a PO, I want to show the Email Domain Management section only to selected billers, So that the feature remains in a controlled testing environment and does not confuse or mislead other billers who are not part of the test phase.
+As a biller, I want to have the permission level for Email domain management in the biller portal so that I can share the access to responsible user only. 
+Add new tab in the cogwheel (SPIKE required)
+Add new batch to the new tab
+Rename one older tab
+Keep section visible to specific biller
+Add permission to access it(Required more discussion from Biller side (can be done by SPARK))
+As a biller, I want to add a new email address and verify domain ownership so that I can send notifications from my own email domain.
+As a biller, I want to see a grid view listing sender name, email address, notification types, and status so that I can review and manage all my configured email addresses at a glance.
+As a biller, I want to choose between self-verification and delegated setup so that I can either configure DNS myself or share the details with my IT team if I’m not technically equipped.
+As a biller, I want to view and copy the required DNS records and submit my consent so that I can configure them directly in my DNS provider and begin domain verification.
+As a biller, I want to download the required DNS records and share them with my IT team so that they can complete the DNS configuration on my behalf and the verification process can begin.
+Add a grid with columns (Sender Name, Email Address, notification types, Status)
+Add a tool tip for sender name
+Add a tool tip for status where we should be able to see all the flows
+Add email CTA which will open a popup where user can enter email address
+validation of email syntax (it should also not allow public email domain like gmail, outlook, yahoo, etc)
+Add Go-Live CTA
+should be disabled till all notification types are set
+should ask for user consent for taking live
+should be changed to “Take Offline“ if status is live.
+After adding domain show “Verify Domain Ownership“ CTA on same row which will take user to choose 2 option
+CTA 1: Option 1(I’ll do it by myself)
+Add CTA which will download DNS records as PDF
+Add one checkbox to take user consent
+CTA 2: Option 2(Someone else will do it)
+Create DNS record Page which also allow user to copy the records & status of each records
+Add one checkbox to take user consent
+As a biller, I want to track the verification progress of my DNS records, so that I can see when the status changes from Unverified to Verified for each of the records and know when I’m ready to proceed with email notification configuration.
+Show Track Progress in the grid if status of the email is verifying
+on clicking it should go to DNS record page which will have updated status also
+close button to come back to grid view
+As a biller, I want to assign specific invoices and general notifications to verified email addresses, so that each email address is only used to send the types of notifications it is explicitly assigned to, ensuring clear communication and better deliverability.
+once email is verified then show Set Notification button
+Set Notification button should open pop-up to set invoice type & general notification
+If invoice types is less than 6 then show checkbox
+If invoice types is more than 5 then show checkbox inside dropdown menu
+Ok CTA to confirm & close CAT to close the panel without any changes
+As a biller, I want to see a progress tracker next to the “Go Live” button, so that I can clearly understand how many notification types have been assigned and how many are still pending, helping me complete the required setup before going live.
+Show text with a task like X out Y notifications are set where X is number of (invoice+general) set and Y is total number of invoice + 1(general)
+When it X = Y then show green tick and make Go-Live Button clickable.
+As a biller, I want to send a test email from the interface if status of email is ready, so that I can verify that emails are being sent correctly from my domain and build confidence in the setup before taking live.
+Once email status is ready then show Send Test Email in the row
+Send Test Email CTA should open pop-up to ask for “Notification Type“, ”template” and,“To Email” 
+As a biller, I want to see a confirmation dialog with a summary of my setup when I click “Go Live,” so that I can review all configured details and be confident everything is correct before making it live.
+Show summary page on click Go-Live
+Summary should contains all the new/changes stuff
+Done CTA will take all live
+As a biller, I want to manage my existing email entries using a context menu with options like Send Test Email, View DNS Details, Deactivate, Make as Default, Edit Sender Name and Set Notification Types, so that I have the flexibility to update or adjust email settings at any time based on operational needs or preferences without redoing the entire setup.
+As a biller, I want to edit the sender name associated with my custom email address, so that I can specify a recognizable or invoice-specific name that better aligns with the invoice types being communicated.
+As a biller, I want to view the DNS records associated with my custom email domain, so that I can reference or match them in the future if needed, making it easier to validate or troubleshoot configurations.
+As a biller, I want to set one of my verified email addresses as the default, so that any new notification types or invoice types added in the future are automatically linked to this email.
+As a biller, I want to update the notification types assigned to each email address, so that I can adjust my configurations as per any future business decisions or changes.
+As a biller, I want to delete an unverified email address, so that I can clean up my configuration page and remove unused or incorrect entries.
+As a biller, I want to deactivate a verified email address, so that I can temporarily remove it from active use while preserving the setup for future reactivation.
+Add the context menu for each email
+Context menu will have multiple CTA:
+Set Sender Name
+Set Notification Types
+Make as Default
+View DNS Records
+Send Test Email
+Deactivate/Delete
+If status is verified or above then can’t delete
+Create popup for Modify Sender Name with one input field
+add Make as default functionality
+ User interaction and design
+(Phase 1) Domain Setup Page in CRM:
+Sample Screenshots
+Phase 2: 
+Design Requirements [Deprecated, new design flow will be Prototype links]
+The design has evolved based on stackholder feedback and technical feasibility, below prototype link have updated design.
+Requirements: 
+https://invoicecloud.atlassian.net/wiki/pages/resumedraft.action?draftId=4193779763&draftShareId=947f47ae-a3fa-4319-8f5f-a5d9b270eb6b
+ 
+Prototype link: 
+https://www.figma.com/proto/Y4D4LEK95GnWhBH2LuuFC7/Custom-email-Domain--email-configuration?page-id=3579%3A62881&node-id=3975-29231&viewport=-1674%2C-639%2C0.02&t=xWyeK6QCMnMDr6kC-8&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=3975%3A29231&show-proto-sidebar=1&hide-ui=1
+ 
+ Success metrics
+Goal
+Metric
+Current Value
+Impact (%)
+Increase Conversion Rate
+Percentage of payers who complete payments after receiving 1st/2nd/3rd email notifications.
+1st: 27%
+2nd: 38%
+3rd: 39%
+Improve Email Click Rate
+Percentage of email notifications clicked by payers (delivery count vs click count).
+13%
+Billers Satisfactory Level
+Direct Feedback
+ Question
+Are we assuming that all billers have the technical capability to set up DNS records?
+Answer: No, that’s the reason we have 2 separate follow for tech & non-tech user to setup DNS records.
+How will we get the CTR of email notifications?
+Answer: Mailgun has click count.
+How will we configure Tracking Records in DNS settings since there is no API available?
+Answer: Getting tracking records with sending records using API.
+How will we ensure that emails are being sent from custom email domain?
+Answer: We have total 36 emails which can be trigger and verify (
+https://invoicecloud.atlassian.net/wiki/x/GABC_g
+ ) if it is actually being send from custom email domain or not.
+ URL:/spaces/PE/pages/4162781218/Custom+Email+Domain-PRD

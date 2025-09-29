@@ -1,0 +1,955 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+Username
+Password
+TEST BASE URL: 
+https://myinsuranceqa.ndgroup.com/paymentservice/detail/xml
+PROD BASE URL: TBD
+They will not be using IC Bill Presentment, Change Logs or Paperless flags. 
+API Authentication Method: 
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Balance Lookup
+RTDR
+Request:
+Username: Provided in coding request
+Password: Provided in coding request
+PolicyNumber: ICs AccountNumber
+IsAmountValidationRequired: Hardcoded Y
+Response:
+AllowPaymentToProcess: True/False
+If True, no action. If False, see below. 
+AmountDue: ICs BalanceDue
+RemainingBalance: ICs TotalAmountDue
+PolicyNumber: ICs AccountNumber
+CompanyNumber: Ignore
+PolicyStatus: Ignore
+PayOptionCode: Ignore
+MessageList: Ignore
+Response (No Payment Allowed):
+If AllowPaymentToProcess = False, enable BlockACH and BlockCC flags + 
+present accompanying MessageList information as BlockACH/CC message on portal. 
+DataPump: Auto Pay Changes
+AutoPay
+AutoPay Flag
+Endpoint URL: /paymentservice/saveenrollmentdetails
+Success case:
+Request:
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AutopaySubmissionVO>
+<UserName>{user_name}</UserName>
+<Password>{password}</Password>
+<PolicyNumber>{policy_number}</PolicyNumber>
+<IsEnrolled>true/false</IsEnrolled>
+<EnrollmentType>AutoPay</EnrollmentType><PaymentMethod>Card/Bank</PaymentMethod>
+</AutopaySubmissionVO>
+Failure case:
+Request:
+     <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AutopaySubmissionVO>
+<UserName>{user_name}</UserName>
+<Password>{password}</Password>
+<PolicyNumber> </PolicyNumber>
+<IsEnrolled>true/false</IsEnrolled>
+<EnrollmentType>AutoPay</EnrollmentType>
+</AutopaySubmissionVO>
+Success case:
+Response:
+          <AutopayServiceResponseVO>
+                     <ResultCode>Success</ResultCode>
+</AutopayServiceResponseVO>
+2. Failure case: 
+ Response:
+<AutopayServiceResponseVO>
+   <MessageList>Policy Number is Required</MessageList>
+   <ResultCode>Failure</ResultCode>
+</AutopayServiceResponseVO>
+Username:
+ invoicetest
+Password:
+ Pay@Serv1
+PolicyNumber:
+ ICs AccountNumber
+isEnrolled:
+ true, if autopay has been turned on. false, if autopay has been turned off
+paymentType:
+ AutoPay
+MessageList:
+ field consists of the one line description for any error or exception occurred. For example: Internal server error. Bad request, etc.
+MessageList and ResultCode are the required fields in the Response. 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .bif
+File Naming Convention: Per BIF Spec
+File Delimiter: Pipe
+Specification: BIF
+Sample File: 
+SFTP File Path: Standard IC FTP Path
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+PolicyNumber + Timestamp
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill/Invoice Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+RemainingBalance
+Invoice Header
+14
+TotalTaxAmount
+FALSE
+Invoice Header
+15
+TotalDiscountAmount
+FALSE
+Invoice Header
+16
+TotalShippingAmount
+FALSE
+Invoice Header
+17
+TotalDutyAmount
+FALSE
+Invoice Header
+18
+VATTaxRate
+FALSE
+Invoice Header
+19
+VATTaxAmount
+FALSE
+Invoice Header
+20
+AllowPartialPayments
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+FALSE
+Invoice Header
+22
+Terms
+FALSE
+Invoice Header
+23
+FirstNotifyRequestedDate
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+FALSE
+Invoice Header
+26
+PONumber
+FALSE
+Invoice Header
+27
+SalesRep
+FALSE
+Invoice Header
+28
+ShipDate
+FALSE
+Invoice Header
+29
+TrackingNumber
+FALSE
+Invoice Header
+30
+ShippingCompanyID
+FALSE
+Invoice Header
+31
+CustomerShipName
+FALSE
+Invoice Header
+32
+CustomerShipAddress1
+FALSE
+Invoice Header
+33
+CustomerShipAddress2
+FALSE
+Invoice Header
+34
+CustomerShipCity
+FALSE
+Invoice Header
+35
+CustomerShipState
+FALSE
+Invoice Header
+36
+CustomerShipZip
+FALSE
+Invoice Header
+37
+CustomerShipPhone
+FALSE
+Invoice Header
+38
+Custom1
+FALSE
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+40
+Custom3
+FALSE
+Invoice Header
+41
+Custom4
+FALSE
+Invoice Header
+42
+Custom5
+FALSE
+Invoice Header
+43
+Custom6
+FALSE
+Invoice Header
+44
+Custom7
+FALSE
+Invoice Header
+45
+Custom8
+FALSE
+Invoice Header
+46
+Custom9
+FALSE
+Invoice Header
+47
+Custom10
+FALSE
+Invoice Header
+48
+Aging1
+FALSE
+Invoice Header
+49
+Aging2
+FALSE
+Invoice Header
+50
+Aging3
+FALSE
+Invoice Header
+51
+Aging4
+FALSE
+Invoice Header
+52
+Aging5
+FALSE
+Invoice Header
+53
+Aging6
+FALSE
+Invoice Header
+54
+Aging7
+FALSE
+Invoice Header
+55
+Aging8
+FALSE
+Invoice Header
+56
+Aging9
+FALSE
+Invoice Header
+57
+Aging10
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+AmountDue
+Invoice Header
+94
+Custom11
+FALSE
+Invoice Header
+95
+Custom12
+FALSE
+Invoice Header
+96
+Custom13
+FALSE
+Invoice Header
+97
+Custom14
+FALSE
+Invoice Header
+98
+Custom15
+FALSE
+Invoice Header
+99
+Custom16
+FALSE
+Invoice Header
+100
+Custom17
+FALSE
+Invoice Header
+101
+Custom18
+FALSE
+Invoice Header
+102
+Custom19
+FALSE
+Invoice Header
+103
+Custom20
+FALSE
+Invoice Header
+104
+Custom21
+FALSE
+Invoice Header
+105
+Custom22
+FALSE
+Invoice Header
+106
+Custom23
+FALSE
+Invoice Header
+107
+Custom24
+FALSE
+Invoice Header
+108
+Custom25
+FALSE
+Invoice Header
+109
+Custom26
+FALSE
+Invoice Header
+110
+Custom27
+FALSE
+Invoice Header
+111
+Custom28
+FALSE
+Invoice Header
+112
+Custom29
+FALSE
+Invoice Header
+113
+Custom30
+FALSE
+Invoice Header
+183
+LocationReference
+FALSE
+Invoice Header
+186
+LateFeeAmount
+FALSE
+Invoice Header
+187
+LateFeeDate
+FALSE
+Invoice Header
+188
+LateFeeDetailRecord
+FALSE
+Invoice Header
+189
+LateFeeDesc
+FALSE
+Invoice Header
+190
+EmailLateFeeNotice
+FALSE
+Invoice Header
+191
+ApplyLateFeeIfNoPaymentsOnly
+FALSE
+Invoice Header
+192
+CreditCardServiceFee
+FALSE
+Invoice Header
+193
+AchServiceFee
+FALSE
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+249
+PromptPayDiscountAmount
+FALSE
+Invoice Header
+250
+PromptPayExpirationDate
+FALSE
+Invoice Header
+251
+PromptPayDesc
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Invoice Header
+317
+PaymentExpirationDate
+FALSE
+Invoice Header
+318
+PaymentExpirationMessage
+FALSE
+Invoice Header
+319
+Echo1
+FALSE
+Invoice Header
+320
+Echo2
+FALSE
+Invoice Header
+321
+Echo3
+FALSE
+Invoice Header
+322
+Echo4
+FALSE
+Invoice Header
+323
+Echo5
+FALSE
+Invoice Header
+324
+Echo6
+FALSE
+Invoice Header
+325
+Echo7
+FALSE
+Invoice Header
+326
+Echo8
+FALSE
+Invoice Header
+327
+Echo9
+FALSE
+Invoice Header
+339
+PDFToken
+FALSE
+Invoice Header
+340
+PDFFileName
+FALSE
+Invoice Header
+342
+InvoiceGroupGUID
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+FALSE
+Invoice Header
+346
+BillerBillYear
+FALSE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+Y
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+PolicyNumber
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Named Insured
+Customer Record
+61
+Address1
+FALSE
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+FALSE
+Customer Record
+64
+State
+FALSE
+Customer Record
+65
+Zip
+FALSE
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+68
+CustomerVATNumber
+FALSE
+Customer Record
+69
+RegistrationValue
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+371
+CustomerName2
+FALSE
+Customer Record
+372
+Pin
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Customer Record
+409
+Active
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+FALSE
+Invoice Detail
+73
+Quantity
+FALSE
+Invoice Detail
+74
+UnitPrice
+FALSE
+Invoice Detail
+75
+ExtendedUnitPrice
+FALSE
+Invoice Detail
+76
+UnitDiscount
+FALSE
+Invoice Detail
+77
+ExtendedUnitDiscount
+FALSE
+Invoice Detail
+78
+UnitTaxAmount
+FALSE
+Invoice Detail
+79
+LineItemTotal
+FALSE
+Invoice Detail
+80
+CommodityCode
+FALSE
+Invoice Detail
+81
+UnitOfMeasure
+FALSE
+Invoice Detail
+82
+UnitTaxRate
+FALSE
+Invoice Detail
+83
+CustomField1
+FALSE
+Invoice Detail
+84
+CustomField2
+FALSE
+Invoice Detail
+85
+CustomField3
+FALSE
+Invoice Detail
+86
+CustomField4
+FALSE
+Invoice Detail
+87
+CustomField5
+FALSE
+Invoice Detail
+88
+CustomField6
+FALSE
+Invoice Detail
+89
+CustomField7
+FALSE
+Invoice Detail
+90
+CustomField8
+FALSE
+Invoice Detail
+91
+CustomField9
+FALSE
+Invoice Detail
+92
+CustomField10
+FALSE
+Invoice Detail
+208
+CustomField11
+FALSE
+Invoice Detail
+209
+CustomField12
+FALSE
+Invoice Detail
+210
+CustomField13
+FALSE
+Invoice Detail
+211
+CustomField14
+FALSE
+Invoice Detail
+212
+CustomField15
+FALSE
+Invoice Detail
+213
+CustomField16
+FALSE
+Invoice Detail
+214
+CustomField17
+FALSE
+Invoice Detail
+215
+CustomField18
+FALSE
+Invoice Detail
+216
+CustomField19
+FALSE
+Invoice Detail
+217
+CustomField20
+FALSE
+Invoice Detail
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: Standard
+File Delimiter: Fixed Width
+Specification: 
+ACH Reject Requirements:
+C-Code Rejects included?
+No
+Include Credits & Chargebacks?
+Credits?
+No
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+No
+Alternative credit indication:
+Sample File: 
+SFTP File Path: Standard IC FTP Path
+File Transfer Frequency: Daily
+Field Mapping
+Header
+Field
+Data Type
+Character Limits
+Format
+Values
+Hardcoded H
+1
+Hardcoded H
+N&D
+3
+Hardcoded N&D
+Timestamp
+8
+YYYYMMDD
+Not Used
+3
+Zero Filled
+Body
+Field
+Data Type
+Character Limits
+Format
+Values
+PolicyNumber
+10
+IC AccoutNumber
+Zero Filled
+11
+Zero Filled
+Zero Filled
+2
+Zero Filled
+Amount
+9
+Zero filled
+IC Payment Amount, minus fees (i.e. $100 = 000000100)
+Zero Filled
+3
+Zero Filled
+Record Count
+5 (spec says 3, approved to 5)
+Zero filled
+i.e. 00001, 00002, etc. (incremental record number)
+Footer
+Field
+Data Type
+Character Limits
+Format
+Values
+Hardcoded T
+1
+Hardcoded T
+N&D
+3
+Hardcoded N&D
+Timestamp
+8
+YYYYMMDD
+Not Used
+6
+zero filled
+Amount
+11
+Total Payment Amount in file (minus fees), zero filled
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF Customization
+AutoPayCollectionDate
+N/A
+BalanceForward
+BIF Customization
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+On Biller Questionnaire
+InvoiceDate
+BIF
+InvoiceDueDate
+BIF
+InvoiceFormatGuid
+BIF
+InvoiceTypeID
+BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+On Biller Questionnaire
+ThirdNotifyRequestedDate
+On Biller Questionnaire
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+N/A
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site.
+Phase 2: SSO Integration with My Insurance
+Biller Experience
+N&D will access BillerPortal. 
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoice
+On the fly invoice creation tied to new business.
+AgentConnect (Onetime payment re-direct only)
+Agent, Policyholder Portal, Mobile App payments for phase 1
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2301362177/BID+3126+Norfolk+Dedham+Technical+Design

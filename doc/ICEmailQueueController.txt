@@ -1,0 +1,31 @@
+Overview
+ICEmailQueueController (EQC) runs in Azure batch. For testing, it uses the 
+icbatchtest
+ batch account. For production, it uses the 
+icautopay
+ batch account. It runs in the 
+ControllerPool
+ of each account. In each batch account, the job schedule 
+ICEmailQueueController
+ is used to start and configure the job run. Once the controller batch job starts, it will create separate batch jobs in the accounts/pools below. These separate batch jobs will have a task for each biller that runs EmailQueueProcessing for 1st/2nd/3rd notifications.
+Environment
+Batch Account
+Pool(s)
+Test
+icbatchtest
+StandardNotifications / HighVolumeNotifications
+Production
+icbatch
+StandardNotifications / HighVolumeNotifications
+Validating the application
+In 
+icbatchtest
+For production
+Choose a demo biller and ensure the “send demo emails” flag is set via “Portal Customization” → “Testing Options” (once it’s enabled, it can be set for up to a week). Next, upload a BIF with the 
+FirstNotifyRequestedDate
+ set to 10 days from today's date. Then, register the customer. Then set the job schedule to the next available time (usually 8 minutes from the current time) with the following environment variables: 
+rerun = 1
+ and 
+billeridlist=2401
+ (or whichever bid is used).
+ URL:/spaces/PE/pages/2980479057/ICEmailQueueController

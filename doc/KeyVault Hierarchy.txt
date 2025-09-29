@@ -1,0 +1,137 @@
+Summary
+There are 3 levels in the KeyVault (Vault) Hierarchy in the InvoiceCloud NextGen Azure architecture.
+Below is a summary of the 3 levels, click the link to go to the detailed section related to each level.
+Note, this information provided in this article is intended for Governance.  There is no cascading logic to look for Secrets/Certificates in this Hierarchy chain.  The Consuming Application will need to specify the KeyVault target within the 
+SecretProviderClass
+ or implementation of KeyVault SDK implementation within the Consuming Application.
+Environment Wide Vaults
+Intended to house Secrets, Passwords, API Keys, and Certificates used by Applications within each Environment to allow for a consolidate “Single Pane of Glass” for managing the creation, rotation, and deletion of such artifacts.
+Cluster Specific Vaults
+Intended to house Secrets related to the Infrastructure of each Cluster, as well as Application Configurations related to all (or most) of the Application Services hosted within the Cluster.
+Application Service/Instance Specific Vaults
+Intended to house Application Configurations related to specific a Application Service and/or specific Application Instance of the Application Service.
+Environment Wide Vaults
+Each InvoiceCloud Modern 
+Environments
+ has its own set of Key Vaults intended to house Secrets (Service Principal Secrets, Service Account Passwords, Third Party API Keys) and Certificates (TLS Certificates) that are applicable for any or all Application hosted within the Environment. 
+These KeyVaults should leverage the Expiration Date on all Secrets and Certificates and 
+implement the Expiration Date approaching alerts design pattern
+ to ensure the Infrastructure and Platform teams are notified and can proactively address the situation prior to the Secret or Certificate expiring.
+These key vaults should be able to be referenced using a 
+SecretProviderClass
+ running under any app's identity (assuming the app is in the same environment as the Environment Wide Vault). We had initially thought to use a global 
+SecretProviderClass
+, but that would be difficult due to the number of Secrets in the Vault that may need to be referenced.  Any time a new Secret is added to the Environment Wide Vault, the 
+SecretProviderClass
+ would need to be updated as well due to the fact the Secrets that Applications consume from the Environment Wide Vault are managed manually.
+These KeyVaults follow the naming convention 
+kv-glb-vault1-{environment-specifier}
+The Resource Group they exist in for DEV, IAT, and QAR Environments 
+rg-glb-resources1-npd - Microsoft Azure
+Below are links for more information on the current Environment Wide Key Vault instances per Environment:
+Global Infrastructure
+ 
+Global Infrastructure
+ 
+Environment Wide Vaults:: Use Cases
+Service Principal Secrets that are 
+required 
+to be rotated on an interval specified during the creation of the Service Principal Secret.
+Third Party API Keys (MailGun, NewRelic, etc…) that are either 
+required 
+to be rotated
+ 
+or 
+should 
+be rotated on a specific time interval.
+API Keys used to access other Azure Resources such as a Service Bus or Message Queue, however these should be migrated to the Managed Identity model as supported by the target Azure Resources.
+Environment Wide Vaults:: Usage Guidelines
+Any Secret or Certificate should have an Expiration Date provided for tracking and observation purposes.
+An 
+Azure Automation Workload should be setup for the Notification of Expiration Date approaching 
+and the Notification should occur 30 days prior to the Expiration of the Secret or Certificate.
+Environment Wide Vaults:: Seeding Guidelines
+This level of Key Vault can be manually seeded by the Custodians of Secrets and Certificates.
+The Service Principal Secrets in this Key Vault are automatically seeded via the 
+Service Principal Terraform Stack
+ in the 
+Global_AAD 
+repo.
+Environment Wide Vaults:: Consumption Guidelines for K8s Hosted Applications
+Each 
+Application Service
+ can use programming language specific SDK’s to pull the Secret values on an interval for in-memory use by the Application Service, which is preferred from a Secret security perspective.
+Each 
+Application Service
+ can have a 
+SecretProviderClass
+ that references the Environment Wide Vault for the given Environment, however the Secret will get placed in plain text within the Application Service’s container as a volume mount and is less secure.  
+Access for each 
+Application Service
+ to the Environment Wide Vault is controlled by KeyVault ACLs applied to the Application Service 
+Instance
+’s Managed Identity via the 
+terraform-azurerm-app-onboarding-aks
+ module.
+Cluster Specific Vaults
+Each InvoiceCloud NextGen AKS Cluster used to host one or more Applications can have it’s own KeyVault if needed.  The KeyVault will be specific to each AKS Cluster per Environment.  This level of KeyVault is intended to house Secrets related to:
+The access of the Azure Resources that comprise the AKS Cluster, such as the Admin Password for the Virtual Machine Scale Set that represents a Node Pool within the AKS Cluster.
+Application Configuration settings that are applicable to all (or most) of the Application Services hosted within the AKS Cluster (aka 
+Application Spoke
+).
+Cluster Specific Vaults:: Use Cases
+The Username and Password for the Windows VM’s in the AKS Node Pool Scale Set.
+Overriding of values in the App Settings or Connection String sections of the 
+app.config
+ file via Environment Variables passed into an application’s container image.  The App Setting or Connection String key/value pair should be common amongst all (or most) of the Services within the Application’s set of Services.
+Cluster Specific Vaults:: Usage Guidelines
+Only the Secrets section of the Key Vault should be used.
+The Secrets should not contain any type of Passwords, Service Principal Secrets, or API Keys used by the Application Services.  These type of Secrets should be stored in the 
+Environment Wide Key Vaults
+.
+Expiration Dates are not required.
+Cluster Specific Vaults:: Seeding Guidelines
+This level of KeyVault can be manually seeded by Application Development teams or Cloud Infrastructure Engineers.
+Cluster Specific Vaults:: Consumption Guidelines for K8s Hosted Applications
+Each Application Service Instance can have a 
+SecretProviderClass
+ that references the Application Cluster's Vault for the given Environment.  
+Access for each 
+Application Service
+ to the Cluster specific KeyVault will need to be implemented within the 
+terraform-azurerm-app-onboarding-aks
+ module when needed.
+Application Service/Instance Specific Vaults
+Each InvoiceCloud NextGen Application 
+Service
+/
+Instance
+ will get its own KeyVault.  The KeyVault will be specific to each Application 
+Service
+/
+Instance
+ combination.  This KeyVault is intended to house Application Configuration settings specific to the Application 
+Service 
+and/or 
+Instance
+.
+Application Service/Instance Specific Vaults:: Use Cases
+Overriding of values in the App Settings or Connection String sections of the 
+app.config
+ file via Environment Variables passed into an application’s container image.
+Application Service/Instance Specific Vaults:: Usage Guidelines
+Only the Secrets section of the Key Vault should be used.
+The Secrets should not contain any type of Passwords, Service Principal Secrets, or API Keys used by the Application Services.  These type of Secrets should be stored in the 
+Environment Wide Key Vaults
+.
+Expiration Dates are not required.
+Application Service/Instance Specific Vaults:: Seeding Guidelines
+This level of KeyVault can be manually seeded by Application Development teams.
+Application Service/Instance Specific Vaults:: Consumption Guidelines for K8s Hosted Applications
+Each Application Service Instance can have a 
+SecretProviderClass
+ that references the Application Service Instance’s specific KeyVault for the given Environment.  
+Access for each Application Service Instance to the specific KeyVault is controlled by KeyVault ACLs applied to the Application Service Instance’s Managed Identity via the 
+terraform-azurerm-app-onboarding-aks
+ module.
+ URL:/spaces/platform/pages/3949232134/KeyVault+Hierarchy

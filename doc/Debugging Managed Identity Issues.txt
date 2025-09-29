@@ -1,0 +1,111 @@
+1
+6
+false
+default
+list
+true
+Lessons
+Lesson 1: always read the whole message! If it’s long, copy it into your IDE and format it there so that it’s more readable. Find and replace can be useful, i.e. replace 
+. 
+ (period followed by space) with a newline.
+Lesson 2: don’t only look at the error message. Check out the other data as well. In the case study below, the biggest clue to the origin of the issue came from 
+error.class
+, not 
+error.message
+. Recommended first fields to look at:
+error.message
+error.class
+error.stack
+Lesson 3: Start at the bottom of the stack trace found in 
+error.stack
+Lesson 4: Please, please, please take every chance you have to improve logging in any applications you work on! Catch exceptions and then rethrow them with more descriptive error messages. Make sure you always log the original exception message, too.
+Lesson 5: Always conduct the 
+Server Sanity Checks
+ for a Host before putting it back into a Load Balancing Host Pool.  Also note, with the rollout of the Kubernetes based Proxy Services, we have introduced a WCF Integration and Smoke test framework for testing or Proxy Services which should also be used in the future to test the health of our Proxy Services in an Environment.
+ICDatabaseService.ServiceTests - Repos
+ICBusinessService.ServiceTest - Repos
+IC.ServiceHost.RTDR.IntegrationTests - Repos
+Case Study
+Scenario
+CTP was logging the following Error Messages in NewRelic: 
+https://onenr.io/01wZDJa8Zj6
+One of the NewRelic Log Messages
+{
+  "agentName": "Infrastructure",
+  "agentVersion": "1.62.0",
+  "apmApplicationIds": "|1025091440|1071217427|1071574267|1025090457|1049334625|1065807072|1091082959|1071292259|1016987907|1089005653|1049930937|962493116|",
+  "apmApplicationNames": "|Azure - Biller Portal - preview|Azure - CRM - McLogin - preview|Azure - ICTemplates - preview|Azure - Portal - McLogin - preview|Azure - RESTAPI - McLogin - preview|Azure - SSOAuthentication - preview|Azure - StratusWebServices - McLogin - preview|Cloud Transaction Processing - preview|ICCloudPaymentsAPI - preview|ICRecaptchaAPI - preview|ICTunnelAPI - preview|StratusFileProcessor|",
+  "azure.availabilitySet": "/subscriptions/c1e3635c-98d4-47f5-96e0-926717b6f0c4/resourceGroups/RGWEB/providers/Microsoft.Compute/availabilitySets/AS-IC-WEB-PREVIEW",
+  "azure.image": "Standard_D4s_v3",
+  "azure.name": "IC-WebPreview2",
+  "azure.regionName": "eastus",
+  "azure.resourceGroup": "RGWEB",
+  "azure.resourceGroupName": "RGWEB",
+  "azure.subscriptionId": "c1e3635c-98d4-47f5-96e0-926717b6f0c4",
+  "azure.type": "Microsoft.Compute/virtualMachines",
+  "azure.vmId": "85c12ed4-1037-4dc5-9601-985d77c4ff30",
+  "azure.vmSize": "Standard_D4s_v3",
+  "azure.windowsFamily": "Server",
+  "azure.windowsPlatform": "Microsoft Windows Server 2016 Datacenter",
+  "azure.windowsVersion": "10.0.14393.8066 Build 14393.8066",
+  "coreCount": "4",
+  "displayName": "IC-WebPreview2",
+  "entity.guid": "MTQ5OTcwNHxBUE18QVBQTElDQVRJT058MTA3MTI5MjI1OQ",
+  "entity.guid.INFRA": "MTQ5OTcwNHxJTkZSQXxOQXw4Njc4NDUyMjU2NTIyNjQ4NjM3",
+  "entity.guids": "MTQ5OTcwNHxJTkZSQXxOQXw4Njc4NDUyMjU2NTIyNjQ4NjM3|MTQ5OTcwNHxBUE18QVBQTElDQVRJT058MTA3MTI5MjI1OQ",
+  "entity.name": "Cloud Transaction Processing - preview",
+  "entity.type": "SERVICE",
+  "error.class": "System.ServiceModel.FaultException`1[[CloudTransactionProcessingSOAP.svcICCrypto.LibraryLevelFault, CloudTransactionProcessingSOAP, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+  "error.message": "Azure.Identity.CredentialUnavailableException: DefaultAzureCredential failed to retrieve a token from the included credentials. See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/defaultazurecredential/troubleshoot\r\n- EnvironmentCredential authentication unavailable. Environment variables are not fully configured. See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/environmentcredential/troubleshoot\r\n- ManagedIdentityCredential authentication unavailable. The requested identity has not been assigned to this resource.\r\nStatus: 400 (Bad Request)\r\n\r\nContent:\r\n{\"error\":\"invalid_request\",\"error_description\":\"Multiple user assigned identities exist, please specify the clientId / resourceId of the identity in the token request\"}\r\n\r\nHeaders:\r\nx-ms-request-id: a618e0d3-cfbc-4e68-921f-d826e206dba6\r\nContent-Length: 168\r\nContent-Type: application/json; charset=utf-8\r\nDate: Thu, 05 Jun 2025 13:36:35 GMT\r\nServer: IMDS/150.870.65.1730\r\n\r\n- Visual Studio Token provider can't be accessed at C:\\windows\\system32\\config\\systemprofile\\AppData\\Local\\.IdentityService\\AzureServiceAuth\\tokenprovider.json\r\n- Stored credentials not found. Need to authenticate user in VSCode Azure Account. See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/vscodecredential/troubleshoot\r\n- Azure CLI not installed\r\n- PowerShell is not installed. ---> System.AggregateException: Multiple exceptions were encountered while attempting to authenticate. ---> Azure.Identity.CredentialUnavailableException: EnvironmentCredential authentication unavailable. Environment variables are not fully configured. See the troubleshooting guide for more information. https://aka.ms/azsdk/net/identity/environmentcredential/troubleshoot\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage)\r\n   at Azure.Identity.EnvironmentCredential.<GetTokenImplAsync>d__12.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Azure.Identity.EnvironmentCredential.GetToken(TokenRequestContext requestContext, CancellationToken cancellationToken)\r\n   at Azure.Identity.DefaultAzureCredential.<GetTokenFromSourcesAsync>d__15.MoveNext()\r\n   --- End of inner exception stack trace ---\r\n   --- End of inner exception stack trace ---\r\n   at Azure.Identity.DefaultAzureCredential.<GetTokenFromSourcesAsync>d__15.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Azure.Identity.DefaultAzureCredential.<GetTokenImplAsync>d__13.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Azure.Identity.CredentialDiagnosticScope.FailWrapAndThrow(Exception ex, String additionalMessage)\r\n   at Azure.Identity.DefaultAzureCredential.<GetTokenImplAsync>d__13.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Azure.Identity.DefaultAzureCredential.GetToken(TokenRequestContext requestContext, CancellationToken cancellationToken)\r\n   at Azure.Core.Pipeline.BearerTokenAuthenticationPolicy.AccessTokenCache.<GetHeaderValueFromCredentialAsync>d__9.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at Azure.Core.Pipeline.BearerTokenAuthenticationPolicy.AccessTokenCache.<",
+  "error.stack": "\r\nServer stack trace: \r\n   at System.ServiceModel.Channels.ServiceChannel.HandleReply(ProxyOperationRuntime operation, ProxyRpc& rpc)\r\n   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs, TimeSpan timeout)\r\n   at System.ServiceModel.Channels.ServiceChannel.Call(String action, Boolean oneway, ProxyOperationRuntime operation, Object[] ins, Object[] outs)\r\n   at System.ServiceModel.Channels.ServiceChannelProxy.InvokeService(IMethodCallMessage methodCall, ProxyOperationRuntime operation)\r\n   at System.ServiceModel.Channels.ServiceChannelProxy.Invoke(IMessage message)\r\n\r\nException rethrown at [0]: \r\n   at System.Runtime.Remoting.Proxies.RealProxy.HandleReturnMessage(IMessage reqMsg, IMessage retMsg)\r\n   at System.Runtime.Remoting.Proxies.RealProxy.PrivateInvoke(MessageData& msgData, Int32 type)\r\n   at CloudTransactionProcessingSOAP.svcICCrypto.ICCryptoService.EncryptPaymentCardNumberForBillerGUID(String BillerGUID, String PaymentGUID, String Cardnumber)\r\n   at CloudTransactionProcessingSOAP.clsCryptoService.CallServiceRetry[TResult](Func`2 functionToCall, ICCryptoService client, Int32 retryCount, Int32 maxRetryCount, Int32 delay) in C:\\agent\\_work\\2\\s\\CloudTransactionProcessingSOAP\\Models\\clsCryptoService.vb:line 53\r\n   at CloudTransactionProcessingSOAP.clsCryptoService.CallService[TResult](Func`2 functionToCall) in C:\\agent\\_work\\2\\s\\CloudTransactionProcessingSOAP\\Models\\clsCryptoService.vb:line 77\r\n   at CloudTransactionProcessingSOAP.CTP.Services.Processors.Implementations.SaleProcessor.IC_CNP_Multi_Customer_Sale(String SecurityGUID, IC_CNP_Sale_Request[] REQ, IC_Misc_Data[] MISC, List`1& ResultingReceiptGuids) in C:\\agent\\_work\\2\\s\\CloudTransactionProcessingSOAP\\Services\\Processors\\Implementations\\SaleProcessor.vb:line 1514\r\n   at CloudTransactionProcessingSOAP.CloudTransactionProcessing.IC_CNP_Multi_Customer_Sale(String SecurityGUID, IC_CNP_Sale_Request[] REQ, IC_Misc_Data[] MISC, List`1& ResultingReceiptGuids) in C:\\agent\\_work\\2\\s\\CloudTransactionProcessingSOAP\\CloudTransactionProcessing.asmx.vb:line 69",
+  "fb.input": "tail",
+  "filePath": "E:\\Data\\Logs\\NewRelic\\Cloud Transaction Processing_NewRelicLogging2025060520.json",
+  "fullHostname": "IC-WebPreview2.invoicecloud.com",
+  "hostname": "IC-WebPreview2",
+  "hostStatus": "running",
+  "instanceType": "Standard_D4s_v3",
+  "label.InUse": "Yes",
+  "level": "Error",
+  "message": "Unexpected exception occurred. \"clsCryptoService\" \"_Lambda$__0\" RetryCount: 1",
+  "Message.Properties.Class": "clsCryptoService",
+  "Message.Properties.Method": "_Lambda$__0",
+  "Message.Properties.RetryCount": 1,
+  "message.template": "Unexpected exception occurred. {Class} {Method} RetryCount: {RetryCount}",
+  "newrelic.source": "api.logs",
+  "operatingSystem": "windows",
+  "plugin.source": "BARE-METAL",
+  "plugin.type": "nri-agent",
+  "plugin.version": "1.19.1",
+  "processorCount": "1",
+  "providerAccountId": "15643",
+  "providerAccountName": "Azure Primary-Subscription",
+  "span.id": "a28a01899669a554",
+  "systemMemoryBytes": "17179398144",
+  "thread.id": "11",
+  "timestamp": 1749171914521,
+  "trace.id": "182d94c428075b25b099395f7df5715a"
+}
+Original Debugging
+Was not able to determine which Application was throwing the Managed Identity error.  It was thought that is was a CTP issue.  However, further inspection of the Logs in NewRelic was able to identify the error was only being reported by CTP but was actually coming from a Proxy Service.
+Looking at the Logs more closely, we were able to see that the Error was being reported in the Payload that the Proxy Service was returning to the CTP application.
+New Relic Log Inspection
+Looking at the 
+error.class
+ property of the Log record showed that the error is possibly coming from a WCF Service.  
+ServiceModel
+ is commonly associated with the consumption of a WCF Service by an Application, and a 
+FaultException
+ is commonly associated with an Error returned from a WCF Service.
+Looking at the 
+error.message
+ showed a Stack Trace that seemed to be coming from an Application that was NOT CTP, but rather ICCryptoService (which is a WCF Service).
+Looking at the 
+error.stack
+, which is guaranteed to be coming from the Application Reporting the Log, we were able to verify the Exeption occurred when communicating with the ICCrytoService via WCF.
+Conclusion
+Once we determined the error was coming from the ICCryptoService, we were able to determine it was an issue with the Managed Identities configured on one or more of the Proxy VMs in Preview Environment.  The error was the ICCryptoService on one of the Proxies was not configured with a ClientId needed when more than 1 User Defined Managed Identity is attached to the VM.
+This was a new Exception not seen previously in the Preview Environment for CTP.  We had recently added 
+IC-ProxyPreview1
+ back to the Load Balancer Pool and posted this notice for the change:
+We were able to correlate that this change introduced the Exception by correlating Event and Log timings.
+ URL:/spaces/platform/pages/4384194632/Debugging+Managed+Identity+Issues

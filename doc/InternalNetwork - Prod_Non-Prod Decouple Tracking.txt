@@ -1,0 +1,25 @@
+Epic:
+https://invoicecloud.atlassian.net/jira/software/c/projects/EBPP/boards/138?quickFilter=661&selectedIssue=EBPP-16560
+ 
+Objective: 
+Decouple Non-Prod and Prod networks and create a network boundary
+Rollback Plan: 
+We have created separate Route tables for Non-Production and Production in the Primary Subscription. If there is an issue we cannot solve quickly, we can simply apply the old route table that is currently applied to the subnet.
+Non Production Workflow:
+ Create Route Table
+Breakdown InternalNetwork Vnet routes
+Prune unneeded routes
+Update/Verify Palo Alto Firewall rules are in place for each subnet being migrated
+Determine tests to be associated with each migrated subnet
+Switch subnet route table to the new route table
+Monitor Palo Alto during migration
+Production Workflow:
+ Create Route Table
+Breakdown InternalNetwork Vnet routes
+Prune unneeded routes
+Update/Verify Palo Alto Firewall rules are in place for each subnet being migrated
+Determine tests to be associated with each migrated subnet
+Choose maintenance windows
+Switch subnet route table to the new route table
+Monitor Palo Alto during migration
+ URL:/spaces/icinfradoc/pages/2970681345/InternalNetwork+-+Prod+Non-Prod+Decouple+Tracking

@@ -1,0 +1,142 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+ 
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+ 
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Cloud Payments v1
+Invoice CloudPay is executed from the CommunityCore portal when the Submit Payment button is clicked from the last screen shown below.  These screens are from the CommunityCore portal.
+Sample CloudPay Request:
+Request Details
+Parameter
+Required
+In Call
+Notes/Description
+Biller_guid
+Y
+Y
+Always provided by IC
+This is specific for each biller and must be provided to CommunityCore
+invoice_number
+Y
+Y
+balance_due
+Y
+Y
+invoice_type_id
+Y
+Y
+Always provided by IC
+This is specific for each biller and must be provided to CommunityCore.
+invoice_date
+N
+N
+invoice_due_date
+N
+N
+create_customer_record
+N
+N
+customer_account_number
+N
+Y
+customer_name
+N
+N
+customer_address
+N
+Y
+customer_city
+N
+Y
+customer_state
+N
+Y
+customer_zip
+N
+Y
+customer_email_address
+N
+Y
+allow_partial_payment
+N
+N
+minimum_payment_amount
+N
+N
+allow_swipe
+N
+N
+allow_emv
+N
+N
+allow_cc_payment
+N
+N
+allow_ach_payment
+N
+N
+allow_paypal_payment
+N
+N
+credit_card_service_fee
+N
+N
+ach_service_fee
+N
+N
+custom_column_1
+N
+N
+custom_column_2
+N
+N
+custom_column_3
+N
+N
+custom_column_4
+N
+N
+return_url
+N
+Y
+https://
+qa
+communitycore/app/contractors/
+3710
+/payments
+fields highlighted in red are variables and vary based on production.
+postback_url
+N
+https://
+qa
+communitycore/api/v1/payment-processing/payment-generic/
+F8AE396D-7F57-4909-BC2D-3F4E5E1667C5
+fields highlighted in red are variables and vary based on production.
+biller_reference
+N
+N
+emv_device_id
+N
+N
+emv_location_id
+N
+N
+cashier_name
+N
+N
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3352330244/CommunityCore+by+SAFEbuilt+Technical+Design

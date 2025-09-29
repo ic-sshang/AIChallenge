@@ -1,0 +1,200 @@
+Page Navigation
+Document Status
+In Progress
+Yellow
+Document Owner
+ 
+Knowledge Transfer
+Gong URL
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+SFTP
+File Naming Convention: 
+billerCode_MMDDYYYYHHMMSS.bif
+Adjustments/Balances
+Sapiens API: getAccountBalance
+RTDR
+Specific values that are updated by the webservices in addition to BalanceDue and Total AmountDue (ex: Block CC, Block ACH, Past Due): N/A
+Payments
+Sapiens API: CreateCash Receipt
+Data Pump
+ACH Rejects
+Sapiens API: RecordAchReject
+Data Pump
+Are C-Code Rejects included? 
+C-Code Rejects not included
+R-Code Rejects included
+Voids
+Sapiens API: RecordAchReject
+Data Pump
+Credits
+Sapiens API: RecordAchReject
+Data Pump
+Chargebacks
+Sapiens API: RecordAchReject
+Data Pump
+Are C-Code Rejects included? 
+C-Code Rejects not included
+R-Code Rejects included
+Change Log - AutoPay Enrollment
+Sapiens API: AutoPay
+Data Pump
+Change Log - Paperless Enrollment
+Sapiens API: updatePaperless
+Data Pump
+Change Log - Phone Number
+Not Supported
+N/A
+Change Log - Email Address
+Not Supported
+N/A
+Bill Images 
+PDF Linking - Supported
+PDF Extraction - Not Supported
+Template - Not Supported
+Web Services - getInvoiceDocUrl API
+The integration supports PDF Linking. If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller.
+Template- Not supported.
+PDF Extraction-Not supported.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+N/A
+Check Free - FISERV - Cash
+Not Supported
+N/A
+CloudPay
+Supported
+CloudPayV2 is supported for the below CloudPayV2 Use Cases: 
+One Time Initial Payment for Payroll Report Premium in Sapiens Portal
+Pay Statement in Sapiens Portal. 
+Sapiens completed development on One Time Payment for Quote Initial Deposits CloudPayV2 Use Case, but they did not have a Partner Level environment for Invoice Cloud to test the One Time Payment for Quote Initial DepositsCloudPayV2 use case. Sapiens advised they will potentially engage Invoice Cloud in Q1 2026 to test the One Time Payment for Quote Initial Deposits. One Time Payment for Quote Initial Deposits CloudPayV2 Use case is not supported in the integration until it is successfully tested. 
+CloudPay Web Services
+Not Supported
+N/A
+CloudStore
+Supported
+Not supported through integration but can be supported on a biller-by-biller basis. 
+CSRConnect
+Not Supported
+N/A
+EMV
+Not Supported
+N/A
+IVR
+Supported
+Not supported through integration but can be supported on a biller-by-biller basis. 
+Recommendation for the IVR search method (ex: account number). 
+Kiosk
+Not Supported
+N/A
+Online Bank Direct - OBD
+Supported
+Not supported through integration but can be supported on a biller-by-biller basis. 
+Outbound IVR
+Supported
+Not supported through integration but can be supported on a biller-by-biller basis. 
+POSConnect
+Not Supported
+N/A
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Not Supported
+N/A
+       Multi-User Log In
+Not Supported
+N/A
+       Co-Owner Registration
+Not Supported
+N/A
+ 
+ SSO
+Supported
+Integrated with Invoice Cloud’s CloudSSOConnect Product (redirect, not iFrame). 
+AutoPay Collection Date
+Not Supported
+N/A
+Batch Closure
+Supported
+Batch Closure Recommendation:
+Custom batch closure is best. 
+Recommended batch close time: 11:59 PM (biller time zone). 
+Bill Processor
+Not Supported
+N/A
+Billing Options 
+       Balance Forward
+Not Supported
+N/A
+       Open Item Billing
+Required 
+Block Payment
+Supported
+Block Payment feature is supported via block field in RTDR Response
+if 
+block
+= true
+BlockPaymentsCC & BlockPaymentsEFT = true
+if 
+block
+= false
+IC BlockPaymentsCC & BlockPaymentsEFT = false
+Conveyance
+Not Supported
+N/A
+Data Conversions
+Supported
+Email Notification Schedule
+Supported
+InvoiceDueDate field in BIF will be used for notifications. This will be configured during implementation based on when Biller wants the notifications to be sent.
+Expire Bill for Payment
+Not Supported
+N/A
+Flex Pay
+Not Supported
+N/A
+Minimum Payment
+Not Supported
+Paperless
+Supported
+Partial Payments
+Supported
+AllowPartialPayments sent in BIF
+Past Due Payments
+Supported
+Past Due Payments feature is supported via pastDue field in RTDR Response
+pastDue
+ = IC PastDue (will always be populated)
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+N/A
+IDTech SRED Key
+Not Supported
+N/A
+Ingenico EMV
+Not Supported
+N/A
+Other EMV Devices
+Not Supported
+N/A
+ URL:/spaces/IM/pages/2846883913/Sapiens+CoreSuite+for+Workers+Compensation+Integration+Software+Details

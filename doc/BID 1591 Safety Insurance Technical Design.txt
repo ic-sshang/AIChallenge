@@ -1,0 +1,658 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Document status
+Done
+Green
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+Present Functionality:
+Test URL: 
+https://dev.safetyinsurance.com/invoice_cloud/
+Prod URL: 
+https://www.safetyinsurance.com/invoice_cloud/
+Note: Only used for IVR RTDR today. 
+Future Functionality:
+ 
+Test URL: 
+https://safuatexjux-api.dxc-ins.com/enterprise-billing/v1/billing/accounts/DMA3840957/balance/minDue
+Prod URL: 
+https://pb360-api.safetyinsurance.com/enterprise-billing/v1/billing/accounts/DMA3840957/balance/minDue
+Note: This RTDR update will be for all payment channels, not just IVR like the above. 
+Present Functionality Sample Request:
+ 
+https://dev.safetyinsurance.com/invoice_cloud/ivr_request.pl?policy_num=BME3001809
+PolicyNumber (Pulled from 
+AccountNumber
+ location in the invoice file is utilized in the request lookup). 
+Future Functionality Sample Request:
+https://safuatexjux-api.dxc-ins.com/enterprise-billing/v1/billing/accounts/DMA3840957/balance/minDue
+AccountNumber is the lookup value (i.e. DMA3840957). 
+100%
+Present Functionality Sample Response:
+{"PolicyNumber":"PRV6546815","StreetAddress":"8563 TESTING LANE","TotalDue":"2032.00","Zip":"02101","City":"BOSTON","MinDue":"812.80","PolicyholderName":"SQAWKLY B TEST92636","DueDate":"2021-08-03","State":"MA","InvoiceNumber":"PRV6546815-V1G9H18"}
+Future Functionality Sample Response:
+Response code  200 OK
+
+Response Body
+{
+ 	     "minDue": 40.0
+}
+Present Functionality Spec: N/A
+Future Functionality Spec:
+Data Pump: Payment
+Enterprise Payments Billing Batch
+Test URL: 
+https://safuatexjux-api.dxc-ins.com/enterprise-payments
+Username/Password: Found in advanced settings in CRM.
+Prod URL: 
+https://pb360-api.safetyinsurance.com/enterprise-payments
+Username/Password: Found in advanced settings in CRM.
+Note: Used to post payments to DXC (PB360). 
+Specification details a three step process to open a batch, add payments, and accept/deposit the batch (close it). 
+Responses can also be found in the specification attached in the specifications column. 
+Data Pump: Paperless
+Presentment Method API
+Test URL: 
+https://safuatexjux-api.dxc-ins.com/enterprise-billing/v1/billing/accounts/
+Username/Password: Found in advanced settings in CRM.
+Prod URL: 
+https://pb360-api.safetyinsurance.com/enterprise-billing/v1/billing/accounts/
+Username/Password: Found in advanced settings in CRM.
+Note: Used to get and change the presentment methods to DXC. 
+Specification details the API calls to get the current presentment method and to change it to either Paper or Paperless (Ebill).
+Responses can also be found in the specification attached in the specifications column. 
+AgentConnect:
+AutoPay Signup
+AgentConnect
+API
+Test URL: 
+https://www.invoicecloud.com/agentconnectapi
+Username/Password: API key can be found in the Support tab → Documentation/ APIs → Application API Keys of the test biller portal
+Prod URL: 
+https://www.invoicecloud.com/agentconnectapi
+Username/Password: API key can be found in the Support tab → Documentation/ APIs → Application API Keys of the test biller portal
+Note: Used to access a customer's portal and sign them up for AutoPay
+Specification details the API call to get a URL to sign up a customer with AutoPay.
+Responses can also be found in the specification attached in the specifications column.
+Data Pump: AutoPay
+*Please note that this autopay data pump documentation was done retroactively based on the code - please feel free to edit as necessary
+Enterprise Payments / Enterprise Billing 
+This request utilizes the same URL/Username/Password Advanced Settings configuration as the payments data pump (Advanced Settings 11, 12, 13)
+When autopay is turned on, the request is a POST to the same base URL as payments (Advanced Setting 11):
+Test URL: 
+https://safuatexjux-api.dxc-ins.com/enterprise-payments
+Prod URL: 
+https://pb360-api.safetyinsurance.com/enterprise-payments
+Username/Password: Found in Advanced Settings 12 and 13 in CRM
+When autopay is turned off, the request method and URL are modified in code, resulting in a PATCH sent to:
+Test URL: 
+https://safuatexjux-api.dxc-ins.com/enterprise-billing/v1/billing/accounts/{AccountNumber}
+Prod URL: 
+https://pb360-api.safetyinsurance.com/enterprise-billing/v1/billing/accounts/{AccountNumber}
+Username/Password: Found in Advanced Settings 12 and 13 in CRM
+When autopay is turned on:
+Method: POST
+identifier
+ = AccountNumber
+isRecurring
+, 
+identifierType
+, and 
+paymentMethod
+ are hard-coded as seen below:
+json
+{
+    "identifier" : {AccountNumber},
+    "isRecurring" : "true",
+    "identifierType" : "DB",
+    "paymentMethod" : "Bank Account"
+}
+When autopay is turned off:
+Method: PATCH
+type
+ and 
+paymentMethod
+ are hard-coded:
+json
+{
+    "type" : "DirectBill",
+    "paymentMethod" : "Direct Invoice"
+}
+Success:
+Response contains 
+POSTEDDATE
+ value
+Failure:
+Response does not contain 
+POSTEDDATE
+Automatic retries are turned on to retry after 15 minutes, maximum of three retries
+RemoteAuthentication: RegisterAccountsForUser
+RemoteAuthentication API
+Test URL: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RegisterAccountsForUser
+Username/Password: API key can be found in the Support tab → Documentation/ APIs → Application API Keys of the test biller portal
+Prod URL: 
+https://www.invoicecloud.com/remoteauthenticationapi/user/RegisterAccountsForUser
+Username/Password: API key can be found in the Support tab → Documentation/ APIs → Application API Keys of the test biller portal
+Note: Used to register a customer
+{
+    "EmailAddress": "TestEmail@noplace.com",
+    "Password": "TestPassword",
+    "Accounts": [
+        {
+            "AccountNumber": "TestAccountNumber",
+            "LoginTypeID": 1
+        }
+    ]
+}
+ 
+{
+    "Code": 0,
+    "Message": "Success",
+    "Data": {
+        "AccountsNotRegistered": []
+    }
+}
+ 
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller and will be used for both new invoice creation as well as existing invoice balance adjustments. 
+File Extension: .txt
+File Naming Convention: Custom
+File Delimiter: Fixed Width
+Specification: 
+Sample File: 
+https://invoicecloud.app.box.com/file/742702308194
+SFTP File Path: \ToInvoiceCloud\Invoices
+File Transfer Frequency: Daily
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+AccountNumber, Custom1, Custom2
+Y
+TRUE
+Account#
+10
+AccountNumber, Custom1, Custom2
+Y
+TRUE
+Policy#
+10
+CustomerName
+Y
+TRUE
+1st Insured Name
+30
+N/A
+Y
+TRUE
+2nd Insured Name
+30
+Address1
+Y
+TRUE
+Insured Street Address
+30
+City
+Y
+TRUE
+Insured City
+30
+State
+Y
+TRUE
+Insured State
+2
+Zip
+Y
+TRUE
+Insured Zip
+5
+Custom4
+Y
+TRUE
+Bill Number
+21
+InvoiceDate
+Y
+TRUE
+Bill Date
+10
+BalanceDue
+Y
+TRUE
+Min Amount Due
+9
+InvoiceDueDate
+Y
+TRUE
+Due Date
+10
+N/A
+Y
+TRUE
+New Balance Amount
+9
+N/A
+Y
+TRUE
+EFT IND
+1
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: ICPayments
+File Delimiter: Fixed Width
+Specification: 
+Sample File:
+SFTP File Path: 
+File Transfer Frequency: Daily
+Header Record
+Field
+Start-End
+Length
+Type
+Description
+Record Type
+1 – 1
+1
+N
+"1"
+Destination ID
+2 – 7
+6
+N
+"055089"
+This is Safety’s ID.  Used to confirm that the file received is for Safety Insurance.
+NUMERIC FILLER
+8 – 15
+8
+N
+Zeros
+Inbound Date
+16 – 23
+8
+N
+MMDDYYYY
+Inbound Time
+24 – 29
+6
+N
+HHMMSS (timestamp)
+[ 24hr clock or Standard time ]
+Origin ID
+30 – 39
+10
+N
+"9017378686" Used to confirm that the file is from Invoice Cloud.  This can be any number provided by Invoice Cloud.  As an example, Invoice Cloud’s customer service number 901-737-8686 is used to identify the file as being from Invoice Cloud.
+FILLER
+40 – 80
+41
+A
+Spaces
+Detail Record
+Field
+Start-End
+Length
+Type
+Description
+Record Type
+1 – 1
+1
+N
+"4"
+Payment Type
+2 – 6
+5
+N
+This identifies the payment type of ACH or CARD.  We are open to the description format here.  For this example, 00888 is used to identify ACH transaction. For CARD transaction, 00999 is used.
+Payment Amount
+7 – 16
+10
+N
+$$$$$$$$¢¢
+Policy Number
+17 – 26
+10
+A
+This should be whatever the policy number is and should be right justified in the field.
+ 
+Our AUTO policies are all numeric, ranging between 5 or more numeric characters.  The number should be zero filled in the beginning before the policy number begins.
+For example:
+Policy     12345 = 0000012345
+Policy   123456 = 0000123456
+Policy 1234567 = 0001234567
+ 
+Our INSPIRE, EXCEED and CBA policies are 10 character alpha-numeric.  For all, alpha characters precede the numeric portion of the policy number.
+For example:
+CP12345678 (INSPIRE policy example)
+HMA1234567 (EXCEED policy example)
+CBA1234567 (CBA policy example)
+LOB Type
+(Line of Business)
+27 – 29
+3
+N
+111 = Auto; 222 = Inspire; 333 = Exceed; 444 = CBA (Combined Bill Account)
+ 111 = Auto (All Numeric)
+Sample Account Numbers:
+ 
+12345, 123456, 1234567, 0000012345, 0000123456, 0001234567 
+  (may contain leading zeros)
+ 
+222 = Inspire (2 alpha characters followed by 8 numeric characters)
+The alphas in this group can begin with one of the following 2 alphas: 
+HO
+, 
+UM
+, 
+DF
+, 
+BP
+, 
+CU, CP
+Sample Account Numbers:
+ 
+HO
+1234567, 
+UM
+1234567, 
+DF
+1234567, 
+BP
+1234567, 
+CU
+1234567, 
+CP
+1234567
+ 
+333 = Exceed
+ 
+(3 alpha characters followed by 7 numeric characters)
+The alphas in this group can begin with one of the following 3 alphas: 
+HMA
+, 
+HME
+, 
+HNH
+, 
+DMA
+, 
+DME
+, 
+DNH
+, 
+UMA
+, 
+UME
+, 
+UNH
+, 
+BMA
+, 
+BME
+, 
+BNH
+, 
+CMU
+, 
+UCM
+, 
+CNU
+, 
+PRV
+,
+ ANH
+, 
+AME
+,
+ COM
+,
+ CNH
+,
+ CME
+Sample Account Numbers:
+ 
+HMA
+1234567, 
+HME
+1234567, 
+HNH
+1234567, 
+DMA
+1234567, 
+DME
+1234567, 
+DNH
+1234567, 
+UMA
+1234567, 
+UME
+1234567, 
+UNH
+1234567, 
+BMA
+1234567, 
+BME
+1234567, 
+BNH
+1234567, 
+CMU
+1234567, 
+UCM
+1234567, 
+CNU
+1234567, 
+PRV
+1234567, 
+ANH
+1234567, 
+AME
+1234567, 
+COM
+1234567, 
+CNH
+1234567, 
+CME
+1234567
+ 
+444 = CBA (3 alpha characters followed by 7 numeric characters)
+This type of account all begin with the alphas “
+CBA
+”. 
+Sample Account Number: 
+CBA
+1234567
+FILLER
+30 – 80
+51
+A
+Spaces
+Trailer Record
+Field
+Start-End
+Length
+Type
+Description
+Record Type
+1 - 1
+1
+N
+"9"
+Total Dollar Amount
+2 - 15
+14
+N
+This is the total dollars and cents in the file.   I think you are safer at 14.  It is a total of all the records in the file.
+$$$$$$$$$$$$¢¢
+Total Number of Items
+16 - 20
+5
+N
+Total # of Item Detail records (type 4) on file
+Total Number of Records
+21 - 30
+10
+N
+Total # of all records (types 1,4,9) on file
+FILLER
+31 – 80
+50
+A
+Spaces
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: 
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+BIF Customization
+AutoPayCollectionDate
+BIF Customization
+BalanceForward
+BIF Customization
+CreditCardServiceFee
+N/A, in BIF, on biller questionnaire 
+FirstNotifyRequestedDate
+N/A
+InvoiceDate
+Pulled from Invoice File
+InvoiceDueDate
+Pulled from Invoice File
+InvoiceFormatGuid
+BIF Customization
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+N/A
+ThirdNotifyRequestedDate
+N/A
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+RSET Payment Methods for Mobile App
+Integration Modifications
+Jira Ticket
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+https://invoicecloud.atlassian.net/browse/EBPP-17334
+ 
+ 
+ Safety Insurance is having an issue where 2 users are being created for the same email address versus linking accounts when the “bridge” is done via SAML and via API (bridge meaning authenticating from their platform to IC). The behavior is noticeable when using SAML bridge first, then API (Remote Authentication - Register Accounts).
+Safety does not use Account Linking within Invoice Cloud.
+ 
+Resolve issue within the code when Safety sends a SAML call 1st and Register accounts API call 2nd, where two users are being created for the same emails, versus linking accounts
+We will extend the functionality of the IC SSO Authorization to the IC Remote Authorization API to handle account linking when two or more different account share the same email but they have different passwords. 
+To minimize the impact of this change, we’ll introduce a feature flag. This flexibility ensures that if undesired functionality gets introduce we could switch it off. 
+Ensure that the list of accounts provided to the 
+IC Remote Authorization API 
+contains only one account while also verifying that the Biller interacting with the API is a SAML Biller. 
+If the Biller is not a SAML Biller or more than one account is provided we will proceed with today's functionality. 
+ 
+https://invoicecloud.atlassian.net/browse/EBPP-17785
+ 
+Safety would like the Home icon in agent connect sessions only to redirect to a different URL, so as to not interrupt any non agent connect users.  Currently we cannot use redirect url b/c they don't use SAML for agent connect so no redirect is given to us and we have no area to store that in Agent Connect, no dynamic url is supported as of now.  This update will allow Safety to pass us a URL defined by them on a SSO request and we can redirect the user back to the given URL.
+The ask is to expose a new property in Agent Connect for the home Icon URL and they pass us that home icon URL when they initiate the agent connect sessions, in code, if we have that URL passed in we go there, if not we go to where they currently go today
+Expose a new parameter in Agent Connect for the Home button URL
+If a user is using Agent Connect and Safety passes us a different URL, redirect the user to the new URL when the Home button is clicked
+If a user is using Agent Connect and Safety does not pass us a different URL, redirect the user to the existing (currently used) URL as we do today
+https://invoicecloud.atlassian.net/browse/EBPP-16681
+ 
+INT Documentation updated
+ URL:/spaces/IM/pages/1610678285/BID+1591+Safety+Insurance+Technical+Design

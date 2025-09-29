@@ -1,0 +1,150 @@
+Objective:
+To analyze and document the integration approach between InvoiceCloud’s Biller Portal (BP/CRM systems) and SecureAuth, with a focus on the techniques used for managing and creating user accounts. This includes identifying API endpoints, authentication mechanisms, data mapping strategies, and user lifecycle workflows to ensure secure, scalable, and efficient user provisioning across systems.
+In 
+SecureAuth
+, user creation and management can be handled through 
+two different scopes
+: 
+Pools
+ and 
+Workspaces
+. Each approach has distinct use cases and implications. Here's a breakdown of both:
+1. Creating Users via Pools
+A 
+Pool
+ in SecureAuth represents a logical grouping of users — similar to a tenant or an isolated identity store. Pools are typically used to segment user populations (e.g., customers, employees, partners).
+How User Creation Works:
+Users are created 
+under a specific pool
+ using the SecureAuth 
+system-level API
+.
+API Endpoint (example):
+POST /api/identity/default/system/pools/{pool_id}/users
+POST /api/identity/default/admin/pools/{ipID}/users
+2. Creating Users via Workspaces
+A 
+Workspace
+ is a more 
+flexible container for identity management
+ that can span across pools and provides 
+collaborative tools
+ for managing users, roles, and other resources.
+ How User Creation Works:
+Users can be created 
+within a workspace context
+, where user roles, UID, and metadata are often handled more dynamically.
+I did not find the API’s for this scenario
+Workspaces allow bulk user import
+ via CSV or Excel files, typically through the 
+Admin UI
+Major Differences Between Pools and Workspaces
+Feature/Aspect
+Pools (Classic SecureAuth)
+Workspaces (Modern Identity Platform / Arculix)
+Use Case
+Used for grouping SecureAuth 
+realms
+, 
+users
+, and configurations
+Designed for 
+modern identity management
+, user creation, bulk import, and delegated admin
+Management Style
+Mostly 
+configuration-based
+, via SecureAuth Admin panel or config files
+Modern, 
+UI-first
+ with bulk import and REST API support
+Multi-Tenant Support
+Limited — pools mainly used for internal grouping
+Full multi-tenant support — separate teams or clients can use isolated Workspaces
+User Import
+Typically through 
+LDIF
+, 
+custom scripts
+, or directory sync
+CSV Import directly via UI; JSON via API
+MFA & Policies
+Defined per realm/pool
+Defined per workspace
+Admin Access Control
+Admins can access based on realms and pools
+Admin access can be scoped 
+per workspace
+ for better delegation and control
+Future Direction
+Legacy, still supported but not actively enhanced
+Recommended for 
+new implementations
+ — SecureAuth is investing in Workspace enhancements
+When to Use What:
+Scenario
+Recommendation
+You are maintaining a 
+legacy SecureAuth deployment
+Use 
+Pools
+You are setting up a 
+new identity and access management environment
+Use 
+Workspaces
+You need 
+delegated administration
+, clean UI, or plan for 
+multi-tenancy
+Use 
+Workspaces
+ 
+ Below are a few APIs that are useful for integrating
+New User creation
+User Store Config API
+/api/identity/default/system/pools/{ipID}/users
+/api/identity/default/admin/pools/{ipID}/users
+Delete the User account
+User Store Config API
+/api/identity/default/system/pools/{ipID}/users/{userID}
+ 
+Get the User details
+User Store Config API
+/api/identity/default/system/pools/{ipID}/users/{userID}
+ 
+Update the User record
+User Store Config API
+/api/identity/default/system/pools/{ipID}/users/{userID}
+ 
+Change password
+User Account API
+            
+/api/identity/default/system/pools/{ipID}/users/{userID}/change_password
+Request Reset password – if required
+User Store Config API
+/api/identity/default/system/pools/{ipID}/user/password/reset/request
+Use 
+Pools
+ when strict user isolation is required (e.g., multi-tenant architecture).
+Use 
+Workspaces
+ when you need 
+role-based management
+, 
+bulk operations
+, or 
+cross-pool capabilities
+.
+Need Clarifications:
+Q1. The APIs listed in the documentation for user creation are all under pools. Do we have any other APIs that support user creation under a workspace?
+Here are the Docs link:
+User Store Config API
+User Admin API
+Q2. For bulk user creation, I tried using the required fields: email or phone, payload.first_name, and payload.last_name. I would also like to use Uid as an identifier, along with passwords and roles.
+If we want to include additional attributes like these, how should they be structured in the Excel file?
+I attempted the following format, but it only processed the email, first_name, and last_name fields:
+email	payload.first_name	payload.last_name	metadata.roles	identifiers.Uid	credentials.password
+Is there a reference template or guide available that outlines the correct structure for all supported attributes?
+Q3. Are there any APIs available for creating users under Workspaces? The docs only mention Pool-related endpoints.
+Q4. When we tried obtaining an API token using the endpoint /default/admin/oauth2/token, we received a "resource not found" error. Could this be due to missing permissions or an incorrect configuration? Is there a different endpoint we should be using, considering this one is under the "admin" path?
+ URL:/spaces/PE/pages/4472407241/PRISM-577+Analyze+and+document+the+integration+technique+between+IC+BP+CRM+and+SecureAuth+for+Managing+and+Creating+User+Accounts

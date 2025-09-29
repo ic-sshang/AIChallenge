@@ -1,0 +1,121 @@
+Medium Rocks (MVP vs Day‑1 vs Future)
+How to Read the Table
+Rows = Capabilities (Big Rocks)
+ → Each row is a core capability (e.g., Wizard, KYC, Funding Config). Marked as 
+Must
+ or 
+Should
+ from workshops.
+Columns = Phases of Readiness
+MVP = Regulatory Baseline
+ → Minimum controls required by Chase/regulators. Manual, Ops-driven. Goal: 
+Legally live
+ (1–3 billers).
+Day-1 = Operational Baseline
+ → Minimal automation to support ~20 billers. Light UI/API builds. Goal: 
+Operationally viable
+.
+Day-90+ = Optimization & Scale
+ → Efficiency, self-service, advanced integrations. Goal: 
+Reduce manual work & scale growth
+.
+Color Codes in Cells
+🔴 
+Net-New Dev (High Effort)
+ – API, service, or UI build.
+🟡 
+Partial Dev (Medium Effort)
+ – CRM config, vendor API, workflow extension.
+🟢 
+Ops/Policy (Low Effort)
+ – Manual workaround or process only.
+Open Qs / Decisions / Blockers
+ → Tracks unresolved items, dependencies, and next steps.
+Estimation
+Effort (S/M/L/XL)
+ = raw build/test work.
+Complexity (Low/Med/High)
+ = cross-team, integration, vendor/Chase risk.
+Medium Rock
+Description
+MVP (Regulatory Baseline – Pilot Billers)
+Day-1 (Operational Baseline ~20 Billers)
+Day-90+ (Optimization & Scale)
+Open Questions / Decisions / Blockers
+Payer Fraud Monitoring (Card Testing, Velocity)
+Detect payer-side fraud: card testing, velocity spikes, stolen BINs. 
+MoSCoW: Must
+.
+🟢 
+Leverage existing Kount (legacy stack)
+ for card testing. 
+WT-233
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+🟢 Basic Ops velocity checks + Chase fraud alerts.
+WT-234
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+🟡 Extend 
+Kount integration  into PayFac stack
+ + 
+basic Ops dashboard
+ for fraud/velocity exceptions.
+WT-235
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+🟡 Configurable velocity rules (txn count, $ thresholds, MCC anomalies). 🟡 Alerts routed into Ops dashboards.
+WT-236
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+🔴 ML anomaly detection (card testing + synthetic IDs). 🔴 Adaptive scoring
+WT-237
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+   (device/IP/BIN). 🔴 Evaluate Kount expansion vs. dedicated AML/fraud vendor.
+Decision:
+ Confirm if Kount remains card-testing only or extended to AML.
+Biller AML Monitoring
+Detect suspicious biller activity (refund laundering, abnormal deposits). 
+MoSCoW: Should
+.
+🟢 Ops manually reviews refund patterns + outliers via reports.
+🟡 AML rule-based scenarios (e.g., >X% refunds, round-dollar spikes). 
+🟡 Alerts into Ops dashboard.
+🔴 Dynamic AML risk scoring, reserves auto-adjusted. 
+🔴 Dedicated AML tooling.
+Decision:
+ No AML vendor selected. Evaluate if Kount or separate system.
+Chargeback & Dispute Monitoring
+Track chargeback ratios vs network thresholds. 
+MoSCoW: Must
+.
+🟢 Ops manually monitors with Chase/Amex outputs. 🟢 Ratios tracked in spreadsheets (Visa 1%, MC 0.9%).
+🟡 Chargeback dashboards (ratios, 30/90-day trending). 🟡 Exception queues to Ops.
+🔴 Predictive monitoring (alerts before breach). 🔴 Integration with dispute mgmt tools.
+Decision:
+ Ops vs Finance owns chargeback SLA.
+Evidence & Audit Logging
+Capture compliance evidence (OFAC, CIS delivery, payouts, fraud/AML alerts). 
+MoSCoW: Must
+.
+🟢 Evidence stored manually (CRM, logs, spreadsheets).
+🟢 Continue manual capture.
+🔴 Automated audit log (system-captured evidence, retention policies, searchable). 
+🔴 RegTech integration for compliance attestations.
+Decision:
+ Define retention length (5 vs 7 yrs).
+Policy & Risk Dashboards
+Unified view of risk/compliance exceptions for Ops/Compliance. 
+MoSCoW: Should
+.
+— Not MVP (Ops uses spreadsheets + manual reports).
+🟡 Day-1 dashboard consolidating fraud/AML/chargeback alerts.
+🔴 Advanced heatmaps + predictive analytics (biller/geo/rail).
+Decision:
+ Tooling choice: extend CRM vs. new system.
+ URL:/spaces/EA/pages/4598497326/Thread+4+Risk+and+Compliance+Monitoring

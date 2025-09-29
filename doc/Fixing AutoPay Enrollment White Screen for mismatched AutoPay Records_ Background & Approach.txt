@@ -1,0 +1,137 @@
+Original Ticket Details (EBPP-3016)
+Background:
+Reason is because in the payment route, when paying for invoices from different accounts.  the login ID that is assigned to the autopay records doesn’t get synced up correctly. 
+exact scenario: One person no login made, selects in search two accounts, two invoices and then pays and signs up for autopay – Result: 
+login ID is made for the first account, and second account doesn’t have a login ID. Autopay record is tied to the login ID of the first. Autopay record will run for both accounts, but if they try to change autopay in biller portal or login to the customer portal we throw an exception. 
+In Biller Portal, in the Customer Portal, and One time Payment. 
+Salesforce Task:
+ 
+TN-559763
+When loading the Edit AutoPay Setup panel, we retrieve a LoginID for the account owner and also retrieve a LoginID  from the AutoPay record. We iterate through these LoginIDs to identify their LoginType in relation to the account. This results in an exception being thrown since  the LoginID in the AutoPay record is 0. The LoginID is set to 0 when unlinking an account from a login whose payment method was configured for AutoPay.
+Today’s Impact:
+Could impact all billers. Billers or Customers attempting to edit an AutoPay setup that was previously setup by a login that is no longer tied to the account.
+Need Stats from Cat. We don’t know the frequency of this. we have seen data that this issue goes back for year. Can happen to anyone. 
+Research Story: 
+EBPP-2439
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+From the original salesforce ticket:  
+“Can you please assist with researching the root cause of this issue?
+ We are seeing customer autopay records with the same payment methods and login ids but the customers are not linked. This is causing the edit autopay modal on the Biller Portal to error out as the login id for the customer is not the same as the current customer login id. We originally thought this issue was due to the mclogin conversion but these customers' auto pay registration dates are more recent. This is happening to multiple customers and multiple billers as this is the second task for this issue this week.” 
+​ Let's figure out the root cause. They don't have MCL enabled so it could be an issue with how customers are given a temporary owner(?). It doesn't add up that they aren't linked but have the same loginID. LoginIDs are what link different accounts.” 
+(Note by Cat)
+Adding cases here as I run across them: 
+56913 BID592 Ellensburg
+93073 BID2955 Hayward, CA
+Steps To Reproduce: 
+Steps for Biller Portal:
+Login into Biller Portal as support user for BID 559
+View customer profile for account number 0204 in Biller Portal
+Select AutoPay tab and attempt to edit the existing autopay setup
+Steps for Customer Portal:
+Login into Biller Portal as support user for BID 559
+Login into Customer Portal as account owner for account number 0204
+Select dropdown link My Profile > AutoPay and attempt to edit the existing autopay setup
+Source:
+Repo: MyIIS
+Page: Dialogs/AutoPay.aspx.vb
+Line: 216
+Visual Proof:
+ 
+GIF of actual result occurring in Customer Portal:
+Result in Biller Portal:
+Notes:
+need to consider this functionality with Biller Options 73  (Customer Portal - Allow AutoPay registration for non-registered Customers) and 82 turned on (Payment Route - Allow AutoPay Registration for One Time payments.)
+only allow enrolling if not already on autopay and not registered. enrolling in autopay when the payer is not registered and not on autopay means creating a separate payment method to each login. Unauthenticated, it should use the owner login of each account to assign the payment method and enroll in autopay. Authenticated, if the customer account is already tied to your login, then use your signed in loginID for the autopay record, and if it's not linked to you then use the owner login of that separate account. 
+Look at the requesting biller’s options in the CRM. 
+If email address is blank then it should be correctly updated when added in payment route. 
+Linked accounts, but not registered, payment method is added to the owner login for autopay. Will follow existing roles for notifications. 
+X-Rays need to be around the options listed, and use cases, to make testing doc with use cases. 
+Will be testing on temp login when there is an email set and when there isn’t. 
+ Problem
+RESOLVED
+Green
+ 
+A recurring problem exists when an unregistered user (payer) pays for 2 invoices on 2 accounts AND signs up for AutoPay through the payment route – this creates a mismatch in our system. This mismatch and lack of linking process in this flow 
+(login that owns the payment method is not tied to the customer record)
+ is causing problems for:
+Payers:
+ wrong payment methods associated with account AND payers are unable to edit their AutoPay
+Billers:
+ unable to edit AutoPay for these payers → blank screen appears
+InvoiceCloud:
+ influx of database requests to delete the AutoPay record and payment method for impacted payers AND burdening support
+ Conditions
+AutoPay is enabled for the invoice type(s)
+Biller option 73: allow autopay for non registered customers
+Biller option 82: allow autopay for one time payments
+ Approach
+The proposed and tested solution involves, during payment review, keeping track of all the customers (based on our invoice selection) and use the specific customer’s LoginID (in the case of unauthenticated payer) to create the the payment method db record and subsequently the autopay db record.
+Code solution can be found in this draft 
+PR
+, note that this only handles unaunthenticated payers but a similar solution can be used or expanded for authenticated payers, paying for multiple customers (linked accounts).
+ Issues
+Ticket Type
+Ticket Link
+Epic
+EBPP-26547
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Bug 
+RESOLVED
+Green
+ 
+EBPP-3016
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+DB query
+EBPP-26890
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Spike
+EBPP-26387
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Path forward: Customer Portal
+EBPP-27256
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Path forward: Biller Portal
+EBPP-27257
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+  Path Forward
+Customer Portal
+Payers are unable to edit their AutoPay, but the AutoPay could be running on AutoPay collection date and deducting funds. We do not want to interfere with AutoPay enrollments unless payers are attempting to review or modify their AutoPay in some way. Payers could be attempting to edit their AutoPay payment method, removing the payment method, or removing their AutoPay enrollment.
+We’re creating a new user flow for affected payers so that we can (1) allow payers to edit their AutoPay, and (2) fix the underlying database issue for that payer.
+Payer arrives on the welcome page of the customer portal.
+Payer navigates to their AutoPay (overview, not the individual edit page)
+When the AutoPay page loads, check for a valid or invalid state. As the page loads:
+Remove the payment method from the Customer AutoPay record and assign the correct LoginID and unenroll them from the impacted AutoPays
+Email notification must be sent regarding the unenrollment
+UI modal pops up with a message regarding their AutoPay
+Notification on-page alert appears with message about their AutoPay and # of accounts removed
+Payer is required to re-enroll in AutoPay for their affected enrollments and add a new payment method
+Biller Portal
+Billers are unable to edit AutoPay on behalf of their customers.
+The Biller Portal knows an issue is occurring. 
+Enable the user flow designed in the 
+Figma
+.
+A Biller user navigates to Customer Profile > AutoPay > Edit AutoPay Setup
+When Edit AutoPay Setup modal loads, check for valid or invalid state.
+For invalid state:
+Show modal pop-up in the UI with go to payer portal button link and cancel link
+If the Biller user clicks cancel, clicks X or out of the modal pop-up nothing will happen
+Every time the Biller clicks Edit AutoPay the modal pop-up will appear until the problem is fixed i.e., AutoPay is unenrolled, payment method is removed, and customer ultimately re-enrolls
+Release Materials
+Check with CS to confirm UI messaging
+Provide a Support Central article on the behavior & steps to rectify the AutoPay
+ URL:/spaces/PE/pages/4067229710/Fixing+AutoPay+Enrollment+White+Screen+for+mismatched+AutoPay+Records+Background+Approach

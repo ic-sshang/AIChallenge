@@ -1,0 +1,37 @@
+The document outlines WDIL's strategy for testing and automating the deployment of all team members' Jira items simultaneously, aiming to prevent bottlenecks in a single DevTest environment.
+Table of Contents
+At A Glance
+Setting Up Team Branches
+Deploying The Team Branch
+Deployment Channel
+At A Glance
+As the number of developers on the WDIL team increased, we encountered a bottleneck in our testing and automation queues. With the limitation of deploying only one member's branch at a time, other members' items would remain in the queue for days awaiting testing and automation. Consequently, lower priority items became backlogged as higher priority items dominated the DevTest pipeline. To address this issue, the team established a collective WDIL team branch. Now, each team member merges their updates for an item into this shared branch before deploying to the DevTest environment, allowing QA to test and automate multiple items at once.
+Setting Up Team Branches
+NOTE: 
+This is an example of how to set up a team branch for the MyIIS repository for the sake of explanation.
+Fetch then Pull latest on the release branch of the repo
+Create a branch based on the release branch you just merged latest with
+Next, we need to merge the team member’s current branches that are ready for testing and automation. To do this we first need to add their branches to Visual Studio locally.
+Fetch and Pull latest from the team member’s branch
+After merging latest navigate back to the team branch
+Once you are on the team branch, right click on the team member’s branch that is going to be merged
+When encountering merge conflicts. Right click the file and Take Incoming and commit the changes 
+ 
+Next, click Clean Solution → Rebuild Solution
+Stage the updated dlls and commit them to the branch
+Repeat steps 3-9 for all team member’s branches that are currently queued for testing.
+After the team branch is pushed to DevOps, team members can add new items to the team branch whenever needed. They must simply follow steps 5-9 then push the team branch. Team members should always do the following when merging their items to the team branch.
+Always merge latest before merging a branch for 
+BOTH
+ the release branch and team branch
+For MyIIS, always Clean and rebuild the solution and commit the updated IC.Common.dlls
+Deploying The Team Branch
+Go to the Build Pipeline
+Click Run Pipeline → Select team branch → Run
+Go to the Publish Artifact tab and copy the artifact version
+Go to the Deployment pipeline for the repo
+Click Run Pipeline → Select team branch → Provide the DevTest environment in the 'DevTest Environment” textbox ex: devtest5 → paste the artifact version → click Run
+The team branch is now deployed to a DevTest environment and can begin the testing process.
+Deployment Channel
+It is encouraged for teams to create a new Slack channel with all the developers and QA to notify each other of what items are currently deployed and in which DevTest environment they are deployed to. Best practice would be that each time the branch is deployed a message with the list of items in the branch and the deployment link are communicated to the team. 
+ URL:/spaces/PE/pages/3548020737/We+ll+Do+It+Live+Team+Branch

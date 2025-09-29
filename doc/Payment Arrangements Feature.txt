@@ -1,0 +1,107 @@
+Target release
+April 28, 2025
+Epic
+EBPP-24851
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+PLANNING
+Purple
+Document owner
+ 
+Designer
+ 
+Tech lead
+ 
+Technical writers
+@ writers
+QA
+ Objective
+Allow applicable payers to make arranged payments towards their invoice as set by the Biller.
+Build support for Payment Arrangement amounts for applicable customers when making a payment via OTP, AutoPay, and IVR.
+Note: The 
+Arrangement Amount 
+is set by the Biller and should not change. If it does, amount will be sent in the new BIF (e.g., if a penalty or fee is added).
+ Requirements
+User Interface
+OTP
+Saving the data and supporting Payment Arrangements in the OTP route aka “Quick Pay”
+Display the ‘Arrangement Amount’ as a payment option in the One Time Payment route
+IC checks to see if there’s an active pay arrangement, if so the most current arrangement amount will populate
+Radio button option for the Payment Arrangement to be selected
+NOTE:
+ Eventually, we will offer this feature in AutoPay and IVR.
+Database
+We will create a new field as a standard DB field for storing the arrangement amount (e.g., PayArrangementAmount')
+This will require that we:
+Update the BIF table to include ‘ArrangementAmount’
+Treat customers that do not have Payment Arrangements as NULL
+:note:
+atlassian-note
+#EAE6FF
+NOTE: Dependency on Data Services to make updates to the BIF
+Data Validation
+InvoiceCloud receives the data from an API via Invoice File
+Payment amount is not going to change
+When we call ‘Get Account’ they’ll have an indicator there that when TRUE we call ‘Get PayArrangementAmount’ to retrieve the amount
+Integration will find a way to store it 
+(that Product helps create)
+CRM
+Allow the ability to enable or disable Payment Arrangement feature
+ Delivery Schedule
+We will take a phased approach as we introduce this feature for (1) OTP, (2) AutoPay and (3) IVR sequentially.
+Support
+Priority
+Sequence
+Notes
+One Time Payment 
+CRITICAL
+Red
+Phase 1: April 28, 2025 
+Radio button
+Updating data correctly
+Pulling it correctly
+Storing it correctly
+AutoPay
+SECONDARY
+Blue
+Phase 2: Date TBD
+Follows OTP config to allow payers to enroll in AutoPay for Arranged Payments
+Only the Arrangement Amount will be deducted in AutoPay
+IVR 
+NOT CRITICAL
+Green
+Phase 3: Date TBD
+ User interaction and design
+TO BE CREATED
+ Open Questions
+Question
+Answer
+Date Answered
+Is there a use case for Bellevue where multiple accounts that are paying with arrangements?
+Yes: landlords. It’s possible to enroll in Payment Arrangements with multiple accounts. 
+Follow-up question: how often does this happen/how many accounts in the past have been set up with Payment Arrangements for multiple accounts
+ 
+Are there any legal requirements for setting up AutoPay for Arrangement Amounts? Does the user need to agree to a new set of terms/conditions?
+If someone is already enrolled in AutoPay, is the user supposed to reconfirm with AutoPay for Payment Arrangement or should the system just 
+know?
+We are going to ask the biller to remove active AutoPay customers if enrolled when a customer becomes enrolled in Payment Arrangements.
+ 
+Do we need an Arrangement exists flag to determine if a payer has Arrangements set up?
+Discussed this possibility with Katie and it makes sense. Could be done after Phase 1. Need to think more on this.
+ 
+Questions about CIS/Cayenta: 
+DataPump into Cayenta: Does this have active PayArrange? That is what we will pull from the AP table.
+Yes. Cayenta work is done.
+ 
+What is the calculation logic? Does it need to be refactored?
+What will the user experience be with the radio button? 
+ Constraints
+Payment Arrangement amount is 
+NOT 
+determined by the payer
+ Not in Scope
+Full details of the Pay Arrangements will not be available in the bill PDFs
+This will not include a native place with all of the information on there
+ URL:/spaces/PE/pages/3833692235/Payment+Arrangements+Feature

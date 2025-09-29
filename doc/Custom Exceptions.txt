@@ -1,0 +1,113 @@
+Custom Exception types are a great way to better communicate and reason about errors in a system.
+As an example, consider a system in which there are multiple concurrent processes operating on a database server at the same time. Each connection must successfully make it through a TCP handshake to connect to the server, access the data that is being requested by the caller, and then be cleaned up by the runtime to avoid thread pool exhaustion or socket errors from dangling connections.
+Using Custom Exceptions for Better Troubleshooting
+To continue the previous example - if one of those multiple concurrent processes attempted to initiate a TCP handshake and was forcibly rejected by the remote server, typical behavior would be for the .NET runtime to throw a 
+SocketException
+. By default, 
+SocketException
+ is automatically populated with an integer error code and an optional string message.
+But what if we want more robust tracking of these errors? We may not really care about the integer error code since it’s giving us really basic, possibly unhelpful information. Maybe instead we have a 
+CorrelationId
+ property that is set automatically on an incoming 
+Request
+ object - in this example, the 
+CorrelationId
+ can be used to trace a single request process end-to-end - from request origination all the way through to the return of a server response. This is often how observability platforms are able to expose full system trace logs for debugging purposes & visually show how a request moves through each part of the system.
+For this type of scenario - we could leverage a user-defined exception type.
+c#
+using System;
+
+public class DatabaseFaultException: Exception {
+
+   public Guid CorrelationId {get; init;}
+   
+   // For serialization purposes
+   [JsonConstructor]
+   public DatabaseFaultException() {
+     CorrelationId ??= Guid.NewGuid();
+   }
+   
+   public DatabaseFaultException(Guid correlationId) {
+      CorrelationId = correlationId;
+   }
+   
+   public DatabaseFaultException(Guid correlationId, string message)
+     : base(message) {
+       CorrelationId = correlationId;
+   }
+   
+    public DatabaseFaultException(Guid correlationId, string message, Exception inner)
+      : base(message, inner) {
+       CorrelationId = correlationId;
+   }
+}
+In the above example - we have created a hypothetical 
+DatabaseFaultException
+. This exception type inherits from the default .NET 
+Exception
+ type & exposes 3 default constructors 
+per Microsoft Best Practice Guidelines
+Additionally, we have included our 
+CorrelationId
+ property allowing us to associate this exception explicitly with a single request/process - so even in a situation where we have thousands of concurrent callers, we can quickly and easily identify which process faulted during execution and get to work on remediation right away.
+Using Custom Exceptions for More Expressive Communication
+While the above example is a more concrete and pragmatic approach to utilizing custom exceptions - exceptions can also be used within a codebase to better communicate meaningful details about the business domain.
+Consider the following
+c#
+public async Task<UserStatus> GetUserStatusAsync(Guid? id, CancellationToken token)
+{
+   token.ThrowIfCancellationRequested();
+   
+   var result = await this._userService.GetStatusAsync(id);
+   
+   if(result.Removed) throw new InvalidOperationException($"User with identifier: '{id}' has been removed from the system!");
+   
+   return result;
+}
+While the above example is bad, in general - note specifically the 
+InvalidOperationException
+ - this is a built-in exception type that is used when the state of an object cannot support the method call. Note that we’re also passing a message indicating the user that has been removed providing enough detail to identify what went wrong. That 
+technically 
+fits this use case - however, we can do better.
+c#
+public async Task<UserStatus> GetUserStatusAsync(Guid? id, CancellationToken token)
+{
+   token.ThrowIfCancellationRequested();
+   
+   var result = await this._userService.GetStatusAsync(id);
+   
+   if(result.Removed) throw new UserRemovedException(id, nameof(GetUserStatusAsync));
+   
+   return result;
+}
+In the above example, we’ve created a custom exception type - 
+UserRemovedException
+ - that accepts two parameters: a nullable 
+Guid
+ representing the User Id and a 
+string
+ value indicating the calling method where the exception was thrown.
+With the introduction of this very simple type, we have done several things
+We have made a more specific type of 
+Exception
+ that clearly communicates 
+the business language of our domain.
+We have encapsulated the information necessary for the 
+Exception
+ to track within the 
+UserRemovedException
+ itself thus removing the responsibility of the caller to format & present this information (also, we got rid of a magic string - that’s always a win).
+We have given ourselves a path for tracking the specific scenario when a user has been removed - even with our included error message in the 
+InvalidOperationException
+, consider that there could potentially be 
+InvalidOperationException
+s thrown from 
+anywhere
+ in the code - 
+look at how many different scenarios this exception type is thrown for just internal to the runtime
+ - having a custom exception type allows us to more quickly identify both 
+where
+ and 
+how often
+ this type of error occurs.
+ URL:/spaces/EA/pages/3376087278/Custom+Exceptions

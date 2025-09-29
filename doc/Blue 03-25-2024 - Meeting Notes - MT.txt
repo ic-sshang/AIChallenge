@@ -1,0 +1,105 @@
+ Date
+3/25/2024
+ Participants
+Mark Lagunez 
+mlagunez@invoicecloud.com
+; 
+Sean Concannon 
+sconcannon@invoicecloud.com
+; 
+Randy Torres 
+rtorres@invoicecloud.com
+; 
+Byron King 
+BKing@invoicecloud.com
+; 
+Dinesh Subramani 
+DSubramani@invoicecloud.com
+; 
+Miguelito Abagat 
+MAbagat@invoicecloud.com
+; 
+Quinten Marsala 
+QMarsala@invoicecloud.com
+; 
+Adrian Izaguirre 
+aizaguirre@invoicecloud.com
+; 
+Tony Cordova 
+tcordova@invoicecloud.com
+; 
+Kirtan Patel 
+KPatel@invoicecloud.com
+; 
+Jonathan Blackburn 
+JBlackburn@invoicecloud.com
+; 
+Vasant Javle 
+VJavle@invoicecloud.com
+; 
+Michael Griehm 
+MGriehm@invoicecloud.com
+; 
+Rob Chenault 
+rchenault@invoicecloud.com
+; 
+Manuel Hernandez Naya 
+mhernandez@invoicecloud.com
+; 
+Rene Reyes 
+rreyes@invoicecloud.com
+;
+Victor Cavada Valdez 
+vcavada@invoicecloud.com
+Alberto Perez 
+aperez@invoicecloud.com
+ Goals
+Kong ADR on service and routing configurations
+ Discussion topics
+Item
+Presenter
+Notes
+Kong Configuration
+ 
+Template - Architecture Decision Record
+ 
+https://invoicecloud.atlassian.net/wiki/spaces/platform/pages/3111976962/Kong+-+Open+decisions+to+be+made
+ 
+Moving of 
+IC-QA-Proxy3
+ to proper network lane.
+ 
+For PCI 4.0, we have agreed with 
+ to achieve an air gapped network isolation between NonProd and Production traffic.  To accomplish this, the Proxy WCF VMs used by the DevTest VMs needs to be moved to the proper Network Lane.
+Is anyone using 
+IC-QA-Proxy1
+ or 
+IC-QA-Proxy2
+ 
+Please comment here if your team is using or maintaining either of these Proxy QA VMs.
+ Action items
+Add action items to close the loop on open questions or discussion topics:
+
+
+
+
+10
+
+
+incomplete
+
+
+ Verify Kong pricing components; service definitions, production vs non production instances 
+
+
+
+
+Type /decision to record the decisions you make in this meeting:
+6388a1e3-1c3b-40ed-8b18-2b9b995ec0a0
+c238ebf6-f817-4cb0-8ba9-759d48d3a428
+DECIDED
+https://invoicecloud.atlassian.net/wiki/spaces/platform/pages/3111976962/Kong+-+Open+decisions+to+be+made
+ 
+https://invoicecloud.atlassian.net/wiki/spaces/platform/pages/3111976962/Kong+-+Open+decisions+to+be+made
+ 
+ URL:/spaces/EA/pages/3130523649/Blue+03-25-2024+-+Meeting+Notes+-+MT

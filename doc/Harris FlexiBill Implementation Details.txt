@@ -1,0 +1,147 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Knowledge transfer
+N/A
+Summary
+Summary
+Details
+Software Partner Name
+Harris FlexiBill
+Software Product Name
+FlexiBill
+Software Cashiering System
+N/A
+Supported Versions
+N/A
+Integration Requirements and Pre-Requisites
+N/A
+Vertical
+GUB
+Sample Biller Implementation
+City of Aberdeen (BID: 1281)
+City of Sherrill (BID: 1276)
+Atglen Borough (BID: 2897)
+Planning
+Test Portals
+IC Hosted Test Portal:
+Harris Flexibill - Test (BID 822)
+Harris Flexibill Test Portal 2 (BID 494)
+Partner Hosted Test Portal: N/A
+Biller Test Portal: N/A
+Rules of Engagement
+New projects discussed in weekly meeting with FlexiBill Wednesdays at 10:30 EST 
+FlexiBill provides assigned resource in weekly meeting. 
+Include assigned resource on kick-off call and assigned meetings. 
+Flexibill prefers for Go Live Prep work to start 3 days prior to Go Live so they have time to make updates and pull production file. 
+Timeline
+~60 days 
+Configuration
+Invoice Types
+Only 42 - Utility
+Virtual Site
+Integration will always use displayaccountnumber on the virtual site and Customer Portal. Please ensure all grids, settings and options support the use of displayaccountnumber. Email/Remind me Templates in CRM need to be updated to use displayaccountnumber. 
+Required Options
+ID
+Option Description
+Details
+51
+Adjustment Import - Balance Differential - Override 24 Payment Check
+By default, IC does not allow DAILY BALANCE adjustments to invoices with a payment made within the past 24 hours. Enable this option to override the 24 hour check
+Enabled
+Required for ALL FlexiBill billers so the balances update properly.
+95
+Customer Portal/Virtual Site - Show Display Account Number
+If enabled, we will show the DisplayAccountNumber instead of the AccountNumber for all payer facing pages in the Virtual Site and Customer Portal. Note: This does not apply to fields from customized grids.
+Enabled
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Upon request after Kick Off Call
+Data generic or unique/specific to each biller
+Adjustment File
+Partner
+Upon request after Kick Off Call
+Data generic or unique/specific to each biller
+Bill Presentment 
+Biller OR Partner 
+Upon request after Kick Off Call
+Standard:
+ PDF Extraction
+Sample Biller using PDF Extraction: Atglen Borough (BID 2897)
+Note on Template
+: Every biller has a different template and presents different data. Data on bill image will need to be confirmed with FlexiBill to ensure it is in the BIF received by Invoice Cloud. Reviewing the invoice samples with FlexiBill as early as possible is key
+Sample Biller using Template: City of Dillon SC (BID 2186)
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+Project Assignment 
+Biller GUID PROD
+Partner
+Once Stratus is installed
+Located within CRM on the Stratus Management Tab
+WebService Key PROD
+Partner
+Once Stratus is installed 
+Located within CRM on the Stratus Management Tab
+Stratus GUID
+Partner
+Once Stratus is installed
+Located within CRM on the Stratus Management Tab
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Diana Hawthorn
+Support Specialist
+dhawthorn@harrislocalgov.com
+716-297-8005 x393
+N
+Robert Kinkaid
+Support Specialist
+RKinkaid@harriscomputer.com
+716-402-2845
+N
+Mark Briglio
+Customer Success Manager
+MBriglio@harriscomputer.com
+716-402-2819
+Y
+ URL:/spaces/IM/pages/2366668989/Harris+FlexiBill+Implementation+Details

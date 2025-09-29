@@ -1,0 +1,54 @@
+Flow for updating database access method
+What method does it use?
+ICDatabaseService?
+Only ICDatabaseService repo should need the update
+IC.ServiceProxies
+Only ICDatabaseService repo should need the update
+IC.Microservice.*
+No update needed
+IC.Database:
+Get current version of IC.Database in use by repo 
+(???) 
+Check if YAML file and .Config file have MI configuration or not. If yes then all good, otherwise need to add MI configuration and work with Infra team to setup MI configuration for KeyVault access. 
+(Version 1.0.8157.18623 introduces MI)
+If > 1.xxxx
+Already has MI
+If < 1.xxxx
+Will need MI implementation
+Follow MI steps to create tickets and MIs for repo
+Update IC.Database version from x to y 
+(which has Parameterized SQL Query changes)
+How to Test IC.Database changes
+Review existing unit tests/healthcheck looking for cases where they are testing against database
+If testing against db exists
+Those can be used to validate that DB continues to work
+If no tests exist
+Create unit tests for:
+getdataset()
+getdatatable()
+executecommandnonquery()
+executesinglestatement()
+Create healthcheck for:
+getdataset()
+Once MIs have been created (if they had to be created)
+Run through our MI tester (we need to create one)
+Need to create a YAML file and run it in a pipeline to make sure MI configuration works
+does it have access to db?
+can it run in devtest?
+can it run in prod?
+does it even exist?
+do we have all the needed mis
+keyvault access?
+etc
+Review job before running locally (we don't want it to pull prod db data, execute against it, etc)
+Run/test job locally
+Ensure app can be deployed with yaml pipeline.  This will become a requirement very soon as the classic ones will be sunset by end of year (according to Platform team)
+Create pipeline if not there
+Think through what issues could arise from the yaml pipeline when it's running through the stages.  They have been known to be ok in one env but a problem in another.  Let's find a creative way to reduce the likelihood the deployment will fail in prod.
+Run/test job in devtest
+If there are notable events that occurred while trying to upgrade the libraries, let's make sure to document them in confluence
+One doc per access method (not per repo)
+Peer code review
+Final approval
+Be available to test on release night
+ URL:/spaces/ED/pages/3644129283/Parametrized+SQL+Query+Items

@@ -1,0 +1,33 @@
+Payer Support Service
+Dev URL Base: 
+https://payer-v3.dev.invoicecloud.com/payer-main/payer-support-api
+Prod URL Base: 
+https://payer-v3.invoicecloud.com/payer/payer-support-api
+Endpoint
+Description
+Request
+Response
+GET api/v1/contact-configuration
+Get configuration information for the Contact Us page/product.
+json
+{
+  "useCustomIntegration": "true",
+  // This will only be present when UseCustomIntegration is true.
+  "integration": "CayentaIssueCreation"  
+}
+POST api/v1/cayenta/create-ticket
+Create a support ticket in a Biller’s Cayenta system.
+json
+{
+  "name": "Joe Payer",
+  "phone": "123-123-1234",
+  "email": "joe@payer.com",
+  "address": "123 Road Street",
+  "accountNumber": "123abc",
+  "message": "lorum ipsum dolar"
+}
+json
+{
+  "issueNumber": "123abcd456"
+}
+ URL:/spaces/EN/pages/2899607619/Route+Table+-+CCU

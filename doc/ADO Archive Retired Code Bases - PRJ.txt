@@ -1,0 +1,317 @@
+Below is a table of code repositories that have been identified as non production software components that are no longer in use.
+How to archive a code repository
+ 
+Code Repo
+Project
+Status
+Notes
+Post Archive System
+fnICG_HyperWalletPayoutRecon
+SRC
+Archived 6/12/2024
+Azure (AZ Function)
+fnICG_ICBatchFeeRecon
+SRC
+Archived 6/12/2024
+Azure (AZ Function)
+fnICG_ICBatchRecon
+SRC
+Archived 6/12/2024
+Azure (AZ Function)
+fnICG_ICTransactionRecon
+SRC
+Archived 6/12/2024
+Azure (AZ Function)
+fnICG_Aging
+SRC
+Archived 6/12/2024
+Azure (AZ Function)
+AcculynkChargebackProcessing
+SRC
+Archived 9/11/2024
+ Confirmed only for BID 909 and they haven’t processed a payment with Acculynk in over a 1yr+. Safe to archive
+ Archived
+Skybot
+AdaptikBatchClose
+SRC
+Archived 9/11/2024
+ - Confirmed it isn’t an option to select on terminals and the logic it uses to pick up billers is off an XML file that is for a demo only biller which is no longer active. Last commit was from Nacho
+ Archived
+Skybot
+CustomBatchClose
+SRC
+Archived 7/31/2024
+ Need to remove Skybot schedules; non-prod
+Skybot
+MasterCardBinFileImport
+SRC
+Archived 7/31/2024
+Not in use
+Skybot
+GitFlowDemo
+SRC
+Archived 7/31/2024
+Not in use
+IC.Azure.ContainerInstances
+SRC
+Archived 7/31/2024
+Not in use, deleted from nuget
+IC.ManagedIdentities.SDK
+SRC
+Archived 7/31/2024
+Not in use, deleted from nuget
+IC.Security.Certificates
+SRC
+Archived 8/14/2024
+IC.SupportTools
+SRC
+Archived 8/14/2024
+IC.Testing.WebApi
+SRC
+Archived 8/14/2024
+IC-AlertMonitor
+SRC
+Pending
+ICChatBotApi
+SRC
+Archived 
+BB-313
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICProcessNotifier
+SRC
+Archived 4/19/2025
+EBPP-27357
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Azure (AZ Function)
+AzureBatchLateStartMonitor
+SRC
+Archived 4/9/2025
+No longer in use, Job is held on skybot. Safe to archive
+Skybot
+ICTestPortalRefresh
+SRC
+Pending
+ICVirtualSiteEmbeddedDemo
+SRC
+Pending
+ImportAccountingFiles
+SRC
+Pending
+Training
+SRC
+Pending
+UpdateGhostInspector
+SRC
+Pending
+IC.IdentityService.Common
+SRC
+Pending
+AutoPaySchedulePayChainComplete
+SRC
+Pending
+Per Mark L
+ICDigitalWalletAPI
+SRC
+Pending
+Per Mark L
+IIS
+ICDocStorageAPIGateway
+SRC
+Archived
+EBPP-22534
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IIS, Skybot
+BatchJobRunHistory
+SRC
+Archived 9/11/2024
+Daniel confirmed they wanted it deleted since it was created with Interns and wasn’t used for the final project. They ended up using ICSkybotJobMonitor.
+ Archived
+Skybot
+ICCRM_OutboundPayments
+SRC
+Archived
+IIS
+AutoPayService
+SRC
+Archived
+PaperlessService
+SRC
+Archived
+ICTemplateAPI
+SRC
+Archived
+ICFramework.Transactions.Sage
+SRC
+In Progress
+EBPP-23018
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICPingdomSetStatus
+SRC
+Archived 10/29/2024
+EBPP-23027
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICServiceManager
+SRC
+Archived 10/29/2024
+EBPP-23029
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+MonthlyOutboundCampaignProcessing
+SRC
+In Progress
+EBPP-23034
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Needs validation that it isn’t in use
+NewRelicConditionsAutomator
+SRC
+Archived 10/30/2024
+EBPP-23035
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TrackEmailReminder
+SRC
+Archived 10/30/2024
+EBPP-23036
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+FedBanksUpdater
+SRC
+Archived 
+BB-333
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Job is held on skybot. The file it looks at is no longer available. 
+ICVSTSReportGenerator
+SRC
+Archived 4/16/2025
+ARC-47
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ Confirmed the Skybot job does not exist in any environment. Superseded by VSTSReportGenerator.
+ICMonitor
+SRC
+Archived 4/19/2025
+EBPP-27353
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICOBDAutoMatchProcess
+SRC
+Archived 4/19/2025
+EBPP-27354
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+UpgradeBankDetails
+SRC
+Archived 4/28/2025
+EBPP-27664
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ICNetSuiteFramework
+SRC
+BB-168
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AzureVMMaintenanceNotifier
+SRC
+Archived 
+BB-334
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+It is on production Skybot but it s HELD.  
+BelmontLightFileSplit
+SRC
+It doesn’t show up as running on Skybot or any of the Skybot commands
+BostonFeesInterest
+SRC
+Not on prod skybot, Intg says it can be archived
+ChathamCountyDailyFileRetrieval
+SRC
+Not on prod skybot, Intg says it can be archived
+ConveyedAccountsPostOp
+SRC
+Held on prod Skybot
+CustomAccountLinking
+SRC
+Not on prod skybot, Intg says archive it
+FileImportMonitor
+SRC
+It is on production Skybot but it s HELD.  
+GutsPvdFileProcessing
+SRC
+Archived 
+ARC-234
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Not on prod skybot, Intg says archive it
+ICBundlePendingImports
+SRC
+It doesn’t show up as running on Skybot or any of the Skybot commands
+SpotsylvaniaConsolidationReportExport
+SRC
+Not on prod skybot, Intg says archive it
+GUTSToICIntegration
+SRC_Miscellaneous
+Archived 
+ARC-235
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IC.RedisCache
+SRC
+Archived 
+BB-202
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ICPaperlessReporting
+SRC
+Archived 
+BB-300
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+AmexResidualImport
+SRC
+Archived 
+BB-305
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+elastic-db-tools
+SRC
+Archived 
+BB-309
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IdentityService
+SRC
+Archived 
+BB-301
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+This was a POC using a third party IdP.  This is not in use.
+ URL:/spaces/EA/pages/3315793946/ADO+Archive+Retired+Code+Bases+-+PRJ

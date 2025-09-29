@@ -1,0 +1,133 @@
+1
+6
+false
+default
+list
+true
+Query Transactions From the NewRelic APM .NET Agent
+Transactions from a Given IP Address
+wide
+760
+FROM Transaction SELECT * WHERE `request.headers.true-client-ip` = '131.241.9.248' and http.statusCode > 499 since 24 hours ago
+Transaction for Stratus Web Services with Really Large Content Length
+wide
+760
+FROM Transaction SELECT * WHERE request.uri = '/stratuswebservices/stratus.asmx' and numeric(`request.headers.content-length`) > 100000000 since 12 hours ago
+Cloudflare Queries
+Find All Blocked Requests Targeting ‘i
+nvoicecloud-beta.com’
+wide
+760
+FROM Log 
+SELECT ClientIP, * 
+WHERE plugin.type = 'cloudflare' 
+AND SecurityAction = 'block' 
+AND ClientRequestHost = 'invoicecloud-beta.com' 
+SINCE 3 hours ago
+App Gateway Queries
+Which App Gateway Host Pool is Showing as Unhealthy
+wide
+760
+SELECT unhealthyHostCount.Total, backendSettingsPool FROM AzureApplicationGatewaySample WHERE `entityGuid` = 'MTQ5OTcwNHxJTkZSQXxOQXwtMTA0NjkwMjc0MjMxMjY4ODI4NQ' WHERE unhealthyHostCount.Total > 0 SINCE 30 days ago
+5XX Status Codes in App Gateway Analysis
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus >= 500 
+FACET properties.httpStatus 
+TIMESERIES 30 minutes 
+since 12 hours ago
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus >= 500 and string(properties.serverStatus) != string(properties.httpStatus)
+FACET properties.httpStatus 
+TIMESERIES 30 minutes 
+since 12 hours ago
+502 Status Codes in App Gateway Details
+wide
+760
+SELECT properties.httpMethod, properties.host, properties.originalHost, properties.requestUri, properties.requestQuery, properties.serverStatus, properties.httpStatus, properties.error_info
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 502 
+SINCE 12 hours ago
+500 Status Code in App Gateway Analysis
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 500
+FACET properties.host, properties.requestUri, properties.error_info
+SINCE 12 hours ago
+502 Status Code in App Gateway Analysis
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 502
+FACET properties.host, properties.requestUri, properties.error_info
+SINCE 12 hours ago
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 502 and string(properties.serverStatus) != string(properties.httpStatus)
+FACET properties.host, properties.requestUri, properties.error_info, properties.serverStatus, properties.serverRouted
+SINCE 12 hours ago
+LIMIT MAX
+503 Status Code in App Gateway Analysis
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 503
+FACET properties.host, properties.requestUri, properties.error_info
+SINCE 12 hours ago
+wide
+760
+SELECT count(*)
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 503 and properties.serverStatus != '503'
+FACET properties.host, properties.requestUri, properties.error_info, properties.serverStatus, properties.httpStatus,  properties.serverRouted
+SINCE 12 hours ago
+LIMIT MAX
+500 Status Codes in App Gateway Analysis (Due to Regression)
+wide
+760
+SELECT *
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.httpStatus = 500  AND properties.requestUri NOT LIKE '%/remoteauthenticationapi/user/retrieveusers%'
+SINCE 12 hours ago
+LIMIT MAX
+copy the transactionId from the log
+Example: 
+properties.transactionId:498164cfd8297cc86ab38d63d1176170
+wide
+760
+SELECT *
+FROM Transaction
+WHERE `request.headers.x-appgw-trace-id` = '4519583172d24ad5a97499ed38c3bcf2'
+SINCE 12 hours ago
+LIMIT MAX
+copy the true-client-ip from the field 
+request.headers.true-client-ip
+example: 
+request.headers.true-client-ip : 20.75.169.54
+wide
+760
+SELECT BillerId, BillerDBA
+FROM Transaction
+WHERE `request.headers.true-client-ip` = '20.75.169.54'
+SINCE 12 hours ago
+LIMIT MAX
+The output should be BillerId = 2002 and BillerDBA = Regression QA1, confirms that the 500 response is coming from the regression.
+Find Large Files Incoming
+wide
+760
+SELECT properties.receivedBytes, properties.requestUri, *
+FROM Log
+WHERE plugin.type = 'azure' AND metadata.resourceGroup = 'rg-pri-appgateway0-prd' AND properties.receivedBytes > 100000000
+since 12 hours ago
+ URL:/spaces/platform/pages/3813048347/NRQL+Queries

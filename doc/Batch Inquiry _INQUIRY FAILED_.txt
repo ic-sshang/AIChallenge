@@ -1,0 +1,17 @@
+Locate the batch inquiry API request log.  This will provide the details the subscriber is requesting to be reconciled.  The request data can be found in the transaction log database.
+Query
+select top 100 * from TransactionLog order by LogID desc
+Record Example:
+45678474	PayController - InquiryBatch	2023-09-22 20:57:27.180	Subscriber Request: {"SubscriberID":2,"MerchantAccountID":"TownofStPaulsNCUtility_instant","terminalID":0,"SalesCount":3,"SalesVolume":219.1,"CreditCount":0,"CreditVolume":0.0,"StartDate":"2023-09-04T20:40:54","EndDate":"2023-09-10T23:02:47","BatchReference":"2612830176","ExclusionList":"","InclusionList":"dHJhbnNhY3Rpb25fbTNoMzdzNXA,dHJhbnNhY3Rpb25fMDk5am1ic3o,dHJhbnNhY3Rpb25fZTBmNzF3OXc","FeeBatch":null}	2023-09-22 20:57:27.307	1	2023-09-22 20:57:27.257	NULL
+The stored procedure 
+spCreateFundingBatches
+ is called using data from the request to reconcile with the data in the database.
+The subscriber could have wrong counts, volumes, or including payments that are invalid or in a status that can not be settled.
+In the case of PSN this call is used before a call to close a batch.  If this fails they are unable to close their batch and will surface a support request/ticket.
+9/22/2023 - Support Request
+PSN reported receiving a “INQUIRY FAILED” for one of their billers while attempting to close the batch.   The transactions that they were sending in the inclusion list had already been submitted for funding (in funding batches).  Two of the funding batches showed as processed and one showed as pending processing but was older than a few days, unusual as the funding job runs daily.   This particular biller had a deposit bank account on file that was rejecting the Hyperwallet deposits.  Hyperwallet eventually failed a funding batch through their error response file.  Certain errors in the response file will reset the funding batch and also update the terminal to a non payout status (0).  The terminal payout mode is the reason the unprocessed batch had not been picked up. This update to the terminal payout mode occurred on 9/14/2023.
+Action
+Finance updated the billers banking.
+All three funding batches for these transactions were reset and the terminal payout mode was set to 1.
+The Hyperwallet funding job will pick up these funding batches on the next run 9/23/2023.
+ URL:/spaces/ED/pages/2831777933/Batch+Inquiry+INQUIRY+FAILED

@@ -1,0 +1,33 @@
+Authentication details from Chase
+To use OAuth 2.0 authentication for testing environment access, perform the following steps. The rest of the article provides detailed instructions on each step.
+Generate a certificate
+ signing request (CSR) or certificate using either the 
+J.P. Morgan authentication utility
+ or 
+OpenSSL
+, and provide the CSR/cert to your J.P. Morgan Payments Representative via email. Your J.P. Morgan Payments Representative then provides your client ID, resource ID, token Uniform Resource Indicator (URI), and certificate (if you provided a CSR).
+Use your private key and certificate to sign a JSON Web Token (JWT).
+Send a request to the J.P. Morgan Token URI to 
+create an access token
+, which is valid for 8 hours.
+Use the access token to 
+send requests
+ to the Commerce platform testing environment endpoints.
+Repeat steps 1-3 to access the Commerce platform production environment endpoints.
+Following the details from Chase this is the proposed Token Flow:
+2
+0
+1
+0
+4213309496
+4215144456
+ChaseAuthenticationSequence.drawio
+1
+1
+1
+https://invoicecloud.atlassian.net/wiki
+ChaseAuthenticationSequence.drawio
+0
+1719
+2121
+ URL:/spaces/EA/pages/4213309496/Chase+OAuth+JWT+Token+Implementation

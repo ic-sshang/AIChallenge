@@ -1,0 +1,88 @@
+DO NOT RUN AUTOPAY IF THE AUTOPAYSCHEDULEDPAYCHAIN IS ALREADY RUNNING OR MANUALLY IN PROD WITHOUT PRIOR AUTHORIZATION 
+Azure DevOps Process This job is ran on an Azure Batch Account labeled 'icAutoPay' on Azure DevOps for Production. For Devtest we use Azure Batch Account labeled 'icbatchtest'. On the batch account, we have a job scheduler named 'AutoPayControllerScheduler' that runs every day at 3 am CT. The job that runs contains a task to execute the AutoPayController application and kick off a chain of events for each biller.
+Notes:
+Make sure the data is set for the rerun; AutopayCollectionDate = CurrentDate 
+The following SP is used to get the Autopay List for the Biller: 
+exec tps.selAutoPayProcessingListV4 @IncludeNobalanceInvoices={Convert.ToInt32(includeZeroBalanceInvoices)},@BillerID=[BID], @AutoPayCollectionDate='' 
+ you can find this in the GetBillerAutopayList method in the AutoPaymentProcessing repo
+You will need permission to make any changes to the AutopayScheduledPayChain. Please contact Mark Lagunez or the Tech Lead in charge of the AutopayScheduledPayChain if there are any questions to permissions. 
+Rerunning from the AutopayScheduledPayChain is only used when the daily AutopayScheduledPayChain has finished for all Billers for the day.
+If another job is already in process for the schedule, AutopayScheduledPayChain will wait until the job processing is finished. 
+Currently, the AutopayScheduledPayChain is structured to run through all of the chain from whatever StartIndex was indicated in the Job Configuration Task. Normally letting the AutopayScheduledPayChain continue through the process is okay because all of the current data has been marked as completed and should not be processed again. 
+The logic has a hardcoded number of exceptions that will abort the rest of the chain. This will happen no matter how often the rerun occurs if the maximum number of exceptions are met. In the case the BID that you are rerunning has this scenario please go to the 
+Emergency and Niche Autopay Reruns
+ section of this article. 
+Always remember after a rerun is completed 
+YOU MUST GO BACK INTO THE AutopayScheduledPayChain 
+Schedule
+ PAGE
+ 
+AND CHANGE THE START TIME TO 3:00 AM THE NEXT DAY.
+Visual of the icautopay Batch Account in Microsoft Azure 
+In the 
+Microsoft Azure 
+search bar type in icautopay. There should be a search result named icautopay with a Batch Account label.
+This will take you to the 
+icautopay Overview
+ page that has various details of the Batch Account.
+Visual of the icautopay Batch Account Overview page 
+In the icautopay Overview page look for the “Features” tab. 
+Within the “Features” tab look for the “
+Job Schedules
+” dropdown item. 
+Click this item to view the AutopayScheduledPayChain job schedules.
+Visual of the icautopay Job Schedules
+On the icautopay Job Schedules page, you will see various job schedules that are available. 
+We are looking for the AutopayScheduledPayChain.
+Click on the AutopayScheduledPayChain Job Schedule to view the 
+AutoPayScheduledPayChain Job Schedule Overview
+ Page 
+Visual of the AutopayScheduledPayChain Job Schedule Overview Page
+In the AutopayScheduledPayChain Job Schedule Overview page look for the “Job Specification” tab.
+We are looking for the “Job Configuration” dropdown list item. 
+Clicking on “
+Job Configuration
+” will take you to the configuration section where you will need to set up the Environment Settings for the rerun.
+Video of the AutopayScheduledPayChain Job Configuration task page and Environment Settings
+On the AutopayScheduledPay Job Configuration task page, you will need to scroll down to the Environment Settings portion. 
+Here you will set the Environment Settings based on the need for the rerun. 
+For example: 
+billerIdList a comma-delimited list of BIDS that need to be rerun 
+startIndex the value dictates what command to start executing
+I will explain where to get more information on the Environment Variables and Start Indices in the following section 
+Visual of the ICAutopayContoller in DevOps 
+There is a comprehensive guide within DevOps for the 
+ICAutopayController Repo
+.
+Visual of the Environment Variables in the ReadMe file of the ICAutoPayController Repo
+Within the 
+ICAutopayController Repo
+, there is a ReadMe file that has information on the Environment Variables used in the AutopayScheduledPayChain Job Configuration task Environment Settings section.
+Visual of the Start Indices in the ReadMe file of the ICAutoPayController Repo
+Example: BID 780, Rerun = 1, startindex = 3 (Scheduled Payment Processing) 
+There is also a section that tells you what integer to use for the startindex. 
+The startindex tells the job where in the chain to start with 
+After inputting all the Environment Settings required for the rerun hit Save. 
+This will place the job with the configuration you set up in a queue.
+Visual of AutopayScheduledPayChain Schedule page 
+The final step to rerunning the AutopayScheduledPayChain is to set up the 
+Schedule
+. 
+This will allow us to set up the start date and time of the rerun. 
+Usually, reruns happen on the same day it failed so we would only change the time and should only be done if the AutopayScheduledPayChain has completed processing for all Billers for the day. 
+The time for reruns should be 5 minutes after your current local time. For example: if it is 3:00 PM CST you will enter 3:05 PM CST to start the rerun. 
+Click Save and wait for the rerun to occur for the Billers in question. 
+After the rerun is complete 
+YOU MUST GO BACK INTO THIS PAGE AND CHANGE THE START TIME TO 3:00 AM THE NEXT DAY. 
+Helpful tips: 
+Set a reminder to go back and change the time. 
+Tell someone that you are rerunning Autopay so that they can also remind you. 
+Emergency and Niche Autopay Reruns 
+https://invoicecloud.atlassian.net/wiki/x/F4ADoQ
+ 
+Work in progress more information coming soon.
+Related Context 
+Product Engineering Documentation on the Autopay/ScheduledPay Chain - 
+https://invoicecloud.atlassian.net/wiki/x/FgCHnQ
+ 
+ URL:/spaces/DS/pages/3780968472/How+To+Rerun+Autopay

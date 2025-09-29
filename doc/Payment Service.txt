@@ -1,0 +1,1551 @@
+Service that provides payment information as well as autopay, paperless and pay be text enrollment.
+Open API definition as of 04/12/2023
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PaymentService",
+    "version": "1.0"
+  },
+  "paths": {
+    "/test/biller/{billerGuid}": {
+      "get": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/invoice/settings/{billerId}": {
+      "get": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerInvoicingModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerInvoicingModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BillerInvoicingModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/invoice/typesettings/{billerId}/{invoiceType}/{invoiceTypeOptions}": {
+      "get": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "invoiceType",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/InvoiceType"
+            }
+          },
+          {
+            "name": "invoiceTypeOptions",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/InvoiceTypeSetting"
+            }
+          },
+          {
+            "name": "convertToBoolean",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/test/invoice/{invoiceGuid}": {
+      "get": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "invoiceGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/invoice/{billerGuid}/{invoiceGuid}/allowedamounts": {
+      "get": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "invoiceGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment/{billerGuid}/confirmation": {
+      "post": {
+        "tags": [
+          "ApiTest"
+        ],
+        "parameters": [
+          {
+            "name": "billerGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/invoices/{invoiceGuid}/paymentmethods": {
+      "get": {
+        "tags": [
+          "InvoicePaymentMethods"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryInvoicePaymentMethodsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryInvoicePaymentMethodsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryInvoicePaymentMethodsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/invoices/{invoiceGuid}/allowedamounts": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceAllowedPaymentAmountsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/invoices/{invoiceGuid}/servicefeequote": {
+      "post": {
+        "tags": [
+          "InvoiceServiceFeeQuote"
+        ],
+        "parameters": [
+          {
+            "name": "invoiceGuid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceServiceFeeQuoteRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceServiceFeeQuoteRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvoiceServiceFeeQuoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceServiceFeeQuoteResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceServiceFeeQuoteResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceServiceFeeQuoteResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/payments/processpayment": {
+      "post": {
+        "tags": [
+          "Payment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessPaymentRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessPaymentRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessPaymentRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/payment/confirmation": {
+      "post": {
+        "tags": [
+          "PaymentConfirmation"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentConfirmationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentConfirmationDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/testpayments/pay": {
+      "post": {
+        "tags": [
+          "PaymentTest"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/testpayments/payCC": {
+      "post": {
+        "tags": [
+          "PaymentTest"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "ServiceHealth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ACHPaymentMethod": {
+        "type": "object",
+        "properties": {
+          "rte": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AchAccountInfoDto": {
+        "type": "object",
+        "properties": {
+          "bankAccountType": {
+            "$ref": "#/components/schemas/BankAccountType"
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "bankRte": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AchPaymentAmountDto": {
+        "type": "object",
+        "properties": {
+          "bankAccountType": {
+            "$ref": "#/components/schemas/BankAccountType"
+          },
+          "checkNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceGuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BankAccountType": {
+        "enum": [
+          1,
+          2,
+          3
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "BillerInvoicingModel": {
+        "type": "object",
+        "properties": {
+          "requirePaymentInFull": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BillerModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "guid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "safeSubscriberGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "safeWebServiceKey": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditCardAccountInfoDto": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string",
+            "nullable": true
+          },
+          "expirationMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expirationYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cvv": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditCardPaymentAmountDto": {
+        "type": "object",
+        "properties": {
+          "invoiceGuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreditCardPaymentMethod": {
+        "type": "object",
+        "properties": {
+          "bin": {
+            "type": "string",
+            "nullable": true
+          },
+          "pan": {
+            "type": "string",
+            "nullable": true
+          },
+          "expMonth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expYear": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceAllowedPaymentAmountsDto": {
+        "type": "object",
+        "properties": {
+          "fullAmountDue": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimumAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "pastDueAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmountDue": {
+            "type": "number",
+            "format": "double"
+          },
+          "otherAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "otherAmountMin": {
+            "type": "number",
+            "format": "double"
+          },
+          "otherAmountMax": {
+            "type": "number",
+            "format": "double"
+          },
+          "canPayFullAmount": {
+            "type": "boolean"
+          },
+          "canPayMinimumAmount": {
+            "type": "boolean"
+          },
+          "canPayPastDueAmount": {
+            "type": "boolean"
+          },
+          "canPayTotalAmount": {
+            "type": "boolean"
+          },
+          "canPayOtherAmount": {
+            "type": "boolean"
+          },
+          "canOverPay": {
+            "type": "boolean"
+          },
+          "canPayZeroBalance": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceModel": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "invoiceNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "invoiceType": {
+            "$ref": "#/components/schemas/InvoiceType"
+          },
+          "payerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalAmountDue": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimumAmountDue": {
+            "type": "number",
+            "format": "double"
+          },
+          "pastDueAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "balanceDue": {
+            "type": "number",
+            "format": "double"
+          },
+          "allowPartialPayments": {
+            "type": "boolean"
+          },
+          "convenienceFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "creditCardServiceFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "achServiceFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalTaxAmount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceServiceFeeQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "paymentSourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paymentAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "creditCard": {
+            "$ref": "#/components/schemas/CreditCardPaymentMethod"
+          },
+          "ach": {
+            "$ref": "#/components/schemas/ACHPaymentMethod"
+          },
+          "paypalBrand": {
+            "$ref": "#/components/schemas/PaypalBrandPaymentMethod"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceServiceFeeQuoteResponse": {
+        "type": "object",
+        "properties": {
+          "invoiceGuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "serviceFee": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InvoiceType": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          146,
+          147,
+          148,
+          149,
+          150,
+          151,
+          152,
+          153,
+          154,
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          176,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194,
+          195,
+          196,
+          197,
+          198,
+          199,
+          200,
+          201,
+          202,
+          203,
+          204,
+          205,
+          206,
+          207,
+          208,
+          209,
+          210,
+          211,
+          212,
+          213,
+          214,
+          215,
+          216,
+          217,
+          218,
+          219,
+          220,
+          221,
+          222,
+          223,
+          224,
+          225,
+          226,
+          227,
+          228,
+          229,
+          230,
+          231,
+          232,
+          233,
+          234,
+          235,
+          236,
+          237,
+          238,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "InvoiceTypeSetting": {
+        "enum": [
+          14,
+          15,
+          38,
+          48,
+          50,
+          51,
+          55
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PayerBillingInfoDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentConfirmationDto": {
+        "type": "object",
+        "properties": {
+          "invoiceType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentType": {
+            "type": "string",
+            "nullable": true
+          },
+          "cardType": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maskedCard": {
+            "type": "string",
+            "nullable": true
+          },
+          "maskedAcct": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "subtotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "total": {
+            "type": "number",
+            "format": "double"
+          },
+          "paymentReference": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentConfirmationRequest": {
+        "type": "object",
+        "properties": {
+          "receipts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "emailAddress": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaymentMethod": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          99
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PaypalBrandPaymentMethod": {
+        "type": "object",
+        "properties": {
+          "paymentTypeId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "ProcessPaymentRequestDto": {
+        "type": "object",
+        "properties": {
+          "payerBillingInfo": {
+            "$ref": "#/components/schemas/PayerBillingInfoDto"
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "achAccountInfo": {
+            "$ref": "#/components/schemas/AchAccountInfoDto"
+          },
+          "achPaymentAmounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AchPaymentAmountDto"
+            },
+            "nullable": true
+          },
+          "creditCardAccountInfo": {
+            "$ref": "#/components/schemas/CreditCardAccountInfoDto"
+          },
+          "creditCardPaymentAmounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditCardPaymentAmountDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessPaymentResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/ProcessPaymentStatus"
+          },
+          "receipts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessPaymentStatus": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "QueryInvoicePaymentMethodsResponse": {
+        "type": "object",
+        "properties": {
+          "invoiceGuid": {
+            "type": "string",
+            "nullable": true
+          },
+          "canUseEft": {
+            "type": "boolean"
+          },
+          "canUseCreditDebitCard": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Authorization header",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
+ URL:/spaces/EN/pages/2564194408/Payment+Service

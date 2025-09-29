@@ -1,0 +1,2239 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira  
+Release Date
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+API Documentation
+Data Synchronization Integration
+This section documents the webhook endpoints that the Biller’s system integration team (custom integration) or Partner (standard integration) needs to provide to achieve the agreed upon data exchange and synchronization requirements for a real-time integration.
+Details
+1800
+IC Use
+Partner API Name
+Description
+Request
+Specifications
+Create Invoice Record via Web Service.
+MyIIS → Virtual Site → Customer Portal → Register Account via Invoice. (Refer to 
+Guru Card
+ for this item)
+QDS Inquiry - Invoice Data Look up
+QDS has custom logic in the Virtual Site to create invoices for customers. When a customer wants to pay for their invoice in the IC Virtual Site, they are first taken to the QDS page using the biller’s TownName (ex: 
+https://www.mytaxbill.org/inet/bill/home.do?town=ansonia
+ ). 
+Once they look up their invoice, IC then pulls the QDS Invoice Data from their QDS’s servers using the URL Request (url = https://{
+QDSDomainName
+}/inet/revenue/seamlessBill.do?town={
+QDSTownName
+.ToLower}&byear={
+Year
+}&btype={
+Type
+}&bnumber={
+BillNumber
+}) and creates a single invoice record using our web service Cloud Invoicing → UploadInvoice. 
+Note
+: If the customer wants to, they can also register their account with InvoiceCloud when they want to pay for their  invoice and keep track of it. (Refer to 
+Guru Card
+ for this item)
+By 
+Default
+, the domain name is set to 
+www.mytaxbill.org
+, however, if there is a domain name in Advanced Setting 115, the domain name is replaced with the value in the advanced setting 115 instead.
+https://{
+QDSDomainName
+}/inet/revenue/seamlessBill.do?town={
+QDSTownName
+.ToLower}&byear={
+Year
+}&btype={
+Type
+}&bnumber={
+BillNumber
+}
+Special Note: 
+If BillerID is in the of the following list below, please get with an Integrator to review possible minor or major custom logic for that biller. 
+1515, 1292, 1250, 7, 128, 138, 139, 175, 195, 218, 220, 223, 225, 227, 228, 230, 232, 243, 245, 248, 267, 273, 304, 307, 315, 328, 341, 358, 374, 385, 395, 426, 436, 553, 557, 579, 673, 717, 720, 723, 732, 734, 818, 879, 883
+QDSDomainName
+: Is set by Biller Advanced Setting 115. For more information, refer to 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design#Advanced-Settings
+ 
+QDSTownName 
+= Is set by Biller Advanced Setting 37. For more information, refer to 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design#Advanced-Settings
+ 
+Year 
+= ListNumber.Substring(0, 4)
+Type 
+= ListNumber.Substring(4, 2)
+BillNumber 
+= ListNumber.Substring(6,7) 
+Advanced Setting
+:
+ Apply Fee to Installment 1 For that Bill Year (Please update with advanced setting that is used)
+Used by: 
+BID - 3328
+ (Colchester)
+For the standard integration the ‘FeeDue' and 'Lien’ and InstallmentAmount2 are added to the latest / most current installment. For Motor Vehicle and Personal Property, This biller would like these fields fee to always be added to installment 1 of that bill year. In RTDR check for where ‘FeeDue’ is being added and always add it to the first installment for that year.
+Additionally, the balance for installment2 (bill-2) should always be set to 0.
+Used by: BID - 730 (East Providence Only)
+IC stored procedure designed to retrieve installments linked to a biller invoice. However, this SP does not order the results by installment number, so we have a mismatch balance between the QDS inquiry page and InvoiceCloud.
+Update our SP ‘spQdsFindOtherInquiryInvoices' to include an additional column field 'billerinstallmentNumber’ to be able to order by it, so that the logic outside of the SP is looping by the installment numbers in an ascending order. In addition, we can check if there is unpaid balance in any installments that past the due date.
+Real Time Data Refresh
+PullQdsData
+Before any QDS RTDR happens, there is a check if 
+Option 46
+ is turned on. Option is usually turned on by IM. 
+This options keeps auto-conveyance on during real time data refresh JSON calls and keeps outstanding bills with the new owner. 
+https://www.mytaxbill.org/inet/revenue/seamlessBill.do?town=
+{
+QDsTownName
+.ToLower}&byear={
+Year
+}&btype={
+Type
+}&bnumber={
+BillNumber
+}
+Special Note: 
+If BillerID is in the of the following list below, please get with an Integrator to review possible minor or major custom logic for that biller. 
+1250, 7, 128, 138, 139, 175, 195, 218, 220, 223, 225, 227, 228, 230, 232, 243, 245, 248, 267, 273, 304, 307, 315, 328, 341, 358, 374, 385, 395, 426, 436, 553, 557, 579, 673, 717, 720, 723, 732, 734, 818, 879, 883
+QDSTownName 
+= Is set by Biller Advanced Setting 37. For more information, refer to 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design#Advanced-Settings
+ 
+Town of Needham Only
+Sewer: TownName=needhamsewerma
+Other:
+TownName=needhamma
+Invoice.BillerBillYear
+ = Set by invoice data in the database. For more information, refer to the IC File Spec ID = 346 within the 
+File Mapping Invoice Table.
+ 
+Invoice.Custom4 
+= Set by invoice data in the database. For more information, refer to the IC File Spec ID = 41 within the 
+File Mapping Invoice Table.
+ 
+Invoice.InvoiceNumber
+ = Set by invoice data in the database. For more information, refer to the IC File Spec ID = 10 within the 
+File Mapping Invoice Table.
+ 
+PDF Remote Linking
+QDS PDF Look-up
+Pulls invoice data to display PDF image against QDS Servers. 
+By 
+Default
+, the domain name is set to 
+www.mytaxbill.org
+, however, if there is a domain name in Advanced Setting 115, the domain name is replaced with the value in the advanced setting 115 instead.
+https://{
+domainName
+}/inet/tax/pdf?town={
+QDSTownName
+}&byear={
+Invoice.BillerBillYear
+}&btype={
+Invoice.Custom4
+}&bnum={
+Invoice.BillerInvoiceNumber
+}
+Special Note: 
+If BillerID is in the of the following list below, please get with an Integrator to review possible minor or major custom logic for that biller. 
+128, 138, 139, 175, 195, 218, 220, 223, 225, 227, 228, 230, 232, 243, 245, 248, 267, 273, 304, 307, 315, 328, 341, 358, 374, 385, 395, 426, 436, 553, 557, 579, 673, 717, 720, 723, 732, 734, 818
+QDSDomainName
+: Is set by Biller Advanced Setting 115. For more information, refer to 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design#Advanced-Settings
+ 
+QDSTownName 
+= Is set by Biller Advanced Setting 37. For more information, refer to 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design#Advanced-Settings
+ 
+Invoice.BillerBillYear 
+= Set by invoice data in the database. For more information, refer to the IC File Spec ID = 346 within the 
+File Mapping Invoice Table.
+ 
+Invoice.Custom4 
+= Set by invoice data in the database. For more information, refer to the IC File Spec ID = 41 within the 
+File Mapping Invoice Table.
+ 
+Invoice.BillerInvoiceNumber
+ = Set by invoice data in the database. For more information, refer to the IC File Spec ID = 347 within the 
+File Mapping Invoice Table.
+ 
+User Experience Integration
+This section documents the initial, recommended user experience design for this integration. Since user experience integration uses Invoice Cloud web services that are available to a Biller, it’s possible for the Biller to change at any time without notifying Invoice Cloud after Go-Live how they use our web services.
+Cloud Payments V2
+Purpose/Summary: It is utilized for EMV devices in countertop payment transactions.
+Sample Request:
+CloudPaymentV2
+1800
+{
+  "CreateCustomerRecord": true,
+  "Customers": [
+    {
+      "AccountNumber": "2023-03-0057432|9520250326090638 1429457875",
+      "Invoices": [
+        {
+          "InvoiceNumber": "2023-03-0057432|9520250326090638 1429457875",
+          "TypeID": 33,
+          "DueDate": "03/20/2099",
+          "InvoiceDate": "3/26/2025 9:06:38 AM",
+          "BalanceDue": 99.30,
+          "CCServiceFee": 0.00,
+          "AchServiceFee": 0.00  
+        }
+      ]
+    }
+  ],
+  "CashierName": "QDS",
+  "EMVDeviceID": 1240273929,
+  "PageLoadOverride": 1,
+  "AllowCCPayment": true,
+  "AllowACHPayment": true,
+  "ReturnURL": "",
+  "PostBackURL": "",
+  "BillerReference": "",
+  "ViewMode": 0,
+  "CssUrl": ""
+}
+Additional Details
+1800
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+N
+PostBackURL
+False
+N
+BillerReference
+False
+N
+ViewMode
+True
+Y
+ViewMode
+0
+CssUrl
+False
+N
+Customers
+True
+Y
+Customers
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+Y
+AccountNumber
+Only AccountNumber
+DisplayAccountNumber
+False
+N
+Name
+False
+N
+Address
+False
+N
+City
+False
+N
+State
+False
+N
+Zip
+False
+N
+EmailAddress
+False
+N
+Invoices
+False
+Y
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+Y
+InvoiceNumber
+TypeID
+False
+Y
+TypeID
+InvoiceDate
+False
+Y
+InvoiceDate
+DueDate
+False
+Y
+DueDate
+BalanceDue
+False
+Y
+BalanceDue
+CCServiceFee
+False
+Y
+CCServiceFee
+ACHServiceFee
+False
+Y
+ACHServiceFee
+MinimumAmountDue
+False
+N
+AllowPartialPayments
+False
+N
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+Y
+AllowSwipe
+AllowEMV
+False
+Y
+AllowEMV
+EMVDeviceID
+False
+Y
+EMVDeviceID
+EMVLocationID
+False
+Y
+EMVLocationID
+CashierName
+False
+Y
+CashierName
+AllowCCPayment
+False
+Y
+AllowCCPayment
+AllowACHPayment
+False
+Y
+AllowACHPayment
+CreateCustomerRecord
+False
+Y
+CreateCustomerRecord
+RemoteAuthenticationToken
+False
+N
+PageLoadOverride
+False
+Y
+PageLoadOverride
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+N
+AllowRegisterAccount
+Optional
+N
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+N
+AllowRemove
+Optional
+N
+AllowViewRelated
+Optional
+N
+AllowRemindMe
+Optional
+N
+User Stories:
+1800
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+User Request a Payment through QDS
+An user tried to make a quick payment
+Assumption:
+User is already registered and authenticated through QDS
+QDS launches CloudPayV2
+Cloud Payments V2
+QDS Payment Inquiry
+Redirect to Invoice Cloud Payment Information Page
+The default EMV device has been designated as the  payment method
+Assumption:
+The EMV device has been selected for countertop payment 
+Invoice Cloud Payment information screen
+The Default EMV Device
+Card Reader Processing the payment
+User is awaiting the card reader to complete the payment process
+Assumption:
+Card information has been transmitted to BlueFin for validation and  payment processing
+Waiting for Card Reader
+Payment Confirmation
+Payment has been completed
+Assumption:
+The payment has been successfully confirmed, and the receipt is now ready for printing.
+Payment Confirmation
+Additional WebServices
+Additional WebServices
+1800
+API Name
+API Use/Purpose
+PaymentReportingDataSetByDateRangeFromGMT
+The purpose of the Payment Report API is to enable the municipality to access both categories of payments.
+PaymentReportingDataSetFromGMT3
+QDS has difficulty to retrieve the BillerReference they sent in the payment inquiry, this API can return the stored reference data.
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is to transfer bill/invoice data to IC from the biller. Invoice Cloud imports one file with multiple invoice types based on the Bill Type seen in the file mapping below. 
+Updates at 07/03/2024
+For Biller Town of Needham only, 6 → If Biller Advanced Setting 39 is set to TRUE, then the AccountNumber is equal to
+ 
+“WS-" & BillType & AccountID
+AccountID = IC FileSpecID 42- Custom5: UniqueID
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: NA - Fixed position
+Specification: Unknown
+Sample File: 
+SFTP File Path: “D:\inetpub\ftproot\qds\” & “TownCode999” - ex. BID-2896, Invoice Files to IC File Path is set to “D:\inetpub\ftproot\qds\TownCode002\ToInvoiceCloud\InvoiceFiles” (Note: Please review 
+Quality Data Systems (QDS) Implementation Details
+  to set the TownCode folder to the SFTP File Path.) QDS loads the BIF in the qds FTP to the specific town code folder.
+File Transfer Frequency:  All day
+Note: This file documentation is for the latest QDS setup we use for all generic QDS billers. These values in the Invoice file are coming from the invoice file type “QDS Comprehensive File Type” 
+Field Mapping
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Positional Extraction Values (Start, Length) 
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+N/A - IC will need to map to FH
+File Header
+2
+BillerGuid
+N
+TRUE
+N/A - IC will need to map to BillerGUID
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - will need to use current date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+NA
+In code, counts all invoices using a InvoiceCounter
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+TotalInvoiceAmount + InstallmentAmount
+The 
+TotalInvoiceAmount 
+adds the 
+InstallmentAmount 
+iteratively for every installment it loops through. 
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+N
+TRUE
+“R”
+If 
+InvoiceTypeCode 
+is “R”, we set the RecordType to “R”. (99% it is type R)
+Else we set it to “N”
+1
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+"3EB8ADCA-EFBF-43A0-977A-7DBA7E3DD236"
+or 
+"a9f42e62-fd7e-424e-a62c-9c7a5aea69ba"
+String
+If 
+InvoiceTypeID 
+is 3
+ 
+or 18, we set the 
+InvoiceFormatGuid 
+to 
+"3EB8ADCA-EFBF-43A0-977A-7DBA7E3DD236"
+Else we set the 
+InvoiceFormatGuid 
+to 
+"a9f42e62-fd7e-424e-a62c-9c7a5aea69ba"
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+CONCAT(
+Year & .BillType & .BillNumber & "-" & InstallmentCounter
+)
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+InstallmentDate
+Date
+InstallmentDate
+is converted to a short date 
+(Ex. 6/1/2009)
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+InstallmentDate
+or 
+InstallmentDueDate
+Date
+If Biller Option45 in the CRM
+ 
+is turned ON, we set the 
+InvoiceDueDate 
+to be the 
+InstallmentDate
+Else, we set the 
+InvoiceDueDate 
+to be the 
+InstallmentDueDate
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+InstallmentAmount
+Double
+TotalAmountDue 
+is set using the 
+InstallmentAmount
+, 
+rounded up to the hundredths place and converted to a Double. 
+Start 402, Length 11
+11
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Year
+Start 1, Length 4
+4
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Name
+Start 39, Length 40
+40
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Name2
+Start 79, Length 40
+40
+Invoice Header
+41
+Custom4
+Y
+FALSE
+BillType
+BillType
+is the way the biller determines their InvoiceType. The 
+BillType
+helps set the 
+InvoiceTypeID,
+ build the 
+AccountNumber
+, and build the 
+InvoiceNumber
+The 
+BillType
+can be set to the following:   
+1→ Real Estate (sets InvoiceTypeID to 8)
+2→ Personal Property (sets InvoiceTypeID to= 7)
+3→  Motor Vehicle (sets InvoiceTypeID to= 33)
+4→  Motor Vehicle Supplemental (sets InvoiceTypeID to = 33)
+5→  Sewer Assessment (sets InvoiceTypeID to = 18)
+6,8,11,12,15 → Sewer Usage (sets InvoiceTypeID to = 3)
+7→  Trash/Sanitation (sets InvoiceTypeID to = 15)
+9 →  Motor Vehicle Supplemental (sets InvoiceTypeID to = 33)
+10 →  Can be used for multiple different business cases. Each biller may vary. Invoice Type ID= 93. Invoice Type Alias should be used to define bill type.
+94 →  Motor Vehicle Supplemental (sets InvoiceTypeID to = 33) - Town of Manchester Only
+Start 5, Length 2
+2
+Invoice Header
+42
+Custom5
+Y
+FALSE
+UniqueID
+Start 14, Length 25
+25
+Invoice Header
+43
+Custom6
+Y
+FALSE
+LoadDate
+Start 392, Length 10
+10
+Invoice Header
+44
+Custom7
+Y
+FALSE
+List Number
+String
+CONCAT(
+Year & .BillType & .BillNumber
+)
+Invoice Header
+47
+Custom10
+Y
+FALSE
+BillNumber
+BillNumber
+ is the way the biller determines a biller’s identification. In code, the 
+BillNumber
+ helps build various values such as the 
+InvoiceNumber
+, 
+AccountNumber
+, 
+BillerInvoiceNumber
+, and 
+Custom7.
+Start 7, Length 7
+7
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+TotalAmountDue
+Double
+BalanceDue
+ is set using the 
+InstallmentAmount, 
+rounded up to the hundredths place and converted to a Double. 
+Invoice Header
+94
+Custom11
+Y
+FALSE
+PropertyDescription
+Start 235, Length 74
+74
+Invoice Header
+97
+Custom14
+Y
+FALSE
+BankCode
+Start 309, Length 2
+2
+Invoice Header
+98
+Custom15
+Y
+FALSE
+BackTaxFlag
+Start 311, Length 1
+1
+Invoice Header
+101
+Custom18
+Y
+FALSE
+LienDue
+Start 688, Length 11
+11
+Invoice Header
+102
+Custom19
+Y
+FALSE
+FeeDue
+Start 699, Length 11
+11
+Invoice Header
+103
+Custom20
+Y
+FALSE
+InstallmentAmount1
+Start 402, Length 11
+11
+Invoice Header
+104
+Custom21
+Y
+FALSE
+InstallmentAmount2
+Start 413, Length 11
+11
+Invoice Header
+105
+Custom22
+Y
+FALSE
+InstallmentAmount3
+Start 424, Length 11
+11
+Invoice Header
+106
+Custom23
+Y
+FALSE
+InstallmentAmount4
+Start 435, Length 11
+11
+Invoice Header
+107
+Custom24
+Y
+FALSE
+TotalAdjustment
+Start 545, Length 11
+11
+Invoice Header
+109
+Custom26
+Y
+FALSE
+DiscountAmount
+Start 710, Length 11
+11
+Invoice Header
+114
+Custom31
+Y
+FALSE
+PropertyLocationNumber
+PropertyLocationNumber
+value is extract if the InvoiceTypeID is either 7 or 8
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+PropertyLocationNumber
+Start 235, Length 10
+10
+Invoice Header
+115
+Custom32
+Y
+FALSE
+PropertyLocationName
+PropertyLocationName
+value is extract if the InvoiceTypeID is either 7 or 8
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+PropertyLocationName
+Start 245, Length 25
+25
+Invoice Header
+116
+Custom33
+Y
+FALSE
+PropertyLocationUnit
+PropertyLocationUnit
+value is extract if the InvoiceTypeID is either 7 or 8
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+PropertyLocationUnit
+Start 270, Length 4
+4
+Invoice Header
+117
+Custom34
+Y
+FALSE
+MapBlockLot
+MapBlockLot
+ value is extract if the InvoiceTypeID is either 7 or 8
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+MapBlockLot
+Start 274, Length 25
+25
+Invoice Header
+118
+Custom35
+Y
+FALSE
+Volume
+Volume
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+Volume
+Start 299, Length 5
+5
+Invoice Header
+119
+Custom36
+Y
+FALSE
+Page
+Page
+ value is extract if the InvoiceTypeID is either 7 or 8
+If the 
+BillType
+ is equal to 01 or 02, we set this IC Field to the 
+Page
+Start 304, Length 5
+5
+Invoice Header
+120
+Custom37
+Y
+FALSE
+VehicleMake
+VehicleMake 
+value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleMake
+Start 235, Length 5
+5
+Invoice Header
+121
+Custom38
+Y
+FALSE
+VehicleModel
+VehicleModel
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleModel
+Start 240, Length 8
+8
+Invoice Header
+122
+Custom39
+Y
+FALSE
+VehicleYear
+VehicleYear
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleYear
+Start 248, Length 4
+4
+Invoice Header
+123
+Custom40
+Y
+FALSE
+VehicleClass
+VehicleClass
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleClass
+Start 252, Length 2
+2
+Invoice Header
+124
+Custom41
+Y
+FALSE
+VehicleRegistrationNumber
+VehicleRegistrationNumber
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleRegistrationNumber
+Start 254, Length 8
+8
+Invoice Header
+125
+Custom42
+Y
+FALSE
+VehicleVIN
+VehicleVIN
+ value is extract if the InvoiceTypeID is 33
+If the 
+BillType
+ is equal to 03 or 04, we set this IC Field to the 
+VehicleVIN
+Start 262, Length 17
+17
+Invoice Header
+134
+Custom51
+Y
+FALSE
+InstallmentDate1
+Start 312, Length 10
+10
+Invoice Header
+135
+Custom52
+Y
+FALSE
+InstallmentDate2
+Start 322, Length 10
+10
+Invoice Header
+136
+Custom53
+Y
+FALSE
+InstallmentDate3
+Start 332, Length 10
+10
+Invoice Header
+137
+Custom54
+Y
+FALSE
+InstallmentDate4
+Start 342, Length 10
+10
+Invoice Header
+138
+Custom55
+Y
+FALSE
+InstallmentDueDate1
+Start 352, Length 10
+10
+Invoice Header
+139
+Custom56
+Y
+FALSE
+InstallmentDueDate2
+Start 362, Length 10
+10
+Invoice Header
+140
+Custom57
+Y
+FALSE
+InstallmentDueDate3
+Start 372, Length 10
+10
+Invoice Header
+141
+Custom58
+Y
+FALSE
+InstallmentDueDate4
+Start 382, Length 10
+10
+Invoice Header
+142
+Custom59
+Y
+FALSE
+AdjustmentAmount1
+Start 446, Length 11
+11
+Invoice Header
+143
+Custom60
+Y
+FALSE
+AdjustmentAmount2
+Start 457, Length 11
+11
+Invoice Header
+144
+Custom61
+Y
+FALSE
+AdjustmentAmount3
+Start 468, Length 11
+11
+Invoice Header
+145
+Custom62
+Y
+FALSE
+AdjustmentAmount4
+Start 479, Length 11
+11
+Invoice Header
+146
+Custom63
+Y
+FALSE
+BondedInterest1
+Start 490, Length 11
+11
+Invoice Header
+147
+Custom64
+Y
+FALSE
+BondedInterest2
+Start 501, Length 11
+11
+Invoice Header
+148
+Custom65
+Y
+FALSE
+BondedInterest3
+Start 512, Length 11
+11
+Invoice Header
+149
+Custom66
+Y
+FALSE
+BondedInterest4
+Start 523, Length 11
+11
+Invoice Header
+150
+Custom67
+Y
+FALSE
+TotalTaxPlusBondedInterest
+Start 534, Length 11
+11
+Invoice Header
+151
+Custom68
+Y
+FALSE
+TaxDue1
+Start 556, Length 11
+11
+Invoice Header
+152
+Custom69
+Y
+FALSE
+TaxDue2
+Start 567, Length 11
+1
+Invoice Header
+153
+Custom70
+Y
+FALSE
+TaxDue3
+Start 578, Length 11
+11
+Invoice Header
+154
+Custom71
+Y
+FALSE
+TaxDue4
+Start 589, Length 11
+11
+Invoice Header
+155
+Custom72
+Y
+FALSE
+InterestDue1
+Start 600, Length 11
+11
+Invoice Header
+156
+Custom73
+Y
+FALSE
+InterestDue2
+Start 611, Length 11
+11
+Invoice Header
+157
+Custom74
+Y
+FALSE
+InterestDue3
+Start 622, Length 11
+11
+Invoice Header
+158
+Custom75
+Y
+FALSE
+InterestDue4
+Start 633, Length 11
+11
+Invoice Header
+159
+Custom76
+Y
+FALSE
+BondedInterestDue1
+Start 644, Length 11
+11
+Invoice Header
+160
+Custom77
+Y
+FALSE
+BondedInterestDue2
+Start 655, Length 11
+11
+Invoice Header
+161
+Custom78
+Y
+FALSE
+BondedInterestDue3
+Start 666, Length 11
+11
+Invoice Header
+162
+Custom79
+Y
+FALSE
+BondedInterestDue4
+Start 677, Length 11
+11
+Invoice Header
+163
+Custom80
+Y
+FALSE
+DiscountAmount
+Start 710, Length 11
+11
+Invoice Header
+164
+Custom81
+Y
+FALSE
+TotalDueNow
+Start 721, Length 11
+11
+Invoice Header
+165
+Custom82
+Y
+FALSE
+BalanceDue
+Start 732, Length 11
+11
+Invoice Header
+166
+Custom83
+Y
+FALSE
+LinkNumber
+The 
+LinkNumber
+helps MV Invoices link to an AccountNumber with Multi Invoice. 
+Start 743, Length 13
+13
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+InvoiceTypeID
+The BillType helps set the 
+InvoiceTypeID
+if the BillType is equal to the following:   
+1 → Real Estate → 
+InvoiceTypeID 
+set to  8
+2 →  Personal Property → 
+InvoiceTypeID 
+ set to 7
+3 → Motor Vehicle → 
+InvoiceTypeID 
+set to 33
+4 → Motor Vehicle Supplemental → 
+InvoiceTypeID 
+set to 33
+5 → Sewer Assessment → 
+InvoiceTypeID 
+set to 18
+6,8,11,12,15 → Sewer Usage → 
+InvoiceTypeID 
+set to 3
+7 → Trash/Sanitation → 
+InvoiceTypeID 
+set to 15
+9 → Motor Vehicle Supplemental → 
+InvoiceTypeID 
+set to 33
+10 → Land Usage → 
+InvoiceTypeID 
+set to Nothing, not supported
+94 → Motor Vehicle Supplemental → 
+InvoiceTypeID 
+set to 33 (Town of Manchester Only)
+Invoice Header
+342
+InvoiceGroupGuid
+N
+FALSE
+N/A - IC creates a new Guid using a .NET Libraries by calling a method called 
+System.Guid.NewGuid().ToString
+The 
+InvoiceGroupGuid
+is set to a new Guid if the biller does not have Club Billing. 
+Logically, if the 
+last AccountNumber 
+is NOT equal to the 
+current AccountNumber
+, then we do not set a new  
+InvoiceGroupGuid
+.
+The 
+InvoiceGroupGuid
+is set to group invoices together for Multi-Invoicing reasons.
+Int Mod - Remove Invoice Grouping
+: Colchester does not want any of their bills automatically grouped. Please create a version of the file export that leaves this field blank.
+NA - Created by IC
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+InstallmentCounter
+The 
+BillerInstallmentNumber 
+is created using the 
+InstallmentCounter 
+when looping through the MaxInstallments there is. 
+NA - Created by IC 
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+Year
+Start 1, Length 4
+4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+CONCAT(
+BillType & BillNumber)
+Refer to 
+Custom4 
+for 
+BillType 
+and 
+Custom10 
+for 
+BillNumber
+Invoice Header
+375
+Active
+N
+FALSE
+N/A - IC sets the Active bit to 1
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - IC will map to IH
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+AccountNumber
+The 
+AccountNumber
+ is created in different ways depending on the BillType. 
+If 
+BillType
+ is equal to the following, we build the 
+AccountNumber
+ in that manner: 
+1 → 
+AccountNumber
+ = Extract from Start 14, Length 25 to make AccountNumber. 
+2
+ →
+ “PP-" & AccountNumber
+ =Extract from Start 14, Length 25 to make 
+AccountNumber
+ 
+For East Providence (BID 730 + Demo: BID 2782) they want this to be T-8 digits (same as Custom5). Pretty much just removing the “PP”-
+3 → 
+Year & BillType & BillNumber
+For East Providence (BID 730 + Demo : BID 2782 they want this to be M-8 digits (same as Custom5) UniqueID field from file
+4 → 
+Year & BillType & BillNumber
+5 → If Biller Advanced Setting 39 is set to TRUE, then the AccountNumber is equal to 
+“SW-" & BillType & BillNumber
+If there is no Biller Advanced Setting 39 or it’s set to FALSE, then the AccountNumber is equal to 
+Year & BillType & BillNumber
+6,8,11,12,15 → If Biller Advanced Setting 39 is set to TRUE, then the AccountNumber is equal to 
+“WS-" & BillType & BillNumber
+6 → If Biller is Town of Needham(BID:3707) and Advanced Setting 39 is set to TRUE, then the AccountNumber is equal to 
+“WS-" & BillType & AccountID(Custom5)
+If there is no Biller Advanced Setting 39 or it’s set to FALSE, then the AccountNumber is equal to 
+Year & BillType & BillNumber
+7 → If Biller Advanced Setting 39 is set to TRUE, then the AccountNumber is equal to 
+“SN-" & BillType & BillNumber
+If there is no Biller Advanced Setting 39 or it’s set to FALSE, then the AccountNumber is equal to 
+Year & BillType & BillNumber
+9 → 
+Year & BillType & BillNumber
+10 → 
+AccountNumber
+ = Extract from Start 14, Length 25
+NOTE
+: If the 
+InvoiceType 
+is 33 (Motor Vehicle) and there is a 
+Link Number
+, we set the 
+AccountNumber 
+to the 
+Link Number
+ instead
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Name
+Start 39, Length 40
+40
+Customer Record
+61
+Address1
+Y
+FALSE
+Address1
+Start 118, Length 40
+40
+Customer Record
+62
+Address2
+Y
+FALSE
+Address2
+Start 159, Length 40
+40
+Customer Record
+63
+City
+Y
+FALSE
+City
+Start 199, Length 25
+25
+Customer Record
+64
+State
+Y
+FALSE
+State
+Start 224, Length 2
+2
+Customer Record
+65
+Zip
+Y
+FALSE
+CONCAT(
+Zip1
+ + “-” +  
+Zip2
+)
+Zip 
+is created using 
+Zip1 
+and 
+Zip2
+. If 
+Zip2 
+is not empty, we add a "
+-
+” between each other. 
+Zip1
+ : Start 226, Length 5
+Zip2
+: Start 230, Length 4
+10
+Customer Record
+68
+CustomerVATNumber
+Y
+FALSE
+InvoiceTypeID
+Reference IC FileSpecID = 252
+Customer Record
+371
+CustomerName2
+Y
+FALSE
+Name2
+Start 79, Length 40
+40
+Customer Record
+409
+Active
+N 
+FALSE
+N/A - IC sets the 
+Active 
+bit to 1
+1
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - IC sets 
+RowType 
+to ID
+2
+Invoice Detail
+71
+ProductID
+N
+FALSE
+NA - IC sets 
+ProductID 
+to "pdf"
+ProductID 
+is always set to “pdf”
+3
+Invoice Detail
+Payment Export 
+Split ACH and CC 
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller. 
+File Extension: .txt
+File Naming Convention: “ICPayments_YearMonthHourMinuteSecond” (ex. ICPayments-20220423230638.txt). 
+Note
+: If SplitPaymentFile is set to True, 2 files are generated. 1 with “ICPayments-ACH” and another 1 with “ICPayments-CC” followed by the DateTime (ex. ICPayments-ACH-20220423230638.txt | ICPayments-CC-20220423230638.txt)
+File Delimiter: Fixed Position
+Specification: NA
+Sample Files
+: 
+CC Payment Export File:
+ACH Payment Export File:
+SFTP File Path: “D:\inetpub\ftproot\qds\” & “TownCode999” - ex. BID-2896, Invoice Files to IC File Path is set to “D:\inetpub\ftproot\qds\TownCode002\ToInvoiceCloud\InvoiceFiles” (Note: Please review 
+Quality Data Systems (QDS) Implementation Details
+  to set the TownCode folder to the SFTP File Path.)
+File Transfer Frequency: All day 
+Field Mapping
+1800
+Field
+DataType
+Character Limits
+Format
+Clause
+Values
+Comments
+Record Type
+Header Dataline Record Type
+String
+1
+Text
+"B"
+Biller Header Prefix
+Header
+Header Empty Spaces
+String
+3
+Text
+"   "
+3 Empty Spaces
+Header
+Header Current Date
+String 
+8
+Date
+09/31/2099
+Date Format: MMddyyyy 
+Header
+Header Constant String
+String
+4
+Numeric
+"0001"
+Constant string for Header line
+Header
+HEADER DATALINE EXAMPLE
+String
+16
+Text
+NA
+Example: "B   
+07252021
+0001
+"
+Header Dataline Example
+Header Example
+Detail Dataline Record Type
+String
+1
+Text
+"P"
+Biller Detail Prefix 
+Detail
+Detail Constant String
+String
+4
+Numeric
+"0001"
+Constant string for Detail line
+Detail
+Year
+String 
+8
+Date
+2020
+Custom 1 = Date Format: yyyy
+Detail
+Bill Type
+String
+2
+Numeric
+"03"
+Custom4 = Bill Type (Similar to InvoiceTypeID). Custom4 is converted to a Int16 which removes any leading 0’s in the Custom4. Then Int16 gets converted to a string as “3” or “4”. 
+Detail
+Bill Number
+String
+7
+Numeric
+"1234567"
+Bill Number is unique to biller.
+Detail
+Payment Amount
+String
+12
+Text
+X + PaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of PaymentAmount
+Detail
+Payment Date
+String
+8
+Date
+01/01/2099
+Date Format: MMddyyyy 
+Detail
+Empty Spaces
+String
+3
+Text
+"   "
+3 Empty Spaces
+Detail
+Add Custom7
+String
+39
+Text
+CONCATENATE(Character_Fill(Custom7, " ", 39, "R")
+If InvoiceTypeID = 7 or 8 AND If Custom7 is not empty,then Detail + Values
+Detail
+Add Custom1 when InvoiceTypeID = 7, 8
+String
+Text
+InvoiceTypeID = 7 or 8
+CONCATENATE(
+Custom1
+(Year) + "0" + Custom4(BillType)+ Character_Filling(
+Custom10
+, "0", 7, "L"))
+If InvoiceTypeID = 7 or 8 AND If Custom7 is empty, then Detail + Value
+Detail
+Add Custom83
+String
+Text
+InvoiceTypeID <> 7 or 8
+CONCATENATE(Character_Fill(Custom83, " ", 39, "R")
+If InvoiceTypeID = 33 AND If Custom83 is not empty,then Detail + Values
+Detail
+Add Custom1 when InvoiceTypeID = 33
+String
+Text
+InvoiceTypeID = 83
+CONCATENATE(
+Custom1
+(Year) + (
+MV or MS
+) + Character_Filling(
+Custom10
+, "0", 7, "L"))
+NOTE: MV if Custom4 = 3, MS if Custom4 = 4. At the end, this value gets added to Detail if InvoiceTypeID = 33 And Custom83 is empty. If conditions are met, then Detail = Detail + Value
+Detail
+Add AccountNumber when InvoiceTypeID is NOT 7, 8, or 33
+String
+Text
+InvoiceTypeID <> 7,8, or 83
+Character_Filling(AccountNumber, " ", 39, "R")
+If InvoiceTypeID is NOT 7,8, or 33, then we add the AccountNumber to the detail. Detail = Detail + Value
+Detail
+Return CC
+PaymentExportDataLineCollection
+1
+Numeric
+If PaymentTypeID = 1
+1
+Return PaymentExportDataLineCollection("CC", Detail) if PaymentTypeId = 1
+Detail
+Return ACH
+PaymentExportDataLineCollection
+1
+Numeric
+If PaymentTypeID <> 1
+Return PaymentExportDataLineCollection("CC", Detail) if PaymentTypeId is not 1
+Detail
+DETAIL DATALINE EXAMPLE ONLY
+String
+79
+Text
+Various by InvoiceTypeID
+Example = “P
+0001
+2020
+3
+0314680
+000000014400
+07242021
+   
+2020
+MV
+0009629
+                          "
+Detail Dataline Example. Various by InvoiceTypeID.
+Detail Example
+CC Footer Dataline Record Type Prefix (StringBuilder for CC)
+String
+1
+Text
+SplitPaymentFile = True
+"T"
+Biller Footer Prefix 
+Trailer
+CC Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = True
+"0001"
+Constant string for Footer line
+Trailer
+CC Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = True
+"          "
+10 Empty Spaces
+Trailer
+CC Footer FileVolumeCC
+String
+12
+Numeric
+SplitPaymentFile = True
+X + CCPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of CCPaymentAmount 
+Trailer
+CC Footer Current Date
+String
+8
+Date
+SplitPaymentFile = True
+01/01/2099
+Date Format: MMddyyyy 
+Trailer
+CC GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = True
+"G"
+Biller Gfooter Prefix
+Trailer
+CC Gfooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = True
+"              "
+14 Empty Spaces
+Trailer
+CC Gfooter FileVolume CC
+String
+12
+Numeric
+SplitPaymentFile = True
+X + CCPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of CCPaymentAmount 
+Trailer
+CC GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = True
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+ACH Footer Dataline Record Type Prefix (StringBuilder for ACH)
+String
+1
+Text
+SplitPaymentFile = True
+"T"
+Biller Footer Prefix 
+Trailer
+ACH Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = True
+"0001"
+Constant string for Footer line
+Trailer
+ACH Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = True
+"          "
+10 Empty Spaces
+Trailer
+ACH Footer FileVolumeACH
+String
+12
+Numeric
+SplitPaymentFile = True
+X + ACHPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of ACHPaymentAmount 
+Trailer
+ACH Footer Current Date
+String
+8
+Date
+SplitPaymentFile = True
+01/01/2099
+Date Format: MMddyyyy 
+Trailer
+ACH GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = True
+"G"
+Biller Gfooter Prefix
+Trailer
+ACH Gfooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = True
+"              "
+14 Empty Spaces
+Trailer
+ACH Gfooter FileVolumeACH
+String
+12
+Numeric
+SplitPaymentFile = True
+X + ACHPaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of ACHPaymentAmount 
+Trailer
+ACH GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = True
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+NonACH/NonCC Footer Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = False
+"T"
+Biller Footer Prefix 
+Trailer
+NonACH/NonCC Footer Constant String
+String
+4
+Numeric
+SplitPaymentFile = False
+"0001"
+Constant string for Footer line
+Trailer
+NonACH/NonCC Footer Empty Spaces
+String
+10
+Text
+SplitPaymentFile = False
+"         "
+10 Empty Spaces
+Trailer
+NonACH/NonCC Footer FileVolume
+String
+12
+Numeric
+SplitPaymentFile = False
+X + FIlePaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of all PaymentAmounts in file. 
+Trailer
+NonACH/NonCC Footer Current Date
+String
+8
+Date
+SplitPaymentFile = False
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+NonACH/NonCC GFooter Dataline Record Type Prefix
+String
+1
+Text
+SplitPaymentFile = False
+"G"
+Biller Footer Prefix 
+Trailer
+NonACH/NonCC GFooter Empty Spaces
+String
+14
+Text
+SplitPaymentFile = False
+"              "
+10 Empty Spaces
+Trailer
+NonACH/NonCC GFooter FileVolume
+String
+12
+Numeric
+SplitPaymentFile = False
+X + FIlePaymentAmount
+"X" is the amount of 0's needed to fit 12 characters to the Left + the length of all PaymentAmounts in file. 
+Trailer
+NonACH/NonCC GFooter Current Date
+String
+8
+Date
+SplitPaymentFile = False
+10/10/2010
+Date Format: MMddyyyy 
+Trailer
+Return retval
+PaymentExportFileTrailerCollection
+Object
+Returns Payment Export File Trailer
+This makes up the last 2 lines of a payment split file for QDS
+Trailer
+TRAILER DATALINE EXAMPLE ONLY (CC)
+String
+35 (Footer) + 35 (GFooter) = 70
+Text
+CC Payments
+Example: 
+”T
+0001
+          
+000001194516
+07252021
+”
+”G              
+000001194516
+07252021
+”
+Similiar to ACH Payments, this is how the Trailer is formated.
+Trailer Example
+TRAILER DATALINE EXAMPLE ONLY (ACH)
+String
+35 (Footer) + 35 (GFooter) = 70
+Text
+ACH Payments
+Example: 
+"T
+0001
+          
+000007707586
+07252021
+"
+”G              
+000007707586
+07252021
+"
+Similiar to CC Payments, this is how the Trailer is formated.
+Trailer Example
+Zobrio Enhancement
+ - Batch
+Summary/Purpose: Zobrio is a payment reconciliation tool that has an additional integration with QDS. If the biller has Zobrio, IC can append the following at the end of each detail record for payments. To implement this additional information for payments, put a note in the coding request to include the payment detail records for Zobrio.
+Field Mapping
+1800
+Examples: 
+“Invoice Cloud ACH-V-MC-DISC MID=####“ 
+"Invoice Cloud AMEX MID=####”
+Field
+DataType
+Character Limits
+Format
+Clause
+Values
+Comments
+Record Type
+Payment Platform
+String
+13
+Text
+“Invoice Cloud”
+Static value, always the same
+Detail
+Filler
+String
+1
+Text
+Space “ “ 
+Static value always the same
+Payment Type 
+String
+13
+Text
+if ACH, Visa, Discovery or Mastercard then value 1, else value 2
+Value 1 = “ACH-V-MC-DISC” 
+Value 2 = “AMEX” 
+Detail
+Filler
+String
+1
+Text
+Space “ “ 
+Static value always the same
+MID
+Int
+Text
+“MID=Value” 
+Find the max length of a MID and then make that the size of the string.
+Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+35
+Service Version
+1/2/3(Custom Bill Types)
+Y
+37
+QDS - TownName
+ansonia (Refer 
+Quality Data Systems (QDS) Implementation Details
+  for TownName for that Biller)
+Y 
+38
+QDS - TownCode
+002 (Refer 
+Quality Data Systems (QDS) Implementation Details
+  for TownName for that Biller)
+Y
+39
+QDS - Sewer/Remove Bill Year from AccountNumber
+1 
+N
+40
+Generic Transaction Sequence
+Used with ServiceVersion = 3 for Custom Bill Types
+https://app.getguru.com/card/5ijaKjni/Quality-Data-Systems-QDS-Supported-Bill-Types
+ 
+13:1|6:3
+{BillType}:{InvoiceTypeID}|{BillType}:{InvoiceTypeID}
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A 
+AllowPartialPayments
+Biller Quesitonnaire - BIF customization
+AutoPayCollectionDate
+Biller Quesitonnaire - BIF customization
+BalanceForward
+N/A - in BIF
+CreditCardServiceFee
+N/A 
+FirstNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+InvoiceDate
+N/A - in BIF
+InvoiceDueDate
+N/A - in BIF
+InvoiceFormatGuid
+N/A - in BIF 
+InvoiceTypeID
+N/A - in BIF
+LateFeeDate
+N/A 
+LocationReference
+N/A 
+MinimumAmountDue
+N/A 
+PaymentExpirationDate
+N/A 
+PaymentExpirationMessage
+N/A 
+PromptPayExpirationDate
+N/A 
+RegistrationValue
+N/A 
+SecondNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+ThirdNotifyRequestedDate
+Biller Quesitonnaire - BIF customization
+User Interaction and Design
+Data Flow - Invoice
+1800
+att2260598789
+1884323864
+1
+qds1
+IM
+att2260205577
+att2259222547
+0
+Data Flow - Adjustments
+1800
+att2260303881
+1884323864
+1
+qds2
+IM
+att2260467721
+att2259222552
+0
+Data Flow - Bill Presentment
+1800
+PDF Linking - Tax only
+att2260729869
+1884323864
+1
+qds3
+IM
+att2259877901
+att2260074514
+0
+Template (Tax: if no image available through PDF Linking  Utility: Always Template)
+Payer Experience
+1800
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+1800
+Biller uses standard IC Biller Portal
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Cloud Invoicing → UploadInvoice
+Used in the Virtual Site to create an invoice record on the fly when a customer wants to pay their bill in QDS’s database for that biller.
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+EBPP-5491
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+09/12/2022
+Invoice Cloud did not support Bill Type 10 from QDS
+Invoice Cloud should support QDS bill type 10 on invoice type id 93
+Add support for QDS Bill type 10
+When invoices are received, some are grouped (for example motor vehicle bills from the same year)
+Remove Invoice Grouping
+: Colchester does not want any of their bills automatically grouped. Please create a version of the file export that leaves this field blank.
+Support for Colchester, frustrated biller that recently went live
+ITG-2777
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+11/05/2024
+Biller AccountNumber format isn’t correct which creates account for each bill. 
+AccountNumber should be unique and new bill for the same customer only gets add to the same account. 
+Change AccountNumber format to 
+“WS-" & BillType & AccountID
+for Town of Needham only
+ITG-3088
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/31/2024
+RTDR is failing on older invoices and not trigger on the latest.
+RTDR should refresh for all invoices.
+Set town names for different invoice type. This is specific for Town of Needham.
+ITG-4010
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Issues with our QDS Inquiry page for a biller due to how our logic handles single installments on our end
+Customer can pay the correct balance when redirect from QDS inquiry page to InvoiceCloud.
+Add a field billerinstallmentNumber to be able to order by in stored procedure. 
+Integrations - 
+Coding Details
+Sample Jira: 
+INT-3313
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Supported Invoice Types: 
+Quality Data Systems (QDS) Implementation Details
+ 
+Details
+1800
+Review the sample file provided:
+Check the invoice file for styling. See if it’s fixed length consistently throughout the file. If not, alert the IM to request a new file from the biller.
+Confirm that the invoice types are supported (see supported bill typed below). If the invoice types are not supported, alert the IM.
+Create Stratus configuration under Stratus Management. Once created, the page should look like the screenshot on step 3.
+After creating the Stratus configuration In CRM, under Stratus Management → Set the 
+attached exports for payments
+ (No FTP of Data Pump) by pressing the “NEW” button. 
+Once pressed, in the dropdown menu “Export Name”, set it to “QDS Lockbox Format - Settled Only” and set it to Active. Once completed, it should appear under “Attached Exports”.
+Under CRM → Invoicing → Advanced Configuration → Enable:
+Real Time Data Refresh
+Stale Balances - Suppress Balance Due
+Apply Global BIF Customizations
+Under CRM → Invoicing → Advanced Configuration → Motor Vehicle Linking Configuration, set the 
+Selected Extension 
+to 
+“QDS (Custom 11)”
+Create QDS Inquiry Config in Database
+Go to the biller’s shard in Microsoft SSMS in the Term Server.
+Create a new query.
+Type the following: 
+exec insQdsInquiryConfig @BillerID=<Insert_BID_Here>
+(Note: Replace “<Insert_BID_Here>” to the Biller’s ID instead)
+Execute the query.
+Check the 
+qdsInquiryConfig
+ table. The results should look like this:
+Add BIF Customizations using the Questionnaire provided by the IM in the Jira item. 
+NOTE
+: Invoice Format GUIDs are hardcoded in ICTemplates to establish Remote Linking. No need to add Invoice Format GUIDs for:
+Template for Sewer 
+Remote Linking for Tax
+Add to available files types.
+Invoice File Type →  QDS Comprehensive File for 
+Payment File Type  → QDS Lockbox - Settled Only, QDS Inquiry/CloudPayments, QDS CloudStore (if required by Confluence documentation) 
+Set advanced settings for all QDS Billers from now on using these settings until further notice.
+Setting ID
+Description
+Value
+37
+QDS - TownName
+stratford
+38
+QDS - TownCode
+138
+39
+QDS - Sewer/Remove Bill Year from AccountNumber
+1
+Below is an example of how they should look like: 
+Refer to 
+Quality Data Systems (QDS) Implementation Details
+  for update the values for these advanced settings. 
+11. Set 
+FTP Paths
+ for 
+Invoices
+ 
+or
+ 
+PDFs
+ if needed. Check questionnaire for this request. Example screenshot looks like this:
+12. Double check steps, then drop invoices to test data. 
+ URL:/spaces/IM/pages/1884323864/Quality+Data+Systems+QDS+Technical+Design

@@ -1,0 +1,20 @@
+1
+6
+false
+list
+brackets
+true
+Description
+DataPump Controller runs every minute on every app server to spin off DataPump.exe for each biller. The controller will basically pickup biller that have records to post in DataPump and update the processing bits accordingly. There are times where an error will come in when the job failed, this can cause delays in queuing billers or show signs of a potential issue.
+Common Scenarios
+Semaphores, mainly during Microsoft maintenance periods.
+An app server was down or restarted unexpected during a job run.
+Steps to Resolve
+Check the logs to see what kind of error caused the issue. 
+Based on the error, keep an eye on any issues with billers' DataPump. If so, a DP-Monitor alert will come in soon after.
+If the job ended by a timeout, the next run will complete. But make sure anything other than a delay is accounted for.
+If the job ended unexpectedly, this points to causing stuck billers’ from not being able to finish the job run to update these bits. If the processing bit is stuck, a DP-Monitor alert and/or 
+Log query result is > 0.0 on 'Datapump Processing Bit Failure'
+ will come in with the specified message.
+Confirm with the CRM Delay-2mins report to see if any billers are processing as expected. If so, close the alert.
+ URL:/spaces/IM/pages/4244963348/DataPumpController+Alert

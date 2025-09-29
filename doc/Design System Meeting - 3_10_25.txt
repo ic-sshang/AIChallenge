@@ -1,0 +1,51 @@
+ 
+ 
+ 
+ 
+Topics of discussion
+Progress updates:
+Modern.js framework: Finally figured out build issue. 6 weeks of debugging later... turns out I found a legit deployment bug which will get fixed in their next release
+ 
+https://github.com/web-infra-dev/modern.js/discussions/6911#discussioncomment-12434661
+ 
+Still feeling confident since the creator of MF recommends it as the top compatible framework.
+Modern.js routing/routing in module-federation in general:
+Having the host app own all of the routing is the simplest approach and the one that is more advised.
+Otherwise you have to develop a complex mechanism to bi-directionally sync the routing state between the host's router implementation and [each] child module's router module implementation.
+Modern.js: as a build tool it uses Rspack instead of Webpack
+https://rspack.dev/
+ 
+https://rspack.dev/#:~:text=by%20the%20community.-,Lightning%20Fast,-Combining%20Rust%20and
+ 
+MUI Table package exploration: seems to support everything that we need for tables so far and for free.
+Blockers: deployment fix in next Modern.js release
+Overall milestones/next steps:
+Framework:
+Figure out injection question, ie can we build once and deploy the same bundle to different environments?
+5 different remote URLS:
+DEV
+IAT (internal testing)
+QAR (regression)
+XAT (external testing)
+PRD
+Page by page or feature by feature
+Should we try to limit the number of micro-frontends we create to reduce complexity? When working locally for example, this means you have to have 
+x
+ amount of repos running 
+npm run dev
+ simultaneously.
+Another layer of complexity is introduced in the feature by feature path where we have to also sync any frontend state between multiple mounted react apps on a single page  
+<div id="feature1"></div>
+ , 
+<div id="feature2"></div>
+, 
+<div id="feature3"></div>
+It seems like page by page is still the least complex path? We limit the amount of micro-frontends created as well as limit the routing to the top-level shell application. Solving the big, single, monolithic build problem without adding a complexity problem.
+Implement Figma Code Connect
+We’re also reviewing table and charting plugins – looking to have suggestions by the end of the month
+Martin would like to test out consuming the design system himself to take it through its paces when ready
+Next Steps
+Reach out to determine when modern.js will fix the build bug
+Land on table and chart components
+Land on requirements for finalizing/proving the PoC
+ URL:/spaces/PRODUCT/pages/4103569501/Design+System+Meeting+-+3+10+25

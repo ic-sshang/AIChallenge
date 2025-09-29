@@ -1,0 +1,102 @@
+1
+6
+false
+default
+list
+true
+Overview
+This is the first usage of App Gateway at InvoiceCloud and will be marked as Deployment Version 0.
+Epics
+PLAT-297
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-541
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Go Live Plan
+App Gateway Go-Live (Date TBD) - Infrastructure Documentation - Confluence (atlassian.net)
+Go/No-Go Meeting 1 on 6/21/2024
+Requests for improvements and hardening of the App Gateway Infrastructure.
+Plan to prioritize by a 
+Must-Have
+ versus 
+Nice-to-Have
+ for initial Go-Live.
+Add more use-cases to the JMeter Performance Tests.
+Fix the Customer Portal’s Image Not Found that was causing false high error rate.
+Must-Have
+Assignee: 
+ to provide definition of Test Cases for CRM, Biller Portal, and Customer Portal
+Assignee: 
+ reach out to 
+ for someone to do this as 
+ is out.
+Provide latency metrics from Barracuda to use to compare with App Gateway latency metrics.
+Must-Have
+Assignee: 
+ 
+Options
+Try to find metrics that show the latency that barracuda introduces versus the latency App Gateway introduces (this option is chosen for sake of not having to make changes inside a maintenance window)
+Add Routes to Barracuda for DevTest to and run Load Tests against that (would require maintenance window for networking changes)
+Review of Post Deployment Testing Plan.
+Must-Have
+Assignee 
+ 
+Will setup meeting to review and make changes as requested by participants.
+Review of the proposed Alerts for Production that are currently in NewRelic.
+Must-Have
+Assignee 
+ 
+Will setup meeting to review and make changes as requested by participants.
+Golden Alerts: Azure AppGW (prd) < New Relic
+Add an Alert for 404 responses returned by the App Gateway.
+Must-Have
+Threshold: Over 1
+Time Window: 2 minutes
+Assignee 
+ 
+Add an Alert for 502, 503, 504 responses returned by the App Gateway.
+Create Azure Application Gateway custom error pages | Microsoft Learn
+Nice-to-Have
+Threshold: Over 1
+Time Window: 2 minutes
+Assignee 
+ 
+Review of the listener pools and backend pools configured in App Gateway.
+Must-Have
+Assignee 
+ 
+agw-pri-appgateway0-prd - Microsoft Azure
+Ensure the 
+CF-RAY
+ Header is passed thru the App Gateway.
+Must-Have
+Assignee: 
+ 
+Provide a list of hostnames supported by GoDaddy but not getting traffic routed via the App Gateway.
+Nice-to-Have
+Assignee?
+Test how long it will take for a Rollback Operation and if there will be any requests dropped.
+Must-Have
+Assignee 
+ 
+ 
+Will do this with the change of using Availability Zones change as a reason to route traffic to Kong for a time being for this test.
+POC if a single Backend Pool can support traffic from multiple Listeners.
+Nice-to-Have
+Assignee 
+ 
+Look into reasoning for the Limitation of 5 Hostnames per Listener.
+Add NSG in front of Public IP Address of the App Gateway
+Nice-to-Have
+Assignee?
+Add Alerts at the Azure Plane for Unhealthy Backends or Request Failures with an inspection window as small as it can be set (1 second).
+Won’t do because of pattern of Alerting consistency
+Update NewRelic Azure Integration Names and reduce RBAC assignments so each SP that is used in the New Relic Integrations only has reader on a single Subscription.
+Nice To Have
+Assignee?
+newrelic - Repos (azure.com)
+How will maintenance be done by pulling out Targets in the Backend Pools, UI or CLI?
+ URL:/spaces/platform/pages/3311271960/Azure+App+Gateway+DV+0

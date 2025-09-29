@@ -1,0 +1,471 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+Document status
+complete
+Green
+Document owner
+ 
+ 
+Solution engineer
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form): Token - Set for Adv. Setting 10, 13, 16, 19 and 22.
+PROD BASE URL
+ (for all integrations): 
+http://web2.civicacmi.com/adx/api/v1/
+RTDR
+:
+Code Repository: ICRTDRService
+Class Name: clsCMI.vb
+DataPump
+: 
+Code Repository :DataPump
+Class Name: clsCivicaCMI.vb
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+http://web2.civicacmi.com/adx/api/v1/
+ POST
+ {baseURL}ICBAL?Token=889f1033-fc31-4353-aaf9-0633ffc6db44&ReferenceId=p3523l
+ 
+{     "ACHOnly": false,     "CashOnly": false,     "CreditCardOnly": true,     "CurrentAccountBalance": 126.24,     "Email": "me@email.com",     "PhoneNumber": "123-123-1234",     "ErrorMessage": "",     "ResponseCode": "0",     "ADXId": 185,     "Errors": null,     "ADXMessage": null,     "Method": "ICBAL",     "ReferenceId": "p3523l",     "RequestURI": "http://web2.civicacmi.com/adx/api/v1/ICBAL?Token=5ea16e56-371d-43d8-b6f4-9843fb24366d&ReferenceId=p3523l",     "Success": true,     "Token": "5ea16e56-371d-43d8-b6f4-9843fb24366d" }
+ Body:
+{
+  "AccountNumber" : "01.00100.3"
+}
+Data Pump: Payment
+http://web2.civicacmi.com/adx/api/v1/ICPAY
+POST
+ {baseURL}?Token=889f1033-fc31-4353-aaf9-0633ffc6db44&ReferenceId=p3523l
+ 
+{     "ErrorMessage": "",     "ResponseCode": "0",     "ADXId": 186,     "Errors": null,     "ADXMessage": null,     "Method": "ICPAY",     "ReferenceId": "p3523l",     "RequestURI": "http://web2.civicacmi.com/adx/api/v1/ICPAYToken=5ea16e56-371d-43d8-b6f4-9843fb24366d&ReferenceId=p3523l",     "Success": true,     "Token": "5ea16e56-371d-43d8-b6f4-9843fb24366d" }
+Body:
+ 
+{
+"AccountNumber": "1.001100.1",
+"PaymentDate": 5-9-18,
+"PaymentAmount": 1.00,
+"PaymentReference": 123456
+}
+Payment amount does not include the service fee
+Data Pump: Paperless Enrollment
+http://web2.civicacmi.com/adx/api/v1/ICPAPER
+ POST
+ {baseURL}?Token=889f1033-fc31-4353-aaf9-0633ffc6db44&ReferenceId=p3523l
+ 
+{
+"ErrorMessage": "",
+"ResponseCode": "0",
+"ADXId": 184,
+"Errors": null,
+"ADXMessage": null,
+"Method": "ICPAPER",
+"ReferenceId": "p3523l",
+"RequestURI": "{{instance}}/api/v1/ICPAPER?Token=5ea16e56-371d-43d8-b6f4-9843fb24366d&ReferenceId=p3523l",
+"Success": true,
+"Token": "5ea16e56-371d-43d8-b6f4-9843fb24366d"
+}
+ Body:
+{
+"AccountNumber": "1.001100.1",
+"Email": "me@here.net",
+"PaperlessFlag": 1
+}
+Data Pump: AutoPay Enrollment
+http://web2.civicacmi.com/adx/api/v1/ICAUTO
+ POST
+ {baseURL}?Token=889f1033-fc31-4353-aaf9-0633ffc6db44&ReferenceId=p3523l
+ 
+{     "ErrorMessage": "",     "ResponseCode": "0",     "ADXId": 187,     "Errors": null,     "ADXMessage": null,     "Method": "ICAUTO",     "ReferenceId": "p3523l",     "RequestURI": "{{instance}}/api/v1/ICAUTO?Token=5ea16e56-371d-43d8-b6f4-9843fb24366d&ReferenceId=p3523l",     "Success": true,     "Token": "5ea16e56-371d-43d8-b6f4-9843fb24366d" }
+Body:
+ 
+{
+"AccountNumber": "1.001100.1",
+"AutopayFlag": 1,
+"Email": "me@here.net"
+}
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .BIF
+File Naming Convention: 20210508154604_may 2021 cy 1 bills 1356_05072021082657.BIF
+File Delimiter: |
+Specification: IC BIF
+Sample File: 
+SFTP File Path: N/A
+ - Civica uses IC ‘InvoiceUpload’ web service
+File Transfer Frequency: Monthly
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Format
+Partner Field Name
+Record Type
+1
+RowType
+Y
+TRUE
+Always FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+Ex. 5cb69557-06bc-4a6c-b45c-9b28db6364a5
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+Ex. EP20210507082657
+File Header
+4
+FileCreationDate
+Y
+TRUE
+MM/dd/yyyy
+File Header
+5
+InvoiceCount
+Y
+TRUE
+xxxx
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+xx.xx
+File Header
+7
+RowType
+Y
+TRUE
+Always IH
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+PDF Extraction: B3D8E0C6-0A66-4566-BD1F-480C87121EA6
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+XXXXXXX
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+MM/dd/yyyy
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+MM/dd/yyyy
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+xx.xx
+Invoice Header
+14
+TotalTaxAmount
+Y
+FALSE
+0
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+1
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+x.xx
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+1
+Invoice Header
+319
+Echo1
+Y
+FALSE
+xxx.xxxx.x  (Appears to be the Acc#)
+Invoice Header
+320
+Echo2
+Y
+FALSE
+xxxx
+Invoice Header
+321
+Echo3
+Y
+FALSE
+UX
+Invoice Header
+58
+RowType
+Y
+TRUE
+Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+xxx.xxxx.x
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Ex. MADISON SUBURBAN UTILITY
+Customer Record
+61
+Address1
+Y
+FALSE
+Ex. 108 WEST WEBSTER ST
+Customer Record
+63
+City
+Y
+FALSE
+MADISON
+Customer Record
+64
+State
+Y
+FALSE
+TN
+Customer Record
+65
+Zip
+Y
+FALSE
+37115
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+xxx.xxxx.x
+Customer Record
+70
+RowType
+Y
+TRUE
+Always ID
+Invoice Detail
+72
+Description
+Y
+FALSE
+MSUD WA
+Invoice Detail
+73
+Quantity
+Y
+FALSE
+0
+Invoice Detail
+74
+UnitPrice
+Y
+FALSE
+Ex. 11.5
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+http://web2.civicacmi.com/adx/api/v1/
+Not unique 
+9
+RTDR Username if Applicable
+IC BID
+Chosen by IC - IC generally uses the generic username in the Civica docs but IM can request to use the BID for uniqueness in the Civica logs (in case Civica logs are ever needed for servicing)
+10
+RTDR Key or Password if Applicable
+Token
+Authority Utility web service Token is unique/specific to each biller (same token for RTDR, data pump and PDFs)
+11
+DataPump Payments EndPoint/WebService URL
+http://web2.civicacmi.com/adx/api/v1/
+Not unique 
+12
+DataPump Payments EndPoint/WebService Username
+IC BID
+Chosen by IC - IC generally uses the generic username in the Civica docs but IM can request to use the BID for uniqueness in the Civica logs (in case Civica logs are ever needed for servicing)
+13
+DataPump Payments EndPoint/WebService Password
+Token
+Authority Utility web service Token is unique/specific to each biller (same token for RTDR, data pump and PDFs)
+14
+DataPump Paperless EndPoint/WebService URL
+http://web2.civicacmi.com/adx/api/v1/
+Not unique 
+15
+DataPump Paperless EndPoint/WebService Username
+IC BID
+Chosen by IC - IC generally uses the generic username in the Civica docs but IM can request to use the BID for uniqueness in the Civica logs (in case Civica logs are ever needed for servicing)
+16
+DataPump Paperless EndPoint/WebService Password
+Token
+Authority Utility web service Token is unique/specific to each biller (same token for RTDR, data pump and PDFs)
+17
+DataPump AutoPay EndPoint/WebService URL
+http://web2.civicacmi.com/adx/api/v1/
+Not unique 
+18
+DataPump AutoPay EndPoint/WebService Username
+IC BID
+Chosen by IC - IC generally uses the generic username in the Civica docs but IM can request to use the BID for uniqueness in the Civica logs (in case Civica logs are ever needed for servicing)
+19
+DataPump AutoPay EndPoint/WebService Password
+Token
+Authority Utility web service Token is unique/specific to each biller (same token for RTDR, data pump and PDFs)
+20
+Remote PDF EndPoint/WebService URL
+http://web2.civicacmi.com/adx/api/v1/
+Not unique 
+21
+Remote PDF EndPoint/WebService Username
+IC BID
+Chosen by IC - IC generally uses the generic username in the Civica docs but IM can request to use the BID for uniqueness in the Civica logs (in case Civica logs are ever needed for servicing)
+22
+Remote PDF EndPoint/WebService Password
+Token
+Authority Utility web service Token is unique/specific to each biller (same token for RTDR, data pump and PDFs)
+32
+Customer Profile - Set Block ACH/CC as ReadOnly
+1
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+in BIF
+AutoPayCollectionDate
+On biller questionnaire - BIF customization
+BalanceForward
+in BIF
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+On biller questionnaire - BIF customization
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+On biller questionnaire - BIF customization
+ThirdNotifyRequestedDate
+On biller questionnaire - BIF customization
+User Interaction and Design
+Data Flow - Invoice
+Civica Authority Utility CIS contains button for uploading invoices to IC 
+UploadInvoiceFile
+ webservice. This should only be ran after bills are posted to accounts in the CIS and requires the billing clerk to initiate the upload.
+att2238513153
+1700560939
+1
+civica4
+IM
+att2237530133
+att2236973096
+0
+Data Flow - Adjustments
+att2238480391
+1700560939
+1
+civica5
+IM
+att2238513158
+att2237661200
+0
+Data Flow - Payment
+att2237497362
+1700560939
+1
+civica6
+IM
+att2238545921
+att2237759507
+0
+Data Flow - Change Log
+Paperless enroll will suppress the printed bill.  Autopay enrollments are passed to the CIS but are not displayed on the utility account.
+att2236940363
+1700560939
+1
+civica7
+IM
+att2237104180
+att2238021637
+0
+Data Flow - Bill Presentment
+att2237726742
+1700560939
+1
+civica8
+IM
+att2237497367
+att2238218255
+0
+Payer Experience
+Payers access InvoiceCloud via one-time pay on the Virtual Site and can also register through the Customer Portal. There are no SSO portals and is the standard payment experience.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoiceFile
+Civica CMI Billers will use our UploadInvoiceFile web method to upload BIFs into their portals.
+ URL:/spaces/IM/pages/1700560939/Civica+CMI+Real-Time+Technical+Design

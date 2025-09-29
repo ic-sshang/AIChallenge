@@ -1,0 +1,27 @@
+Item link: 
+WDIL-135
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+User Story:  Doctors has a requirement that a member cannot pay less than the Minimum Amount Due or more than the Total Amount Due. They can pay any amount between those two numbers, but that is not clear to the member in the payment route. TDC would like to be able to clarify that to the members by editing the ‘Pay Other Amount’ text.
+Requesting Biller: The Doctors Management Company (
+BID: 4389
+)
+Findings:
+CRM:
+Add a new invoice type setting for the 
+Pay Other Amount 
+payment option - similar to invoice type settings 44, 47 and 49 (
+as shown in the screenshot below
+).
+MyIIS (
+customer payment route
+):
+Update the radio button’s text to use the text from the new invoice type setting if one is configured, else default to the current text - 
+Pay Other Amount.
+Code link
+Automation:
+There seems to be no automation that verifies the radio button’s text.
+QA code repo search link: 
+https://dev.azure.com/invoicecloud/QA_Src/_search?action=contents&text="Pay Other Amount"&type=code&lp=code-Project&filters=ProjectFilters{QA_Src}&pageSize=25&result=DefaultCollection/QA_Src/Framework/GBmaster//InvoiceCloud/PageObjects/Customer/CloudPaymentPage.cs
+ URL:/spaces/PE/pages/4646076501/WDIL-135+-+Ability+to+Edit+Pay+Other+Amount+Text+in+Payment+Route

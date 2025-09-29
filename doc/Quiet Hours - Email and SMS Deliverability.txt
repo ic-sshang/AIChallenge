@@ -1,0 +1,331 @@
+Epic Link:  
+https://invoicecloud.atlassian.net/jira/polaris/projects/EPD/ideas/view/4555109?selectedIssue=EPD-20&issueViewSection=comments
+ 
+EBPP-19331
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ June 25, 2024
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+In Progress
+Starting again June 27
+July
+TBD
+July
+Est Completion
+see timeline for details
+see timeline for details
+see timeline for details
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Problem Alignment
+Problem Alignment
+IC sends emails and SMS throughout the day at any time. States are currently imposing laws that require “collectors” to send payer notifications only in between certain daylight hours. First sending email and SMS at inconvenient times is annoying to payers and second these are laws IC has to comply with. Therefore we must adjust our email and SMS  sending times.
+ Supporting Research
+Supporting Research
+Biller
+Request
+Ave Maria FL 
+Request from a payer to adhere to FL state laws for email and SMS sends to be between 8am and 8pm. 
+All FL billers 
+Requirement for all FL billers to only have email and SMS sends to be between 8am and 8pm. 
+See below full list of states with laws on email and SMS send times. 
+ Objective
+Objective
+The objective of this project is to align with state requirements for payers to receive email and SMS notifications in a respectable time frame typically from 8am to 8pm. We will have more states requiring email and SMS sends only within certain hours and we will have to adhere to those requirements. 
+ Success Metrics
+Success Metrics 
+We will have solved this problem when we can release the sending fix of 9am to 6pm to Florida billers as soon as possible. We also be successful when this is working for Southern Farm Bureau. Southern Farm Bureau has asked for this change and they will need it working in many states, all states they operate in. 
+Goal
+Metric
+Current
+Good
+Great
+ Target Audience
+Target Audience
+Consumers
+This is being built for consumers in Florida initially so we can comply with Florida state requirements. We will also build this for all billers, therefore for all consumers. 
+Billers
+We are building this for all billers and will have this as an opt out option for billers. Sine we expect more states to have requirements like this we are building this feature for all billers and will allow opt outs if necessary. 
+Group
+Impact
+Billers
+Billers in certain states requiring email and SMS deliverability times. Billers operating in states  with email and SMS deliverability times, for example insurance billers underwriting in different states.
+Payers
+Payers who are customers of the above billers. 
+ User Interaction and Design
+User Interaction
+From research on Multilingual below is a list of our top billers and the languages available on their site for payment. 
+Biller
+State
+Requirements 
+SEMCO
+faster Pay by Text 
+Ava Maria FL
+Florida
+delivered between 9am to 6 pm
+Florida Billers 
+Florida
+delivered between 9am to 6 pm
+Designs for Biller Portal showing Email Timestamp
+tbd
+Design for Biller Portal showing SMS Timestamp
+tbd 
+ Components Impacted
+Components
+Component
+Impact
+CRM - TBD
+Way to configure which languages biller has on their site. 
+Email Notifications 
+1st, 2nd, 3rd invoice notifications
+SMS Notifications 
+1st, 2nd, 3rd notification
+ Technical Architecture
+Technical Architecture
+What are the right questions to ask or diagrams to provide for this section?
+Mail Gun 
+Cydne 
+New Relic 
+Biller Portal 
+Client-side
+Server-side
+ Testing Plan
+Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+Email notifications
+SMS notifications 
+ 
+ 
+ 
+ 
+Pay by Text
+ 
+ 
+ 
+  Serviceability/Observability
+Serviceability
+What are the right questions to ask or diagrams to provide for this section?
+ Timeline
+Timeline
+Event
+Date
+Confidence
+Status
+Kickoff Call
+06/01
+HIGH
+Green
+ 
+in progress
+Blue
+ 
+Design Review 
+07/15
+MEDIUM
+Yellow
+ 
+INCOMPLETE
+Red
+ 
+Project Start 
+ 06/03
+high
+ 
+COMPLETE
+Green
+ 
+Milestone 1 - Releasing email and SMS change to 4 demo billers
+06/07
+high
+ 
+COMPLETE
+Green
+ 
+Milestone 2 - SMS Notifications to New Relic and timezone fix in EQP
+07/12
+ 
+MEDIUM
+Yellow
+ 
+INCOMPLETE
+Red
+ 
+Milestone 3 - Releasing email and SMS change to 1 FL biller
+07/19
+ 
+MEDIUM
+Yellow
+ 
+INCOMPLETE
+Red
+ 
+Milestone 4 - Releasing showing delivery timestamp in biller portal
+August TBD
+Milestone 5 - Releasing email and SMS change to  move FL biller
+August TBD
+ 
+INCOMPLETE
+Red
+ 
+There needs to be 1 week between 2 and 3 to give enough time to demonstrate that the fix is correct. we could technically push the fix, release it, and have the code ready in the deployment queue for the following fix version (e.g. Tu -> Th) but we would only deploy the live biller change (#3) if it passed the testing. so if we could do it on a Th -> Tu cycle that could give enough time
+WIP Release Approach:
+Release to Ava Maria first to get feedback. BETA biller before end of July.
+Release to all FL billers, and California billers. 
+Release all sending time for all billers to Queue Emails and SMS at 11 am EST and no Sunday sends.
+Communicate to billers this send time change.  
+ Release Plan 
+Release Plan
+Releasing for FL billers before end of July 2024. This is an expectation for Ava Maria and FL billers. 
+Releasing next in the following states / we could make this a global change for all billers.
+California
+Oklahoma 
+New York
+Washington
+Mississippi
+Tennessee
+New Jersey 
+Maryland
+Communication needed: 
+email notifying billers 
+ Business Logic
+Business Logic 
+ Based on the below state regulations, we should be looking at 8p-8a with no notifications on Sundays in all 50 states as we have no specific details about where payers physically are (and no way to find out if they’re traveling). We need additional guidance from Compliance about whether we can hold conversations with payers outside of these hours if they interact with us first (similar to transactional emails being permitted).
+Key Features
+Email
+Sending emails between hours of 9am to 6pm (Florida) but otherwise most states only send from 8am to 8pm.  
+SMS
+Sending SMS between hours of 9am to 6pm (Florida) but otherwise most states only send from 8am to 8pm.  
+Controls: 
+Implementation: biller option control, or in CRM. We will use this as multiple controls in the CRM. It should be universally applied for all billers under the assumption we will receive more request s/more regulation from states. The CRM controls can then add more complexity if needed. Also by enforcing this for all billers it presents us as more credible, reliable on send times as a whole. 
+Controlling Opt Out: who can control this. Implementations and CSM. 
+Question - why would we allow any one to opt out from this? Why would a biller maybe not care at all when email and sms is sent?
+Time Zone and Biller Registered Location: 
+we capture the biller’s time zone and exact location, therefore we have state and time zone. However we need to also think about billers that operate in different states and if those states will have different rules around email and sms controls and deliverability. For example SFB and in insurance in general, they could be underwriting in multiple states different than their registration state. We will need to support those use cases as well. 
+Specification
+Daily we will send email and SMS starting at 11 am EST to 8 pm EST. This is for all billers. 
+IC can generate the invoice notification at any time, as long as the PAYER does not receive that communication outside of the 9AM-6PM window
+We do not need to apply logic to the address of the Payer at this time – only the Biller timezone needs to looked at.
+we know Cdyne’s has a schedule delivery time parameter in existing webservice. Mail Gun has additional header, we will use for SMTP calls.
+We are processing it and sending it out to Cdyne and Mailgun services with terms of when to send out that specific SMS or Email: 
+Look at SMS in queue, of when time it is being processed  - if needs to be in a different “slot” place it to 9:01am that day or place it to 9:01am the next day. 
+Look at Email in queue, of when time it is being processed - if needs to be in a different “slot” place it to 9:01am that day or place it to 9:01am the next day. 
+MailGun resources:
+what we will use to know the delivery time of the email: 
+https://help.mailgun.com/hc/en-us/articles/360042135833-Send-Time-Optimization
+  This uses machine learning to know when to send the email to each user, when most likely they will open and click through the email. 
+We can request to have sends in between certain times 11am EST to 8pm EST. Mail gun will use the payer’s data to select send time. If there is no payer data then it will be sent at IC scheduled send time. Should improve engagement rates, but not delivery rates. We can use a search in the logs to get the timestamp of the email sends. Or Events API.
+Cdyne resources: 
+what we will use to know the delivery time of the SMS: 
+In event of bounced email:
+In biller portal we show “bounced' in customer profile and in the email tracking report. 
+In event of bad number, SMS:
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Project Participants
+Name
+Company
+Team
+Role
+Shelby Webster 
+InvoiceCloud
+Team SPAM
+Product Manager
+ Mark Lagunez 
+InvoiceCloud 
+Team SPAM 
+Technical Lead 
+Bethany Buchanan
+ InvoiceCloud
+Design 
+ Design
+ Requirements
+Requirements, Use Cases 
+ 
+Requirement
+Importance
+Jira Link
+Notes
+As a biller I want to only send email and SMS during set day time hours.
+V1
+ 
+As a biller I do not want to send email and SMS on Sundays. 
+As a biller I need to send SMS in my payer’s time zone (based off area code ?)
+As a biller I want to only send a max of 3 emails and/or SMS per day. 
+Do we have to think about any unconsolidated linked account emails?
+As an IC implementation owner or CSM I want to set the Quiet Hours configuration in the CRM. 
+V1
+As a biller I want to see in the biller portal → customer profile the full history of when email and SMSs are delivered to a payer. 
+V1
+As an insurance biller I need send emails and SMS to payers in the states/time zone I am under writing in, not where I am registered. 
+ Competitive Analysis
+Competitive Analysis
+ Dependencies
+Dependencies 
+Dependency
+Team/Product
+Notes
+Dependent on use of Mailgun and Cydne 
+Won’t be changing vendors at this time, due to time constraints. We are dependent on using these vendors.
+ Assumptions
+Assumptions 
+List any assumptions you have about your users, technical constrains, business goals, etc.
+ Open Questions
+Open Questions
+Question
+Owner
+Action Step
+Answer 
+What detailed information can we get from Mailgun on email sends? (ie when these are actually sent, not sent emails, bounced emails etc)
+Shelby
+Research Mailgun
+ What detailed information can we get from Cdyne on SMS sends? (ie when these are actually sent, not sent emails, bounced emails etc)
+ Shelby
+ Research Cydne
+ What communication absolutely must fall into these certain hours?  What communication doesn’t have to fall in these hours? And is that consistent across all states?
+ Shelby
+List of all communications and identify what must be in those hours. Check with compliance. 
+ 
+Releasing this - how much do we / do we need to educate billers on laws in their area? We could release with saying we are now sending at X times and you are responsible for knowing your state laws?
+Shelby
+Do we need special time sends for Hawaii? 
+Shelby
+How to handle insurance under writing needs? 
+Shelby
+ Out of Scope
+Out of Scope
+Allowing full range of time selection for email and SMS sends. We won’t allow billers to completely customize their send times. It must fit within certain times relative to the billers time zone. 
+Enhanced bounced email reporting. Some billers have reported questions on this, but it does not fall into scope for the compliance issue of sending times.
+ Communication Checklist
+ URL:/spaces/PRODUCT/pages/3324575757/Quiet+Hours+-+Email+and+SMS+Deliverability

@@ -1,0 +1,257 @@
+Runbook name
+Project Change Control - SOP
+Description
+Standard Operating Procedure for managing change requests for a customer implementation.
+On this page
+2
+Change Log
+760
+Date
+Author
+Version
+Description
+ 
+ 
+ 
+1
+Initial draft for review
+Feb 18, 2025
+MGreer
+1.1
+Added a link to SDD in SharePoint/
+ 
+ 
+1.2
+Minor edits
+May 8, 2025
+ 
+1.3
+Added OP change control process
+1. 
+Overview
+This Standard Operating Procedure (SOP) outlines the process for submitting, evaluating, and approving change requests that arise after the Solution Design Document (SDD) has been signed off, or any change request for projects where a SDD was not used.  Any new requirements introduced post-SDD must follow this formal change request workflow to ensure proper assessment and alignment with the project's scope, timeline, and budget.
+Change requests are categorized to help determine their impact and urgency, ranging from minor adjustments to major changes that may block go-live. This SOP also distinguishes between Product Change Requests and Integration Modifications, each with its own documentation and approval path.
+By following this process, stakeholders can ensure that all changes are properly triaged, documented, reviewed, and implemented in a controlled and transparent manner, minimizing risk and maintaining project integrity.
+2. 
+Scope
+This SOP applies to all InvoiceCloud new biller implementation projects.  It covers the entire lifecycle of change management, from the initial discovery phase to biller Go-Live.
+3. 
+Definitions
+Change Control
+: The process of managing changes to the project scope, including new requirements, modifications, or deletions of previously agreed-upon requirements.
+Discovery Phase
+: The initial phase of the project where the customer's needs are assessed, and all integration and custom product requirements are gathered and documented.
+Solution Design Document
+ 
+(SDD):
+ A formal document that details all custom requirements identified during the discovery phase, including integration and custom product requirements. The SDD document is created only for new integrations and custom projects.
+Change Request (CR)
+ - A customer change submitted after the SDD is signed, or for projects with an existing integration and there is no SDD, any customer requested custom change.
+Roles
+IC PM Role
+ - IC PM role means IC PM if one is assigned else IC IM.
+IC PRM - IC Product Manager
+4. 
+Documentation
+Solution Design Document (SDD)
+: Captures all custom integration and product requirements identified during the discovery phase and serves as the baseline for the project's scope.   This is only needed for projects with a new or custom integration or custom development requirements.    SDD locate in SharePoint: 
+Solution Design Document template
+Change Request Form
+: Used to document new requirements or changes to existing requirements after the initial Requirements Document has been signed off. 
+Change Request Form
+ 
+SOW
+: Statement of 
+work 
+stating the work to be done, timeline, and cost. 
+Statement of Work Template
+ 
+5. 
+Responsibilities
+Project Manager / Implementation Manager
+: 
+Responsible for documenting the project overview section of the Solution Design Document. 
+ Also, responsible for overseeing the change control process, ensuring compliance with this SOP, and communicating with the customer regarding changes.
+Integration Manager /Solutions Engineer
+: Responsible for documenting all integration requirements and design during discovery and updating the SDD as needed. 
+Product Management
+: Responsible for documenting all product enhancement Go-Live requirements and updating the SDD as needed.
+Customer
+: Responsible for reviewing and signing off on the Solution Design Document and submitting any new requirements through the established change control process.
+6. 
+Customer Change Request Procedure
+:
+1 - Initial Implementations Triage
+Customer Formally Submits Change Request
+ - Any new requirements identified after the SDD has been signed off must be submitted by the customer through the formal change request process.
+IC Project Team Triages CR
+:
+The
+ IC Project Manager 
+will assess the impact of the new requirement on the project's scope, timeline, and budget.
+New requirements will be classified into one of the following categories:
+Minor Change
+: Low impact on the project, can be accommodated within the existing scope.
+Major Change
+: Significant impact on the project, requiring adjustments to the scope, timeline, or budget.
+Major Change (Go-Live Blocker)
+ - Same as Major Change but 
+required by customer to Go-Live
+.
+There are 3 types of change Requests: 
+Integration Modification
+ 
+-  Requires a code change in existing integration to fulfill requirement.
+Inbound - Product Change Request
+ 
+- Requires a product code change to InvoiceCloud to  fulfill requirement.
+Outbound - Product Change Request - 
+Requires a product code change to Transcard to  fulfill requirement.
+Document Change Request
+The 
+IC Project Manager
+ will be responsible for documenting integration and product related change requests.  
+A Change Request Form must be completed 
+IC Project Manager
+, detailing the nature of the change, its impact on the project, and any associated costs. (See Change Request Form on top of this document)
+The Change Request Form should include a clear description of the requested change, justification for the change, and an analysis of its impact to the implementation.
+Seek Implementations Approval
+The IC Project Manager will bring the change control document to the Implementations Triage meeting to ensure scope is clear and to check if there is a workaround or if the team is aware of an available solution that may solve the issue and hence avoid the 
+change. 
+For GUB & FS
+ - 
+ Implementation CR triage call is held on Tuesday’s/Thursday 10-11 am EST
+Change needs to be approved by Director of respective function.
+If change is not approved by the Implementation triage team
+, consult with the vertical Director for messaging back to customer.
+If the change is approved by the Implementation triage team
+, then the IM and/or Project Manager will submit the Change Request to the appropriate department depending on type of change.  
+Proceed to step 2
+2a - Integration Modification
+Submit Request
+ - Submit a 
+Jira Solution Engineering ticket
+, attaching the change request document. 
+On Service Portal → Solution Engineering → 
+Integration Request
+PM/IM to follow up the request and meet with SE or Engineering to clarify requirements.
+Review on Integrations Triage call.
+SE/Eng Triage
+ - 
+Impact assessment - What level of change is it (i.e. custom integration, or standard?)
+Decide approval
+Dir of SE
+Dir of Int Eng/Mgr of Int Eng
+Product??
+Determine if approved
+If the 
+Change Request is 
+approved
+ and Engineering provides a timeline, then the next discussion is effort, and cost.  
+If no timeline was provided follow up with Eng to obtain a 
+release date
+.
+The IC PM will assess effort with Engineering and share it with the Director of Implementations to estimate cost.  When these items are complete,  the change request is ready for an SOW.
+Proceed to 
+Create SOW & Communicate with Customer step
+If Change Request is NOT Approved by Eng
+ - Review with the Director of Implementations for respective vertical to discuss possible escalation or customer communication strategy.
+2b - Inbound - Product Change Request
+Submit the CR
+: 
+Click here to 
+Submit Product Request
+ 
+Attach Change Request Form to ticket. (See Change Request Form on top of this document)
+Next, attend the weekly 
+Product change request 
+meeting
+ to review the change request details and determine if the request is valid and they understand the request to move to team review.
+Weekly product request review is on Tuesdays at 4 PM EST held by Ryan Pieszak. Employees must attend the review meetings to answer questions regarding their request. 
+Product will provide a T-Shirt Sizing in terms of Level of Effort and range of the cost.  No timeline commitment will be provided at this point unless the work being requested is already on the Product Roadmap.
+The PM/IM will relay this T-Shirt Size to the customer to gain approval to move forward with full detail scoping.
+If approved to proceed is granted from Customer, Product will place the request in the queue to be fully scoped with enough details to generate a SOW.  Product may approve the change but add the request to the backlog and not commit to a delivery date. 
+Determine if Approved
+If CR is Approved by Product
+ - If the change is approved and Product provides a 
+timeline
+, then the next discussion is effort and cost. 
+If no timeline was provided follow up with Eng to obtain a 
+release date
+.
+The IM and/or PM will assess effort with Product and share it with the Director of Implementations to estimate cost.  When these items are complete, the change request is ready for an 
+SOW.
+Proceed to 
+Create SOW & Communicate with Customer step
+If CR is NOT Approved by Product
+ - Review with the Director of Implementations for respective vertical to discuss possible escalation or customer communication strategy.
+2c - Outbound - Product 
+Change Request
+Any client request that cannot be enabled 
+immediately
+ as part of the standard features offered by Transcard, is consider a “Change”. The InvoiceCloud PM will inform the client verbally during a meeting or via email, that the request is not a standard feature.
+Process:
+Complete a Change Request Form (See Change Request Form on top of this document)
+Submit a New Feature ticket to InvoiceCloud’s 
+Transcard Jira Board
+ . Attach the Change Request Form to the JIRA. 
+Attend the Transcard 
+Jira Project Review
+1
+ to diagnose the request with Outbound Program Manager. The diagnosis will determine: 
+Will InvoiceCloud ask Transcard to work on the item?  
+If no, InvoiceCloud: 
+Will inform Transcard PM   
+Will inform the client that the request is denied 
+If yes, InvoiceCloud: 
+Outbound Program Manager will submit the documented change to Transcard for a swag (scope, time and cost) via the Transcard/IC Joint Roadmap Smartsheet
+TC will provide the swag. SLA based on priority: 
+Sales-originating: 
+Urgent - High: 2 business days 
+Not urgent - Medium: 10 business days 
+Not urgent – Low: 20 business days 
+Internal Product: 
+Urgent - High: 5 business days 
+Not urgent - Medium: 10 business days 
+Not urgent – Low: 20 business days 
+InvoiceCloud SOW Manager will prepare an SOW for the client
+Upon SOW signature, the work will be executed according to documented scope/schedule 
+InvoiceCloud will collect SOW cost from the client and will pay Transcard their corresponding amount. This is the InvoiceCloud SOW manager’s responsibility 
+1
+ 
+Transcard Jira Project Review:
+Weekly call on Mondays from 1:00-2:00pm ET
+Organizer: IC Outbound Program Manager 
+Attendees: 
+From IC: IM, PM, Product 
+Partnership Governance- Standing Meetings re: Change requests: 
+2
+ IC/TC Bi-Weekly Product Mtg:
+Bi-weekly call on Thursdays from 9:30-11:00am ET
+Organizer: TC Program Manager/Product Manager 
+Attendees: 
+From IC: Product Director, Product Manager, Program Manager 
+From TC: Program Manager and EVP Product 
+3 - Create SOW & Communicate with Customer
+Create SOW - PM
+, or IM if no PM on project, to create the SOW with scope details, schedule and cost.
+Coordinate with Sandy Matlock in Conversions to generate SOW.
+Communicate to Customer
+ - The PM/IM will deliver the SOW to the client and collect signature. Once the document is signed, they can communicate to Engineering via Jira so the work can start according to schedule. The customer must review and formally approve the Change Request Form before any work on the new requirement begins.
+Update Project Schedule
+ - The PM/IM will update project schedule with CR completion date and add a new line items to the IAT/UAT list to ensure new deliverables are tested.
+4 - Tracking and Reporting
+All change requests' statuses should be tracked in the project’s RAID Log.
+See 
+Maintaining Project RAID Log
+ 
+5 - Post-Implementation Support
+Review of Changes
+:
+After implementation, review all changes made to ensure they meet the customer's expectations and the project objectives. 
+Sign-Off and Closure
+:
+Obtain final sign-off from the customer on the implemented changes.
+Close out the project, including any necessary documentation and archiving of the Change Control Log.
+Frequently Asked Questions
+ URL:/spaces/Implementa/pages/4160847874/SOP+-+Project+Change+Request+Process

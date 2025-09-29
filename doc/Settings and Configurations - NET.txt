@@ -1,0 +1,26 @@
+Zero Start Environment Configurations
+Do not check-in configurations that are specific to a environment into Source Control.  If you want to have configurations for ease of development add them as a README or a different file that can not be accidently deployed and or consumed by a deployment.   Required configurations should be validated on startup and we do not want dev configurations accidently being deployed to production which could delay surfacing issues later ( like a production assets using dev assets ).  Pipelines are used to deploy applications and their  environment specific configurations.  
+Having defaults increases the risk of missing the injection of a particular configuration by the deployment pipeline.
+Use Configuration Files
+Store configurations settings in separate configuration files rather than hardcoding values into the code.  This allows for easy changes without modifying the application's codebase.
+Appropriate Configuration Builder
+Use the appropriate configuration builder based on the use case.  For example the default will use web.config and app.config files which can be used for local development and traditional IIS deployments.  You can add the 
+EnvironmentConfigBuilder
+ to support environment variables overrides for running in containers.
+Sensitive Data Protection
+Keep sensitive configuration data (passwords, API credentials) out of source control.  Use user secrets or a secure configuration store, like a key vault, to manage sensitive data during development and deployments.
+Configuration Validation 
+Validate configuration settings during application startup.
+Configuration Sections
+Organize configuration settings into logical sections within the configuration files.  This improves readability and maintainability as the configuration grows.
+Strongly Typed Configuration
+Create strongly typed configuration classes to map configuration data to c# objects.  This enhances type safety and provides itellisense support during development.
+Immutable Configuration
+Treat configuration objects as immutable.  Once loaded, configuration settings should not be changed during the application’s runtime.
+AppSettings vs. ConnectionStrings
+Use 
+connectionStrings 
+for database and other connection related settings and use 
+appSettings 
+for general application settings.
+ URL:/spaces/ED/pages/2798059521/Settings+and+Configurations+-+NET

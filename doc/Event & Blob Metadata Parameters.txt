@@ -1,0 +1,50 @@
+PDFLinking (InvoiceFormatID 18) works by saving a PDF into a container within icblobstorage formatted as ic-pdf-{BillerID} alongside updating the PDFFileName and PDFToken fields on the Invoices table.
+The PDFs name is modified to a new GUID and saved in icblobstorage.
+In the Invoices table, the invoice record is updated to have the PDFFileName field with the original file name and PDFToken to contain the GUID matching the GUID name in icblobstorage.
+As this new process moves forward we will need to identify which fields will be required to be part of the Event parameters, as well as what data should be part of the Blob Metadata for each of the process' to reference.
+Event Custom Parameters:
+Based on a discussion with the architecture team, the events for this process will contain the following fields:
+-BillerID
+-CurrentPDFName (this will show the location of the PDF currently in blob PDFName is a GUID)
+-OriginalPDFName (the original name of the PDF before it was renamed to a GUID)
+-CorrelationID (a GUID which will remain constant through the whole PDF process.)
+Correlation ID should be the same for all the chained events, including split pdfs generated from a large PDF.
+Blob Metadata Custom Parameters:
+BillerID
+BurstInMultiplesOf (The number of pages PDFSplit needs to split the larges pdf if split is set to multiples, if set to 0, the split will be dynamic.)
+PDFTemplateMarkers (For dynamic split, this field contains the template markers to identify the next “first page” while splitting.)
+TemplateID (PDFExtract will need this field to pull the extraction field markers related to the Template marker.)
+PDFLinkValues (a dictionary of the values PDFLink will use to link the PDF with the Invoice record, currently, only AccountNumber, InvoiceNumber with wildcards)
+PDF handling flow
+PDF will be dropped by the biller/Printer under an FTP folder.
+ex. 2025AprilBills.pdf (sitting in the FTP folders / icwebsftpdevtest / icwebsftppremium.)
+BillerFTPPDFProcessing:
+Based on a configured task, BillerFTPPDFProcessing will pick up the PDF and do the following:
+Save the original PDF filename.
+Create a GUID and rename the PDF with that GUID.
+Upload the renamed PDF to  sapripdfextmain0dev.
+Create a GUID for the correlationID field.
+Create and submit a PDFInserted event with the defined information.
+Insert BillerID into the blob metadata.
+BillerFTPPDFProcessing does not need to insert any BlobMetadata as PDFIdentify only requires the info on the PDFInserted.
+PDFIdentify
+PDFIdentify will
+insert BurstInMultiplesOf, PDFTemplateMarkers, and TemplateID which are needed for the next two projects.
+raise a PDFIdentified event with the same values as the PDFInserted event.
+PDFSplit
+PDFSplit will decide if the current PDF needs to be split or not. If not, it will raise a PDFSplit event with the same values as the PDFIdentified event.
+If the PDF is split into multiple PDFs, for each resulting PDF, it will do the following
+create a new GUID name for that new PDF name.
+Save the PDF into blob with the new GUID name.
+insert the blob metadata fields from the parent PDF into the split pdfs.
+Raise a PDFSplit event, with the updated “CurrentPDFName”, all other fields should stay the same.
+PDFExtract
+PDFExtract will
+Insert PDFLinkValues for PDFLink to identify what fields to match the invoice with the PDF.
+Raise a PDFExtracted event with the same fields the PDFSplit event.
+PDFLink
+PDF Link (In the current project scope)
+Move the PDFs from sapripdfextmain0dev/pdf-linking to icblobstorage/ic-pdf-{BillerID}
+BulkInsert by biller into pdf.PendingBillerPDFs.
+ 
+ URL:/spaces/IM/pages/4372856910/Event+Blob+Metadata+Parameters

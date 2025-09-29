@@ -1,0 +1,66 @@
+Runbook name
+How to scope a new project
+Description
+Describes process for scoping a new project before the customer kickoff.
+On this page
+2
+Change Log
+Date
+Author
+Version
+Description
+ 
+ 
+ 
+1.0
+Initial draft
+ 
+ 
+1.1
+Updated descriptions
+April 3, 2024
+Martha Greer
+1.2
+Added “exceptions” and “Conversions” rows. 
+ 
+Jared
+1.3
+Add step to review Gong recordings
+Summary
+It is very important to thoroughly scope the project before you officially kick-off the project with the customer.  The goal of the scoping process is to surface and analyze all project requirements to determine if any requirements will require Dev or IT support, and to generate a realistic Go-Live date.
+Process
+Description
+Role Responsible
+1
+Review Biller Order Form (BOF)
+Ensure that the CIS used for each invoice type is integrated with IC. If there is no integration, the project needs to be revised by Sales and Alliances. 
+If EMV, check if the CIS uses CloudPay v2, if not, then be aware that the biller will use the Biller Portal.
+Check any special notes about payment processors. Only Chase is a straight forward vendor. Anything else needs a conversation with Boarding, and the Implementaions Manager.
+2
+Review sales notes in SalesForce
+The most useful sections are in the “Opportunity”: “Identified Pain Points” and “Biller Deal Sheet”.  Ensure that the CIS selected is the one that will be used for the main invoice type.  
+3
+Review billers current payment site
+Check how payments work today” One time and registered”. Check identifiers such as account or parcel number.  Add all of these notes in the questionnaire  so you can ask questions to the Biller later on.  Check the Biller’s customer service phone, email.
+Look for all the payment types they accept. You should have an IP Sheet (Invoice Parameter) from sales for every payment type. If you see that invoices are missing, ask Sales why the client is not enabling IC for those.  Likely, Sales missed asking about small things like trash, dog licenses, etc.  Ask at this time or you will end up with an add-n later in the project and waste time. 
+Always add notes to the Biller or Internal Questionnaires in the project schedule so there is evidence of your research and you can review notes later on. 
+4
+Meet with Sales & Sales Engineering (if applicable) 
+Following the schedule, complete the sales debrief document “AFTER” you have read Salesforce and the client’s website. 
+5
+Listen to Prior Gong recordings
+Ensure to review all prior Gong recordings.
+6
+Review Confluence and GURU
+Familiarize yourself with the CIS by reading these 2 sites.  When you are done reading, you should have a clear understanding abut how the integration works. You should be able to explain to the client during kick-off how the integration works with any CIS involved. Also for kick-off, you must be clear on how the integration will work with the print vendor (if known), and the engagement platform (if any).
+7
+Watch for the “Exceptions”
+Remember that in addition to the “normal” processes a Bller has (regular bills), there are payment options that can delay the project if not discovered at the beginning.  Examples include:
+Delinquent bills.  How does the biller handle those, how does the IC integration handle those (if it does). What will be the customer experience? What is the experience today? How does the biller handle delinquent bills today? At a minimum, the biller should be able to keep its current process without disruption. Ideally, IC can help with those delinquent bills.
+How many invoice types will IC have? Does the biller have a PDF for each of them?  Is there an expectation that one invoice ID will support 2 PDFs? By default, IC does not support that.  This is a topic that may need technical consulting. 
+Muti login. Does the biller use it today? Does the engagement platform support it? Does the IC integration support it?
+8
+Conversions
+What payment vendor processes autopays today? (example: WorlsPay, First Data, Paymentus (PayPal).  Is the expectation that IC will receive credit card data from the payment vendors? If yes, you need to allocate at least 3-4 months to get the data from the data the Biller requests it. 
+ACH data: There are 2 sources of ACH data, the payment processor and/or the Biller.  You will need to ask the biller if they have ACH data for autodrafts (autopays) or the processor.   If the Biller has the data, then you are OK and just need to add conversion tasks for testing.  If the processor has the data, you need to allocate at least 3-4 months to get the data from the date the Biller requests it. 
+ URL:/spaces/Implementa/pages/3122921473/Scoping+a+new+project

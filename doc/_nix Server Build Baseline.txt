@@ -1,0 +1,26 @@
+Create VM
+Image based on the most up-to-date version and builds of approved *nix OS
+Ubuntu 22.04
+Create Backup
+From the Azure portal open the page for the server
+Create Delete Lock (if necessary)
+Add storage drive < 300GB
+Change time zone to Central
+Join VM to Domain
+https://learn.microsoft.com/en-us/entra/identity/domain-services/join-ubuntu-linux-vm
+ 
+Install CrowdStrike Falcon
+Pull latest supported version from 
+https://falcon.us-2.crowdstrike.com/hosts/sensor-downloads
+Ubuntu: 
+sudo dpkg -i <installer_filename>
+All OSes: 
+sudo /opt/CrowdStrike/falconctl -s --cid=EF3C6D5DB9B242DAABCF19C7A126C2DD-C4
+Systemd: 
+sudo systemctl start falcon-sensor
+Add Linux VM to PCI Group in AlienVault Scanning group (if necessary)
+Apply all pending patches
+Prior to releasing for use, scan the server and remediate found vulnerabilities
+AlienVault for PCI systems
+CrowdStrike for all others
+ URL:/spaces/icinfradoc/pages/3471409157/nix+Server+Build+Baseline

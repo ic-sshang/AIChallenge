@@ -1,0 +1,837 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+INT-604
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-815
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-1669
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ITR
+17586 - Integration Modification for 
+Data Pump 
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Solution engineer
+ 
+ 
+Knowledge Transfer
+Gong | Britecore Integration - Knowledge Transfer
+API Documentation
+URL to the doc site: 
+https://api.britecore.com/
+ - “BriteCore 2.0.0” section, under 
+payments
+Unique Biller Value: <biller domain> 
+API Details
+1800
+IC Use
+Partner API Name
+Request
+Response
+Specifications
+RTDR: Balance Update
+Retrieve Updated Invoice Balance
+https://<biller domain>/api/v2/payments/retrieve_updated_invoice_balance
+invoiceNumber: value supplied by britecore during BIF file transfer
+api_key: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+Success:
+Failure:
+API uses JSON
+<britecorepro_domain>
+: unique per britecore client. For example:
+https://unitedfrontier.britecorepro.com
+https://jetty.britecorepro.com
+Data Pump: Payment
+Make Payment
+https://<biller domain>/api/v2/payments/make_payment_by_invoice_or_policy
+api_key: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+amount: decimal value of what was already paid via invoice cloud portal, and should now reflect on the policy within britecore
+payment_date: either date payment submission via user actually happened or, day the api request was made
+invoice_number: value supplied by britecore during BIF file transfer
+policy_number: account number supplied by britecore on the BIF
+payment_transaction_id: transaction reference ID for the payment.
+source_id: hardcoded INVOICECLOUD
+meta
+key value pair setup
+payment_source: channel or payment source (i.e. AutoPay, Pay By Text, etc.).
+payment_method: Visa, MC, AMEX, Discover, ACH, etc.
+Partner requests Bank Name if provided, else “ACH”
+maskedNumber: Last 4 of bank or card number
+payorName: Customer name
+Example:
+Response:”
+\{
+    "data": \{
+        "isDuplicate": false,
+        "payoffAmount": 666.00,
+        "confirmationNumber": "35871617128868"
+    },
+    "messages": \[
+        "Updated account balances."
+    ],
+    "success": true
+}
+Success:
+Failure:
+API uses JSON
+<britecorepro_domain>
+: unique per britecore client. For example:
+https://unitedfrontier.britecorepro.com
+https://jetty.britecorepro.com
+Data Pump: Paperless Enrollment
+Invoice Cloud Supress Insured Deliverable Printings
+https://<biller domain>/api/v2/payments/invoice_cloud_supress_insured_deliverable_printings
+accountNumber: value supplied by britecore during automatic BIF file transfer. It’s unique per policy
+api_key: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+enable: true
+Success:
+Failure: 
+API uses JSON
+<britecorepro_domain>
+: unique per britecore client. For example:
+https://unitedfrontier.britecorepro.com
+https://jetty.britecorepro.com
+Data Pump: AutoPay Enrollment
+Invoice Cloud Autopay Enroll
+https://<biller domain>/api/v2/payments/invoice_cloud_autopay_enroll
+accountNumber: value supplied by britecore during automatic BIF file transfer. It’s unique per policy
+api_key: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+enable: true
+Success:
+Failure:
+API uses JSON
+PDF Linking
+Retrieve Invoice Document
+https://<biller domain>/api/v2/deliverables/retrieve_invoice_document
+invoice_number (
+AccountHistory.id
+ for invoice for respective policy term payment) – was made against.
+api_key: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+primary_insured: true *Not required
+Success: 
+Failure:
+API uses JSON
+<britecorepro_domain>
+: unique per britecore client. For example
+https://unitedfrontier.britecorepro.com
+https://jetty.britecorepro.com
+MODIFICATIONS API Details
+1800
+Postman Collection with example request and responses
+Call RTDR Retrieve Policy using the IC Account Number. From the response, capture the id field (BriteCore AccountGUID/Policy ID). Use this AccountGUID/PolicyID as policy_id in subsequent RTDR calls such as Get Invoices.
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings
+ RTDR: Retrieve Policy ID for balance update RTDR and Block Payments
+API:
+https://<biller domain>/api/v2/policies/retrieve_policy
+Method:
+POST
+api_key
+: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+We will obtain the 
+policy_id
+ from 
+data.id
+ to use for balance update RTDR
+We will block payments through the RTDR process
+ 
+Request:
+IC Account Number= 
+policy_number
+IC Advanced Setting = 
+api_key
+Response:
+data.id
+ = IC Custom1 (This is for future use)
+For 
+data.system_tags.length
+check
+if (
+data.system_tags[x].name
+ === "Poor Payment History" && 
+data.system_tags[x].value
+ === true && 
+data.active_revision.policy_status?.includes
+ ("Cancellation Pending") 
+) { 
+ 
+Block ACH & CC Payment
+} 
+else { 
+ 
+Not Blocked
+}
+[SA-902] BriteCore Integration Refactor - JIRA
+ 
+Request
+json
+{
+    "policy_number": "FM4000264061",
+    "api_key": "asdfghjkl;'"
+}
+Response
+json
+{
+    "success": true,
+    "messages": [],
+    "data": {
+        "id": "88713b24-0589-404c-9eae-e0419560c90f",
+        "policy_number": "Test-For-IC-01",
+        "policy_number_origin": "manual",
+        "sequence_id": null,
+        "policy_number_normalized": "TestForIC01",
+        "active": true,
+        "rewritten": false,
+        "show_app": true,
+        "date_added": "2025-05-01T19:42:34+00:00",
+        "policy_group_id": null,
+        "copied_from_rev_id": null,
+        "copied_to_rev_id": null,
+        "flag": "white",
+        "inception_date": "2025-05-30",
+        "cancel_delay_date": null,
+        "system_tags": [
+            {
+                "id": "4ce758aa-c900-11e4-92c1-0242ac110048",
+                "name": "Poor Payment History",
+                "type": "internal",
+                "required": false,
+                "show_on_dec": false,
+                "line": false,
+                "policy_type": false,
+                "policy_type_item": false,
+                "sub_line": false,
+                "category": false,
+                "question": false,
+                "question_option": false,
+                "claim": false,
+                "claim_payment": false,
+                "contact": false,
+                "policy": true,
+                "quick_code": null,
+                "style": "checkbox",
+                "schedule": false,
+                "value": true
+            }
+        ],...
+ RTDR: Balance Update/ Invoice Creation/ Invoice Deactivation 
+ 
+API:
+https://<biller domain>/api/v2/accounting/get_invoices
+Method
+: Post
+api_key
+: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+We will create/update/deactivate invoices on the fly through the RTDR process.
+Response will contain an array of invoices for the policy/account.
+'N' Record
+If an invoice in the response does not exist on IC then create invoice even if it’s fully paid off
+'U' Record
+If an invoice in the response exists on IC then update the TotalAmount and Balance Due
+'D' Record
+If an invoice exists on IC but does not exist in the response, then deactivate invoice.
+Request:
+Value from 
+retrieve_policy API  
+data.id
+= 
+policy_id
+IC Advanced Setting = 
+api_key
+Response:
+Response will contain and array of Invoices for the Account/Policy. IC will check each invoice from the response.
+Check if the invoice is paid or unpaid and the policy is active continue, else do nothing.
+If invoice not found, then deactivate invoice. 
+if (
+  
+data.invoices[x].data.details.paidInFull
+ === true or false 
+&&
+  
+data.invoices[x].data.detail.policyStatus
+ === "Active"
+) {
+  
+Create or update invoice
+IC InvoiceNumber = 
+data.invoices[x].id
+IC InvoiceDate = 
+data.invoices[x].data.details.billDate
+IC InvoiceDueDate = 
+data.invoices[x].data.details.dueDate
+IC AutoPayCollectionDate = 
+data.invoices[x].data.details.dueDate
+IC 
+TotalAmountDue & BalanceDue
+= 
+data.invoices[x].balance
+  
+Determine record type
+IC recordType = "N or U"
+IC InvoiceTypeID = "164"
+}
+[SA-902] BriteCore Integration Refactor - JIRA
+ 
+Biller must be open billing.
+Request
+json
+{
+    "policy_id": "5b40589b-fc24-445e-b007-dafe7fd21261",
+    "api_key": "asdfghjkl;'"
+}
+Response
+json
+{
+    "success": true,
+    "messages": [],
+    "data": {
+        "policy_id": "88713b24-0589-404c-9eae-e0419560c90f",
+        "bill_from_date": null,
+        "bill_to_date": null,
+        "due_from_date": null,
+        "due_to_date": null,
+        "sorting_order": "asc",
+        "page_number": 1,
+        "page_size": 50,
+        "total_pages": 1,
+        "invoices": [
+            {
+                "id": "f2fa7664-a055-4780-bf51-2b33f0889d42",
+                "date": "05/01/2025",
+                "type": "Invoice",
+                "fileKey": "12e4b30c-e31a-4923-9071-dfe88bef37f9",
+                "amount": 115.00,
+                "balance": "115.00",
+                "summary": "Initial Invoice",
+                "icon": "view",
+                "credit": "",
+                "debit": 115.00,
+                "data": {
+                    "details": {
+                        "description": "Initial Invoice",
+                        "policyStatus": "Active",
+                        "billDate": "05/01/2025",
+                        "dueDate": "05/31/2025",
+                        "paidInFull": false,
+                        "invoicePaymentsIds": [],
+                        "generatedBy": "britecore_ashish.jain@britecore.com",
+                        "dateReceived": "06/04/2025",
+                        "dirty": false,
+                        "showWaive": true,
+                        "showDelete": false,
+                        "showEditAndReprint": true,
+                        "cancelDate": "07/05/2025"
+                    },
+                    "amount": 115.00,
+                    "schedule": {
+                        "Premium": 110.0,
+                        "Custom Fees": 0.0,
+                        "Installment Fee": 5.0
+                    }
+                }
+            },
+            {
+                "id": "ccdff4de-3727-4c8f-bed7-c10a8b066c44",
+                "date": "05/30/2025",
+                "type": "Invoice",
+                "fileKey": "97a994b0-5179-4623-8268-cf7c2a9a3589",
+                "amount": 0.00,
+                "balance": "115.00",
+                "summary": "Installment Invoice",
+                "icon": "view",
+                "credit": "",
+                "debit": "",
+                "data": {
+                    "details": {
+                        "description": "Installment Invoice",
+                        "policyStatus": "Active",
+                        "billDate": "05/30/2025",
+                        "dueDate": "06/30/2025",
+                        "paidInFull": true,
+                        "invoicePaymentsIds": [],
+                        "generatedBy": "britecore_ashish.jain@britecore.com",
+                        "dateReceived": "06/04/2025",
+                        "dirty": false,
+                        "showWaive": false,
+                        "showDelete": false,
+                        "showEditAndReprint": true,
+                        "cancelDate": "08/04/2025"
+                    },
+                    "amount": 0.00,
+                    "schedule": {
+                        "Premium": 0.0,
+                        "Custom Fees": 0.0,
+                        "Installment Fee": 0.0
+                    }
+                }
+            },...
+Paperless
+API:
+https://<biller domain>/api/v2/vendors/invoice_cloud_suppress_insured_deliverable_printings
+Method:
+POST
+api_key
+: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+Send the Paperless status to Britecore system
+ 
+Request:
+IC Account Number= 
+policy_number
+IC Advanced Setting = 
+api_key
+IC Paperless Status = 
+enable
+true/false
+Response:
+200- successful call
+else do nothing
+[SA-902] BriteCore Integration Refactor - JIRA
+[ITG-3966] New Change Request - JIRA
+ 
+Request
+json
+{
+    "api_key": "asdfghjkl;'",
+    "policy_number": "FM400001115",
+    "enable": true
+}
+Response
+success = true
+json
+{
+    "success": true,
+    "messages": [],
+    "data": {
+        "suppressedPrinting": true,
+        "invoiceNumbers": [
+            "073c6261-8c91-42d6-be57-25935b897d70",
+            "de6135c7-da37-4dbb-a878-1de1e91b2f61",
+            "beb7f745-d711-4cc5-9206-e4bf9e3123a5",
+            "89d48d14-c424-4bc2-b58b-5f13e9a0c3ff",
+            "fffc40b8-278c-4c4c-8e9c-53b6a4ee525f",
+            "152a1cc7-06d5-423c-b65f-3659b2a9d6a0"
+        ]
+    }
+}
+success = false
+json
+{
+    "success": false,
+    "messages": [
+        "policy_number not found"
+    ],
+    "data": {}
+}
+ AutoPay
+API:
+https://<biller domain>/api/v2/vendors/invoice_cloud_autopay_enroll
+Method:
+POST
+api_key
+: invoice cloud has to request britecore for one as it’s unique per britecore client choosing to use integration
+Send the Autopay status to Britecore system
+ 
+Request:
+IC Account Number= 
+policy_number
+IC Advanced Setting = 
+api_key
+IC Autopay Status = 
+enable
+true/false
+Response:
+200- successful call
+else do nothing
+[SA-902] BriteCore Integration Refactor - JIRA
+[ITG-3966] New Change Request - JIRA
+ 
+Request
+json
+{
+    "api_key": "asdfghjkl;'",
+    "policy_number": "FM400001115",
+    "enable": true
+}
+Response
+success = true
+json
+{
+    "success": true,
+    "messages": [],
+    "data": []
+}
+success = false
+json
+{
+    "success": false,
+    "messages": [
+        "policy_number not found"
+    ],
+    "data": {}
+}
+File Mapping
+Invoice File
+File Extension: .JSON
+File Naming Convention:  BID_MMDDYYYY
+File Delimiter:  N/A
+Specification: N/A
+Sample File: 
+File Transfer Frequency: Daily
+Field Mapping
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Record Type
+1
+RowType
+N
+TRUE
+N/A - always FH
+File Header
+2
+BillerGUID
+Y
+TRUE
+N/A - field generated by IC
+File Header
+4
+FileCreationDate
+Y
+TRUE
+N/A - current date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+N/A - invoice count in file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+N/A - total invoice amount in file
+File Header
+7
+RowType
+N
+TRUE
+File Header
+8
+RecordType
+Y
+TRUE
+N - New Policy
+R - 
+For daily invoice updates
+U - 
+ No 'U' records will be sent
+D - Cancelled Policy
+ - No 'D' records will be sent. Any payments on cancelled policy will be accepted and applied on the account for Britecore disbursement
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A - field generated by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+N/A - random GUID value created by Britecore
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Invoice Header
+248
+AutoPayCollectionDate
+Y
+FALSE
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Account Balance (current invoice amount + trailiing balance)
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Invoice Type ID
+Invoice Header
+59
+AccountNumber
+Y
+TRUE
+Policy Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Named Insured
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Email address
+Customer Record
+20
+AllowPartialPayments
+Y
+FALSE
+Invoice Header
+61
+Address1
+Y
+FALSE
+Address
+Customer Record
+63
+City
+Y
+FALSE
+City
+Customer Record
+64
+State
+Y
+FALSE
+State
+Customer Record
+65
+Zip
+Y
+FALSE
+Zip
+Customer Record
+23
+FirstNotifyRequestedDate
+Y
+FALSE
+Invoice Header
+407
+PastDue
+Y
+FALSE
+Trailing Balance
+Invoice Header
+38
+Custom1
+Y
+TRUE
+AccountGUID
+Invoice Header
+Not used from file
+PaymentExpirationDate
+Not used from file
+AutoPayEnabled
+Not used from file
+TotalInvoiceAmount
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+ Y
+10
+RTDR Key or Password if Applicable
+ 
+ Y
+11
+DataPump Payments EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+ Y
+13
+DataPump Payments EndPoint/WebService Password
+ 
+ Y
+14
+DataPump Paperless EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+ Y
+16
+DataPump Paperless EndPoint/WebService Password
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+Y
+19
+DataPump AutoPay EndPoint/WebService Password
+Y
+20
+Remote PDF EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+Y
+22
+Remote PDF EndPoint/WebService Password
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL
+See CRM BID 1663 for example (value is unique per biller)
+Y
+103
+DataPump ACH Rejects EndPoint/WebService Password
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+in invoice file
+AutoPayCollectionDate
+in invoice file
+BalanceForward
+in invoice file 
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+in invoice file
+InvoiceDate
+in invoice file
+InvoiceDueDate
+in invoice file
+InvoiceFormatGuid
+in invoice file
+InvoiceTypeID
+in invoice file
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+on biller questionnaire (note: there is a value for this field in the file but it should be ignored)
+PaymentExpirationMessage
+on biller questionnaire
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+on biller questionnaire
+ThirdNotifyRequestedDate
+on biller questionnaire
+User Interaction and Design
+Data Flow - Invoice
+1800
+att315293759
+159547396
+1
+invoice
+IM
+att315293754
+att313327711
+0
+Data Flow - Adjustments
+1800
+att315326535
+159547396
+1
+adjustment
+IM
+att313327718
+att313622608
+0
+Data Flow - Payment
+1800
+att315293773
+159547396
+1
+payment
+IM
+att315129913
+att315293768
+0
+Data Flow - Change Log
+1800
+Paperless:
+att313589831
+159547396
+1
+paperless
+IM
+att313327725
+att315326557
+0
+Autopay:
+att315293812
+159547396
+1
+autopay
+IM
+att315326562
+att313589836
+0
+Data Flow - Bill Presentment
+1800
+att313426123
+159547396
+1
+pdf linking
+IM
+att315359320
+att313426118
+0
+Payer Experience
+1800
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+1800
+ can we input a visual for cloudpay?
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ n/a
+ 
+ 
+ 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ n/a
+ 
+ 
+ 
+ 
+ 
+ URL:/spaces/IM/pages/159547396/BriteCore+Technical+Design

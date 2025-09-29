@@ -1,0 +1,10 @@
+These apply for all servers.
+Go the server’s host dashboard in New Relic and ensure nothing looks irregular
+i.e. 
+IC-Web1’s dashboard
+Ensure that CPU, memory, and storage usage look consistent - spikes in either direction are suspicious and may warrant a closer look
+Ensure that all drives are below 90% full
+Sort related entities by throughput. Visit the top 3 (if there are that many). Note that if the server has been out of rotation or offline for some amount of time, there may be no related APM entities. In this case, disregard the following steps.
+filter to the server you’re checking, and ensure that transaction time, error rate, throughput, and logs don’t deviate from the norm.
+Note that there may be drops at the very end of some of the graphs. This is normal; the graph is showing that the data hasn’t yet caught up to real time.
+ URL:/spaces/platform/pages/4275536180/Generic+Checks

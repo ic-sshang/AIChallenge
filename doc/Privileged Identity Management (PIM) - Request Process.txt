@@ -1,0 +1,28 @@
+Privileged Identity Management (PIM) Request Process
+Requesting Access
+ 
+Sign in to 
+https://portal.azure.com
+  with your Azure Credentials (the same ones you use to sign in to the VPN).
+Search for Microsoft Entra Privileged Identity Management 
+ 
+Click on “My roles”.
+Click on Groups and activate an eligible assignment.
+As of 1/10/2023, there are 4 available roles.
+ICVM – The items prefixed with ICVM will grant the user RDP access to the servers. This is currently available to the Web servers, but will expand to the other server types. 
+This will not grant admin rights.
+ICDB – The items prefixed with ICDB will grant the user the same access level as a deployed application. 
+This will not grant admin rights.
+As of 10/1/2024, there is only 1 available role: ic-iac-avd-admins-npd
+After clicking on “Activate”, a new blade will appear and ask for additional detail. Click on “Activate” to submit the activation request.
+Required fields:
+Duration: How long will you be needing access? Max is 4 hours.
+Ticket Number: Jira Issue Id or Service Desk Ticket Id.
+Reason: Short summary on why the access is needed.
+  Optional fields:
+Custom activation time: To defer the activation to a specific date.
+Ticket System: Open ended, but we can state Jira or Service Desk.
+On the top right, there will be a new notification stating that the request is pending approval.
+ 
+ 
+ URL:/spaces/PE/pages/2557509637/Privileged+Identity+Management+PIM+-+Request+Process

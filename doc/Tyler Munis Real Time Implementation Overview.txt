@@ -1,0 +1,111 @@
+Page Navigation
+Document Status
+DRAFT
+ 
+Document Owner
+ 
+ 
+Knowledge Transfer
+Summary
+Summary
+Details
+Software Partner Name
+Tyler Technologies
+Software Product Name
+Munis Utility Billing
+Software Cashiering System
+Supported Versions
+Version 2019 or higher
+Version 2019 is required for API - also ask Biller if they have purchased the API and have a specific instance implemented by Tyler
+Integration Requirements and Pre-Requisites
+Vertical
+Utility
+Sample Biller Implementation
+City of Bend Utility
+Planning
+Test Portals
+IC Hosted Test Portal - Generated for each Biller
+Biller Test Portal - Munis will create a portal for each biller.
+Rules of Engagement
+General Tyler Munis consultant - Randy Mercer 
+rmercier@rdmsoftwareconsulting.com
+Each biller is generally assigned support from Tyler Munis - work with biller to schedule calls
+Timeline
+Configuration
+Invoice Types
+Usually only Utility (42)
+Virtual Site
+Required Options
+ID
+Option Description
+Details
+1
+Allow Adjustments on Closed Invoices
+Enable this option if Payments and Adjustments can be applied to an Invoice that is considered closed. There are cases in which the recommended functionality is to disable this option. One case is Balance Forward, which by definition the balance of the previous Invoice is adjusted out and moved to the new Invoice. No more payments or adjustments should be allowed on that closed Invoice.
+If balance forward set to off if not set to on
+64
+Override 6 hour previous RTDR Check
+This will prevent RTDR from only happening every 6 hours.
+48
+Advanced Setting - Option 48 (not CRM Options)
+Reverse Account Number - Acct-Cust, Cust-Acct
+The standard account number format will be Account Number + '-' + Customer Number format. For the standard account number format Advanced Setting 48 needs to be turned on for RTDR and Data Pump to work. IT will handle this during implementation
+ 
+50
+Option 50
+By Default the Account Number format is.. Enable this option if you want the account number to be…
+Option 50 in the Biller Portal will be used if the account number is in Customer Number + '-' + Account Number format. The standard Tyler Munis integration will be Account Number + '-' + Customer Number format. 
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Biller in Tyler Munis XML Format
+Before IT starts implementing
+Data is in a general XML format. 
+Before implementing figure out if the biller is using open billing or balance forward and include that in the Jira.
+Adjustment File
+N/A
+Payment File
+N/A
+Bill Presentment
+Print Vendor or Biller
+Before IT starts implementing
+Specific for each biller
+RTDR API
+Biller
+RTDR Passcode
+Biller
+DataPump API (same as RTDR API)
+Same
+DataPump Passcode (same as RTDR Passcode)
+Same
+Multi-Database Name (not always applicable)
+N/A
+SSO URL
+N/A
+PDF URL
+N/A
+Whitelisting IP Addresses
+Invoice Cloud
+Ask Biller if needed for implementation
+Partner Coding Requirements 
+note
+NOT NEEDED - Invoice Cloud codes to Munis API but Munis does not code to Invoice Cloud API
+
+
+NOT NEEDED - Invoice Cloud codes to Munis API but Munis does not code to Invoice Cloud API
+
+
+Contacts
+Implementation Learnings - Tyler Integrations
+Getting autopay information extracted out of Tyler is difficult. The data cannot be extracted in its entirety. Data matching is needed. New Port Richey found the workaround attached below.
+ URL:/spaces/IM/pages/1870495849/Tyler+Munis+Real+Time+Implementation+Overview

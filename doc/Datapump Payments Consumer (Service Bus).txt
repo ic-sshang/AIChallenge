@@ -1,0 +1,118 @@
+  Application Overview
+Field
+Details
+Application Name
+Datapump Payments Consumer (Service Bus) 
+Version
+NA
+Description
+This is a .NET Worker Service deployed in the 
+Biller
+ Kubernetes cluster.
+Its primary function is to read unprocessed 
+Service Bus
+ messages from a 
+Payments
+ topic and trigger API calls to the Biller API to notify payment events.
+The service manages authentication by calling the centralized authentication service to obtain a token, using the appropriate authentication type for the request.
+After receiving the Biller API’s response, it updates the corresponding 
+datapump
+ record in the relevant Biller shard.
+Scaling
+ is handled by 
+KEDA
+, based on the number of messages pending in the Service Bus topic.
+Primary Functionality
+Processes datapump records and calls biller CIS API’s to notify the payment update.
+Key Features
+Kubernetes-Based Deployment, Worker Service, Dotnet 8, Rebus, KEDA.
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Anoop Nag
+Tech Lead
+Kailashnadh Pochiraju
+Engineering Manager
+Kailashnadh Pochiraju
+Support Contact
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+c#
+Frameworks/Libraries
+dotnet 8, IC.Database, Serilog
+Database
+ IC.Net.DataAccess.MsSql
+Key Vault
+kv-pri-biller0-{env}
+Dependencies
+Database, Azure Service Bus, Rebus
+Code Repository Link
+  Application Services
+Field
+Details
+Notes
+Application Service Indicator
+datapump-servicebus-payments-consumer
+NA
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+NA
+Create Application Service Vault
+False
+NA
+Grant Crypto Vault Access
+False
+NA
+Grant Environment Vault Access
+True
+Yes
+Grant Cluster Vault Access
+False
+No
+Grant ServiceBus Sender Access
+True
+No
+Grant ServiceBus Receiver Access
+True
+No
+Grant ServiceBus Data Owner Access
+False
+No
+Grant IC Blob Storage Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant PDF Extract Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Biller Shard DB Access
+True
+True
+Biller Shard DB Access for QE
+False
+Only utilized by Tooling Cluster Workload for now so likely your Workload will not need it.
+  Deployment Information
+Field
+Details
+Cluster
+Biller
+Deployment Node
+k8s Job Node
+Application Type
+Worker Service
+Outbound Network Ports
+Inbound Network Ports
+PCI Scope
+[Does the application handle credit card data?] No
+Environment Variables
+IC__SqlDatabase__BillerConnectionStringTemplate
+Schedule
+NA
+ URL:/spaces/ED/pages/4579360928/Datapump+Payments+Consumer+Service+Bus

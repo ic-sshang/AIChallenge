@@ -1,0 +1,100 @@
+Areas of interest:
+Service Fees - 
+This sounds like it is not going to be needed.
+Biller Pricing Fees
+This is more aligned with the work the Data Services team has been doing to manually mitigate. 
+Possible New Requirements:
+New PaymentSource for "Autopay - Migrated" verbiage can change. 
+Make changes in the CustomerAutoPay record. 
+Have this new field be an integer. Default to 1. If it comes from the tool let's do a 2. 
+Consider having a separate table to have this linking.
+New TBL to hold the new types. 
+Pending Questions:
+* 
+Adding a new payment source:
+Add to the tblPaymentSource
+Add to the new Service Fees.
+[TBD - Ran out of time to capture]
+Wrenches
+:
+We may have integrations where we key off of the Autopay payment source id for autopay. 
+What would we be breaking? 
+This change would be done in:
+S
+ervice Fees:
+ICCRM - Service Fees page
+MyIIS - Cloud Tools (Service Fee logic)
+Service Fee logic has some regression testing. Leverage this. 
+The following Web Service has some tests:
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=/MyIIS/App_Code/InvoicePaymentFees.vb
+If we break these, then we know something is wrong.
+Changes would be done here: 
+GetServiceFeeInformation - 
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=/IC.Common/clsUtilities.vb
+CTP - Service Fees it is what it is. We do NOT validate on the service fee since it could break other integrations. 
+If we need to do this, the Wicked Tendies can own that. 
+Biller Pricing Fees:
+MonthEndFinalize
+Branch "FinModUpdates" or something like that. 
+Code is generated through FindMod
+Staging will stage the data
+This data will be presented over to the finance team
+This will create the BIF and import to biller 1. 
+MonthEndStaging
+Branch "FinModUpdates" or something like that. 
+Gets data from FinMod
+fnComputeBillerRevenue
+Azure Function
+If we need to make changes, clsICPricingAndFees is the class we need to update. 
+Purpose: 
+Calculates the biller fee based on the pricing 
+If this get’s changed, then it’ll trickle down to the other applications.
+Discounted Rate:
+Not in place
+Thoughts:
+Having more records on the same table will be a problem.
+Having a different table?
+Having a new discount table that would tie in to the BillerFeeCalculations FKID? 
+Flat or Percentage fee amount. This is the amount to use instead of the standard rate. Example: Main record is 2.95%. Discount is 1.5%. We would use 1.5% for the pricing. 
+Start and End dates for temporary discounts. 
+Next iteration. 
+tbl for the discount type. 
+First item is Conversions.
+Temporary discounts (Next iteration)
+Adding a different column to the table called “Discount” ?
+BillerFeeCalculations 
+is the name of the table we have today that handles the pricing. 
+When we send over the message to the AZFunction, we send BillerID and PaymentID today. Need to identify a way to determine if it’s a converted autopay item.
+There is a stored procedure that will gather the data based on the payment ID. 
+selPaymentByPaymentID 
+: Get if it is a converted autopay driven payment.
+selBillerFeeCalculations
+ : Get discount rates
+New SP? Get discount rates
+CalculateBillerFee
+, 
+GetBillerPricing
+, 
+GetPaymentRecord
+ are areas of interest. 
+FinMod
+What is FinMod?
+Is version 2.0 of our biller pricing system. The pricing engines are still the apps above. 		
+Scenarios to look out for:
+What if the customer updates the autopay record in the portal? 
+Does it stay migrated?
+Consensus is yes
+What if I get a new invoice type?
+Should the new record have the migrated flag if they use the same payment method? 
+I think no since it's a new autopay record. 
+What about if a biller updates the autopay record on the biller portal?
+Does it stay migrated? 
+Consensus is yes
+Documentation?
+WHHHHHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT?
+Confluence doc: 
+Month End Billing
+ 
+This has jobs and how they work together to build out our pricing engine. 
+Identify documentation for fnComputeBillerRevenue if there is any, otherwise invest time to craft one. We need a before and after. 
+ URL:/spaces/PE/pages/2711617578/EBPP-11864+-+Auto+Pay+-+Migrated+-+Info+Gathering

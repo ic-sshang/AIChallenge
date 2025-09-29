@@ -1,0 +1,30 @@
+Introduction
+This is a .NET Worker Service deployed in the 
+Biller
+ Kubernetes cluster.
+Its primary function is to read unprocessed 
+Service Bus
+ messages from a 
+Paperless
+ topic and trigger API calls to the Biller API to notify payment events.
+The service manages authentication by calling the centralized authentication service to obtain a token, using the appropriate authentication type for the request.
+After receiving the Biller API’s response, it updates the corresponding 
+datapump
+ record in the relevant Biller shard.
+Scaling
+ is handled by 
+KEDA
+, based on the number of messages pending in the Service Bus topic.
+Running the Job
+The job does not require any parameters by default but supports optional parameters to control its behavior. It utilizes the 
+Microsoft.Extensions.Configuration
+ framework and adheres to its standard conventions. This Connects to the Azure Service Bus with Rebus Package and Scales based on the message count of a topic in azure service bus. Configuration values can be provided in multiple ways, with the following order of precedence (from lowest to highest priority):
+appsettings.json
+ entries
+Environment variables
+Operational Details
+Query Azure Service Bus Message based on on subscription in a topic.
+Prepares request object to trigger biller CIS Api and authenticates by calling centralized authentication service.
+Once the response is received it updates the datapump record in biller shard.
+Process Diagram
+ URL:/spaces/ED/pages/4579950610/DataPump+Service+Bus+Paperless+Consumer+Architecture+Overview

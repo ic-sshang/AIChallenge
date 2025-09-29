@@ -1,0 +1,54 @@
+Description
+This application is used to send reports that are generated through the Biller Portal and the Biller Report Scheduler job.  It runs on Automate/Skybot every 5 minutes and picks up any submitted reports that were created after the completion of the previous job run.  
+Biller Portal UI Custom report process
+Custom reports generated on the fly
+Biller Scheduler UI report process
+Generating and sending reports
+ReportGeneratorQueue method
+The application starts by running a query to obtain the list of reports that are not marked as processed for all active and live billers.  If an error occurs during this database request, the query will attempt to retry and pull the reporting data 3 additional times.  
+Once the reporting data has been successfully obtained, the job will now process the number of reports to be sent in this job run.
+Each report will now be added to a list of BillerReport objects and will contain the following information.
+BillerReport object data:
+BillerID - Which biller requested this report.
+BillerReportID - The PK of the reporting table.
+EmailRecipients - who will receive this report.
+EmailSubject - “InvoiceCloud Report - “
+WhatTheyEnteredForAReportName
+” 
+ReportFequency
+ (if applicable)
+ReportFilename - name of the scheduled report
+ReportFormat -The format will either be in ZipCSV or ZipTab (ONLY Lewis County’s reportid 48).  The reporting service does not support other formats at this time.
+ReportDestination - Default is EmailWithDownloadLink to azure blob storage containing the ZipCSV
+ReportSQL - The query that will run to retrieve the data for this report.
+ReportSent - will run after the action dispatch result is returned.
+ReportOutputDirectory - Required for FTP action
+BillerReportProcessor method
+After the 
+BillerReport
+ object is populated with the above data, the application will begin to iterate over each 
+ BillerReport
+ that will need to be sent.  Each report will pull the requested information using the supplied ReportSQL query, and create an email based on the 
+BillerReport 
+object data.
+Steps for report sending.
+Data is pulled using the supplied report query.
+Report is formatted into ZipCSV or ZipTab (Lewis County only) using the Ionic.Zip library 
+A backup copy of the report is stored in “Files\ReportGeneratorBackup” on the app server
+The business service is called to upload the zip file and save it to azure blob storage.
+File is then deleted from the backup directory after successful storage in blob.
+Report Destination is set from reporting data (Email only, FTP, Email with download link)
+File will be sent to the report destination.
+FTP - a Local copy only saved to the ReportOutputDirectory
+Email with download link - report is sent with link to blob storage report file
+Email only - report is sent with report file attached as an email attachment.
+Email is sent via Mailgun to the listed recipients. 
+Report is marked as processed so it does not get picked up again on the next run.
+Application Error Handling
+If there is a problem with the query after three retry attempts (memory exception, timeout, etc), the report record will be marked as processed, logging will be sent to NR, and a notification via slack will be sent to client services informing them that the report could not be sent to the biller.
+Error Action Summary Steps:
+logging will be sent to NR.
+Notification via slack will be sent to client services with the message “Email Processing Report Error.”
+The report record will be marked as processed.
+The job will continue to execute and process the remaining reports picked up during the run.
+ URL:/spaces/ED/pages/3013312600/Biller+Report+Generator+-+Process+Overview

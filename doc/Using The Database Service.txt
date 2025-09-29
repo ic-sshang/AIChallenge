@@ -1,0 +1,81 @@
+Prerequisites
+Please read the following documents to gain a better understanding of the architecture:
+Data-Access-On-Applications - Overview
+ 
+What is the Database Service?
+The Database Service is a WCF service that abstracts how we connect to the database. The benefit to having this service is if we need to make any changes to how we connect to the database, it can be done by updating this one service, instead of each individual app we host. 
+Code Samples
+The database service abstracts the 
+http://ADO.NET
+  implementations needed to communicate to the SQL server. The Service contains useful methods like GET_DATATABLE or EXECUTE_COMMAND_NONQUERY that we would use on a day-to-day basis.
+There is a limitation to this method. The limitation is that the application calling the Database Service MUST run inside our network to have access to our Proxy Servers*. 
+Flow
+The client application will obtain a Managed Identity from a Key Vault (or via PowerShell by accessing the Managed Identity resource via the Azure CLI). This id will be used to talk to the Azure token service. 
+The token service will return an Access Token. 
+The Access token will be applied to a header when requesting the database service. 
+The Database Service will inspect the message for an "AccessToken" header. 
+If the header is available, it will use the token passed in to authenticate with SQL Server. 
+If the header is NOT available, it will use the internal access token for the service. This is temporary until we have all of our apps using the Managed Identity logic. 
+The access token identified by the service will be used to authenticate with the SQL server upon making a SQL Connection. 
+The token will be valid until its expiration date. 
+Expiration date will vary. During our tests, we've seen 12 hr, 24 hr, and 48 hr tokens. 
+Required NuGet packages
+Please use the 1.* versions as 2.* versions are in beta.
+IC.ServiceProxies - It contains most if not all of the ICServices.  
+IC.Database.Authentication - It contains the logic to authenticate using the Managed Identities. 
+Code Samples
+*.config appSetting keys
+xml
+        <add key="UseManagedIdentity" value="true">
+            <!-- Set to true if using Managed Identities for KeyVault/Token -->
+        </add>
+        <add key="ClientId" value="">
+        <!-- ClientId value used for Azure Token creation. -->
+        </add>
+        <add key="VaultName" value="icappsettingsdevtest">
+        <!-- VaultName value to be used for the Azure Key Vault that will be accessed -->
+        </add>
+This is a code sample for 
+http://VB.NET
+ . 
+vbnet
+    Imports Auth = IC.Database.Authentication
+    Imports IC.Interfaces
+    Imports IC.ServiceProxies.Database
+
+    Public Class clsDatabase
+        Public Shared Property TokenProvider As IC.Interfaces.ITokenProvider
+        Private Shared _proxy As DatabaseServiceProxy = Nothing
+
+
+        Shared Sub New()
+            Try
+                ' Get values from app.config using SettingsService
+                Dim clientId As String = Configuration.ConfigurationManager.AppSettings("ClientId")
+
+                ' Create DatabaseProxy using token provider and keyvault
+                Console.Write("Creating TokenProvider..")
+                TokenProvider = New Auth.DatabaseTokenProvider(clientId)
+                Console.WriteLine("Done")
+                Console.Write("Creating DatabaseServiceProxy..")
+                _proxy = New DatabaseServiceProxy(TokenProvider) With {
+                    .DefaultApplicationName = "DailyBillerMgtReportEmail",
+                    .DefaultDatabase = Database.Enums.DatabaseName.DBLive,
+                    .DefaultCommandTimeout = 300
+                    }
+                Console.WriteLine("Done")
+            Catch ex As Exception
+                Console.WriteLine($"Exception occurred: \n{ex.ToString}\n")
+            End Try
+        End Sub
+
+        Public Shared Function GET_DATASET(ByVal SQL As String, ByVal BillerID As Integer) As DataSet
+            Return _proxy.GET_DATASET(BillerID, SQL)
+        End Function
+    End Class
+
+Troubleshooting
+Access Issues?
+Please refer to this guide: 
+Authentication-Troubleshooting.md
+ URL:/spaces/ED/pages/2806153300/Using+The+Database+Service

@@ -1,0 +1,54 @@
+1
+6
+false
+default
+list
+true
+Opening a Pull Request
+Pull request titles should be in the format: 
+[{Issue Key}] {short summary of issue}
+Example: 
+[PLAT-1234] Document How to Open a PR
+The Pull Request Description should be in the following format:
+**Link to Story**: [Link to your story](https://invoicecloud.atlassian.net/jira/software/c/projects/PLAT/boards/312)
+
+**Version**: `+semver:{major}|{minor}|{patch}`
+
+**Pipelines**:
+- List of Pipelines ran that display the expected behavior and you have verified the results of the Pipeline(s)
+
+**Changes Made**: 
+- List of the notable changes made, can be sourced from Commit Messages (but please clean up, also note Copilot is great for creating commit messages) or added manually
+Closing a Pull Request
+When closing a Pull Request that has received 2 or more Approvals from the Platform Team Members, please follow the steps outlined below:
+After clicking the 
+Complete
+ button ensure the following options are selected:
+Merge type
+: 
+Squash commit
+Delete
+ branch name
+Create a Tag and add the Title of the PR as the Tag Comment:
+Click the Copy button by the PR Title.
+Go to the 
+History
+ of the 
+main
+ branch to find the last Tag.
+Click the 
+Tags
+ menu item on the left menu and create a Tag incrementing as appropriate using the following Tagging convention:
+platform-{platform_architecture_version}/{component_major_version}.{component_minor_version}.{component_patch_version}
+platform_framework_version
+: The overarching Platform Architecture Version the Tag belongs to.  As we move forward and we want to make major changes to the Platform Architecture we will increment this number and this will allow us to identity which Components work together within the same larger Platform Architecture strategy.
+Note, if this is not an Infrastructure or Platform Component Repo, i.e. an Application Repo, then this aspect of the Tag is not needed.
+component_major_version
+: The Major Version that gets added to the name of the Azure Resources when they are created as the 
+Deployment Version
+ which is a strategy to enable Blue-Green Infrastructure Deployments.
+component_minor_version
+: Adding a new Features or behavior in a backwards compatible way.
+component_patch_version
+: Hotfixes to existing Tags made during the Development and Testing Lifecycle, or a hotfix to a Production deployed component.
+ URL:/spaces/platform/pages/3929407507/Pull+Requests

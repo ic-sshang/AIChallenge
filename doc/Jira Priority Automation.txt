@@ -1,0 +1,127 @@
+1
+6
+false
+default
+list
+true
+Overview
+The idea behind the automation is to assign an accurate priority for items based on different ticket properties. The properties will be used in a formula to assign a weight to the item. The weight will fall into four categories, P1-P4 (High-Low).
+Formula and Weights
+Ticket Properties
+Urgency
+Biller Tier
+Reported Service
+Assigning Weights
+Urgency
+:
+Low: 1
+Medium: 2
+High: 3
+Critical: 4
+Biller Tier
+:
+Since there are different logic branches, we want to adjust these values to not be as impactful within its branch. This allows us to take the tiers into account within reason and letting the urgency and reported service fields drive the priority.
+Tiers 1 and 2
+Tier 1 - 500,000+: 1.50
+Tier 2 - 250,000 - 499,999: 1
+Other Tiers
+Tier 3 - 100,00 - 249,9993: 2
+Tier 4 - 50,000 - 99,999: 1.50
+Tier 5 - Below 50,000: 1
+Reported Service
+:
+High: 3
+Medium: 2
+Low: 1
+Proposed Formula
+Priority Weight = Urgency Weight × Biller Tier Weight × Reported Services Weight
+To ensure that Tier 1 and 2 billers are at least a Medium priority, we will have a different branch in the logic that calculates the weight based on the Urgency and Reported Services.
+Priority Weight = Urgency Weight × Reported Services Weight
+Categorizing the Weights
+For Biller Tiers 1 and 2
+Min and Max:
+Minimum Weight: 1
+Maximum Weight: 18
+Define The Ranges
+P1 - High
+: Top 5 weights.
+Weights:  8, 9, 12, 13.5, 18
+P2 - Medium
+: Bottom 7 weights
+Weights: 1, 1.5, 2, 3, 4, 4.5, 6
+For Biller Tiers 3-5
+Min and Max
+:
+Minimum Weight: 1
+Maximum Weight: 24
+P1 - High
+: Top 3 weights.
+Weights:  16, 18, 24
+P2 - Medium
+: Next 4 weights
+Weights: 8, 9, 12, 13.5
+P3 - Low
+: Next 4 weights
+Weights: 3, 4, 4.5, 6
+P4 - Lowest
+: Bottom 3 weights
+Weights: 1, 1.5, 2
+For Empty Biller Tier
+Min and Max:
+Minimum Weight: 1
+Maximum Weight: 12
+Define The Ranges
+P1 - High
+: Top 2 weights.
+Weights:  9, 12
+P2 - Medium
+: Next 2 weights
+Weights: 6, 8
+P3 - Low
+: Next 2 weights
+Weights: 3, 4
+P4 - Lowest
+: Bottom 2 weights
+Weights: 1, 2
+Automation Rules
+Update Priority on field change
+Update Priority when moved to Pending
+Link to view item weight:
+https://invoicecloud.atlassian.net//rest/api/2/issue/[DS ITEM KEY HERE]/properties/priorityWeight
+Pending Improvements / Considerations
+Take Reported Service (or Scrum Team) into account.
+Reported Service is now taken into account.
+High Tier Billers, with low/medium urgency for a low/medium reported service.
+This has been addressed with the split logic for tier 1 and 2 billers.
+Low Priority Reported Services, with low urgency since we do not currently measure how many billers the issue is impacting. (e.g. Kiosk, Pay-by-Text)
+Tickets that are not from Salesforce may be missing the Biller Tier. This may need to be accounted for. Maybe a default value can be assigned. Different buckets can be created for weights calculated without the Biller Tier.
+This was addressed along with the change for tier 1 and 2 billers buckets.
+Improvements
+For Tier 1 and 2 billers, only assign medium or high priority.
+Calculate tickets missing the tier using the remaining fields.
+Possible Solution:
+Create a field in the Jira DS project that is required in the portal.
+An automation can be created to populate the true Biller Tier field based on the value of this 
+backup 
+field
+.
+This would require a change to Workato to set this value since it would needed in the portal.
+Change Logs
+Logs for any major changes to the recipes or formula.
+10/16/2024 3:36 PM:
+Currently, the formula takes the Biller population-affected field into account. The issue with that is that the field is not always populated. It would require an engineer to understand the ticket's impact, which we typically don't know until we start working on the ticket.
+I'm going to make a change to use the Reported Service instead, in addition to the Biller Tier and Urgency.
+The weight of the Reported Service will match what is in the Priority Rubric 
+https://invoicecloud.atlassian.net/wiki/x/CwA_vw
+.
+10/17/2024 8:30 AM:
+The changes are live for the Wicked Tendies scrum team. There are two automation rules (linked in the Automation section), one to run when any of the 3 fields are changed, and another to run when the ticket is moved to Pending status as this occurs for all tickets.
+10/17/2024 4:09 PM:
+Reworked the weights to ensure Tier 1 and 2 billers are at least Medium Priority. The change is also rolled out to Wicked Tendies and Integrations. The changes look good and will released to all teams shortly.
+10/18/2024 8:59 AM:
+The automation has been rolled out for all teams. Also, for the event listener rule, tickets with the Escalations label are being skipped since the priority should have been manually updated.
+10/30/2024 4:13 PM:
+Removed striked throught content from the document.
+10/30/2024 4:35 PM:
+Shift ranges for Tier 1 and Tier 2 billers since too many Tier 2 billers were getting weight 6 and being set to High when they were more of Medium priority ticket.
+ URL:/spaces/DS/pages/3662151700/Jira+Priority+Automation

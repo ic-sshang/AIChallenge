@@ -1,0 +1,1465 @@
+Page Navigation
+File Mapping
+Invoice File
+Adjustment/Daily Balance File
+Payment/Lockbox File
+Change Log File
+BIF Customization's
+User Interaction and Design
+Invoice Cloud Web Services
+Integration Modifications
+Jira ticket
+ 
+ITR
+ 
+Release Date
+ 
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+ 
+Knowledge Transfer
+ 
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: TXT
+File Naming Convention:
+File Delimiter:
+Specification:
+Sample File:
+SFTP File Path:
+File Transfer Frequency:
+Import Types: There are two import types for the utility integration - 'UB V2' and 'Utility - Serial Number'. If the biller is looking for IC to capture multiple [meter] serial numbers for display on the template, we need to use the 'Utility - Serial Number' import type. These import types use the same file but IC stores additional data from the 'Utility - Serial Number' type.
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+2
+BillerGuid
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+4
+FileCreationDate
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+5
+InvoiceCount
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+6
+TotalInvoiceAmount
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+7
+RowType
+ 
+TRUE
+ 
+ 
+ 
+ 
+Invoice Header
+8
+RecordType
+N
+TRUE
+NA - IC Genereated Value
+RecordTypes.N
+ 
+1
+Invoice Header
+9
+InvoiceFormatGuid
+ 
+TRUE
+ 
+ 
+ 
+ 
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Now.ToString("MMddyyyyhhmmss") & "-" & FH.InvoiceCount.ToString
+MMddyyyyhhmmss-InvoiceCount
+Creates Invoice Number from dataline.
+"
+ 
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+dataline.Split("|")(10).Trim
+20210715
+InvoiceDate could be found in the Header
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+dataline.Split("|")(12).Trim
+08052021
+Gets Due Date
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+dataline.Split("|")(129).Trim
+String
+Gets Total Amount Due.
+10
+Invoice Header
+14
+TotalTaxAmount
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+15
+TotalDiscountAmount
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+16
+TotalShippingAmount
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+17
+TotalDutyAmount
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+18
+VATTaxRate
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+19
+VATTaxAmount
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+20
+AllowPartialPayments
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+21
+MinimumAmountDue
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+22
+Terms
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+23
+FirstNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+24
+SecondNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+25
+ThirdNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+26
+PONumber
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+27
+SalesRep
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+28
+ShipDate
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+29
+TrackingNumber
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+30
+ShippingCompanyID
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+31
+CustomerShipName
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+32
+CustomerShipAddress1
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+33
+CustomerShipAddress2
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+34
+CustomerShipCity
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+35
+CustomerShipState
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+36
+CustomerShipZip
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+37
+CustomerShipPhone
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+38
+Custom1
+ 
+FALSE
+ dataline.Split("|")(18).Trim
+ 
+ Date From
+ 
+Invoice Header
+39
+Custom2
+ 
+FALSE
+ dataline.Split("|")(17).Trim
+ 
+ Date To
+ 
+Invoice Header
+40
+Custom3
+Y
+FALSE
+dataline.Split("|")(109).Trim
+String
+Days
+10
+Invoice Header
+41
+Custom4
+Y
+FALSE
+dataline.Split("|")(127).Trim
+String
+Current Due
+10
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Start Index 93, Length 10
+String
+Previous Due
+10
+Invoice Header
+43
+Custom6
+Y
+FALSE
+String
+8
+Invoice Header
+44
+Custom7
+Y
+FALSE
+String
+8
+Invoice Header
+45
+Custom8
+Y
+FALSE
+String
+r
+3
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Start Index 73, Length 10
+String
+Gets BalanceDue
+10
+Invoice Header
+102
+Custom19
+Y
+FALSE
+String
+40
+Invoice Header
+103
+Custom20
+Y
+FALSE
+dataline.Split("|")(1).Trim
+String
+Screen Messages 1
+30
+Invoice Header
+104
+Custom21
+Y
+FALSE
+dataline.Split("|")(2).Trim
+String
+Screen Messages 2
+30
+Invoice Header
+105
+Custom22
+Y
+FALSE
+Stadataline.Split("|")(3).Trim
+String
+Screen Messages 3
+30
+Invoice Header
+106
+Custom23
+Y
+FALSE
+dataline.Split("|")(4).Trim
+String
+Screen Messages 4
+28
+Invoice Header
+107
+Custom24
+Y
+FALSE
+dataline.Split("|")(110).Trim
+String
+If Paid After AM
+2
+Invoice Header
+108
+Custom25
+Y
+FALSE
+dataline.Split("|")(156).Trim
+String
+Past Due Date
+10
+Invoice Header
+109
+Custom26
+Y
+FALSE
+String
+10
+Invoice Header
+110
+Custom27
+Y
+FALSE
+String
+1
+Invoice Header
+118
+Custom35
+Y
+FALSE
+String
+10
+Invoice Header
+119
+Custom36
+Y
+FALSE
+6
+Invoice Header
+120
+Custom37
+Y
+FALSE
+20
+Invoice Header
+121
+Custom38
+Y
+FALSE
+8
+Invoice Header
+122
+Custom39
+Y
+FALSE
+5
+Invoice Header
+123
+Custom40
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+124
+Custom41
+Y
+FALSE
+8
+Invoice Header
+125
+Custom42
+ 
+FALSE
+ 
+Invoice Header
+126
+Custom43
+ 
+FALSE
+ 
+Invoice Header
+127
+Custom44
+Y
+FALSE
+3
+Invoice Header
+128
+Custom45
+Y
+FALSE
+19
+Invoice Header
+129
+Custom46
+Y
+FALSE
+30
+Invoice Header
+130
+Custom47
+Y
+FALSE
+ 
+Invoice Header
+131
+Custom48
+Y
+FALSE
+ 
+Invoice Header
+132
+Custom49
+Y
+FALSE
+ 
+Invoice Header
+133
+Custom56
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom50
+Y
+FALSE
+7
+ 
+ 
+Custom51
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom52
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom53
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom54
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom55
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom57
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom58
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom59
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom60
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom61
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom62
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom63
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom64
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom65
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom66
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom67
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom68
+Y
+FALSE
+ 
+Invoice Header
+ 
+Custom70
+Y
+FALSE
+50
+Invoice Header
+ 
+Custom72
+Y
+FALSE
+30
+Invoice Header
+ 
+Custom73
+Y
+FALSE
+8
+Invoice Header
+ 
+Custom74
+Y
+FALSE
+40
+Invoice Header
+ 
+Custom80
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom81
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom82
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom83
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom85
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom86
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom87
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom88
+Y
+FALSE
+3
+Invoice Header
+ 
+Custom89
+Y
+FALSE
+8
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+ 
+Invoice Header
+317
+PaymentExpirationDate
+ 
+FALSE
+ 
+Invoice Header
+318
+PaymentExpirationMessage
+ 
+FALSE
+ 
+Invoice Header
+319
+Echo1
+Y
+FALSE
+ 
+Invoice Header
+320
+Echo2
+ 
+FALSE
+ 
+Invoice Header
+321
+Echo3
+ 
+FALSE
+ 
+Invoice Header
+322
+Echo4
+ 
+FALSE
+ 
+Invoice Header
+323
+Echo5
+ 
+FALSE
+ 
+Invoice Header
+324
+Echo6
+ 
+FALSE
+ 
+Invoice Header
+325
+Echo7
+ 
+FALSE
+ 
+Invoice Header
+326
+Echo8
+ 
+FALSE
+ 
+Invoice Header
+327
+Echo9
+ 
+FALSE
+ 
+Invoice Header
+328
+Echo10
+ 
+FALSE
+ 
+Invoice Header
+339
+PDFToken
+ 
+FALSE
+ 
+Invoice Header
+340
+PDFFileName
+ 
+FALSE
+ 
+Invoice Header
+342
+InvoiceGroupGUID
+ 
+FALSE
+ 
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+1
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+10
+Invoice Header
+375
+Active
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+407
+PastDue
+ 
+FALSE
+ 
+ 
+ 
+ 
+Invoice Header
+58
+RowType
+ 
+TRUE
+ 
+ 
+ 
+ 
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+dataline.Split("|")(0).Trim
+String
+Retrieves the Account Number
+12
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Sdataline.Split("|")(6).Trim
+String
+Retrieves the Customers Name
+30
+Customer Record
+61
+Address1
+Y
+FALSE
+dataline.Split("|")(112).Trim
+String
+Retrieves the Address1.
+If the length of dataLine(0).Substring(239,30) is greater than or equal to 0 and also if dataLines(0).Substring(269, 30).Trim.Length is greater than 0, return dataLine.Substring(269, 30)
+Else If the length of dataLine(0).Substring(239,30) is greater than 0 and also if dataLines(0).Substring(269, 30).Trim.Length is equal than 0, return dataLine.Substring(239, 30)
+Else when it’s neither conditions, just return dataLines(0).Substring(239, 30).Trim to get Address1.
+ 
+Customer Record
+62
+Address2
+N
+FALSE
+dataline.Split("|")(113).Trim
+String
+Return String.Empty
+0
+Customer Record
+63
+City
+Y
+FALSE
+dataline.Split("|")(114).Trim
+String
+Retrieves the City
+28
+Customer Record
+64
+State
+Y
+FALSE
+dataline.Split("|")(115).Trim
+String
+Retrieves the State
+2
+Customer Record
+65
+Zip
+Y
+FALSE
+        If Len(dataline.Split("|")(116).ToString.Replace("-", "").Trim) >= 5 Then
+            Return Left(dataline.Split("|")(116).ToString.Replace("-", "").Trim, 5).Trim
+        Else
+            Return dataline.Split("|")(116).ToString.Replace("-", "").Trim
+        End If
+String
+Retrieves the Zip Code
+10
+Customer Record
+66
+Phone
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+67
+EmailAddress
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+68
+CustomerVATNumber
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+69
+RegistrationValue
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+356
+BlockPaymentsCC
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+357
+BlockPaymentsEFT
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+371
+CustomerName2
+ 
+FALSE
+ 
+ 
+ 
+ 
+ 
+372
+Pin
+ 
+FALSE
+ 
+ 
+ 
+ 
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+dataline.Split("|")(0).Trim.Replace("-", "")
+String
+Retrieves the Account Number from datalines and replaces any text “-” to ““
+12
+Customer Record
+409
+Active
+ 
+FALSE
+ 
+Customer Record
+70
+RowType
+ 
+TRUE
+ 
+Invoice Detail
+71
+ProductID
+ 
+FALSE
+ 
+Invoice Detail
+72
+Description
+Y
+FALSE
+12
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+3
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+3
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+3
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+8
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+8
+Invoice Detail
+88
+CustomField6
+ 
+FALSE
+ 
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+6
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+8
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+3
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+11
+Invoice Detail
+208
+CustomField11
+ 
+FALSE
+ 
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+8
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+8
+Invoice Detail
+ 
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension:
+File Naming Convention:
+File Delimiter:
+Specification:
+Sample File:
+SFTP File Path:
+File Transfer Frequency:
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+306
+BillerGuid
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+307
+ThirdPartyFileReference
+ 
+FALSE
+ 
+ 
+ 
+ 
+File Header
+308
+FileCreationDate
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+309
+AdjustmentCount
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+310
+TotalAdjustmentAmount
+ 
+TRUE
+ 
+ 
+ 
+ 
+File Header
+311
+RowType
+ 
+TRUE
+ 
+ 
+ 
+ 
+Adjustment Record
+312
+InvoiceNumber
+ 
+FALSE
+ 
+ 
+ 
+ 
+Adjustment Record
+313
+AccountNumber
+ 
+TRUE
+Row(1)
+ 
+Adjustment Record
+314
+AdjustmentAmount
+ 
+TRUE
+Row(8)
+ 
+Adjustment Record
+316
+AdjustmentTypeID
+ 
+TRUE
+Balance differential
+ 
+Adjustment Record
+341
+AdjustmentDesc
+ 
+FALSE
+Misc Payment/Adjustment
+ 
+Adjustment Record
+343
+AdjustmentDate
+ 
+FALSE
+Row(28) or Today.Date
+ 
+Adjustment Record
+351
+BillerInstallmentNumber
+ 
+FALSE
+ 
+Adjustment Record
+352
+BillerBillYear
+ 
+FALSE
+ 
+Adjustment Record
+353
+BillerInvoiceNumber
+ 
+FALSE
+ 
+Adjustment Record
+354
+MatchMethodID
+ 
+FALSE
+Newest
+ 
+Adjustment Record
+370
+InvoiceTypeID
+ 
+FALSE
+ 
+Adjustment Record
+ 
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: TXT
+File Naming Convention:
+File Delimiter:
+Specification:
+Sample File:
+SFTP File Path:
+File Transfer Frequency:
+Field
+Data Type
+Character Limits
+Format
+Values
+ Account Number
+String
+20
+Row(0).ToString.PadRight(20, " ")
+Payment Amount
+ String
+10
+ Row(1).ToString.Replace(".", "").PadLeft(10, "0")
+Payment type
+String
+Row(2)
+Payment Date
+String
+row(4).ToString("MM/dd/yyyy")
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire
+AllowPartialPayments
+ 
+AutoPayCollectionDate
+ 
+BalanceForward
+ 
+CreditCardServiceFee
+ 
+FirstNotifyRequestedDate
+ 
+InvoiceDate
+ 
+InvoiceDueDate
+ 
+InvoiceFormatGuid
+ 
+InvoiceTypeID
+ 
+LateFeeDate
+ 
+LocationReference
+ 
+MinimumAmountDue
+ 
+PaymentExpirationDate
+ 
+PaymentExpirationMessage
+ 
+PromptPayExpirationDate
+ 
+RegistrationValue
+ 
+SecondNotifyRequestedDate
+ 
+ThirdNotifyRequestedDate
+ 
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ 
+ 
+ 
+ 
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ URL:/spaces/IM/pages/2108293142/SouthernSoftware

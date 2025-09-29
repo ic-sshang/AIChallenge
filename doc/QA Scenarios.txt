@@ -1,0 +1,91 @@
+EBPP-8217
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Scenarios 1 : Schedule batch file for weekend date and confirm receipt of appropriate response from Braintree.
+Scenarios 2 : Schedule batch file for holiday date and confirm receipt of appropriate response from Braintree.
+Scenarios 3 : Schedule batch file for week date and confirm receipt of appropriate response from Braintree.
+2. 
+EBPP-6268
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+3. 
+EBPP-6243
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Scenarios 1 :
+Day 1, Create a trans of sales for $2000. Ic Net = 0(2000 paid to Merchant)
+Day 2, Create a trans of sales for $1000 and refund of $2000. IC Net = -1000 (to hold at IC)
+Day 3, Create a trans of sales for $500. Since sales is less than the Net. we will calculate balance and now the Net will be -500
+Day 4, Create a trans of $2000. since IC Net is less than sales. 2000 will be given to Merchant without any calculations. IC Net still -$500
+4. 
+EBPP-6017
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Scenarios 1 : Enable biller with payPal chargeback fees via CRM portal and create invoice to validate chargeback fees 
+Scenarios 2 : Disable biller with payPal chargeback fees via CRM portal and create invoice to validate chargeback fees not present
+5.
+EBPP-4635
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+CC Payment-
+Scenarios 1.Call CardSalesValuted API and add reciept guid and payment details in the request and check the response and DB gets updated with same details.
+Scenarios 2:CallCardSalesUnvaluted API and add reciept guid and payment details in the request and check the response and DB gets updated with same details.
+ACH Payment-
+Scenarios 3.Call ACHSaleValuted API and add reciept guid and payment details in the request and check the response and DB gets updated with same details.
+Scenarios 4.Call ACHSaleUnvaluted API and add reciept guid and payment details in the request and check the response and DB gets updated with same details.
+6. 
+EBPP-4619
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+SUCCESS
+:
+Scenario 1:Call the funding batch file with valid bank account details and verify no error in the file for IC subscriber. Validate the email and slack alert should get generated.
+Scenario 2:Call the funding batch file with valid bank account details and verify no error in the file for PSN subscriber. Validate the email alert should get generated.
+Insufficient Funds:
+Scenario 3:Call the funding batch file account details with zero balance for IC subscriber and verify the insufficient fund error in the response file and retry the same call for 2 times and validate the terminal got deactivated and also validate the email and slack alert should get generated.
+Scenario 4:Call the funding batch file account details with zero balance for PSN subscriber and verify the insufficient fund error in the response file and retry the same call for 2 times and validate the terminal got deactivated and also validate the email alert should get generated.
+System Error:
+Scenario 5:Call the funding batch file account details with system error for IC subscriber and verify the system error in the response file and(
+ retry should confirm with Martin or Ola?)
+ and also validate the email and slack alert should get generated.
+Scenario 6:Call the funding batch file account details with system error for PSN subscriber and verify the system error in the response file and(
+ retry should confirm with Martin or Ola?)
+ and also validate the email alert should get generated.
+Invalid Bank Account:
+Scenario 7:Call the funding batch file account details with invalid account details for IC subscriber and verify the error in the response file and also validate the email and slack alert should get generated.
+Scenario 8:Call the funding batch file account details with invalid account details for PSN subscriber and verify the error in the response file and also validate the email alert should get generated.
+7. 
+EBPP-3163
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Scenario 1: 
+When there is a variance for hyperwallet morning balance is more than zero validate the refresh button should be disabled
+.
+Scenario 2: When hyperwallet morning balance is zero, refresh button should be enabled.
+8. 
+BRAIN-75
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Scenario 1 :
+Create a transc for total bill amount $102 ($100 as invoice amount + $2 convenience fee
+As a consumer, apply for full refund to IC
+Result : 
+IC to take $100 from merchant and give it to consumer. $2 not to be included in refund to consumer
+Scenario 2:
+Create a transc for total bill amount $102 ($100 as invoice amount + $2 convenience fee
+As a consumer, apply for full refund to IC
+Consumer cancels the refund after applying for refund
+Result : IC to not process the refund…
+Scenario 3:
+repeat T1 for PSN subscriber
+Scenario 4:
+repeat T1 for PSN subscriber
+ URL:/spaces/EN/pages/2557018113/QA+Scenarios

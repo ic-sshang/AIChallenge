@@ -1,0 +1,58 @@
+none
+Current Setup
+See 
+1.5 Payer Portal - 15PP
+ for visualization and documentation of current setup.
+Basically with the current setup, all of the React pages are handled via 
+redirects
+.
+The page redirects to a different URL path “
+portal/UI
+” instead of “
+portal/
+“
+Eventually, with each page moved over to React we would decommission all of the redirecting and redo the authentication structure so we’re not piggybacking off of the MyIIS session anymore.
+This repo would at that point become the official/primary payer or biller repo.
+Martin suggests importing the new design-system repository as a federated module where it’s dynamically imported so we can 
+avoid having to rebuild every other repository when we make a change to a button.
+Action Items:
+Invite Martin to the next developer meeting we have on the design system.
+Martin is interested in helping us in general and also helping us decide what pages to start designing in React first – very interested in helping make those priority calls.
+Martin was a little concerned with the UI being jarringly different between React and non-React pages. Something to be conscious of.
+Research whether we can use the advantages of the new React19 compiler alongside the federated module setup (we should be able to though 
+ )
+Also look into Nextjs’ routing compatibility
+Module Federation - Quick Rundown
+Module Federation is a new feature introduced in Webpack 5, but its history dates back to 2017. At that time, the Webpack team began exploring a way to share code between multiple applications.
+https://webpack.js.org/concepts/module-federation/
+ 
+Module Federation is an architectural pattern for the decentralization of JavaScript applications (similar to 
+micro services
+ on the server-side).
+It allows you to share code and resources among multiple JavaScript applications (or 
+micro-frontends
+). This can help you:
+Reduce code duplication
+Improve code maintainability
+Lower the overall size of your applications
+Enhance the performance of your applications
+Module Federation is suitable for the following scenarios:
+Large Applications
+: For large applications, you can break the application into multiple micro-frontends and use Module Federation to share code and resources between them.
+Microfrontend Architecture
+: Module Federation is an ideal tool for building microfrontend architectures.
+Multi-team Development
+: Module Federation can assist multiple teams in collaboratively developing large applications.
+ 
+Use cases
+https://webpack.js.org/concepts/module-federation/#components-library-as-container
+ 
+ 
+Components library as container 
+ 
+Many applications share a common components library which could be built as a container (separate build) with each component exposed. Each application consumes components from the components library container. Changes to the components library can be 
+separately deployed without the need to re-deploy all applications
+. *The application automatically uses the up-to-date version of the components library.
+https://microfrontends.com/
+ 
+ URL:/spaces/PRODUCT/pages/3548151819/Meeting+Notes+on+the+Current+React+Setup+Module+Federation+and+Action+Items

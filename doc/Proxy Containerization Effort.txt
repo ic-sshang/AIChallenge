@@ -1,0 +1,111 @@
+1
+6
+false
+disc
+list
+true
+  Exposing Services
+Outcomes from meeting on 2025-03-04:
+  First choice is to expose with the existing Nginx ingress controller
+see 
+docs
+ had a negative experience with this in the past. Looking to hear more about that and have a backup plan prepared in case this doesn’t work out for us
+We choose this option 
+PLAT-2076
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+  Second choice is to expose with a new Azure load balancer
+Each proxy service would be exposed in Kubernetes using a load balancer type service (each will have a separate IP)
+Single client-facing load balancer will have each of those K8s load balancers registered as backend pools
+Client-facing load balancer will have a load balancing rule to route traffic from port X to a specific backend service
+ Upgrading to Dotnet Core
+Outcomes from meeting on 2025-03-04:
+WCF is not supported in Dotnet >= 5
+uses 
+gRPC
+ instead
+Bring WCF apps to the latest .NET with CoreWCF and Upgrade Assistant - .NET Blog
+GitHub - CoreWCF/CoreWCF: Main repository for the Core WCF project
+Outcome: need to POC a conversion of one proxy to dotnet core using CoreWCF. Evaluation should give us a sense of the time, effort, and risk involved in making this upgrade. That knowledge will allow us to make a decision. TBD on who will do this POC and when. Ideally, an app team would own these applications and make this POC. Nobody owns proxies today; might need to be Platform/Architecture that runs this. Could be Build Breakers.
+Upgrading to dotnet core is not a showstopper. Worst-case scenario, we just go ahead and run the containerization using Windows containers.
+  We are not upgrading to .NET Core for initial K8s Hosted Rollout.
+ Which VNet to Land the K8s Cluster
+We have discovered that the Proxy Azure Load Balancer requires the Backends it balances traffic for to be in the same VNet and Location as the Load Balancer Front End IP.  Therefore we have to decide which path forward.
+Options
+Put the K8s Cluster in the Legacy VNets
+InternalNetwork
+Preview can span 
+10.0.32.0/24
+ thru 
+10.0.34.0/24
+Prod can span 
+10.0.58.0/24
+ thru 
+10.0.60.0/24
+vnet-east-infraQAcommon-dev
+SBX can span 
+10.31.2.0/24
+ thru 
+10.31.4.0/24
+DEV can span 
+10.31.5.0/24
+ thru 
+10.31.7.0/24
+IAT can span 
+10.31.8.0/24
+ thru 
+10.31.10.0/24
+QAR can span 
+10.31.11.0/24
+ thru 
+10.31.13.0/24
+Move the Proxy VMs to the new Proxy VNet we created per our original plan before this discovery.
+We want to limit the scope of new things on our critical services that have a heavy traffic load.
+Some type of NAT'ing in the Legacy Network to the Proxy
+Too much added complexity
+Switch to use App Gateway 
+In Preview
+, probably do not want to rely on Preview Version.
+Would only be used for the Rollout, and would then be destroyed after we move all traffic to K8s hosted Proxies.
+We should not use Preview Feature for Critical Services
+A Load Balancer Type that allows for Backends in different VNets
+We want to limit the scope of new things on our critical services that have a heavy traffic load.
+Follow Up
+After exploring the specifics of the implementation of the 
+Put the K8s Cluster in the Legacy VNets
+ decision made above and getting a better understanding of the tech debt ramifications (dealing with a Network with no Private DNS support, the amount of unique RBAC the Infrastructure Service Principals will need, having to put Sandbox Cluster in DevTest or have Sandbox Cluster in its own VNet in Sandbox Subscription or setting up some type of Legacy VNet parity in Sandbox) it is my opinion this option is not as a desirable option as I originally thought.  I think a better option would be to wait until all the Proxies are deployed to a given Environment, then start cutting over Server by Server as a Canary Rollout.  I think this actually has some advantages as it would allow us easily to understand if the Errors we see are related to the K8s Hosted Proxy Services as the Error Profiles for the Server(s) cutover would be very different from the other Servers that were not cutover which would be very valuable when running down Errors once the Canary Rollout begins.
+ Follow Up Pivot
+Commit to the end of Second Month (end of August) in Q3 for all Proxy Services ready to move into QAR Testing and then promote up when all successful  
+ 
+ 
+ 
+We will go back to the new Spoke for the Proxy Clusters and do single server cutover to all 4 new K8s Histed Services at the same time. 
+ 
+ 
+Canary Rollout Strategy
+Blockers to start the Rollout
+No response for long running operations more than 5 minutes
+Observed in the following Environments using the WCF Testing Tools
+In DEV
+ AVD to VM Hosted does not work for long running
+ App Server to VM Hosted does work for long running
+ AVD to K8s Hosted does not work for long running
+ App Server to K8s Hosted 
+ rechecking
+ VM on itself does work for long running
+ K8s on itself 
+ testing
+In PRD
+ AVD to VM Hosted does work for long running
+ App Server to VM Hosted does work for long running 
+ and 
+ 
+  AVD to K8s Hosted does not work for long running
+ The Load Balancer Timeout change was not applied 
+ 
+ App Server to K8s Hosted 
+ and 
+ to work together to test this
+Phase 1
+ URL:/spaces/platform/pages/4083417108/Proxy+Containerization+Effort

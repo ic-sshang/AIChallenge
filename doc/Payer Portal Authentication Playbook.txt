@@ -1,0 +1,28 @@
+This activity must be done from a development term server.  Internal employees should use 10.0.5.6.   Contractors should use 10.0.25.4.   Right now the session API in MyIIS is deployed to devtest2 only,  be sure to target that webserver.  
+Biller Options
+Biller options (139) will be used to configure a biller to use the new 1.5 UX for Pay By Text pages in the Payer Portal. The option is disabled by default and must be enabled for a target biller in order to use the new UI.  If this is a new biller that has not be used for testing please let the development team know so the proper DB changes can be applied to that biller shard.  
+Right now Biller 2002, 500, and 265 have the required DB changes.
+ 
+Direct Login
+Login Page
+https://devtest2.invoicecloud.com/portal/(S(drueorbn1xrjqoo3z22nwupg))/2/customerlogin.aspx?billerguid=70a8e4cd-e9e9-42c6-ab94-6a1c397fe6d6
+Username: 
+E.Epifanio@noplace.com
+Password: InvoiceCloud#1
+CRM
+Log into the CRM
+Biller Users
+Lookup biller and navigate to biller users
+Note: Be sure to select a biller that has the Payer Portal biller option enabled.   Biller 500 has this enabled in the dev test environment. 
+Biller’s Customer Search
+Login as a biller user and navigate Search >> Customers in the top level menu.
+Search for a customer, you can use “%%%” to look up all customers.
+Note: The user you select can only have one active session in the Payer Portal from a given IP Address.
+Customer Login
+Click the computer icon on the target user record (located to the far right)
+Pay By Text Page
+Navigate to the Pay By Text page by selecting 
+My Profile >> Pay by Text
+ in the top level menu
+You can also review the sessions signed identity JSON API response by going directly to the CustomerReactAuth.aspx page
+ URL:/spaces/EN/pages/2802941986/Payer+Portal+Authentication+Playbook

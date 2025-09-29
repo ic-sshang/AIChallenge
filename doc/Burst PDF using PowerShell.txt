@@ -1,0 +1,82 @@
+Purpose
+: This document is meant as a 
+step-by-step guide
+ to run the PowerShell script you provided. This script splits a PDF file into separate pages using a library called 
+iTextSharp
+.
+Script File (latest version available in the 
+scripts repo
+):
+What You’ll Need
+A 
+Windows PC
+PowerShell
+ (comes pre-installed on Windows)
+An internet connection (for the first-time setup)
+A PDF file you want to split
+Step-by-Step Instructions
+Step 1: Install iTextSharp (One-Time Setup)
+Open 
+PowerShell as Administrator
+:
+Click the 
+Start Menu
+, type 
+PowerShell
+, right-click it, and choose 
+Run as administrator
+.
+Run this command to install the iTextSharp library:
+Install-Package iTextSharp -Source https://www.nuget.org/api/v2 -Scope CurrentUser
+If prompted to trust the source, type 
+Y
+ and press 
+Enter
+.
+📝 This step only needs to be done once.
+Step 2: Prepare Your PDF File
+Place your PDF file in a folder you can easily access, like 
+C:\Users\YourName\Documents\PDFs
+.
+Note the 
+full path
+ to the file. For example:
+   C:\Users\YourName\Documents\PDFs\example.pdf
+
+🧾 Step 3: Update the Script
+Open the script using 
+Notepad or Notepad++
+, and make these changes:
+Replace the path in this line with the actual path to your PDF:
+  $inputFile = "C:\Users\YourName\Documents\PDFs\example.pdf"
+
+Make sure the path to the iTextSharp DLL matches where it was installed. It’s usually something like:
+  Add-Type -Path "C:\Users\YourName\.nuget\packages\itextsharp\5.5.8\lib\itextsharp.dll"
+
+Save the file with a 
+.ps1
+ extension, for example:
+split-pdf.ps1
+Step 4: Run the Script
+Open 
+PowerShell
+ (you don’t need admin this time).
+Navigate to the folder where your script is saved. For example:
+   cd "C:\Users\YourName\Documents\PDFs"
+
+Run the script:
+   .\split-pdf.ps1
+
+Step 5: Check the Output
+The script will create new PDF files in the same folder, each containing one page from the original PDF.
+Files will be named like 
+example.1.pdf
+, 
+example.2.pdf
+, etc.
+Troubleshooting Tips
+File Not Found?
+ Double-check the file path and make sure it’s correct.
+Permission Denied?
+ Make sure you have access to the folder and file.
+ URL:/spaces/DS/pages/4305420700/Burst+PDF+using+PowerShell

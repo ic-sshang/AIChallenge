@@ -1,0 +1,227 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+complete
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+N/A
+Summary
+Summary
+Details
+Software Partner Name
+Cogsdale
+Software Product Name
+Cogsdale
+Software Cashiering System
+Cashiering
+Supported Versions
+IC Integration Version 3
+Three integration versions supported (variances in RTDR only). The functionality listed below is what is added in the applicable version:
+Not supported / No longer implemented
+Supported / No longer implemented
+Standard RTDR functionality to update Balance Due
+If the balance is not updated due to a newer invoice on the account that IC has not received yet, IC will display an error message “unable to update balance, new bill has been generated"
+Supported / Currently implementing
+Added RTDR functionality for Past Due, Block CC and Block ACH flag updates.
+If the balance is not updated due to a newer invoice on the account that IC has not received yet, IC will display an error message “unable to update balance, new bill has been generated"
+Integration Requirements and Pre-Requisites
+Each Cogsdale biller must complete the Cogsdale prerequistes prior to Cogsdale installing the web services that Invoice Cloud uses for Data Pump and RTDR.
+Cogsdale SERVER Pre-requisites (EBPP integration): 
+Minimum of GP 2013 and CSM Build 43.
+Functional Prerequisite
+ - The Deposit Receivables option is only supported for deposit payments.
+Other Cogsdale Pre-Requisites (Cogsdale will provide to biller):
+Web server running Microsoft Server 2008 or better with IIS7 or better
+An available external IP address and Port with a matching SSL certificate
+"Server Feature .NET Framework 4.5 Features > WCF Services > HTTP Activation must be installed on the Web server
+On Server 2008 only Framework 3.5 is available to set WCF. This needs to be done before .NET Framework 4.5.2 Installation"
+.NET Framework 4.5.2 Required
+"Web Deploy 3.5 Installed on IIS: 
+http://www.iis.net/downloads/microsoft/web-deploy
+ 
+Use the Web Platform Installer to install Web Deploy: 
+http://www.microsoft.com/web/downloads/platform.aspx
+ "
+Download Integration components from Cogsdale ftp site 
+https://sftp.cogsdale.com/thinclient/
+ CogsdaleShared/CSM Integration Component
+Cogsdale Pre-requisites (CloudPOSConnect): 
+Minimum of GP 2013 and CSM 29.
+.Net framework 4.6 or better.
+Vertical
+GUB
+Sample Biller Implementation
+636, 801, 661
+1436 (using multiple invoice type IDs)
+Planning
+Test Portals
+IC Hosted Test Portal - 
+Partner Hosted Test Portal
+Biller Test Portal - Required - Cogsdale has requested that each biller have a test portal created along with a prod portal.
+Rules of Engagement
+None - see contacts below
+Timeline
+~60-90 days
+Configuration
+Invoice Types
+The integration supports multiple Invoice Type ID's by Cogsdale adding an additional field to the invoice file called ‘InvoiceTypeID’. This field is not required and if it’s not provided, we will assume 42
+ (ex: BID 1436)
+Virtual Site
+Required Options
+Enable/Disable any appropriate settings related to SSO if the implementation uses SSO.
+ID
+Option Description
+Details
+50
+Cogsdale Account Number Format
+By default, the account number format is Customer # - Location #. Enable this option if you want the account number to be Location # - Customer #
+This option is 
+Off
+ by default.
+Account number consists of the customer and account number. Normally it is separated with a dash.
+Account Numbers and Customer Numbers may be used interchangeably for each biller.
+Advanced Setting 48 will reverse Customer and Account numbers in the Invoice Cloud Account Number field.
+108
+Disable Email Address Update from BIF
+If enabled, invoice file (BIF) imports will not update the customer email address. However, new emails for customers without an email address will still be inserted.
+Enable – if required for integration
+112
+Prevent Update of Empty Account Owner Login Email After Payment
+Note: 
+Enable this when using Allow CC Email Updates, Prevent Email Update, and Allow Unregistered Updates.
+Enable - required if Option 131 is enabled
+131
+Update Email Address After Payment
+By default, we would allow the owner’s email addresses to be updated in the payment route if the owner’s email address is empty (
+Allow email updates
+).
+Allow CC email updates:
+ Update the CC email address when a different email is entered during the payment route. (Never update the main email address).
+Prevent email updates:
+ Prevent owner and CC email addresses from being overridden.
+Allow unregistered updates:
+ will update every time the customer is not registered.
+The default value for this Option is: 
+"Allow email updates"
+Select appropriate action
+134
+Send email(s) to the payer's email address only. For the Virtual Site only.
+When this option is enabled, emails will only be sent to the payer's email address (email entered in the payment route).
+Enable – if required for integration
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Cogsdale
+Upon request
+The data is unique/specific to each biller
+Prior to receiving files from Cogsdale, the portal must be configured to allow invoice files to load properly
+Account Number format (ex: 
+Customer-Account Number format
+)
+RTDR API URL (prod)
+Cogsdale
+Upon request
+RTDR Passcode/Key (prod)
+Cogsdale
+Upon request
+RTDR API URL (test)
+Cogsdale
+Upon request
+RTDR Passcode/Key (test)
+Cogsdale
+Upon request
+DataPump API URL (prod)
+Cogsdale
+Upon request
+DataPump Passcode/Key (prod)
+Cogsdale
+Upon request
+DataPump API URL (test)
+Cogsdale
+Upon request
+DataPump Passcode/Key (test)
+Cogsdale
+Upon request
+SSO URL
+Cogsdale
+Upon Request
+Provide IT the SSO login/logout info for advanced setting configuration
+Bill Presement
+See Details
+See Details
+Remote Linking to Cogsdale Web Service does not require an additional URL and is not configured in CRM Advanced Settings. Remote Linking is completed as part of the integration for Cogsdale. This service uses the same configuration as the rest of the real-time aspects of the integration.
+Remote Linking and/or PDF Extraction to PDF Vendor can be supported and handled by implementations
+Web service version number
+Cogsdale
+1, 2 or 3
+Service Version 3 functionality: "Cash Only" flag on Cogsdale will automatically update the block flags on IC
+Whitelisting IP Addresses
+Invoice Cloud
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Project Assignment 
+BID
+Project Assignment 
+Invoice Format ID
+Project Assignment 
+Invoice Format GUID
+Project Assignment 
+Biller GUID TEST
+Project Assignment 
+WebService Key TEST
+Project Assignment 
+Biller GUID PROD
+Project Assignment 
+WebService Key PROD
+Project Assignment 
+Invoice Type ID
+Project Assignment 
+Products Biller Signed Up For
+Project Assignment 
+Biller Contact Information
+Project Assignment 
+Contacts
+Name
+Title
+Phone
+Email
+Support
+800-533-9690
+csmsupport@cogsdale.com
+Dan Kilgallon
+Support Specialist
+800-533-9690 x62076
+DKilgallon@cogsdale.com
+ URL:/spaces/IM/pages/2241953793/Harris+Cogsdale+Implementation+Details

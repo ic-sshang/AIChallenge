@@ -1,0 +1,49 @@
+Component
+Notes
+Priority (H/M/L)
+CRM and MyIIS
+Legacy Web Site Visual Studio solution type.  Creates issues with the BIN folder, assemblies, and references.
+Low
+.Net Framework EOL
+We have several projects that are using EOL runtimes or runtimes that are nearing EOL.
+High
+DevTestNN VM Web Servers
+Developers do not have RDP access to review / troubleshoot IIS deployment / configuration issues.
+Low
+Biller Master / Shards DBs 
+There is only one non-production DB / server for Master and Shards.
+Low
+Gateway DBs
+There is a test DB catalog hosted on the production DB server.   This prevents segmentation. 
+High
+Skybot Jobs 
+A handful of multi stepped jobs use local disk storage with the assumption that the next step will be able to access the same local storage.  This prevents jobs from being able to freely move to app servers.
+Low
+IC.Database Library
+Old versions of this library are in the IC nuget feed.  Old versions allow misconfigured software to connect to production databases.
+High
+Managed Identity
+We have code repositories that have not implemented MI for connecting to Key Vaults or Databases.  This becomes a blocker when a enhancement needs to be made in these repositories.
+MI provisioning needs to be formalized and tested.
+Should we still use MI for database access?
+MI automation 
+High
+ICPaymentProcessingAPI
+Mono Repos
+Low
+Pay by Text
+Uses old pull model to process data.  Known scalability problems.  (SmsNotifications, Sms)
+Live/Non-Invoice email notifications
+Uses old pull model process data.  Known scalability problems. (EmailQueueProcessing)
+Online Bank Direct
+Uses old pull model to process data. Known scalability problems. (MC_RPPS)
+DataPump
+Uses old pull model to process data.  Known scalability problems (DataPump)
+Batch Settlement
+Scalability and resiliency problems.  (AchAutoClose, CreditCardAutoClose, ICBatchCloseProcessor)
+Payment Processing
+Resiliency problems (CTP)
+Biller Creation / Wizard
+Polls table 
+Does not run in development
+ URL:/spaces/EA/pages/3086385284/Baseline+Gaps+-+BLA

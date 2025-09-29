@@ -1,0 +1,54 @@
+Overview of Kubernetes
+Kubernetes
+ is an open-source platform designed to automate the deployment, scaling, and management of containerized applications. It provides a robust and flexible framework for running applications in a distributed environment, ensuring high availability, scalability, and resilience.
+Key Concepts
+Cluster
+: A Kubernetes cluster consists of a set of worker machines, called nodes, that run containerized applications. The cluster is managed by a control plane, which coordinates all activities within the cluster.
+Node
+: A node is a worker machine in Kubernetes, which can be a virtual or physical machine. Each node runs pods and is managed by the control plane.
+Pod
+: The smallest and simplest Kubernetes object, a pod represents a single instance of a running process in your cluster. Pods can contain one or more containers that share the same network namespace and storage.
+Service
+: A Kubernetes service is an abstraction that defines a logical set of pods and a policy for accessing them. Services enable communication between different parts of your application and can expose your application to external traffic.
+Deployment
+: A deployment provides declarative updates to applications. It manages the creation and scaling of pods and ensures that the desired number of pod replicas are running at any given time.
+ConfigMap
+: A ConfigMap is used to store configuration data in key-value pairs. It allows you to decouple configuration artifacts from image content to keep containerized applications portable.
+Secret
+: Similar to ConfigMap, a Secret is used to store sensitive information, such as passwords, OAuth tokens, and SSH keys. Secrets are encoded and can be mounted as files or exposed as environment variables.
+Ingress
+: An Ingress manages external access to services within a cluster, typically HTTP and HTTPS. It provides load balancing, SSL termination, and name-based virtual hosting.
+Kubernetes Architecture
+The Kubernetes architecture consists of the following main components:
+Control Plane
+: The control plane manages the Kubernetes cluster. It consists of several components:
+API Server
+: The API server is the front end of the Kubernetes control plane. It exposes the Kubernetes API and processes REST operations.
+Etcd
+: A consistent and highly-available key-value store used as Kubernetes' backing store for all cluster data.
+Controller Manager
+: Runs controllers that regulate the state of the cluster, such as the node controller, replication controller, and endpoints controller.
+Scheduler
+: Assigns pods to nodes based on resource availability and other constraints.
+Nodes
+: Nodes are the worker machines in a Kubernetes cluster. Each node runs the following components:
+Kubelet
+: An agent that runs on each node and ensures containers are running in a pod.
+Kube-proxy
+: A network proxy that runs on each node and maintains network rules for pod communication.
+Container Runtime
+: The software responsible for running containers, such as Docker or containerd.
+Fundamental Components
+Namespaces
+: Namespaces provide a way to divide cluster resources.
+Volumes
+: Volumes are used to persist data across pod restarts. 
+Labels and Selectors
+: Labels are key-value pairs attached to Kubernetes objects, such as pods and services. Selectors are used to identify and group objects based on their labels.
+Annotations
+: Annotations are key-value pairs used to attach arbitrary non-identifying metadata to objects. They are useful for storing information that can be used by tools and libraries.
+ReplicaSets
+: A ReplicaSet ensures that a specified number of pod replicas are running at any given time. It is often used by deployments to maintain the desired state of applications.
+StatefulSets
+: StatefulSets are used to manage stateful applications. They provide guarantees about the ordering and uniqueness of pods, making them suitable for applications that require stable network identities and persistent storage.
+ URL:/spaces/PMK/pages/4152983554/Kubernetes+Basics

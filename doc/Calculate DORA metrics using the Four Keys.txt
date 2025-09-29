@@ -1,0 +1,73 @@
+DevOps Performance
+The DevOps research and Assessment (DORA) team has identified four key metrics that indicate the performance of a software development team, two of this metrics measure velocity and two measure stability. By measuring these values and continuously iterating to improve on them a team can achieve significantly better business outcomes. One of the challenges of gathering the DORA metrics is that deployment, change and incident data are usually in different disparate systems, we'll need to retrieve those values and assign them the accuracy in which they reflect the state of the deployment process.
+Four Key Metrics and how to calculate them
+Deployment Frequency
+How 
+often 
+an organization 
+successfully
+ releases to 
+production
+.
+In this case, the volume of the deployment does not matter, only the frequency. A deployment with 40 features and a deployment with 4 features will have the same weight since we're only calculating how often they get into production for the whole deployment. Deployment frequency falls in the **daily** bucket if there is at least three successful deployments per week. 
+An important note is that we can only consider deployments who successfully deployed to production. So deployments pushed back or cancelled are not considered in this metric.
+Metrics used for key:
+Azure DevOps: Deployments to 
+Production
+ environments with release pipelines containing 
+Regression
+ in their name
+Lead Time for Changes
+The amount of 
+time
+ it takes a 
+commit
+ to get into 
+production
+.
+This metric requires two important pieces of data: 
+When the commit happened
+When the deployment happened
+ This means that for every deployment, you need to maintain a list of all the changes included in the deployment.
+Metrics used for key:
+Azure DevOps: SHA mapping for commits
+Jira: Issues changelongs to determine status change time difference from ‘Active Coding’ to ‘Resolved’
+Change Failure Rate
+The 
+percentage
+ of 
+deployments
+ causing a 
+failure
+ in production.
+This metric depends on two things:
+How many deployments were attempted
+How many resulted in failures in production
+The number of deployments attempted can be retrieved from the 'Deployment Frequencies' metric and that number has to be linked to incidents. How we get the incidents is another story, we'll need to retrieve stories with a bug label or a GitHub incident (or the equivalent in another VC). 
+Metrics used for key:
+Azure DevOps: Deployments to 
+Production
+ environments with release pipelines containing 
+Regression
+ in their name
+Jira: Creation Date on bug issues
+Time to restore services
+How 
+long
+ it takes an organization to 
+recover
+ from a 
+failure
+ in production.
+For this metric you need to know when the incident was created and when it was resolved. It doesn't matter for which deployment the incident belongs to, we are just calculating the average time in which a feature considered a bug fix gets completed and deployed to production.
+Metrics used for key:
+Jira: Difference between Resolved Date and Creation Date for bug issues
+DORA DevOps performance levels
+Four Keys Repo
+DORA offers a tool to calculate DORA metrics using a generalized pipeline for organizations, they can be modified so it satisfies the data sources that each organization uses as long as they offer HTTP requests to retrieve the data.
+Four Keys repo
+The four keys project video
+Source: 
+https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance
+ 
+ URL:/spaces/platform/pages/2019819530/Calculate+DORA+metrics+using+the+Four+Keys

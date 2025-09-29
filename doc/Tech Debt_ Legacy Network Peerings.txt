@@ -1,0 +1,48 @@
+Understand the purpose of uncodified peerings to the NewGen Network’s Primary Hub V2 in the Production Network Lane and plan tasks to codify or eliminate them in the backlog.
+Peering Name
+Peered VNet
+Need
+DR
+To IaC
+To Remove
+Peer-ADDS-Network-East
+ADDS-Network-East
+VM workloads moved under Palo
+No
+India-vnet-pri-hub2
+centralindia-avd
+India AVD VNET
+No
+Hub2-2-vnet-east-infraQA1to6-dev
+vnet-east-infraQA1to6-dev
+Peer to devtest VMs VNET2
+No
+peer-vnet-east-akstooling-legacyapps-hub2
+vnet-east-akstooling-legacyapps
+Peer to Legacy Selenium Cluster
+No
+vnet-east-infra-common-app-dev-2-vnet-peering-InternalNetwork-vnet-pri-hub2
+vnet-east-infra-common-app-dev
+Peer to devtest VMs VNET1
+No
+vnet-east-appinfra-prod-2-vnet-pri-hub2
+vnet-east-appinfra-prod
+Older production Spoke
+No
+
+
+
+
+1
+
+
+incomplete
+
+
+ and 
+ determine which Peerings will be IaC’ed vs planned for Removal in near future.  Note, may be all IaC and none to Remove near term.  
+
+
+
+
+ URL:/spaces/icinfradoc/pages/2682060813/Tech+Debt+Legacy+Network+Peerings

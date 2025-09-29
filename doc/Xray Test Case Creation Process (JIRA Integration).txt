@@ -1,0 +1,72 @@
+When to Create Test Cases
+Start during story grooming
+: Begin adding test cases during the story grooming session. This helps in identifying and covering basic scenarios early in the development process.
+How to Add Test Cases
+Use the Test Coverage plugin in JIRA
+: This plugin allows you to add new or existing test cases directly in JIRA.
+Link test cases to the parent Epic
+: Always ensure that each test case is linked to the relevant Epic to maintain traceability and organization.
+Mandatory Fields in a Test Case
+Issue Type
+: Should be set to “Test” to categorize it correctly.
+Summary
+: Provide a brief description of the scenario being tested.
+Reported Services
+: Indicate the product or service being tested (e.g., Cloud Payments).
+Parent
+: Link the test case to the appropriate Epic for context.
+Test Type
+:
+Manual UI/API/DB/E2E
+: For manual test cases involving user interfaces, APIs, databases, or end-to-end scenarios.
+Cucumber UI/API
+: For automated test cases written in BDD (Behavior Driven Development) format.
+Unit Test & Other Automation
+: For end-to-end or integration tests that are automated.
+Manual vs. Automated Test Cases
+Automated Tests
+: Use Cucumber UI/API or other automation frameworks for test cases that can be automated.
+Manual Tests
+: If automation is not feasible immediately, use Manual UI/API/DB/N2N. Provide a justification for not automating, such as time constraints.
+Workflow of Test Cases
+Story Grooming
+: Add acceptance criteria as Xray test cases during the grooming session.
+Testing
+: Execute the test case and update its status to “In Progress” while testing.
+Resolving
+: Mark test cases as “Resolved” before the story can move to the Deployment Queue.
+Automating Later
+: If automation is pending, mark the test as “Time Constraint”. Once automated, change the test type to Cucumber UI/API and resolve it.
+Structure of Test Cases & Test Sets
+Grouping
+: Use test sets to group multiple test cases for regression testing or specific flows.
+UI Navigation
+: Structure test cases to match the UI navigation for easy search and reference.
+API Documentation
+: For API tests, follow the structure of the API documentation.
+Reuse
+: Always check for existing test cases before creating new ones. Use the “Quality Engineering” filter to find previously created test cases.
+BDD Format (Given-When-Then)
+All functional and integration tests must follow the BDD format, which helps in writing clear and understandable test cases.
+Automation Process & Framework
+Steps for Automating a Test Case
+:
+Write the test case in BDD format in Xray.
+Implement the automation in the QA Source Repo.
+Create a Pull Request (PR) in the QA repo.
+Obtain 2 approvals before merging the PR.
+Merge the PR only after the story reaches the Deployment Queue.
+Framework Structure
+: Specific repositories (e.g., Cloud Payments, CRM) contain feature-specific steps for automation.
+Tagging & Pipeline Execution
+Tagging
+: Use tags like @AutoPay, @DataPump, etc., to identify and run related tests. Multiple tags can be added to a single test case.
+Running Test Cases
+: Use the pipeline to execute test cases in different environments. Tags help in running specific scenarios.
+Prod
+: Runs in the regression environment.
+Test
+: Runs in the DevTest environment with specific biller shards.
+Final Note
+Aim to automate test cases within the sprint and use the correct test type for tracking manual vs. automated tests.
+ URL:/spaces/PE/pages/4032987151/Xray+Test+Case+Creation+Process+JIRA+Integration

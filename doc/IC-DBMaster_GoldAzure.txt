@@ -1,0 +1,536 @@
+Necessary Changes for Containerization
+Direct Exclusions
+Remove 
+External Resources
+Remove 
+*/ExternalTables
+dbo
+OBD
+pdf
+pld
+RPT
+safe
+SMS
+Remove Views that are reliant on 
+External Tables
+dbo.vwInvAdj
+dbo.vwEquipment
+pld.vwInvoices
+dbo.vwInvPay
+dbo.vwData
+dbo.vwCRMPdfLinkMonitor
+Remove Security items configured for remote server 
+(Enumerated below)
+Remove SQL 
+USER
+s created for existing server logins
+Remove Permissions - 
+Permissions
+ + 
+RoleMemberships
+ - for existing users
+Remove 
+MASTER KEY
+s created for external data sources.
+Schema and Database Object Modifications
+Minor syntax adjustments for DACPAC build.
+dbo.selNotes
+Error
+bash
+wide
+760
+  C:\IC-DBMaster_GoldAzure\dbo\Stored Procedures\Procs2\selNotes.sql(81,10,81,10): 
+  Build error SQL71501: 
+  Procedure: [dbo].[selNotes] contains an unresolved reference to an object. 
+  Either the object does not exist or the reference is ambiguous because it could 
+  refer to any of the following objects: 
+  [dbo].[Employees].[DateRecAdded] 
+  or [dbo].[Notes].[DateRecAdded].
+Fix
+sql
+wide
+760
+-- Change
+ORDER BY DateRecAdded Desc
+
+-- TO
+ORDER BY N.DateRecAdded Desc
+dbo.selNotes_ITQueue
+Error
+bash
+wide
+760
+ C:\IC-DBMaster_GoldAzure\dbo\Stored Procedures\Procs2\selNotes_ITQueue.sql(65,10,65,10):
+Build error SQL71501: 
+Procedure: [dbo].[selNotes_ITQueue] contains an unresolved reference to an object.
+Either the object does not exist or the reference is ambiguous because it could
+refer to any of the following objects: 
+[dbo].[Employees].[DateRecAdded] or
+[dbo].[Notes].[DateRecAdded]. 
+Fix
+sql
+wide
+760
+-- Change
+ORDER BY DateRecAdded Desc
+
+-- TO
+ORDER BY N.DateRecAdded Desc
+dbo.selMonthEndBillingBillers
+Error
+bash
+wide
+760
+  C:\IC-DBMaster_GoldAzure\dbo\Stored Procedures\Procs2\selMonthEndBillingBillers.sql(33,62,33,62): 
+  Build error SQL71501: 
+  Procedure: [dbo].[selMonthEndBillingBillers] contains an unresolved reference to an object.
+  Either the object does not exist or the reference is ambiguous because it could
+  refer to any of the following objects: 
+  [dbo].[BillerDomains].[billerid], 
+  [dbo].[Billers].[billerid] or 
+  [dbo].[MonthEndBillingBillers].[billerid]. 
+Fix
+sql
+wide
+760
+-- @ Line 27: Change
+IF @ManualBillingOnly = 1  
+	BEGIN  
+		SELECT m.BillerID, bd.DomainID      
+		FROM MonthEndBillingBillers AS m  
+		INNER JOIN Billers AS b ON m.BilleriD = b.BillerID  
+		INNER JOIN dbo.BillerDomains AS bd ON b.BillerID = bd.BillerID
+		WHERE m.ManualBilling = 1 AND b.WebDomainID = 2  
+        ORDER BY billerid
+	END 
+
+-- Update the ORDER BY clause to clarify table.
+ORDER BY m.BillerID
+dbo.selAzureBillers_Test
+ x2 
+Note - 
+ I excluded this one in the build because it indicates that its a 
+_Test
+ variant. Get confirmation on this.
+Error
+bash
+wide
+760
+ C:\IC-DBMaster_GoldAzure\dbo\Stored Procedures\Procs1\selAzureBillers_Test.sql(93,4,93,4):
+ Build error SQL71501: 
+ Procedure: [dbo].[selAzureBillers_Test] contains an unresolved reference to an object. 
+ Either the object does not exist or the reference is ambiguous because it could
+ refer to any of the following objects: 
+ [dbo].[BillerDomains].[bd]::[DomainURLDesc], 
+ [dbo].[BillerDomains].[DomainURLDesc], 
+ [dbo].[Billers].[bd]::[DomainURLDesc], 
+ [dbo].[tblDomainTypes].[bd]::[DomainURLDesc] or 
+ [dbo].[tblVirtualApplications].[bd]::[DomainURLDesc]
+Fix 
+sql
+wide
+760
+-- @ Lines 101 + 263: Change
+WHERE
+  WebDomainID = 2 AND
+
+-- To
+WHERE
+  B.WebDomainID = 2 AND
+itg.updProfileBillerFileSplitConfig
+Error
+bash
+wide
+760
+"C:\IC-DBMaster_GoldAzure\IC-DBMaster_GoldAzure.sqlproj" (default target) (1) ->
+(SqlBuild target) ->
+  C:\IC-DBMaster_GoldAzure\itg\Stored Procedures\updProfileBillerFileSplitConfig.sql(1,1,1,1): 
+  Build error SQL70001: 
+  This statement is not recognized in this context.
+Fix
+sql
+wide
+760
+-- Change
+CREATE OR ALTER PROCEDURE [itg].[updProfileBillerFileSplitConfig]
+
+-- TO
+CREATE PROCEDURE [itg].[updProfileBillerFileSplitConfig]
+Configuration for Containerization
+Modify the 
+IC-DBMaster_GoldAzure.sqlproj
+ directly - add a new 
+ItemGroup
+ for the 
+Docker
+ build configuration and set the following Build Exclusions.
+xml
+wide
+760
+  <ItemGroup Condition="'$(Configuration)' == 'Docker'" Label="Docker Container Build Exclusions">
+    <!-- External Data Source & External Tables-->
+    <Build Remove="External Resources\MyElasticDBQueryDataSrc.sql" />
+    <Build Remove="dbo\External Tables\*.sql" />
+    <Build Remove="OBD\External Tables\*.sql" />
+    <Build Remove="pdf\External Tables\*.sql" />
+    <Build Remove="pld\External Tables\*.sql" />
+    <Build Remove="RPT\External Tables\*.sql" />
+    <Build Remove="safe\External Tables\*.sql" />
+    <Build Remove="SMS\External Tables\*.sql" />
+    <!-- Views dependent on Extenal Tables -->
+    <Build Remove="dbo\Views\vwInvAdj.sql" />
+    <Build Remove="dbo\Views\vwEquipment.sql" />
+    <Build Remove="dbo\Views\vwInvPay.sql" />
+    <Build Remove="dbo\Views\vwData.sql" />
+    <Build Remove="dbo\Views\vwCRMPdfLinkMonitor.sql" />
+    <Build Remove="pld\Views\vwInvoices.sql" />
+    
+    <!-- Users for Existing SQL Server Logins -->
+    <Build Remove="Security\ic_cubeaccess.sql" />
+    <Build Remove="Security\icMIsqlaccess.sql" />
+    <Build Remove="Security\ktibbs.sql" />
+    <Build Remove="Security\mthorpe.sql" />
+    <Build Remove="Security\ymalinin.sql" />
+
+    <!-- Permissions for existing Users -->
+    <Build Remove="Security\Permissions.sql" />
+    <Build Remove="Security\RoleMemberships.sql" />
+
+    <!--Credentials for Extenal Data Sources-->
+    <Build Remove="Security\https*" />
+    <Build Remove="Security\ElasticDBQueryCredApp.sql;Security\ElasticDBQueryCred_App.sql;" />
+
+  </ItemGroup>
+List of Exclusions
+The build result of the 
+Docker
+ configuration, with the above 
+ItemGroup
+ set in the 
+IC-DBMaster_AzureGold.sqlproject
+ excludes the following items:
+External Tables
+dbo
+AccelaConfig.sql
+AccessToPdf.sql
+ACHRejects.sql
+ACHRestrict.sql
+AdjErrors.sql
+Adjustments.sql
+AutoPayImportConfig.sql
+AutoPayImportFieldMap.sql
+AutoPayImportInvoiceTypes.sql
+AutoPayLockdown.sql
+BalanceForward.sql
+BIFImportLog.sql
+BillerAdvancedSettings.sql
+BillerAgreements.sql
+BillerAPIKeys.sql
+BillerApplication.sql
+BillerAttachedExports.sql
+BillerBanks.sql
+BillerBifCustomizations.sql
+BillerBranding.sql
+BillerCCMerchants.sql
+BillerCustomerSummaryData.sql
+BillerDataPump.sql
+BillerDataPumpConfig.sql
+BillerEmailConfig.sql
+BillerEmailMessages.sql
+BillerEmailProcessList.sql
+BillerEmails.sql
+BillerEmailTemplates.sql
+BillerEquipment.sql
+BillerExpectedBillCount.sql
+BillerFtpFileConfig.sql
+BillerFtpPdfConfig.sql
+BillerFtpZipConfig.sql
+BillerImages.sql
+BillerIntegrationSummary.sql
+BillerInvoiceSet.sql
+BillerInvoiceTypeSettings.sql
+BillerLocationReference.sql
+BillerLocationReferenceImages.sql
+BillerMaintenanceWindows.sql
+BillerMarketing.sql
+BillerMarketingFeatureSet.sql
+BillerMarketingItemSet.sql
+BillerNoticeMembers.sql
+BillerOptions.sql
+BillerOutBoundIVRConfig.sql
+BillerOwner.sql
+BillerPaymentSummaryData.sql
+BillerPricingItems.sql
+BillerProducts.sql
+BillerPurge.sql
+BillerSetup.sql
+BillerStatementData_Shard.sql
+BillerTemplateCustomData.sql
+BillerURL.sql
+BillerUserActivity.sql
+BillerUserBillerPortalFavorites.sql
+BillerUserDashboardCharts.sql
+BillerUserHistory.sql
+BillerUserPermissions.sql
+BillerUsers.sql
+CCVelocity.sql
+ChangeLogsByInvoiceType.sql
+Chargebacks.sql
+ChaseTransactionLog.sql
+Check21Deposits.sql
+Check21Images.sql
+Check21ItemDetails.sql
+Check21ItemUserFields.sql
+CloudStoreField.sql
+CloudStoreFieldValidations.sql
+CloudStoreItem.sql
+CustomerAutoPay.sql
+CustomerBanks.sql
+CustomerCreditCards.sql
+CustomerDriversLicense.sql
+CustomerHistory.sql
+CustomerLinkedAccounts.sql
+CustomerLoginAttempts.sql
+CustomerPaperless.sql
+CustomerPaperlessBounce.sql
+CustomerRecurringScheduledPayments.sql
+CustomerRegConfig.sql
+Customers.sql
+CustomerUserActivity.sql
+DataPump.sql
+DataPumpDetail.sql
+DataPumpDetailSandS.sql
+DataPumpParams.sql
+EmailDoNotSend.sql
+EmailQueue.sql
+EmailTracking.sql
+EquipmentPricing.sql
+FileImportExclusion.sql
+FileImportTracker.sql
+FileImportTrackerPreLoad.sql
+FileImportTrackerReLoad.sql
+Files.sql
+Files_Adjustments.sql
+Files_Conveyance.sql
+Files_Expiration.sql
+Files_Paperless.sql
+Files_Payments.sql
+GridCustomization.sql
+ImportErrorsRealTime.sql
+ImportRealTime.sql
+InsPolicy.sql
+IntgAdjustmentSummary.sql
+IntgChangeLogsSummary.sql
+IntgConveyanceSummary.sql
+IntgDailyBalanceFileSummary.sql
+IntgInvoiceSummary.sql
+IntgIVRSummary.sql
+IntgPymtsFromBillerSummary.sql
+IntgPymtsToBillerSummary.sql
+IntgRejectsSummary.sql
+IntgStatus.sql
+InvoiceDetail.sql
+InvoiceEcho.sql
+Invoices.sql
+IVRHistory_Outbound.sql
+OBDLockdown.sql
+OBDMatchData.sql
+PaperlessBilling.sql
+PaperlessLockdown.sql
+Payments.sql
+PaymentSchedules.sql
+PayNearMeOrderInvoices.sql
+PayNearMeOrders.sql
+PayNowButtons.sql
+PDFLogging.sql
+PendingAutoPayRegistrations.sql
+PendingAutoPaySetUps.sql
+PendingFileImports.sql
+PendingPaperlessRegistrations.sql
+prdCheck21.sql
+prdCloudPayments.sql
+prdCloudStore.sql
+prdCreditCard.sql
+prdEFT.sql
+prdInvoicing.sql
+prdKiosk.sql
+prdPayNearMe.sql
+prdRPPS.sql
+PurgeData.sql
+QdsFiles.sql
+QdsInquiry.sql
+QdsInquiryConfig.sql
+QdsQueue.sql
+RealTimeBalance.sql
+RemindMeEvents.sql
+RemindMeTemplates.sql
+RemoteAuthentication.sql
+RetrievalRequests.sql
+RPPSEntries.sql
+RPPSEntryDetail.sql
+RPPSReversals.sql
+RPPSRunTime.sql
+RTDRRequestLogs.sql
+ScheduledPaymentHistory.sql
+ScheduledPayments.sql
+ServiceFees.sql
+SessionTracking.sql
+SettledBatches.sql
+SettledBatchQ.sql
+StratusBillerAvailableFormats.sql
+StratusConfig.sql
+StratusConfigHeartbeat.sql
+StratusSweepers.sql
+StratusTasks.sql
+SubmitterServiceFees.sql
+SystemsAndSoftwareQueue.sql
+Terminals.sql
+TerminalSettings.sql
+TextReminders.sql
+Ticket.sql
+TicketDetail.sql
+tmpSwipeStats.sql
+TrackCustomLabels.sql
+Video.sql
+VirtualSiteInput.sql
+VirtualSiteMenuItemGroupItems.sql
+VirtualSiteMenuItemGroups.sql
+VirtualSiteMenuItems.sql
+VirtualSiteNavSettings.sql
+VirtualSiteOutput.sql
+VirtualSitePayNowButtons.sql
+VirtualSiteQuery.sql
+VirtualSites.sql
+VirtualSiteSettings.sql
+WebMethodLogs.sql
+WSReports.sql
+OBD
+SessionEntries.sql
+SessionInvoices.sql
+Sessions.sql
+pdf
+BillerPendingPdfs.sql
+pld
+BIFHeader.sql
+Customers.sql
+Import.sql
+InvoiceDetail.sql
+Invoices.sql
+RPT
+BillerScheduledReportRecipients.sql
+BillerScheduledReports.sql
+ReportGeneratorQueue.sql
+ReportGeneratorRecipients.sql
+safe
+Data.sql
+DataUpd.sql
+Subscriber.sql
+SMS
+CustomerSMSMode.sql
+SMSOut.sql
+Views
+dbo
+vwInvAdj.sql
+vwEquipment.sql
+vwInvPay.sql
+vwData.sql
+vwCRMPdfLinkMonitor.sql
+pld
+vwInvoices.sql
+Security
+ic_cubeaccess.sql
+icMIsqlaccess.sql
+ktibbs.sql
+mthorpe.sql
+ymalinin.sql
+Permissions.sql
+RoleMemberships.sql
+https___icdbauditlogs.blob.core.windows.net_sqldbauditlogs.sql
+https___icdbauditlogs.blob.core.windows.net_sqldbtdlogs.sql
+https___icsqlaudit.blob.core.windows.net_sqldbauditlogs.sql
+https___icsqlaudit.blob.core.windows.net_sqldbtdlogs.sql
+ElasticDbQueryCredApp.sql
+ElasticDbQueryCred_App.sql
+Stored Procedures in 
+IC-DBMaster_GoldAzure
+ Reliant on External Data Source
+Note - there are many of these that look like temporary, backup, or test versions.
+CRYPTO
+selCustomerByCustomerGUID.sql
+dbo
+CreateResidualDataIVR_V2.sql
+CreateResidualDataInvoicing_V3.sql
+FISIONBillersReport_BAK.sql
+FISIONBillersReport_Marcom.sql
+FISIONBillersReport_Marcom_tmp.sql
+FISIONBillersReport_Riju_Test.sql
+rptCRMPaymentSchedules_MHT.sql
+rptMonthlyAppcuesBillerStautsRpt.sql
+selProfit2_PayaPrevMonth_V2.sql
+selProfit2_PayaPrevMonth.sql
+spIncompleteFileMonitor.sql
+spManualLoadBillerURLtoDW.sql
+spManualLoadTerminalSettingstoDW.sql
+CreateResidualDataIVR.sql
+FISIONBillersReport_Test.sql
+FISIONBillersReport.sql
+insACHAVolumeOffenders.sql
+insBillerNoticeMembers.sql
+insBillerStatementData_Master_V2.sql
+insBillerStatementData_Master.sql
+insEmployees_RML.sql - Repos
+MissingCustomerLoginPermissions_old.sql - Repos
+MissingCustomerLoginPermissions_rml.sql - Repos
+MissingCustomerLoginPermissions.sql - Repos
+PinlessDebitDailyReport.sql - Repos
+RemoveDupePaymentSchedules.sql - Repos
+rptBillerMarketingData.sql - Repos
+rptMgtReportFull.sql - Repos
+rptPaymentsByPaymentSource.sql - Repos
+rptPendingFileImportCount.sql - Repos
+selACHRejects.sql - Repos
+selBalanceForwardBillers_Master.sql - Repos
+selBillers_mcl.sql - Repos
+selBillers.sql - Repos
+selCustomerBiller.sql - Repos
+selCustomersByCustomerGuid.sql - Repos
+selEmailDoNotSend.sql - Repos
+selEmailQueue.sql - Repos
+selEmailQueueCount.sql - Repos
+selFileImportList.sql - Repos
+selInvoicesToEmail.sql - Repos
+selMerchantsForAutoClose_PNM.sql - Repos
+selMissingAmexIDs.sql - Repos
+selPendingScheduledFileImport.sql - Repos
+selPendingScheduledPaymentProcessingBalanceCheckTest.sql - Repos
+selPreLoadFileImportList.sql - Repos
+selProfit2_RML.sql - Repos
+selProfit2_RMLV2.sql - Repos
+selReLoadFileImportList.sql - Repos
+selRemoteAuthentication.sql - Repos
+spBillersTest.sql - Repos
+spBillersWithBifCustomizations.sql - Repos
+spBillersWithBifCustomizations_remote.sql - Repos
+spCheckScheduledPayments.sql - Repos
+spFixDupeCustLinkedAccounts_Master.sql - Repos
+spLoadBillerEmailProcessList_Master.sql - Repos
+spLoadBillers_Master.sql - Repos
+spLoadBillerUsers_Master.sql - Repos
+spLoadprdInvoicing_Master.sql - Repos
+spLoadVirtualSites_Master.sql - Repos
+spPendingFileImportMonitor.sql - Repos
+spRefreshBillerElasticOptions.sql - Repos
+spRefreshChaseBillerMIDs.sql - Repos
+spSageTimeoutMonitor.sql - Repos
+updChaseReject_RTE.sql - Repos
+pdf
+selPdfProcessedCounts.sql - Repos
+selPendingPDF_Billers.sql - Repos
+RPT
+selReportGeneratorQueue.sql - Repos
+SMS
+selPhonerNumberHistory.sql - Repos
+References
+T-SQL Function Default Values
+T-SQL Image Data Type
+ URL:/spaces/EA/pages/4661280769/IC-DBMaster_GoldAzure

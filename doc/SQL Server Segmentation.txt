@@ -1,0 +1,86 @@
+ The following Azure Resource Inventory was provided by 
+ .  We will need to solve for enabling these Azure Resource Types to access the Biller Shard SQL Server in a private manner not requiring the Trusted Azure Services Networking Exception on the Biller Shard SQL Server.  
+Jira Epic: 
+[PLAT-231] Secure PaaS Services to SQL connectivity - JIRA (atlassian.net)
+1
+6
+false
+default
+list
+true
+Azure Logic Apps 
+ 
+Logic Apps - Data Services - Confluence (atlassian.net)
+There are 132 Logic Apps, 57 of those are enabled.  All Logic Apps are on the 
+Consumption
+ Plan Model and therefore do not allow for VNet Integration.  They do have a set of Known IPs for Outbound Traffic.
+It appears we can update in place the 
+Plan
+ to the 
+Single Tenant
+ Plan using CLI:  
+az logicapp | Microsoft Learn
+Azure Logic Apps Questions
+How are the Logic Apps deployed into the Infrastructure?
+How are the Logic Apps Tested?
+Can we delete the 
+Disabled
+ Logic Apps?
+How many Enabled Logic Apps actually touch DB?
+50 from Ross table
+46 are 
+Enabled
+Azure Logic Apps Plan
+Update all Azure Logic Apps to Single Tenant Plan
+Enable VNet Integration
+Access Azure SQL Server of Private Endpoint
+Azure Function Apps 
+ 
+Az Function Apps - Data Services - Confluence (atlassian.net)
+16 unique Function Apps.  Current Azure Function Plan supports VNet Integration (would require SQL Server Private Endpoints) as well as a set of Known Outbound IPs for Outbound Traffic.
+Azure Function Apps Plan
+Enable VNet Integration
+Access Azure SQL Server of Private Endpoint
+Azure Data Factory
+Azure Data Factory - Data Services - Confluence (atlassian.net)
+8 Data Factories in Primary Subscription, they all would need Self Hosted Integration Runtime (SHIR) setup.  Need someone who has access to Data Factory Studio planes to check.  The educated guess is none of these have the Self Hosted Integration Runtime setup, which is basically a VM we create and install the SHIR Agent onto and then setup in the Data Factory.  With SHIR SQL Server Private Endpoints or SQL Server Service Endpoints could either be used.
+Azure Data Factory Plan 
+ 
+Create VMs
+Install SHIR Agent on VMs
+Setup Data Factories to only use SHIR Agents
+Agent VMs access Azure SQL Server of Private Endpoint
+Elastic Database Jobs 
+ 
+Elastic Database Jobs - Data Services - Confluence (atlassian.net)
+1 Elastic Job Agent Found: 
+IC-ElasticJobAgentV2
+Allows for creation of a Private Endpoints specific to the Azure Elastic Job Agent that then the Agent will communicate the SQL Server over.
+Elastic Database Jobs Plan
+Create Private Endpoints specific to the Elastic Jobs Agent for the Azure SQL Server
+Azure Automation Runbooks 
+ 
+Azure Automation Runbooks - Data Services - Confluence (atlassian.net)
+Potentially 3 Azure Automation Accounts.  Azure Automation Accounts allow for self-hosted 
+Hybrid Runbook Worker Agents
+ (much like ADF SHIR) which would require setting up at least one VM and then installed the Hybrid Runbook Worker VM Extension and then registering the Agent(s) with the Azure Automation Account 
+Azure Automation Runbook Questions
+What is the difference between the following Automation Accounts?
+Azure Automation Runbooks Plan
+Create VMs with the Hybrid Runbook Worker VM Extension 
+Set them up in the Azure Automation Accounts
+Configure the Runbooks to use the Hybrid Runbook Worker Agents
+Agent VMs access Azure SQL Server of Private Endpoint
+Azure Batch
+Azure Batch Applications
+2 Production Azure Batch Accounts.  Azure Batch Accounts allow for the 
+creation of an Azure Batch pool in a virtual network
+ which then the Pool Node (a VM) can access Azure SQL Server either over Private Endpoint or Service Endpoint.
+Azure Batch Plan
+Create at least one Azure Batch Pool in a PRD VNet
+Ensure all Batch Applications use the Azure Batch Pool within the PRD VNet
+Pool Node VMs access Azure SQL Server of Private Endpoint
+Azure Web Apps 
+ 
+3 Production Web Apps that reachout to the Database 
+ URL:/spaces/platform/pages/3186360337/SQL+Server+Segmentation

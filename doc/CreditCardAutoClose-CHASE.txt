@@ -1,0 +1,81 @@
+This document outlines the functionality of the CreditCard Auto-Close Skybot job used for automating batch closure for Chase transactions. The job is built on a legacy VB application and scheduled to run hourly.
+🧾 Job Overview
+Property
+Value
+Skybot Job Name
+STAGING-CreditCardAutoClose-CHASE
+Command
+CreditCardAutoClose\CreditCardAutoClose.exe 3
+Execution Frequency
+Every 60 minutes (Hourly)
+Repository
+CreditCardAutoClose (VB application)
+⚙️ Batch Auto-Close Logic Flow
+Determine Current Auto-Close Hour
+The process begins by retrieving the current system hour (NOW.HOUR).
+This value is compared against the configured AutoCloseHour for each biller in the system.
+Filter by Module (CHASE Only)
+If a biller is associated with ModuleID = 3 (Chase), it becomes eligible for automatic batch closure.
+Identify Eligible Billers
+The method GetBillerList() is called to return a list of billers whose AutoCloseHour matches the current hour.
+Retrieve Batch Closure Candidates
+The job executes the following stored procedures to identify which billers and merchants are ready for batch closure:
+EXEC selAzureBillers_BatchClose @AutoCloseHour = [CurrentHour]
+EXEC selCreditCardAndAchCombinedMerchantsForAutoClose @AutoCloseHour = [CurrentHour]
+These procedures fetch terminal and payment details required for batch processing.
+Initiate Batch Close for Chase
+·       For each eligible payment/merchant:
+o   The Chase client is invoked to initiate the endofday endpoint for batch close.
+🌐 API Integration
+Chase Paymentech API (via TunnelAPI)
+Endpoint:
+https://nsp.invoicecloud.com/tunnelapi/v1/chase/endofday
+Purpose:
+Submits a batch close request to Chase for all applicable transactions associated with a merchant.
+API Response:
+The job logs success/failure response from the Chase client after submission.
+find the below chase processor class having the resopnse
+🗄️ Payments Table Impact
+Before Batch Close Execution
+Payments are recorded with a SettledBatchID of 0 or null, indicating they are not yet settled.
+PaymentID
+BillerID
+TerminalID
+SettledBatchID
+101
+2002
+402749
+0
+102
+2002
+402749
+0
+After Batch Close Execution
+Once the batch close is successful, payments are updated with a valid SettledBatchID.
+PaymentID
+BillerID
+TerminalID
+SettledBatchID
+101
+2002
+402749
+98765
+102
+2002
+402749
+98765
+📝 Summary
+Step
+Description
+Identify AutoClose Hour
+Determines the current hour to match billers’ scheduled closure windows.
+Filter by Module ID
+Only billers with ModuleID = 3 (Chase) are processed.
+Retrieve Eligible Merchants
+Stored procs executed to identify which billers are ready.
+Batch Close Trigger
+Payments sent to Chase via TunnelAPI.
+Post-Close Update
+Payment records updated with new SettledBatchID.
+ 
+ URL:/spaces/PE/pages/4351098994/CreditCardAutoClose-CHASE

@@ -1,0 +1,29 @@
+Payment files are critical for the Biller to reconcile the payments. This job runs both as an azure function and an automate/skybot job. The two most comment delivery methods for Payment export files are via Stratus or FTP.
+How to figure out if the Biller uses Stratus. The easy way is to look up in the CRM
+How to figure out if the Biller uses FTP / BillerFTPV2. 
+The easy way is to look up in the FTP Management tab in the CRM.
+If a biller has an export task in the FTP Export Processing tab they are part of the V2 process.
+How to verify failures for the V2 Export Process.
+Go to Microsoft Azure Portal and go to the exports application insights page by searching ICFTPExportProcessor.
+Once at the Application Insights page for ICFTPExportProcessor, go to the Logs tab found on the left side, under the 
+Monitoring
+ section.
+A window should pop up showing options for queries. Click on the 
+X 
+at the top right of the window.
+In the text box for New Query 1, type in 
+traces 
+and
+ 
+click Run to see traces for the last 24 hours. If the issue you are looking for happened at an earlier date, make sure to modify the time range. 
+By Default, trace time data will be shown in UTC. Make sure to switch to Local Time to find traces more accurately.
+If you’d like to show logs only relevant to only 1 function run of queuing exports, expand a relevant trace and right click the operation_Id. Click Include and Run the new Query.
+Only relevant traces for that run should now appear
+Payments get a WSReportID value when they are included on a payment export file or if the biller calls one of our report webservices.
+If a payment does not have a WSReportID (or has a WSReportID  of 0), then that means it was not included in any payment report.
+SQL query
+SELECT TOP 10 * FROM StratusExportProcessor WHERE BillerID = 2899 order by 1 desc 
+Video
+Payment Exports KT with Integrations
+Payment Exports Manual Generation with Albert
+ URL:/spaces/DS/pages/2555150454/Payment+Files

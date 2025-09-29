@@ -1,0 +1,52 @@
+BillerCloudStore.aspx
+The BillerCloudStore.aspx.vb file is part of an 
+ASP.Net 
+  Web Forms application, specifically designed for handling operations within a cloud store feature of a biller portal. This file contains a class BillerCloudStore that inherits from clsBillerSession, indicating it utilizes session-based information, particularly for billers. Let's break down the key components and methods step by step:
+Properties
+CloudStoreItemGuid
+: 
+Retrieves a GUID from the query string that uniquely identifies a cloud store item. If the query string parameter is missing or invalid, it returns Guid.Empty.
+BillerUserID
+: 
+Retrieves the current biller's user ID from the session.
+FormState
+: 
+Gets the current state of the cloud store item form, which includes various settings and user inputs.
+Invoices
+: 
+Retrieves or initializes an InvoiceCollection from the session to manage invoices.
+BillerCloudStore_Init
+This method initializes the cloud store form if a valid CloudStoreItemGuid is provided. It creates a new instance of CloudStoreItemForm with the GUID and current biller ID, then adds this form to a placeholder control on the page. It also binds data to some UI elements like selectedItemsCart and itemSummary.
+BillerCloudStore_Load
+Triggered when the page loads. If it's not a postback (initial page load), it performs several operations:
+Retrieves cloud store item details from the database using the CloudStoreItemGuid.
+If the item is not active or doesn't exist, it displays an error message and hides certain parts of the page.
+Sets various instructional texts on the page by decoding and processing strings from the database.
+If there are invoices present in the session, it makes the checkout section visible.
+Calls SetDivVisibility to adjust the visibility of certain UI elements.
+SetDivVisibility
+A helper method that controls the visibility of UI elements related to adding items to a list and their amounts. It also triggers updates on related update panels to reflect changes on the client side without a full page reload.
+btnAddToList_Click
+Handles the event when the "Add to List" button is clicked. It attempts to:
+Parse item quantity and selection from the form.
+Validate the selection against minimum and maximum item requirements.
+Save the selected values to the form state for later processing.
+Update the UI to reflect the new state, including re-binding the selected items cart and updating the summary panel.
+SaveSelectedValuesToState
+Saves the selected item details to the form state, including the item description, quantity, and value. It ensures the item is not already present in the state before adding it.
+ddlCloudStoreItems_SelectedIndexChanged
+Handles the event when the cloud store item dropdown selection changes. It enables the "Add to List" button if a valid item is selected, updates quantity inputs based on the selected item's requirements, and adjusts UI visibility accordingly.
+BillerCloudStore_PreRender
+In the pre-render phase of the page lifecycle, it ensures the checkout section is visible if there are any invoices present in the session.
+btnProcessPayment_Click
+Handles the event for processing payments. It performs several checks and operations:
+Validates the form input.
+Saves the form state to the session.
+Generates an invoice number and GUID.
+Creates an invoice record and detail records based on user input.
+Loads the new invoice from the database and sets additional properties related to payment.
+Adds the new invoice to the session's invoice collection.
+Redirects the user to a payment options page if validation passes; otherwise, displays an error message.
+Summary
+This file encapsulates the functionality required for a biller to interact with cloud store items, including selecting items, adding them to a cart, and initiating payment processes. It leverages session state, database operations, and dynamic UI updates to provide a seamless user experience.
+ URL:/spaces/ED/pages/3337191468/Biller+Portal+Cloud+Store

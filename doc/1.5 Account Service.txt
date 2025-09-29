@@ -1,0 +1,112 @@
+Open API spec:
+json
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PayerAccountService",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/v1/accounts": {
+      "get": {
+        "tags": [
+          "PayerAccounts"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayerAccount"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayerAccount"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayerAccount"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "PayerAccountService"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PayerAccount": {
+        "type": "object",
+        "properties": {
+          "payerAccountGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "payerGuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "accountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayAccountNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "payerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "address1": {
+            "type": "string",
+            "nullable": true
+          },
+          "isMasterAccount": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Authorization header",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}
+ URL:/spaces/EN/pages/2765946982/1.5+Account+Service

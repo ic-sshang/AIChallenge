@@ -1,0 +1,79 @@
+What is it
+Balance forward is the process zeroing out a customers previous unpaid invoices of the same invoice type when a new invoice is imported so they only have one possibly unpaid invoice on record of a invoice type at a time
+We do not add the balance onto the following sent invoice, this is reliant on the biller sending us the new amount including the balance forward amount in the Balance Due
+How dose it work
+Step by Step
+A invoice is sent in to Invoice Cloud and processed to a BIF, including File Spec [194~1] as the example below                 
+|   V   |
+7~IH|8~N|9~b3d8e0c6-0a66-4566-bd1f-480c87121ea6|10~ACE10000025511302022|11~1/31/2023|12~11/30/2022|13~25|194~1|252~164|318~TBD|375~1
+58~CR|59~ACE100000255|60~Brian Brown|61~271 Hartman Rd|63~Greene|64~NY|65~13778
+70~ID|72~InvoiceDetail
+As the invoices are imported into [dbo].[Invoices] they are imported into [dbo].[BalanceForward] 
+The stored procedure [dbo].[selBalanceForwardBillers] is run every 15 minuets [ICDBMonitorBalanceForward] to begin to queue on the Azure Storage Queue [Balance-Forward]
+[dbo].[spBalanceForward] is run on ever invoice in the queue viewing all past active invoices of the same invoice type creating a payment for PaymentTypeID 10 to zero out the invoice and deleting the record from the [dbo].[BalanceForward]
+Note: Balance Forward (File Spec [194]) if only used to determine weather or not to trigger a BalanceForward Action
+Steps for Debugging
+Process the Invoice file locally using [Stratus Web Services]/[frmInvoiceUpload.aspx] locally to verify that it gets processed to include Balance Forward Variable [194~1]
+If processed locally within the last 7 days verify that the Invoices processed correctly by checking in [dbo].[ImportErrorsRealTime] of the invoices did not process correctly
+Check the File in [dbo].[Files] and verify that [Files].[ImportComplete] is not Null, if so the file errored and will not Balance Forward 
+If [dbo].[BalanceForward] still has invoices in it, the job is stuck 
+Why did an invoice not balance forward
+Under [Invoice Types] in the CRM the Invoice Type Setting 13 can prevent Balance Forward for billers with different Invoice Years
+Under Integration Summery you may need to add a BIF Customization or enable the Balance Forward option above the BIF Customizations
+Post Balance Forward Adjustments will cause a Balance to be on the Invoice
+If the invoice expected to have a balance forward payment applied has a VOIDED payment, confirm when the void occurred to determine if the invoice could have had a balance at the time the new invoice was imported causing the balance forward to not trigger
+It is set up to balance forward only certain types of invoices within the same invoice type id (Integration Summery > Edit FileSpecID: 194)
+Why did an invoice balance forward when it wasn’t supposed to
+Balance Forward (File Spec [194]) if only used to determine weather or not to trigger a BalanceForward Action, The BalanceForward Action will balance forward any Invoice of the same Invoice Type if it has a BalanceDue on it.
+Useful Databases, Useful queries
+Account Numbers and Invoices that have not balance forward can be found using this query
+sql
+wide
+1800
+Select A.fileid, a.AccountNumber, a.InvoiceNumber, a.InitialBalanceDue, a.BalanceDue, a.DateRecAdded
+	from vwdata as a
+	where accountnumber in (Select a.AccountNumber from 
+		(Select a.AccountNumber, Count(*) as Bills from vwdata as a where BalanceDue <> 0.00 and BalanceForward = 1 group by a.accountnumber) as a where Bills > 1) 
+	and a.BalanceDue <> 0.00
+	Order by a.AccountNumber ASC, a.DateRecAdded Desc 
+Biller Invoice Type Setting Query
+sql
+wide
+1800
+SELECT A.BillerInvoiceTypeSettingsID, A.BillerID, A.InvoiceTypeID, B.InvoiceTypeDesc, A.InvoiceTypeSettingID, C.InvoiceTypeSettingDesc, A.Value, A.DateRecAdded 
+	FROM [dbo].[BillerInvoiceTypeSettings] AS A 
+		LEFT JOIN [dbo].[tblInvoiceType] AS B ON A.InvoiceTypeID = B.InvoiceTypeID 
+		LEFT JOIN [dbo].[tblInvoiceTypeSettings] AS C ON A.InvoiceTypeSettingID = C.InvoiceTypeSettingID
+	ORDER BY InvoiceTypeID Desc, InvoiceTypeSettingID ASC
+Integration summaries changes
+sql
+wide
+1800
+SELECT cl.ChangeLogID, cl.UserFKID, cl.ChangeRequestorID, cr.ChangeRequestorDesc, cl.TableName, 
+		bo.OptionID, o.OptionDesc, cl.FieldName, cl.OldValue, cl.NewValue, cl.ChangeDate
+	FROM [dbo].[ChangeLogs] AS cl 
+		LEFT JOIN [dbo].[BillerOptions] AS bo ON cl.FKID = bo.BillerOptionID
+		LEFT JOIN  [dbo].[tblOptions] AS o ON o.OPTIONID = bo.OPTIONID
+		LEFT JOIN [dbo].[tblChangeRequestor] as cr on cl.ChangeRequestorID = cr.ChangeRequestorID
+	WHERE TABLENAME = 'IntgInvoiceSummary' 
+	ORDER BY FKID ASC, cl.DateRecAdded DESC
+	 
+SELECT * FROM IntgInvoiceSummary
+Find duplicate Balance Forwards
+wide
+1800
+--Find duplicate Balance Forwards
+select invoiceid, count(PaymentDescription) as 'BalanceForwardCount'
+from payments 
+where paymentdescription like 'balance forward'
+group by invoiceid
+having count(PaymentDescription) > 1
+order by 2 desc
+Gaps in Documentation
+If you know anything pertaining to Balance Forward, edit the document to include missing information and clear it from this portion if here or add any questions where there may be something unclear
+It is currently unknown how Balance forward under BIF Customization interacts with the Balance Forward under [dbo].[IntgInvoiceSummary] 
+CS has expressed that including both could cause issues with Balance Forwarding
+Documentation for the gap above 
+ - 
+https://app.getguru.com/card/TL54gL6c/Balance-Forward-per-Invoice-Type
+ URL:/spaces/DS/pages/2573434889/Balance+Forward

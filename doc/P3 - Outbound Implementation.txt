@@ -1,0 +1,222 @@
+Contents
+none
+note
+Overview
+
+
+Overview
+
+
+This is the project implementation phase for outbound payments implementations.
+Transcard Contacts and Roles can be found 
+Outbound Payments Playbook
+. Information about Outbound Payments can be found 
+https://invoicecloud.atlassian.net/wiki/x/LQAQJQ
+ and 
+https://invoicecloud.atlassian.net/wiki/spaces/Implementa/pages/3353411585/Outbound+Payments+Implementation?atlOrigin=eyJpIjoiZDQ4ZmRiZWRmYzYwNGIzM2E2NmNkYTViNWMwMTFlMmYiLCJwIjoiYyJ9
+.
+Change Log
+Change Details
+Date
+Author
+Version
+Description
+11/26/24
+S Bautista
+1.0
+Added RACI column
+3/10/25
+Chris Faria
+1.1
+Updated broken link in Overview
+note
+Project Roles
+
+
+Project Roles
+
+
+Name
+Team
+1
+Project Manager (PM)
+Implementations
+2
+Implementations Manager (IM)
+Implementations
+3
+Boarding Specialist (BS)
+Boarding
+4
+Biller (B)
+Customer
+5
+Core System (CS)
+Customer/Vendor
+6
+Transcard (TC)
+Partner for OP product
+7
+Solutions Architect (SA)
+Solutions Engineering
+8
+Outbound Program Manager (OPM)
+Implementations
+Process Steps
+Process steps and task owners.
+Category
+Step
+Description
+R / A / C / I
+1
+CRM Configuration - OP Only Go Live
+Additional Steps for biller without EBPP 
+2
+CRM Configuration
+Enable Product
+Enable Outbound Payments product in the CRM under the Products tab.
+IM / OPM / / B
+3
+CRM Configuration
+Biller Portal User Setup
+Set up Biller Portal users in the CRM under the Users tab. Ensure that Biller has documentation on how to set up their own users. 
+IM / OPM / / B
+4
+SMART Hub Profile Setup
+Confirm Biller has provided all logos
+Biller should upload their logo through the Marketing Questionnaire - Link included in Kickoff Follow up Email - 
+Marketing Questionnaire Smartsheet Link
+ 
+Access the logos through Marketing Questionnaire Smartsheet Report - 
+link here
+Find your project line
+Select the paperclip icon on the far left
+Download the logos and save them to the project folder in BOX
+IM / OPM / B /
+5
+SMART Hub Profile Setup
+Receive UI template from Biller with requested customizations
+Biller needs to return the UI Template that was sent in the Kickoff Follow Up email.
+Save biller version to SharePoint
+IM / OPM / B /
+6
+SMART Hub Profile Setup
+Receive printed check information from Biller
+Save biller details to SharePoint folder **This step can be omitted if Biller is not printing checks.**
+IM / OPM / B /
+7
+SMART Hub Profile Setup
+Complete and submit Outbound Implementation Checklist
+Download and complete 
+Outbound Implementation Checklist
+. Link to the template is found in the project schedule.
+Complete with information collected in the Biller Questionnaire and kick off call.
+Attach submitted UI Template and logos
+Save to SharePoint folder
+Submit to Transcard via email - 
+Marie.Rafferty@Transcard.com
+IM / OPM / B / TC
+8
+SMART Hub Profile Setup - Template Signoffs
+Get biller sign off on all templates - Email, SMS, & UI
+Once Transcard has completed their configuration you will advise the biller to review the templates and save the emailed confirmation to the project folder in SharePoint
+IM / OPM / B, TC /
+9
+SMART Hub Profile Setup - Template Signoffs
+Get biller sign off on Check Template Setup with Printer 
+**This step can be omitted if Biller is not printing checks or is using their own printer**
+Refer to 
+TSYS Check Template & Requirements.docx
+ for template client needs to sign off on and the requirements Transcard needs to set up checks.
+Transcard will send example via email. Forward to the biller and save email confirmation to SharePoint
+IM / OPM / B /
+10
+Funding Setup
+Receive signed Account Authorization form and advise boarding to submit account details
+This document must be signed and returned by the biller for boarding to be able to proceed with their onboarding in SMART Enroll.
+Once received save it to the project folder in SharePoint
+Add comment to Boarding Salesforce case with link to SharePoint and @ the boarding specialist to submit account details
+IM / OPM /  / BS, B/SA
+11
+Funding Setup - FBO Account
+Confirm with boarding that they have completed SMART Enroll
+Boarding’s only task for FBO Billers it to create their profile in SMART Enroll.
+As part of completing SMART Enroll, the Boarding Specialist MUST invite the PM to SMART Enroll with the “Business Full Access” permission. The PM will then invite the appropriate Biller contact to SMART Enroll to input banking information AND API creds.
+Your boarding rep will comment in Salesforce when this step is complete.
+PM / OPM / BS / B/SA
+12
+Funding Setup - FBO Account
+Confirm with Transcard that the FBO Account has been created
+This can be done via email
+TC / PM / BS / B/SA
+13
+Funding Setup - Open Banking
+Send Bank Connection Client Guide to biller
+The biller needs to follow the instructions to request banking credentials be sent from their bank to Transcard
+Download current guide -
+ 
+Bank Connect Client Guide
+ 
+- attach to email and include the following language
+A critical step in the implementation is obtaining API credentials from your bank. This part of the set-up process enables us to pass technical instructions on your behalf for your [BANK NAME] account. Please use the attached guide and let me know if you have any questions.
+PM / OPM / BS / B/SA
+14
+Funding Setup - Open Banking
+Confirm that biller has submitted banking credentials request to their bank
+The biller needs to submit the request to their banking institution.
+The timing will be dependent the biller’s bank institution, but this generally take 6-8 weeks to the biller must submit this as early as possible.
+PM / PM / BS / B/SA
+15
+Funding Setup - Open Banking
+Confirm with Transcard that they have received banking credentials
+Biller bank will generate their credentials and will either
+Submit the banking credentials directly to Transcard. In this case TC should start without our direction, but you should monitor and request updates because we don’t have visibility in this method.
+Provide the biller with the credentials who will then forward them to you. If this happens, you will need to email them to Transcard - 
+Marie.Rafferty@transcard.com
+PM / PM / B / B/SA
+16
+Funding Setup - Open Banking
+Confirm bank credentials added to SMART Enroll
+This can be done via email or during the weekly TC/IC Implementation call
+IM / PM / BS / B/SA
+17
+SMART Exchange/Disperse API Credentials
+Confirm Biller has received/completed verification email
+During Transcard setup, the biller contacts will receive an automated email asking them to verify their access.
+Confirm that they have received the message and completed the verification during a call or via email.
+PM / PM / BS / B/SA
+18
+SMART Exchange/Disperse API Credentials
+Confirm that Transcard as submitted internal request for API Credential Creation
+We won’t have visibility so you will need to follow up with Transcard via email and/or during the weekly TC/IC Implementation call
+PM / PM / TC / B/SA
+19
+SMART Exchange/Disperse API Credentials
+Receive Postman collection from Transcard and send to biller and core system
+Transcard will send you the biller specific Postman collection including their API Credentials
+Forward this to the biller and point of contact from their Core System in an 
+ENCRYTED
+ email including the below language.
+The attached Postman collection contains the API credentials, which can be found in the "Variables" section. You will be able to use the collection to run test transactions into the SMART [Disburse/Exchange] portal. There are a few configurable items where you can elect to include a document with the payments, as well as, request an e-signature. Items set to "false", will disable the function.
+Please note: The payable (token) delivery method is set to the email variable and will pull from the main collection’s variable. This should be updated to the tester’s email address.
+PM / PM / TC / CS, B/SA
+20
+IAT (IM Acceptance Testing)
+IAT
+Complete Internal Acceptance Testing. 
+https://invoicecloud.atlassian.net/wiki/spaces/Implementa/pages/4274290689/Outbound+Payments+Internal+Acceptance+Testing+IAT?atlOrigin=eyJpIjoiZjNjNDg1ODI1ZGJiNDM4OTk3MWM5OTI3ZjNkNWJhNTIiLCJwIjoiYyJ9
+IM / PM / TC /SA
+21
+SMART Exchange/Disperse API Credentials
+Confirm Core System setup is complete and validated
+Follow up with the Core System to confirm they have successfully added the Postman collection to their configuration
+Refer to the core systems Integrations Confluence page for details on their requirements/timeline
+OP Supported Integrations
+ 
+PM / PM / CS / B/SA
+22
+Quality Core Functions
+Complete PM - Core Functions Checklist
+ 
+PM / PM / / 
+ URL:/spaces/Implementa/pages/3374284811/P3+-+Outbound+Implementation

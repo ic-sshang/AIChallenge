@@ -1,0 +1,53 @@
+Hands-On Session Agenda
+1. 
+DotNetFramework Upgrade
+Cloning: Clon
+e the project repository "
+CreateLateFees (
+https://invoicecloud@dev.azure.com/invoicecloud/Src/_git/CreateLateFees
+)
+" for upgrading the framework.
+Upgrade to 4.6.2
+: Update the project to target the .NET Framework 4.6.2.
+Reinstall Packages
+: Use the command 
+Update-Package -reinstall
+ in Package Manager Console to reinstall all packages for the new framework target.
+Fix Vulnerable Packages
+: Identify and resolve any vulnerabilities in the packages.
+Build and Test
+: Build the upgraded solution and run the unit test cases.
+Adding AI.HealthCheck
+Clone Repository
+: Clone the AI.HealthCheck repository (
+https://invoicecloud@dev.azure.com/invoicecloud/Src_Miscellaneous/_git/AI.CodeDocumentation
+).
+Setup Development Environment
+: Add required packages/extensions to VSCode.
+Configure Launch Settings
+: Add 
+launch.json
+ with all necessary parameters.
+Generate API Token
+:
+Navigate to 
+Manage Your Account
+.
+Go to 
+Security
+, click on 
+Create and Manage API Tokens
+.
+Click 
+Create API Token
+, provide a label, and generate.
+Integrate with CreateLateFee
+:
+Run HealthCheck and add it to the CreateLateFee repository.
+Fix build issues in the repository.
+Testing
+: Build the integrated solution and execute all test cases in HealthCheck.
+Miscellaneous
+Build and Deploy
+: Build the repository and deploy it to the DevTest environment.
+ URL:/spaces/PE/pages/3857612802/Hands-on+Session+on+.Net+framework+upgrade+and+AI+Health+Check

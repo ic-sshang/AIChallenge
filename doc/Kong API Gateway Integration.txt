@@ -1,0 +1,273 @@
+Overview
+This guide will help you create the necessary files to integrate your project with the Kong API Gateway. The integration is managed using Terraform.
+Example Project .kong Folder
+Step-by-Step Guide
+Create the .kong Folder
+If the 
+.kong
+ folder does not already exist, create it in the root of your project.
+Create the main.tf File
+Create a file named 
+main.tf
+ inside the 
+.kong
+ folder.
+Example Content
+json
+terraform {
+  required_providers {
+    azurerm = "~> 4.0"
+    kong = {
+      source  = "kevholditch/kong"
+      version = "6.5.1"
+    }
+  }
+  # https://developer.hashicorp.com/terraform/language/backend/azurerm
+  # all backend settings passed in via environment variables in the pipeline
+  backend "azurerm" {
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+provider "kong" {
+  kong_admin_uri   = var.kong_admin_uri
+  kong_admin_token = var.kong_admin_token
+  kong_workspace   = var.kong_workspace
+}
+
+module "kong_route_configurations" {
+  source = "git@ssh.dev.azure.com:v3/invoicecloud/Platform/terraform-kong-single-service-routes//?ref=platform-0/0.0.0"
+
+  providers = {
+    kong = kong
+  }
+
+  service_name            = var.service_name
+  backend_targets         = var.backend_targets
+  backend_path            = var.backend_path
+  backend_host_header     = var.backend_host_header
+  healthcheck_active_path = var.healthcheck_active_path
+  incoming_hosts          = var.incoming_hosts
+  routes                  = var.routes
+}
+Create the variables.tf File
+Create a file named 
+variables.tf
+ inside the 
+.kong
+ folder to define the variables used in 
+main.tf
+.
+Example Content
+json
+variable "kong_admin_uri" {
+  type        = string
+  description = "The URI of the Kong Admin URI."
+}
+
+variable "kong_admin_token" {
+  type        = string
+  description = "The Kong Admin Token."
+}
+
+variable "kong_workspace" {
+  type        = string
+  description = "The Kong Workspace."
+}
+
+variable "service_name" {
+  type        = string
+  description = "Name of the Kong Service."
+}
+
+variable "backend_targets" {
+  type        = set(string)
+  description = "List of target hosts for backend load balancing."
+}
+
+variable "backend_path" {
+  type        = string
+  default     = "/"
+  description = "Path used in backend connections."
+}
+
+
+variable "backend_host_header" {
+  type        = string
+  default     = null
+  description = "Custom host header for backend connections."
+}
+
+variable "healthcheck_active_path" {
+  type        = string
+  default     = "/api/v1/healthcheck/liveProbe"
+  description = "Path for active health checks."
+}
+
+variable "incoming_hosts" {
+  type        = list(string)
+  description = "List of incoming hosts for the routes in this service."
+}
+
+variable "routes" {
+  type = map(object({
+    incoming_protocols                  = optional(list(string), ["http", "https"])
+    incoming_methods                    = optional(list(string), null)
+    incoming_paths                      = optional(list(string), ["/"])
+    incoming_strip_path                 = optional(bool, false)
+    incoming_preserve_host              = optional(bool, true)
+    incoming_https_redirect_status_code = optional(number, 301)
+    incoming_snis                       = optional(list(string), null)
+    plugins = optional(map(object({
+      enabled     = optional(bool, true)
+      config_json = string
+      tags        = optional(list(string), [])
+    })), {})
+  }))
+  description = "Map of routes with their configurations."
+  default = {
+    payments_creditcard_sales_post = {
+      incoming_hosts = [
+        "api-dev.invoicecloud-beta.com"
+      ]
+      incoming_paths         = ["/biller/v1/payments/creditcard/sales"]
+      incoming_methods       = ["POST", "OPTIONS"]
+      incoming_preserve_host = false
+      plugins = {
+        request_transformer_advanced = {
+          config_json = "plugins/payments-creditcard-sales-post-transformer.json"
+        }
+        oauth2 = {
+          config_json = "plugins/oauth2.json"
+        }
+      }
+    }
+  }
+}
+The example file 
+variables.tf
+ defines the following map of routes with their configurations:
+payments_creditcard_sales_post
+: A specific route configuration.
+ 
+incoming_hosts
+: The incoming hosts for the route.
+ 
+incoming_paths
+: The incoming paths for the route.
+ 
+incoming_methods
+: The incoming methods for the route.
+ 
+incoming_preserve_host
+: Whether to preserve the host header.
+ 
+plugins
+: A map of plugins to apply to the route.
+ 
+request_transformer_advanced
+: A specific plugin configuration for 
+Request Transformer Advanced
+ 
+config_json
+: The path to the plugin configuration file.
+ 
+oauth2
+: A specific plugin configuration for 
+OAuth 2
+ 
+config_json
+: The path to the plugin configuration file.
+Create the environments Subfolder
+If the 
+environments
+ folder does not already exist, create it in
+the .kong
+ folder.
+Create Environment-Specific Configuration Files
+Environment-specific configuration files are in .tfvars format and define the variables used in your Terraform configuration. Below is an example of a configuration file for the development environment named 
+dev.tfvars
+.
+json
+service_name        = "icrestapi-dev6"
+backend_targets     = ["10.32.0.11:443"]
+backend_host_header = "devtest6.invoicecloud.com"
+incoming_hosts      = ["api-dev.invoicecloud-beta.com"]
+backend_path        = "/api"
+The example configuration file 
+dev.tfvars
+ defines the following:
+service_name
+: The name of the service being configured.
+backend_targets
+: A list of backend targets (IP addresses and ports) for the service.
+backend_host_header
+: The host header to use when forwarding requests to the backend targets.
+incoming_hosts
+: A list of incoming hosts that the Kong API Gateway will match for routing requests to this service.
+backend_path
+: The path to use when forwarding requests to the backend targets.
+Create the plugins Subfolder
+If the 
+plugins
+ folder does not already exist, create it in
+the .kong
+ folder.  
+Create Plugin Configuration Files
+Plugin configuration files are in JSON format and define the behavior of custom plugins.  Below is an example of a plugin configuration file named 
+payments-creditcard-sales-post-transformer.json
+.  
+json
+{
+    "replace": {
+        "uri": "/api/v1/invoicepay/cc/sale",
+        "headers": [
+            "Authorization:$((function() local customId = headers[\"X-Consumer-Custom-Id\"] if not customId then return \"\" end local t = {} for k, v in customId:gmatch(\"([^,]+):([^,]+)\") do t[k] = v end local apiKey = t[\"apikey\"] if not apiKey then return \"\" end return \"Basic \" .. apiKey end)())"
+        ]
+    }
+}
+The example configuration file 
+payments-creditcard-sales-post-transformer.json
+ performs the following actions:
+replace
+: Specifies the transformations to apply to the request.
+ 
+uri
+: Replaces the request URI with 
+/api/v1/invoicepay/cc/sale
+.
+ 
+headers
+: Replaces the Authorization header with a value derived from the 
+X-Consumer-Custom-Id
+ header.
+For IIS API Deployments
+For API applications that are running under IIS on a Azure VM Web Server ( deployment template 
+web-deploy.yaml@pipeline-templates
+ ) you will need to update the deployment pipeline YAML to indicate the Kong workspace / domain that the the deployment targets.
+yaml
+ .
+ .
+ .
+ extends:
+  template: web-deploy.yaml@pipeline-templates
+  parameters:
+    kongRouteDomain: 'biller'
+.
+.
+.   
+kongRouteDomain
+: Specifics the target Kong workspace / domain for configuration deployment.
+Related links:
+Kong
+ 
+API Gateway - Kong
+ 
+https://docs.konghq.com/hub/kong-inc/oauth2/
+ 
+https://docs.konghq.com/hub/kong-inc/request-transformer-advanced/
+ 
+ URL:/spaces/ED/pages/4001398798/Kong+API+Gateway+Integration

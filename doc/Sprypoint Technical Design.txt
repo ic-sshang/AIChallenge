@@ -1,0 +1,718 @@
+ 
+Page Navigation
+Jira ticket 
+INT-3281
+ITR
+Release Date
+5/13/2022
+Document status
+Complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+API Key for Test:
+541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd
+TEST BASE URL : 
+https://sprycis-spry-test.sprypoint.com
+API Authentication Method: API Key  (Will need Key and Value per Biller-- This will be part of header request)
+API Specs can be found: 
+ 
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+RTDR: Balance Update
+Get Realtime Data Refresh
+Used for single accounts only
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/rtdr/
+{account}
+Look up account information and return balance and Example cURL curl --location --request GET '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/rtdr/00
+ 000008' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd'
+Json { "accountNumber": "00000008", - Account Number
+"accountId": "8debd820-46f1-4fc2-8f3c-bdf536b970c1", 
+"totalBalance": 239.31, - Balance Due
+"currentBalance": 0,- Not Used
+ "pastDueBalance": 239.31, -Past Due
+"noChecks": false,
+ "noCreditCard": false, -Block CC if True, unblock if false
+"noEft": false- Block ACH if True, unblock if false
+“invoiceDueDate“: Date format = yyyy-MM-dd (i.e.: 2024-08-01) 
+Check 
+InvoiceDueDate
+ from the response to compare with InvoiceDueDate(FileSpecID-12) matches.
+6475670e-b0c5-4dd2-87ed-7ec8e9b4a4dc
+eeb245ab-79c5-48a0-89da-170762ee263e
+DECIDED
+IF YES: Update the BalanceDue (FileSpecID- 93 using the 
+totalBalance
+ value in the respond).
+cb076106-d5d5-4820-98ce-ba3cad62050d
+DECIDED
+IF NO: Do not update the BalanceDue. IC will display an error message "unable to update balance, new bill has been generated"
+IF YES: Update the BalanceDue (FileSpecID- 93 using the 
+totalBalance
+ value in the respond).
+IF NO: Do not update the BalanceDue. IC will display an error message "unable to update balance, new bill has been generated"
+BalanceDue between IC’s 
+BalanceDue 
+and 
+resp.Balancedue 
+needs to be made in order to keep the balance due consistent between IC, SpryPoint and Email Notification Balances. 
+RTDR: Balance Update- Multiple Accounts
+Batch Real-Time Data Refresh
+Used for updating multiple accounts at once.
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/rtdr
+ Same as real-time data refresh, but supports a list of accounts by account ID or account number Example cURL curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/rtdr
+' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{
+ "accounts": ["8debd820-46f1-4fc2-8f3c-bdf536b970c1", "00000007"] }'
+Response json [ { "accountNumber": "00000001", "accountId": "8debd820-46f1-4fc2-8f3c-bdf536b970c1", "totalBalance": 264.31, "currentBalance": 25, "pastDueBalance": 239.31, "noChecks": false, "noCreditCard": false, "noEft": false, “invoiceDueDate“: Date format = yyyy-MM-dd (i.e.: 2024-08-01) },
+ { "accountNumber": "00000007", "accountId": "aff80714-b74a-4b7d-85cb-6166ec768dc5", "totalBalance": 0, "currentBalance": 0, "pastDueBalance": 0, "noChecks": false, "noCreditCard": false, "noEft": false, “invoiceDueDate“: Date format = yyyy-MM-dd (i.e.: 2024-08-01)}
+Check 
+InvoiceDueDate
+ from the response follows the same rule as single account. 
+Mapping here should mirror single accounts.
+Data Pump: Payment
+Payment Postback
+Called when payment is made. If a batch already exists, payment will be added to batch. If batch doesn’t exist, one will be created and payment will be added to batch
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/paymentPostback
+Example cURL curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/payment
+ Postback' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "BillerGUID": "4f5975fd-53d5-44b3-b98d-051a7697f504", "Approved": true, "PaymentGUID": "ABC123457", "InvoiceNumber": "1afa2625-3f15-41e3-8c8b-7ca9b191e0ab", "PaymentAmount": 10.00
+Biller GUID- Biller GUID
+Approved- True 
+Payment GUID- IC Payment GUID
+Invoice Number- Invoice Number passed in BIF
+Payment Amount- Payment Amount
+PaymentTypeID- 1- CC, 2- ACH (Should be made at least 1 advanced setting as value may vary biller to biller), 3- American Express(separate from 1- CC), 4- PayPal/PayPal Credit/Venmo, 5- OBD FISERV(for electronic checks) and 6- OBD MasterCard RPPS(for electronic checks), 7- Easy Pay, 8- Check and 9- Cash, 10-Others.
+Response Body Headers plain OK c0e88ed8-12c3-49ea-b376-3503e1976aee
+Data Pump: Scheduled Payment
+Scheduled Payment Postback
+Create a scheduled payment by the primary customer on a specified account. Scheduled payment would include a unique external reference number/ID, the account number, the amount, as well as
+the date it should be scheduled for.
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/scheduledPaymentPostback
+curl --location --request POST
+'
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/scheduledPaymentPostback
+' \
+--header 'X-Auth-Token:
+541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"ScheduledPaymentID": "{SchedulePaymentID}",
+"AccountNumber": "{AccountNumber}",
+"PaymentAmount": {Amount},
+"PaymentDate": "{PaymentDate}"
+}'
+Response Body Headers plain OK
+Data Pump: Scheduled Payment Changes
+Scheduled Payment Changes Postback
+Update/Cancel a scheduled payment using the unique external reference number/ID. If the status is
+sent as “Update”, then the scheduled payment’s date is updated to the new one that is sent in the
+request. If the status is sent as “Cancelled”, then the scheduled payment is cancelled. The change
+description is used to create the news item for the action done.
+If it’s cancelled, leave payment amount and date to null, only populate payment ID and status. 
+Open Request
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/scheduledPaymentChangesPostback
+curl --location --request POST
+'
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/scheduledPaymentChangesPostback
+' \
+--header 'X-Auth-Token:
+541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"ScheduledPaymentID": "{SchedulePaymentID}",
+"AccountNumber": "{AccountNumber}",
+"PaymentAmount": {Amount},
+"PaymentDate": "{PaymentDate}",
+"Status": "{
+Cancelled
+, 
+Update
+}",
+"ChangeDescription": "{Description}"
+}'
+Response Body Headers plain OK
+Data Pump: Credit
+Credit Postback
+Called to put charges on customer accounts, e.g. fees or partial payment reversals. Also used for voiding payments.
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/creditPo
+ stback
+Example cURL curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/creditP
+ ostback' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "accountNumber": "00000001", "chargeTypeName": "NSF / Returned Check Fee", "amount": 25.00, "description": "From reversal of payment 1/25/2022", "autoPost": true, "chargeDate": "2/20/2022"
+Account Number- Account Number
+NSF/Returned Check Fee-
+Amount- Original Payment Amount
+Description; Credit
+AutoPost: True
+Charge Date: MMDDYYYY
+Response plain OK b71d5557-a5ca-4a93-942d-3ae4492a857b
+Data Pump: ACH Reject 
+ACH Reject
+Called when ACH payment is rejected. If payment is still in Draft, it will be canceled. If it has been posted, a payment reversal will be posted. This only supports full reversal - not partial
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/achRejec
+ tPostback
+Example cURL curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/achReje
+ ctPostback' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "PaymentGUID": "ABC123457" }'
+PaymentGUID- IC Payment GUID
+Response Body Headers plain OK
+Data Pump: Paperless Enrollment
+Post Update Paperless
+Update paperless setting on account. Can take true or false for paperless flag.
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/paperles
+ s
+ curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/paperle
+ ss' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "accountNumber": "00000002", "paperless": true, "emailAddress": "
+haijuan.zhu@test.gmail.com
+" }'
+Account Number= Account Number
+Paperless= True/False
+EmailAddress= Email Address
+OK
+Data Pump: AutoPay Enrollment
+Post Update Autopay
+Update Autopay flag on account. Can take true or false as the autopay flag. Can accept accountNumber or accountId to identify account 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/autopay
+ 
+curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/autopay
+ ' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "accountNumber": "
+00000002
+", "autopay": true, "referenceNumber": "123" }'
+Account Number= Account Number
+Autopay= True/False
+Reference Number=
+ Enrollment Date
+Data Pump: Update Email
+Update email address on a customer. Can update an existing (if oldEmail is specified) or create a new email contact. Can accept customerNumber or customerId to identify customer.
+Should only be used for one time payment or if a customer is not SSO.
+Open Request 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/updateEm
+ ail  curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/updateE
+ mail' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "
+customerNumber": "C00000001
+", "oldEmail": null, "newEmail": "
+joe@sprypoint.com
+"
+Customer Number: Customer Number
+Old E-mail: Old E-mail or Null
+New E-mail: New Email
+* at least one email address should always be present in the 
+oldEmail
+ or 
+newEmail
+ field (
+SA-1318
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+)
+OK
+Data Pump: Update Phone
+Update Phone
+Update phone number on a customer. Can update an existing (if olfPhone is specified) or create a new phone contact. Can accept customerNumber or customerId to identify customer.
+Should only be used if biller does not have SSO.
+ 
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/updatePh
+ one' 
+ curl --location --request POST '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/updateP
+ hone' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd' \ --header 'Content-Type: application/json' \ --data-raw '{ "customerNumber": "C00000001", "oldPhone": "+14135552150", "newPhone": "+14135551234" }'
+Customer Number: Customer Number
+Old Phone: Old Phone Number or Null
+New Phone: New Phone Number
+PDF Linking
+Get Statement PDF
+Returns a PDF document
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/statemen
+ tPdf/{statementID}
+Example cURL curl --location --request GET '
+https://sprycis-spry-test.sprypoint.com/integrations/invoicecloud/stateme
+ ntPdf/1afa2625-3f15-41e3-8c8b-7ca9b191e0ab' \ --header 'X-Auth-Token: 541e22e43ebb4ca8ba907ca945db6ce80ed17bddab7843f8a2cc3f3fd06eebdd'
+Response Body Headers application/pdf OK, with PDF document payload
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: BIF
+Specification: IC BIF
+Sample File: 
+File Transfer Frequency: Per Billing (Daily in most cases)
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Record Type
+1
+RowType
+Y
+TRUE
+N/A
+N/A
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A- Generated by IC- Known as BillerGUID
+N/A
+File Header
+4
+FileCreationDate
+Y
+TRUE
+N/A
+N/A
+File Header
+5
+InvoiceCount
+Y
+TRUE
+N/A
+N/A
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Amount Due
+Numeric
+File Header
+7
+RowType
+Y
+TRUE
+N/A
+N/A
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N/A
+N/A
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A- Generated by IC
+N/A
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Statement Number
+Numeric
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Date
+Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+Numeric
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Amount Due
+Numeric
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+N/A
+Numeric
+Invoice Header
+23
+FirstNotificationDate
+Y
+FALSE
+N/A
+Date
+Invoice Header
+24
+SecondNotificationDate
+Y
+FALSE
+N/A
+Date
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Amount Due
+Numeric
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+N/A
+N/A
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+N/A
+N/A
+Invoice Header
+407
+PastDue
+Y
+FALSE
+Past Due
+Numeric
+Invoice Header
+58
+RowType
+Y
+TRUE
+N/A
+N/A
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account Number
+Numeric
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+Alpha Numeric
+Customer Record
+61
+Address1
+Y
+FALSE
+Service Address
+Alpha Numeric
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Service City
+Alpha Numeric
+Customer Record
+64
+State
+Y
+FALSE
+Service State
+Alpha Numeric
+Customer Record
+65
+Zip
+Y
+FALSE
+Service Zip
+Alpha Numeric
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Customer E-mail Address
+Alpha Numeric
+Customer Record
+356
+BlockPaymentsCC
+Y
+FALSE
+Block CC
+True/False
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+Block EFT
+True/False
+Customer Record
+70
+RowType
+Y
+TRUE
+N/A
+N/A
+Invoice Detail
+Advanced Settings
+Note that the Biller API Key is the same for all of the different endpoints we are using for this integration.
+Advance Setting 131 usage notes for deducting transaction convenience fees
+The default value is to subtract convenience fees
+ New values:
+DataPumpSubtractConvenienceFeeFromScheduledPayments 
+(Boolean: true, false, 1, 0)
+DataPumpSubtractConvenienceFeeFromPayments 
+(Boolean: true, false, 1, 0)
+Also, Advanced setting 130 SHOULD NOT be used for this integration************************
+Setting 131 values and result below:
+Example use: {DataPumpSubtractConvenienceFeeFromPayments:false}
+value
+result
+true
+subtract
+false
+do not subtract
+not set
+subtract
+invalid value
+subtract
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/rtdr/{0}
+Y (Domain Name)
+10
+RTDR Key or Password if Applicable
+Biller API Key
+Y
+11
+DataPump Payments EndPoint/WebService URL
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/paymentPostback
+Y (Domain Name)
+13
+DataPump Payments EndPoint/WebService Password
+Same Biller API Key
+Y
+14
+DataPump Paperless EndPoint/WebService URL
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/paperless
+Y  (Domain Name)
+16
+DataPump Paperless EndPoint/WebService Password
+Same Biller API Key
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/autopay
+Y  (Domain Name)
+19
+DataPump AutoPay EndPoint/WebService Password
+Same Biller API Key
+Y
+88
+Secondary RTDR EndPoint/WebService URL (used for Credits, Voids and Chargebacks)
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/creditPostback
+Y (Domain Name)
+90
+Secondary RTDR Key or Password if Applicable
+Same Biller API Key
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/achRejectPostback
+Y (Domain Name)
+103
+DataPump ACH Rejects EndPoint/WebService Password
+Same Biller API Key
+Y
+111
+Secondary DP Paperless EndPoint URL
+(Email Customer Changelogs | Phone Number Customer Changelogs)
+https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/updateEmail|https://cis-proxy-us-west-1.sprypoint.com/mar/staging/integrations/invoicecloud/updatePhone
+Y (Domain Name)
+113
+Secondary DP Paperless EndPoint Password
+Same Biller API Key
+Y
+131
+JSON Configuration
+json
+{ "PaymentCodes": { "PaymentTypes": { "1": 1, "2": 2, "4": 7, "5": 8, "6": 9, "15": 4, "16": 4, "17": 4 },
+"PaymentTypeOverrides": { "American Express": 3, "Mastercard RPPS": 6, "Fiserv": 5 }, "DefaultCode": 10 } }
+
+{
+  "PaymentCodes": {
+    "PaymentTypes": {
+      "1": 1,
+      "2": 2,
+      "4": 7,
+      "5": 8,
+      "6": 9,
+      "15": 4,
+      "16": 4,
+      "17": 4
+    },
+    "PaymentTypeOverrides": {
+      "American Express": 3,
+      "Mastercard RPPS": 6,
+      "Fiserv": 5
+    },
+    "DefaultCode": 10
+  }
+}
+
+{
+  "DataPumpSubtractConvenienceFeeFromScheduledPayments": false,
+  "DataPumpSubtractConvenienceFeeFromPayments": false
+}
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+in BIF
+AllowPartialPayments
+Questionnaire
+AutoPayCollectionDate
+Questionnaire
+BalanceForward
+in BIF
+CreditCardServiceFee
+in BIF
+FirstNotifyRequestedDate
+Questionnaire
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+in BIF
+LocationReference
+in BIF
+MinimumAmountDue
+in BIF
+PaymentExpirationDate
+in BIF
+PaymentExpirationMessage
+in BIF
+PromptPayExpirationDate
+in BIF
+RegistrationValue
+in BIF
+SecondNotifyRequestedDate
+Questionnaire
+ThirdNotifyRequestedDate
+Questionnaire
+User Interaction and Design
+Data Flow - Invoice
+att2189951006
+2124841131
+1
+SpryPoint Invoices
+IM
+att2189295652
+att2190442505
+0
+Data Flow - Adjustments
+att2190966785
+2124841131
+1
+SpryPoint Adjustments
+IM
+att2189983767
+att2190934017
+0
+Data Flow - Payment
+att2190770181
+2124841131
+1
+Sprypoint Payments
+IM
+att2191097857
+att2190508042
+0
+Data Flow - Void
+att2190802949
+2124841131
+1
+Sprypoint Void
+IM
+att2190508047
+att2190540809
+0
+Data Flow - ACH Reject
+Blank
+Data Flow - Change Log
+Blank
+Data Flow - Bill Presentment
+PDF Linking will be used for any customer using SpryPoint
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the SpryEngage Portal for registration with SSO into IC for payment.
+Biller Experience
+Billers will access Invoice Cloud from the Biller Portal.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-2884
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8/29/2024
+Only two Payment Types: 1- CC, 2- ACH/EFT
+Add more payment types for bank reconciliation.
+Adding additional payment types: 3- American Express(separate from 1- CC), 4- PayPal/PayPal Credit/Venmo, 5- OBD FISERV(for electronic checks) and 6- OBD MasterCard RPPS(for electronic checks). Use 1- CC as a default payment type.
+INT-11502
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/10/2024
+There is no InvoiceDueDate in RTDR
+BalanceDue needs to update accordingly by comparing the  InvoiceDueDate between RTDR and InvoiceDueDate in Invoice file.
+If the due date from the response is in the future, do not update the balance due. THe message in RTDR that should be displayed is "unable to update balance, new bill has been generated"
+INT-11629
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/22/2024
+SpryPoint doesn’t have APIs to receiving scheduled payment and changes through Datapump 
+SpryPoint developed two endpoints for datapump
+SpryPoint created two API endpoints: Scheduled Payment Postback and Scheduled Payment Changes Postback. IC needs to add Endpoints and Password to Advanced Settings and enable Datapump types in CRM.
+ URL:/spaces/IM/pages/2124841131/Sprypoint+Technical+Design

@@ -1,0 +1,27 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+projectName
+$(Build.Repository.Name)
+ignoreErrors
+False
+testFilterExtension
+" "
+testFilter
+" "
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/windows-container-build.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../../tasks/dotnet-framework/build.yaml
+../../tasks/sonarqube/analyze-and-publish.yaml
+../../tasks/dotnet-framework/test.yaml
+../../tasks/sonarqube/prepare-dotnet.yaml
+ URL:/spaces/platform/pages/3632595581/jobs+dotnet-framework+build.yaml

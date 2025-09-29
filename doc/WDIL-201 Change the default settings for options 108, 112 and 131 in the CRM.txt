@@ -1,0 +1,42 @@
+Item link: 
+WDIL-201
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Requesting Billers: Florida Citrus Business and Industries Fund (BID: 3968), City of Moline IL (BID: 4457)
+User Story: The problem: 
+Unintended account overtakes
+ Account linking is available in all BIDs. Settings 108, 112 and 131 are allowing the override of email addresses through the one-time payment route - even for accounts that are registered AND are linked to other accounts. As a results, all linked accounts receive the email address update effectively overtaking the group of linked accounts. This is especially relevant in tenant/landlord relationship, where payment methods have been saved. The new owner of the linked accounts now has the ability to link other accounts and use the existing payment method that does not belong to him/her --> 
+creating a potential for FRAUD.
+The ask: Please change the default setting for these 3 settings to the following:
+108 - default is ON
+112 - default is ON
+131 - default is "Allow Unregistered Updates"
+Pre-grooming Notes:
+After further review, the requested changes seem less disruptive than I initially thought and had mentioned in today’s (8/13/2025) standup. We will need to work with Data Services to complete the necessary work of flipping the Biller Options' values for all the billers and updating the biller options' default values.
+Completing the data updates for Biller Options 108, 131 and 134 should be straightforward. However, Biller Option 112 is a little more complex because it is for custom Safety logic that blocks Account Owner email updates when a Group oversight user/login makes a payment. Therefore, flipping the bits or completing the data updates only, won’t enable this functionality. To enable this functionality, it would require additional code changes, if we wanted to make Safety’s custom logic which is currently controlled by Biller Option 112, default for all billers.
+Item links where some biller options were initially implemented:
+Biller Option 108: 
+EBPP-2082
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Biller Option 112: 
+EBPP-2673
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Biller Option 134: 
+EBPP-12643
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Technical Notes:
+Logic in the Cloud payment review page
+ (
+more detailed logic below
+)
+Email Strategy Factory
+Safety’s custom logic
+Default logic
+ URL:/spaces/PE/pages/4573397013/WDIL-201+Change+the+default+settings+for+options+108+112+and+131+in+the+CRM

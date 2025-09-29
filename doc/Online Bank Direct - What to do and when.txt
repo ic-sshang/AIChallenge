@@ -1,0 +1,154 @@
+1
+6
+false
+none
+list
+false
+Change Log
+Change Details
+Date
+Author
+Version
+Description
+ 
+Martha Greer
+Document uploaded
+Aug 12, 2024
+Martha Greer
+Updated document and ensured there is no dup document on Sharepoint
+note
+Overview
+
+
+Overview
+
+
+The purpose of this document to guide Implementation Managers, CS and Boarding about best practices to enable OBD when Payers will use new account numbers upon going live with Invoice Cloud.
+This document is oriented towards “new” implementations. However, some of this information is applicable to the Conversions team when an existing biller switches CIS. 
+Note: Please be aware that only InvoiceCloud calls this product “OBD”.  Do not use acronyms and explain to clients that our 
+Online Bank Direct
+, is known, by the rest of the world, as Bank Bill Pay. 
+Online Bank Direct (OBD) - What to do when Payers get new account numbers
+When do Payers get new account numbers (identifiers)?
+New account numbers are issues when the biller changes billing (CIS) systems. For example, they move from Harris to Oracle, or from Harris to Spry Point, etc.  In most cases, the new CIS will issue new identifiers for payers. It is very rare for a new CIS to keep existing account numbers.  
+Feel free to share this document with your Biller and CIS vendors regarding OBD and new account numbers: 
+Information to Billers_New CIS_New Account Numbers_OBD
+ 
+Why do we care about new account numbers and OBD?
+If the Biller already uses Bank Bill Payment services (with FISERV, Mastercard, or any other vendor), then Payers entered in their bank the old account number.  When InvoiceCloud activates OBD, IC will get the daily OBD files from FISERV and Mastercard with the old account number and will do “Zero” auto- matching.   So what?
+The biller will have to manually match every single OBD payment in the Biller Portal. So what?
+Well, imagine a client the size of San Jose water, Dekalb, Boston, having to manually auto-match in the Biller Portal 25,000 payments a day.  True story: Our OBD screen collapsed when San Jose Water received their first OBD file and thousands of payments did not match. We had to stop, call the head of the DB team and ask him to find a way to complete auto matching.
+What happens if IC does not auto match OBD payments and the biller does not have enough time to match all payments manually?
+InvoiceCloud will return the payments to the provider (FISERV or Mastercard) after 
+7 days
+. Why? Because IC cannot keep the money without allocating it to an account.  n account.
+The Process:
+If this is a new CIS installation, confirm that new account numbers will be issued by the new CIS.
+Boarding: 
+ 
+Boarding to confirm if the Biller is enrolled already with FISERV or another Bank Bill Pay Vendor during the underwriting process. This happens after intake meetings where Boarding reviews every project. 
+Boarding requests a Change of Concentrator Letter from the Biller. This is required when Boarding submits the request to FISERV to kick off the vetting process (takes 3 weeks). 
+If the Biller does use FISERV, or another Bank Bill Pay Vendor, already AND this is a new CIS installation, then the IM/PM must request a scrub file. 
+One single request in Sforce: Activate OBD AND request FISERV scrub file right after OBD Activation.  
+Once Boarding receives the scrub file, they will save it in the BOX and the IM will be notified via Sforce (@IM/PM). 
+Typically Scrub Files are to be completed by the biller.
+ 
+What
+ 
+When
+ 
+Day 
+ 
+Go Live day.
+ 
+---
+ 
+1
+ 
+IM submits Online Bank Direct (OBD) activation Salesforce case to Boarding. This is for InvoiceCloud to request FISERV & RPPS activation.
+Go live Day or the next day. 
+2 
+InvoiceCloud requests a scrub file. (The file has a 30-day duration/expiration) 
+Go live day or the next day 
+2 
+FISERV & RPPS enable OBD. 
+This includes the vetting.
+15 business days from OBD activation (from go-live).
+RPSS only takes 7-10 business days.
+The boarding rep will provide the IM with the activation date for RPPS. FISERV has an SLA but they do not provide an actual activation date.
+17 
+FISERV provides the scrub file to InvoiceCloud 
+ 
+20 
+The Biller or the CIS updates the FISERV scrub file with the new CIS account numbers. 
+The project owner (Biller side) and the PM (CIS) certify that the account numbers posted in the scrub file are accurate. 
+ 
+As soon as possible after go-live date.   
+22 
+InvoiceCloud provides the updated scrub file to FISERV 
+As soon as the updated scrub file is received via email. 
+23 
+FISERV updates account numbers on its system.  
+Up to 5 days  
+28 
+InvoiceCloud starts auto-matching payments 
+As soon as FISERV updates the account numbers on its system  
+29 
+A 2
+nd
+ Scrub File may be needed after 1-2 months of processing, which would be handled by Post Go-Live support by submitting case to Boarding.
+ 
+Hint: Did you know that a scrub file can be requested years after the biller is live to improve auto matching?
+ 
+FAQ:
+ 
+My biller is live with OBD, but the scrub file is pending, or the biller has hundreds of payments to be manually matched, can IC help them? 
+Yes. If the number of auto matched payments is out of control (more than 300 or so), make sure first that auto matching is enabled properly in the CRM and then open a
+ DataService JIRA/Data Update Request
+. You will need the "
+reference file
+”. 
+This is key for any MC RPPS OBD payments to auto-match since RPPS does not offer scrub files.  Any special configurations/customizations to the account numbers/schemes (dropping or adding of digits in account number schemes) can be addressed at FiServ but must be done via Data Services to update the MC RPPS OBD payment files with the correct account numbers OR customizations to account numbers/schemes.
+ 
+Note: You may need to file a JIRA daily until the number of unmatched OBD payments is manageable.  
+Click here to view a 
+Sample JIRA request
+: 
+Biller name and BID: 
+Request
+: Force OBD auto matching 
+Details
+:  
+Attached you can find a reference file called <xx>. Column < > has the old account number and column < > has the new account number that InvoiceCloud has. Please use this file to force auto-matching of all current pending OBD payments. The client has < > unmatched payments and it is very difficult to match manually.  Payments are returned after 7 days so it is imperative to complete the auto-match as soon as possible.  
+What is a scrub file? 
+ 
+It is a 
+file that FISERV (and not RPSS) provides. It has the full list of Payers enrolled on OBD. It shows the account number that the Payer used to enroll in OBD. It also has a column the “new” account number must be entered using a simple VLOOKUP. 
+ 
+When should I not use the Scrub file provided by FISERV?
+ 
+If the number of rows you see in the scrub file is not significant (say, fewer than 100) then it may not be worth taking any action.  The biller will be able to match payments manually in the Biller Portal.  
+Large clients where MRR is significant (>$10K), may have a large scrub file and therefore, the work described above is useful and necessary. 
+Real example
+: James City Service Authority is a “new” biller that is separating from an existing biller we have called HRSD.  James is moving to a new CIS and new account numbers will be issued.  HRSD does NOT have a contract with FISERV or RPPS so there is no scrub file in the first place.  For James City, we will enable OBD for the first time as part of going live. 
+What makes FISER send a paper check to the Biller? 
+For account numbers: 
+Q: If the FISERV questionnaire says that the account numbers have 5 digits but Payers add leading zeros and make it , for example, 8 digits, will that trigger a paper check?  
+“Yes, If you give us an account scheme of 000456, and the customer only enters 456 that will go as a paper check unless on the needs analysis you state to zero file to make the account # 6 digits. We remove all dashes and spaces unless you tell us on the needs analysis that the dash or space needs to be transmitted to the merchant for posting.  
+For biller names:
+ 
+Q: I know we try to submit many versions of the biller’s name and abbreviations. For example, we list the city name but do not include the state abbreviation, but the customer does. Does that trigger a paper check?   
+A: No. Typically we take names and wildcard them so if you give us City of Columbus, we use city of col% anything after the % is wildcard so it could be anything even the state.  
+Addresses:
+ 
+Q: Would biller address abbreviations trigger a check if it’s not listed?  For example, I live on Main Street, the biller gives us the addresses for Main Street but not St.  I know the team will add that St, but would that trigger a check?  
+A: We use zip codes not technically the address, so we love to have the zip 5 plus zip 4 that is used by USPS, I know they have on their website where you enter an address, and it give you the zip code with the plus four. We use a USPS software called CodeOne where it will take the address of like your example and give us the valid zip code it if can.  
+When should I not use the Scrub file provided by FISERV?
+ 
+If the number of rows you see in the scrub file is not significant (say, fewer than 100) then it may not be worth taking any action.  The biller will be able to match payments manually in the Biller Portal.  
+Large clients where MRR is significant (>$10K), may have a large scrub file and therefore, the work described above is useful and necessary. 
+Real example
+: James City Service Authority is a “new” biller that is separating from an existing biller we have called HRSD.  James is moving to a new CIS and new account numbers will be issued.  HRSD does NOT have a contract with FISERV or RPPS so there is no scrub file in the first place.  For James City, we will enable OBD for the first time as part of going live. 
+Additional information: 
+Please familiarize yourselves with the questionnaire billers must complete for OBD
+ URL:/spaces/Implementa/pages/3081928741/Online+Bank+Direct+-+What+to+do+and+when

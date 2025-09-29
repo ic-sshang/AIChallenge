@@ -1,0 +1,181 @@
+Description
+Things to Know when converting billers from IMT MIPS APPS to IMT Spectrum with RTDR, DataPump, and PDF linking.
+Page Navigation
+Summary
+Process
+Definitions
+Key Responsibilities
+Quality Assurance
+Roles
+Procedures
+Summary
+This document outlines the technical and procedural steps for converting a biller from IMT MIPS APPS to IMT Spectrum. The process includes configuration of real-time data retrieval (RTDR), DataPump, PDF linking, and CRM updates to ensure a seamless transition with minimal disruption to billing and payment services.
+Additional Confluence Information:
+https://invoicecloud.atlassian.net/wiki/x/FADghQ
+ 
+ Process
+Definitions
+API Credentials
+: Authentication details used to access IMT Spectrum services.
+BIF Customizations
+: InvoiceCloud-specific formatting settings for invoice display.
+DataPump
+: A service that transmits payment and registration data between systems.
+FTP Path
+: File Transfer Protocol location used for uploading invoice PDFs.
+GUID
+: Globally Unique Identifier used to identify invoice formats.
+IMT Spectrum
+: Real-time web services platform replacing IMT MIPS APPS.
+Maintenance Window
+: Scheduled downtime for system updates.
+RTDR
+: Real-Time Data Retrieval for invoice and balance information.
+UAT
+: User Acceptance Testing environment.
+Key Responsibilities
+Biller/Provider (IMT)
+:
+Provide UAT and production tokens, API credentials.
+Confirm go-live date.
+Confirm readiness for go-live.
+Validate configuration and notify when maintenance window can be removed.
+Provide API credentials and access to production environment.
+Validate post-conversion functionality.
+Project Manager (InvoiceCloud)
+:
+Set up Box folder and secure upload link.
+Update Salesforce and capture screenshots.
+Submit JIRA and Integration Coding Form.
+Configure CRM, FTP, DataPump, and Advanced Settings.
+Schedule and remove maintenance window.
+Quality Assurance
+Project Manager (InvoiceCloud)
+:
+Verify CRM settings, FTP paths, and DataPump configurations.
+Confirm RTDR test results and PDF linking.
+Ensure correct GUIDs are applied for invoice formatting.
+Biller
+:
+Validate invoice visibility and payment processing post-conversion.
+Roles
+·        
+Biller
+: The client organization undergoing the conversion. Provides credentials, confirms go-live details, and validates post-conversion functionality.
+·        
+Project Manager (InvoiceCloud):
+ Oversees the conversion process, coordinates with internal teams and the software vendor, and ensures all CRM and integration updates are completed.
+·        
+Provider (IMT/Spectrum Software Vendor):
+ Supplies API credentials, confirms go-live readiness, and supports configuration validation.
+Procedure
+Initial Setup  
+Who: Project Manager  
+a. Set up Box folder and send secure upload link to provider.  
+b. Request production token, API credentials, and confirm go-live date and maintenance window.  
+c. Capture screenshots of the following CRM screens from PROD:  
+   i. Profile  
+   ii. Products  
+   iii. Credit/Debit Cards  
+   iv. OBD  
+   v. Cloud IVR Connect Invoice Types  
+   vi. Advanced Settings  
+   vii. Integration Summary  
+   viii. FTP Management  
+   ix. DataPump Management  
+Pre-Go Live Configuration  
+Who: Project Manager  
+a. Create Integration Coding Form.  
+b. Submit JIRA with link to Coding Form (at least 30 days before go-live).  
+c. Include:  
+   i. Maintenance window details  
+   ii. API credentials  
+   iii. Biller-specific username, password, and user ID  
+d. Sample JIRA wording:  
+   Biller is converting from IMT MIPS APPS to IMT Spectrum, including presentment linking and setup for RTDR and DataPump, as reflected on the Integration Coding Form. Go-live is scheduled for [Date].  
+e. Reference prior Spectrum integrations for context.  
+f. Include links to:  
+   i. Confluence Guide  
+   ii. PDF Remote Link Guide – Guru Card  
+CRM Maintenance Window Setup  
+Who: Project Manager  
+a. Navigate to:  
+   CRM > Biller Portal > Settings > Portal Customization > Maintenance Windows  
+b. Click New Maintenance Window  
+c. Internal Description:  
+d. IMT Spectrum Conversion (Add Date)  
+e. Customer-Facing Message:  
+   Biller payment portal will be unavailable [Date]. Customers will be unable to process payments or access payment information. Site availability will resume immediately after the maintenance window. We appreciate your patience and understanding. Thank you.  
+f. Set start and end date/time (Central Time).  
+g. Check Active and optionally apply to all pages.  
+h. Save.  
+CRM Configuration & FTP Setup  
+Who: Project Manager  
+a. In CRM:  
+   i. Profile > Integration Partner ID → IMT Spectrum  
+   ii. Invoicing > Advanced Configuration:  
+      1. Enable:  
+         a. Real Time Data Refresh  
+         b. Suppress Stale Balances  
+         c. Apply Global BIF Customizations  
+   iii. Integration Summary > BIF Customizations:  
+      1. Update InvoiceFormatGUID to:  
+         A7DA43F3-9D20-45C9-8DC5-BE5AE931A8A3  
+b. FTP Path Setup:  
+   i. Format:  
+      [ftpname]\\ToInvoiceCloud\\PDFs  
+      Example: prairiepinemutualftp\\ToInvoiceCloud\\PDFs  
+   ii. FTP Management > PDF Settings > New PDF Setting:  
+      1. Input FTP username  
+      2. Add path  
+      3. Enable backup, set move action to “Move to Filename Pending,” and activate  
+   iii. FTP Management > Zip File Settings > New Zip File Setting:  
+      1. Use same path  
+      2. Enable backup, delete zip files, and activate  
+DataPump & Advanced Settings Cleanup  
+Who: Project Manager  
+a. CRM > DataPump Management:  
+   i. Configure based on biller’s terminal setup  
+   ii. Non-payment DataPump: no selections  
+b. CRM > Advanced Settings:  
+   i. Remove:  
+      1. 14–22 (old DataPump and PDF endpoints)  
+      2. 88, 105  
+   ii. Update:  
+      1. 8: RTDR Endpoint → 
+https://www.pdspectrum.com/wsSpectrumAPICore
+ 
+      2. 9: RTDR Username  
+      3. 10: RTDR Key or Password  
+      4. 11–13: DataPump Payments (same URL, username, password as above)  
+   iii. Format for settings 10 & 13:  
+      [PrivateKey]|[Password]  
+Testing & Go-Live Execution  
+Who: Project Manager, Biller, Provider  
+a. Test RTDR:  
+   i. Biller Portal > Search > Files > Invoice Files > History > Data Refresh  
+   ii. If no data appears, verify Advanced Settings  
+b. Confirm BIF Customization GUID is correct  
+c. Email provider (Seth) to confirm go-live readiness  
+d. Notify team when maintenance window is active  
+Post-Go Live Wrap-Up  
+Who: Project Manager  
+a. Remove maintenance window:  
+   i. CRM > Biller Portal > Maintenance Window > Uncheck Active > Save  
+b. Email provider that window is removed  
+c. Recapture screenshots  
+d. Update Salesforce with go-live confirmation  
+e. 
+https://app.getguru.com/card/iEMxq7pT/PDF-Remote-Link-Guide-IMT-Spectrum
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@924
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "IM"
+ URL:/spaces/IM/pages/4470538258/IMT+MIPS+APPS+to+Spectrum+Conversion+Team+Details

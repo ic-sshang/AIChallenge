@@ -1,0 +1,178 @@
+Target release (to prod)
+Early September 2025
+Target release (for testing)
+Mid August 2025
+Feature
+AutoPay Add-On (for Political Donations)
+Epics
+EBPP-21479
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-28086
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+IN DEVELOPMENT
+Blue
+ 
+Document owner
+ 
+ 
+Designer
+ 
+Tech lead
+ 
+UI Mocks
+https://www.figma.com/design/PKfNlHZFtODPZUFoGwfwuj/TFB-AgFund-AutoPay-Contributions?node-id=1-74&node-type=canvas&t=isaBGxXa6ASVhNkL-0
+ 
+Objective 
+ 
+Allow eligible members to enroll in AutoPay for a membership invoice and add on a political contribution. 
+When a user enrolls in AutoPay for their annual TXFB membership invoice, the user is prompted to add a $5 AGFUND contribution to their AutoPay. Each will be paid annually.
+This user experience is 
+NOT
+ part of a payment flow.
+In this feature, a user is 
+NOT
+ initiating a payment.
+The user is 
+ONLY
+ enrolling in AutoPay for their annual membership.
+Note: AGFUND is a PAC contribution specifically for Texas Farm Bureau Insurance
+High-level Requirements 
+ 
+Payer
+In the AutoPay setup flow the AutoPay Add-On for PAC contribution prompt displays in the UI 
+Same donations configuration options applied
+System needs to check eligibility flag ahead of AutoPay processing
+Check any current invoices for eligibility
+Process as two separate payment transactions – (1) membership (2) PAC contribution
+To process PAC contribution system must check the AutoPay table for the contribution add-on
+If payment fails for membership invoice do NOT proceed with payment processing for PAC contribution
+Data syncing
+Same data synchronization applies – send payment status once AutoPay run is successful and payment has processed for (1) membership (2) AGFUND
+AutoPay Add-On flag for PAC to be sent via DataPump to GuideWire
+Treats AGFUND as an additional AutoPay enrollment that is synced over to GuideWire
+Note:
+ Other APIs to manage AutoPay Add-Ons will not be available. For example, it is not supported if unenrolling a payer from AutoPay via API.
+Customers can opt out of the AutoPay Add-On
+Biller
+CSR/Agents can enroll customers in AutoPay for their annual membership and add on the $5 AGFUND contribution from the Biller Portal
+Assumptions 
+ 
+Works on desktop and mobile
+AutoPay will carry over annually until the user says no and opts out
+Customer will have 1 membership invoice only
+Out of Scope 
+ 
+Users will not be able to make payments towards other members' memberships
+Users can not use multiple payment methods for AutoPay of membership and AGFUND contribution
+Users will not be able to make additional payments to AGFUND during AutoPay enrollment
+Different AGFUND contribution amounts are not supported including:
+Custom amount (with min/max)
+Multiple preset fixed amount choices
+Round it up
+There will not be any identifier or tag to show if a member enrolled in the AGFUND AutoPay add-on on the iFrame of the customer portal
+User Interaction and Design 
+ 
+TFB AGFUND Autopay Research
+TFB AGFUND Autopay Mock Designs
+Product Specifications 
+ 
+Payer (Phase 2.1)
+In the AutoPay setup flow the AutoPay Add-On for PAC contribution prompt displays in the UI 
+This might apply to all invoice types or a selected invoice type
+Same donations configuration options applied
+System needs to check eligibility flag ahead of AutoPay processing
+Check any current invoices for eligibility
+Payment processing
+Check AutoPay table if contribution add-on exists for customer
+If payment fails for membership invoice do NOT proceed with payment processing for PAC contribution
+Same data synchronization applies – send payment status once AutoPay run is successful
+Send confirmation of AutoPay enrollment for Membership invoices and AutoPay add-on for PAC contribution
+Payer name must be passed through to TXFB (same configuration as today applies – send name of payment method)
+Customers can opt out of AutoPay in the following scenarios:
+Eligible user has enrolled in main invoice type and PAC contribution add-on. User opts out of PAC contribution. They will remain opted in to AutoPay for main invoice type.
+Eligible user has enrolled in main invoice type and PAC contribution add-on. User opts out of main invoice type. They are un-enrolled from AutoPay both.
+Must be a clean slate for user. Our system will 
+not
+ remember what they previously selected in the chance that they re-enroll in future.
+Email notifications are sent to users for:
+Enrollment confirmation
+Payment processing confirmation
+Reminder notification
+Changes to AutoPay i.e, Customer unenrolls
+Configuration in CRM
+Invoice Types > Donation Fund Invoice Types
+Add a line item with a check box to toggle whether the PAC contribution add-on is to be displayed in AutoPay setup flow
+Existing line item REQUIRE ELIGIBILITY CHECK must be checked to ensure eligibility is checked during this AutoPay process
+Considering the invoice type relationship and that the AutoPay add-on only applies to membership invoice types for TXFB, we may want to include a dropdown to select the invoice type(s) the AutoPay add-on applies to
+User scenarios 
+ 
+Description
+User Scenario
+Payment method stored & enrolls in AutoPay add-on
+User logs in
+User navigates to My Membership Account to enable AutoPay for membership payment
+User selects stored payment method from dropdown 
+User enrolls in AutoPay with stored payment method
+AGFUND contribution prompt appears with attestation
+User selects YES
+User confirms eligibility
+Email notification triggered to confirm AutoPay enrollment
+Email notification triggered to confirm AGFUND contribution
+User selects NO
+Email notification triggered to confirm AutoPay enrollment
+Payment method stored & does NOT enroll in AutoPay add-on
+User logs in
+User navigates to My Membership Account to enable AutoPay for membership payment
+User selects stored payment method from dropdown 
+User enrolls in AutoPay with stored payment method
+AGFUND contribution prompt appears with attestation
+User selects YES
+User confirms eligibility
+Email notification triggered to confirm AutoPay enrollment
+Email notification triggered to confirm AGFUND contribution
+User selects YES
+Email notification triggered to confirm AutoPay enrollment
+Email notification triggered to confirm AGFUND enrollment
+Payment method fails
+Payment fails for membership invoice type
+IC should NOT proceed with payment processing for AGFUND contribution add-on
+Email that payment failed for AutoPay for membership invoice is sent
+Customer opts out of AutoPay Add-On
+User logs in
+User navigates to My Membership Account
+User clicks edit on the AutoPay page for membership invoice
+User follows the typical AutoPay flow
+User selects NO for AGFUND
+Email notification triggered regarding opt-out / removal of AutoPay
+CSR enrolls customer in AutoPay via Biller Portal
+Biller Portal AutoPay enrollment with PAC contribution add-on
+CSR locates customer in the Biller Portal
+CSR adds a payment method in the Biller Portal for customer
+CSR enrolls customer in AutoPay and asks if they want to add on a PAC contribution (AGFUND)
+CSR selects the PAC Contribution on the AutoPay dialogue
+Email notification triggered regarding AutoPay enrollment
+Email notification triggered regarding PAC contribution (AGFUND)
+Communications 
+ 
+Notifications are sent to users for the following activities from existing InvoiceCloud email templates: 
+AutoPay Enrollment Confirmation (Baseline – no changes to templates req’d because content says “
+and if applicable AGFUND will be drafted
+”)
+Payment Processed Confirmation 
+AutoPay for membership 
+AGFUND contribution 
+Reminder Notification (3 days in advance) 
+Upcoming AutoPay for membership 
+Upcoming AGFUND contribution 
+Changes to payment method for AutoPay (Baseline – no changes to templates req’d)
+When a customer opts out of AutoPay (Baseline – no changes to templates req’d)
+When payment fails (Baseline – no changes to templates req’d)
+Customer Research 
+ 
+TFB / IC Demo - AGFUND Autopay (for Release 2)
+ URL:/spaces/PE/pages/3772088326/AutoPay+Add-On+for+PAC+Product+Requirements+TFB+AGFUND

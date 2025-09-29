@@ -1,0 +1,74 @@
+#FFFAE6
+THIS DOCUMENT IS STILL IN PROGRESS!!
+Purpose
+The purpose of this space is to document the current Integration solution set at InvoiceCloud to enable Electronic Bill Presentment & Payments. These solutions are managed by Integration Engineering team.
+ Please feel free to add/update/suggest the ways to improve 
+ 
+People / Product or Tools / Process
+People
+Scrum Teams
+Scrum Team 1: Best Integrator Friends (BIF) led by 
+Marcus Steen
+Scrum Team 2: Better Bill Quality (BBQ) led by 
+Fernando Cavazos Covarrubias
+ Scrum Team 3: Data Dawgs led by 
+Md Omar Faruque
+Scrum Team 4: Charminar Connectors led by
+ Kailashnadh Pochiraju
+Team collaboration
+Operations
+Solutions Engineering Team
+Implementation Team
+Conversions
+Client Services
+Engineering Team???????
+Dev Support
+Product or Tools
+Below are the products/tools supported by Integration Engineering team
+Integration 360 (Int360)
+FTP - Invoice File Processing
+FTP - Invoice File Processing (File split) 
+Stratus (Desktop Client)
+Real Time Data Reference (RTDR)
+Data Pump
+PDF File Linking
+PDF Extraction
+PDF Template
+Conversions
+Process
+Jira Sprint Boards
+Data Dawgs
+Better Bill Quality
+Best Integrator Friends (BIF)
+Charminar Connectors
+Integration Roadmap
+2025 - 
+Integrations Timelines - Integrations - Confluence
+Application Infrastructure / Repo Details
+How to get access to production database? 
+The access to production database is restricted to specific teams so in order to analyze production data we can leverage the replica of prod database which is 1 min old data. We can raise access request for the replication server. 
+Below is database server detail 
+Environment
+Database Server URL
+Comments
+1
+PROD
+ic-db-east-server1.database.windows.net
+It is the live production database used by the application 
+2
+DEV
+ic-dbtest-east-server1.database.windows.net
+Lower environment for testing and development
+3
+PROD (Replica)
+ic-db-west-server1.database.windows.net
+This is replica of prod db which is 1 min old
+#E6FCFF
+NOTE: 
+I have taken guidance of 
+Ray Cappola 
+and got reference of Prod replica, the key differentiator is the region value i.e., west / east  
+Reference Ticket
+Raise ticket under: 
+Service Management > Data Services Request > Access Request 
+ URL:/spaces/PRODUCT/pages/4052582545/Integrations+Product+Documentation

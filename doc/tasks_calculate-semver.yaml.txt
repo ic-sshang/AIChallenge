@@ -1,0 +1,25 @@
+Code-Generated Docs
+Description
+
+Use GitVersion to compute the semantic version
+Must run on an agent with Dotnet installed
+
+Parameters
+Parameter
+Default
+Description
+gitVersionConfigFile
+GitVersion.yml
+Path to GitVersion.yml. Default assumption is that this will be in the repo root. You can pass an empty string ' ' to denote that you aren't using a config file.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/helm-deploy.yaml
+flows/library-dotnet-framework.yaml
+flows/kubernetes-build.yaml
+flows/linux-container-deploy.yaml
+jobs/container-build.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+ URL:/spaces/platform/pages/3634462973/tasks+calculate-semver.yaml

@@ -1,0 +1,83 @@
+1. High-Level Architecture
+Clients: Slack (IC-AgentHub), React SPA
+Orchestrator (stateless .NET Core API)
+Event Bus: Azure Service Bus (topics/subscriptions)
+Agents: PlanningAgent, XrayAgent, CodeAgent, TestAgent, ReleaseAgent
+MCP Adapters: Azure DevOps, Jira,  Xray Cloud, Azure OpenAI
+2. Data Models & Schemas
+2.1 RunRequest
+wide
+1800
+{
+  "runId":"uuid",
+  "initiator":"user@invoicecloud.com",
+  "requestType":"PRReview|SoapToRest|GenerateXray",
+  "context":{ "repo":"billing-service", "prId":"123" },
+  "metadata":{ "autonomyLevel":"L0", "expectedAgents":["CodeAgent","QAAgent"] }
+}
+
+2.2 AgentOutput
+wide
+1800
+{
+  "runId":"uuid",
+  "agentId":"CodeAgent",
+  "status":"Completed",
+  "confidence":0.92,
+  "artifacts":[ { "type":"patch", "name":"pr123.diff", "content":"---diff" } ],
+  "proposedActions":[ { "actionId":"act-001", "kind":"ApplyPatchToRepo", "requiresApproval":true } ],
+  "metrics":{ "tokens":1234, "latencyMs":12000 }
+}
+
+2.3 ProposedAction
+wide
+1800
+{
+  "actionId":"act-001",
+  "kind":"ApplyPatchToRepo",
+  "requiresApproval": true,
+  "payload": { "repo":"billing-service", "branch":"ic-agent/run-001", "patch":"..." },
+  "createdBy":"CodeAgent",
+  "confidence":0.91
+}
+
+3. Messaging Design
+run.requests
+ → Orchestrator publishes, agents subscribe through multi agent host.
+agent.outputs
+ → Agents publish, Aggregator subscribes.
+4. 
+MCP Tool Adapters
+Azure DevOps MCP
+: 
+getPrDiff
+, 
+createPrComment
+, 
+applyPatch
+.
+Jira MCP
+: 
+createIssue
+, 
+linkTests
+.
+Xray Cloud MCP
+: 
+genXray
+, 
+importXray
+.
+5. Aggregator
+Waits for 
+expectedAgents
+ or timeout.
+Merges outputs, detects conflicts.
+Emits ProposedActions for approval.
+6. Security & Governance
+Azure AD for auth, Managed Identities for services.
+MCP services redact sensitive data (remove PII , secrets) before model calls.
+7. CI/CD & Deployment
+Repos per component (Orchestrator, Agents, MCP, SPA, Slack App).
+Azure DevOps Pipelines → build, test, containerize.
+ URL:/spaces/PE/pages/4644765766/Technical+Design+Document+-+AI-Powered+SDLC

@@ -1,0 +1,221 @@
+INT360 Overview and Documentation on Migration
+This document provides an end-to-end overview of INT360 and discusses the approaches considered by the team to integrate the INT360 feature into the CRM during biller creation. It also explores the possibilities of providing this feature in the CRM, along with addressing authentication challenges and CORS (Cross-Origin Resource Sharing) issues.
+Overview:
+Currently, the INT360 process applies the profiler default settings to the newly created biller based on the attached Integrator profile. The following settings are applied, which are retrieved from the profiler settings:
+AdvancedSettings
+InsertBifCustomizations
+InsertFTPConfig
+SetNonPaymentConfig
+UpdateBillerTerminals
+SetPaymentConfigurations
+InsertFieldMapping
+Process:
+INT360 currently uses form-based authentication. Once the user successfully logs into ICSKYNET, they can navigate to INT360 and select the integrator from the dropdown menu. Upon selection, the attached billers will be displayed. When a biller is selected, all the above-mentioned settings are retrieved through multiple GET calls. When the user clicks on "Apply Changes," all the profiler settings are updated to the biller.
+Detailed Steps:
+Get all profilers
+Retrieves all integrator profiles.
+exec itg.selIntegratorProfiles
+Filtering the integrator in INT360 integrators list:
+var profiler = Integrator.Profiles.Where(x => x.IntegratorID == integratorID).FirstOrDefault();
+Get biller terminals
+Retrieves terminals from the biller and returns a set of terminals, removing terminals with PaymentTypeID of 99.
+exec dbo.lstBillerTerminals @BillerID= {billerID}
+Get Data pump settings
+Retrieves various data pump settings based on the parameter type.
+switch (DPParamTypeID)
+
+{
+
+    case 1:
+
+        query = "exec lstPaymentTypes";
+
+        idComparator = "PaymentTypeId";
+
+        settingDescColumnName = "PaymentTypeDesc";
+
+        break;
+
+    case 2:
+
+        query = "exec lstTransactionTypes";
+
+        idComparator = "TransactionTypeId";
+
+        settingDescColumnName = "TransactionTypeDesc";
+
+        break;
+
+    case 3:
+
+        query = "exec lstPaymentSource";
+
+        idComparator = "PaymentSourceId";
+
+        settingDescColumnName = "PaymentSourceDesc";
+
+        break;
+
+}
+Profile data pump configuration
+Retrieves the data pump configuration for a specific profile.
+exec itg.selProfileDataPumpConfig @ProfileID={profileID}
+Get Profile Advanced Settings
+Retrieves advanced settings for a specific profile.
+string query = $"exec itg.selProfileAdvancedSettings @ProfileID={profileID}";
+
+string lstAdvancedSettings = "exec lstBillerAdvancedSettings";
+
+var profileAS = Database.GetDataSet(query, 0).Tables[0];
+
+DataTable spAdvancedSettings = Database.GetDataSet(lstAdvancedSettings, 0).Tables[0];
+
+try
+
+{
+
+    foreach (DataRow row in profileAS.Rows)
+
+    {
+
+        DataRow[] AdvSettingsRow = spAdvancedSettings.Select($"BillerAdvancedSettingID = {Convert.ToInt32(row["AdvancedSettingID"])}");
+
+    }
+
+}
+Get File Configurations
+Retrieves FTP file configurations for a specific profile.
+exec itg.selProfileFtpFileConfig @ProfileID={profileID};
+Get File Export Configurations
+Retrieves FTP file export configurations for a specific profile.
+exec itg.selProfileFtpFileExportConfig @ProfileID={profileID};
+Get Zip Configurations
+Retrieves FTP zip configurations for a specific profile.
+exec itg.selProfileFtpZipConfig @ProfileID={profileID};
+Get PDF Configurations
+Retrieves FTP PDF configurations for a specific profile.
+exec itg.selProfileFtpPdfConfig @ProfileID={profileID};
+Get Biller File Split Configurations
+Retrieves file split configurations for a specific profile.
+exec itg.selProfileBillerFileSplitConfig @ProfileID={profileID};
+Get Biller FTP Credentials
+Retrieves FTP credentials for a specific biller.
+exec selBillerFtpConfig @BillerID={BillerID}, @Active=1;
+Updating the Settings
+Biller Advanced Settings
+Inserts advanced settings for a biller.
+exec insBillerAdvancedSettings @BillerID={0}, @BillerAdvancedSettingID={1}, @Setting='{2}';
+Insert Bif Customizations
+Inserts BIF customizations for a biller.
+exec selBillerBifCustomizations @BillerID={BillerID}, @Field={item.Field}, @InvoiceTypeID={item.InvoiceTypeID};
+Insert FTP Config
+Inserts FTP file configurations for a biller.
+exec dbo.insBillerFtpFileConfig;
+Insert FTP Export Config
+Inserts FTP file export configurations for a biller.
+exec dbo.insFileExportTask;
+Insert Zip Config
+Inserts FTP zip configurations for a biller.
+exec dbo.insBillerFtpZipConfig;
+Insert PDF Config
+Inserts FTP PDF configurations for a biller.
+exec dbo.insBillerFtpPdfConfig;
+Insert BFS Config
+Inserts file split configurations for a biller.
+exec itg.insBillerFileSplit;
+Insert Stratus Available Formats
+Inserts available formats for Stratus.
+exec insStratusBillerAvailableFormat;
+Insert Stratus Config
+Inserts Stratus configurations for a biller.
+exec insStratusConfig;
+Set Non-Payment Config
+Inserts non-payment data pump configurations for a biller.
+exec insBillerDataPump @BillerID={BillerID}, @DataPumpID=1;
+Update Terminals
+Updates terminals for a biller.
+exec insBillerDataPump @BillerID={BillerID}, @DataPumpID=1;
+Set Payment Configuration
+Inserts payment data pump configurations for a biller.
+exec insBillerDataPump @BillerID={BillerID}, @DataPumpID=1;
+Insert Field Mappings
+Inserts field mappings for a biller.
+exec dbo.insQdsInquiryConfig @BillerID={billerID}, @EBPP;
+Logging the Info
+Logs configuration changes.
+If the configurations are successfully updated to the biller, log the success messages.
+If the configurations fail to update to the biller, log the failure messages using the stored procedure below.
+exec insNotes;
+Proposed Approaches for Migrating to CRM
+First Approach: Reuse Existing Angular Views
+Reuse the existing Angular views and migrate them as-is to ICCRM by placing them under the content folder. This approach leverages the existing codebase, reducing development time and effort.
+Second Approach: Convert to 
+ 
+ASP.NET Core
+Convert the UI to ASP.NET  Core, an open-source web framework for .NET. Web Forms is not recommended, as it would be a technological downgrade. This approach modernizes the application, providing better performance and scalability.
+Third Approach: API Reuse
+Reuse the existing APIs in ICSKYNET and make AJAX calls from the ICCRM Angular pages. This approach leverages the existing backend logic, ensuring consistency and reducing the need for additional development.
+Risks
+Since website projects do not precompile, ensure IIS is properly configured to serve Angular pages and static files (JS, HTML, CSS) after placing them in a static content folder, such as /Content/Int360/.
+Angular uses client-side routing (e.g., 
+https://www.invoicecloud.com/crm/i360/biller
+), whereas ASP.NET  Web Forms expects server-side page requests (e.g., 
+https://www.invoicecloud.com/crm/i360/biller.aspx
+). Therefore, use Angular’s Hash Routing mode (e.g., 
+https://www.invoicecloud.com/crm/#/i360/biller
+ ).
+IIS may not serve certain file types (e.g., .json, .js.map). To resolve this, update the web.config to allow these MIME types.
+Authentication
+Currently, ICSKYNET uses form-based authentication and maintains cookies. To access the existing APIs, you need to pass the authentication cookie from CRM. Here are the steps to achieve this:
+Retrieve the Authentication Cookie:
+ Ensure that the authentication cookie from ICSKYNET is accessible in the CRM application.
+Pass the Cookie with API Requests:
+ Include the authentication cookie in the headers of your AJAX requests from the CRM to the ICSKYNET APIs. This ensures that the API requests are authenticated.
+Configure CORS:
+ Update the CORS settings in the ICSKYNET Web API project to allow requests from the CRM domain. This can be done by adding the appropriate CORS policy in the Web API configuration.
+Handle Authentication Errors:
+ Implement error handling in the CRM application to manage authentication errors, such as expired or invalid cookies. Prompt the user to re-authenticate if necessary.
+Alternate Approaches
+Convert Web APIs to VB.NET
+ 
+Convert the existing Web APIs from C# to VB.NET  and move them to the App_Code/Web API folder in ICCRM. This ensures that both the UI and API are in the same repository, simplifying maintenance and deployment.
+Create a Library
+Develop a library that encapsulates the INT360 API calls. Use the DLL generated from this library in ICCRM to call the INT360 APIs. This approach promotes code reuse and modularity.
+Use Existing Authentication Cookie Flow
+Utilize the existing authentication cookie flow to call the authentication controller. Pass the authentication cookie to the INT360 API to complete the flow. This method leverages the current authentication mechanism, ensuring seamless integration.
+Create Authentication Controller for JWT Tokens
+Develop an authentication controller in ICSKYNET to generate a JWT token using claims. Return the token to the client and use it in a Skybot job to pass it to the INT360 API. This approach enhances security by using token-based authentication.
+Important Considerations
+Mixing C# and VB.NET
+ 
+:
+ While it is possible to mix C# and VB.NET  in a website project for business logic and helper classes, it is not recommended for Web API Controllers. This approach may not work smoothly in a website project unless the components are precompiled separately. This can lead to potential issues with integration and maintenance.
+Dynamic Compilation of Web Forms:
+ ASP.NET  Web Forms dynamically compile .aspx pages at runtime. This means that any changes to the .aspx pages are compiled on the fly, which can impact performance and deployment processes.
+Angular Components in ICSKYNET:
+ INT360 is not the only Angular-based component in ICSKYNET. Other tabs and features also use Angular. Therefore, it is essential to carefully extract only the INT360-related code and migrate it to ICCRM. This ensures that the migration does not affect other functionalities within ICSKYNET.
+Deployment Considerations:
+ It may be necessary to modify the deploy.yaml file in ICCRM to include the content folder during deployment. This ensures that all necessary static files (such as JS, HTML, and CSS) are correctly deployed and accessible in the ICCRM environment.
+Finalized Approach
+First Step: Consolidate API Calls
+In ICSKYNET, there are multiple API calls used in the INT360 controller, including around 9 GET calls and 9 POST calls. To streamline the process, we need to consolidate these into two calls:
+GET Call:
+ This call will retrieve all necessary settings from the profiler in the same manner as before, ensuring no changes from the functional side. It will gather all required data in a single call.
+POST Call:
+ This call will update all settings in a single call without missing any steps. Alternatively, create a single POST call and use services to fetch all settings from service calls and update them. Ensure the controller remains lightweight by utilizing services and helpers.
+Second Step: Implement JWT Authentication
+Once a biller is submitted in CRM, it is passed to the job. The job will then call the ICSKYNET APIs.
+Create JWT Authentication Logic:
+ Implement JWT authentication logic in the job using the existing ic.jwt package. Generate a token and pass it to the INT360 API. Validate the token in ICSKYNET based on JWT claims. Once validation is successful, call the INT360 POST API with billerID and integratorID parameters.
+Additional Details
+Token Generation:
+ The Skybot job will use the ic.jwt package to generate a JWT token. This token will include claims that identify the user and their permissions.
+Token Validation:
+ ICSKYNET will validate the JWT token to ensure it is authentic and has not expired. This validation will be based on the claims included in the token.
+Service Layer:
+ To keep the controller lightweight, a service layer will be used to handle the business logic. This layer will be responsible for fetching settings, updating configurations, and any other necessary operations.
+Error Handling:
+ Implement robust error handling to manage scenarios where the token is invalid or expired. The system should prompt the user to re-authenticate if necessary.
+Security Considerations:
+ Ensure that all API calls are secure and that sensitive data is protected. Use HTTPS for all communications between the CRM, Skybot job, and ICSKYNET.
+ URL:/spaces/PE/pages/4039671824/Int360+Migration+to+CRM+Documentation

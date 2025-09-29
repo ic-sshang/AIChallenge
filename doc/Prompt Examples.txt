@@ -1,0 +1,52 @@
+Customers
+list of customers with username
+nodes { customerName accountNumber emailAddress username }
+show me customers with autopay
+nodes { customerName accountNumber emailAddress customerAutoPays { autoPay autoPayDate } }
+show me customers with paperless
+nodes { customerName accountNumber emailAddress customerPaperless { Paperless PaperlessDate } }
+show me customers with invoices that have a balance due
+nodes { customerName accountNumber emailAddress invoices { invoiceNumber balanceDue } }
+list of customers with blocked payments
+nodes { customerName accountNumber emailAddress blockCCPayments blockEFTPayments }
+Payments
+list of autopay payments
+nodes { paymentDate customerName accountNumber invoiceNumber paymentType paymentAmount paymentMessage paymentSource }
+list of biller portal payments.
+nodes { paymentDate customerName accountNumber invoiceNumber paymentType paymentAmount paymentMessage paymentSource }
+list of credit card payments
+nodes { paymentDate customerName accountNumber invoiceNumber paymentType paymentAmount paymentMessage }
+list of credit card payments with address that starts with a
+nodes { paymentDate customerName accountNumber invoiceNumber paymentType paymentAmount paymentMessage address city state zip }
+Invoices
+list of invoices with DisplayAccountNumber
+nodes { invoiceDate customerName accountNumber invoiceNumber invoiceDueDate totalAmountDue balanceDue displayAccountNumber }
+list of invoices with BalanceForward
+nodes { invoiceDate customerName accountNumber invoiceNumber invoiceDueDate totalAmountDue balanceDue balanceForward }
+list of invoices with autopay payments
+nodes { invoiceDate customerName accountNumber invoiceNumber invoiceDueDate totalAmountDue balanceDue payments { paymentSource } }
+Customer Credit Card → Customer Relationship
+a list of expiring cards with customers that has autopay on
+a list of expiring credit cards with customer's autopay enabled
+Upcoming card expirations for customers enrolled in autopay
+{ customerCreditCards(first: 1000, where: { expYear: { eq: 2025 }, expMonth: { in: [ 6, 7 ] }, customer: { customerAutoPays: { some: { autoPay: { eq: true } } } } }) nodes { customerName accountNumber emailAddress cardNumber expMonth expYear customer { customerAutoPays { autoPay autoPayDate } } } totalCount }
+Customer → Customer Credit Card Relationship
+Customers with autopay enabled and credit cards nearing expiration
+Accounts with active autopay and soon-to-expire payment cards
+List of customers using autopay with cards expiring in the near future
+Customers set up for automatic payments with expiring cards
+{ customers(first: 1000, where: { customerAutoPays: { some: { autoPay: { eq: true } } }, customerCreditCards: { some: { expYear: { eq: 2025 }, expMonth: { in: [ 6, 7 ] } } } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { customerGUID customerName accountNumber emailAddress customerCreditCards { cardNumber expMonth expYear } customerAutoPays { autoPay autoPayDate } } totalCount }
+Scheduled Payments → Customer Relationship
+Scheduled payments linked to customers with expiring credit cards
+Scheduled payments tied to soon-to-expire card information
+{ scheduledPayments(first: 1000, where: { customer: { customerExpiringCards: { some: { expYear: { eq: 2025 }, expMonth: { in: [ 6, 7 ] } } } } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { type pmtType pmtDate accountNumber customerName invoiceNumber amtDue pmtAmt customer { customerName accountNumber emailAddress customerExpiringCards { cardNumber expMonth expYear } } } totalCount }
+Customer → Scheduled Payments Relationship
+Customers that have scheduled payments that are on autopay.
+Customers that have scheduled payments in the future that are on autopay.
+{ customers(first: 1000, where: { customerAutoPays: { some: { autoPay: { eq: true } } }, scheduledPayments: { some: { pmtDate: { gte: \"2025-06-05T00:00:00\" } } } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { customerGUID customerName accountNumber emailAddress scheduledPayments { type pmtType pmtDate accountNumber } customerAutoPays { autoPay autoPayDate } } totalCount } }
+Hours and Minutes Prompts
+show me payments from 3 hours ago.
+{ payments(first: 1000, where: { paymentDate: { gte: \"2025-06-05T12:04:57\" } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { paymentGUID paymentTypeID paymentDate customerName accountNumber invoiceNumber paymentTypeDesc paymentAmount paymentMessage } totalCount } }
+show me payments from 3 minutes ago
+{ payments(first: 1000, where: { paymentDate: { gte: \"2025-06-05T15:02:52\", lte: \"2025-06-05T15:05:52\" } }) { pageInfo { startCursor endCursor hasPreviousPage hasNextPage } nodes { paymentGUID paymentTypeID paymentDate customerName accountNumber invoiceNumber paymentTypeDesc paymentAmount paymentMessage } totalCount } }
+ URL:/spaces/ED/pages/4380590160/Prompt+Examples

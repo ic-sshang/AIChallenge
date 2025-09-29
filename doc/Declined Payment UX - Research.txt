@@ -1,0 +1,141 @@
+Background
+Currently if a payment is declined, the user is notified on the payment confirmation screen. To change their payment information, they must go through the whole payment route again. This creates friction for the user that may have a negative effect on adoption.
+We are improving the declined payment user experience in 
+EBPP-26263
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ and want to measure the potential ROI of this initiative. 
+Research Goals
+Estimate the potential impact on adoption/revenue that will result from improving the user experience of declined payments in the checkout flow.
+Research Findings
+!! Disclaimers on Paths in Pendo !!
+Disclaimers on Paths in Pendo
+Paths timeout after 60 minutes, so if the user makes no activity after 60 minutes, the path would end and a new path would begin the next time the visitor interacts with the site
+Sometimes the path shows “no next step” while other times the path just ends – both represent the end of the path. Pendo just explicitly shows there's no next step when there are multiple branches of a path.
+:grey_question:
+2754
+❔
+#F4F5F7
+Research Question: 
+How many users re-attempt after their payment is declined? How many of those users end up successfully completing a payment? 
+Note: The below paths filters out the steps taken after a declined payment to provide a quick view of how many users successfully process a payment after a declined payment. 
+Post-declined payment path
+ from Jan 2025
+This path shows what actions users take after experiencing a declined payment
+Historical Data
+Quarter
+Total Volume of Declined Payments
+% of Drops (NO re-attempt) Post-Decline 
+% of Re-attempts that Result as Processed 
+% of Total Declines that Result as Processed
+Q1 24
+745k
+32%
+73%
+48%
+Q2 24
+827k
+45%
+75%
+40%
+Q3 24
+751k
+38%
+75%
+45%
+Q4 24
+715k
+33%
+75%
+48%
+FY 24 Average per Quarter
+760k
+37%
+75%
+45%
+Takeaways:
+Once a payment is declined, on average 37% do not complete another attempt to pay (users may drop-off at multiple stages of the payment process). 
+This means only 63% re-attempt a payment.
+Of those that re-attempt, on average 75% result in a payment 
+Projected Results
+Key Assumptions
+Our average Revenue Per Transaction (RPT) is $1.30 according to 
+Tableau data
+ (filtered from 1/1/24-12/31/24)
+Using our average FY 2024 data, 37% of 742k drop-off per quarter. That comes out to ~281.2k transactions per quarter, or ~93.7k per month.
+Conservative Case
+If 1% more users re-attempted after a declined payment (meaning 64% re-attempt), that would result in capturing 
+1.8k
+ more transactions per month and we would gain 
+2.3k MRR
+.
+Calculations
+Current:
+63% of 760k re-attempt per quarter = 478.8k, or 159.6k per month
+75% re-attempts result in payment
+75% of 159.6k is 
+119.7k
+ per month
+Future:
+64% of 760k re-attempt per quarter = 486.4k, or 162k per month 
+75% re-attempts result in payment
+75% of 162k = 
+121.5k
+ per month which is 
++1.8k 
+from current
+Best Case
+The re-attempt of the same payment method is typically very high (>80%)
+If 80% users re-attempted after a declined payment, that would result in capturing 
+32.3k
+ more transactions per month and we would gain 
+42k MRR
+.
+Calculations
+Current:
+63% of 760k re-attempt per quarter = 478.8k, or 159.6k per month
+75% re-attempts result in payment
+75% of 159.6k is 
+119.7k
+ per month
+Future:
+80% of 760k re-attempt per quarter = 608k, or 202.7k per month 
+75% re-attempts result in payment
+75% of 202.7k = 
+152k
+ per month which is 
++32.3k 
+from current
+Additional Data
+:grey_question:
+2754
+❔
+#F4F5F7
+Research Question: 
+What actions are users taking before experiencing a declined payment?
+Pre-declined payment path
+ from Jan 2025
+Historical Data
+Quarter
+% of Declined Payments from Cloud Payment Review Page
+Total Volume of Declined Payments
+Q1 24
+79% 
+832k
+Q2 24
+64% 
+905k
+Q3 24
+72% 
+835k
+Q4 24
+77% 
+797k
+FY 24 Average
+73%
+842k
+Path per quarter
+Observations:
+Looking at the average results from 2024
+Payment declines not resulting from any action prior are likely a result from failed payments through autopay or a recurring scheduled payment – these workflows are not in scope for this initiative 
+ URL:/spaces/PRODUCT/pages/4018700392/Declined+Payment+UX+-+Research

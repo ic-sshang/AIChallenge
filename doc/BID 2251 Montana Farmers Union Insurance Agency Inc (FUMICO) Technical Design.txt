@@ -1,0 +1,470 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+ITR
+Document status
+Done
+Green
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+File Mapping
+Invoice File
+File Extension: .bif
+File Naming Convention: Standard
+File Delimiter: Pipe
+Specification: Standard, will be used for both new invoice creation and updates (i.e. balances) for existing invoices. 
+Sample File: 
+File Transfer Frequency: Daily
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Invoice Header
+41
+Custom4
+Y
+FALSE
+AG_NAME (used for template)
+Invoice Header
+42
+Custom5
+Y
+FALSE
+AG_NAME_ADDR (used for template)
+Invoice Header
+43
+Custom6
+Y
+FALSE
+AG_STREET (used for template) 
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Invoice Header
+58
+RowType
+Y
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Record
+61
+Address1
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Customer Record
+64
+State
+Y
+FALSE
+Customer Record
+65
+Zip
+Y
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+Adjustment/Daily Balance File
+File Extension: n/a
+File Naming Convention: n/a
+File Delimiter: n/a
+Specification: Balance changes/updates to be handled via BIF. Payments made outside of Invoice Cloud handled by BPF. 
+Sample File: n/a
+File Transfer Frequency: n/a
+Payment/Lockbox File (Incoming from FUMICO)
+File Extension: .bpf
+File Naming Convention: Standard
+File Delimiter: Pipe
+Specification: Standard
+Sample File: 
+File Transfer Frequency: Daily
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Record Type
+196
+RowType
+Y
+TRUE
+File Header
+197
+BillerGuid
+Y
+TRUE
+File Header
+198
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+199
+FileCreationDate
+Y
+TRUE
+File Header
+200
+PaymentCount
+Y
+TRUE
+File Header
+201
+TotalPaymentAmount
+Y
+TRUE
+File Header
+202
+RowType
+Y
+TRUE
+Payment Record
+203
+InvoiceNumber
+Y
+TRUE
+Payment Record
+204
+AccountNumber
+Y
+TRUE
+Payment Record
+205
+PaymentAmount
+Y
+TRUE
+Payment Record
+206
+PaymentDate
+Y
+TRUE
+Payment Record
+Payment/Lockbox File
+File Extension: .txt
+File Naming Convention: Standard
+File Delimiter: JSON
+Specification: 
+Sample File:
+[
+  {
+    
+"reference_id"
+: 
+"58541724-4bc7-4481-8e72-2ec68eee589f"
+,
+    
+"policy_number"
+: 
+"BP00004949"
+,
+    
+"fumico_process_date"
+: 
+"2020-12-01"
+,
+    
+"fumico_invoice_type"
+: 
+"A10"
+,
+    
+"payment_receipt_timestamp"
+: 1608583151,
+    
+"payment_amount"
+: 1234567.89,
+    
+"is_short_pay"
+: 
+"Y"
+,
+    
+"invoice_cloud_transaction_id"
+: 
+"Invoice Clouds's ID"
+  
+},
+  {
+    
+"reference_id"
+: 
+"58541724-4bc7-4481-8e72-2ec68eee589f"
+,
+    
+"policy_number"
+: 
+"BP00004949"
+,
+    
+"fumico_process_date"
+: 
+"2020-12-01"
+,
+    
+"fumico_invoice_type"
+: 
+"A10"
+,
+    
+"payment_receipt_timestamp"
+: 1608584195,
+    
+"payment_amount"
+: 100,
+    
+"is_short_pay"
+: 
+"Y"
+,
+    
+"invoice_cloud_transaction_id"
+: 
+"Invoice Clouds's ID"
+  
+},
+  {
+    
+"reference_id"
+: 
+"58541724-4bc7-4481-8e72-2ec68eee589f"
+,
+    
+"policy_number"
+: 
+"BP00006207"
+,
+    
+"fumico_process_date"
+: 
+"2020-12-02"
+,
+    
+"fumico_invoice_type"
+: 
+"A9"
+,
+    
+"payment_receipt_timestamp"
+: 1608585170,
+    
+"payment_amount"
+: 560.01,
+    
+"is_short_pay"
+: 
+""
+,
+    
+"invoice_cloud_transaction_id"
+: 
+"Invoice Clouds's ID"
+  
+}
+]
+File Transfer Frequency: Daily after batch close. 
+Field
+Data Type
+Character Limits
+Format
+Values
+ReferenceID
+N/A
+Pulled from Custom1 in BIF 
+PolicyNumber
+N/A
+AccountNumber
+FUMICOProcessDate
+N/A
+Pulled from Custom2 in the BIF
+FUMICOInvoiceType
+N/A
+Pulled from Custom3 in the BIF
+PaymentReceiptTimestamp
+N/A
+Format as provided samples. 
+PaymentAmount
+N/A
+Principal payment amount minus any processing fees. 
+IsShortPay
+N/A
+This will always be blank. 
+InvoiceCloudTransactionID
+N/A
+Unique payment ID from Invoice Cloud. (IC payment reference number)
+Change Log File
+File Extension: n/a
+File Naming Convention: n/a
+File Delimiter: n/a
+Specification: n/a
+Sample File: n/a
+File Transfer Frequency: n/a
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Provided in BIF
+AutoPayCollectionDate
+Customization
+BalanceForward
+Customization
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+Customization
+InvoiceDate
+Provided in BIF
+InvoiceDueDate
+Provided in BIF
+InvoiceFormatGuid
+Provided in BIF
+InvoiceTypeID
+Provided in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+Provided in BIF
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Customization
+ThirdNotifyRequestedDate
+Customization
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Biller Experience
+User Stories
+ URL:/spaces/IM/pages/1340407837/BID+2251+Montana+Farmers+Union+Insurance+Agency+Inc+FUMICO+Technical+Design

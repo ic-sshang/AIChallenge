@@ -1,0 +1,74 @@
+Release Notes 2025-06-10
+
+
+ICRestAPI - Logging Improvements for the CreateCustomerRecord WebMethod
+
+
+
+
+Enhanced request and response logging
+ - Now log both requests and responses for the Create Customer Record Web Method, providing better visibility and easier troubleshooting.
+
+
+Improved error logging
+ - We’ve updated error logs to include comprehensive details, such as parameter types, making it simpler to diagnose issues.
+
+
+Sensitive data masking
+ - We’ve implemented new methods to mask sensitive information in logs, ensuring better data privacy and security for customer information.
+
+
+Consolidated logging methods
+ - By breaking out logging methods and reducing cognitive complexity, your development experience will be more streamlined and maintainable.
+
+
+Unit tests for increased reliability
+ - Enhanced unit testing for logging features ensures more robust performance and reliability of the system.
+
+
+Optimized asynchronous logging
+ - Improvements in async logging help maintain performance while logging operations, resulting in faster response times.
+
+
+Null and empty checks added
+ - Additional checks for null or empty values prevent errors and enhance the robustness of logging functionality. 
+
+
+
+
+These enhancements will ensure a smoother, more secure experience while using our APIs!
+
+
+ICRESTAPI - Improve Logging for Retrieve User Login Payment Method on Banks and Credit Cards
+
+
+
+
+Enhanced logging for Create Customer Record Web Method: Improved visibility by logging both requests and responses, helping to troubleshoot and optimize customer record operations.
+
+
+Improved error logging: Now includes the full name of parameter types, making it easier to diagnose issues and improve the overall reliability of the application.
+
+
+Sensitive data masking: Added masking for sensitive information in request/response logs to enhance user data security.
+
+
+Reduced cognitive complexity: Refactored methods for better readability and maintainability, streamlining development and support processes.
+
+
+Unit tests enhancement: Updated and expanded unit tests ensure robust functionality and higher confidence in the application's reliability.
+
+
+Asynchronous logging improvements: Enhanced logging mechanisms for better performance, ensuring faster operation and less resource usage.
+
+
+Public ClearSensitiveData method: Made this method publicly accessible, giving developers more flexibility in managing sensitive data.
+
+
+Addition of LogActionFilter: Introduced a new filter to standardize logging across user interactions, enhancing consistency and predictability in log outputs. 
+
+
+
+
+These updates are designed to improve the user experience, strengthen security, and streamline troubleshooting!
+ URL:/spaces/PE/pages/4399464535/Release+Notes+-+SR+-+2025-06-10

@@ -1,0 +1,50 @@
+Problem Alignment
+8-23-21 Waiting for Chase test portal access.
+The Problem
+The City of Boston needs the ability to preauthorize a payer’s credit/debit card and hold it up to 14 days for birth certificates and death certificates. Holding the authorization will give the CSR time to review and verify the request before it is processed.
+After reviewing, the CSR should have options to finalize (settle) or abort (release hold) for each transaction. If the transaction is not manually finalized by the CSR in X amount of time (likely 7 days), the pre-auth will 
+expire
+. For pricing, Boston said they are fine with the existing IC fee of 2.75% with a $1 min. For the month of June 2021, 3,704 birth certificates ($14 each) and 746 death certificates ($12 each) were processed. Boston will submit the service fee to their payers for payment. 
+Why: How do we know this is a real problem and worth solving?
+Boston is currently using Stripe for this functionality with their birth certificate and death certificates. This functionality is a requirement in their RFP.
+Audience: Who are we building for?
+This is for the City of Boston, although it has potential for usage by other billers. For now, we are building the solution to focus on the City of Boston, though this document includes the next steps to productize this feature if needed. 
+High-level Approach
+We plan on allowing Boston to continue to use their front-end application so there is minimal disruption in the workflow of Boston employees. 
+Approach: Integrate with their existing system/interface (provide APIs to handle the payment activity)
+Use existing Chase Paymentech functionality to receive and send back a token to cancel or approve the payment
+Use Boston’s front-end application that CSRs use for Birth and Death Certificate requests. This application uses Stripe’s API to process payment or release auth hold. IC needs to provide an API that Boston can use in place of Stripe’s API. It would need to allow them to process or cancel a pending authorization.
+https://www.figma.com/file/OcCgZsdqVT9AQPk8uFSvxN/Hold-an-authorized-transaction?node-id=0%3A1
+ 
+Success
+How do we know if we’ve solved this problem?
+We will be successful if Boston is happy with the solution we provide for supporting and managing preauthorized transactions.
+Solution Alignment
+Key Features
+Invoice Cloud will need to support delayed batch settlement at the Invoice Type level. Payments to this Invoice Type would not settle nightly like typical transactions. Instead, they would remain as pending authorizations until a CSR takes action or them or until 14 days pass, at which point they are automatically declined.
+Align pricing to existing fields if possible
+Ability to pass a payment token back and forth with Boston so they can decline or approve transactions. 
+Additionally, we will need a new Approval Status (“Pending”) for these pending payments/authorizations:
+Jira issues
+Ticket
+Product Area
+https://invoicecloud.atlassian.net/browse/EBPP-1282
+ 
+Pending payments DB table so we can seperately hold these transactions. We need to ensure that the batch does not close on these transactions
+https://invoicecloud.atlassian.net/browse/EBPP-2079
+ 
+Biller portal “Search Payments” addition to add “Pending” as a dropdown option
+https://invoicecloud.atlassian.net/browse/EBPP-2080
+ 
+CRM changes. Will need this for enablement and seperate pricing
+https://invoicecloud.atlassian.net/browse/EBPP-2081
+ 
+Creating an API Boston can use to approve or decline a transaction from their existing UI
+https://invoicecloud.atlassian.net/browse/EBPP-2092
+ 
+Open batch summary update?
+Productization Approach:
+To make the product available to other billers we will need:
+Interface to approve or deny transactions in the biller portal. This approach would involve a new Biller Portal area where the pending payments are displayed. It could be similar to our “Open Batch” functionality, but with more options to take action on each item (process payment, cancel/release authorization).
+Use the Cloud Store to capture these transaction types
+ URL:/spaces/PRODUCT/pages/1164279809/Payment+authorization+hold+and+release

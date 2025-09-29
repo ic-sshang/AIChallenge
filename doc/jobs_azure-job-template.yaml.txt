@@ -1,0 +1,45 @@
+Code-Generated Docs
+Description
+None :(
+Parameters
+Parameter
+Default
+Description
+artifact
+n/a
+where to pick the artifact eg-ReleaseArtifacts
+                 vstsFeedPackage: "${{ lower(parameters.artifact
+version
+n/a
+the package name,get from build yaml
+                 vstsPackageVersion: ${{ parameters.version }}package version
+vstsFeed
+n/a
+where to pick the artifact eg-ReleaseArtifacts
+                 vstsFeed
+resourceGroupName
+n/a
+webAppName
+n/a
+webApp|functionapp
+                 WebAppName: ${{ replace(parameters.webAppName
+targetEnvironment
+n/a
+preDeploySteps
+n/a
+postDeploySteps
+n/a
+appType
+n/a
+serviceConnection
+n/a
+agentPool
+n/a
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/azure-deploy-template.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+ URL:/spaces/platform/pages/3634790549/jobs+azure-job-template.yaml

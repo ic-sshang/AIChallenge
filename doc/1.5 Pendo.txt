@@ -1,0 +1,83 @@
+Pendo is tooling used to monitor user interactions and engagement.
+Below is vanilla JavaScript run in the global window space to install/bootstrap Pendo.   
+Note the API key that is used “
+28824daf-cc11-45f9-74fb-46d3058ddba1
+".
+ <script type="text/javascript" language="javascript">
+        (function (apiKey) {
+                (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=[];
+                v=['initialize','identify','updateOptions','pageLoad','track'];for(w=0,x=v.length;w<x;++w)(function(m){
+                    o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
+                    y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+apiKey+'/pendo.js';
+                    z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+        })('28824daf-cc11-45f9-74fb-46d3058ddba1');
+</script>
+The above script has been added to the PayerPortal project in a static “pendo.js” file and the host is loading this fie in the page header.
+Below was pulled from a devtest2 MyIIS session for BID 265.  This script function is called upon document ready / page load and is used to start Pendo user interaction data capturing.  The data will be different for each authenticated / logged in user into the payer portal.
+<script type="text/javascript">
+pendo.initialize(
+{
+  visitor: {
+    id: '27e313b8-c72e-472c-bd06-85f82746da7f-b8f1fa83-2719-4cda-a7c6-baf5da55dd33638283811733888414',
+    authenticated: 'True',
+    account_linked: 'True',
+    userhaspaperless: 'False',
+    visitor_environment: 'Development'
+  },
+  account: {
+    id: 'InvoiceCloud - QE 265',
+    account_environment: 'Demo',
+    Biller_software_partner: 'Invoice Cloud',
+    Biller_has_autopay: 'True',
+    Biller_has_paperless: 'True',
+    Billertier: 'N/A',
+    Date_live: '6/1/2023',
+    Multi_user: 'True',
+    vertical: 'Government & Utility',BID: '265',State: 'MA'
+  }
+}
+);
+</script>
+
+ 
+Based on conversations with SMEs on existing Pendo integrations the 
+visitor.id
+ is all that is required to hook into an already existing Pendo data capture.  Below is the minimal required initialize call.   This call should be made early in the React render process.
+The 
+visitor.id
+ is being captured as a cookie “ic_pendokey” on the “.invoicecloud.com” domain.   The React application can read this cookie to get the visitor id and call the Pendo initialize upon mounting.  
+pendo.initialize(
+{
+  visitor: {
+    id: '27e313b8-c72e-472c-bd06-85f82746da7f-b8f1fa83-2719-4cda-a7c6-baf5da55dd33638283811733888414',
+    }
+}
+);
+Screenshot of the cookie 
+ic_pendokey
+ set in MyIIS for the 
+visitor.id
+ value.  
+This cookie is not set on the “.invoicecloud.com” level but rather on the subdomain “
+devtest2.invoicecloud.com
+”.  
+This will cause issues in the test environment reading the cookie because MyIIS and the 1.5 UI live on different subdomains.
+Cookie domain issue (no longer applicable)
+In addition to tracking page views/visits handled by the initialize.  We need to explicitly track:
+Both an attempt to enroll in Pay By Text and the API result in that attempt
+Both an attempt to cancel a existing Pay By Text enrollment and the API result in that attempt
+Other events of interest, special to 1.5
+1.5 authentication (MyIIS session + OTP JWT token) results
+A simple pub/sub dispatcher can be used in the React UI to decouple application events (what we want to track) from Pendo.  
+Below are Pendo code examples for tracking a event, the function takes a event name and a metadata object.  We can use the metadata object to provide the details of the API calls.  The event names to track must be registered in the Pendo admin UI.
+pendo.track("pay_by_text_signup", {
+        statusCode: 200,
+        message: "success"
+    });
+    
+    
+pendo.track("pay_by_text_cancel", {
+        statusCode: 200,
+        message: "success"
+    });
+ URL:/spaces/EN/pages/2933882953/1.5+Pendo

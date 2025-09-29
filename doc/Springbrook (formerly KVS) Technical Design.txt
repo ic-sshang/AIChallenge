@@ -1,0 +1,642 @@
+ 
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+INT-5513
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Release Date
+Feb 2023
+Document status
+in progress
+Yellow
+Document owner
+ 
+ 
+Solution engineer
+ 
+Salesforce SOW
+n/a
+Knowledge Transfer
+n/a
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: N/A
+File Naming Convention: N/A
+File Delimiter: Fixed length
+Specification: 
+Sample File: 
+File Transfer Frequency: Twice a year
+Note: Each line in the invoice file will be used to create two invoices in IC. There will be an invoice for installment 1 and an invoice for installment 2. 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Character Position
+Record Type
+1
+RowType
+N
+TRUE
+N/A - Always ‘FH’
+n/a
+File Header
+2
+BillerGuid
+N
+TRUE
+IC generated value
+n/a
+File Header
+4
+FileCreationDate
+N
+TRUE
+Creation date
+n/a
+File Header
+5
+InvoiceCount
+N
+TRUE
+Count of invoices in file
+n/a
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Total invoice amount in file
+n/a
+File Header
+7
+RowType
+N
+TRUE
+Always ‘N’
+n/a
+Invoice Header
+8
+RecordType
+N
+TRUE
+N/A - Always ‘IH’
+n/a
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+IC generated value
+n/a
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Created by IC: Year-REQ
+InstallNumber
+-SequenceBill No
+Installment 1 - 1 (field1-'REQ1'-field2field4)
+Installment 2 - 2 (field1-'REQ2'-field2field4)
+Field 1 - 1:4
+Field 2 - 5:6
+Field 4 - 13:19 (
+remove left padded zeros
+)
+Invoice Header
+11
+InvoiceDate
+N
+TRUE
+Hardcoded 
+Installment 1 - 7/1/BillYear
+Installment 2 - 2/1/BillYear+1
+Change request to use an advanced setting that can be configured per invoice type to allow someone to setup the date in CRM. We should be able to configure this setting to match ‘BillYear+1’  functionality in this setting.
+n/a
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Hardcoded 
+Installment 1 - 7/31/BillYear
+Installment 2 - 2/28/BillYear+1
+Change request to use an advanced setting that can be configured per invoice type to allow someone to setup the date in CRM. We should be able to configure this setting to match ‘BillYear+1’  functionality in this setting.
+n/a
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Installment 1 - 1st Inst Principal Due (Field 28)
+ - IC will add the decimal point manually by diving the value by 100.
+Installment 2 - 2nd Inst Principal Due (Field 36)
+ - IC will add the decimal point manually by diving the value by 100.
+415:425
+490:500
+Invoice Header
+93
+BalanceDue
+Y
+TRUE
+Set to TotalAmountDue
+Installment 1 - 415:425
+Installment 2 - 490:500
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Sequence (field 2)
+5:6
+Invoice Header
+39
+Custom2
+N
+FALSE
+Field left blank intentionally (for payment file)
+Sub Bill
+Invoice Header
+40
+Custom3
+Y
+FALSE
+District (field 3)
+7:12
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Location Street No (field 21), Location Street Name (field 22), Location Street Unit (field 23)
+combine 3 fields into one
+344:349
+350:389
+390:399
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Original Tax Due (field 25)
+402:412
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+Installment 1 - 1 (hardcoded based on how the record is split into two invoices)
+Installment 2 - 2 (hardcoded based on how the record is split into two invoices)
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+Year (field 1)
+1:4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+Bill No (field 4)
+remove left padded zeros
+13:19
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - Always ‘CR’
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Print Key (field 68)
+Biller calls this the map ID
+800:824
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Owner Name 1 (field 13) 
+87:126 
+Customer Record
+61
+Address1
+Y
+FALSE
+Owner Addr 1 (field 15)
+167:206
+Customer Record
+62
+Address2
+Y
+FALSE
+Owner Addr 2 (field 16)
+207:246
+Customer Record
+63
+City
+Y
+FALSE
+Owner City (field 18)
+287:326
+Customer Record
+64
+State
+Y
+FALSE
+Owner State (field 19)
+327:328
+Customer Record
+65
+Zip
+Y
+FALSE
+Owner Zip (field 20)
+329:343
+Customer Record
+373
+DisplayAccountNumber
+FALSE
+Parcel ID (field 6)
+21:40
+Customer Record
+70
+RowType
+N
+TRUE
+N/A - Always ‘ID’
+n/a
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: N/A
+File Naming Convention: N/A
+File Delimiter: Fixed length
+Specification: 
+Sample File: 
+File Transfer Frequency: Daily
+Note: File may contain records for previous centuries or years. The integration is Open Invoicing so if an older invoice needs a balance update, the record will be in the file.
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Character Position
+Record Type
+305
+RowType
+N
+TRUE
+N/A - Always ‘FH’
+n/a
+File Header
+306
+BillerGuid
+N
+TRUE
+IC generated value
+n/a
+File Header
+308
+FileCreationDate
+N
+TRUE
+Creation date
+n/a
+File Header
+309
+AdjustmentCount
+N
+TRUE
+Count of adjustments in file
+n/a
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+Total adjustment amount in file
+n/a
+File Header
+311
+RowType
+N
+TRUE
+N/A - Always ‘AR’
+n/a
+Adjustment Record
+312
+InvoiceNumber
+N
+FALSE
+Created by IC: CenturyYear-REQ
+InstallNumber
+-
+Sequence
+Bill No
+Installment 1 - 1 (field1,2-'REQ’field10-
+field3
+field4)
+Installment 2 - 2 (field1,2-'REQ’field10-
+field3
+field4)
+Field 1 - 1:2
+Field 2 - 
+3:4
+Field 10 - 23:24
+Field 3 - 5:6
+Field 4 - 7:13 (
+remove left padded zeros
+)
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+Balance (Field 11)
+ - IC will add the decimal point manually by diving the value by 100.
+When the balance has a negative/credit balance, the last digit of the field represents a certain negative number. (Examples: 0000000000Q = -0.08, 0000000123M = -12.34)
+ }  = negative 0
+J = negative 1
+K = negative 2
+L = negative 3
+M = negative 4
+N = negative 5
+O = negative 6
+P = negative 7
+Q = negative 8
+R = negative 9
+25:34
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+Always 2
+n/a
+Adjustment Record
+343
+AdjustmentDate
+N
+FALSE
+Hardcoded - today’s date
+n/a
+Adjustment Record
+Payment/Lockbox File
+There are 2 current versions of the Springbrook Payment Export file:  183 (IF_KVS Lockbox File) and 450 (IF_KVS Payment - CSV).  A new version is documented below which will need a new Invoice File Type.
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .TXT
+File Naming Convention: ICPayments’InvoiceTypeAbbreviation+InstallmentNumber'-YYYYMMDDHHMMSS (Ex: ICPaymentsRE3-20230104010005)
+File Delimiter: Fixed length
+Specification: Included Payment Types: Payments only 
+Sample File: 
+File Transfer Frequency: Daily
+Note: Specification shows values after the ‘payment date’ but KVS confirmed IC should use spaces for those values.
+Field Mapping
+Header:
+Partner Field
+Character Field Position 
+Character Field Limit
+Values
+Batch
+1:4
+4
+Hardcoded 0001
+Combined into one field (KVS field names listed below)
+Tax Year
+Sequence
+Muni
+Bill No
+Sub Bill
+Payment No
+5:8
+9:10
+11:16
+17:23
+24:24
+25:26
+5:26
+4
+2
+6
+74
+1
+2
+22
+Always 0’s on header (IC combined into one field)
+Items (Batch Count)
+27:31
+5
+Left padded with zeros
+Total Amount (Batch Amount)
+32:43
+11
+Left padded with zeros, no decimal
+Filler
+44:79
+36
+Blank spaces
+Body:
+Field
+Character Field Position 
+Character Field Limit
+Values
+Batch
+1:4
+4
+Hardcoded 0001
+Tax Year (Biller Bill Year)
+5:8
+4
+Padded 0’s if missing characters
+Sequence (Custom1)
+9:10
+2
+Left padded with zeros
+Muni/District (Custom3)
+11:16
+6
+Right padded with spaces
+Bill No (Biller Invoice Number)
+17:23
+7
+Left padded with zeros
+SubBill (Custom2)
+24:24
+1
+If length greater than 0, then append. If length less than 0, leave blank.
+Payment No (Biller Installment Number)
+25:26
+2
+Left padded with zeros
+Payment Amount
+27:36
+10
+Left padded with zeros, no decimals
+Payment Date
+37:44
+8
+YYYYMMDD
+Blank
+45:78
+34
+Blank spaces
+New TXT Payment Export File
+File Extension: .TXT
+File Naming Convention: ICPayments’'-YYYYMMDDHHMMSS (Ex: ICPayments-20241202111005)
+File Delimiter: Fixed length
+Sample File:
+Field Mapping
+Field
+Character Field Position 
+Character Field Limit
+Values
+Partner Field
+AccountNumber without Dash
+1:9
+9
+Account Numbers on Springbrook are in this format 005026-000.  Since there are only 9 characters the - needs to be removed.
+Account Number
+Amount
+10:17
+8
+LEFT pad with spaces
+Amount
+Payment Date
+18:23
+6
+MMDDYY (last 2 digits of the year YY)
+Date
+Payment Method Description
+24:34
+11
+First 11 characters of description, RIGHT pad with spaces
+Check Number (24:34)
+Last4 of CC Number or Last4Checking/Savings Account Number
+35:38
+4
+Last4 of CC Number or Last4Checking/Savings Account Number
+Check Number (35:38)
+Payment Source Description
+39:55
+15
+First 15 characters of description, RIGHT pad with spaces
+Description (39:55)
+RejectReference  
+56:68
+13
+First 13 characters of RejectReference, LEFT pad with spaces if needed.
+Description (56:68)
+Advanced Settings
+n/a
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF Customization 
+AutoPayCollectionDate
+BIF Customization 
+BalanceForward
+Always No
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF Customization 
+InvoiceDate
+in BIF (based on Advanced Setting - TBD)
+InvoiceDueDate
+in BIF (based on Advanced Setting - TBD)
+InvoiceFormatGuid
+BIF Customization 
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF Customization 
+ThirdNotifyRequestedDate
+BIF Customization 
+User Interaction and Design
+Data Flow - Invoice
+att2553413744
+2530771004
+1
+kvs1
+IM
+att2553348211
+att2553708576
+0
+Data Flow - Adjustments
+att2553806859
+2530771004
+1
+kvs2
+IM
+att2553905175
+att2553774089
+0
+Data Flow - Payment
+att2553872389
+2530771004
+1
+kvs3
+IM
+att2554200071
+att2553643038
+0
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Standard IC Biller Portal
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-6379
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+est June 2023
+Hardcode invoice dates and due dates
+All configurable invoice dates and due dates based on the invoice type (ex school tax vs city tax)
+School taxes and city taxes are billed at different times of year 
+ITG-3221
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Created new payment export file.
+Created new payment export file.
+Created new payment export file.  Several Springbrook billers have requested this new format.
+ URL:/spaces/IM/pages/2530771004/Springbrook+formerly+KVS+Technical+Design

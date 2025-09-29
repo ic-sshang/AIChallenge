@@ -1,0 +1,61 @@
+none
+Goal: establish a working web tier in the secondary region. Success will be accomplished by routing some portion of overall production traffic to these new secondary web servers. Active/active is 
+not
+ a requirement.
+Q3
+Secondary NonProduction Hub + Firewall
+We want to be able to test things without hitting the production database and messing with the primary production hub. Would require deployment of both network and firewall (with minimal configuration).
+Palo Alto will have licensing issues. Maybe we could go with Azure Firewall instead 
+ 
+Backup plan: make the current secondary production hub peer to our nonproduction primary and not prod, then switch over to prod once ready. We would need to remove the current peerings to make this plan work. This would only be a short-term fix, as we’d still be left without a nonproduction secondary region when we want to move toward DR for other components such as the Payer and Biller spokes.
+Decision: 
+We will not be doing this. Since we’re going with an active/passive approach for our initial attempt, we can deploy to the secondary production hub without much risk of disrupting production. Hopefully, we’ll have separate XAT and PRD databases by that point, so risk would be minimal.
+AVD’s
+We’ll need AVD’s in both secondary nonproduction and production regions to get this done. 
+create the network [looks like the 
+vnet
+ exist]
+create the VM’s and other resources for our team in both nonproduction and production
+Decision:
+ We will need to do this.
+Tooling Spoke
+Only need AWX and pipeline agents
+Does not include access via app gateway and Cloudflare – just private connectivity from secondary region AVD’s 
+Decision:
+ We will need to do this.
+Application Gateway
+Gets a subnet in the secondary hub network
+Would only have AWX configured - no other backends until later
+Also includes Cloudflare setup for secondary nonproduction hub (so we can actually access AWX)
+Decision:
+ We will need to do this.
+Q4
+Classic Web Spoke
+deploy network
+deploy web servers
+ensure application deployments target both regions
+update Redis to use geographic redundancy with active/active - requires clusters
+or create an extra PVE for existing Redis and use that. Would suffice for testing or active/passive failover but would be a poor user experience due to added latency
+do we either
+add a second distinct instance of Redis in the west region and set up sticky sessions OR
+configure Redis to be a multi-regional resource and allow requests to go to 
+set up secondary domain so that we can test this region before sending production traffic to it, i.e. 
+www-sec.invoicecloud.com
+Decision: 
+We will need to do this. We will create duplicate instances of Redis in the west region rather than making Redis multi-region.
+East/West Connectivity
+We’re only spinning up the web tier, which requires other components such as a proxy tier to work. We’ll need the new servers to be able to communicate with current resources.
+Decision:
+ We will not do this. We have plans to deploy the Kubernetes migrated Proxy applications in Q4. If those plans don’t manifest, this can be a backup.
+Known Application issues:
+StratusFileUpload and CRM File Upload will fail during failover as they write files to the Skybot servers, which would be unavailable. 
+Fix: use storage accounts instead of file shares
+ (need Integrations to make fix)
+Cloudflare Traffic Routing
+This is the part where we actually route some traffic to the new servers in production. Example: route 10% of West US traffic to the secondary region and 90% to primary region while routing all other traffic to primary region
+We don’t necessarily need to leave the app in active/active (although I think that’d be great), but we should try it out as a partial failover test. 
+This is our ultimate measure of success
+ 
+Decision:
+ We will need some Cloudflare work, but very little. We will need to create a procedure for failing over from East to West Palo in Cloudflare, but not do any of the active/active mentioned above.
+ URL:/spaces/platform/pages/4500258847/Web+Server+DR+Secondary+Region

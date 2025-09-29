@@ -1,0 +1,40 @@
+How to ensure your application connects correctly to the crypto service in the new DevTest virtual machines
+ Instructions
+✅ 
+1. Check Your Connection Method
+If you're using WCF service references:
+Open your service reference configuration.
+Update the endpoint URL to include /v1 at the end:
+https://cryptoservice.invoicecloud.com/CryptoService.svc/v1
+Point to a bindingConfiguration that does not include authentication.
+Use the CTP project as a working reference:
+Binding configuration example – lines 1–18
+Endpoint setup example – lines 1–19
+If using ic.serviceproxies
+Check whether your app uses ic.serviceproxies to connect to the crypto service.
+If so, the URL may be hardcoded in that package.
+Determine which version of ic.serviceproxies you are referencing.
+Look at the corresponding commit or source code to verify:
+If the crypto service endpoint ends with /v1, you are good to go.
+If not, update or override it accordingly.
+Test Your Integration
+Once the /v1 endpoint is configured:
+Validate all crypto-related functionality (e.g., encryption, decryption, token handling).
+The /v1 endpoint is stable and widely used, so any issues likely stem from configuration mismatches.
+Clean Up Old Endpoints
+Search your application configs for any deprecated crypto service endpoints.
+If you find old endpoints that are no longer in use:
+Remove them to prevent confusion and reduce maintenance risk.
+Highlight important information in a panel like this one. To edit this panel's color or style, select one of the options in the menu.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@9f5
+modified
+false
+true
+page
+kb-how-to-article
+label = "kb-how-to-article" and type = "page" and space = "PE"
+ URL:/spaces/PE/pages/4252008575/Updating+Crypto+Service+Configuration+for+DevTest+VMs

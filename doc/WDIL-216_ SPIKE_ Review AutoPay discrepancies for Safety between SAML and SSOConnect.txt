@@ -1,0 +1,166 @@
+Table Of Contents
+none
+Saved Payment Methods Page (CustomerGroupPaymentOptions.aspx)
+When a user accesses the AutoPay page using 
+RedirectID: 3 (AutoPay settings)
+ and 
+does not have a saved payment method
+, they are automatically redirected to the 
+Saved Payment Method page
+ to add one.
+This behavior is custom for Safety and also controlled by 
+Platform Feature Flag 25,
+ which enables the same logic for other billers.
+The feature is 
+already supported in SSOConnect
+.
+Setup Signup Button Code Reference 
+FilterAutoPayCustomersToAgentConnectCustomer.vb
+AutoPay Redirect Page Link on Saved Methods Page
+Safety has the AutoPay feature disabled in the Customer Portal. To override this behavior, custom logic is implemented in the 
+BindData
+ function of the 
+CustomerGroupPaymentOptions.aspx
+ page (i.e., the 
+Saved Payment Methods
+ page). This logic enables AutoPay access 
+only for users authenticated via SAML or AgentConnect sessions
+, allowing them to bypass the restriction.
+BindFunction SAML override
+Bind Function AgentConnect override
+Normally, when a user is redirected to the 
+Saved Payment Methods
+ page (e.g., after accessing the AutoPay page via 
+RedirectID: 3
+), and they successfully add a payment method, a link is displayed allowing them to return to the 
+AutoPay page via iframe
+. This is necessary because users in iframe mode don’t have access to the navigation bar.
+However, for 
+Safety
+, this link does 
+not appear
+ due to 
+Biller Option 102
+ being enabled . To handle this, Safety uses 
+c
+ustom logic (SAML) and biller option 147 (AgentConnect) that only displays the link if the user is authenticated via 
+SAML
+ or 
+AgentConnect
+.
+To support this behavior for 
+SSOConnect
+, we’ll need to extend the logic. One possible solution is to 
+extend Biller Option 147
+ to include SSOConnect users, enabling the same redirect functionality.
+BindData Function SAML logic
+BindData Function AgentConnect logic for biller option 147
+Only bank accounts are supported For AutoPay verbiage
+This verbiage is only available in AgentConnect but can be extended to SSOConnect 
+here
+Landing page using SSOConnect, RedirectID: 3, and with no existing payment methods
+No go to autopay link when payment method is added
+AutoPay Page (CustomerGroupAutoPay2.aspx)
+Safety does not allow users to manage the status of linked accounts.
+To enforce this, we use 
+c
+ustom logic in the 
+BindFunction
+ on the AutoPay page to filter visibility so that only the 
+account passed
+ in the 
+SAML
+ or 
+AgentConnect
+ request is shown.
+Since 
+SSOConnect
+ does not currently support this filtering behavior, we’ll need to 
+extend the 
+logic to include SSOConnect sessions.
+Bind SAML filter logic
+Bind AgentConnect filter logic
+Don't show autopay sign up
+This logic ensures that the AutoPay signup button is only shown if the user coming through a 
+SAML session
+ is 
+not already signed up for AutoPay
+.
+It checks the user's status and only displays the button if they’re eligible to enroll. This will need to be added for SSOConnect.
+SetupSignupButton function
+ShouldEnableAutoPaySignUpForSamlCustomer function
+Edit/New AutoPay Page (AutoPay.aspx)
+For the same reasons outlined earlier, Safety requires filtering on the New/Edit AutoPay page to show only the 
+customer account passe
+d in the request.
+This filtering is currently implemented for both 
+SAML
+ and 
+AgentConnect
+ sessions via the 
+LoadLinkedCustomerAccounts
+ function in 
+AutoPay.aspx.vb
+.
+Since 
+SSOConnect
+ does not yet support this behavior, we will need to 
+extend the logic
+ to include SSOConnect sessions as well.
+LoadLinkedCustomerAccounts Function SAML Filter
+LoadLinkedCustomerAccounts Function AgentConnect Filter
+Link to where we determine if we need to override the hide autopay feature in the customer portal in ddlAccounts_SelectedIndexChanged
+Safety does not allow changes to a customer’s AutoPay settings unless they meet specific eligibility criteria. The logic for determining eligibility is as follows:
+SAML Sessions
+:
+If the user is authenticated via SAML and accesses the AutoPay Settings page using 
+RedirectID=3
+.
+GetEligibilityStrategy
+AgentConnect Sessions
+:
+If the user is authenticated via AgentConnect and accesses the AutoPay Settings page using 
+RedirectID=3
+.
+GetEligibilityStrategy
+Invoice File Check
+:
+The customer must have the 
+Custom5
+ field set to 
+"1"
+ in the invoice file to be considered eligible.
+AutoPayEligibilityByInvoiceCustomFlagStrategy
+Currently, this logic is implemented for 
+SAML
+ and 
+AgentConnect
+ sessions.
+To support 
+SSOConnect
+, we will need to 
+extend this eligibility logic
+ accordingly.
+btnSave_Click validation if user is eligible
+SSO Discrepancy
+Current issue:
+The AutoPay page incorrectly states that the account is not enrolled in AutoPay when accessed through SSOConnect, while the Biller Portal confirms enrollment.
+Attempting to initiate a new AutoPay setup via SSOConnect yields an empty Policy/Account dropdown.
+SAML integration displays correct AutoPay and Saved Payment Method data.
+Reason:
+This issue is occurring because Safety uses custom filtering to ensure that only the user passed in the request is displayed. Currently, this filtering relies on having a 
+SAML or AgentConnect session
+ in context. Without one, the system is 
+unable to retrieve the user’s information
+, which causes the filtering to fail, and no customer information is shown. To resolve this, we need to 
+add support for SSOConnect
+ to the filtering logic mentioned throughout the doc so it can properly identify and display the correct user.
+Filter code references:
+AutoPay page (CustomerGroupAutoPay2.aspx)
+Bind SAML filter logic
+Bind AgentConnect filter logic
+New/Edit AutoPay page (AutoPay.aspx)
+LoadLinkedCustomerAccounts Function SAML Filter
+LoadLinkedCustomerAccounts Function AgentConnect Filter
+Video of use case
+ URL:/spaces/PE/pages/4629626909/WDIL-216+SPIKE+Review+AutoPay+discrepancies+for+Safety+between+SAML+and+SSOConnect

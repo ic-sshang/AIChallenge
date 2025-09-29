@@ -1,0 +1,161 @@
+This API enables force sale Payment using account and routing number information as that will not switch on Braintree. The gateway will receive this force sale transaction and insert them directly to the the DB.
+Method
+POST
+API End point
+NEW:
+ http(s)://<base-url>/pay/ForceSale
+Request Headers
+Attribute
+Description
+Value
+Content-Type
+HTTP Content Type of the POST Method body
+application/json
+Authorization
+Authorization Header. Currently using Basic Authorization
+Basic Nms4bTh2YnNOR3kvb2hBUGZ5K3A4c3VWdmtlZ2ZQVVRYVXoxUDhWWVd6UjFFRWNHd0cyTjAzbzl3RXphT2ZkMnQybjdYTkhsa1MvRnVVTWJhQXdIaDU1SFo2c2JJU3NadHp6RW9GMmJQODA9Og==
+Accept
+Accepted Response Content Type
+application/json
+Request Body
+Attributes
+Required
+Description
+Sample value
+AccountNumber
+M
+Bank Account number for payment
+1000000000
+To be used for PayPal Sandbox environment
+RoutingNumber
+M
+Routing number associated with the Account
+011000015
+To be used for PayPal Sandbox environment
+AccountType
+M
+Customer account type: Checking or Savings
+Checking or Savings
+CustomerFirstName
+O
+Customer First Name
+Joe
+CustomerLastName
+O
+Customer Last Name
+sample
+CustomerAddress
+M
+Customer Street Number and Name
+123 Street address
+CustomerCity
+O
+Customer City Name
+ 
+CustomerState
+O
+Customer State Name
+ 
+CustomerZip
+M
+Customer Zip Code
+ 
+CustomerEmailAddress
+O
+Customer Email Address
+ 
+InvoiceNumber
+M
+Invoice Number associated with the Billing information
+ 
+TotalAmount
+M
+Total Billed / Invoice Amount
+<= 999999999.99
+'> 0.00
+SalesTax
+O
+Sales Tax associated with the Sale
+Default 0.00
+MerchantAccountID
+M
+Merchant Account ID associated with the Billed invoice
+Valid Merchant ID
+ACHStandardEntryClassCode
+M
+A NACHA standard entry class (SEC) code, which designates how an ACH transaction was authorized.
+CCD 
+PPD 
+TEL
+WEB
+WEB
+RecurringType
+O
+Whether the payment is a recurring payment or not
+0 - One time payment
+1 - Recurring payment
+Default 0
+Sample Request
+    {
+        "AccountNumber": "1000000000",
+        "RoutingNumber": "011000015",
+        "AccountType" : "CHECKING",
+        "CustomerFirstName":"Joe",
+        "CustomerLastName":"Token",
+        "CustomerAddress":"123 Street Address",
+        "CustomerCity":"MyCity",
+        "CustomerState":"Tx",
+        "CustomerZip":"12345",
+        "CustomerEmailAddress":"token@test.com",
+        "InvoiceNumber":"inv-nacho-test100991",
+        "TotalAmount":9.00,
+        "SalesTax":0,
+        "MerchantAccountID":"biller1",
+        "RecurringType":1,
+        "ACHStandardEntryClassCode": "WEB"        
+    }
+Response Body
+Attributes
+Description
+Sample Values
+Code
+API Invocation Result code
+ 
+Message
+API Invocation Result Message
+Success or Any other error message describing the reason for failure
+Data
+Object representing the state and status of transaction
+Refer Data section below
+Data
+Attributes
+Description
+Sample Values
+ApprovalIndicator
+Boolean value representing the Approval Status of the transaction at PayPal end
+true - Approved by PayPal
+false - Declined
+Id
+Transaction Reference Id for the Approved Transaction as provided by PayPal
+For Declined or failed transactions this is returned as Empty string
+Alphanumeric
+Message
+Approval or Rejection message with Reason code
+Approved 1000
+TimeStamp
+PayPal approved date/time of the transaction
+2020-08-28T02:31:19
+Sample Response
+{
+    "Code": 0,
+    "Message": "Success",
+    "Data": {
+        "ApprovalIndicator": true,
+        "Id": "6c73231ee61a42f1a2d5273a03d2df47",
+        "Message": "Payment Added",
+        "TimeStamp": "2023-04-10T07:27:10.557",
+        "LegacyID": ""
+    }
+}
+Sample Error Response
+ URL:/spaces/ED/pages/2703032325/ForceSale

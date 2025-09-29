@@ -1,0 +1,1406 @@
+Baseline Identified Components
+Configurations
+Environment Settings
+Application Settings
+Database
+IC.Database
+DatabaseProxy
+Logging
+Microsoft.Extensions.Logging.ILogger
+Prompt #1 (Ankita’s)
+JSON Results
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerOption.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PrdInvoicing.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SmsMode.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerPhoneNumber.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}"
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/RecordType.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerSMSMode.cs",
+	"Results":[
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Customer.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerLogin.cs",
+	"Results":[
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Invoice.cs",
+	"Results":[
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PhoneType.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SMSOut.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Configuration/DalAutofacModule.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/InvoicesRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/_StoredProcExtensions.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountEnrollmentRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/UserActivityRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountPermissionRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/BillerSettingsRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/SmsOutboundQueueRepository.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByAuthenticatedUser.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/ResendConfirmation.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByUnauthenticatedUser.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/IEnrollAccountCommand.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/QueryAccountEnrollment.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/DisenrollAccount.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountEnrollment.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsType.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsMode.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/BillerSettings.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/Invoice.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountStatus.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountResponse.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountRequest.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/AccountStatus.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IBillerSettingsRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountPermissionRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IInvoicesRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IUserActivityRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountEnrollmentRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/ISmsOutboundQueueRepository.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Program.cs",
+	"Results":[
+		{
+			"Dependency": "Configuration",
+			"Component": ["System.Configuration.ConfigurationManager"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Runtime"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	],
+	"Variables": [
+			{ "Key": "JwtSettings", "Source": "appsettings.json" },
+			{ "Key": "IC:SqlDatabase", "Source": "Application Settings" }
+	]	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/AutofacModule.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Controllers/AccountEnrollmentController.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/DateTimeProvider.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/IDateTimeProvider.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Assembly.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Configuration/AutofacExtensions.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Logic/EnrollmentLogic.cs",
+	"Results":[
+		{
+			"Dependency": "Database",
+			"Component": ["Custom"]
+		},
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/ResendConfirmationCommandHandler.cs",
+	"Results":[
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "Queues",
+			"Component": ["Custom"]
+		}
+	],
+	"Variables": []	
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByAuthenticatedUserCommandHandler.cs",
+	"Results":[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["PayerPayByTextService.Repositories"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/DisenrollAccountCommandHandler.cs",
+	"Results":[
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByUnauthenticatedUserCommandHandler.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/QueryAccountEnrollmentCommandHandler.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Configuration/LogicAutofacModule.cs",
+	"Results":[
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	],
+	"Variables": []
+}
+
+
+Prompt Identified Components v. Baseline Identified Components
+Logging Systems
+  Microsoft.Extensions.Logging
+Configuration
+ System.Configuration.ConfigurationManager
+Databases
+  IC.MicroService.DAL.EntityFramework
+ PayerPayByTextService.Repositories
+  Custom
+Services
+ 
+ IC.MicroService.Runtime
+  IC.MicroService.DAL.EntityFramework
+ IC.MicroService.Logic
+Summary: 
+ 
+False Positive Identified Components
+Prompt #2 (Jose’s)
+JSON Results
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerOption.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PrdInvoicing.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SmsMode.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerPhoneNumber.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/RecordType.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerSMSMode.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Customer.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerLogin.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Invoice.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PhoneType.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SMSOut.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Configuration/DalAutofacModule.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/InvoicesRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/_StoredProcExtensions.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountEnrollmentRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/UserActivityRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountPermissionRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/BillerSettingsRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/SmsOutboundQueueRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Database",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByAuthenticatedUser.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/ResendConfirmation.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByUnauthenticatedUser.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/IEnrollAccountCommand.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/QueryAccountEnrollment.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/DisenrollAccount.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountEnrollment.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsType.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsMode.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/BillerSettings.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/Invoice.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountStatus.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountResponse.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountRequest.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/AccountStatus.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IBillerSettingsRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountPermissionRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IInvoicesRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IUserActivityRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountEnrollmentRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/ISmsOutboundQueueRepository.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Program.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Configuration",
+			"Component": ["PayerPayByTextService.Configuration"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Runtime"]
+		},
+		{
+			"Dependency": "Databases",
+			"Component": ["IC.MicroService.DAL.EntityFramework"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/AutofacModule.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Controllers/AccountEnrollmentController.cs",
+	"Dependencies": [
+		{
+			"Dependency": "HTTP Clients",
+			"Component": ["Microsoft.AspNetCore.Mvc"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/DateTimeProvider.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/IDateTimeProvider.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Assembly.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Configuration/AutofacExtensions.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Logic/EnrollmentLogic.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/ResendConfirmationCommandHandler.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "Queues",
+			"Component": ["Custom"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByAuthenticatedUserCommandHandler.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["PayerPayByTextService.Repositories"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/DisenrollAccountCommandHandler.cs",
+	"Dependencies": [
+		{
+			"Dependency": "Logging Systems",
+			"Component": ["Microsoft.Extensions.Logging"]
+		},
+		{
+			"Dependency": "Services",
+			"Component": ["IC.MicroService.Logic"]
+		},
+		{
+			"Dependency": "Database",
+			"Component": ["PayerPayByTextService.Repositories"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByUnauthenticatedUserCommandHandler.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/QueryAccountEnrollmentCommandHandler.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+{
+	"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Configuration/LogicAutofacModule.cs",
+	"Dependencies": [
+		{
+			"Dependency": "NA",
+			"Component": ["NA"]
+		}
+	]
+}
+
+
+Prompt Identified Components v. Baseline Identified Components
+Logging Systems
+  Microsoft.Extensions.Logging
+Configuration
+ System.Configuration.ConfigurationManager
+Databases
+  IC.MicroService.DAL.EntityFramework
+ PayerPayByTextService.Repositories
+  Custom
+Services
+ 
+ IC.MicroService.Runtime
+  IC.MicroService.DAL.EntityFramework
+ IC.MicroService.Logic
+  Custom
+Summary: 
+False Positive Identified Components
+Prompt #3 (Tarun’s)
+JSON Results
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerOption.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"]}
+    ],
+    "Variables": []
+}
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PrdInvoicing.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SmsMode.cs", "Results": [], "Variables": []}
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/BillerPhoneNumber.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/RecordType.cs", "Results": [], "Variables": []}
+"""output.json
+{
+  "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerSMSMode.cs",
+  "Results": [
+    {
+      "external dependency Category": "Databases",
+      "implementation Category": ["IC.MicroService.DAL.EntityFramework"]
+    }
+  ],
+  "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Customer.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/CustomerLogin.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/Invoice.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/PhoneType.cs", "Results":[], "Variables": []}
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Entities/SMSOut.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Configuration/DalAutofacModule.cs",
+    "Results":[
+        {
+            "external dependency Category": "Databases", 
+            "implementation Category": ["IC.MicroService.DAL.EntityFramework"]
+       }
+    ],
+    "Variables": []
+}"""
+"""output.json
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/InvoicesRepository.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"]}
+    ],
+    "Variables": []
+}"""
+"""output.json
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/_StoredProcExtensions.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"]}
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountEnrollmentRepository.cs",
+"Results":[
+   { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+],
+"Variables": []
+}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/UserActivityRepository.cs",
+"Results":[
+    {"external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"]}
+],
+"Variables": []
+}
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/AccountPermissionRepository.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"]}
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/BillerSettingsRepository.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.DAL/Repositories/SmsOutboundQueueRepository.cs",
+    "Results":[
+       { "external dependency Category": "Databases", "implementation Category": ["IC.MicroService.DAL.EntityFramework"] }
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByAuthenticatedUser.cs", "Results":[], "Variables":[]}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/ResendConfirmation.cs",
+ "Results": [],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/EnrollAccountByUnauthenticatedUser.cs",
+ "Results":[],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/IEnrollAccountCommand.cs", "Results":[], "Variables":[]}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/QueryAccountEnrollment.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Commands/DisenrollAccount.cs", "Results":[], "Variables":[]}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountEnrollment.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsType.cs",
+ "Results": [],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/SmsMode.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/BillerSettings.cs",
+ "Results": [],
+ "Variables": []}
+"""output.json
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/Invoice.cs",
+    "Results":[],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Models/AccountStatus.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountResponse.cs", "Results":[], "Variables":[]}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/EnrollAccountRequest.cs", "Results":[], "Variables":[]}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/DTOs/AccountStatus.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IBillerSettingsRepository.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountPermissionRepository.cs", "Results": [ ], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IInvoicesRepository.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IUserActivityRepository.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/IAccountEnrollmentRepository.cs", "Results": [], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Model/Repositories/ISmsOutboundQueueRepository.cs", "Results": [], "Variables": []}
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Program.cs",
+    "Results":[
+        {
+            "external dependency Category": "Databases", 
+            "implementation Category": ["IC.MicroService.DAL.EntityFramework"]
+        },
+        {
+            "external dependency Category": "Configurations", 
+            "implementation Category": ["Environment.GetEnvironmentVariable"]
+        }
+    ],
+    "Variables": [
+            { "Key": "JwtSettings", "Source": "Settings\/Configuration" },
+            { "Key": "IC:SqlDatabase", "Source": "Settings\/Configuration" }
+    ]
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/AutofacModule.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService/Controllers/AccountEnrollmentController.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/DateTimeProvider.cs",
+ "Results":[],
+ "Variables": []
+}
+{"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/IDateTimeProvider.cs",
+ "Results":[],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Assembly.cs",
+ "Results": [],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/IC.MicroService.Time/Configuration/AutofacExtensions.cs", "Results":[], "Variables":[]}
+"""output.json
+{
+  "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Logic/EnrollmentLogic.cs",
+  "Results": [
+    {
+      "external dependency Category": "Logging",
+      "implementation Category": ["Microsoft.Extensions.Logging"]
+    }
+  ],
+  "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/ResendConfirmationCommandHandler.cs", "Results": [ {"external dependency Category": "NA", "implementation Category": ["NA"] } ], "Variables": [] }
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByAuthenticatedUserCommandHandler.cs",
+    "Results":[
+        {
+            "external dependency Category": "Logging", 
+            "implementation Category": ["Microsoft.Extensions.Logging"]
+       }
+    ],
+    "Variables": []
+}"""
+"""output.json 
+{ "FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/DisenrollAccountCommandHandler.cs",
+    "Results":[
+        {
+            "external dependency Category": "Logging", 
+            "implementation Category": ["Microsoft.Extensions.Logging"]
+       }
+    ],
+    "Variables": []
+}"""
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/EnrollAccountByUnauthenticatedUserCommandHandler.cs",
+ "Results":[],
+ "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/CommandHandlers/QueryAccountEnrollmentCommandHandler.cs", "Results":[], "Variables": []}
+{"FilePath": "../repos/PayerPayByTextService/src/PayerPayByTextService.Logic/Configuration/LogicAutofacModule.cs", "Results":[], "Variables":[]}
+
+Prompt Identified Components v. Baseline Identified Components
+Logging Systems
+  Microsoft.Extensions.Logging
+Configuration
+  Environment.GetEnvironmentVariable
+Databases
+  IC.MicroService.DAL.EntityFramework
+Services
+None
+Summary: 
+False Positive Identified Components
+ URL:/spaces/EN/pages/3060400129/PayerPayByText-+Health+Check+Component+Identification+Comparison

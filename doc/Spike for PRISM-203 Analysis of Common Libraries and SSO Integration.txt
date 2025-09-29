@@ -1,0 +1,44 @@
+Objective
+Identify the common libraries and their role in the system.
+Analyse the technical implementation and reusability of the IC.SingleSignOn module for SAML-based Single Sign-On (SSO).
+Provide recommendations for enhancing SSO functionality in systems like BillerPortal.
+ Scope
+Focus on the integration with Identity provider (like SecureAuth or Auth0) for SSO using IC.SingleSignOn.
+Examine current system functionalities and propose enhancements for future integration.
+Detailed Overview of Common Libraries
+Role in the System
+IC.SingleSignOn
+: Enables streamlined SAML-based authentication, promoting secure and seamless user experiences.
+Key Features
+Initiates SSO for single and multi-claim scenarios.
+Facilitates signing requests with X.509 certificates.
+Dependencies
+.NET Framework 4.8 or higher verison for compatibility.
+BillerPortal relies on IC.SingleSignOn for authentication workflows.
+ Key Processes, Integration Points, and Dependencies
+Processes
+SAML initiation methods (Saml.InitiateSingleSignOn, Saml.InitiateSingleSignOnMultiClaim) are central to IC.SingleSignOn functionality.
+Certificate management using CertificateHelper.GetCertificateDebug aids testing during development.
+Integration Points
+Connection between the SAML service provider (entityId) and the ACS URL for response handling.
+Dependency inclusion of IC.SingleSignOn in BillerPortal.
+Dependencies
+Requires proper certificate configuration for signing requests.
+Static setup of entityId and ACS URL parameters for BillerPortal integration.
+ Gap Analysis for SSO Integration
+Current State Assessment
+The system supports multiple users sharing the same email address under a single biller with distinct usernames.
+Identified Gaps
+Current IC.SingleSignOn methods depend on static configurations, limiting adaptability.
+Potential Risks
+Static configuration reduces scalability and customization options.
+Recommendations for Future Enhancements
+SSO Integration Enhancements
+Implement dynamic configuration for entityId and acsUrl parameters to improve flexibility.
+Introduce detailed error handling in CommandResult objects for robust debugging.
+Technical analysis document: 
+https://invoicecloud.atlassian.net/wiki/spaces/PE/pages/edit-v2/4250796042?draftShareId=a9697e89-5b23-4dfe-baca-730c593b354d
+Conclusion
+This analysis highlights crucial areas requiring improvement, particularly around SSO gaps due to shared email identifiers. By implementing the recommended solutions, the system can achieve greater security, scalability, and user experience.
+ 
+ URL:/spaces/PE/pages/4269965341/Spike+for+PRISM-203+Analysis+of+Common+Libraries+and+SSO+Integration

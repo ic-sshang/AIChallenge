@@ -1,0 +1,200 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+In Progress
+Yellow
+ 
+Document owner
+ 
+ 
+Knowledge transfer
+Summary
+Summary
+Details
+Software Partner Name
+AMS/Sunguard
+Software Product Name
+PayConcierge
+PayConciergeConnect?
+Software Cashiering System
+N/A
+Supported Versions
+1.14/ 1.16
+Integration Requirements and Pre-Requisites
+Pre-Kickoff with AMS before contacting biller
+Before contacting the Biller, the Implementation PM must set up a Pre-Kickoff Call with AMS to set expectations.
+What’s Fusion?
+What’s NaviLine?
+What’s CentralSquare?
+What’s Community Plus?
+What is PayConciergeConnect? Is this just the product name or is it some type of integration interface needed to integrate with IC?
+Vertical
+GUB
+Sample Biller Implementation
+1026
+Planning
+Test Portals
+IC Hosted Test Portal -Yes BID 1026
+Partner Hosted Test Portal-NO
+Biller Test Portal - Needed? Yes on biller by biller basis 
+Required? Yes, if biller requested
+Rules of Engagement
+Email Todd and Hiren upon project assignment to discuss new biller project. This should be done before contacting the biller.  Todd will start to align with the biller (what version is biller running, is this a standard real time/hybrid implementation). The InvoiceCloud IM will be copied on Todd’s email to the biller.  From there the kickoff call is scheduled. Todd and Hiren should be invited to the kickoff call.  
+AMS must be invited to all meetings and copied on every email sent to the client.
+Timeline
+60-90 Days 
+Configuration
+Invoice Types
+42 Utility, 8 Real Estate, 9 Motor Vehicle, 10 Personal Property 
+Virtual Site
+ 
+Required Options
+ID
+Option Description
+Details
+73
+Suppress Balance Forward Payment Records
+Will remove balance forward records from payment reporting/lists for customer portals
+ALWAYS TURN THIS ON
+95
+Customer Portal/Virtual Site - Show Display Account Number
+If enabled, we will show the DisplayAccountNumber instead of the AccountNumber for all payer facing pages in the Virtual Site and Customer Portal. Note: This does not apply to fields from customized grids
+ALWAYS TURN THIS ON
+Implementation Requirements
+Communication
+Items to review with AMS on the pre-kickoff call:
+Who will process credit cards?  IC or AMS?  If AMS is processing the credit cards they will provide to IC a "BridgePay Merchant Setup Form" that we place in Box then configure within the CRM (Terminal section). IC handles ACH/eCheck in most cases. 
+Biller will need to attend "My BridgePay" training.  The BridgePay portal is the backend reporting tool used to review payments, do voids, etc.  AMS will schedule a separate training for "My BridgePay". IM will need to include this training onto the Project Schedule and RAID Log.
+Is the Biller ordering POS equipment from AMS?  If yes, AMS will work with the Biller to deliver and configure these devices.
+AMS will provide details with regards to what system the Biller has installed...i.e. Fusion, NaviLine.
+AMS must be invited to all meetings and copied on every email sent to the client.
+Forms
+Every Biller will need to fill out the "AMS/Invoice Cloud PayConcierge Interface" form.  AMS will present this form to the Biller and review it at kickoff early in the implementation process. This form is critical to obtain early in the project so that AMS can work to connect to their system.  In many cases it can take 3-6 weeks to get the system interface complete.  Once it is connected the delta files (invoice files) will flow.
+CRM Settings
+DISABLE EMAIL NOTIFICATIONS UNTIL GO LIVE DATE. Please set email notification BIF customization's to INACTIVE (AMS sends live email addresses in their files).  This can also be disabled in the biller portal.  
+Biller testing is limited because data is real
+Go-Live Prep/Soft Launch
+Pre go-live data purge is for PAYMENTS EXCEPT BALANCE FORWARD
+All Billers must go through a Soft Launch phase for 4 weeks prior to Go Live.  
+Soft Launch is when all the work is complete for the implementation and we place the Biller in LIVE mode within the CRM, but is is not announced to their customers yet (not live to public).  We ensure that no emails are loaded and/or get sent out when we start Soft Launch.  During Soft Launch we run through a script that AMS provides.  This script will ensure the 2-way data exchange for testing:  payment testing, change of email, sign up for autopay, etc.  This testing is done on the Billers internal account users only.
+Prior to Soft Launch AMS must input a ticket to their development staff 3 days prior to the start of Soft Launch.  During this 3-day time slot the Biller must not do any activity in the Customer Portal and Biller Portal.  This is considered the 3-Day Quiet Time prior to Soft Launch.
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+AMS
+Daily 
+SFTP address: 128.136.9.87
+SFTP Username: AMS provides to IM
+SFTP Pwd:  AMS provides to IM
+NOTES
+: 
+Sample delta files. Since San Angelo, we have used production data for testing.  We do not normally obtain test data and load it…we wait to have the connection to Billers production instance to pull the delta files live (but we are in demo mode).  Up to this point things have worked out and we are able to get the connection to the delta files sooner.  In the case of Palm Bay and Folsom we got the delta files late.  
+DISABLE EMAIL NOTIFICATIONS UNTIL GO LIVE DATE. Please set email notification BIF customization's to INACTIVE (AMS sends live email addresses in their files).  This can also be disabled in the biller portal.  
+Adjustment File
+AMS
+Daily
+Adjustment file is parsed from the daily invoice file sent by AMS.  This is biller specific.  
+Payment File
+InvoiceCloud
+Daily 
+InvoiceCloud generates a payment file daily and drops in AMS FTP.  We also DataPump all payments in Realtime. 
+Change Log File
+N/A
+N/A
+NOTE: There are often issues with the timing of IC change log information and AMS delta file updates (old data overwriting new data) - be sure the IC change log is delivered BEFORE AMS sends the file each night/morning (ex: IC send change log at 8pm EST and AMS sends daily delta file at 11pm EST). Include the change log file timing in the coding ITR (see 9712 for sample)
+Payment Codes
+N/A - Standard
+N/A
+Payment codes are standard across all AMS integrations. The biller must map these payment codes to their batches in Superion and may ask for assistance grouping/categorizing them
+Bill Presentment
+AMS
+Daily
+This can either be a template created on the fly or PDF extraction
+RTDR API
+AMS 
+Currently in possession
+This is listed in the technical documentation page
+RTDR Passcode
+AMS
+Currently in possession 
+This is listed in the technical documentation page
+DataPump API (same as RTDR API)
+AMS
+Currently in possession
+This is listed in the technical documentation page
+DataPump Passcode (same as RTDR Passcode)
+AMS
+Upon request to AMS
+Data is unique/specific to each biller
+PDF URL
+AMS
+Upon request to AMS 
+Data is unique/specific to each biller
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+AMS
+Project Assignment 
+BID
+AMS
+Project Assignment 
+Products Biller Signed Up For
+AMS
+Project Assignment 
+Discuss in pre-kickoff call with AMS
+Contacts
+Name
+Title
+Phone
+Email
+Escalation Contact
+Todd Baum
+VP of Product Development
+(407) 331-5465
+tbaum@automatedmerchant.com
+Y
+Hiren Desai
+Development Services Manager
+407-331-5465
+hdesai@automatedmerchant.com
+N
+Laurie Haas
+Product Manager
+(407) 331-5465
+lhass@automatedmerchant.com
+N
+Nancy Murphy
+Senior Public Sector Account Manager
+Office: (407) 331-5465
+Cell: (407) 712-5337
+nmurphy@automatedmerchant.com
+N
+ URL:/spaces/IM/pages/2248441871/AMS+Implementation+Details

@@ -1,0 +1,170 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+Partner TXT file
+Stratus Client
+Boyce is NOT able to generate an invoice file after a billing cycle closes. This means that the go-live has to be tied to the billing cycle and mid-cycle launches are problematic.
+Example file naming scheme:
+BID_Date_web.txt
+1377_20220829140216_Web.txt
+Adjustments
+Partner TXT file
+Stratus Client
+Example file naming scheme:
+BID_Date_custbal.txt
+1377_20220829140216_custbal.txt
+Payments
+Invoice Cloud CSV file
+Stratus Client
+Includes Settled payments only
+ACH Rejects and Paperless Enrollment is also included in the Payments file. 
+ACH Rejects Posting
+Included in Invoice Cloud CSV Payments File
+Stratus Client
+Are C-Code Rejects included?
+C-Code Rejects not included
+C-Code Rejects included
+In Biller Portal, ACH Reject Notification Email sent. 
+Void
+Not Supported
+Paperless Enrollment
+Included in Invoice Cloud CSV Payments File
+Stratus Client
+Change Log - AutoPay Enrollment
+Standard Invoice Cloud TXT Change Log File
+Stratus Client
+Change Log - Phone Number
+Standard Invoice Cloud TXT Change Log File
+Stratus Client
+Change Log - Email Address
+Standard Invoice Cloud TXT Change Log File
+Stratus Client
+Bill Images 
+PDF Linking - Not Supported
+PDF Extraction - Not Supported
+Template - Supported
+IC based HTML template
+Note: variations may exist between billers based on specific biller request. However all Boyce billers use the same template. Internal code logic will slightly change the visual appearance of the displayed template where applicable.
+Add BIF Customization File Spec: IH - InvoidFormatGuid & Choose Template: Boyce Systems Standard Template
+ (518B6FCB-46B1-4E17-B407-84E129B60838)
+ (if no custom template is indicated on the BOF) See BID 2857
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Supported
+Only supported if biller uses our Online Bank Direct Product. 
+This product would be used if municipalities allowed coordinating bill pay with customers banks. A payer will setup a recurring payment or autopay using their bank account and the bank sends over the paper check via FiServ to be applied to the customers account in IC.
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+IC posts payments or if handled manually by the biller.
+CSRConnect
+Not Supported
+EMV (POS PAY IN CRM) 
+Supported
+IVR
+Supported
+Recommended IVR Search Method: Account Number
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Standard IC email/pwd linking
+       Multi-User Log In
+Supported
+Handled by IC and Biller
+       Co-Owner Registration
+Supported
+Handled by IC and Biller
+Number of co-owners that should be setup: 5
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported
+Set via BIF Customization
+Recommended AutoPay Collection Date: On Due Date
+Batch Closure
+ Supported
+Recommended: Auto (Usually between 12:00-1:00 AM Biller Local Time)
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+Set via BIF Customization
+       Open Item Billing
+Not Supported
+Block Payment
+Not Supported
+Conveyance
+Supported
+Auto Conveyance is supported
+Data Conversions
+Supported
+Data for the conversion comes from biller
+Email Notification Schedule
+Supported
+Set via BIF Customization
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Not Supported
+Minimum Payment
+Not Supported
+Paperless
+Supported
+Partial Payments
+Supported
+Set via BIF Customization
+Past Due Payments
+Supported
+Supported in Invoice File
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Supported
+Device is connected to biller portal under individual customer accounts. 
+Ingenico EMV
+Not Supported
+Other EMV Devices
+Not Supported
+ URL:/spaces/IM/pages/2367193089/Boyce+Systems+Integration+Software+Details

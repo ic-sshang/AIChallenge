@@ -1,0 +1,856 @@
+Custom batch integration designed for BID2899 Stafford County (Utility) and BID3260 City of Springfield OH. Details on Springfield’s custom Paperless file can be found here: 
+BID 3260 City of Springfield OH - Custom Paperless File
+ 
+Page Navigation:
+1
+7
+Jira ticket
+Release Date
+Document status
+ 
+Document owner
+Solution engineer
+Customer Update File
+ Split
+If an account needs to be blocked (logic below) a customer update file needs to be created (ONLY, no bill file needed). If account is not in C or W follow logic for Invoice file: If AR 32 = C or W, block ACH/
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension:  .fullDelta
+File Naming Convention: CX20200313170449271650116.fulldelta
+File Delimiter:  '|'
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:  Daily
+BalanceForward: Stafford County balance forwards bills in Utility
+FileTypes:
+IF_NaviLineCentralSquare Batch Invoices - DefaultDueDate To CurrentDate
+If no due date is provided, then use the current date (Today) by default.
+IF_NaviLineCentralSquare Batch Invoices
+Currently Requires Valid Due Date (MMddYYYY)
+New bills vs Availability Fees
+If statement date (field 55) is not null:
+If account status (field 32) 
+not 
+in ‘C' or 'W’ create an invoice record of type ‘R'. 
+If statement date (field 55) is null and account status (field32) not in ‘C' or 'W’ and totalamountdue (30) > 0:
+Create an invoice with invoice number -  AccountNumber-
+AvailabilityFee
+ as type R. Use the rest of the fields as possible just like a normal invoice
+Else, Skip
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+N
+TRUE
+set by IC (FH)
+File Header
+2
+BillerGuid
+N
+TRUE
+set by IC
+File Header
+4
+FileCreationDate
+N
+TRUE
+set by IC
+File Header
+5
+InvoiceCount
+N
+TRUE
+set by IC
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+set by IC
+File Header
+7
+RowType
+N
+TRUE
+set by IC (IH)
+Invoice Header
+8
+RecordType
+N
+TRUE
+Always 
+'R
+'
+Char(1)
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+set by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+AccountNumber-StatementDate
+Ex:42399-34144-03102020
+If statement date is null and totalamountdue > 0 and account status (field32) not in ‘C' or 'W’ invoice number is 
+AccountNumber-AvailabilityFee
+(literal string “AvailabilityFee”)
+AccountNumber (AR2) +  '-' + StatementDate: (AR55)
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+StatementDate
+If statement date is empty set to current date
+Date(MMDDYYYY)
+AccountRecord55
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+If statement due date is empty set to current date
+Date(MMDDYYYY)
+AccountRecord8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+TotalBalanceAmount
+Decimal(10,2)
+AccountRecord30
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+PartialPaymentType
+if PartialPaymentType is “P” AllowPartialPayments = True
+Else AllowPartialPayments = False
+Char(1)
+AR36
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+PartialPaymentAmount
+if PartialPaymentType is “P” MinimumAmountDue = AR37
+Else MinimumAmountDue will no be set.
+Decimal(10,2)
+AR37
+Invoice Header
+38
+Custom1
+Y
+FALSE
+NormalizedValidationValue
+Numeric(10)
+AR54
+Invoice Header
+39
+Custom2
+Y
+FALSE
+RecordType
+Char(1)
+AR1
+Invoice Header
+40
+Custom3
+Y
+FALSE
+DueAmount
+Decimal(10,2)
+AR7
+Invoice Header
+41
+Custom4
+Y
+FALSE
+BudgetBillingAmount
+Decimal(10,2)
+AR56
+Invoice Header
+42
+Custom5
+Y
+FALSE
+PartialPaymentAmount
+Decimal(10,2)
+AR37
+Invoice Header
+44
+Custom7
+Y
+FALSE
+PaymentPlanAmount
+Decimal(10,2)
+AR57
+Invoice Header
+47
+Custom10
+Y
+FALSE
+AccountType
+Char(1)
+AR3
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+DueAmount
+Decimal(10,2)
+AR7
+Invoice Header
+94
+Custom11
+Y
+FALSE
+LastPaymentAmount
+Decimal(10,2)
+AR9
+Invoice Header
+95
+Custom12
+Y
+FALSE
+LastPaymentDate
+Date(MMDDYYYY)
+AR10
+Invoice Header
+96
+Custom13
+Y
+FALSE
+AutoPayFlag
+char(1)
+AR11
+Invoice Header
+97
+Custom14
+Y
+FALSE
+Paperless
+char(1)
+AR12
+Invoice Header
+98
+Custom15
+Y
+FALSE
+ConsumerCountry
+Char(2)
+AR20
+Invoice Header
+99
+Custom16
+Y
+FALSE
+NotificationOption
+Char(1)
+AR23
+Invoice Header
+100
+Custom17
+Y
+FALSE
+StreetNumber
+Numeric(7)
+AR24
+Invoice Header
+101
+Custom18
+Y
+FALSE
+ServiceAddressLine1
+Varchar(48)
+AR25
+Invoice Header
+102
+Custom19
+Y
+FALSE
+ServiceAddressLine2
+Varchar(48)
+AR26
+Invoice Header
+103
+Custom20
+Y
+FALSE
+ServiceCity
+Varchar(20)
+AR27
+Invoice Header
+104
+Custom21
+Y
+FALSE
+ServiceState
+Char(2)
+AR28
+Invoice Header
+105
+Custom22
+Y
+FALSE
+ServiceZip
+Varchar(9)
+AR29
+Invoice Header
+106
+Custom23
+Y
+FALSE
+OverDueAmount
+Decimal(8,2)
+AR31
+Invoice Header
+107
+Custom24
+Y
+FALSE
+Status
+Char(1)
+AR32
+Invoice Header
+108
+Custom25
+Y
+FALSE
+StatusDescription
+Varchar(25)
+AR33
+Invoice Header
+109
+Custom26
+Y
+FALSE
+PaymentTypeFlag
+Char(1)
+AR35
+Invoice Header
+110
+Custom27
+Y
+FALSE
+AccountNumber1
+varchar(22)
+AR38
+Invoice Header
+111
+Custom28
+Y
+FALSE
+AccountNumber2
+varchar(22)
+AR39
+Invoice Header
+112
+Custom29
+Y
+FALSE
+AccountNumber3
+varchar(22)
+AR40
+Invoice Header
+113
+Custom30
+Y
+FALSE
+AccountNumber4
+varchar(22)
+AR41
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Set by IC - Always 42 (Utility)
+Char(2)
+Invoice Header
+407
+Past Due
+Y
+FALSE
+OverDueAmount
+Decimal(8,2)
+AccountRecord31
+Invoice Header
+58
+RowType
+N
+TRUE
+N/A - always ‘CR’
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+AccountRecord2
+varchar(22)
+AccountRecord2
+Customer Record
+60
+CustomerName
+Y
+TRUE
+CustomerName
+Varchar(32)
+AccountRecord5
+Customer Record
+61
+Address1
+Y
+FALSE
+ConsumerAddressLine1
+Varchar(48)
+AccountRecord15
+Customer Record
+62
+Address2
+Y
+FALSE
+ConsumerAddressLine2
+Varchar(48)
+AccountRecord16
+Customer Record
+63
+City
+Y
+FALSE
+ConsumerCity
+Varchar(20)
+AccountRecord17
+Customer Record
+64
+State
+Y
+FALSE
+ConsumerState
+Char(2)
+AccountRecord18
+Customer Record
+65
+Zip
+Y
+FALSE
+ConsumerZip
+Varchar(9)
+AccountRecord19
+Customer Record
+66
+Phone
+Y
+FALSE
+ConsumerPhone
+Numeric(10)
+AccountRecord2
+1
+Customer Record
+356
+BlockPaymentsCC
+Y
+FALSE
+If AR 32 = ‘C' or 'W’, block (takes precedent over AR 35)
+If AR 32 != ‘C' or 'W’ unblock
+Account Record 32
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+If AR 32 = C or W, block 
+If AR 32 != 'C' or 'W' and AR35='C' (Credit Card) block
+If AR 32 != ‘C' or 'W’ AND AR35 = 'A’ unblock
+Different payment type flags, not all used:("A"ll, "C"redit cards, "D"ebit cards, "P"lastic (debit/credit), "E"checks, or "N"one - no payments allowed)
+Char(1)
+Account Record 32 +
+AccountRecord35
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Strip leading 0s from AccountRecord2 (both the value before and after the -)
+YYYYY-ZZZZZ
+varchar(22)
+AccountRecord2
+Customer Record
+70
+RowType
+N
+TRUE
+Set by IC - Always ‘ID’
+Invoice Detail
+Customer Update File
+File Summary/Purpose: 
+File Extension:  
+File Naming Convention:
+File Delimiter:  '|'
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency:  Daily
+Field Mapping
+IC FileSpecID
+IC Field Name
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Record Type
+58
+RowType
+T
+Set by IC - Always CR
+CustomerUpdateFile
+59
+AccountNumber
+T
+AccountNumber
+AR2
+CustomerUpdateFile
+60
+CustomerName
+F
+61
+Address1
+F
+62
+Address2
+F
+63
+City
+F
+64
+State
+F
+65
+Zip
+F
+66
+Phone
+F
+67
+EmailAddress
+F
+68
+CustomerVATNumber
+F
+69
+RegistrationValue
+F
+356
+BlockPaymentsCC
+F
+If AR32 = C or W block
+CustomerUpdateFile
+357
+BlockPaymentsEFT
+F
+If AR32 = C or W block
+CustomerUpdateFile
+371
+CustomerName2
+F
+372
+Pin
+F
+373
+DisplayAccountNumber
+F
+408
+EmailAddressCC
+F
+409
+Active
+F
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter:  Fixed Position
+Specification: No ACH Rejects, Credits or Chargebacks. 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: The biller has two options they can choose for the payment files:
+Daily (after batch closure)
+Twice per day (at specified times by the biller). Example: BID 2899 receives files for payments 12AM-3PM and 3PM-11:59PM EST)
+Field Mapping
+File Header
+Field
+Format
+Values
+RecordType
+Position 1-1
+Always 'H'
+Batch Type
+Position 2-2
+Always 3 - Utilities (1= Real Estate, 2 = Personal Properties)
+BatchID
+Position 3-12
+0
+Payment Date
+Position 13-20
+Date of payment (mmddyyyy)
+Batch Total
+Position 21-32
+Total amount of payments in batch (Lpadded with 0s, no commas or $)
+Batch Line Count
+Position 33-40
+Number of payments in batch (Lpadded with 0s)
+Filler
+Position 41-80
+Spaces
+Detail Record
+Field
+Format
+Values
+Record Type
+Position 1-1
+Always 'D'
+Line Number
+Position 2-9
+Line number, starts with 1 
+OCR Scan Line
+Position 10-41
+For Utililty
+:
+Position 10: Always 3 
+Position 11:  Always 0
+Position 12-22 - 
+BillAmountDue 
+(lpadded with 0s)
+Position 23-31 Customer Number (first half of account number)
+Position 32-40 - LocationID (second half of account number after '-')
+41 - Can always be set to 0
+Payment Amount
+Position 42-52
+Payment Amount (Lpadded with 0s)
+Filler
+Position 53-80
+Spaces
+Payment File - Springfield
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter:  Fixed Position
+Specification: No ACH Rejects, Credits or Chargebacks. 
+Sample File
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Customer Account
+string
+Length 8
+Position 1-8
+Custom27 (lpadded with 0s)
+Location Account
+string
+Length 8
+Position 9-16
+Custom28 (lpadded with 0s)
+Payment Amount
+string
+Length 8
+Length 17-24
+Payment Amount - Service Fee (lpadded with 0s, no decimal)
+Padded Field
+string
+Length 56
+Position 25-80
+all spaces
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Comma separated (,)
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: (Add note if DLS needs to be accounted for)
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+OPTION 111 - update Past due when making a payment through IC should be turned on
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+Generally Not needed
+AllowPartialPayments
+Biller By Biller Basis
+AutoPayCollectionDate
+Biller By Biller Basis
+BalanceForward
+Should probably be set to yes for Utility (was for Stafford) Biller By Biller Basis but this integration was built with Balance Forward in mind so may not work
+CreditCardServiceFee
+Generally Not needed
+FirstNotifyRequestedDate
+Biller By Biller Basis
+InvoiceDate
+Set in Invoice File
+InvoiceDueDate
+Set in Invoice File
+InvoiceFormatGuid
+Set in Invoice File
+InvoiceTypeID
+Set in Invoice File
+LateFeeDate
+Biller By Biller Basis
+LocationReference
+Biller By Biller Basis
+MinimumAmountDue
+Biller By Biller Basis
+PaymentExpirationDate
+Biller By Biller Basis
+PaymentExpirationMessage
+Biller By Biller Basis
+PromptPayExpirationDate
+Biller By Biller Basis
+RegistrationValue
+Biller By Biller Basis
+SecondNotifyRequestedDate
+Biller By Biller Basis
+ThirdNotifyRequestedDate
+Biller By Biller Basis
+User Interaction and Design
+Data Flow - Invoice
+att2188214304
+2188083201
+1
+Chart1
+IM
+att2188738567
+att2188148778
+0
+Data Flow - Adjustments
+att2188902403
+2188083201
+1
+Chart2
+IM
+att2188443687
+att2188345349
+0
+Data Flow - Payment
+att2187100209
+2188083201
+1
+Chart3
+IM
+att2188640275
+att2188345354
+0
+Data Flow - Change Log
+att2188181520
+2188083201
+1
+Chart4
+IM
+att2188574727
+att2188279819
+0
+Data Flow - Bill Presentment
+Bill presentment done through Data Prose (bill linking) (
+https://app.getguru.com/card/zTLd66aT/DataProse-Implementation-Print-Vendor
+). 
+They receive standard changelog file format
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller Portal
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-4640
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+9/7/2022
+No due date set when blank so record was being skipped
+Set due date to the current date to import the record
+Before a customer is invoiced, they may have charges on the account without an invoice date or due date so IC sets these to the current date (the date we receive them from the biller) so they can be imported
+INT-4615
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+8/29/2022
+No value was being mapped to DisplayAccountNumber
+Trim leading zeros from account number and store value in DisplayAccountNumber
+Payers see their Account Number without leading zeros.
+ URL:/spaces/IM/pages/2188083201/Naviline+Central+Square+without+AMS+bridge+Technical+Design

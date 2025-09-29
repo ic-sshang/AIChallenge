@@ -1,0 +1,43 @@
+Purpose
+This spike, 
+BIF-8
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+, is to research the level of effort needed to support an automated recovery process of failed file transfers from the web servers via 
+StratusWebServices
+ to the app servers for 
+StratusFileProcessor
+.
+Current State
+Currently, any recovery that is needed must be done manually. There is no automated process that handles the recovery.
+Expected Outcome
+We expect there to be an automated process to handle the recovery of file transfers once the App servers are all back online. This lowers the need for an engineer from the BIF team being present during maintenance over the weekend.
+Proposal
+Preceding Changes Needed
+We would need to move the drop-off location for these "failed to route" files to a new folder instead of just the standard 
+StratusFileErrors
+ within 
+Files/In/Errors
+. We can move these files to 
+StratusFileErrors
+ after a certain duration (e.g 1 day), but we will want the initial drop-off location different for retrying within 
+StratusWebServices
+.
+Possible Solutions
+Some ideas on how to handle the automated recovery:
+A new endpoint that could be called within 
+StratusWebServices
+ so that it can be called by the maintenance pipeline for all web machines.
+An Azure function could be made to hit that endpoint every hour
+Note: 
+There are some concerns about this as the 
+WebMethod
+ would be public.
+We have a new job that tries hourly to transfer files in the recovery folder to the app server. This would need to be hosted on the web servers.
+We could instead have 
+StratusWebServices
+ upload files to retry in the azure storage blob, and have 
+StratusFileProcessor
+ or another job pull the file for processing
+Or we could move the file upload process to Azure storage blobs and have SFP pull files from there instead.
+ URL:/spaces/PE/pages/4380622928/StratusFileProcessor+-+File+Transfer+Automated+Recovery+LOE

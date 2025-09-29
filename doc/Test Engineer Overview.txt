@@ -1,0 +1,42 @@
+What is a Test Engineer?
+A test engineer is an engineer that has volunteered (or has been assigned) to test a Jira item once the item has finished coding or a configuration change has been made. They will test the new functionality that is on the associated Pull Request or any functionality changes that are reported on the Jira item. 
+“How To Test” Template
+Before requesting a Test Engineer, be sure to include information on how to test as a comment on your Jira item. You should use the following template:
+Prerequisite: 
+[Write a short description of what is required before testing]
+How to test:
+[Write a short description of how to test]
+For example, if your testing requires running a Unit Test method and a specific Advanced Setting needs to be enabled, you would write:
+Prerequisite: 
+Advanced Setting XX must be enabled
+How to test:
+Use unit test method exUnitTest() in \Repo\UnitTests.vb\
+How do I request a Test Engineer?
+The Assignee on the Jira item may post a request for a test engineer in a public Slack channel where relevant members can accept the request. They may also use a direct message.
+For example, an engineer that is embedding with our Integration’s Product Team may ask for a Test Engineer in the Dev Support Slack channel or the Integration’s Product Team Slack channel. 
+An engineer will then accept or deny the request. 
+Test Engineer Request/Response Example
+Request:
+Requesting Test Engineer for Jira Item [Jira Item Number and Hyperlink]. Please reply to this post if you can assist. 
+Response:
+I am available for testing. I will update the Testing tab. 
+Note: these are just examples. You may request/reply any way you prefer. 
+Testing
+Once the Test Engineer has accepted the request, they should navigate to the Jira item and fill in the Testing tab’s fields. 
+Afterward, read and follow the Assignee’s message on how to test. 
+“Test Complete” Template
+Once testing is completed, make sure to fill out the “Test/Code” review field in the Testing tab and use the following template to post a comment that you have finished testing:
+Test Description: 
+[Describe how you tested the item]
+Test Result:
+[Test Succeeded \ Test Failed]
+Note:
+[Write any comments or concerns about your testing experience]
+For example, if you test and the testing was unsuccessful, you would write:
+Test Description: 
+I enabled Advanced Setting XX and ran the unit test. 
+Test Result:
+Test Failed
+Note:
+I encountered an unexpected exception during my testing. I will get with [Assignee] to review. 
+ URL:/spaces/DS/pages/2619113523/Test+Engineer+Overview

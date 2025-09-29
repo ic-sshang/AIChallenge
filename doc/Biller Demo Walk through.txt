@@ -1,0 +1,107 @@
+Target Audience
+Implementation Managers, Technical Consultants
+Trainer
+ 
+Training Videos location:
+Link to training videos
+Training Agenda
+Table of Contents
+none
+Biller walk Through - Talk Tracks
+The purpose of this document and videos is to give you a list of talking points to address when showing the system to a client.  The Biller walk through will occur after the Implementation Manager completes testing.
+General guidance:
+Check your initial discovery analysis of the client. Review the opportunity in Salesforce and the “pain points” that made the client sign with IC.
+Your walk through should emphasize how IC is solving the pain and how we are delivering what we promised.
+Always show them where the “PAY” buttons should be displayed on their website. Take a picture of their website and edit it. Add a link to the one time payment screen and a link for Registered customers.  
+It is critical for success and adoption (revenue) to ensure the Biller posts the payment links in a visible place.
+Hint: Did you know that every time you send a go-live email, Kevin clicks on the Biller’s website link and checks if the payment links are visible? He reached out to marketing if he feels the links are buried.
+Biller will use InvoiceCloud as the front end for one-time payments and registered users.
+Sample video 
+here
+Start with One Time Payment:
+Keep this demo very light and avoid technicalities.
+Do not refer to our pages as “the virtual site” and the “Customer portal”. Aside from IC, nobody understands what that means. Use instead a term like “the payment screen” or, “the one-time payment experience”, or “the registered experience.”
+Emphasize the problems that the IC portal is solving. Most common pain point you need to exploit:
+Customers forget to pay their bills
+Email is required so IC will always send an email reminder.
+Use “Remind me”.
+Use Pay by Text.
+Other topics to mention as you show the experience:
+When will IC receive new invoices.
+Are balances refreshed in real time
+Are payments posted in real time?
+Registered experience.
+Focused on the most important aspects of registration:
+Reduces calls to their office as it increases self-service.
+Manage payment methods (including the fact that IC shows alerts for certain rejects.  Refresh your knowledge on this topic via GURU – keyword “Certegy”. Pages 19 and 20 on 
+this guide
+.
+Manage autopay
+Paperless
+Pay by text
+Change logs: If a payer enrolls in autopay or paperless, how will the flags be posted to the CIS and to the print vendor.
+Support videos.
+Biller will use Single Sign On (SSO)
+Sample Video 
+here
+Start with One Time Payment
+In some SSO integrations, the one-time payment button redirects the customer to IC.  In other integrations (less common) the CIS has embedded the IC payment screen.  You MUST know exactly what the experience will be.
+Registered experience.
+You do not need to demo the integrator’s portal, but you should know what services they display.  For example, in utilities, they show things like new water service deposits, reconnect services, move-in, move-out, etc. Also, most vendors send several emails to payers. Those emails are not always related to payments. Familiarize yourself with their page.
+You need assistance from the SSO vendor as you cannot access it directly.  The vendor or the biller will have to share their screen and walk through the payer experience.
+Focus areas for registered payers:
+One time pay.
+Payment methods.
+Autopay.
+Pay by text.
+Paperless.
+Email notifications: Check the integration in Confluence or with the CIS and confirm who sends email reminders. You must be very clear on this.
+Other topics to mention as you show the SSO experience:
+When will IC receive new invoices.
+Are balances refreshed in real time?
+Are payments posted in real time.
+Change logs: If a payer enrolls in autopay or paperless, how will the flags be posted to the CIS and to the print vendor.
+The Biller Portal – Real Time
+Sample Video 
+here
+Important:
+ Know your audience!  Most biller’s users will only use the Biller Portal to research a payment.  These are the typical audiences/personas and the reason to visit the Biller Portal:
+CSR
+CSR Manager
+Finance
+IT
+Research a payment
+Void- Refund a payment.
+View reports
+Add/remove users
+Reconciliations tab
+Datapump
+Files (invoices, adjustments)
+If you are doing a walk through only for Finance, then there is no need for you to focus on other tasks.  Be clear about the role and responsibilities of your audience. Keep in mind that people’s attention span is short. Show the key functions first.
+What not to show:
+ 
+Know your customer before deciding what to show / or not
+.
+How to make a payment via Biller portal.  This is a typical mistake.  Remember that most billers initiate payments in the CIS using AgentConnect or CloudPay v2. Also, some billers do not take payments over the phone or in person at all.   If your project is using AgentConnect or CloudPay, then there is no reason to show the biller how to take a payment manually in the Biller portal. Else, show how to take a payment.
+Refunds: If your biller does not process refunds, and instead issues credits to the account, do not show refunds. Again, know your client and the integration before a demo.
+The most important things to show:
+Search:
+Payments.  This is a key tab. Spend quality time here.
+If the integration is real time, mention that payments are posted in real time.  If batch, mention that IC will deliver a payment file every single day after midnight.
+VOIDS.  It is very common for Billers to void a payment. Explain that it is best to void as soon as the payment occurs as payments made with a debit card expire after a couple of hours.
+If the integration supports Data Pump voids, explain that voids will be automatically pumped, else, they need to be manually posted in the CIS.
+If the integration does not pump VOIDs, then explain that the Clerk will have to make the VOID in IC  and in the CIS to keep the 2 systems in synch.
+Refunds: If the biller will issue refunds via IC, then show it.
+If the integration supports Data Pump refunds, explain that those will be automatically pumped, else, they need to be manually posted in the CIS
+Reports.
+Customers/Data Pump history. Explain how IC will post data in real time. Verify the Datapump settings and the integration to confirm if IC will post: autopay and paperless.
+Total outstanding invoices. This is a fast way to see pending bills and totals. This option is enabled based on the integration type.
+Reconciliation:
+Payment Reconciliation.  You must use a live biller to show this as the report only shows data after a deposit is made (3 days after go live).
+Rejects: If the integration posts rejects to the CIS, then explain how rejects work and that they will be posted via Datapump as soon as IC gets them from the processor.
+If Rejects are posted via a file, explain that.
+If Rejects are not posted to the CIS at all, then explain that they will need to enter it in the CIS manually.
+EMV
+:
+If the client is using EMV, a separate session to test EMV is required.
+ URL:/spaces/Implementa/pages/3165421569/Biller+Demo+Walk+through

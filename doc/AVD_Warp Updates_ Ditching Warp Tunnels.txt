@@ -1,0 +1,78 @@
+2
+1
+0
+0
+3836870658
+3776675861
+1
+plan.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+plan.drawio
+0
+651
+391
+Red is old approach; green is new
+This plan will accomplish a few things at a high level.
+Secure access to AVD’s using conditional access policies
+Ensure UDP is enabled on AVD
+Enable secure public access to AVD’s
+Remove Warp tunnels (keep Warp Gateway - not DoH)
+Remove AVD private endpoints
+May need to do something to enable UDP for Warp Gateway - 
+UDP Looking Good in WARP Settings!
+Will connections default to UDP? Hopefully, but unknown
+Need to validate that UDP for remote desktop is enabled on hosts. 
+See details
+Note: Microsoft engineers recommended that we enable RDP access using UDP to ensure the best experience. Turns out this is already enabled on our AVD’s. Warp Gateway, however, is currently TCP-only. We shouldn’t need to make any specific change for this; moving away from Warp Gateway should handle it.
+RDP over UDP is already enabled
+Detailed Plan
+Phased Rollout
+We can’t just roll to everyone at once. Will want to roll to Windows users first, then MacOS. Will need to sync Intune and Jamf to get Macs onboard. Will also need to be able to test with individual users before mass rollout. Both mean we’ll need to run both private and public endpoint concurrently, at least for a week or two.
+Add Conditional Access Policies for AVD Access
+Recommended policies follow. These should be assigned to the role 
+Virtual Machine User Login
+ for AVD resources. Note that there are more conditional access policies that Microsoft recommends applying for general access to Azure resources. I’ve called out the ones that we’d need in order to secure AVD, but it would be worthwhile to do apply the other general recommended policies in the future.
+One potential issue
+: Entra traffic currently does not route through Warp. We’ll need to validate that connections to AVD will work with the conditional access policy ensuring that user’s IP as seen by AVD is the Cloudflare IP, not their home IP. If this is the case, we’ll need to figure out a solution if IP range is going to be required. The IP range access policy is not a hard requirement but would be ideal. If not possible, we can blacklist AWS/GCP IP’s, IPs from unknown countries, etc. instead of whitelisting Cloudflare.
+Testing: 
+create policies and set to report only. test policies both positively and negatively
+set to enforce, but scope to only test subjects. test policies again
+There will be exceptions required to these policies for Altimetrik engineers (their devices will not be Entra-joined or Intune-managed). 
+ will further clarify these policies.
+User’s device must be AD-joined
+Require administrators use compliant or hybrid joined devices - Microsoft Entra ID | Microsoft Learn
+Ensures user’s device is AD-joined
+User's device must be compliant
+Enforce device compliance with Conditional Access - Microsoft Entra ID | Microsoft Learn
+Ensures user’s device is managed by Intune + up to date. Can be used to ensure that you’re accessing AVD from your laptop, not just any AD-joined device. The policies that would need to be met are defined in Intune; see 
+Device compliance policies in Microsoft Intune | Microsoft Learn
+User's location must be approved
+Conditional Access - Block access by location - Microsoft Entra ID | Microsoft Learn
+Can use geo locations or IP ranges. We’ll want to use Cloudflare Warp Gateway IP ranges for this. We’ll also want to include our Azure VPN IP ranges.
+Require MFA 
+Require MFA for all users with Conditional Access - Microsoft Entra ID | Microsoft Learn
+Requires MFA. We may already be doing this one. We do this already.
+Block legacy sign in methods
+Block legacy authentication with Conditional Access - Microsoft Entra ID | Microsoft Learn
+Microsoft says almost all attempted hacks use legacy auth. Blocking this is a best practice. We do this already.
+Enable Public Access to AVD
+Now that we’ve added conditional access policies to AVD, which should make sure only our users can access our virtual desktop resources, we can enable public access. It’s straightforward: simply 
+Enable public access from all networks
+. See 
+the docs
+. We’ll need this option set to be able to connect to AVD without going through Warp Gateway, which has been causing our trouble.
+Note: my screenshot shows the setting in the portal, but we’ll want to use Terraform to make this change.
+Enabling Public AVD Access in the Portal
+Remove Warp Tunnels
+Now that AVD’s are publicly accessible, we no longer need to connect to them through Warp tunnels. 
+Testing:
+create separate Warp profile that has no virtual networks. assign to test subjects. test both positive and negative scenarios
+Steps:
+Remove Warp tunnels from Warp client configurations on laptops
+Remove DNS forwarding from Warp client configurations on laptops
+Remove Warp tunnel ACI’s and any related infrastructure (terraform destroy) (wait X days after Warp tunnels are disabled - probably beneficial to disable/shutdown before actual destruction)
+Remove AVD Private Endpoints
+Remove AVD private endpoints and DNS zones
+ URL:/spaces/platform/pages/3776675861/AVD+Warp+Updates+Ditching+Warp+Tunnels

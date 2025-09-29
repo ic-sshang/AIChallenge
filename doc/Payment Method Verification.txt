@@ -1,0 +1,211 @@
+Epic Link:  
+EBPP-3510
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ July 25, 2024
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+In Progress
+Starting Mid August
+TBD
+October
+October
+Est Completion
+see timeline for details
+see timeline for details
+see timeline for details
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Problem Alignment
+Problem Alignment
+We currently have no way for payment methods to be verified by an owner. In our existing workflows the first user to login to an account that has a stored payment method is then considered the owner of that payment method. We obfuscate the full payment details however we are not verifying that the user knows the obfuscated information and should have access. 
+ Supporting Research
+Supporting Research
+Below is a diagram of existing capabilities based on the user’s role for multi-user accounts. 
+ Objective
+Objective
+The objective is to build a user experience for multi-user and non multi-user accounts to have payment method verification. 
+ Success Metrics
+Success Metrics 
+Goal
+Metric
+Current
+Good
+Great
+ Target Audience
+Target Audience
+Consumers
+Billers
+Multi-user billers mostly are our concern where there is a higher risk that someone other than the payment method holder could get the payment info. However this payment verification solution will still work for non-multi-user accounts too. 
+Group
+Impact
+Billers
+Multi-user billers, billers with saved payment methods converted.
+Payers
+Multi-user payers signing up for their account with saved payment methods.
+ User Interaction and Design
+User Interaction
+Figma: 
+https://www.figma.com/board/TdDoDuvsjhCa3NcpIppw49/EBPP-3510-Registration-Saved-Payment-Verification-Research?node-id=0-1&t=R4d6i2SlExEd0hkA-0
+ 
+ Components Impacted
+Components
+Component
+Impact
+ Technical Architecture
+Technical Architecture
+ Testing Plan
+Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  Serviceability/Observability
+Serviceability
+What are the right questions to ask or diagrams to provide for this section?
+ Timeline
+Timeline
+Event
+Date
+Confidence
+Status
+Kickoff Call
+06/01
+HIGH
+Green
+ 
+in progress
+Blue
+ 
+Design Review 
+INCOMPLETE
+Red
+ 
+ 
+COMPLETE
+Green
+ 
+ 
+COMPLETE
+Green
+ 
+INCOMPLETE
+Red
+ 
+INCOMPLETE
+Red
+ 
+ 
+INCOMPLETE
+Red
+ 
+WIP Release Approach:
+ Release Plan 
+Release Plan
+ Business Logic
+Business Logic 
+Key Features
+Authenticated flow 
+The goal of this flow is to have the person registering for an account for the first time be alerted that there is a saved payment method on that account that needs verification. As part of the onboarding flow we would want to encourage the user first to verify the payment method so they can do other things in the account, like register for AutoPay. Below is the high level use case of a user verifying their payment method. 
+Other use cases we need to consider:
+If the second payer registers on the account and all payment methods have been verified. 
+If the payer goes to the AutoPay page and tries to use a saved payment method.
+In the one time payment route with saved payment method do we do the verification then?
+Unauthenticated flow
+We will have the account number and possibly email. If there is a save payment method on the account we can ask the payer to verify the payment method before signing in. 
+Specification
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Project Participants
+Name
+Company
+Team
+Role
+Shelby Webster 
+InvoiceCloud
+Team SPAM
+Product Manager
+ Mark Lagunez 
+InvoiceCloud 
+Team SPAM 
+Technical Lead 
+Bethany Buchanan
+ InvoiceCloud
+Design 
+ Design
+ Requirements
+Requirements, Use Cases 
+ 
+Requirement
+Importance
+Jira Link
+Notes
+As a biller I want to know if a payment method has been verified.
+As a biller I want to know if a payment method has had multiple (3+?) verification attempts. 
+As a payer I want to verify by payment method on the Save Payment method page.
+As a payer I want to know if I can’t verify a payment method and what to do next. 
+As a payer I want to verify my payment method as the first step when logging into a new account.
+As a payer I want to verify my CC. 
+As a payer I want to verify my bank info. 
+ Competitive Analysis
+Competitive Analysis
+ Dependencies
+Dependencies 
+Dependency
+Team/Product
+Notes
+ Assumptions
+Assumptions 
+List any assumptions you have about your users, technical constrains, business goals, etc.
+ Open Questions
+Open Questions
+Question
+Owner
+Action Step
+Answer 
+y
+ 
+ Out of Scope
+Out of Scope
+ Communication Checklist
+Communication needed: 
+Training materials for payers 
+Training materials for billers to support payers 
+Sales enablement materials
+Can market this as new better experience
+ URL:/spaces/PRODUCT/pages/3403186234/Payment+Method+Verification

@@ -1,0 +1,56 @@
+Step 1: Run Initial Query to Check DataPump Activity
+Use the following SQL query to inspect recent DataPump records:
+SELECT TOP (100000)  
+    T.DataPumpTypeDesc,  
+    tp.paymentsourcedesc  
+FROM dbo.DataPump D  
+JOIN dbo.tblDataPumpType T ON T.DataPumpTypeID = D.DataPumpTypeID  
+JOIN tblpaymentsource tp ON tp.paymentsourceid = D.paymentsourceid  
+ORDER BY D.DateRecAdded DESC
+What to Look For:
+Records with 
+DateDelivered = NULL
+ may be normal for high-volume billers.
+Re-run the query after a few minutes to check if these records are diminishing.
+If records are diminishing, data is flowing and the alert can be closed.
+If not, proceed to further checks.
+Step 2: Check for Errors or Exceptions
+Inspect the 
+Response
+ field in the result set for any error messages.
+Common Issues:
+Timeout exceptions
+Endpoint unreachable
+Other error messages
+Action:
+Report findings in the 
+production-ops
+ channel.
+Close the alert after reporting.
+Be aware: You may receive repeated alerts for the same issue.
+Step 3: Check for Stuck Processing Bit
+Symptoms:
+DateDelivered
+ is not updating.
+Records are continuously adding up.
+Confirmation Query
+SELECT * FROM dbo.BillerDataPump
+What to Look For:
+If 
+LastUpdated
+ is 30+ minutes old, this may indicate a stuck bit.
+Action:
+Get a second opinion if you are new to this process.
+If confirmed, reach out to 
+Data Services
+ to reset the bit.
+Alternatively, use the 
+CRM tool
+ (requires permission).
+Reference:
+CRM Tool Info: 
+DD-46
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ URL:/spaces/PE/pages/4589879306/Monitoring+DataPump+Traffic+Step-by-Step+Guide

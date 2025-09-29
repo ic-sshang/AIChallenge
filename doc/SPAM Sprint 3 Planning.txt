@@ -1,0 +1,131 @@
+ 
+ to 
+ 
+Capacity Planning
+Target Points: 70
+Product Priorities / Guidance
+ 
+Delivery
+ 
+ 
+Quiet Hours (50%)
+Must be in Production by end of Sprint 4 
+(Sept 5, 2024)
+Toggleable by Biller Option
+Billers can verify the delivery timestamps (1st/2nd/3rd notification) in Biller Portal history
+Production Support / Bugs (40%)
+SFB iframe bug introduced by ADA “skip to main content” feature
+AP monitoring logic appContinue ADA Improvements
+PCI 4.0 Compliance (10%)
+Azure Batch db/repo reconfig & testing 
+(must be done by end of Aug for auditor
+)
+ 
+Discovery
+ 
+ 
+TXFB - Autopay PAC contributions 
+(must be delivered in Q1)
+TXFB - 
+Display all policies on open invoices
+ 
+(must be delivered in Q1)
+Payment Method Verification 
+(PUT ON TEMP HOLD - likely not required for TXFB go live)
+Sprint Goals
+Quiet Hours
+Begin LISTENER development
+Prepare DB & Biller Portal UI for new delivery timestamp values
+Execute a test using imported BIF (not staged data) pre-and-post midnight to simulate a real scenario
+Resolve CS Escalation issues
+Western go live
+VBPU post-go live
+Resolve Production Support issues
+EQP issues
+Autopay double payments
+Autopay logic app alert noise
+PCI Compliance support
+Delivery Planned Work
+Area / Description
+JIRA
+Layer Cake
+Points
+Notes
+Sprint 2 Carryover
+BO 133 Consolidated Payment Receipt for CP (TEST ONLY)
+https://invoicecloud.atlassian.net/browse/EBPP-18468
+CPv2 URL Expiration (NO DEV OR TEST)
+https://invoicecloud.atlassian.net/browse/EBPP-17389
+ 
+Quiet Hours
+https://invoicecloud.atlassian.net/browse/EBPP-20045
+https://invoicecloud.atlassian.net/browse/EBPP-20332
+PCI Compliance
+https://invoicecloud.atlassian.net/browse/EBPP-21499
+ 
+EQP Performance Issue
+https://invoicecloud.atlassian.net/browse/EBPP-18884
+ 
+Many
+20
+18468 (5)
+17389 (1)
+20045 (3)
+20332 (5)
+21499 (1)
+18884 (5)
+Quiet Hours
+Biller Portal History UI
+https://invoicecloud.atlassian.net/browse/EBPP-20333
+https://invoicecloud.atlassian.net/browse/EBPP-19399
+Webhook HTTP Listener (Email)
+https://invoicecloud.atlassian.net/browse/EBPP-21586
+ 
+Regulatory
+30
+Listener will be deployed to Production
+Listener will parse all email traffic in “delivered” status
+Listener will NOT write to db
+Western Go Live
+Customer portal blank page from improper handling of LocationReference 
+(only used with Insurance carriers needing to display multiple logos)
+https://invoicecloud.atlassian.net/browse/EBPP-21502
+ 
+Customer Committed - Contractual
+5
+Go live blocker. Already in the process of going live this month. Must ship by Tuesday 8/13/24
+Autopay double payments
+Short-term fix to not retry for specific CTP exceptions
+https://invoicecloud.atlassian.net/browse/EBPP-20075
+ 
+Product Support & Escalations
+5
+Continuing to be reported more
+Virginia Beach
+Update Account Status popup ranking (set 'inactive' to last)
+https://invoicecloud.atlassian.net/browse/EBPP-20987
+Product Support & Escalations
+3
+Post go live issues. There are more we are negotiating but this is an easy win
+Autopay alert logic app noise reduction
+Filter out specific events
+https://invoicecloud.atlassian.net/browse/EBPP-21495
+ 
+Product Support & Escalations
+8
+SPAM team getting woken up at 3-4AM for alerts that do not matter
+ADA Improvements
+https://invoicecloud.atlassian.net/browse/EBPP-20944
+https://invoicecloud.atlassian.net/browse/EBPP-21470
+ 
+Regulatory
+9
+Missed the Cut
+reCAPTCHA
+Improve reCAPTCHA whitelist logic 
+https://invoicecloud.atlassian.net/browse/EBPP-19773
+ 
+Product Support & Escalations
+8
+Ensure Sause Labs does not get prompted, 2) ensure Payers do not get prompted even with BID on list
+ URL:/spaces/PE/pages/3451486399/SPAM+Sprint+3+Planning

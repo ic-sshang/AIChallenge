@@ -1,0 +1,795 @@
+ 
+Page Navigation:
+Jira ticket 
+EBPP-2242
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ITR
+ITR 17319, 
+EBPP-1709
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+DRAFT
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+Salesforce SOW
+Knowledge Transfer
+Important Implementation/Accelerator Customizations
+Pay by Text is an addition to the accelerator that is required to be coded in by the Biller. 
+Last 4 Digits of CC/ACH for Payments is an addition to the accelerator that is required to be coded in by the Biller.
+UserType and UserLogName in the Autopay webservice call is an additional value that needs to be added to the accelerator if the biller would like to receive these values. This is an Advanced Setting that will need to be setup for the Biller.  
+03-06-2025 When un-enrollment of autopay would pass “
+PaymentType = 0
+", this change is not part of the accelerator. Please advice the biller to code for the responses to consume PaymentType = 0 on their own implementation. IC is evaluating the enhancement to the accelerator for 04/2025 enhancement list.
+API Documentation
+URL: Provided by Biller
+Authentication: Username / Password
+Details
+IC Use
+Partner API Name
+Request
+Response
+Specifications
+Test Endpoints
+RTDR: Balance Update
+BalanceUpdate 
+Returns account balances
+IC AccountNumber
+BillingID
+IC DisplayAccountNumber
+AccountNumber/PolicyNumber
+PaymentReference
+String
+Status
+Success / Failure
+Message
+Failure message
+BalanceDue
+Due Amount in GW UI
+TotalAmountDue
+DueTotal Amount in UI
+InvoiceNumber [Array]
+Invoice Number 
+Errors handled:
+Authentication Failed: Please check user credentials(username and password)
+Please provide a valid Account Number
+Please provide one of the fields to update
+FirstName,LastName,Email,Phone,AlternateNumber,Addressline1,Addressline2,City,State,Zip
+Connection timed out or connectivity failures
+Default functionality is Open Billing. Configure Advanced setting versioning if Balance forward is used, so only most recent invoice is updated. 
+Data Pump: Payment
+ICPaymentsNotification
+ Posts a payment/credit to GW system
+Customer Name (optional)
+Account Number = 
+BillingID (BillingID or Account req.)
+DisplayAccount Number 
+AccountNumber
+IC Invoice Number
+InvoiceNumber
+Date
+PaymentDate
+Amount
+PaymentAmount
+Paymentguid
+PaymentID
+PaymentType
+ACH / CC
+FirstName
+LastName
+Email
+Phone
+AlternateNumber (pay by text)
+BillingAddress
+City
+State
+ZipCode
+PaymentChannel 
+PaymentReference
+String (PaymentID)
+Status
+Failed / Success
+Message
+Same errors as BalanceUpdate
+Method : setPaymentNotification
+ 
+ 
+PaymentChannel
+ = Payment Source ID 
+Last 4 Digits of CC/ACH for Payments is an addition to the accelerator that is required to be coded in by the Biller.
+Date Format: YYYY-MM-DD HH:MM:SS
+Example: 2025-02-10 15:10:24
+http://10.0.26.4:8581/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+Data Pump: Refund
+ICPaymentsNotification
+ Posts a payment/credit to GW system
+sent to payment endpoint above with one additional field 
+Reason 
+with the value of 
+Internal
+ReasonCode: 
+internal = IC Credit and Void
+Data Pump: ACH Reject and Chargebacks
+ICPaymentsNotification
+ Posts a payment/credit to GW system
+sent to payment endpoint above with one additional field 
+Reason 
+with the value of 
+returnedcheck
+Reject Codes
+returnedcheck = IC Rejects
+internal = IC Credit and Void
+modification =  Chargeback
+IC ACH Rejects can be customized to send Reject Codes (R01, R02, etc.) with an advanced setting as needed.
+Data Pump: Void
+ICPaymentsNotification
+ Posts a payment/credit to GW system
+sent to payment endpoint above with one additional field 
+Reason 
+with the value of 
+Internal
+Reason Code: 
+internal = IC Credit and Void
+Data Pump: Paperless Enrollment
+PaperLess
+EmailID
+DisplayAccountNumber
+BillingAccountNumber
+PaperLess
+(boolean)
+<soapenv:Body>\r
+      <ics:setPaperlessPreference>\r
+         <!--Optional:-->\r
+         <ics:paperlessRequest>\r
+            <!--Optional:-->\r
+            <dto:DisplayAccountNumber>?</dto:DisplayAccountNumber>\r
+            <!--Optional:-->\r
+            <dto:EmailID>?</dto:EmailID>\r
+            <!--Optional:-->\r
+            <dto:PaperLess>?</dto:PaperLess>\r
+         </ics:paperlessRequest>\r
+      </ics:setPaperlessPreference>\r
+   </soapenv:Body>\r
+Status
+Failed / Success
+Message
+Successfully Saved 
+Throws exception when fails to update or not meeting the mandatory conditions
+method: setPaperlessPreference
+Data Pump: AutoPay Enrollment and Auto Pay Payment Method Changes and Auto Pay Method Detail Changes
+AutoPay
+https://fbtbcwebx.sfbcic.com/bc-epqa7/ws/acc/ic/service/inbound/api/ICServiceAPI?wsdl
+<soap:Envelope xmlns:soap=http://www.w3.org/2003/05/soap-envelope xmlns:soap1=http://guidewire.com/ws/soapheaders xmlns:ics=http://guidewire.com/bc/ws/acc/ic/service/inbound/api/ICServiceAPI xmlns:dto=http://example.com/acc/ic/service/inbound/dto>
+   <soap:Header>
+      <soap1:traceability_id>?</soap1:traceability_id>
+      <soap1:gw_locale>?</soap1:gw_locale>
+      <soap1:gw_language>?</soap1:gw_language>
+      <soap1:authentication>
+         <soap1:username>?</soap1:username>
+         <soap1:password>?</soap1:password>
+      </soap1:authentication>
+   </soap:Header>
+   <soap:Body>
+      <ics:setAutoPay>
+         <!--Optional:-->
+         <ics:autopayRequest>
+            <!--Optional:-->
+            <dto:AccountNumber>?</dto:AccountNumber>
+            <!--Optional:-->
+            <dto:AddressLine1>?</dto:AddressLine1>
+            <!--Optional:-->
+            <dto:AutoPay>?</dto:AutoPay>
+            <!--Optional:-->
+            <dto:BankAccountNumber>?</dto:BankAccountNumber>
+            <!--Optional:-->
+            <dto:CardNumber>?</dto:CardNumber>
+            <!--Optional:-->
+            <dto:City>?</dto:City>
+            <!--Optional:-->
+            <dto:CustomerName>?</dto:CustomerName>
+            <!--Optional:-->
+            <dto:DisplayAccountNumber>?</dto:DisplayAccountNumber>
+            <!--Optional:-->
+            <dto:EmailAddress>?</dto:EmailAddress>
+            <!--Optional:-->
+            <dto:PaymentGUID>?</dto:PaymentGUID>
+            <!--Optional:-->
+            <dto:PaymentType>?</dto:PaymentType>
+            <!--Optional:-->
+            <dto:State>?</dto:State>
+            <!--Optional:-->
+            <dto:UserLogName>?</dto:UserLogName>
+            <!--Optional:-->
+            <dto:UserType>?</dto:UserType>
+            <!--Optional:-->
+            <dto:Zip>?</dto:Zip>
+         </ics:autopayRequest>
+      </ics:setAutoPay>
+   </soap:Body>
+</soap:Envelope>
+
+Status
+Failed / Success
+Message
+success - successfully Received /Saved
+Failure - list of errors
+CustomerName 
+string(100)
+Email ID
+AccountNumber 
+string (10)
+BillingID
+DisplayAccountNumber 
+string (10)
+Policy ID
+AutoPay (boolean)
+PaymentType 
+0 - (No Payment Type) 
+1- CC
+2- ACH
+PaymentGuid
+Payment Instrument GUID
+Bank AccountNumber 
+String(14) 
+Masked Value
+CC Card 
+string(19)
+Masked Value
+AddressLine1 
+String(50)
+Payment Instrument Address
+City 
+String(50)
+Payment Instrument City
+State 
+String(50)
+Payment Instrument State
+Zip 
+String(50)
+Payment Instrument Zip
+UserType: ChangeRequestorID
+UserTypeID (Only 1,2,3,14,15,16,17,18) 
+UserLogName: UserLogName provided in AgentConnect, and User Information available from Biller Portal and Customer Portal (agent username or employee name or Biller username or  customer Login username)
+This change is included in the Advanced Setting that needs to be turned on. 
+Test endpoint: 
+http://10.0.26.4:8581/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+Bill Presentment - PDF Linking
+fetchInvoiceDocument
+Endpoint URL: 
+bc/ws/acc/invoicecloud/service/ICServiceAPI
+IC AccountNumber
+BillingID
+InvoiceNumber
+AccountNumber/PolicyNumber
+Content
+Acutal PDF/Bill/Statment or Base64 encoded bytes.
+DocumentName
+filename
+MimeType
+string
+Test endpoint:
+http://10.0.26.4:8581/bc/ws/acc/invoicecloud/service/ICServiceAPI
+Authentication Header Parameters:
+User: su pw: gw
+Updated 05/01/2025:
+ gw_locale = en_US
+gw_language = en_US
+Data Pump: Pay by Text Enrollment 
+setPayByText
+<xs:complexType name="PayByTextRequest">
+<xs:sequence>
+<xs:element name="AccountNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="PayBytext" type="xs:boolean" minOccurs="0"/>
+<xs:element name="PhoneNumber" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="PayByTextResponse">
+<xs:sequence>
+<xs:element name="Message" type="xs:string" minOccurs="0"/>
+<xs:element name="Status" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+Pay By Text: True/False Boolean Flag
+Phone Number: Phone Number entered for Pay by Text
+Pay by Text is an addition to the accelerator that is required to be coded in by the Biller. 
+File Mapping
+Invoice File
+File Extension: .BIF
+File Naming Convention: standard (BID_MMDDYYYYHHMMSS.BIF)
+File Delimiter: Pipe
+Specification: N/A
+Sample File: 
+File Transfer Frequency: Multiple times per day as policies are generated. 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+sysdate
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+invoice.amount
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N= New D=Deactivate U=Update R=Rewrite if exists
+New - Send new if there are new invoices created for subsequent changes (2nd policy or changing pay plan from Full Pay to Monthly/Quaterly - consider record type R if new billed invoice is created)
+Update - Update to existing invoice due to new policies/changes
+Rewrite - GW rewrite/reinstate
+Deactivate - 1. For cancellations and send only with status as Cancelled or Scheduled 
+Cancellation.GW
+ should not send for Pending Cancellation. Once deactivated, biller to take payments from insured through collections or late pay.
+2. For Non-Renew if there was a billed invoice for renewal transaction.
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+invoice.invoicenumber
+*Downpayments have temp invoice numbers
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BillingDate
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+We do not show cancellation effective date/reinstatement date.
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+DueTotal
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Invoice Header
+21
+MinimumAmountDue
+FALSE
+Invoice Header
+23
+FirstNotifyRequestedDate
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due Amount in UI
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+Invoice Header
+317
+PaymentExpirationDate
+FALSE
+Invoice Header
+318
+PaymentExpirationMessage
+FALSE
+Invoice Header
+345
+BillerInstallmentNumber
+Y
+FALSE
+Indicating the priority between billed invoice vs adhoc invoice. 
+Scheduled billed Invoice to be series 1,2,3,4,X
+Adhoc invoices to be incremented
+375
+Active
+FALSE
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+59
+AccountNumber
+Y
+TRUE
+BillingID
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Direct BIll - Billing Contactname
+Agency Bill - AgencyName/OrganizationName
+Customer Record
+61
+Address1
+Y
+FALSE
+Full Address is one field in GW
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Customer Record
+64
+State
+Y
+FALSE
+Customer Record
+65
+Zip
+Y
+FALSE
+Customer Record
+66
+Phone
+Y
+FALSE
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+BillingAccoutNumber -DirectBill 
+ProducerCode -AgencyBill
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+ 8
+ RTDR EndPoint/WebService URL	
+ 
+ 
+ 
+13
+DataPump Payments EndPoint/WebService Password	
+14
+DataPump Paperless EndPoint/WebService URL	
+15
+DataPump Paperless EndPoint/WebService Username	
+16
+DataPump Paperless EndPoint/WebService Password	
+17
+DataPump AutoPay EndPoint/WebService URL	
+18
+DataPump AutoPay EndPoint/WebService Username	
+19
+DataPump AutoPay EndPoint/WebService Password	
+21
+Remote PDF EndPoint/WebService Username	
+22
+Remote PDF EndPoint/WebService Password	
+77
+Insurance Vertical - Enable Policies	
+1
+N
+101
+DataPump ACH Rejects EndPoint/WebService URL	
+102
+DataPump ACH Rejects EndPoint/WebService Username	
+103
+DataPump ACH Rejects EndPoint/WebService Password	
+131
+JSON Configuration
+Values can be updated for the Non-Approved Payment Codes as requested by the Biller
+SendExternalUserNameAndType will need to be set to True if the biller requires these values in the API. 
+"UseACHRejectCodeFromRecord"
+- When this setting is true then the Reject code as found on the database (“RO1”, etc) will be used. When this is false then the value found in 
+ACHRejectCode
+ will be used if provided.
+{
+    "DataPumpConfig": {
+        "ACHRejectCode": "returnedcheck",
+        "ChargebackCode": "modification",
+        "RefundCode": "internal",
+        "VoidCode": "internal",
+        "SendExternalUserNameAndType": "True",
+        "UseACHRejectCodeFromRecord": true
+    }
+}
+Y
+131
+JSON Configuration
+For Guidewire V10: For billers that are balance forward, the integration will need to include this JSON code to turn on Balance Forward functionality for RTDR, forcing the integration to only update the most recent invoice. 
+{
+    "ZensarGuidewire": {
+        "RTDRConfig": {
+            "BalanceForward": true
+        }
+    }
+}
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Provided via BIF or BIF customization. 
+AutoPayCollectionDate
+BIF customization
+ - Due Date
+BalanceForward
+Provided via BIF or BIF customization. 
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization
+InvoiceDate
+Provided via BIF
+InvoiceDueDate
+Provided via BIF
+InvoiceFormatGuid
+Provided via BIF
+InvoiceTypeID
+Provided via BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+Provided via BIF
+PaymentExpirationDate
+Provided via BIF or BIF customization. 
+PaymentExpirationMessage
+Provided via BIF or BIF customization. 
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Provided via BIF or BIF customization. 
+ThirdNotifyRequestedDate
+Provided via BIF or BIF customization. 
+Zensar Portals 
+Environment
+Portal Name
+BID
+Biller GUID
+Web Service Key
+Zensar Endpoint
+Dev
+Zensar
+2391
+cefa0d67-2d3e-41ac-a252-8c79e1ca6d3f
+289407d7-5fc6-4e75-9258-4a46f3f5af6d
+BC- 
+http://10.0.26.4:8581/bc/BillingCenter.do
+PC- 
+http://10.0.26.4:8181/pc/PolicyCenter.do
+ 
+AutoPayService - 
+http://10.0.26.4:8581/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+Test
+Zensar - Test
+2558
+9b91a344-c47b-46a7-9b91-0784ad1a6621
+d0d890e9-180f-4e7d-a59d-521d6c5b8189
+BC- 
+http://10.0.26.4:8595/bc/BillingCenter.do
+PC- 
+http://10.0.26.4:8195/pc/PolicyCenter.do
+ 
+AutoPay service - 
+http://10.0.26.4:8595/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+Second Test
+Zensar - Clocktest
+2560
+d51385ac-6fa3-463c-a285-8efb03ff5c5c
+7269f9e0-07b3-4b61-80c2-bb0bbb7bcca9
+BC- 
+http://10.0.26.4:8580/bc/BillingCenter.do
+PC- 
+http://10.0.26.4:8180/pc/PolicyCenter.do
+GW9 Dev
+Zensar - GW 9
+1587
+9cc4c8ca-70c9-4016-96ef-eefd8597833b
+fc033c56-aaec-42f3-ad88-73d3f714156e
+BC- 
+http://10.0.26.4:9580/bc/BillingCenter.do
+PC- 
+http://10.0.26.4:9180/pc/PolicyCenter.do
+http://10.0.26.4:9580/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+GW9 Test
+Zensar - GW 9 test
+1872
+587a11d5-63ad-45d5-8e86-aa6e0e365edd
+6bdda624-f991-469b-abaf-a2056de58649
+BC- 
+http://10.0.26.4:5580/bc/BillingCenter.do
+PC- 
+http://10.0.26.4:5180/pc/PolicyCenter.do
+http://10.0.26.4:5580/bc/ws/acc/invoicecloud/service/ICServiceAPI?wsdl
+User Interaction and Design
+note
+Additional Detail needing review:
+https://invoicecloud.app.box.com/file/935588957872
+ 
+https://invoicecloud.app.box.com/folder/144291706166
+ 
+https://invoicecloud.app.box.com/folder/123270594580
+ 
+
+
+Additional Detail needing review:
+https://invoicecloud.app.box.com/file/935588957872
+ 
+https://invoicecloud.app.box.com/folder/144291706166
+ 
+https://invoicecloud.app.box.com/folder/123270594580
+ 
+
+
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment (One Time - Down Payment)
+Data Flow - Inline Donation Payments
+Inline Donations are supported to be sent through Data Pump to Guidewire Biling Center. Guidewire Integration will need to be customized to apply the Donations sent by Invoice Cloud accordingly. 
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+ is the biller using the standard biller portal only?
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+EBPP-16496
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+INT-10259
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+7/19/2024
+to Send Pay By Text Enrollment information to Billing Center on Guidewire. 
+INT-1076
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8/1/2024
+Chargebacks were not included in the integration and ACH Reject + Credits + Voids were not customizable with Biller decided verbiage. 
+Chargebacks to be sent in the API and all non approved payments to be added to advanced settings for Biller to change as requested.
+INT-10869
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+8/20/2024
+Payment Channel for the API was not being used. 
+PaymentChannel to be utilized to provide PaymentSource information to the Biller.
+https://invoicecloud.atlassian.net/jira/servicedesk/projects/SA/queues/custom/87/SA-867
+ 
+12/12/2024
+Currently our Autopay Data Pump doesn’t have access to tables that store values regarding the user that has made changes to autopay. 
+User information is available for integrations team to send these values in data pump for logging purposes. 
+Product has added tables that Integrations can work with to provide the values in Auto Pay Data Pump for UserType and UserLogName. 
+INT-12366
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+1/23/2025
+InvoiceCloud does not send specific reject codes through Data Pump
+InvoiceCloud to send specific reject codes through Data Pump
+Clients may need to take different actions on an account depending on the reject code they received.
+ITG-3584
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+5/1/2025
+Invoice cloud did not support GW  SOAP12/ SOAP11 binding for version 10
+Invoice cloud would be updating the GW v10 binding for SOAP12/11
+SA-1242
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBA 
+Currently the integration only supports Open Billing. 
+Create new version that can be used for Balance Forward integrations.
+When the version has been set via Advanced setting to Balance Forward, only update the balance for the most recent invoice. 
+ URL:/spaces/IM/pages/1105592418/Guidewire+Accelerator+Technical+Design

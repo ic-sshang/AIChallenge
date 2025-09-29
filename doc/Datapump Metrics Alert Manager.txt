@@ -1,0 +1,117 @@
+  Application Overview
+Field
+Details
+Application Name
+Datapump Metrics Alert Manager
+Version
+NA
+Description
+This is a console-based CRON job deployed in the Biller Kubernetes cluster. It runs every minute to provide near real-time alerts to billers when their CIS APIs—invoked by the Datapump executable (triggered by a Skybot job via the Datapump Controller)—exceed predefined performance thresholds.
+The job sends alerts (Email via Mailgun API) for the key metrics such as:
+Average Response Time
+Error Rate Percentage
+Timeout Error Rate
+Thresholds for these metrics are configured in CRM for Datapump-enabled billers. When a threshold is breached, the job automatically sends alert emails to the respective billers, helping them identify and address performance issues in their APIs that may be slowing down the Datapump job.
+Primary Functionality
+Trigger real-time alerts when configured thresholds are breached, ensuring prompt detection and resolution of issues affecting the Datapump data synchronization process.
+Key Features
+Automated Email Notifications, Threshold-Based Alerting, Kubernetes-Based Deployment, CronJob, Dotnet 8, Entity Framework(ORM).
+  Development Team Contact Information
+Role
+Contact Information
+Product Manager
+Anoop Nag
+Tech Lead
+Kailashnadh Pochiraju
+Engineering Manager
+Kailashnadh Pochiraju
+Support Contact
+Architect
+Martin Henderson
+  Technical Details
+Field
+Details
+Programming Languages
+c#
+Frameworks/Libraries
+dotnet 8, IC.Runtime.EntityFramework, Serilog
+Database
+ IC.Net.DataAccess.MsSql
+Key Vault
+icappsettingsdevtest
+Dependencies
+Database, Mailgun API
+Code Repository Link
+https://dev.azure.com/invoicecloud/Biller/_git/DataPumpMetricsAlertManager
+ 
+  Application Services
+Field
+Details
+Notes
+Application Service Indicator
+datapump-metrics-alert-manager-job
+NA
+Application Service Short Indicator
+string (needed if Create Application Service Vault = true)
+NA
+Create Application Service Vault
+False
+NA
+Grant Crypto Vault Access
+False
+NA
+Grant Environment Vault Access
+True
+Yes
+Grant Cluster Vault Access
+False
+No
+Grant ServiceBus Sender Access
+False
+No
+Grant ServiceBus Receiver Access
+False
+No
+Grant ServiceBus Data Owner Access
+False
+No
+Grant IC Blob Storage Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant PDF Extract Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Grant IC Vendor PDF Archive Storage Account Access
+False
+Only utilized by PDF Extract Workload for now so likely your Workload will not need it.
+Biller Shard DB Access
+True
+True
+Biller Shard DB Access for QE
+False
+Only utilized by Tooling Cluster Workload for now so likely your Workload will not need it.
+  Deployment Information
+Field
+Details
+Cluster
+Biller
+Deployment Node
+k8s Job Node
+Application Type
+CRON Job
+Outbound Network Ports
+Inbound Network Ports
+PCI Scope
+[Does the application handle credit card data?] No
+Environment Variables
+IC__MailgunApi__MailgunApiKey
+IC__SqlDatabase__MasterConnectionString
+IC__SqlDatabase__PerfloggingConnectionString
+IC__SqlDatabase__BillerConnectionStringTemplate
+\Branding\ConsoleAppNotifications\Default_Template.htm
+Schedule
+: 
+*/5 * * * *
+ 
+Five Minutes
+ URL:/spaces/ED/pages/4350902303/Datapump+Metrics+Alert+Manager

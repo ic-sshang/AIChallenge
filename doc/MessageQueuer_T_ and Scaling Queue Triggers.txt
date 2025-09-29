@@ -1,0 +1,76 @@
+MessageQueuer<T>
+MessageQueuer<T> 
+has an load balancer object 
+ILoadBalancer<string> 
+and  list of queues 
+IAzureQueues
+. The load balancer has a list of queue name storages that should correspond to each queue name in the queue list. The 
+MessageQueuer<T> 
+object will use the load balancer to keep track of what queue is next, retrieve the queue corresponding to the current name on the load balancer and queue up a message to that queue. 
+Currently there are 3 
+BatchCloseExecutorMessageQueuer
+,
+ BatchCloseProcessorMessageQueuer 
+and 
+BatchCloseSyncMessageQueuer 
+will utilize the 
+Utilities
+ tools to collect the queue name storages from the class containing the Queue Trigger Functions. Which means we don’t have to maintain a list of queue names for the MessageQueuers above, they will simple go retrieve it from the function themselves. 
+The MessageQueuer will then create a load balancer object and leverage the 
+Factory 
+ to create a new instance of 
+MessageQueuer<T>
+.
+This diagram show 3 MessageQueuer singletons  
+BatchCloseExecutorMessageQueuer
+,
+ BatchCloseProcessorMessageQueuer 
+and 
+BatchCloseSyncMessageQueuer
+.
+The way 
+RoundRobinComponent 
+is implemented does not 100% distribute the queue messages. It has been seen in test runs with a large number of test billers that the distribution of queue messages is not exactly even, however variations of differences for every run is not so big.  But it it something that should be addressed sooner rather than later. 
+How to Scale - BatchCloseExecutor
+BatchCloseExecutor 
+consists of multiple Queue Trigger Azure Functions that could be scaled out as needed. 
+BatchCloseProcessor 
+queues messages to 
+batchclose-executor
+ and 
+batchclose-executor-2
+, which are then picked  up by their corresponding Azure Function.
+Create New Queue Storage
+In order to scale out 
+BatchCloseExecutor 
+you need to first create the new queue storage for the new 
+BatchCloseExecutor 
+to receive data from. Name it 
+batchclose-executor-<number>
+, where 
+<number>
+ is a  unique number. Example, the first one is 
+batchclose-executor
+, but the second is 
+batchclose-executor-2
+, so if you create a third you would name it 
+batchclose-executor-3
+.
+Create a New Function
+After creating a queue storage, you can go to the code and copy either Run1 or Run2, and create a new function. Make sure to just refactor the new function so that the numbering matches that of the new queue storage. Example,
+Run1 and Run2 are queue triggers for BatchCloseExecutor.
+Finishing Up
+After you’re done creating everything we need for the new Azure Function, just simply build and deploy and it should be ready to go. 
+Scaling Down
+To complete remove, make sure to just undo everything you did for a specific BatchCloseExecutor. 
+Remove Azure Function in Code, from 
+BatchCloseExector 
+class.
+Remove Queue Storage
+Scaling other Queue Trigger Functions
+Other queues, like 
+BatchCloseProcessor 
+could easily be scaled in the same manner as 
+BatchCloseExecutor
+, since the MessageQueuers are all implemented with a load balancer and read the queue names from the implemented Queue Trigger Functions in our code, scaling up any our Queue Triggers Functions is a easy as just creating a new queue storage and add a new queue trigger to the code.  
+ URL:/spaces/PE/pages/2629173329/MessageQueuer+T+and+Scaling+Queue+Triggers

@@ -1,0 +1,24 @@
+When there is a huge delay in AutoPay Processing RTDR had to be disabled to speed up autopay processing.
+ Instructions
+Steps
+ Login to CRM - 
+https://www.invoicecloud.com/crm/
+ 
+ The search of the Biller and load of the configuration
+Uncheck the box and save it to Disable
+Check the box and save it to Enable
+New Relic Query to Validate
+SELECT average(TotalProcessTime) from RTDRTransactions where BillerID=1210 since 1 hours ago TIMESERIES 5 minutes compare with 1 week ago
+Highlight important information in a panel like this one. To edit this panel's color or style, select one of the options in the menu.
+ Related articles
+The content by label feature automatically displays related articles based on labels you choose. To edit options for this feature, select the placeholder and tap the pencil icon.
+false
+5
+com.atlassian.confluence.content.render.xhtml.model.resource.identifiers.SpaceResourceIdentifier@88f
+modified
+false
+true
+page
+label = "kb-how-to-article" and type = "page" and space = "DS"
+kb-how-to-article
+ URL:/spaces/DS/pages/2671968362/How+to+disable+enable+RTDR

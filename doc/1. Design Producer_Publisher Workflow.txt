@@ -1,0 +1,409 @@
+Overview
+This section will walk through planning and designing an end-to-end producer/publisher workflow. 
+Prerequisites
+Review 
+API-First Development
+Review 
+Messaging Documentation
+Planning Steps
+Identify/Name Commands and Events
+Use identified commands to begin building API specifications
+Implementation Steps
+Create an 
+Application Service
+ or 
+Use Case
+ 
+Note on Application Services
+ - this concept originates from and is tailored more toward a hexagonal/onion-style architecture 
+using Domain Driven Design
+. However, Application Service in this context implies that the service (typically) lives alongside your API project and would be responsible for things like command/request validation or command production - these services may also fetch, update, or insert data using an injected repository or service. You can think of these as existing somewhere between the 
+Business Logic
+ & 
+Presentation Layers
+.
+Register All Dependencies.
+Commands are typically 1:1 with a regular API request object that is POSTed to an endpoint. This is not always the case, however - you may have a Request object that needs to be validated & mapped to a command if there are details that must be derived internally. 
+This is guide is assuming the former scenario - where a command is going directly to the API endpoint.
+An easy example of this - whenever a report is run, the 
+ReportId
+ value is created by a record being inserted into the database. It’s important for a downstream consumer to have this so it can query for the record and update it over time - you may have a 
+Request
+ object that has the 
+BillerId
+ + parameters for the report - but will need to create the command internally once you’ve been able to validate the request & insert a record.
+(Optional) Planning, Domain Driven Design Practices, and Domain Experts
+Domain Driven Design is not necessary to understand in-depth at this point
+ - but the planning and modeling concepts are very useful at the point you are beginning to design commands and events.
+Domain Driven Design introduces the concept of “
+Domain Experts
+” who represent Subject Matter Experts in a particular area - these are the best individuals to include in planning conversations when beginning to model Commands and Events (also Domains). They can be Product Managers or Owners, Business or Customer Stakeholders, Developers and Architects, or even you. The point of this practice is to 
+align the software with business process
+. 
+It is easy as a developer to live through a technical lens and begin tackling problems immediately from a technical point of view. Utilizing a method of employing Domain experts up front and having formal modeling/planning is a gentle introduction to Domain Driven Design in practice and moves the typical thought process around design up a level - over time, this practice starts to become a living example of 
+Conway’s Law
+, breaking down knowledge siloes and introducing more cohesion across an organization.
+To keep things simple
+The time to do this sort of planning is during up-front feature design or during Sprint Planning/Refinement - though I would personally recommend setting aside dedicated time for this type of thing if the scope is large enough.
+Before embarking on this activity, consult architects if you have any questions/concerns/doubts/ideas.
+Make sure to include the appropriate domain experts in sessions where you plan to model commands and events.
+Example Prompt
+For the remaining examples in this guide, let’s build a hypothetical (and somewhat cliche) shopping cart system using the following functional requirements.
+Users should be able to add products to a cart or remove products from a cart.
+Users should be able to place an order for one or more items in their shopping cart.
+Product Inventory should be automatically allocated (reserved) whenever a product is added to a user’s cart.
+Product Inventory should be deducted from the overall product total whenever an order is placed.
+With just those 4 bullets, we’ve identified several entities and commands for the sake of brevity - let’s assume we have the following entities, and they have the correct properties on them.
+Customer
+ - Represents our User.
+Cart
+ - Represents our Shopping Cart - every 
+Cart
+ has one & only one associated 
+Customer
+.
+Product
+ - An item that can be added to a 
+Cart
+ for purchase.
+Order
+ - An aggregation of 
+Products
+ that have been ordered by a 
+Customer
+.
+1. Identify + Name Commands and Events
+The first step is to identify which commands are necessary to fulfill the functional requirements of the problem. See the 
+above section
+ for guidance on this activity.
+Keep in mind
+Commands should be expressive of 
+business process
+ and indicate 
+exactly
+ what is to be performed, imperatively.
+Commands are in the present tense.
+Events are past-tense and indicate that 
+something has occurred
+. They are often the result of commands.
+One command may be responsible for emitting multiple events - but they are often 1:1.
+During our planning sessions, we begin to discuss how this workflow operates.
+2
+1
+0
+0
+4116938816
+4112678981
+1
+Untitled Diagram-1741883952159.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1741883952159.drawio
+0
+441
+384.5
+The above gives a decent enough overview of the flow of actions in the system - but which of the operations are really commands to be sent directly and which operations can occur reactively as the result of events?
+Well - as with anything - 
+it depends
+.
+Let’s think about it this way
+A 
+Customer 
+is representative of an end user in this example - they are an individual who has logged in and has an account associated to them.
+The 
+Shopping Cart
+ (which should be its own individual actor) could be considered 
+specific
+ 
+to a given user for a given period of time.
+ Basically - the shopping cart has no value if there isn’t a user interacting with it - though it may hold responsibility for initiating the check-out process.
+Products
+ are entities that represent a physical item - they may have properties describing 
+what they are,
+ but we really only care about managing stock in this context.
+The 
+Order 
+also has no intrinsic value outside of the User - and even more specifically the Shopping Cart. It’s probably not going to have its own behavior because it is just the result of a shopping transaction.
+So - from the above - let’s model commands based on responsibility.
+Shopping Cart
+AddProductToCart
+Note - in an aggregate model 
+ShoppingCart
+ - this just be 
+AddProduct
+. At the Application Layer, the addition of 
+ToCart
+ is more explicit and preferred.
+PlaceOrder
+…That’s it. Really!
+Even though the 
+Customer
+ is the one performing these actions, they’re really just executing commands telling the system what is to be done. Every other interaction in the above diagram can be modeled as an event that is the result of one of these operations.
+Note - the 
+Get
+ actions are just regular REST 
+GET
+ operations - or 
+Queries
+ when discussing CQRS
+The command event correlation for 
+ShoppingCart
+Shopping Cart
+AddProductToCart
+ → 
+ProductAddedToCart
+PlaceOrder
+ → 
+OrderPlaced
+The consumers of the events and their corresponding actions taken, internally.
+Product
+ProductAddedToCart
+ → 
+ReserveQuantity
+OrderPlaced
+ → 
+RemoveQuantity
+Order
+OrderPlaced
+ → 
+CreateOrder
+Customer
+OrderPlaced
+ → 
+NotifyCustomer
+Now that commands & the resultant events have been modeled - let’s implement the scenario with system components and take a look at how this changes the overall flow of operations in our design.
+Solid Lines - 
+Represent commands. (Placed on Queues)
+Originating from the Customer - commands are sent over HTTP-based REST.
+Originating anywhere else - Commands are sent over Azure Service Bus.
+Dashed Lines
+ - Represent events. (Placed on Topics)
+Top label = Event that occurred
+Bottom label = Action occurring as a result.
+Dotted Lines
+ - Explicit action that occurs, discounting commands/events.
+2
+1
+0
+0
+4116807748
+4112678981
+1
+Untitled Diagram-1741885330701.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1741885330701.drawio
+0
+670.5
+574.4711230835471
+One thing that should be pretty apparent from viewing the above diagram is how decoupled everything has now become. There are only two commands issued DIRECTLY to a service in the above diagram - all of the remaining interactions occur either through the emission of events or placing commands onto a message broker to be consumed & processed by another service.
+note
+We could definitely have the 
+PlaceOrder
+ command go directly to the 
+OrderService
+ - that would likely be a more appropriate scenario in the real world. To keep things simple, there’s just one POSTable API identified here and we’re proxying the command.
+
+
+We could definitely have the 
+PlaceOrder
+ command go directly to the 
+OrderService
+ - that would likely be a more appropriate scenario in the real world. To keep things simple, there’s just one POSTable API identified here and we’re proxying the command.
+
+
+Given the above - let’s look at a naive model of all our commands & events - do note, each item below will also have the
+ 
+common properties
+ 
+CorrelationId
+, 
+Username
+, 
+and
+ 
+Timestamp
+, which provide auditing capabilities.
+2
+1
+0
+0
+4117299287
+4112678981
+1
+Untitled Diagram-1741886867898.drawio
+4
+4
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1741886867898.drawio
+0
+812
+781
+There are two things of note I want to highlight from the above class diagram
+First - note that the 
+OrderPlaced
+ event has multiple subscribers that react whenever the event occurs and perform some additional action, internally. In the example, a 
+NotificationService
+ is listening for the 
+OrderPlaced
+ event - whenever one occurs, it reacts by notifying the customer using with their order details using some pre-configured preferences.  Similarly, the 
+ProductService
+ uses the 
+OrderPlaced
+ event to internally reduce the quantity of a given product using 
+Product.RemoveQuantity
+.
+Second - while this is a relatively naive example - note that there really isn’t a ton of information in the commands and events above - there is enough to be able to query for certain entities and perform some action with or against them. To continue to drive the point home - 
+commands and events are ways to communicate 
+what should happen or what has happened
+ - this is why the emphasis placed on language is so incredibly crucial to the implementation of event driven architectures.
+2. Build API Specification
+Now that we’ve identified our commands and their origination points - designing the API specification should be a breeze. We just have the two command endpoints.
+This probably isn’t the best example - but it communicates the point.
+API Specification
+yaml
+openapi: 3.0.3
+info:
+  title: Swagger Shopping Cart Example - OpenAPI 3.0
+  description: |-
+    This is a very simple example of an API specification to support
+    the event-driven motivating example.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://shoppingcart.swagger.io/api/v3
+tags:
+  - name: shopping-cart
+    description: Manage Products in your Session and Place Orders
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /shopping-cart:
+    post:
+      tags:
+        - shopping-cart
+      summary: Adds Product To Cart
+      description: Add a product to the cart
+      operationId: addProducToCart
+      requestBody:
+        $ref: '#/components/requestBodies/AddProductToCart'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - shopping-cart:
+            - write:shoppping-cart
+            - read:shopping-cart
+  /shopping-cart/order:
+    post:
+      tags:
+        - shopping-cart
+      summary: Places order for items in cart
+      description: Uses the current state of the shopping cart to place an order
+      operationId: placeOrderFromShoppingCart
+      requestBody:
+        $ref: '#/components/requestBodies/PlaceOrder'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+      security:
+        - shopping-cart:
+            - write:shoppping-cart
+            - read:shopping-cart
+components:
+  schemas:
+    Order:
+      required:
+        - shoppingCartId
+        - customerId
+      type: object
+      properties:
+        shoppingCartId:
+          type: string
+          format: uuid
+          example: "00000000-0000-0000-0000-000000000000"
+        customerId:
+          type: string
+          format: uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      xml:
+        name: order
+    Product:
+      required:
+        - productId
+        - quantity
+      type: object
+      properties:
+        productId:
+          type: string
+          format: uuid
+          example: "00000000-0000-0000-0000-000000000000"
+        productQuantity:
+          type: integer
+          format: int32
+          example: 1
+      xml:
+        name: product
+  requestBodies:
+    AddProductToCart:
+      description: Command to Add Product to the Shopping Cart
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Product'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Product'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Product'
+      required: true
+    PlaceOrder:
+      description: Command to Place and Order for the Customer from the given Shopping Cart
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Order'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Order'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Order'
+      required: true
+  securitySchemes:
+    shopping-cart:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://shopping-cart.swagger.io/oauth/authorize
+          scopes:
+            write:shopping-cart: modify your shopping cart
+            read:shopping-cart: access and read your shopping cart
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+Summary
+This section introduced concepts when thinking about and implementing command workflows. An introduction to the architectural thought process of event-driven systems was introduced and used to articulate how concepts from the Domain Driven Design practice can be used to model commands & events directly from business processes.
+We concluded this section by walking through a motivating example describing a very simple modeling exercise, identifying the correct commands and events for the scenario, creating some system flow diagrams for reinforcement, and designing our API contract to accept the commands we identified.
+ URL:/spaces/PMK/pages/4279304379/1.+Design+Producer+Publisher+Workflow

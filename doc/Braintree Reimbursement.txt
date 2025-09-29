@@ -1,0 +1,146 @@
+ICPaymentProcessingAPI Refunding and Voiding Methods
+URL:
+ 
+https://icg-payments.invoicecloud.com/pay/<method name>
+Methods that use 
+ReimbursementProcessor.Refund
+PaymentCredit
+CardRefund
+ACHRefund
+PayPalRefund
+PayPalCreditRefund
+VenmoRefund
+Methods that use 
+ReimbursementProcessor.Void
+PaymentVoid
+ACHVoid
+CardVoid
+Reimburse is the only method that uses 
+ReimbursementProcessor.Reimburse
+ReimbursementProcessor 
+The 
+ReimbursementProcessor
+ has 3 main methods:
+Refund - This method will retrieves payment information by the given 
+PaymentReference
+ in the request. Once we validate that the payment is refundable we use the 
+PaymentType
+ to select the Refund Strategy. 
+Refund Strategies:
+ACHProcessorRefundStrategy
+ - ACH transactions are scheduled to change status and have a blackout window during which payments cannot be refunded nor voided. Depending of when the payment was made, the status of the payment might indicate that the payment is not currently refundable. This strategy uses 
+ReimbursementWindow
+ to determine if the current process is within the blackout window, and whether the refund can be queued to process after the blackout window. If everything checks out the payment will get refunded, else the refund gets queued or we return a message that the payment is currently not refundable. 
+CardProcessorRefundStrategy
+PayPalProcessorRefundStrategy
+PayPalCreditProcessorRefundStrategy
+VenmoProcessorRefundStrategy
+Void
+Reumburse
+ReimbursementProcessor 
+Class Diagram
+2
+1
+0
+0
+2918678765
+2846687367
+1
+Braintree Reimbursement Diagram Class
+7
+7
+https://invoicecloud.atlassian.net/wiki
+test
+0
+3571
+1141
+Refund 
+Activity Diagram
+1
+0
+0
+2932637723
+2846687367
+1
+Activity Diagram Refunds.svg
+3
+0
+5
+https://invoicecloud.atlassian.net/wiki
+ACtivity Diagram Refunds.svg
+0
+zn2diaPOE8Ht1RiAiGiy 1
+447
+auto
+top
+1
+679
+Void 
+Activity Diagram
+1
+0
+2932474025
+2846687367
+1
+Activity Diagram Void.drawio.svg
+1
+0
+1
+https://invoicecloud.atlassian.net/wiki
+Activity Diagram Void.drawio.svg
+0
+zn2diaPOE8Ht1RiAiGiy 1
+447
+auto
+top
+1
+649
+ACH - Reimbursement Status Timing
+1
+0
+0
+2931654818
+2846687367
+1
+ACH Void and Refund Time Chart.drawio
+2
+0
+2
+https://invoicecloud.atlassian.net/wiki
+ACH Void and Refund Time Chart.drawio
+0
+NcOpsgGb3WyHZxFHqdWt 1
+760.5
+auto
+top
+1
+337
+:info:
+atlassian-info
+#B3D4FF
+Reimbursement Status of an ACH Payment. ACH payments have a blackout window from 9:15 PM to 12:00 AM. Payments are made after 9:45 PM they previous day are voidable until 9:15 PM current day. 
+Credit Card - Reimbursement Status Timing
+1
+0
+0
+2931720370
+2846687367
+1
+CC Void and Refund Time Chart.drawio
+2
+0
+2
+https://invoicecloud.atlassian.net/wiki
+CC Void and Refund Time Chart.drawio
+0
+NcOpsgGb3WyHZxFHqdWt 1
+590.5
+auto
+top
+1
+307
+:info:
+atlassian-info
+#B3D4FF
+Reimbursement Status of a Credit Card payment.
+ URL:/spaces/ED/pages/2846687367/Braintree+Reimbursement

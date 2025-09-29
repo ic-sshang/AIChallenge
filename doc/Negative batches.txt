@@ -1,0 +1,22 @@
+User Story Title
+- 
+EBPP-6243 Negative batches
+Related Story
+Functional Understanding
+As per use case :
+Trancsation 1 date- amout 3000$ (1000 sales+2000  refund)
+Make request- 2000$ refund .
+2000$-3000$= -1000$ (outstanding biller  to pay IC)
+T 2 next day new Sale = 500$
+500$  + (old outstanding amount -1000)$=-500$
+T 3 next post day  new Sale = 1000$
+1000$  + (old outstanding amount -500)$=1000$(refund)  ||   1000$  + (old outstanding amount -500)$=500$(refund)
+How to reproduce this scenario with DBA . require DBA person.
+Technical Understanding
+Hyper Wallet File processing Job- OneBatchFileCreation.
+Repository Path- ICPaymentprocessing .Jobs.Hyperwalletfileprocessing.
+Is Sale Volume called debit and Credit volume called credit?
+BL- Get All the unfunded batches- spProcessInvelidUnfundedBatches → Agregate SUM → check(+ or -) → send the funding instruction(Debit funding instruction or Credit Funding instruction).
+Need to verify sp in database:inOneBatch_File, spCompleteFundingBatch, selFundingbatchestoprocess.
+References
+ URL:/spaces/EN/pages/2542698591/Negative+batches

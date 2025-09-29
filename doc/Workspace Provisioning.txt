@@ -1,0 +1,22 @@
+Add User to the following AAD groups
+ Non-Production AVD: 
+ic-iac-avd-users-npd
+ 
+Production AVD: 
+ic-iac-avd-users-prd
+Note: There are two additional groups that Terraform is polling 
+ic-iac-avd-hold-npd
+ && 
+ic-iac-avd-hold-prd
+ these are used in the offboarding workflow. This group gives no access to login to the Azure Virtual Desktop, but it will ensure the AVD is not deleted during the 90 day hold during offboarding
+Non-Production AVD Creation Pipeline
+ && 
+Production AVD Creation Pipeline
+ run every night at 9PM Eastern Standard Time and will handle AVD workspace creation, legacy key vault access and database access
+Users with enough access to Azure Devops can also run these pipelines manually as an override to deploy a workspace on demand. 
+Warning: There are no approvers required, the pipeline will Terraform plan && apply with no human interaction
+TLDR:
+The 
+workspace
+ terraform stack uses data sources to poll the AAD groups mentioned in step 1. As users are added or removed, Terraform will create or destroy the resources associated with said user. 
+ URL:/spaces/icinfradoc/pages/3298623490/Workspace+Provisioning

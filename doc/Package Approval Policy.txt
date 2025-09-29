@@ -1,0 +1,67 @@
+**DRAFT UNDER REVIEW**
+Purpose
+Ensure the responsible use of packages within the organization to maintain code quality, security, and compliance.
+Scope
+This policy applies to all Invoice Cloud software development teams (contractors included), projects, and code repositories.
+Responsibilities
+Developer
+Identify:
+ Identify the need for a new or modified package within their projects
+Submit Request:
+ 
+Submit a formal request for approval
+, providing detail information about the package; name, version, purpose, and potential impact on the project
+Tech Lead / Architect
+Compatibility Review:
+ Assess whether the package is compatible with the existing project dependencies, frameworks, and standards
+Documentation:  
+Maintain the Software Bill of Materials (SBOM) with any package changes
+.  
+Maintain a record of the decision and approval process from all parties. TBD link to ADR template.
+Security Engineer
+Security Review:
+ Evaluate the package for security vulnerabilities.  Use security scanning tools and conduct manual reviews if needed to ensure the package does not introduce security risks.
+Legal / Compliance Officer
+License Review: 
+Ensure the third party package is compatible with the project’s licensing requirements and that any licensing obligations are met.  
+Artifact Administrator
+Audit Review: 
+Regularly evaluate package publish age.
+Submit Request:
+ Submit a formal request for aged package approval, providing detail information about the package; name, version, age, any potential known CVEs or EOLs.
+Package Removal:  
+Remove non-approved packages from feeds
+Package Sources
+Nuget.org
+NPMJS.com
+Invoice Cloud Private Development Feed
+Invoice Cloud Private Production Feed
+Approval Process For Production Packages
+This process applies to packages for use in production and does not apply to development packages.
+(Developer | Artifact Admin) identifies the need for a new or modified package
+(Developer | Artifact Admin) submits a request to the Tech Lead or Architect board (this could be a ticket process but formal requests need to be stored for auditing and outcomes recorded)
+Internal IC package that needs to be created or modified
+Create a branch
+Deploy the package to the private development feed view
+Test the package
+Create a PR
+Reviewers evaluate the package for standards, security, licensing, and compatibility
+If approved the PR is completed
+If approved the package is promoted to the production feed view and can be used by IC software
+Third Party package
+Reviewers evaluate the package for standards, security, licensing, and compatibility
+If approved the package is added to the production feed and can be used by IC software
+If applicable the project software bill of materials documentation is updated
+Create a package approval process decision record and store in the centralized documentation store
+Quality and Security and Licensing
+Packages must be reviewed for security vulnerabilities and compliance with licensing agreements.  SonarQube and Mend reports must be utilized in the analysis.
+Criteria:
+No critical CVEs
+No critical code quality report items
+No license usage violations
+Tools:
+SonarQube
+ - Used for reporting on the code quality of internal Invoice Cloud packages
+Mend
+ - Used for reporting security vulnerabilities of both internal Invoice Cloud packages and the usage of third party packages
+ URL:/spaces/ED/pages/2817982465/Package+Approval+Policy

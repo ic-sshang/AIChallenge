@@ -1,0 +1,63 @@
+This document details how to use AgentConnect’s iframe functionality.
+Note: Please refer to the IC Documentation site as it offers more in detail descriptions of the specifications of the different parameters opened to billers in AgentConnect.
+AgentConnect is an InvoiceCloud API that allows a customer service representative or agent to access a customer’s account to perform different functions on behalf of a customer. AgentConnect can be opened in two ways: one being opening the AgentConnect session in a new tab or two being opening the session within an iframe in order to embed the session within a biller or integration partner’s website. A series of steps below will describe how to use this iframe.
+AgentConnect Sample Request
+The following is a sample request made to the AgentConnect API
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://www.invoicecloud.com/agentconnectapi",
+    "method": "POST",
+    "headers": {
+    "Authorization": "Basic U2V2NlZ3TnlZMTduS2s0YWJaZEtHdVQyOHQreHlKNkZPOXVqOFJjQXBuYUxuUWkvK2c5VElKZFFXMG5ES3gxd2FObnUyY1JxSmlUdk1veGZCOHBxM0xaZ3c2SWFnbWpYWFFGNlFuY0RUTmc9Og==",
+    "Content-Type": "application/json"  
+    },
+    "processData": false,
+    "data": {
+                "AccountNumber": "ACCT-99999",
+                "CustomerName": "John Doe",
+                "Address1": "123 Anystreet",
+                "City": "Anytown",
+                "State": "TX",
+                "Zip": "78500",
+                "EmailAddress": "none@none.com",
+                "BlockPaymentsCC": false,
+                "BlockPaymentsEft": false,
+                "RedirectMode": 1,
+                "UserType": 2,
+                "UserLogName": "John Doe",
+                "AgentConnectViewMode": 1,
+                "CssUrl": "https://www.invoicecloud.com/ssotest/sso-gmp.css"            
+        }
+}
+
+$.ajax(settings).done(function (response) {
+    console.log(response);
+});
+Notice the “AgentConnectViewMode” parameter on line 24. In order for the the AgentConnect session to be compatible with an iframe, that parameter 
+MUST 
+be set to 1. If that is not set to 1, the user will receive an error like the one below. 
+Note that the iframe test page being used in the screenshots below is an internal page not provided to our billers.
+This error occurs when “AgentConnectViewMode” is not set to 1 when using an iframe.
+The other parameter to take notice of is on line 25 of the sample AgentConnect API request. The parameter CssUrl is used to apply styling to pages within the iframe. For more information on the CssUrl, refer to the IC Documentation site under specifications and CloudSSOConnect. Lastly, when AgentConnectViewMode is set to 1, then the CssUrl parameter is now a 
+REQUIRED
+ parameter. The user will receive the following error if the user does not provide a URL.
+Error when the now required CssUrl parameter is not provided.
+Successful Iframe AgentConnect API Request Example
+The following is a successful AgentConnect API request. Note that a RedirectMode parameter exists in this request; in this case, it is RedirectMode = 1. The RedirectMode determines what page the iframe will land on. The following is all the available RedirectModes:
+1 = Customer Portal Recent Bill Listing
+2 = Customer Portal Paperless Settings
+3 = Customer Portal AutoPay Settings
+4 = Customer Portal Update User Information
+5 = Customer Portal Payment Options
+6 = Customer Portal Payment History
+7 = MakeOneTimePayment (deprecated)
+8 = Customer Portal Open Bill Listing
+9 = Customer Portal Scheduled Payments Listing
+10 = Customer Portal Recurring Scheduled Payments Listing
+11 = Customer Portal Pay By Text Settings
+12 = Customer Portal Closed Bill Listing
+Successful AgentConnect Request using iframe and RedirectMode 1
+ 
+AgentConnect Session in an iframe
+ URL:/spaces/PE/pages/2559574135/Agent+Connect+-+Iframe+Experience

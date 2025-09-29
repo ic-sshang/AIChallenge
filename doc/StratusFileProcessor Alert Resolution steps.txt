@@ -1,0 +1,39 @@
+Alert Trigger Condition
+An alert is triggered when a record in the StratusFileProcessor table has a StartedDate but no CompletedDate or CanceledDate for over 30 minutes. This indicates that files are sitting idle and not being picked up for processing.
+Step-by-Step Resolution Process
+Step 1: Check Pending Files
+Run the following SQL query in 
+IC_PerfLogging DB
+ to check pending files:
+SELECT TOP 1000 *
+FROM StratusFileProcessor
+WHERE CompletedDate IS NULL
+  AND CanceledDate IS NULL
+  AND MachineName LIKE '%IC-App1%'
+ORDER BY 1 DESC;
+Replace 'IC-App1' with the actual machine name from the alert.
+Step 2: Monitor File Processing
+If files are slowly getting processed, no action is needed.
+If files are not moving at all, proceed to the next step.
+Step 3: Investigate via Skybot
+Open Skybot Job History from Prod AVD:
+Locate the latest job run for the affected machine.
+Download the job log and review it for errors or signs of a file causing the job to fail.
+Step 4: Identify and Remove Bad File
+Find the server IP from the Server List on Confluence.
+In Prod AVD, open File Explorer:
+Right-click → New → Shortcut
+Enter: \\{IP Address} (e.g., \\10.0.6.4)
+Login using your IC email and password (select 'Use a different account').
+Navigate to:
+   EDataAppData → Files → In → StratusPending → {file type folder}
+Move the bad file to:
+   Files → In → Errors
+Step 5: Update the Database
+Contact Data Services to manually set a CanceledDate for the bad file in the StratusFileProcessor table. Once updated, you can close the alert.
+Step 6: Handle Duplicate Records (Rare Scenario)
+Follow Step 4 to access the machine folder.
+Check if the file exists in the queue.
+If no file is present, but the record still has no dates, it’s likely a duplicate.
+Contact Data Services to mark the record as canceled.
+ URL:/spaces/PE/pages/4589682752/StratusFileProcessor+Alert+Resolution+steps

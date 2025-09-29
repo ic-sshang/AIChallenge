@@ -1,0 +1,203 @@
+Epic Link:
+EBPP-3432
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ 
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+In progress
+Not Started 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+Est Completion
+ 
+ 
+ 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Problem Alignment
+Currently we don’t support service requests for starting or stopping services for utilities vertical. This functionality has been requested by several utilities billers and some insurance billers. The problem some of these billers face is that there CIS systems might support start / start service or policies but their payment processor does not. Therefore their payer experience when viewing their account or making a payment they have no indication of the status of their account. Therefore we have an opportunity to create a service request feature for requesting start or stop of service. 
+ Objective
+The objective of this project is to introduce a service request feature specifically for starting or stopping utility service into the GUB market. This aligns with InvoiceCloud’s goal to provide more tailored vertical specific options and aligns with phase one of our roadmap plan to build features for Enterprise Utilities. 
+ Success Metrics
+List the project goals and metrics that will be used to determine its success.
+Goal
+Metric
+Current
+Good
+Great
+Raise revenue
+Gain revenue from start / stop service fees. 
+Process more payments 
+Increased number of payments processed due to start / stop service fees 
+Only collecting on Collier County CloudPay item
+Increased number of payments processed on time, before due date. Long term we want to be influencing people to not go into stop service / policy
+Number of past due invoices per month
+need ITR
+ Target Audience
+Group
+Impact
+Biller Portal users
+ The biller portal group will see account statuses on the customer profile and can make payments for the payer to have service / policy restart, stop. 
+Payers 
+Payers on IC virtual site or customer portal will have access to their account status and can make payments for starting service / policy again is disconnected.
+IC CS Staff 
+InvoiceCloud internal staff will need tools to support processing stopping service, starting service to tell. 
+ User Interaction and Design
+Is this a revision to existing UI or a blue sky approach?
+What deliverables are expected as a result?
+Place mockups, flow diagrams, etc, here when available.
+ Components Impacted
+What components within the Invoice Cloud platform will be impacted
+Component
+Impact
+CRM
+We will need to add some customizable controls for the billers most likely. These may be configurations on days past due to stop service, start / stop fee, email configurations for stop / start service. 
+Payer Site - Virtual Site 
+On search have account status and directions to request starting or stopping service  
+Payer Site - Customer Portal 
+Have account status in customer portal, and ability to request starting or stopping service - submitting this request to the biller.
+Biller Portal 
+Customer profile updates, reporting on start/stop service, customer history line item updates. Could utilize our existing service request feature to also respond back to payers on their requests in the biller portal. 
+ Technical Architecture
+What are the right questions to ask or diagrams to provide for this section?
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ Serviceability/Observability
+What are the right questions to ask or diagrams to provide for this section?
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Name
+Company
+Team
+Role
+Shelby Webster
+InvoiceCloud
+Team SPAM
+Product Manager
+Mark Lagunez 
+InvoiceCloud
+Team SPAM
+Technical Lead
+Nicole Furi
+InvoiceCloud
+Design
+Design
+National Fuel
+National Fuel
+ Requirements
+Requirements supporting background: 
+Previously we have had billers want to use the 3rd notification for sending notifications of close to stop service, however if they are a balance forward biller, which most utilities are, and their shutoff timeline is into the next billing cycle period then it starts to get confusing as to the new invoice and the balance.  
+Its common that billers will want to send a delinquency notification automatically once they get X number of days past the due date.
+Requirement
+Importance
+Jira Link
+Notes
+Must be mobile responsive
+HIGH
+Red
+ Notifications for close to stop service / policy
+ 
+ 
+ 
+Notifications for service / policy reinstated
+Biller Portal updates for Account statuses 
+Payer site updates for Account Statuses 
+ Competitive Analysis
+Kubra has a pre-pay product but nothing stop / start service or policy. 
+N&D group is asking for account statuses to be added to the InvoiceCloud site. They did have this previously with Paymentus. However there doesn’t appear to be a start / stop service / policy product on Paymentus.
+ Dependencies
+Dependencies are around working with a dedicated and narrow group of partners. It will be dependent on integrations with the partners to actually send service or policy updates back. InvoiceCloud will be responsible taking payments and account notifications but the CIS systems will be responsible for posting back for actual shut off service.
+ Assumptions
+List any assumptions you have about your users, technical constrains, business goals, etc.
+ Timeline
+Event
+Date
+Confidence
+Status
+Kickoff call
+ 
+Incomplete
+Design review
+ 
+incomplete
+Red
+ 
+Deliverable #1 
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+What is the thing that we need to know?
+ 
+Here is the answer to that question
+Type // to add a date
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+ Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+Early Access Billers
+All Billers
+Partners
+Internal \ Training
+Internal \ Support+CSM
+Internal \ Sales
+Internal \ Boarding
+Internal \ General
+Add rows if needed
+ URL:/spaces/PRODUCT/pages/2523987979/CSS+Service+Request

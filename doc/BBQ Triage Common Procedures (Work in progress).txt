@@ -1,0 +1,103 @@
+For a general understanding of an ITG item review the Triage Runbook:
+ITG Triage Runbook
+ 
+ITG request identification
+Initial information required for a Bill Presentment ITG:
+Identify if the request is a valid request.
+If the request is to research part of an existing integration, this is not a valid request and should be sent to Dev Support.
+Identify which integration components are needed based on the request. (RTDR, DataPump, Bill Presentment)
+If the description does not show the information look for Box links for questionnaires/coding forms samples etc.
+If the request sound like unique, unusual or custom then review with the team for proper solution.
+If the item is a conversion, please review the 
+Conversions
+ section.  
+If the request does not explain what is needed to be done to complete the request, add an internal note requesting clarification to understand the steps needed to complete the request.
+If components owned by other teams are needed, check if the request hasn’t been split or needs to be split and assigned to their respective teams 
+(Documentation to split an ITG).
+ 
+TODO (3/28/25)
+: NOTE: “Integration Components” are not the same as “Components” in the ITG.
+If the ITG does not need to be split and the request is for another team, then leave the item in the queue for the other team to pick up the request.
+TODO:
+ Identify the type of component within the team to determine what is needed.
+Biller FtpPdf Processing
+Bill Presentment
+MyIIS
+Systems & Software
+Identify the Bill Presentment Type.
+Verify if the submitter specified the type of Bill Presentment. If the request is ambiguous, look into the box folders and ask for clarification. Template, PDF Linking (Extraction/Filename), PDF Remote Linking are the terms that clearly specify presentment type.
+InvoiceFormatIDs should help identify the type of Bill presentment.
+Look for information/samples required for the set bill presentment type.
+Check if the request is immediate, or if it is a specific date in the future. (A request is immediate if it is marked for escalation, which requires checking the appropriate slack channels: 
+#production-ops
+,
+ 
+#new-revenue-priorities
+, 
+#conversions_priorities
+)
+Jump to a specific Bill Presentment types:
+ICRemoteLinking
+PDFLinking
+ICTemplates
+Conversions
+TODO 4/11/25
+: Identify the current method of bill presentment (check FTP Management/Integration Summary/BIF Customizations etc.) and validate if the existing/new bill presentment works with the new integration.
+ICRemoteLinking
+Identify if this is an existing integration or a new integration.
+A quick to identify if it is an existing integration would be to refer to this Guru page to determine if the integration exists. 
+Print Vendors - PDF Linking | Guru
+Existing integration:
+Look at the documentation to identify the components needed to set up. (Confluence/Guru)
+Look for the API URLs
+Authentication if needed (username, password, authentication API URL, etc.)
+Configurable Parameters if needed.
+New Integrations:
+Documentation provided on how to use the APIs
+Based on the documentation, look for the components needed (API Urls, Authentication, Configurable Parameters etc.)
+PDF Linking
+Identify if this is an existing integration or a new integration.
+To verify is it is an existing integration, look at the biller Integration Summary under the invoices section of the page. In this section, there may be notes in the Pdf Summary that will let you know if they are setup pdf linking.
+Determine how the biller/printer plans to send us the pdfs. (FTP, Stratus, or Web Services)
+FTP: verify if the requestor has provided the FTP account that is going to be used to load the pdf, if not provided, add a note to the requestor to provide the FTP username.
+Stratus: confirm if the stratus task exist, if not, create one.
+WebServices: Confirm what PDFLinking type the biller/SP will be using. Be on the lookout for any questions regarding the webmethod the Biller/SP is using. 
+Determine if the request is for a new configuration or to modify an existing configuration.
+Verify if the requestor has mentioned if the biller is planning on using the existing configuration combined with the new configuration or if they are going to use a new setup for the biller.
+Verify if we can match on the account number and/or invoice number ether from the filename or from within the contents of the pdf.
+Start working on the pdf configuration. A guide to setup the configurations is linked below.
+Keys for Extractions: 
+PDF Extraction (Generic Class) Format | Guru
+ICTemplates
+Identify if this is an existing integration or a new integration.
+When the request contains verbiage of adding, updating, or deleting data, it is typically an existing integration.
+Existing integration:
+Identify the template page that needs to be modified.
+Go into the biller portal, use the search invoice page, select the correct invoice type ID, search for the latest invoices, click the magnifying glass icon to see what page is being displayed.
+Identify the current mapping of existing fields that need to be modified in the template. (I.E Water is 
+Custom20
+)
+Identify the new mapping of the existing fields.
+Considerations for the Refiner: 
+We should never use 
+BalanceDue 
+from the invoice record, we should use 
+InitialBalanceDue 
+instead. 
+Try to avoid doing calculations, when possible, ask the requestor if there is a field in the invoice that already contains the correct amount.
+FIX WORDING (3/28/25):
+ Confirm the contents in the database for requested field match the required formatting. (Ex. Invoices having a custom field with a message/text expected to be used as an amount.)
+Validate the intended data formatting matches what the biller is expecting us to use. 
+While looking at the invoice records in the database, make sure to query by 
+InvoiceTypeID 
+& 
+InvoiceFormatID
+. 
+A biller who changed software partners might have older invoices with a different invoice format GUID and completely different data from newer invoices.
+New Integrations:
+TODO:
+Once you have identified and done some research as to what is needed, review the request again to determine if this request is valid or if we have all the data needed to complete this request.
+Considerations would be:
+If they are asking for hard-coded text, is this necessary? Can the biller provide this data to us within their invoice file?
+If everything looks valid and necessary then add your research notes into the description field on the ITG, create the BBQ INT item, then mark the ITG as “DONE”
+ URL:/spaces/PE/pages/4044259480/BBQ+Triage+Common+Procedures+Work+in+progress

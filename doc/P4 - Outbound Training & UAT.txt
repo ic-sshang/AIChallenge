@@ -1,0 +1,126 @@
+Contents
+none
+note
+Overview
+
+
+Overview
+
+
+Training and User Acceptance Testing (UAT) is an important part of the Outbound Payment project. Training ensures the Biller can feel confident in their use of the product and UAT helps to ensure that the product functions correctly in production conditions.  
+Transcard Contacts and Roles can be found 
+Outbound Payments Playbook
+. Information about Outbound Payments can be found 
+https://invoicecloud.atlassian.net/wiki/x/LQAQJQ
+ and 
+https://invoicecloud.atlassian.net/wiki/x/AQDhxw
+Change Log
+Change Details
+Date
+Author
+Version
+Description
+8/30/24
+Sarah Bautista
+1.0
+Updating to match Blueprint and add new artifacts
+3/10/25
+Chris Faria
+1.1
+Updated verbiage in Process Steps
+note
+Project Roles
+
+
+Project Roles
+
+
+Name
+Team
+1
+Project Manager (PM)
+Implementations
+2
+Implementations Manager (IM)
+Implementations
+3
+Biller (B)
+Customer
+4
+Transcard (TC)
+Partner for OP product
+5
+Solutions Architect ( SA )
+Solutions Engineering
+6
+Outbound Program Manager (OPM)
+Implementations
+Process Steps
+Process steps and task owners.
+Category
+Step
+Description
+R / A / C / I
+1
+Training & Testing
+Provide Training Opportunity to Biller
+Biller receives live training by IM and TC (only if necessary)
+Here are IC’s internal training resources:
+Outbound Payments Demo in GURU
+Demo & Training
+Outbound Payments - PM Training
+SA, IM / PM /  / B
+2
+Training & Testing
+SMART Hub Walkthrough
+IM hosts call to walk through the SMART Hub tabs to highlight the sections that are most important for implementation 
+SA, IM / PM /  / B
+3
+Training & Testing
+FBO
+ - 
+Send ACH and Wire Transfer instruction to Biller
+[Skip this step if using Open Banking]
+The FBO Banking setup requires the funds for a payment to already be in the bank account before a payment can be issued.
+For testing, the biller will need a minimum of $5.00 to be deposited into their funding account. They can either wire the fund or ACH transfer.
+Transcard will send FBO account details once the account setup is complete. Forward these to the biller in an 
+ENCRYTED
+ email including the below language.
+Use the below account details to fund the FBO account that was set up for [BILLER NAME]. We recommend an initial transfer of $5-$10 in order to test the payment methods being offered.
+[
+ACH Information]
+[
+Wire Information]
+Please let me know if you have any questions.
+SA, IM/PM
+4
+Training & Testing
+FBO - Biller funds FBO Account
+[Skip this step if using Open Banking]
+Biller will need to confirm when they have initiated the transfer.
+B / PM /  / B
+5
+Training & Testing
+FBO
+ - 
+Confirm with Transcard that the test accounts are funded
+[Skip this step if using Open Banking]
+Once the biller completes their end of the transfer, Transcard will verify that they see the funds available.
+This can be done via email or during the weekly TC/IC Implementation call
+TC /SA,  IM / / B
+6
+Training & Testing
+Ensure all individuals involved in testing are set up in SMART Hub 
+Sign into SMART Hub and confirm that all biller contacts are added.
+SA, IM / PM /  / B
+7
+Training & Testing
+End-to-End Testing Call with Biller to complete UAT Worksheet in Smartsheet
+Smartsheet Blueprint for UAT Worksheet
+SA, IM  / PM, OPM /  / B
+8
+Training & Testing
+Biller Sign-off
+Biller certifies the project is ready to go live via email.  Save email to BOX
+B / PM /  / B
+ URL:/spaces/Implementa/pages/3374055449/P4+-+Outbound+Training+UAT

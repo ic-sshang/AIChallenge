@@ -1,0 +1,67 @@
+Introduction
+For exercising Skybot Healthcheck Jobs, we have built an ADO pipeline that will run on each of the Worker Process App Servers (1 thru 8) and exercise the Job 
+.exe
+ for those Jobs that have a Healthcheck implemented.  
+Link to the Pipeline: 
+Pipelines - Runs for healthcheck-automated-exercising
+Link to the Repo: 
+https://dev.azure.com/invoicecloud/Src/_git/healthcheck-automated-exercising
+ 
+Current Failing Healthchecks
+Currently there are 12 known failing Healthchecks and 1 
+.exe
+ that has been removed (
+BillerBulkRTDR
+) that is also creating a failure in the script (out of 79 Jobs that are being exercised).
+The failing Healthchecks are listed below with the current failure reasons:
+wide
+1800
+##[error]❌ FAILED: ChaseChargebacks [24/79] (Exit Code: 1, Duration: 6.75s, Thread: 5)
+[01:54:30 ERR] Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChaseDFRFiles [25/79] (Exit Code: 1, Duration: 19.99s, Thread: 14)
+[01:54:43 ERR] Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChaseGlobalBin [26/79] (Exit Code: 1, Duration: 0.32s, Thread: 7)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChaseNOCs [27/79] (Exit Code: 1, Duration: 0.32s, Thread: 4)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChasePCL3FileImport [28/79] (Exit Code: 1, Duration: 0.32s, Thread: 4)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChaseRejects [29/79] (Exit Code: 1, Duration: 7.6s, Thread: 7)
+[01:54:30 ERR] Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: ChaseRetrievalRequests [30/79] (Exit Code: 1, Duration: 0.29s, Thread: 18)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: DataPumpMonitor [38/79] (Exit Code: 1, Duration: 0.4s, Thread: 12)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: MC_RPPS [49/79] (Exit Code: 1, Duration: 12.91s, Thread: 5)
+[01:55:07 ERR] Triggered By: ChilkatSftpHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: MC_RPPS_Import [50/79] (Exit Code: 1, Duration: 7.04s, Thread: 11)
+Error with Posting to Slack Channel - System.Net.WebException: The remote server returned an error: (404) Not Found.
+   at System.Net.HttpWebRequest.GetResponse()
+   at IC.Slack.SlackClient.PostSlackMessage(String HookUrl, String message)
+[01:55:03 ERR] Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: MinolPaymentFileFTP-AZURE [51/79] (Exit Code: 1, Duration: 1.33s, Thread: 14)
+Triggered By: EmailViaRelayHealthCheck: emailTo needs to be initalized - Triggered By: EmailViaRelayHealthCheck, Message:Health Check Failed
+
+##[error]❌ FAILED: PinlessDebitBinFileImport [64/79] (Exit Code: 1, Duration: 0.26s, Thread: 13)
+Triggered By: SlackApplicationHealthCheck, Message: Health Check Failed
+
+##[error]❌ FAILED: WellsFargoRejects [79/79] (Exit Code: 1, Duration: 1.43s, Thread: 10)
+Error calling DownloadReport: <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<errorBean>
+    <code>RESOURCE_NOTFOUND</code>
+    <detail>The requested resource is not found. Please try again later.</detail>
+    <localizationKey>cybsapi.resource.notfound</localizationKey>
+    <message>Requested Resource Not Found</message>
+</errorBean>
+ - CyberSourceHealthCheck - Health Check Failed: Unexpected error when accessing CyberSource API
+ URL:/spaces/platform/pages/4650172440/Skybot+HealthChecks

@@ -1,0 +1,380 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+ITR
+Release Date
+Document status
+DRAFT
+Document owner
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+RTDR TEST BASE URL: 
+RTDR PROD BASE URL (for all integrations): 
+https://fwcprod.instecbilling.com/api/invoices/{invoicenumber}/invoiceBalanceWithThreshold
+DataPump PROD BASE URL (for all integrations): 
+https://fwcprod.instecbilling.com/api
+/payments/[DataPumpID]
+API Authentication Method: Header KVP
+HeaderName: 
+Authorization-Token
+PROD Header Value: 
+PROD-D4B0CFFB-05B6-423F-B5C0-F9E2DC49D25D
+TEST Header Value: 
+dev-5C9575CDE65442FC8FE2CD380C685E78
+Renewal process: NA
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+RTDR: Balance Update
+InvoiceBalanceWithThreshold
+Used to pull the most recent balance for a customer using the accountNumber.
+GET
+https://fwcprod.instecbilling.com/api/invoices/{invoicenumber}/invoiceBalanceWithThreshold
+{invoiceNumber] = ICInvoiceNumber
+We only receive the balance as the response:
+Ex. 
+12.34
+Note: Possible exception if accountNumber or token are incorrect:
+The remote server returned an error: (404) Not Found.
+Data Pump: Payment/Void/Credit/Declines
+Payments
+Used to post payments/ACH Rejects to instec API.
+PUT
+https://fwcprod.instecbilling.com/api
+/payments/[DataPumpID]
+(The datapump ID is used to make the api request on the instec side unique. This prevents double pumping.) 
+{
+"Payments":[
+{
+"AccountNumber":{AccountNumber},
+"name":{CustomerName},
+"CheckNumber":{PaymentReference},
+"InitialAmount":"{PaymentAmount}",
+"InvoiceNumber":{InvoiceNumber},
+"ExportId":{InvoiceNumber},
+"ProcessDate":{PaymentDate (yyyy-M-dd format) },
+"PaymentType":{GetPaymentType (CreditCard = 3, ACH = 2, Everything else = 1. Void = 211, Credit = 210, DeclinedPayments = 212)},
+"OriginatingRoute":"1",
+“OnlinePaymentFee“{ConvenienceFee},
+(FrankCrumTEST only and if Declined Payment) 
+"PolicyNumber":{InvoiceNumber (first part before the “-”)},
+“TransactionsSource“:{PaymentSourceID}
+}]
+}
+Ex:
+json
+{
+"Payments":[{
+"AccountNumber":"acct1",
+"PolicyNumber":"pol1",
+"name":"ABC Company, Inc",
+"CheckNumber":"9905",
+"InitialAmount":"1234.56"
+,"InvoiceNumber":"2",
+"ExportId":"export1",
+"ProcessDate":"2018-9-17",
+"PaymentType":"3",
+"OriginatingRoute":"1"}]
+}
+Success:
+{code:json}{ "policyNo": null, "accountNumber": "R237075", "code": "200", "description": "SUCCESS" }{code}
+Include Credits & Chargebacks?
+Credits?
+Yes
+Chargebacks?
+No
+Sent a Negative value, using dash indicator?
+Yes
+Alt. credit indicatator : NA
+Note:
+If we are sending a credit, fetch the PaymentReference and PaymentDate from the original payment to send in the payload.
+If the convenience code was 0 when the payment was made we must go and fetch the matching service fee payment to get the convenienceFee amount.
+Data Pump: ACH Rejects
+Payments
+Used to post payments/ACH Rejects to instec API.
+PUT
+https://fwcprod.instecbilling.com/api
+/payments/[DataPumpID]
+(The datapump ID is used to make the api request on the instec side unique. This prevents double pumping.) 
+{
+"Payments":[
+{
+"AccountNumber":{AccountNumber},
+"name":{CustomerName},
+"CheckNumber":{PaymentReference},
+"InitialAmount":"{RejectAmount}",
+"InvoiceNumber":{Custom1},
+"ExportId":{Custom1},
+"ProcessDate":{PaymentDate (yyyy-M-dd format) },
+"PaymentType":”200”,
+"RejectReasonCode":{RejectCode},
+“OnlinePaymentFee“{ConvenienceFee}
+"OriginatingRoute":"1"
+}]
+}
+C-Code Rejects included? No
+Data Pump: Paperless Enrollment
+Accounts/Options
+Used to update paperless settings for Instec
+PATCH
+https://fwcprod.instecbilling.com/api
+/Accounts/Options
+{
+“IsPaperless“: {CustomerPaperless Flag}
+}
+Data Pump: AutoPay Enrollment
+Accounts/Options
+Used to update autopay settings for Instec
+PATCH
+https://fwcprod.instecbilling.com/api
+/Accounts/Options
+{
+“IsAutoPay“: {CustomerAutopay Flag}
+}
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: 
+File Naming Convention: 
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: 
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Invoice Header
+20
+AllowPartialPayments
+FALSE
+Invoice Header
+23
+FirstNotifyRequestedDate
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+FALSE
+Invoice Header
+194
+BalanceForward
+FALSE
+Invoice Header
+248
+AutoPayCollectionDate
+Y
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+TRUE
+Invoice Header
+347
+BillerInvoiceNumber
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+TRUE
+Customer Record
+60
+CustomerName
+TRUE
+Customer Record
+61
+Address1
+FALSE
+Customer Record
+62
+Address2
+FALSE
+Customer Record
+63
+City
+FALSE
+Customer Record
+64
+State
+FALSE
+Customer Record
+65
+Zip
+FALSE
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+(Not Actually Used. We are using 88 for RTDR URL)
+NA
+10
+RTDR Key or Password if Applicable
+(Not Actually Used. We are using 90 for RTDR Password)
+11
+DataPump Payments EndPoint/WebService URL
+https://fwcprod.instecbilling.com/api
+ 
+13
+DataPump Payments EndPoint/WebService Password
+DP Payments Password
+14
+DataPump Paperless EndPoint/WebService URL
+https://fwcprod.instecbilling.com/api
+ 
+16
+DataPump Paperless EndPoint/WebService Password
+DP Paperless Password
+17
+DataPump AutoPay EndPoint/WebService URL
+https://fwcprod.instecbilling.com/api
+ 
+19
+DataPump AutoPay EndPoint/WebService Password
+DP Autopay Password
+81
+RTDR Service Version
+2 (2 specifies the Framework version in RTDR should be used.)
+88
+Secondary RTDR EndPoint/WebService URL
+https://fwcprod.instecbilling.com/api/invoices/{invoicenumber}/invoiceBalanceWithThreshold
+90
+Secondary RTDR Key or Password if Applicable
+RTDR Password
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ URL:/spaces/IM/pages/2241921025/BID+1491+Frank+Crum-+Instec+Technical+Design

@@ -1,0 +1,105 @@
+Problem Alignment
+Project 
+Scheduled Payment on OTP
+Objective 
+Introduce scheduled payment option on the one time payment route in CloudPayv2 as an option
+Status 
+In concept
+ 
+Jira
+EBPP-4208
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Target Release Date 
+August 2022 
+Team 
+We’ll do it Live
+The Problem
+We need to enable scheduled payments in the one time payment route for Kentucky Farm Bureau payers who do not login to their customer portal but need to schedule a one time payment, and store their payment method. This is a particular request from KFB for a subset of payers that use this functionality on their existing platform. KFB has requested this as a must for going live. 
+Why: How do we know this is a real problem and worth solving?
+KFB has requested this and views this as a must for going live. 
+Scheduling a payment on the one time payment route could be applied for other one time payments ins insurance, GUB, or financial services if there is a required one payment needed and the payer needs to arrange payment on a certain day. These may be more favorable for non recurring medium or large payments.
+Audience: Who are we building for?
+Kentucky Farm Bureau 
+Supporting Research and Documentation
+https://www.figma.com/proto/8wi486eek3TX6sBTAs9KVz/Payer-Flows?node-id=1%3A2&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=1%3A2
+ 
+Opportunity Sizing and Timeline 
+At this time KFB is the biller requiring this for go live and the updates to CloudPayV2 to accept scheduled payments will only be marketed to KFB.
+KFB plans to go live in October 2022. The target release for this feature is August 2022. 
+High-level Approach
+Update CloudPayV2 to allow the intake of a parameter to optionally display the option to future-date a payment. Existing controls applied using Biller Options will be adhered to which may limit how and when a future date is made will be applied.
+Success
+How do we know if we’ve solved this problem?
+We will know we have solved this problem when KFB and IC can accept schedule payments from the one-time payment route.
+Solution Alignment
+Key Features
+Schedule Creation
+: The newly created Payment Date field will allow the payer to select a future date. 
+Balance Due field must be required and greater than $0.00. Invoice Date must be today’s date or later.
+In the one time payment route before payment is made users will have to cancel payment and restart to change the date of a scheduled payment. 
+Date Range Controls and Limits
+Invoice Type Setting #3 - “Allow Customer to Schedule Payments” may be enabled or disabled. The Biller can override this through the API call using the AllowScheduledPayment parameter so they can manage access to this feature on a per payer basis (KFB requirement)
+Invoice Type Setting #18 - “Allow Scheduled Payments to Process on 0 or Negative Balance Invoice” is circumvented by requiring biller send us an Amount Due greater than $0
+Invoice Type Setting #27 - “Allow payment to be scheduled past the Invoice Due Date” is circumvented by requiring Invoice Date to be on or after today’s date. 
+Storing Payment Method for Payment
+: We will receive and store the payment method tied to the scheduled payment date. 
+We will have to use RemoteAuth as always on (i.e. always provide the token) for the KFB to allow scheduled one time payments for unregistered users. 
+Viewing Upcoming Past Scheduled Payments
+: KFB will iframe the schedule payments page into their customer portal. 
+Editing/Cancelling Scheduled Payment
+: From scheduled payments page users can view and cancel an upcoming one time scheduled payment. If they payer would like to edit the scheduled payment amount they will have to reach out to the biller. The payer can still edit the scheduled payment date.
+QE Testing Guide here: 
+https://docs.google.com/spreadsheets/d/1emicFhYeewW4vxnwbTjeLl3g_KGUC_QcXkzSZyQHP2U/edit?usp=sharing
+ 
+Out of Scope/Considerations
+We will only be updating this in CloudPayV2 as this is the webservice method is the most secure and robust that we are promoting. Further updates/consolidation of CloudPay V2 and Agent Connect are not included at this time.
+Incorporating a scheduled payment in the IC one time payment route experience. The UI for setting up a one time scheduled payment route must be done on the biller’s side.
+What if any additional fields does KFB want/ need in the Postback? 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Y
+No 
+Sales
+Do you need sales enablement materials?
+N
+No
+Marketing
+Does this impact marketing?
+N
+No we won’t be promoting this at this time
+Training
+Do you need to update support content or training?
+Y
+Yes ITK training to be done.
+Implementations
+Changes to questionnaire
+Y
+Yes implementations will be working with KFB on this
+Delivery
+Set up and Enablement
+N
+No
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+N
+No
+Support
+Biller questions and support
+Y
+Yes
+Legal
+Are there potential legal ramifications?
+N
+No
+Reconciliations
+Questions from billers about charges
+N
+No
+ URL:/spaces/PRODUCT/pages/2240086021/Scheduled+Payment+on+One+time+Payment+Route

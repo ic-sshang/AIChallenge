@@ -1,0 +1,31 @@
+Background: 
+Problem
+: Our prospects have expressed concerns with the security and management of access of our current APIs. OAuth 2.0 provides a more secure and efficient way to handle API access, making it a meaningful problem to address. 
+Texas Mutual has made this a contractual commitment for go-live. 
+As part of this requirement, they require: 
+ The biller center accelerator is updated with the new API authentication 
+Any SOAP APIs used in the accelerator are converted to RESTful. 
+Value Proposition
+: OAuth 2.0 provides a standardized, secure, and efficient method for authorizing API access. It addresses the core problem by providing better security, reducing the risk of data breaches, and improving user experience by providing seamless integration with other services.
+End Users
+: Billers and SIs integrating to our solution. 
+Better than Alternatives
+: OAuth 2.0 is a widely accepted standard for authorization. Compared to alternatives like basic authentication or homegrown solutions, OAuth 2.0 provides better security, interoperability, and user experience.
+Phase 1 Scope: 
+The phase 1 scope include the current APIs used in the accelerator. 
+It does not include additional APIs in the library at this time. In addition, Biller OAuth credentials will need to be provisioned.   One option is allow Billers to do this in the Biller Portal to provide self service, create and/or revoke credentials as needed.
+Epic: 
+EBPP-24334
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Phase 1 Timeline:
+ 
+1/17/2025 - Provide preliminary API documentation to CastleBay (CB)
+1/30/2025 - Complete scope document with CB & start accelerator project 
+1/30/2025 - Complete API development changes 
+3/10/2025 - Complete billing center accelerator 
+Scoping Documents:  
+https://invoicecloud.atlassian.net/wiki/spaces/EA/pages/3437428779/Kong+Biller+OAuth+2.0+Authentication+-+PRJ
+ 
+ URL:/spaces/PRODUCT/pages/3873210373/Texas+Mutual+Modern+API+Management+Update+APIs+to+OAuth+2.0

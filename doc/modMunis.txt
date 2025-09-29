@@ -1,0 +1,168 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+NA
+ITR
+NA
+Document status
+DRAFT
+ 
+Document owner
+ 
+Solution engineer
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Note: 
+File Mapping
+Invoice Files
+Adjustment/Daily Balance File
+Payment Export File/Lockbox File
+MUNIS Personal Property Download - Settled Only (StratusFileDirectionID: 16)
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: NA
+File Delimiter: NA
+Class/FileName: CityOfLasVegas_BlueHeron_PaymentExport_base.vb
+Code Repository: StratusWebServices
+Specification: NA
+Sample File: 
+https://invoicecloud.app.box.com/file/875160677709
+ 
+SFTP File Path: NA
+File Transfer Frequency: NA
+Sample Screenshot:
+Where: 
+H00000002501020202112340001
+is 
+Header Line
+ (Header)
+Where: 
+2520220000038500000002500001
+is 
+Payment Line
+ (Report Body)
+IC DataBase Field
+In Code
+Creation Logic/Conditions
+Line Type
+Value in Above Sample
+NA
+NA
+Always “H”
+Header Line
+H
+00000002501020202112340001
+NA
+**batchAmount**
+**batchAmount** replaced by 
+Header Line
+H
+0000000250
+1020202112340001
+PaymentDate
+NA
+Header Line
+H0000000250
+10202021
+12340001
+NA
+1234
+Always “1234”
+Header Line
+H000000025010202021
+1234
+0001"
+NA
+batchCounter
+batchCounter will start at 1 then keep adding one for every row within the payments table for a particular batch.
+And will be padded with “4” zeros (0000) to the left
+Header Line
+H0000000250102020211234000
+1
+“ “
+Empty Space for 54 Characters
+Header Line
+H00000002501020202112340001
+--------
+NA
+“25”
+Always “25” for InvoiceTypeID=7 (Personal Property). Payments made  on invoices of Type Personal Property.
+Payment Line
+25
+20220000038500000002500001
+BillerBillYear
+or 
+InvoiceNumber
+NA
+IF BillerBillYear length >1
+Then Write BillerBillYear and pad value with “4” zeros (0000) to the left
+Else
+Write the first 4 characters of the InvoiceNumber
+Payment Line
+25
+2022
+0000038500000002500001
+BillerInvoiceNumber
+or
+Custom10 
+or
+InvoiceNumber
+NA
+IF BillerInvoiceNumber length >1
+Write BillerInvoiceNumber and Pad with “8” zeros (00000000) to the left
+Else
+Write Custom10 and Pad with “8” zeros (00000000) to the left ONLY if Custom10 Length length >0 
+OtherWise
+Write InvoiceNumber and Pad with “8” zeros (00000000) to the left 
+Payment Line
+252022
+00000385
+00000002500001
+PaymentAmount
+NA
+PaymentAmount padded with “10” zeros (0000000000) to the left.
+Payment Line
+25202200000385
+0000000250
+0001
+paymentDate
+NA
+IF BID = 434 or  483
+Write paymentDate and append "0000"
+IF BID=1152  Town of Arlington
+Write paymentDate and append "1234"
+Payment Line
+NA
+batchCounter
+Current Value of batchCounter and PadLeft with “4” zeros (0000)
+Payment Line
+25202200000385000000025
+00001
+“ “
+If BillerID = 483 Then
+Append 40 “ “ (blank) spaces
+Else
+Append 49“ “ (blank) spaces
+End If
+Payment Line
+2520220000038500000002500001
+-------------
+Change Log File
+BIF Customization's
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+ URL:/spaces/IM/pages/2046197761/modMunis

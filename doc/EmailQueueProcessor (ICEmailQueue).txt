@@ -1,0 +1,116 @@
+ICEmailQueue is an Azure Function App that sends emails. It’s part of our email queue system.
+See 
+ICEmailQueue (EmailQueueProcessor)
+ for details about where this function app is in Azure, its associated storage accounts, etc.
+EmailQueueProcessor contains 4 functions, each of which processes (reads data from the database and uses that data to send an email) a different subset of email queues, based on email queue type ID.
+Functions
+All 4 functions expect a payload matching the format
+ 
+{biller ID}|{email queue type ID}|{email queue ID (pointer to specific email record)}
+For example, a message could be 
+2002|109|5807
+ResendACHRejectEmail
+Link to the code
+Supported email queue type ID’s:
+Email Queue Type ID
+Name
+25
+PayerRejectNotificationResendQueue
+ResendCCExpirationEmail
+Link to the code
+Supported email queue type ID’s:
+Email Queue Type ID
+Name
+79
+CreditCardExpirationNotificationResendQueue
+SendPasswordResetEmail
+Link to the code
+Supported email queue type ID’s:
+Email Queue Type ID
+Name
+91
+PasswordResetNotificationQueue
+109
+ResetBillerUserPasswordQueue
+111
+BillerUserCreatePasswordQueue
+SendTestEmail
+Link to the code
+Supported email queue type ID’s:
+Email Queue Type ID
+Name
+12
+InvoiceFirstNotificationTestQueue
+13
+LateFeeNotificationTestQueue
+14
+AutoPayDeclineNotificationTestQueue
+15
+ScheduledPaymentDeclineNotificationTestQueue
+16
+TransactionReceiptTestQueue
+17
+InvoiceSecondNotificationTestQueue
+18
+InvoiceThirdNotificationTestQueue
+20
+WelcomeNotificationTestQueue
+22
+AutoPayRegistrationNotificationTestQueue
+24
+PaperlessRegistrationNotificationTestQueue
+26
+PayerRejectNotificationTestQueue
+31
+CreditCardExpirationNotificationTestQueue
+34
+ScheduledPaymentConfirmationTestQueue
+35
+AutoPayReminderTestQueue
+43
+FlexPayConfirmationTestQueue
+45
+ScheduledPaymentReminderTestQueue
+48
+PaperlessOffNotificationTestQueue
+51
+OnlineBankDirectPaymentReceiptTestQueue
+53
+Check21PaymentReceiptTestQueue
+56
+InvoiceFirstNotificationCustomerGroupTestQueue
+58
+InvoiceSecondNotificationCustomerGroupTestQueue
+60
+InvoiceThirdNotificationCustomerGroupTestQueue
+62
+AutoPayOffConfirmationTestQueue
+64
+ConveyedCustomerNotificationTestQueue
+66
+MultipleCustomerRegistrationsWelcomeNotificationTestQueue
+68
+RSPConfirmationTestQueue
+70
+RSPCanceledNotificationTestQueue
+90
+AccountDeactivationNotificationTestQueue
+92
+PasswordResetNotificationTestQueue
+95
+AutoPayCompletedTestQueue
+96
+PaperlessCompletedTestQueue
+99
+AutoPayReminderCustomerGroupTestQueue
+101
+AutoPayReceiptCustomerGroupTestQueue
+103
+AutoPayWIthPaperlessCompletedTestQueue
+104
+PaymentMethodBlockNotificationTestQueue
+107
+FlexPayAutoEnrollmentTestQueue
+113
+ConsolidatedReceiptTestQueue
+ URL:/spaces/ED/pages/4005167108/EmailQueueProcessor+ICEmailQueue

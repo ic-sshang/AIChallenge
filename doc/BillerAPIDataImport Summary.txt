@@ -1,0 +1,64 @@
+Purpose
+This document summarizes the the integration types and functionality of the BillerAPIDataImport process for 
+BIF-312
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+. 
+Summary
+Integration Flavors
+The application supports two distinct data import integrations:
+Epic
+: This integration fetches data via an HTTP GET request from a configured URL. It uses Basic Authentication. The response is read as a string, backed up to a local file, and then converted to a byte array for upload.
+TruePoint
+: This integration retrieves data from a JSON-based web API. It makes an HTTP POST request with a JSON body and an API key in the header. The response is parsed, and an invoice file is generated from the data. 
+Process Flow
+The application follows a straightforward process for importing data:
+Initialization
+: The application starts and validates command-line arguments (
+billerid
+, 
+stratusfileid
+, 
+importerbase
+).
+Importer Selection
+: Based on the 
+importerbase
+ argument, a factory method (
+GetImporterBase
+) instantiates the appropriate integration class (
+Epic
+ or 
+clsTruePointUtility
+).
+Data Retrieval (
+PullFile
+): The 
+PullFile
+ method of the selected importer is called. This method is responsible for connecting to the external system (either via HTTP GET for Epic or HTTP POST for TruePoint) and returning the data as a byte array.
+File Backup
+: The retrieved data is backed up locally.
+File Upload (
+UploadFile
+): The 
+ImporterBase.UploadFile
+ method calls the 
+UploadStratusInvoiceFileBinary
+ SOAP web service method, sending the byte array to the Stratus platform.
+Logging
+: The application logs the outcome of the import process.
+Advanced Setting Usage: 
+Advanced Setting 
+88
+: Retrieval Endpoint
+Advanced Setting 
+90
+: Password/Key
+TruePoint only:
+Advanced Setting 
+40
+: Last Successful Run Date
+Observations
+The application acts as a middleware or bridge, fetching data from third-party systems and forwarding it to the Stratus web service.
+No significant data processing or transformation occurs within this application. It primarily handles data retrieval and transmission.
+ URL:/spaces/PE/pages/4491706534/BillerAPIDataImport+Summary

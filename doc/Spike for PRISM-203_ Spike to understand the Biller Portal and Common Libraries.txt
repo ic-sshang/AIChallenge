@@ -1,0 +1,100 @@
+Gaps in integrating SSO and MFA
+Multiple Users Sharing a Single Email Address
+Current Functionality:
+The application permits multiple users, associated with the same biller, to share an identical email address while maintaining distinct usernames.
+Problem:
+SSO (Single Sign-On) and MFA (Multi-Factor Authentication) systems like SecureAuth rely on a unique identifier, such as an email address, for user authentication. They don’t allow users with same email address(identifier) to be created. 
+Session Management
+Current Functionality:
+User sessions are managed using session variables with a fixed session duration.
+Challenge:
+SSO systems generally rely on token-based session management (e.g., SAML assertions, OIDC tokens). Transitioning from the current session-based system to token-based authentication for seamless SSO integration may require substantial architectural modifications
+Database-Driven Authentication
+Current Behavior:
+User authentication is currently performed by querying the database and validating credentials against stored data.
+Challenge:
+SSO and MFA systems bypass traditional database-driven authentication workflows, which could lead to incompatibilities with existing processes that rely on database validation. To address this, new authentication functions would need to be designed or the current process replaced to align with token-based authentication methods while ensuring seamless integration with dependent workflows.
+Technical Flow of IC.SingleSignOn
+The IC.SingleSignOn module provides a streamlined implementation of SAML-based Single Sign-On (SSO) functionality. Below is the technical flow:
+Reusability of IC.SingleSignOn
+Technical Flow of IC.SingleSignOn
+The IC.SingleSignOn module provides a streamlined implementation of SAML-based Single Sign-On (SSO) functionality. Below is the technical flow:
+Initiating SSO:
+The 
+Saml.InitiateSingleSignOn
+ method is used to initiate the SSO process. It requires the following parameters:
+entityId
+: The unique identifier for the SAML service provider.
+name
+: The user's identifier (e.g., email).
+certificate
+: A valid X.509 certificate for signing the SAML request.
+acsUrl
+: The Assertion Consumer Service (ACS) URL where the SAML response will be sent.
+Multi-Claim SSO:
+The 
+Saml.InitiateSingleSignOnMultiClaim
+ method extends the functionality to include multiple claims. It accepts:
+claimsList
+: A list of key-value pairs representing user claims (e.g., email, name, nickname).
+Other parameters are similar to 
+InitiateSingleSignOn
+.
+Response Handling:
+Both methods return a 
+CommandResult
+ object containing:
+HttpStatusCode
+: Indicates the HTTP status of the response.
+ContentType
+: Specifies the content type (e.g., text/html).
+Content
+: The SAML request payload, which is sent to the ACS URL.
+Certificate Management:
+The 
+CertificateHelper.GetCertificateDebug
+ method is used to retrieve the signing certificate during development.
+Steps to Integrate IC.SingleSignOn with BillerPortal
+Add IC.SingleSignOn as a Dependency:
+Include the IC.SingleSignOn library in the BillerPortal project. Ensure all required dependencies (e.g., .NET Framework 4.8) are met.
+Configure SAML Parameters:
+Define the following parameters in the BillerPortal configuration:
+entityId
+: The unique identifier for the BillerPortal SAML service provider.
+acsUrl
+: The ACS URL for BillerPortal.
+certificate
+: Use a valid X.509 certificate for signing.
+Implement SSO Logic:
+Use the 
+Saml.InitiateSingleSignOn
+ or 
+Saml.InitiateSingleSignOnMultiClaim
+ method to initiate the SSO process. For example:
+ var response = Saml.InitiateSingleSignOn(entityId, userEmail, certificate, acsUrl);
+Handle the Response:
+Redirect the user to the ACS URL with the generated SAML request payload (
+response.Content
+).
+Testing:
+Use the 
+SamlTest
+ unit tests as a reference to validate the integration.
+Limitations/Shortcomings
+Certificate Management:
+The current implementation relies on 
+CertificateHelper.GetCertificateDebug
+ for development. Ensure proper certificate management in production to avoid security risks.
+Error Handling:
+The 
+CommandResult
+ object does not provide detailed error messages for debugging. Custom error handling may be required.
+Limited Protocol Support:
+The module is designed specifically for SAML. If BillerPortal requires other protocols (e.g., OAuth), additional implementation will be needed.
+Static Configuration:
+The 
+entityId
+ and 
+acsUrl
+ are statically configured. Dynamic configuration may require additional customization.
+ URL:/spaces/PE/pages/4250796042/Spike+for+PRISM-203+Spike+to+understand+the+Biller+Portal+and+Common+Libraries

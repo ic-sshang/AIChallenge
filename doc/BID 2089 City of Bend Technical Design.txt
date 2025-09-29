@@ -1,0 +1,62 @@
+Page Navigation:
+1
+7
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Solution Engineer
+ 
+Everything will be the standard 
+Tyler Munis Real Time Technical Design
+ integration except anything listed here
+Integration Area
+Customization(s)
+API Documentation & Authentication 
+Documentation - Dev
+: 
+https://tylerwebnp.ci.bend.or.us/impl2/devportal/portal/home
+ClientID: 1605031280
+Client Secret: ryYyZe7QNHWmIWP7dAvW7p1d+g==
+Other Environment:
+https://tylerwebnp.ci.bend.or.us/test/devportal/portal/home
+ 
+Authentication - Prod
+ClientID:  1621450624
+Secret: 
+OLD: LaXJpCSKYcJYMILqlw==
+Secret: 
+NEW:  LaXJpCSKYcJYMlLqlw==
+Prod: Token URL: 
+https://tylerweb.ci.bend.or.us/prod/tylerid/authtokenserver/connect/token
+Prod: BASE URL: 
+https://munisappprd.ci.bend.or.us/prod/munisopenapi/hosts/UB/api
+Authentication - Dev
+They use oAuth for authentication. The token should last 60 minutes.
+Through dev site go to Authentication → oAuth2_clientCredentials and use ClientID and Client Secret
+Token URL: 
+https://tylerwebnp.ci.bend.or.us/impl2/tylerid/authtokenserver/connect/token
+Bill/Invoice Data
+Bend can have more than one bill open at once - NO BILL FORWARDING
+Bend is planning to send Bill File with ‘CopyTo’ field which means there can be duplicates. If ‘CopyTo’ field has value of ‘THIS IS A COPY’ IC will skip the record
+Data Fields:
+Account Number: 
+For Bend values are flipped it should be ‘ <CUST_NO> + '-' + <H_ACCTNO> (no prefix). 
+This means option 50 in the CRM needs to be on for Bend
+Display Account Number
+: For Bend we need display account number to be set to ‘UT-' + <CUST_NO> + '-' + <H_ACCTNO>. This will not be used but is their old Account Number format.
+Adjustment/Balance Updates
+N/A
+Payments
+N/A
+Change Logs
+N/A
+Bill Presentment
+We will be doing PDF Extraction - bill images will be delivered through SFTP
+CRM Options
+Option 50 - On (see notes in Bill/Invoice Data for more details on flipping the account number and customer number)
+Option 64 - On
+Option 52 - On
+ URL:/spaces/IM/pages/1616248894/BID+2089+City+of+Bend+Technical+Design

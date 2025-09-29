@@ -1,0 +1,13 @@
+Identified Technical Problems
+Orphaned records occur from unregistering an account tied to AutoPay and RSP
+Temp logins create DB headaches – they can be manipulated without proper validation (i.e., tying a payment method to a temp login during registration that doesn’t belong to the user registering), and can lead to account takeovers
+Invoice imports sometimes create empty logins or logins without proper ownership
+Lack of consistency with how we create logins & temp logins across the platform
+Unregistering a login might result in auto pay configurations pointing to payment methods that are no longer valid.
+Look for uses of the below when unregistering, it works as expected
+[updCustomerAutoPayV2]
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS?path=/BillerPortal/Dialogs/Unregister.aspx.vb&version=GBrelease&line=146&lineEnd=147&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents
+ 
+Standard Specification For Deleting a Login
+TODO
+ URL:/spaces/EA/pages/4611735634/MCL+-+Orphan+Records+-+PRJ

@@ -1,0 +1,24 @@
+Purpose
+This policy outlines the accepted versions of .NET for development and production environments to ensure stability, security, and supportability.
+This policy is for .Net (formally named Core).  
+ See .Net Framework Version Policy
+Scope
+This policy applies to all development teams and projects utilizing .NET within the organization.
+Accepted Versions
+The current accepted version of .NET is 
+8.0
+.
+Only Long-Term Support (LTS) versions of .NET should be used for production environments.
+Long-Term Support (LTS) Versions
+LTS versions are supported for a minimum of three years, providing stability and extended support.
+All new projects must use the latest LTS version of .NET.
+Existing projects should be upgraded to the latest LTS version as part of their regular maintenance cycle.
+Rule of thumb:  Even numbers are LTS and odd numbers are STS
+Short-Term Support (STS) Versions
+STS versions are supported for a shorter period and receive updates only until the next release.
+Use of STS versions must be approved by an Architect.
+Projects using STS versions must have an approved maintenance plan to upgrade to the next LTS version when it becomes available.
+Maintenance and Upgrades
+Regular reviews of .NET versions in use will be conducted to ensure compliance with this policy.
+Maintenance plans for upgrading to newer LTS versions should be documented and a part of a .Net project lifecycle.
+ URL:/spaces/ED/pages/3759767557/.NET+Version+Policy

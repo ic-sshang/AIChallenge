@@ -1,0 +1,7 @@
+This page is designed to track any technical questions we may have regarding integration with the Commerce and/or JPM Treasury platform. 
+Q1. When processing a partial refund / full refund transaction, do we also need to process a capture? 
+Partial refund doc - 
+https://developer.payments.jpmorgan.com/docs/commerce/online-payments/capabilities/online-payments/how-to/refund-payment
+ 
+Q1 - A. Chase confirmed refunds will be automatically captured. We will need to design this to know that for “refunds” we just make that single /refund api call and it will get captured by end of day. 
+ URL:/spaces/EA/pages/4571758674/Chase+JPM+Technical+Q+A

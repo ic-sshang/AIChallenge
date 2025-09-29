@@ -1,0 +1,31 @@
+Overview
+On 5/19/2024 at 5:30 AM Eastern Time we will add a SQL Server Private Endpoint to the Prod Hub allowing access to the Biller Shard SQL Server over a Private IP and Private Network Lane in preparation for the SQL Server Prod and Prod connectivity segmentation required by PCI.
+Diagram
+0
+1
+0
+3211231308
+3211132962
+Prod-Hub-With-DevTest-SQL-Private-Endpoints.drawio.svg
+1
+2
+0
+5
+https://invoicecloud.atlassian.net/wiki
+Prod-Hub-With-DevTest-SQL-Private-Endpoints.drawio.svg
+0
+2F8haLecWd9ihfKOBuCI 1
+861
+auto
+top
+1
+691
+Deployment Pipeline
+Pipelines - Run hub-infrastructure-apply-2.84.0 (azure.com)
+Testing
+ to validate the following Test Cases:
+Access blocked from Laptop due to not allowing access from the WARP IPs. 
+Access allowed from Prod AVD in the Prod Network but in a Spoke VNet that does not yet have the Azure SQL Server Private DNS Zone linked therefore traffic still uses Azure Resource Connection Exception. 
+Access allowed from Prod Jumpbox in the Prod Newtork attached to a Subnet in the Prod Hub that does have the Azure SQL Server Private DNS Zone linked and Azure SQL Server Private Endpoint added therefore traffic uses the Private Endpoint. 
+ to validate the following Test Cases:
+ URL:/spaces/platform/pages/3211231308/Prod+SQL+Server+Private+Endpoint

@@ -1,0 +1,132 @@
+ Date
+4/22/2024
+ Participants
+Mark Lagunez 
+mlagunez@invoicecloud.com
+; 
+Sean Concannon 
+sconcannon@invoicecloud.com
+; 
+Randy Torres 
+rtorres@invoicecloud.com
+; 
+Byron King 
+BKing@invoicecloud.com
+; 
+Dinesh Subramani 
+DSubramani@invoicecloud.com
+; 
+Miguelito Abagat 
+MAbagat@invoicecloud.com
+; 
+Quinten Marsala 
+QMarsala@invoicecloud.com
+; 
+Adrian Izaguirre 
+aizaguirre@invoicecloud.com
+; 
+Tony Cordova 
+tcordova@invoicecloud.com
+; 
+Kirtan Patel 
+KPatel@invoicecloud.com
+; 
+Jonathan Blackburn 
+JBlackburn@invoicecloud.com
+; 
+Vasant Javle 
+VJavle@invoicecloud.com
+; 
+Michael Griehm 
+MGriehm@invoicecloud.com
+; 
+Rob Chenault 
+rchenault@invoicecloud.com
+; 
+Manuel Hernandez Naya 
+mhernandez@invoicecloud.com
+; 
+Rene Reyes 
+rreyes@invoicecloud.com
+;
+Victor Cavada Valdez 
+vcavada@invoicecloud.com
+Alberto Perez 
+aperez@invoicecloud.com
+Marcus Steen 
+msteen@invoicecloud.com
+Scott Miller 
+smiller@invoicecloud.com
+Anitha Vemulapalli 
+AVemulapalli@invoicecloud.com
+Jeremy Hamel 
+JHamel@invoicecloud.com
+ Goals
+Create a inventory of client certificates in use (
+Client Certificate Inventory
+ )
+Define third party certificate (client certificates) management process
+ Discussion topics
+Item
+Presenter
+Notes
+Third Party Certificates
+(Client Certs)
+ApplePay cert expires every year and we end up with a urgent work stream to rotate the certificate.
+What format cert / types do we have?
+GooglePay as a application reference for implementation.
+Use Key Vault
+centralize storage (store as a actual certificate in the key vault not as a secret blob)
+alert on proactive expirations
+phase 1 (heritage): provide certificate from key vault to deployment pipelines and inject into artifact
+phase 2 (heritage): update applications to read from the key vault directly on startup and pull the cert, cache and TTL
+phase 1 (Next Gen): Certificates provided from CIS key vault driver injected to into ENV 
+IC.Serilog
+ latest
+ 
+During the K8s migration effort we added the ability to pass in the Log Level to allow for the usage of different 
+Serilog Log Levels
+ in Application Source Code, such as 
+Verbose
+.  Previous 
+IC.Serilog
+ was hard coded to 
+Information
+, and that is the default if no value is specified 
+Configure
+ method of the 
+IC.Serilog
+ package.
+Note the last time I checked, NewRelic had a Global Log Filter that filtered out any Log with the Level of 
+Debug
+ or contained 
+Debug
+ in the message.
+Azure Credential Flow
+ 
+Description of Azure Credential Flow
+InvoiceCloud Implementation
+Proposed Improvement
+ Action items
+Add action items to close the loop on open questions or discussion topics:
+
+
+
+
+10
+
+
+incomplete
+
+
+ 
+ Run .Net version query script and publish the findings
+
+
+
+
+Type /decision to record the decisions you make in this meeting:
+6388a1e3-1c3b-40ed-8b18-2b9b995ec0a0
+c238ebf6-f817-4cb0-8ba9-759d48d3a428
+DECIDED
+ URL:/spaces/EA/pages/3169288193/Blue+04-22-2024+-+Meeting+Notes+-+MT

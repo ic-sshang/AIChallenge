@@ -1,0 +1,754 @@
+Project Timeline (Tentative)
+Initiative 
+ 
+Q4 2025
+Q1 2026
+Q2 2026
+2H 2026
+User Management in the Biller Portal
+Unique Logins
+Payer UX Improvements
+Account Linking Logging
+Registration Improvements
+Identify Owner/Tenant
+Pay by Text 
+Improved Account Linking
+Customer Import Tool Improvements
+Centralized system for Logins
+Customizable User Login Types
+Project Initiatives
+https://invoicecloud360.sharepoint.com/:w:/r/sites/IC-ProductRoadmap/_layouts/15/Doc.aspx?sourcedoc=%7B4803184D-B030-45D6-ADDC-133D36E418C3%7D&file=MCL%20Solution%20Options.docx&action=default&mobileredirect=true
+ 
+Initiative
+Approach
+Problems Solved
+Success Criteria
+Teams
+User Management in the Biller Portal
+Phase 1
+Perform key user operations
+For example: 
+Change user login type
+Transfer Account Ownership
+Add payment method to a user 
+Show user level information
+Show the user that a saved payment method belongs to
+Phase 2
+Initiate registration
+Link accounts and send a registration invite to the customer to register the group of linked accounts with an invite link
+Cover unhappy payment method validation scenarios
+Biller Portal Customer User Management
+ 
+Only Data Services can promote/demote user login type
+Can’t see payment methods that belong to non-Owner users
+No ability to transfer account ownership and the Biller Portal user must unregister & re-register; no way to select a group of accounts to keep linked and transfer to another user
+Reduce manual intervention required for common user tasks by empowering Billers
+x% reduction in DBRs
+Biller
+ 
+Transfer Account Ownership
+ in the Biller Portal (and Customer Portal)
+When transferring account ownership:
+Select or enter the new user to transfer the account over to
+The user should have the ability to select which linked accounts are transferred
+Remove saved payment methods
+Remove AutoPay enrollments
+Maintain transaction/payment history
+Maintain Paperless settings
+Transfer Ownership Operation
+ 
+Users override email addresses and gain access to payment methods that do not belong to them
+Cannot change the group that it is linked to without unregistering and re-registering
+x% reduction in support cases
+x% reduction in DBRs
+Reduce risk of churn by Collier/BSU
+Biller
+Payer
+Unique Logins
+Unique Email Login / Auth Type
+Prevent duplicate email logins
+Phase 1: Stop the bleeding
+CRM option: new “Unique” Email auth type, hide existing Email auth type
+DB: enforce uniqueness at the DB level for legacy billers (cleanup/migration needed for existing dupes, but no more dupes should be created) 
+User flow: require any user attempting to register with an existing email address to either (1) create a new login, or (2) reset password to regain access if their password is unknown
+Phase 2: Migration and clean-up
+Requires a dedicated application to link customers, decrypt and re-encrypt payment methods to consolidate logins. Crypto services collaboration needed for writing the clean-up utility. 
+Payment methods and AutoPay should be preserved during login consolidation process.
+Add Unique Login Email Constraint
+ 
+System does not require unique email addresses for logins using the email auth type.
+Support & Data Services need to manually investigate each case which can take 1-3 hours per.
+Reduce time spent manually investigating email login issues
+x% reduction in DBRs
+Payer
+Biller
+DB
+Platform / Shared Services
+Payer UX Improvements
+Payer UX update
+When editing AutoPay, if the payment method that an AutoPay is enrolled with does 
+not 
+belong to the user logged in we should hide the last 4 digits of the payment method.
+Payer UX Updates
+ 
+Last 4 digits of payment method are visible to all users on an account when viewing AutoPay not just the payment method owner
+Reduce risk of churn by Collier/BSU
+Fulfill longstanding request with Insurance billers
+Payer - SPAM or WDIL
+ 
+Transfer Account Ownership
+ in the Customer Portal (and Biller Portal)
+When transferring account ownership:
+Transferring an account to a new user login
+The user should have the ability to select which linked accounts are transferred
+Payment methods are removed
+AutoPay enrollments are removed
+Paperless settings can remain
+Transfer Ownership Operation
+ 
+Users override email addresses and gain access to payment methods that do not belong to them
+Cannot change the group that it is linked to without unregistering and re-registering
+x% reduction in support cases
+x% reduction in DBRs
+Reduce risk of churn by Collier/BSU
+Payer - TBD
+Enable Biller Option 108 
+by default
+Audit Billers that do not have this option on to see if they should have it enabled
+There is a use case that the BIF imports are the source of email updates that Billers prefer
+Can we challenge or improve our handling of email updates when Biller Option 108 is not enabled?
+Imports can improperly update email addresses when an email address already exists. This is especially problematic for Billers with email login auth type.
+x% reduction in support cases
+x% reduction in DBRs
+Integrations
+S&S / SSO Registration Improvements
+Account Owner role should end up registered using the email passed to IC by the SSO. The existing email on the Account Owner role should be copied into the Courtesy Email address field for the Account Owner role.
+SPAM-188
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Prevents creating new Account Owner roles when a user is registering for the 1st time with SSO and a different email address
+Improve relationship with S&S
+Payer - SPAM
+Fix inconsistencies with Unregistration
+ behavior across the platform 
+ICRemoteAuth API
+Customer Portal
+ICRestAPI
+Unregistration Behaviors: Logins & Account Linking
+ 
+Unregistration is handled differently depending on where it is occurring.
+Customers remain enrolled in AutoPay or Recurring Scheduled Payments if they are unregistered or saved payment method is removed.
+Consistent behavior
+Payer
+Account Linking Improvements
+Improved Account Linking
+Phase 1
+Option to prevent automatic account linking
+Could be specific to SAML or a Biller Option that covers all automatic linking scenarios
+Phase 2
+Smarter logic for automatic/manual account linking
+Process to approve accounts linked that our system catches as needing admin oversight
+Improper account linking is happening for Billers with SAML (ProAssurance)
+x% reduction in Support Cases
+TBD
+Prevent improper account linking
+2026 Q1/Q2
+ Default, consistent behavior for account linking followed across the platform 
+(this needs to be defined)
+Accounts are automatically linked to users that should not have access to those accounts
+x% reduction in Support Cases
+TBD
+Add logging in the Biller Portal for account linking/unlinking changes
+Logging for account linking changes is not readily available for Biller users or Support
+Time reduction on Support Cases
+Biller
+Registration Improvements
+Payment Method Validation
+During registration challenge a user to verify their payment method before registering them to that login with a payment method tied to it
+Payment methods get tied to users during registration that might not belong to them
+Security risk
+Build trust
+Payer - SPAM
+Identify Landlord/Tenant
+Identify Owner/Tenant 
+User identification for property owners, landlord, tenant, etc. 
+On our side, validate owner status (e.g., using Collier's existing property appraiser data and application information) to automate role assignment and reduce manual intervention
+There is no way to identify if a user is an Owner, Landlord, or Tenant in our current system and is a burden for Billers
+Improve user experience for GUB/Property Management scenarios
+Payer
+Pay by Text
+Pay by Text
+ enrollment by user
+Pay by Text is at the Account Level and cannot be set by individual users
+x% increase in PBT adoption
+Payer - SPARK
+Future Outlook
+Approach
+Problems Solved
+Success Criteria
+Teams
+Centralized system for Multi-User Login
+Code for logins and linking is spread across the app and all repos
+Dedicated ownership of Logins and Account Linking 
+TBD
+Customizable User Login Types 
+with configurable permissions 
+Existing user types are rigid and not customizable
+5 Billers configure customized user logins
+Feature demoed to new Billers
+TBD
+Q4 Itemized Deliverables
+Updates to the Customer Portal
+Hide the last 4 digits of a payment method used for AutoPay when the logged-in user is linked to the account but is not the owner of that payment method.
+When a user changes their email address in the Customer Portal, all saved payment methods and AutoPay enrollments will be cleared. This is a temporary measure while we develop the new 
+Transfer Account Ownership 
+feature, planned for release in 2026.
+Updates to the Biller Portal
+Managing Payment Methods
+See which user a payment method belongs to
+Add a new payment method and assign it to an individual user
+Change a user’s role (for example: Co-owner to Account Oversight, or Guest to Account Owner, etc.)
+Risk Log
+High-level Approach
+Risk
+Mitigation Strategy
+Next Steps
+Prevent duplicate email logins
+Payment methods & AutoPay must be preserved during login consolidation – if different users in fact handle different logins with the same email, they could gain access to payment methods that don’t belong to them.
+Prevent duplicate email logins
+If password resets need to occur, and it is a shared email address/inbox, race to reset could become problematic.
+Prevent duplicate email logins
+Billers are not aware of the impact of login consolidation
+Clear communications with Billers that have a high volume of duplicate email logins or edge cases.
+User Management in the Biller Portal
+Billers are not confident in performing operations in the Biller Portal and still submit support cases.
+As part of GTM strategy, collaborate closely with Training  & Client Services teams to ensure enablement materials are created, available, and circulated well amongst Billers.
+Discovery Action Items
+Task
+Owner
+Due Date
+
+
+
+
+375
+
+
+2afb4b03-b243-4c6a-83ba-f8e8d938ad1a
+
+
+complete
+
+
+Record problems reported by CS related to Multi-User login, Co-owner, and account linking
+
+
+
+
+ 
+ 
+
+
+
+
+376
+
+
+00190a7a-8c0e-4148-a6d5-b409fd8c4f04
+
+
+complete
+
+
+Complete technical interviews with SMEs, MCL pain points, design flaws, possible solutions
+
+
+
+
+
+
+
+
+377
+
+
+fa4c22a9-5f84-4d6a-b991-2e154cc16167
+
+
+complete
+
+
+Tony
+
+
+
+
+
+
+378
+
+
+6fbaa4fe-678d-433f-9db8-d9fd0e2b4103
+
+
+complete
+
+
+Albert
+
+
+
+
+
+
+379
+
+
+db45976c-138d-4c12-8829-ed60e081bc1f
+
+
+complete
+
+
+Ross
+
+
+
+
+
+
+380
+
+
+a98ec852-9c6b-45ee-85a2-d156ed61cf6b
+
+
+complete
+
+
+Randy
+
+
+
+
+ 
+
+
+
+
+381
+
+
+8de2046d-53e7-4972-9e98-aa7a54ac7367
+
+
+complete
+
+
+Complete technical interviews with Tech Leads, MCL pain points, MCL feature implementations in their components
+
+
+
+
+
+
+
+
+382
+
+
+7fbe83eb-8892-45db-a371-454f3f98083a
+
+
+complete
+
+
+Mark
+
+
+
+
+
+
+383
+
+
+39cbb7cd-835e-411a-a84b-083a25526795
+
+
+complete
+
+
+Sean
+
+
+
+
+
+
+384
+
+
+0b2b72fb-4ef2-4890-a0bf-d7a45dd10693
+
+
+complete
+
+
+Victor
+
+
+
+
+ 
+
+
+
+
+385
+
+
+2e2b32a4-3757-488f-ae42-e3ac1c251f69
+
+
+complete
+
+
+Complete visual diagram for MCL hierarchy structure for broader audience discussions
+
+
+
+
+ 
+
+
+
+
+386
+
+
+fb0c251f-3207-4511-98b2-33dea8cd1ad6
+
+
+complete
+
+
+Complete CS interviews (Client Services, Implementations, Customer Success)
+
+
+
+
+ 
+ 
+
+
+
+
+387
+
+
+c7f9d7c6-0809-4c31-b0a7-b8545b89f0a8
+
+
+complete
+
+
+Define potential solution approaches for ‘Property Management’ MCL 
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+388
+
+
+8287442a-ca0f-49d3-b0e4-02b23ce39abe
+
+
+incomplete
+
+
+Review approaches & identify the repos involved, teams impacted for each problem area
+
+
+
+
+ 
+
+
+
+
+389
+
+
+b435888a-eada-477d-837e-d47617eadf56
+
+
+complete
+
+
+Create solution options for review & decision-making
+
+
+
+
+Reviewed with Martin & Bill
+Validated some approaches with Collier
+ 
+ 
+
+
+
+
+390
+
+
+f791f169-0b95-405c-89fb-56ba7d9ad964
+
+
+complete
+
+
+Meet with Collier to confirm all problems are captured, ask questions, discuss solution options, etc.
+
+
+
+
+ 
+ 
+
+
+
+
+391
+
+
+77ada1a3-be99-44ab-93c0-28e3fc7d68ba
+
+
+complete
+
+
+Coordinate dedicated sessions to discuss key pain points to be solved & proposed solutions
+
+
+
+
+ 
+ 
+
+
+
+
+392
+
+
+451c3b79-37d8-424c-9d6c-bb9500fa832b
+
+
+complete
+
+
+Complete the sessions:
+
+
+
+
+
+
+
+
+393
+
+
+7e3af818-5385-4e85-9bc2-de382753969f
+
+
+complete
+
+
+DB (Ross, Kelsey) 
+ 
+
+
+
+
+
+
+394
+
+
+03d5afb5-c7dd-47de-8012-27a0b19837de
+
+
+complete
+
+
+Imports (Albert, Marcus, Tony, Cat, Ross, Kelsey) 
+ 
+
+
+
+
+
+
+395
+
+
+edd4b694-af67-4e35-a77f-4bc07e198788
+
+
+complete
+
+
+Biller team (Ryan, John, Sean, Ange) 
+ 
+
+
+
+
+
+
+396
+
+
+7bdac2f8-33ec-4c8c-840a-9aca236fa701
+
+
+complete
+
+
+Payer team 
+TO BE SCHEDULED
+
+
+
+
+ 
+Multiple Dates
+
+
+
+
+397
+
+
+89f89064-ae41-42de-b106-b0095cb20979
+
+
+complete
+
+
+As needed, coordinate technical scoping sessions per focus area
+
+
+
+
+ 
+ 
+
+
+
+
+398
+
+
+742b8411-8c87-4ed8-8be8-31111e023151
+
+
+incomplete
+
+
+Get team buy-in for commitments in Q4 
+
+
+
+
+ 
+
+
+
+
+399
+
+
+951a1b7f-d89b-4a56-97e1-b583ff85efd4
+
+
+incomplete
+
+
+Work with teams to t-shirt size solution approaches
+
+
+
+
+ 
+
+
+
+
+400
+
+
+c7689abe-6158-4b63-84ba-c340543bd3b6
+
+
+incomplete
+
+
+Research behaviors for Customer Account/Login creation, Registration/Unregistration, and Account Linking across different areas of the Platform including Customer Portal, Biller Portal, AgentConnect, APIs, etc.
+
+
+
+
+ 
+
+
+
+
+401
+
+
+cef4cac1-c362-4dcc-a6cd-3a531c0120b2
+
+
+incomplete
+
+
+Define our intended, default behavior for Customer Account/Login creation, Registration/Unregistration and Account Linking
+
+
+
+
+ 
+Next Steps
+Focus on high priority problems & Property Management scenarios. Then, satisfy Insurance needs & future proof Multi-User login. 
+Define behaviors
+ (e.g., 
+unregistration/registration
+, account linking/unlinking). 
+  to dig into these. Mark confirmed various API entry points are not documented and should be.
+Commit work for Q4:
+Account transfer option
+ from Customer Portal and Biller Portal
+Stop supporting unique login emails (phase 1)
+Imports
+: Can we stop allowing email updates from BIF or add some admin oversight? Can Biller Option 108 be enabled as the default? What is the future of the Customer Import Tool? 
+Plan & scope:
+User Management
+ feature in the Biller Portal. This will be a big source of reduced support costs and DBRs by empowering billers to do things that require data services. For example: allow Billers to change user login type; transfer account ownership and select the linked accounts to transfer.
+Payment Method Validation
+Centralized
+ service for Logins, User Permissions, Registration/Unregistration, Account Linking
+Path forward for inconsistent behaviors
+ (goal to start chipping away at this in Q4)
+Risk Mitigation
+ URL:/spaces/PE/pages/4625104899/MCL+Planning+2025-2026

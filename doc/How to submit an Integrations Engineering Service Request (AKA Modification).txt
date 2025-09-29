@@ -1,0 +1,99 @@
+This Confluence guide includes instructions for submitting an Integrations Engineering Service Request to the Integrations team, along with a template for the required fields needed to complete the request.
+Creating the Integrations Engineering Service Request
+Using the 
+Service Management Portal
+, navigate to the integrations project:
+Type of Request
+In the 
+Integrations
+ project, start by selecting the appropriate request type—most DS team submissions fall into one of the following:
+General Request:
+Use this when the biller is requesting something new for their integration.
+Example: A new invoice import/payment export format is needed.
+Note: This is not intended for product feature requests. Those should be submitted through the appropriate product request channels.
+Change Request:
+Use this when the biller is requesting modifications to an 
+existing 
+integration.
+Examples: Adding new fields to an existing PDF template, including additional fields in an existing Datapump integration, or providing extra payment fields in an existing payment exports format.
+Report an Integration Problem:
+Use this when the biller reports that something isn’t working as expected—this request type is specifically for reporting bugs or system issues.
+Examples: Datapump requests include incorrect customer data, or payment export calculations are incorrect.
+INT Eng. Service Request Template
+Once the item type has selected, under “
+What can we help you with
+” use the following Integrations Engineering Service Request template:
+Title:
+ [Name of Affected Service] - [Short description of Bug]
+Priority as per Rubric:
+ [Highest - Lowest]
+Fault: 
+[Clear and concise description of the issue]
+Context
+: [Expand on the fault by adding more context regarding the issue.]
+How was the bug exposed to the end user?:
+ [Provide a summary explanation of how the end user encountered the issue. 
+DO NOT
+ just state “While researching DS-1234.“]
+Expected Result: 
+[Experience that the user expects]
+Actual Result: 
+[Experience that is actually happening]
+Steps To Reproduce: 
+[Step-by-step guide on how to recreate the bug]
+Visual Proof:
+ [Image or video of the bug and/or its symptoms]
+Impact: 
+[Description of 
+billers 
+and 
+software partners
+ that could be affected]
+Initially Reported By: 
+[Biller/Software Partner who reported the issue]
+ 
+Bug Start Date
+: [When was the issue introduced]
+Bug Source: 
+[Provide the JIRA items that Introduced the bug. Accomplish this by using blame in the repo to see when the changes were introduced]
+Source Code:
+Repo:﻿ [Code Repository where the bug is located]
+Page(s): [Page where the bug is located]
+Method(s): [Method where the bug is located]
+Line(s): [Line of code where the bug is located]
+Biller ID Fields
+In the 
+“What biller(s) is this request for?”
+ dropdown, select the 
+production biller
+ associated with the request, as indicated in the DS ticket.
+If the biller reported in the DS ticket is a 
+test biller
+, select the corresponding 
+production biller
+ from the dropdown.
+Then, in the field below, enter the 
+Biller ID (BID)
+ of the 
+test biller
+ that corresponds to the selected production biller.
+Integration Partner Field
+Under 
+“What Integration Platform does this request apply to?”
+, enter the biller’s integration partner. One way to find this information is through the 
+CRM, under the Profile tab
+.
+Example Integration Partner
+Delivery Date
+Next, reference the following documentation to asses an appropriate delivery date:
+https://invoicecloud.atlassian.net/wiki/x/CwA_vw
+ 
+If no SLA is provided, and the request is not classified as a Highest, High, or Medium, enter an estimated delivery date—typically around 15 days—to fulfill the required field.
+Attachments
+Be sure to attach any relevant screenshots, files, or documents that help illustrate the request—whether it's showing where a change is needed, highlighting a bug, or providing examples of the issue.
+Active Implementation
+Determine whether the biller requesting the change or reporting the bug is part of an active implementation project. Unless the implementation project ID has been provided in the DS-ticket, select No.
+Final Steps
+Once all selections and fields have been properly filled out, click “Send” to submit the request. 
+Make sure to link the created ITG to the related DS-ticket.
+ URL:/spaces/DS/pages/2594406419/How+to+submit+an+Integrations+Engineering+Service+Request+AKA+Modification

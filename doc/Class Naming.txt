@@ -1,0 +1,34 @@
+PascalCase for Class Names and Members
+Class names, properties, and methods should follow PascalCase (capitalize the first letter of each word).
+c#
+public class ShoppingCart
+{
+  public int ItemCount { get; set; }
+  
+  public void EmptyCart() {
+    /* ... */
+  }
+}
+camelCase for Parameters
+Method parameters should use camelCase (start with a lowercase letter and capitalize subsequent words).
+c#
+public class ShoppingCart
+{
+  public void AddItem( ShoopingCartItem shoppingCartItem ) {
+    /* ... */
+  }
+} 
+Prefix Private Fields with an Underscore
+When naming private fields, prefix them with an underscore ( _ ) to distinguish them from local variables.
+c#
+public class ShoppingCart
+{
+  private decimal _totalAmount;
+  
+  public void CalculateTotal() {
+    decimal totalAmount = 0;
+    /* ... */
+    _totalAmount = totalAmount;
+  }
+}
+ URL:/spaces/EA/pages/3376119973/Class+Naming

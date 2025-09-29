@@ -1,0 +1,9 @@
+Summary
+Gets a list of zip file paths from the db. Posts number of unzip requests to slack. Check chilkat credentials and availability; if ok process proceeds. Each zip file is moved to the server, the unzipped file destination is retrieved, then the file is unzipped. Results are logged and sent to slack. Each extracted file is placed in the unzipped file destination. Backups and deletion occur if selected. Using tasks and parallelism, files from the unzipped locations are then moved to the specified FTP PDF folder locations. Responses are logged, errors posted to slack and logged.
+Features
+File unzipping (.7z and .zip)
+File transfers
+Logging (console and New Relic)
+Chilkat
+Slack messaging
+ URL:/spaces/IM/pages/3828416543/BillerFTPPDFProcessing

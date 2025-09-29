@@ -1,0 +1,32 @@
+When we initially defined the New Web Server project, the idea was to use this project to move the QAR Web Servers into the NonProd Network Lane and the DevTest Subscription (where they belong based on our 
+Environments
+ definition), this would coincide with the Proxy Containerization effort and the QAR Proxy instances would be re-homed in the proper Network Lane and Subscription as well.
+There has been some differing opinions on whether to place the New Web Servers in the proper locations from the beginning or to place them where the Legacy QAR Web Servers currently live which is the Production Network Lane and Production Subscription (Primary Subscription but if we do put these in a Production Subscription it will be the Enterprise Prod Subscription).
+We need to determine the path forward and define the rollout plan.
+Stakeholders:
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Options 
+  Put the QAR Environment in the NonProd Environment and DevTest Subscription
+Unanimous vote
+Which Shard(s) in DevTest SQL Server
+ and 
+ 
+New Hostnames will be
+www-qar.invoicecloud-beta.com
+my-qar.invoicecloud-beta.com
+icg-payments-qar.invoicecloud-beta.com
+icg-boarding-qar.invoicecloud-beta.com
+icg-reporting-qar.invoicecloud-beta.com
+Put it in the Prod Network Lane and Prod Subscription
+ URL:/spaces/platform/pages/4372234246/QAR+Initial+Landing+Spot+for+Modern+Web+Servers

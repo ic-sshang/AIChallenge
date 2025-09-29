@@ -1,0 +1,331 @@
+Brief Overview
+:  A REST API that allows kiosk vendors (KIS, Dynatouch) a way to retrieve and pay a billers invoices from the Invoice Cloud system.  
+After selecting an invoice on the Kiosk machine, it allows transaction calls to the API to complete the payment of the invoice(s) (Cash, EFT and CC).
+Video tutorial:
+https://invoicecloud.wistia.com/medias/qoyuasos7e
+Supporting documentation:
+https://invoicecloud.app.box.com/folder/77249587038?s=9mmtwykvke1qf2yx0lbzmmc63w9f0gb9
+ (requires Box access)
+Spec doc Version 2.3: 
+https://invoicecloud.app.box.com/file/1390319973133?s=km38oc3v6m6snct40racxvwf8ylrhajt
+ (requires Box access)
+Dynatouch setup process:
+https://app.getguru.com/card/cjjG6rMi/Dynatouch-Kiosk-BillPay
+Endpoints
+: 
+V1: 
+https://www.invoicecloud.com/kioskapi/v1/
+V2: 
+https://www.invoicecloud.com/kioskapi/v2/
+All communication to the kiosk APIs require basic access authentication.
+Technical Documentation
+Biller Authentication
+The BillerAuthenticateAttribute class in the BillerAuthenticateAttribute.vb file is an attribute that implements the IAuthenticationFilter interface. This attribute can be used to decorate action methods in a controller to enforce authentication.
+Here's a breakdown of how the BillerAuthenticateAttribute class works for each function:
+Constructor
+: The constructor of the BillerAuthenticateAttribute class is called when an action method decorated with this attribute is invoked. The constructor initializes the IRepository object, which is used to interact with the database.
+AllowMultiple
+ This property is part of the IFilter interface and indicates whether multiple instances of the filter can be applied. In this case, it returns False, meaning only one instance of the BillerAuthenticateAttribute can be applied to an action method.
+AuthenticateAsync
+: This method is called before the action method is executed. It's responsible for checking if the request is authenticated.
+It first checks if the Authorization header of the request is null, if the scheme is not "Basic", or if the parameter of the Authorization header is empty. If any of these conditions are met, it sets the ErrorResult of the context to a new instance of InvalidCredentialResponse, which returns an HTTP 401 Unauthorized status code.
+If the Authorization header is valid, it decodes the parameter of the Authorization header, which is a Base64-encoded string, and creates a new BillerPrincipal object. If the Biller property of the BillerPrincipal object is null, it sets the ErrorResult of the context to a new instance of InvalidCredentialResponse.
+If the Biller property of the BillerPrincipal object is not null, it sets the Principal of the context to the BillerPrincipal object. This means the user is authenticated.  The BillerPrincipal class is used to represent the security context of a user in the application. It includes the user's identity, roles, and associated biller. This class can be used for authentication and authorization in the application.
+ChallengeAsync
+: This method is called if the AuthenticateAsync method sets the ErrorResult of the context. It's responsible for adding the WWW-Authenticate header to the response. In this case, it does nothing and simply returns a completed task.
+Biller specific functions
+IsSubmitterForInvoiceType
+(InvoiceTypeID As Integer, PaymentTypeID As Integer) As Boolean: 
+This function checks if the current Biller is a submitter for a specific invoice type and payment type. It does this by filtering the TerminalSettings DataTable for rows that match the provided InvoiceTypeID, PaymentTypeID, and a hardcoded PaymentSourceID of 19 (which represents a Kiosk). If a matching row is found, it returns the SubmitterProgram value as a boolean. If no matching row is found, it returns False.
+GetServiceModeIDForCurrentPaymentType
+(paymentTypeID As Integer) As Integer: 
+This function returns the service mode ID for the current payment type. If the paymentTypeID is 1, it returns the ServiceFeeModeID from the Invoicing property. Otherwise, it returns the AchServiceFeeModeID from the Invoicing property.
+GetLowestCreditCardCeilingForInvoiceTypes
+(ByVal invoiceTypes As List(Of Integer)) As Double: 
+This function returns the lowest credit card ceiling for a list of invoice types. It does this by iterating over the provided list of invoice types and selecting the MaxCreditCard value from the TerminalSettings DataTable for each invoice type. It then returns the smallest MaxCreditCard value found. If no MaxCreditCard values are found, it returns 0.0.
+GetLowestAchCeilingForInvoiceTypes
+(ByVal invoiceTypes As List(Of Integer)) As Double: 
+This function is similar to the previous one, but it returns the lowest ACH ceiling instead of the credit card ceiling.
+ShouldRedirect
+(requestURI As Uri) As Boolean: 
+This function checks if a redirect should occur based on the requestURI. It does this by comparing the authority of the requestURI (i.e., the scheme, host, and port) with the DomainUrlDesc property of the Biller. If they do not match, it returns True, indicating that a redirect should occur. If the requestURI contains "/localhost:", it returns False, indicating that a redirect should not occur.
+GetBillerIDFromBillerGUID
+(ByVal BillerGUID As Guid) As Integer: 
+This is a static function that returns the BillerID for a given BillerGUID. It does this by executing a stored procedure selAzureBillers and returning the BillerID from the first row of the result.
+GetBillerOptionValue
+(ByVal billerID As Integer, ByVal OptionID As Integer) As String: 
+This is a static function that returns the option value for a given billerID and OptionID. It does this by executing a stored procedure selBillerOptionValue and returning the BillerValue from the first row of the result. If an exception occurs during this process, it is caught and logged using Serilog, and an empty string is returned.
+Kiosk Api Controller
+The KioskApiController is a base controller class that provides common functionality to other controllers in the application. It has several protected fields and a constructor that initializes these fields. The BillerController is one of the controllers that inherits from KioskApiController.
+When a request is made to an endpoint handled by BillerController, the following process flow occurs:
+The KioskApiController constructor is called, which initializes the _response, _repository, _emailSender, and _httpContextRepo fields. The _response field is an instance of the ApiResponse class, which is used to create HTTP responses. The _repository field is an instance of a class that implements the IRepository interface, which is used to interact with the database. The _emailSender field is an instance of the SystemEmail class, which is used to send emails. The _httpContextRepo field is an instance of a class that implements the IHttpContextRepository interface, which is used to interact with the HTTP context.
+The BillerController constructor is called, which passes the repository and httpContextRepo parameters to the base KioskApiController constructor.
+A method in BillerController is called, depending on the HTTP verb and route of the request. For example, if the request is a GET request to the v1/config route, the Config method is called. If the request is a GET request to the v1/retrieveinvoicetypes route, the RetrieveInvoiceTypes method is called.
+The called method performs some operation and uses the _response field to create an HTTP response. The ApiResponse class has several methods for creating responses with different HTTP status codes, such as BadRequest, OK, InternalServerError, and ServiceUnavailable. These methods use the ApiResponseContent class to create the content of the response.
+If an error occurs during the operation, the SystemEmail class is used to send an email alert. The SystemEmail class has several methods for sending different types of emails, such as SendServiceFeeAlertToEscalations, SendNoSubmitterFeeFoundEmail, SendInternalServerErrorEmail, and SendExceptionMessageEmail. These methods use the Send method to send the emails, which inserts the emails into a queue using the InsertIntoSystemEmailQueue method.
+The created HTTP response is returned to the client.
+Biller Controller
+The BillerController class inherits from the KioskApiController class and is responsible for handling HTTP requests related to billers.
+This class has two HTTP GET methods, Config and RetrieveInvoiceTypes, which are accessible via the v1/config and v1/retrieveinvoicetypes routes, respectively.
+Config route
+: This route returns configuration details for a biller. It uses the BillerConfigHandler class to retrieve the configuration details and the ApiResponse class to create an HTTP response. If an exception occurs during this process, it is logged and an HTTP 500 Internal Server Error response is returned.
+RetrieveInvoiceTypes
+: This route returns the invoice types for a biller. It uses the BillerConfigHandler class to retrieve the invoice types and the ApiResponse class to create an HTTP response. If an ApiException occurs during this process, it is logged and an HTTP 400 Bad Request response is returned. If any other type of exception occurs, it is logged and an HTTP 500 Internal Server Error response is returned.
+Biller Config Handler
+The BillerConfigHandler class in the BillerConfigHandler.vb file is a helper class that retrieves configuration details and invoice types for a biller. It uses a repository to interact with the database and a Biller object to identify the biller.
+This class has a constructor that takes two parameters: repository of type IRepository and biller of type Biller. These parameters are used to initialize the _repository and _biller fields, respectively.
+The class has three methods:
+GetBillerConfig
+: This method creates a BillerConfigResponse object, sets its BillerDBA property to the BillerDBA property of the _biller field, and sets its SearchOptions property to the result of the GetBillerSearchOptions method of the _repository field, passing the BillerID property of the _biller field as a parameter. It then returns the BillerConfigResponse object.
+GetBillerConfigV2
+: This method is similar to the GetBillerConfig method, but it creates a BillerConfigV2Response object and sets its SearchOptions property to the result of the GetBillerSearchOptionsWithInvoiceType method of the _repository field.
+RetrieveBillerInvoiceTypes
+: This method creates a list of InvoiceType objects, sets it to the result of the GetBillerInvoiceTypes method of the _repository field, and returns the list.
+The main difference between GetBillerConfig and GetBillerConfigV2 is GetBillerConfigV2 provides additional invoice type information with each search option compared to GetBillerConfig.
+Customer Controller
+The CustomerController class that inherits from the KioskApiController class and is responsible for handling HTTP requests related to customers.
+This class has a constructor that takes two parameters: repository of type IRepository and httpContextRepo of type IHttpContextRepository. These parameters are passed to the base KioskApiController constructor.
+The class has one HTTP POST method, Search, which is accessible via two routes: v1/account/search and v1/customer/search. This method takes a CustomerSearchRequest object as a parameter, which contains search criteria for finding customers.
+The CustomerSearchRequest class in the CustomerSearchRequest.vb file is a model class that represents the data required to search for customers. It has the following properties:
+SearchOptionID: An integer that represents the type of search to perform.
+SearchValue: A string value to search for (max length 250 chars)
+LastName: A string that represents the last name of the customer to search for (max length 100 chars)
+InvoiceTypeId: An integer value corresponding to the InvoiceTypeID (range -1 to 9999)
+Each property has data annotations that enforce validation rules, such as Required, StringLength, and Range.
+Here's a breakdown of what the Search method does:
+It retrieves the Biller object from the current user.
+It logs the start of the search operation using the Serilog.Log.Information method. The log message includes details about the search request and the biller.
+It creates a CustomerSearchResponse object, is returned after the function performs the actual search based on the provided request. The CustomerSearchResponse constructor takes the search request, the biller, and the repository as parameters.
+If the search operation is successful, it returns an HTTP 200 OK response with the search results.
+If an ApiException is thrown during the search operation, it logs the error, notifies New Relic (a performance monitoring tool), and returns an HTTP 400 Bad Request response with details about the error.
+If any other type of exception is thrown, it logs the error, notifies New Relic, and returns an HTTP 500 Internal Server Error response.
+Transaction Controller
+The TransactionController class inherits from the KioskApiController class and is responsible for handling HTTP requests related to transactions.
+This class has two HTTP POST methods, CalculatedServiceFee and Sale, which are accessible via the v1/fee/calculate, v1/transaction/calculatedservicefee, v1/payment/submit, and v1/transaction/sale routes, respectively.
+CalculatedServiceFee
+: This route calculates the service fee for a transaction. It takes a CalculatedServiceFeeRequest object as a parameter, which includes the payment type ID, credit card type ID, and a list of invoice payments. It uses the CTPRequestHandler class to calculate the service fee and returns a CalculatedServiceFee object with the calculated fee amount. If an ApiException occurs during this process, it is logged and an HTTP 400 Bad Request response is returned. If any other type of exception occurs, it is logged, an internal server error email is sent, and an HTTP 500 Internal Server Error response is returned.
+Sale
+: This route processes a sale transaction. It takes a SaleRequest object as a parameter, which includes the encrypted track data, bank routing and account numbers, convenience fee, email address, payment type ID, kiosk machine ID, and a list of invoice payments. It uses the CTPRequestHandler class to process the sale and returns a SaleResponse object with the transaction result. If the transaction is declined, an HTTP 400 Bad Request response is returned. If the transaction is approved, an HTTP 200 OK response is returned. If an ApiException occurs during this process, it is logged and an HTTP 400 Bad Request response is returned. If any other type of exception occurs, it is logged, an internal server error email is sent, and an HTTP 500 Internal Server Error response is returned.
+CTP Request Handler
+The CTPRequestHandler class in the CTPRequestHandler.vb file is a class that handles transaction requests. It implements the ITransactionRequestHandler interface and contains several methods:
+New
+(repository As IRepository, biller As Biller, httpContextRepo As IHttpContextRepository): This is the constructor of the class. It initializes the private fields with the provided arguments.
+CalculateServiceFee
+(request As CalculatedServiceFeeRequest) As Double: It calls the Validate method on the request object. This method checks if the request is valid and throws an ApiException if it's not.
+It checks if the PaymentTypeID of the request is 6, which represents a cash payment. If it is, the method returns 0 because cash payments have no service fee.
+It calls the GetChargeBatches method on the _chargeBatchBuilder object, passing in the invoices, payment type ID, and credit card type ID from the request. The GetChargeBatches method returns a list of ChargeBatch objects, each representing a batch of charges for a transaction.
+It sums up the ConvenienceFeeAmount of all the charges in all the batches and returns this sum as the calculated service fee
+Sale
+(request As SaleRequest) As SaleResponse: 
+The Sale method in the CTPRequestHandler class is responsible for processing a sale transaction. It takes a SaleRequest object as a parameter and returns a SaleResponse object.
+Here's a step-by-step breakdown of what the method does for each PaymentTypeID:
+If PaymentTypeID is 1 (Credit Card Payment): The method first decrypts the track data if necessary. This is done because credit card payments involve encrypted track data for security reasons.
+It then calls the GetChargeBatches method on the _chargeBatchBuilder object, passing in the invoices, payment type ID, and credit card type ID from the request. The GetChargeBatches method returns a list of ChargeBatch objects, each representing a batch of charges for a transaction.
+The method then validates the service fee and maximum payment amount for each charge batch. This is done to ensure that the service fee and payment amount are within acceptable limits.
+Finally, it processes the sale for each charge batch. If the sale is successful, it updates the customer's email address if necessary and sends out receipts to the customer's email address.
+If PaymentTypeID is 2 (ACH Payment): The process is similar to the credit card payment process. The method first decrypts the track data if necessary.
+It then calls the GetChargeBatches method on the _chargeBatchBuilder object, passing in the invoices, payment type ID, and credit card type ID from the request. The GetChargeBatches method returns a list of ChargeBatch objects, each representing a batch of charges for a transaction.
+The method then validates the service fee and maximum payment amount for each charge batch. This is done to ensure that the service fee and payment amount are within acceptable limits.
+Finally, it processes the sale for each charge batch. If the sale is successful, it updates the customer's email address if necessary and sends out receipts to the customer's email address.
+If PaymentTypeID is 6 (Cash Payment): The method processes the cash sale and returns the response. It does not need to decrypt any track data or calculate service fees, as these steps are not applicable to cash payments.
+GetMiscData
+(customerID As Integer, invoiceID As Integer) As IC_Misc_Data: This private method returns an IC_Misc_Data object with various data related to the transaction.
+HandleCustomerEmails
+(newEmailAddress As String, latestEmailAddress As String, receiptGUIDs As List(Of String), chargeBatches As List(Of ChargeBatch)): 
+This private method handles customer emails. It sends out additional receipts to the email address provided by the kiosk and tries to update customers with no email address if allowed.
+It checks if the newEmailAddress is not null or empty and is different from the latestEmailAddress. If this is the case, it means the customer has provided a new email address at the kiosk.
+If the customer has provided a new email address, the method calls the TryUpdateCustomersEmail method, passing in the newEmailAddress and chargeBatches as parameters. The TryUpdateCustomersEmail method tries to update the customers' email addresses in the database to the new email address provided by the kiosk.
+The method then checks if the receiptGUIDs list is not null or empty. If this is the case, it means there are receipts to be sent to the customer.
+If there are receipts to be sent, the method calls the EmailPaymentReceipts method on the _repository object, passing in the billerID, newEmailAddress, and receiptGUIDs as parameters. The EmailPaymentReceipts method of the _repository object is responsible for sending out the receipts to the customer's email address.
+TryUpdateCustomersEmail
+(newEmailAddress As String, chargeBatches As List(Of ChargeBatch)) As Boolean: 
+This private method tries to update customers' email addresses to the new email address provided by the kiosk. It returns a boolean indicating whether the update was successful.
+It first checks if the newEmailAddress is null or whitespace. If it is, the method returns False and does not proceed with the update.
+It then checks the _biller.AdvancedSettings for specific settings that might prevent email updates. If the biller has either the SSO setting or the suppress email changes setting enabled, the method returns False and does not proceed with the update.
+The method then creates a new list of integers called customerIDs. This list will hold the IDs of the customers whose email addresses need to be updated.
+It loops through each ChargeBatch in the chargeBatches list. For each ChargeBatch, it loops through each InvoiceSale. If the customer associated with the InvoiceSale does not have an email address and their ID is not already in the customerIDs list, their ID is added to the customerIDs list.
+After all the ChargeBatch objects have been processed, the method calls the UpdateEmailForCustomers method on the _repository object, passing in the newEmailAddress, customerIDs list, and _biller.BillerID as parameters. The UpdateEmailForCustomers method of the _repository object is responsible for updating the email addresses of the customers in the database.
+The method then returns True, indicating that the email addresses were successfully updated.
+ACHSale method
+Initialization
+: 
+Several variables are initialized, including lists for ICRequestList, ICMiscList, receiptGuids, and paymentsToVoid, and a new IC_ACH_Sale_Response object ICResponse.  
+A new CloudTransactionProcessingSoapClient object client is created for making SOAP requests.
+Logging
+:
+The function logs the start of the ACH sale process, including the BillerID, EmailAddress, and InvoiceInfo from the saleRequest.
+Processing Charge Batches
+:
+The function iterates over each ChargeBatch in chargeBatches.
+For each ChargeBatch, it creates a new IC_ACH_Sale_Request object for each achInvoiceSale in the batch and adds it to ICRequestList.It also creates a new IC_Misc_Data object for each achInvoiceSale and adds it to ICMiscList.
+The IC_ACH_Sale_Request object includes details about the sale, such as the bank account number, bank RTE, convenience fee amount, total amount, customer ID, invoice number, invoice type ID, customer details, and whether the biller is a submitter for the invoice type.
+The IC_Misc_Data object is created by calling the GetMiscData function with the customer ID and invoice ID.
+Making the SOAP Request:
+The function makes a SOAP request to IC_ACH_Multi_Customer_Sale with the ICRequestList and ICMiscList, and stores the response in ICResponse.
+Processing the Response:
+If the response indicates a duplicate, the function logs the duplicate and adds the receipt GUID to receiptGuids.If the response indicates that validation failed or the sale was not approved, the function logs the failure, voids any successful payments, and returns a failed SaleResponse.
+If the response indicates approval and the KioskMachineID is not 0, the function adds payment equipment details to the repository.
+Logging and Email Handling:
+The function logs the end of the ACH sale request for each batch and the end of all sale requests.
+It calls the HandleCustomerEmails function to handle customer emails.
+Returning the Response:
+The function returns a new SaleResponse with the approval indicator, payment GUID, code, and message from ICResponse.
+CreditCardSale method
+The CreditCardSale function in the CTPRequestHandler class is a private function that processes a list of ChargeBatch objects and a SaleRequest object, and returns a SaleResponse object.
+Here's a step-by-step breakdown of the function:
+Initialization
+:
+Several variables are initialized, including lists for ICRequestList, ICMiscList, receiptGuids, and paymentsToVoid, and a new IC_CNP_Sale_Response object ICResponse.
+A new CloudTransactionProcessingSoapClient object client is created for making SOAP requests.
+Logging
+:
+The function logs the start of the credit card sale process, including the BillerID, EmailAddress, and InvoiceInfo from the saleRequest.
+Processing Charge Batches:
+The function iterates over each ChargeBatch in chargeBatches.
+For each ChargeBatch, it creates a new IC_CNP_Sale_Request object for each ccInvoiceSale in the batch and adds it to ICRequestList.
+It also creates a new IC_Misc_Data object for each ccInvoiceSale and adds it to ICMiscList.
+The IC_CNP_Sale_Request object includes details about the sale, such as the card number, card expiry month and year, convenience fee amount, total amount, customer ID, invoice number, invoice type ID, customer details, and whether the biller is a submitter for the invoice type.
+The IC_Misc_Data object is created by calling the GetMiscData function with the customer ID and invoice ID.
+Making the SOAP Request:
+The function makes a SOAP request to IC_CNP_Multi_Customer_Sale with the ICRequestList and ICMiscList, and stores the response in ICResponse.
+Processing the Response:
+If the response indicates a duplicate, the function logs the duplicate and adds the receipt GUID to receiptGuids.
+If the response indicates that validation failed or the sale was not approved, the function logs the failure, voids any successful payments, and returns a failed SaleResponse.
+If the response indicates approval and the KioskMachineID is not 0, the function adds payment equipment details to the repository.
+Logging and Email Handling:
+The function logs the end of the credit card sale request for each batch and the end of all sale requests.
+It calls the HandleCustomerEmails function to handle customer emails.
+Returning the Response:
+The function returns a new SaleResponse with the approval indicator, payment GUID, code, and message from ICResponse.
+CashSale method
+The CashSale function in the CTPRequestHandler class is a private function that processes a ChargeBatch object and a SaleRequest object, and returns a SaleResponse object.
+Here's a step-by-step breakdown of the function:
+Initialization
+:
+A new SaleResponse object saleResponse is created.
+Logging
+:
+The function logs the start of the cash sale process, including the BillerID, EmailAddress, and InvoiceInfo from the saleRequest.
+Processing Charge Batches:
+The function iterates over each cashInvoiceSale in the ChargeBatch.
+For each cashInvoiceSale, it creates a list of receiptEmails. If the saleRequest includes an email address, it is added to receiptEmails.
+It retrieves the customer details for the cashInvoiceSale from the _repository and assigns them to cashInvoiceSale.Invoice.CustomerDetails.
+If the customer details include an email address that is different from the saleRequest email address, it is added to receiptEmails.
+It calls the _repository.ApplyInvoiceCashPayment function with the cashInvoiceSale, receiptEmails, and BillerID, and assigns the response to saleResponse.
+If the sale is approved and the KioskMachineID is not 0, it retrieves the paymentID from the _repository using the PaymentGUID from saleResponse and the BillerID, and adds the Kiosk Machine ID that made the payment to the payment details table in the database.
+Updating Customer Emails:
+If the saleRequest does not include an email address, it calls the TryUpdateCustomersEmail function with the saleRequest email address and the ChargeBatch.
+Logging
+:
+The function logs the end of the cash sale process, including the BillerID, EmailAddress, and InvoiceInfo from the saleRequest.
+Returning the Response:
+The function returns the saleResponse.
+This function is responsible for processing cash sales, which involves creating receipt emails for each sale, applying cash payments to each sale, handling the responses, and returning a final response. It also handles logging and updating customer emails.
+Voiding Payments
+LoadSuccessfulPaymentsToVoid 
+The LoadSuccessfulPaymentsToVoid method in the CTPRequestHandler class is a private method that loads successful payments that need to be voided. It takes a list of payment references and a list of receipt GUIDs as input.
+Here's a step-by-step breakdown of the method:
+Processing Receipt GUIDs:
+The method iterates over each guid in receiptGuids.
+For each guid, it checks if the guid is not null or empty.
+Retrieving Payments:
+If the guid is not null or empty, it retrieves the corresponding payments from the database using the selPayments stored procedure. The stored procedure is called with the BillerID from _biller, the guid, and an Approved parameter set to 1, indicating that it should only retrieve approved payments. The result is stored in a DataSet object payments.
+Processing Payments:
+The method then iterates over each payment in payments.Tables.
+For each payment, it iterates over each row in payment.Rows.
+Adding Payment References:
+For each row, it checks if paymentReferences does not already contain the PaymentReference from the row.
+If paymentReferences does not contain the PaymentReference, it adds the PaymentReference to paymentReferences.
+This method is used to load the payment references of successful payments that need to be voided. It does this by retrieving the payments for each receipt GUID and adding the payment reference of each payment to paymentReferences if it's not already present.
+VoidProcessedAchTransactions 
+The VoidProcessedAchTransactions method in the CTPRequestHandler class is a private method that voids processed ACH transactions. It takes a list of payment references as input.
+Here's a step-by-step breakdown of the method:
+Initialization
+:
+An IEmailSender object emailSender is created. This object is used to send emails.
+Processing Payment References:
+The method iterates over each paymentReference in paymentReferences.
+For each paymentReference, it creates a new CloudTransactionProcessingSoapClient object client for making SOAP requests.
+It creates a new IC_ACH_Void_Request object voidRequest with the BillerID from _biller and the paymentReference.
+It makes a SOAP request to IC_ACH_Void with securityGUID and voidRequest, and stores the response in voidResponse.
+Handling the Response:
+If the ApprovalIndicator in voidResponse is False, it means the void request was not approved. In this case, it sends an email to notify about the void failure. The email is sent to "
+tcordova@invoicecloud.com
+" and "
+sconcannon@invoicecloud.com
+" from "
+No-reply@invoicecloud.com
+" with the subject "ACH-Void-Failure" and the paymentReference in the body.
+This method is responsible for voiding ACH transactions. It does this by making SOAP requests to IC_ACH_Void for each payment reference. If a void request is not approved, it sends an email to notify about the void failure.
+VoidProcessedCreditCardTransaction 
+The VoidProcessedCreditCardTransaction method in the CTPRequestHandler class is a private method that voids processed credit card transactions. It takes a list of payment references as input.
+Here's a step-by-step breakdown of the method:
+Initialization
+:
+An IEmailSender object emailSender is created. This object is used to send emails.
+Processing Payment References:
+The method iterates over each paymentReference in paymentReferences.
+For each paymentReference, it creates a new CloudTransactionProcessingSoapClient object client for making SOAP requests.
+It creates a new IC_CNP_Void_Request object voidRequest with the BillerID from _biller and the paymentReference.
+It makes a SOAP request to IC_CNP_Void with securityGUID and voidRequest, and stores the response in voidResponse.
+Handling the Response:
+If the ApprovalIndicator in voidResponse is False, it means the void request was not approved. In this case, it sends an email to notify about the void failure. The email is sent to "
+tcordova@invoicecloud.com
+" and "
+sconcannon@invoicecloud.com
+" from "
+No-reply@invoicecloud.com
+" with the subject "CC-Void-Failure" and the paymentReference in the body.
+This method is responsible for voiding credit card transactions. It does this by making SOAP requests to IC_CNP_Void for each payment reference. If a void request is not approved, it sends an email to notify about the void failure.
+Charge Batch Processing
+The GetChargeBatches method in the ChargeBatchBuilder class is a public function that takes in a list of InvoicePayment objects, a paymentTypeID integer, and optionally a CreditCard type and a cardnumber string. It returns a list of ChargeBatch objects.
+Here's a high-level overview of what this function might do based on its signature and the context provided:
+Input Parameters:
+invoicePayments
+: This is a list of InvoicePayment objects. Each InvoicePayment object represents a payment made on an invoice. It includes properties like InvoiceGUID, PaymentAmount, CreditCard, and InvoiceID.
+paymentTypeID
+: This is an integer that represents a specific type of payment (e.g., credit card, debit card, cash, etc.).
+creditCardType: This is an optional parameter that defaults to CreditCard.None. If provided, it represents the type of credit card used for the payments (e.g., Visa, MasterCard, etc.).
+cardnumber: This is an optional parameter that defaults to an empty string. If provided, it represents the card number of the credit card used for the payments.
+Processing
+:
+The function likely processes the list of InvoicePayment objects and groups them into batches based on some criteria. The criteria could be related to the paymentTypeID, creditCardType, and cardnumber.
+Each ChargeBatch is a list of InvoiceSale objects. An InvoiceSale object represents a payment made on an invoice, similar to InvoicePayment, but it also includes additional information like ConvenienceFeeAmount and TotalAmount.
+The ChargeBatch class also includes methods for validating the total amount of the batch against a maximum allowed amount (MaxAmountValidation), which could be different for credit card sales and ACH sales.
+Overpayment and Partial Payment Scenarios:
+Overpayment
+: If a payment amount in an InvoicePayment object is greater than the invoice amount, it could be considered an overpayment. The function BillerAllowsOverPayments queries the database to check if the biller allows overpayments for the specified invoice type.
+Partial Payment
+: If a payment amount in an InvoicePayment object is less than the invoice amount, it could be considered a partial payment. 
+Processing Swipe Data
+The KISSwipeCardReader class in the KISSwipeCardReader.vb file is a class that implements the ISwipeCardReader interface. This class is used to handle card swipe data, specifically for the KIS (Kiosk Information System) card reader.
+The class has several private fields (_CardNumber, _ExpMonth, _ExpYear, _CardholderName) and corresponding public read-only properties (CardNumber, ExpMonth, ExpYear, CardholderName). These properties represent the card number, expiration month, expiration year, and cardholder name of a swiped card.
+The ImportSwipedData method is the main method of this class. It takes a string swipedData as a parameter, which represents the raw data from a card swipe. This method processes the swiped data, decrypts it, and extracts the card information.
+Here's a step-by-step breakdown of what the ImportSwipedData method does:
+Logs the start of the data import process using the Serilog library.
+Creates a KISEncryptedSwipeInformation object from the raw swiped data. This object represents the encrypted information from a card swipe.
+Logs the device serial number of the card reader.
+Creates a MagensaDecryptCall object with the encrypted swipe information and calls its ExecuteRequest method to decrypt the swipe information. The decrypted information is stored in a CardReaderTrackInformation object.
+If an exception occurs during this process, it logs the error using the Serilog and NewRelic libraries and continues execution.
+If the decryption was successful, it sets the private fields with the decrypted card information and returns True. If the decryption was not successful, it logs an error and returns False.
+The KISEncryptedSwipeInformation inner class represents the encrypted information from a card swipe. It has several properties that represent different parts of the encrypted swipe information, such as the encrypted track data, MagnePrint data, device serial number, and key serial number. Its constructor takes a string rawData as a parameter, splits it into its components, and assigns them to the properties. If an exception occurs during this process, it logs the error and rethrows the exception.
+Transaction Utility Functions
+GenerateReference
+:
+This function is used to generate a unique reference string. The reference string is composed of 4 letters and 4 numbers, alternately arranged. The letters are randomly selected from the English alphabet, excluding "I", "O", "B", "Z", "S", "G". The numbers are randomly selected from 1 to 9.
+Here's a step-by-step breakdown:
+A Random object AUTORAND is created to generate random numbers.
+Two empty strings LETTERS and NUMBERS are created to hold the randomly generated letters and numbers respectively.
+A loop is used to generate 4 random letters. The Chr function is used to convert the ASCII value to a character. The ASCII values 65 to 91 correspond to the uppercase English alphabet (A-Z). If the generated letter is "I", "O", "B", "Z", "S", "G", it is skipped.
+Another loop is used to generate 4 random numbers from 1 to 9.
+The final reference string RANDOMSTR is created by alternately appending the letters and numbers.
+If an exception occurs during this process, it is caught and logged using NewRelic and Serilog.
+GenerateApprovalCode
+:
+This function is used to generate an approval code composed of 6 random numbers from 1 to 9.
+Here's a step-by-step breakdown:
+A Random object AUTORAND is created to generate random numbers.
+An empty string RANDOMSTR is created to hold the randomly generated numbers.
+A loop is used to generate 6 random numbers from 1 to 9 and append them to RANDOMSTR.
+If an exception occurs during this process, it is caught and logged using NewRelic and Serilog.
+ URL:/spaces/ED/pages/2692907029/Kiosk+API

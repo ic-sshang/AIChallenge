@@ -1,0 +1,151 @@
+Summary
+Document status
+TEMPLATE
+Company
+Industry/Vertical
+Website
+Software + Version
+Solutions Engineer
+ 
+Integration Manager
+Introduction:
+Coaching Objective: Outline the main goals of the coaching session and explain its structure and what the Partner/CIS can expect.
+Understand their needs and look over existing APIs and documentation.
+Discuss any challenges or issues the Partner/CIS is having with our APIs.
+Most common web services: Cloud Payment V2, Cloud SSOConnect, and AgentConnect.
+General Questions:
+General Questions
+ Notes
+Web Services
+  
+Response/Decision
+What are your primary goals for using InvoiceCloud API?
+Utilized to identify which product requires coaching. 
+CloudPayment V2
+SSOConnect
+AgentConnect
+What features or functionalities are most important to you in an API? 
+We can demo the IC functionality that has been requested.
+Do you have any existing systems or tools that need to integrate with InvoiceCloud API?
+Additional Notes
+ 
+CloudPaymentV2:
+The CloudPayment V2 API offers a comprehensive suite of tools for integrating secure and efficient payment processing into your applications. 
+This API based payment integration allows 3rd party applications to utilize a “Pay Now“ button within their application to redirect the user to in InvoiceCloud Payment Route where they can enter all the payment information and submit the payment. Once the payment has been approved, the IC payment Route will display a printable receipt and provide a method to return the user back to the calling application. 
+Use this API to generate a URL that allows direct access to the payment route.
+A URL will expire 15 minutes after it is generated. It can be reused before that expiration. After a 15-minute expiration, a new URL will need to be generated.
+All POS transactions utilizing an EMV device must be integrated with CloudPaymentV2.
+CPV2
+General Questions
+ Notes
+  
+Response/Decision
+Date
+Would you like to make payments on an existing or new invoice/account?
+Multiple invoices can be passed.
+Do you require minimum payment?
+If yes, inform CIS/Partner that partial payment should be set to true.
+Do you need a Card Reader(EMV and/or Swipe)?
+Would you like InvoiceCloud to provide a postback URL for posting transaction results?
+Additional Notes
+  
+Cloud SSOConnect:
+Cloud SSO Connect web service simplifies the integration of Single Sign-On capabilities, improving user experience and security. 
+This feature allows Partners and/or Billers to use InvoiceCloud as the authentication provider for their customers to create a seamless experience for the customer between Partner/Biller and Invoice Cloud systems.
+There is no web service for unlinked accounts. However, if one of the linked accounts is unregistered, it will automatically become an unlinked account.
+A Remote Authentication token will expire 15 minutes after it is generated. It can be reused before that expiration. After a 15-minute expiration, a new token will need to be requested by calling the Refresh Authentication Token web service.
+Cloud SSO Connect: 
+General Questions
+ Notes
+  
+Response/Decision
+Date
+Do you manage customer information?
+Who stores user data?
+ 
+If not, the InvoiceCloud Cloud SSOConnection workflow
+Assume all Biller customers exist within the InvoiceCloud. (Otherwise, create a new account with a remote authentication token)
+Partner/Biller makes a web service call to the RemoteAuthentication web method.
+The customer’s email address and password are passed to this web method.
+Invoice Cloud will authenticate the credentials and return a RemoteAuthenticationToken.
+This token is a pointer to the unique session opened up to access the Invoice Cloud systems for that Customer.
+When the Partner/Biller is ready to redirect the Customer to Invoice Cloud,
+they will redirect the Customer using this pre-defined URL.
+Descriptions of ViewMode and RedirectID are described further down on this page.
+The Customer can navigate within the Invoice Cloud Customer Portal as needed.
+   If yes, what does your workflow look like?
+To verify how the partner/biller platform works with their customer in a demo session
+SE outlines the various scenarios associated with different registration processes.
+1)The user can log in
+2)The user does not exist in partner/biller system
+3)User does not exist in Invoice Cloud
+4) The user forgets to log in credentials, and the user needs to reset the password
+Do you use the Multi-User function?
+Additional Notes
+  
+SAML SSO:
+SAML stands for Security Assertion Markup Language. It is an XML-based open standard for transferring identity data between two parties: an identity provider (IdP) and a service provider (SP). It is an alternative to InvoiceCloud’s Cloud SSO Connect product. This single sign-on (SSO) login standard has significant advantages over logging in using a username/password:
+No need to type in credentials
+No need to remember and renew passwords
+No weak passwords
+Requirements:
+The Biller/Identity Provider must provide claims and claim names must be configured exactly in CRM.
+Login Type IDs must be provided to the Biller to set up roles
+Limitations:
+iFrames functionality with SAML SSO is currently only available for integrations that use Okta as the Identity Provider. For some potential solutions for clients using Okta:
+note
+SAML SSO Guide for External Use: 
+SAML SSO Developer Guide.docx
+
+
+SAML SSO Guide for External Use: 
+SAML SSO Developer Guide.docx
+
+
+SAML SSO: 
+General Questions
+ Notes
+  
+Response/Decision
+Date
+Explain the difference between Cloud SSOConnect and SAML SSO.
+SAML is a technical standard for enabling SSO, while SSO is the overall concept of logging in once to access multiple services.
+InvoiceCloud must have an account/invoice/policy number in their database before any attempt to SSO. As a result, it must be a Service Provider initiated flow as below:
+What is your identity provider? 
+What are the claim attributes you will be using?
+What is your identity Provider Entity ID?
+What is your Metadata XML URL?
+What is your Single Sign-On Service URL?
+Additional Notes
+AgentConnect:
+AgentConnect allows a biller to use an API call with Invoice Cloud that allows an Agent/CSR user to log in to the Customer Portal 
+on behalf of a specific user 
+to perform actions such as making payments and changing settings such as Autopay or Paperless. It also has built-in auditing features where any actions the user performs are logged and viewable in the biller portal.
+Allows Agent/CSR to 
+log in as a specific user
+ for a specified user and/or account number.
+Accurately performs 
+audit logging
+ for any actions the Agent/CSR performs on behalf of the customer.
+AgentConnect introduced the ability to send an SMS or Email on-demand from the Customer Portal or API that contains a payment link for an invoice.
+Flexible data requirements
+Email Address optional - used only for matching purposes and will 
+not
+ update the account record if there is a mismatch found. This also includes whether a different email address is entered into the payment route.
+Filter payments in the Biller Portal made via AgentConnect.
+More secure than CloudCSRConnect API.
+AgentConnect: 
+General Questions
+ Notes
+  
+Response/Decision
+Date
+How do CSRs/Clerks take payments (phone or in person)?
+Are card swipers used to process a transaction?
+Do you need to create an Account/Invoice on the fly?
+Can CSRs/clerks process payments by using a customer's stored payment method?
+Do CSRs/clerks assist customers with self-service activities like Paperless / Autopay / Pay by Text?
+Additional Notes
+ 
+﻿
+ URL:/spaces/IM/pages/3800465409/Template+API+Coaching+Discovery

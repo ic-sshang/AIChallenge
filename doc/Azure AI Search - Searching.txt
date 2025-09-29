@@ -1,0 +1,73 @@
+dotnet add package Azure.Search.Documents
+dotnet add package Azure.AI.OpenAI
+Create a Index Model
+The index model should match your index fields and is used to provide strongly typed search results.
+c#
+public class MyIndexedDocument
+{
+  public string id {get;set;}
+  public string title {get;set;}
+  public string content {get;set;}
+  public float[] contentVector {get;set;}
+}
+ 
+Create the Search Client
+You will need the Azure AI Search instance and the target index name.
+c#
+
+string endpoint = "<your-search-endpoint>";
+string indexName = "<your-index-name>";
+ar credential = new DefaultAzureCredential();
+var client = new SearchClient(new Uri(endpoint), indexName, credential);
+
+Define the Keyword Query
+c#
+string keywordQuery = "invoice processing optimization";
+
+ 
+Define the Search Type
+You can search your index using a simple keyword search or a sematic embedding search, if your index supports a vector/embedding field.
+Simple Keyword Search
+c#
+
+var options = new SearchOptions
+{
+    Size = 5,
+    Select = { "title", "content" } // fields to return
+};
+
+Hybrid Index Search
+Create the query embedding used to search the vectors stored in the index.   You will need to use the same Azure Open AI embedding model that was used when creating the index’s documents.  IN this example that is the index field 
+contentVector
+.
+float[] embeddingVector = await GenerateEmbeddingAsync(keywordQuery);
+Create 
+SearchOptions
+ that support semantic searching using the query vector and the index’s sematic configuration (this is defined in the index configuration in Azure AI Search).
+c#
+
+var searchOptions = new SearchOptions
+{
+    Size = 10,
+    QueryType = SearchQueryType.Semantic,
+    SemanticConfigurationName = "default", // must match your index config
+    VectorSearch = new()
+    {
+        Queries =
+        {
+            new VectorQuery
+            {
+                KNearestNeighborsCount = 10,
+                Fields = { "contentVector" }, // your vector field
+                Values = embeddingVector // float[] from your embedding model
+            }
+        }
+    },
+    Select = { "title", "content", "score" }
+};
+Query the Index for Results
+ 
+c#
+var response = await client.SearchAsync<MyIndexedDocument>(keywordQuery, searchOptions);
+var results = response.Value.GetResults();
+ URL:/spaces/EA/pages/4625268751/Azure+AI+Search+-+Searching

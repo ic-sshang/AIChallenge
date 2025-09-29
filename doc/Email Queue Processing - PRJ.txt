@@ -1,0 +1,80 @@
+Area to brainstorm and discuss solutions for rearchitecting Email Queue Processing. 
+09/12/24 Discussion
+Goals
+separate SMS from Email – today, email notifications are responsible for inserting the SMS notification (even if no email is going to be sent!); this is unintuitive and also means that EQP issues can result in dupes and other SMS issues
+overall reduce delivery times
+“consolidate” EmailQueueProcess
+ing
+ and EmailQueueProcess
+or
+ while separating the core logic into a business class / app / appropriate solutions
+full testability in lower environment (e.g., test emails can’t be sent/tested in devtest!)
+nice to have: dummy inbox and stress testing
+maybe a mailgun sandbox / dev environment, would be nice to have a way to query dummy data from mailgun
+Technical Thoughts
+consider the requirements for sending an email:
+who will receive the email?
+what data is needed to create the email content/body?
+we need API / contract / interface for required data (e.g. template markers, fields, db columns, etc.)
+today the “base” data for scheduled payment reminders returns almost 400 db columns with no validation
+was the content created correctly?
+validate the HTML body (via unit tests – today it’s either manual or in the mailgun portal)
+https://github.com/VerifyTests/Verify.AngleSharp
+ 
+change the order of operations for sending emails
+validate recipient emails 
+before
+ doing any RTDR/db calls etc.
+RTDR before prepping email to send – perform at invoice level where applicable
+how we send emails
+on-demand, e.g. receipts and other “triggered” emails
+batch, e.g. notifications/reminders
+in either case, some application will use the service bus to queue the message(s) and then have an AZ function / k8s subscribed to each queue (could also be by biller + queue)
+instead of MyIIS inserting into the db email queue or calling AzureQueueStorage, it will send a message to the service bus
+instead of EQProcessing pulling from the db queue (
+selEmailQueue
+) and processing each row, they’ll be sent to the service bus
+use mailgun API instead of SMTP
+better support for bulk/mass emails: 
+https://documentation.mailgun.com/docs/mailgun/user-manual/sending-messages/#batch-sending
+ 
+mailgun templates
+Flow #1 
+processor can cache biller options/settings 
+ Flow #2
+controller = 
+https://keda.sh/
+ 
+Generic Event Based Design
+2
+0
+1
+0
+3559686186
+3559620710
+Untitled Diagram-1726161293778.drawio
+1
+3
+3
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1726161293778.drawio
+0
+990.5
+296.5
+Event Based Design Applied To Templated Email Processing 
+2
+0
+1
+0
+3559686186
+3558637756
+Untitled Diagram-1726161293778.drawio
+1
+4
+4
+https://invoicecloud.atlassian.net/wiki
+1726162228198-Untitled Diagram-1726161293778.drawio
+0
+1171
+440
+ URL:/spaces/EA/pages/3559686186/Email+Queue+Processing+-+PRJ

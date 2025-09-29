@@ -1,0 +1,12 @@
+Session Authentication
+Status
+Accepted
+Context
+A legacy application will have a existing session for a authenticated payer user.  The payer user should not have to authenticate again in order to use the new 1.5 UI.
+Should MyIIS implement a API in which a server side request to the 1.5 OTP token endpoint is done to exchange the existing session’s biller GUID and user GUID for a bearer token or should MyIIS sign the existing session’s biller GUID and user GUID with an HMAC and the 1.5 UI will handle calling the OTP token endpoint client side?
+Decision
+MyIIS will expose a RESTful API that will generate and sign the OTP payer token payload using data stored in the existing session.
+Consequences
+If MyIIS signs the biller GUID and user GUID then there is no need for a server side request to OTP.  This minimizes the HTTP dependencies for MyIIS.  The SPA will now have this concern.  This means the SPA will call MyIIS to get the payer token payload and then call the OTP to get the token.  Both the biller GUID and the payer login GUID will be disclosed to the browser.  However, the OTP will require a valid HMAC in order to issue the token.  Assumptions, the biller GUID and payer login GUID are not secrets.
+If MyIIS calls the OTP token endpoint server side.  MyIIS will need to have configurations and HTTP network dependencies setup properly.  The SPA will call MyIIS to get the token.  MyIIS will then call the OTP to get the token and relay the token response.  The biller GUID and payer login GUID are not disclosed to the web browser.
+ URL:/spaces/EN/pages/2709946369/1.5+Session+Authentication+ADR

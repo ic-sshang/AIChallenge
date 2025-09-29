@@ -1,0 +1,135 @@
+Lazy loading in .NET is a design pattern used to defer the initialization of an object until it is actually needed. This can improve performance and resource management in your application. Here are some scenarios where lazy loading is particularly beneficial:
+1. 
+Expensive Object Creation
+Use lazy loading when the creation of an object is resource-intensive, such as when it involves complex computations or database queries. By deferring the creation until the object is needed, you can avoid unnecessary overhead.
+2. 
+Improving Performance
+If your application loads many objects but only a few are used at a time, lazy loading can help improve performance by loading objects only when they are accessed.
+3. 
+Reducing Memory Usage
+Lazy loading can help reduce memory usage by delaying the allocation of memory for objects that might not be used during the application's lifetime.
+4. 
+Handling Large Data Sets
+When dealing with large data sets, such as collections of entities in Entity Framework, lazy loading can prevent loading all related data at once, which can be inefficient and slow.
+5. 
+Conditional Initialization
+If an object is only needed under certain conditions, lazy loading ensures that it is only created when those conditions are met, thus optimizing resource usage.
+Use Cases
+Lazy loading is used to help defer significant work from constructors.  Errors in constructors can be problematic in identifying errors during dependency injection.   Deferring the work allows for errors to surface inline when the component is being used.
+Object Creation
+.NET exposes the 
+Lazy<T>
+ type to allow for the lazy creation of objects.
+This type is very simple to use but comes with some caveats; notably, it is a blocking data structure and not appropriate for asynchronous work. However, this means that 
+Lazy<T>
+ is thread-safe out of the box and is great for initialization of large or complicated objects that are not needed immediately at runtime.
+Examples
+Lazy Creation of Objects - Synchronous
+c#
+// Classic singleton pattern with Lazy<T> implementation.
+public sealed class MyLazySingleton {
+    // Private default constructor
+    private MyLazySingleton() {}
+    
+    // The Lazy<T> constructor accepts a delegate factory for creating the concrete type.
+    private static readonly Lazy<MyLazySingleton> _instance = new Lazy<MyLazySingleton>(() => new MyLazySingleton());
+    
+    // Access the encapsulated Lazy<T> value via public member.
+    public MyLazySingleton Instance  => this._instance.Value;
+    
+    public void DoStuff() {
+       // Singleton behavior.
+    }
+}
+
+internal class Example {
+   
+    // Inject the dependency - it hasn't been created yet!
+    private readonly MyLazySingleton _myLazy;
+    public Example(MyLazySingleton myLazy) {
+        this._myLazy = myLazy;
+    }
+
+    public void MyMethod() {
+        // Object gets created here.
+        var singleton = this._myLazy.Instance;
+        
+        // Do stuff here.
+        singleton.DoStuff();
+    }
+}
+For asynchronous work, 
+Stephen Cleary
+ (by way of 
+Stephen Toub
+) recommends the implementation of an 
+AsyncLazy<T>
+ class to wrap 
+Task<T>
+ - 
+see here
+AsyncLazy<T> Implementation
+c#
+/// <summary>
+/// Provides support for asynchronous lazy initialization. This type is fully threadsafe.
+/// </summary>
+/// <typeparam name="T">The type of object that is being asynchronously initialized.</typeparam>
+public sealed class AsyncLazy<T> {
+    /// <summary>
+    /// The underlying lazy task.
+    /// </summary>
+    private readonly Lazy<Task<T>> instance;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AsyncLazy&lt;T&gt;"/> class.
+    /// </summary>
+    /// <param name="factory">The delegate that is invoked on a background thread to produce the value when it is needed.</param>
+    public AsyncLazy(Func<T> factory) {
+        instance = new Lazy<Task<T>>(() => Task.Run(factory));
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AsyncLazy&lt;T&gt;"/> class.
+    /// </summary>
+    /// <param name="factory">The asynchronous delegate that is invoked on a background thread to produce the value when it is needed.</param>
+    public AsyncLazy(Func<Task<T>> factory) {
+        instance = new Lazy<Task<T>>(() => Task.Run(factory));
+    }
+
+    /// <summary>
+    /// Asynchronous infrastructure support. This method permits instances of <see cref="AsyncLazy&lt;T&gt;"/> to be await'ed.
+    /// </summary>
+    public TaskAwaiter<T> GetAwaiter() {
+        return instance.Value.GetAwaiter();
+    }
+
+    /// <summary>
+    /// Starts the asynchronous initialization, if it has not already started.
+    /// </summary>
+    public void Start() {
+        var unused = instance.Value;
+    }
+}
+Lazy Creation of Objects - Asynchronous
+Assuming 
+AsyncLazy<T>
+ is available - lazy loading can be used in an asynchronous context without blocking.
+c#
+internal class Example {
+   
+    private readonly AsyncLazy<MyLazyType>_myLazy = new AsyncLazy<MyLazyType>(() => new MyLazyType());
+    
+    public async ValueTask MyMethod() {
+        // Object gets created here.
+        var singleton = await this._myLazy;
+        
+        // Do stuff here.
+        await singleton.DoStuffAsync();
+    }
+}
+Resources & Further Reading
+Lazy Initialization - .NET Framework | Microsoft Learn
+Lazy<T> Source - GitHub
+Lazy Loading of Related Data - EF Core | Microsoft Learn
+Asynchronous Lazy Initialization
+ URL:/spaces/EA/pages/3376087418/Lazy+Loading

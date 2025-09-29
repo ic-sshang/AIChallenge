@@ -1,0 +1,45 @@
+This is similar to invoice file processing. First, you need to spot the actual file, then trace the converted BAF file, and finally how this is processed to make it to the Invoice and Adjustment table.
+Look for the spec first - 
+https://www.invoicecloud.com/Documentation/FileSpecifications/AdjustmentFile.aspx?path=Specifications%2FAdjustment+File
+You can get the file from the Biller Portal - the file of interest is 3042_20230123_currentbalance.pierre.csv which is converted it means when you download you are going to get the file in BAF
+Get the format id of the file - the easy way is to look at perflogging database even though there might be better ways.
+sql
+SELECT TOP 10 * FROM StratusFileProcessor WHERE BillerID = 3042  ORDER BY 1 DESC -- Filename BAF_3042_255_20230123154644_10.0.6.7_20230123_currentbalance.pierre.190ee8af-8b9b-4c08-8b1f-5ce3ccdf9fdc.csv
+The file format type is 255. Look for the code in stratus to locate the logic that is applied in the conversion.
+https://invoicecloud.visualstudio.com/Src/_git/StratusWebServices?path=%2FStratusWebServices%2FfrmAdjustmentUpload.aspx.vb
+Look for Case 255 
+vbnet
+            Case 255 'IF_ValleyView - Utility
+                myBaseFile = New Integrations.Billers.ValleyView.ValleyView_Adjustments With {.InvoiceType = clsIntegratorTools.InvoiceTypes.Utility}
+You can drill down deeper to find the actual implementations 
+https://invoicecloud.visualstudio.com/Src/_git/StratusWebServices?path=%2FIC.Stratus.Framework%2FIntegrations%2FBillers%2FValleyView%2FValleyView_Adjustments.vb
+Now that the logic has been validated.
+The Actual import job of consuming the Adjustment file and making it to the respective tables happens via DB functions
+https://invoicecloud.visualstudio.com/Database_Src/_git/dbAzureMaster?path=/dbAzureMaster/dbo/Stored Procedures/ImportAdjustmentFile_V2.sql
+The final DB table entries are in the below tables
+sql
+select top 3 * from Adjustments where InvoiceID = 44000
+select * from tblAdjustmentType
+select * from Files_Adjustments where Files_AdjustmentID=13
+select top 3 * from ImportRealTime where FileGuid='647b808e-d414-47e3-a2f0-13397fe8315d' and Column1 like '%4-800668-01%'
+select * from invoices where InvoiceNumber='UB-4-800668-01-01172023'
+https://app.getguru.com/card/eikGMabi/Biller-Adjustment-File-BAF
+https://app.getguru.com/card/7cdgnabc/Balance-Differential-versus-Fixed-Amount
+Additional Notes:
+Balance Differentials in Adjustment files that equal the balance due will not create an adjustment record. Below is an example:
+Adjustment amount in Adjustment File = 198.00
+311~AR|313~10322399|314~198|316~2|343~2/28/2023|354~2
+BalanceDue in Database =  198.00
+No adjustment in Database for 198.00
+It is always a good idea to confirm if this continues to be expected behavior. To verify, use the following steps and queries below to find the record in the ImportRealTime table
+First find the fileGUID for the file.
+One way to find this is by first obtaining the field "Files_adjustmentID" under a known adjustment that came from the same file.
+
+select * from adjustments invoiceid where = ******                      --use the field "files_adjustmentID" for the next step
+
+select * from files_adjustments where files_adjustmentID = *********    --use the filesadjustmentID to then use the fileGUID
+
+select * from importrealtime where fileGUID = '*******'                ---use query below to narrow down search
+select * from importrealtime where fileGUID = '*******' and column1 like '%*******%'  ---insert the accountnumber in the column with the adjustment record.
+The final screenshot below confirms the adjustment was imported fine and the value for the adjustment was the same as the balance due.
+ URL:/spaces/DS/pages/2576515077/Adjustment+File

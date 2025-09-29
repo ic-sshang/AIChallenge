@@ -1,0 +1,34 @@
+Overview
+The below diagram illustrates the primary network components used for Web traffic.
+2
+0
+1
+0
+3567091735
+3567419413
+Untitled Diagram-1726499407213.drawio
+1
+4
+4
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1726499407213.drawio
+0
+401
+801
+GoDaddy:  
+Translates human-readable domain names into IP addresses, hosts the nameservers that are authoritative for our domains.
+Cloudflare Reverse Proxy
+: Acts as an intermediary between users and web servers, providing additional layers of security (Web Application Firewall) and performance optimizations.
+Palo Alto Firewall: 
+Used to secure and route internal traffic
+Azure App Gateway:
+ Used to route HTTP traffic at a domain and path level
+Kong API Gateway: 
+Used to manage API HTTP traffic (routing, authentication, transformations, etc…)
+Azure VM Web Server:  
+Hosts IIS web applications
+k8s Cluster: 
+Hosts
+ 
+containerized web workloads
+ URL:/spaces/ED/pages/3568304140/Web+Network+Components

@@ -1,0 +1,30 @@
+Support for .NET Framework follows the Lifecycle Policy of the parent OS.  As of this writing that is 
+Windows Server 2016
+.
+Do not use .Net Framework 
+4.8.1
+ it is not installable on our production servers.  This version is only supported on Windows 2022.
+Purpose
+This policy outlines the accepted versions of .NET Framework for development and production environments to ensure stability, security, and supportability.
+Scope
+This policy applies to all development teams and projects utilizing .NET Framework within the organization.
+Accepted Versions
+The current accepted version of .NET Framework is 
+4.8
+.
+Only
+ 4.7.2+
+ versions of .NET Framework should be used for production environments.
+Supported Versions
+4.7.2+
+ versions are supported on our production servers.
+All new projects must use the latest 
+4.8
+ version of .NET Framework.
+Existing projects should be upgraded to the latest 
+4.8
+ version as part of their regular maintenance cycle.
+Maintenance and Upgrades
+Regular reviews of .NET Framework versions in use will be conducted to ensure compliance with this policy.
+Maintenance plans for upgrading to newer versions should be documented as part of a .Net Framework project lifecycle.
+ URL:/spaces/ED/pages/3760422914/.Net+Framework+Version+Policy

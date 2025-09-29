@@ -1,0 +1,33 @@
+The fnICG_Aging azure function will look for non funded payments which are four days old and will log it in the tblFCPDailyTasks table.
+This azure function will not send any email or upload files to the azure blob storage.
+Stored Procedure
+Test DB
+Description
+[selBillerByTerminals]
+ICG_Test
+Returns the billerIds of payments which are of from the subscriber InvoiceCloud over a period of one day and which has convenience fee.
+Tables Involved : Payments, Terminals
+insFCPTaskLog
+ICG_AUDIT
+ 
+Test data can be created/seeded by running the inPayment stored procedure with SubscriberId as 1 (Invoice Cloud) and some ConvenienceFee.
+Eg. 
+sql
+DECLARE	@return_value int
+
+EXEC	@return_value = [dbo].[insPayment]
+		@SubscriberID = 2,		
+		@TerminalID = 798,
+		@PaymentAmount = 65,
+		@ConvenienceFee =  4.5,
+		@SalesTax = 1.2,
+		@TransactionTypeId = 1,
+		@PaymentTypeId = 4,
+		@PaymentReference = 'b111PSNOEtest03',
+		@PaymentMessage = 'payment for testing b111 PSN OTH ERR03',
+		@InvoiceNumber = 'INV-B111-PSN-IF',
+		@CustomerName = 'TEST',
+		@EmailAddress = 'x-test@invoicecloud.com'		
+
+DECLARE	@return_value int
+ URL:/spaces/ED/pages/2625699872/fnICG_ICTransactionRecon

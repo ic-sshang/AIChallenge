@@ -1,0 +1,85 @@
+Scenarios where this occurs
+Scenario
+Trigger
+Two linked SPs, both credit card, 
+different
+ tokens
+Hard‑coded paymentMethod_DT built from 
+groupedScheduledPayments.First
+CC + ACH in same LinkGUID
+Same cause; CC request reused for ACH invoice → wrong account / decline
+Two ACH accounts in same LinkGUID
+Wrong bank GUID applied to second invoice
+One SP invalid (e.g., expired card) forces fee recalculation (
+SubmitterProgram=True
+)
+We recalc fees correctly but still send wrong payment info to remaining SPs
+Proposed fix (NOT ROOT CAUSE)
+Repo: ScheduledPaymentProcessing, Module1.vb
+vbnet
+' ProcessLinkedScheduledPayments line 700
+' BEFORE – one DataTable for whole group
+Dim paymentMethod_DT As DataTable = _
+        clsUtilities.GetPaymentMethodDataTable(groupedScheduledPayments.First, appLog)
+
+For Each scheduledPayment As ScheduledPaymentDetail In groupedScheduledPayments
+    …
+Next
+vbnet
+' AFTER – retrieve per SP, cache on FKID
+Dim paymentMethodDict As New Dictionary(Of Integer, DataTable)
+
+For Each scheduledPayment As ScheduledPaymentDetail In groupedScheduledPayments
+    …
+    Dim paymentMethod_DT As DataTable
+    If Not paymentMethodDict.TryGetValue(scheduledPayment.FKID, paymentMethod_DT) Then
+        paymentMethod_DT = clsUtilities.GetPaymentMethodDataTable(scheduledPayment, appLog)
+        paymentMethodDict.Add(scheduledPayment.FKID, paymentMethod_DT)
+    End If
+    …
+Next
+
+Root cause
+None of the code paths in the  
+FlexPayAutoEnrollScheduleGenerator repo 
+assign a LinkGUID to scheduled payments.
+MYIIS/CloudPaymentReview.aspx.vb
+ 
+does 
+assign LinkGUID to scheduled payments but it correctly re-uses the same payment method/type/login across the same LinkGUID.
+The issue is very likely in
+ BillerPortal/FlexPayment.aspx.vb:
+FlexPayment.aspx.vb - Repos
+vbnet
+(existing code)
+Private Function GetPendingFlexPayment(customerId As Integer, paymentDate As Date) As String
+    Return Database.GET_DATATABLE(
+        "exec mcl.selFlexPayPendingPayments @tmpCustomerID=" & customerId,
+        Me.Biller.BillerID
+    ).
+    AsEnumerable().
+    Where(Function(row) row("PaymentDate") = paymentDate). ' FKID is available yet we only filter by Date
+    Select(Function(row) row("ScheduledPaymentGUID")).
+    FirstOrDefault()
+End Function
+
+Private Function GetFlexPayBundleInvoiceGroupGuid(movedScheduledPayment As List(Of ScheduledPaymentModel), paymentMethod As ServiceFeePaymentMethodInfo) As FlexPayBundle(Of FlexPayBundleInvoiceGroupKey)
+      ...
+      ' FlexPayBundleInvoiceGroupKey and FlexPayBundleKey 
+      ' should have FKID and we should filter by it
+      Dim flexPayBundle As New FlexPayBundle(Of FlexPayBundleInvoiceGroupKey)(
+          If(targetSchedulePayments Is Nothing OrElse targetSchedulePayments.Count = 0, movedScheduledPayment, targetSchedulePayments),
+      Function(key, scheduledPayment) key.PaymentDate = scheduledPayment.PaymentDate AndAlso key.LoginId = movedScheduledPayment.First.LoginId AndAlso
+          key.PaymentTypeId = scheduledPayment.PaymentTypeId,
+      New FlexPayBundleInvoiceGroupKey() With {
+          .LoginId = movedScheduledPayment.First.LoginId,
+          .PaymentDate = Date.Parse(If(dpPaymentDate.SelectedDate Is Nothing, If(FlexPayments.PaymentDate.CompareTo(Date.Now) < 0, Date.Now, FlexPayments.PaymentDate), dpPaymentDate.SelectedDate)),
+          .PaymentTypeId = movedScheduledPayment.First.PaymentTypeId
+      })
+      ...
+End Function
+
+' Same thing in GetFlexPayBundleInvoices, we're not filtering correctly.
+
+In short, FlexPayment.aspx.vb only looks up and groups scheduled payments by their PaymentDate (and PaymentTypeId) without ever filtering on FKID, so any payments on the same date—even from different cards or bank accounts—end up sharing one LinkGuid. This causes unrelated payment methods to be erroneously bundled together and their service fees consolidated.
+ URL:/spaces/PE/pages/4240080903/EBPP-27274+SPIKE+-+FlexPay+Schedules+-+Scheduled+payment+picking+up+incorrect+payment+method+for+linked+payments

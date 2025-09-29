@@ -1,0 +1,878 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+INT-8645
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Document status
+Complete
+Green
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Postman Collection: 
+ 
+Summary: Our network team has set up firewall rules to allow the provided IP addresses access to our service API.
+The simplified workflow is:
+When token is invalid, obtain and cache token from auth service
+Use token to access resource services
+Authorization Service
+The Western National Services API is protected by an OAuth 2 security implementation.  The API implements 
+RFC 6749
+ OAuth 2.0 Authorization Framework.  Western National requires use of the client credentials authorization grant (as defined in section 
+1.3.4 of RFC 6749
+).
+It is strongly recommended to cache tokens and reuse for all requests subsequent requests. A token may become invalid either by being revoked from the server or by reaching expiration. If an invalid token is used to access a resource service, then a 401 HTTP Status will be returned, the client will be required to obtain a new token, and the client will need to repeat the original request with the new token.
+Additional Details 
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Token Retrieval
+Token endpoint
+This is the OAuth 2 specified 
+token endpoint
+. It is used by a client to obtain an access token by presenting an authorization grant and client credentials.
+POST
+Path: /oauth/token
+application/json
+Consumes: application/x-www-form-urlencoded
+Key: grant_type
+Format: alphanumeric
+Required: true
+Values: client_credentials
+Test: 
+Username: 
+svc_ic_domain_tst@wnins.com
+password: 0hvy42h3117bw092
+Auth Service URL: 
+https://api-test.wnins.com/auth
+Auth Service Token URL: 
+https://api-test.wnins.com/auth/oauth/token
+Production: 
+Username: 
+svc_ic_domain_prd@wnins.com
+password: hA57UrB84PaxzbNc
+Auth Service URL: 
+https://api.wnins.com/auth
+Auth Service Token URL: 
+https://api.wnins.com/auth/oauth/token
+200 OK
+{
+  "access_token": "3075f149-61f5-4273-b730-1b43d6bf84bc",
+  "token_type": "Bearer",
+  "expires_in": 48207,
+  "scope": "read"
+}
+
+All requests to the resource services must provide an access token in the Authorization header as a bearer authentication mechanism.
+    Authorization:  Bearer {access-token}
+example:
+    Authorization:  Bearer 8c120b6d-e334-4590-90a3-66c09825f515
+RTDR: Balance Update
+Billing account endpoint
+This service is used by a client to obtain billing account details.
+GET 
+<api>/billing/{billingAccountId}
+Path: /{billingAccountId}
+application/json
+Example:
+ GET 
+https://api-test.wnins.com/billing/BC$1061687030001
+Test: 
+Billing Service URL: 
+https://api-test.wnins.com/billing
+Billing Service Billing Account URL: 
+https://api-test.wnins.com/billing/{billingAccountId}
+Production: 
+Billing Service URL: 
+https://api.wnins.com/billing
+Billing Service Billing Account URL: 
+https://api.wnins.com/billing/{billingAccountId}
+200 OK
+
+{
+  "resourceId": "BC$1061687030001",
+  "source": "BILLING_CENTER",
+  "number": "1061687030001",
+  "type": "BILLING",
+  "policies": [
+    {
+      "resourceId": "PC$1061113191-1",
+      "extension": {
+        "policyTermNumber": "1061113191-1"
+      },
+      "status": "PENDING_CANCELLATION",
+      "effectiveDate": "2023-12-09",
+      "expirationDate": "2024-12-09",
+      "type": "PERSONAL",
+      "number": "1061113191",
+      "lineOfBusiness": "PERSONAL_AUTO",
+      "insuranceCompany": {
+        "type": "INSURANCE_COMPANY",
+        "name": {
+          "name": "Pioneer Specialty Insurance Company"
+        },
+        "number": "5",
+        "naic": "40312"
+      },
+      "agency": {
+        "type": "AGENCY",
+        "code": "156"
+      },
+      "billingInfo": {
+        "referenceNumber": "41061113191000000",
+        "billType": "DIRECT_ACCOUNT",
+        "payPlan": {
+          "code": "BC05",
+          "description": "Direct Monthly"
+        },
+        "currentDueDate": "2024-01-30",
+        "lastPaymentDate": "2024-01-04",
+        "minimumDueAmount": 242.13,
+        "totalDueAmount": 1060.05,
+        "paidInFullDiscountAmount": 88,
+        "paidInFullDiscountAvailable": false,
+        "autoPayEligible": true
+      },
+      "description": "Select Auto"
+    },
+    {
+      "resourceId": "PC$1061113192-1",
+      "extension": {
+        "policyTermNumber": "1061113192-1"
+      },
+      "status": "PENDING_CANCELLATION",
+      "effectiveDate": "2023-12-09",
+      "expirationDate": "2024-12-09",
+      "type": "PERSONAL",
+      "number": "1061113192",
+      "lineOfBusiness": "HOME",
+      "insuranceCompany": {
+        "type": "INSURANCE_COMPANY",
+        "name": {
+          "name": "Western National Mutual Insurance Group"
+        },
+        "number": "1",
+        "naic": "15377"
+      },
+      "agency": {
+        "type": "AGENCY",
+        "code": "156"
+      },
+      "billingInfo": {
+        "referenceNumber": "41061113192000000",
+        "billType": "DIRECT_ACCOUNT",
+        "payPlan": {
+          "code": "BC05",
+          "description": "Direct Monthly"
+        },
+        "currentDueDate": "2024-02-09",
+        "lastPaymentDate": "2024-01-04",
+        "minimumDueAmount": 517.91,
+        "totalDueAmount": 2177.82,
+        "paidInFullDiscountAvailable": false,
+        "autoPayEligible": true
+      },
+      "description": "Signature Home"
+    }
+  ],
+  "billingInfo": {
+    "referenceNumber": "41061687030001000",
+    "billType": "DIRECT_ACCOUNT",
+    "billTo": {
+      "name": {
+        "name": "TJDPIFPAHO DORAN"
+      }
+    },
+    "currentDueDate": "2024-01-30",
+    "lastPaymentDate": "2024-01-04",
+    "lastPaymentAmount": 100,
+    "minimumDueAmount": 760.04,
+    "totalDueAmount": 3242.87,
+    "autoPay": true,
+    "autoPayEligible": true,
+    "accountBill": true,
+    "pastDue": false
+  },
+  "links": []
+}
+BILL and COLL Invoice Logic (Custom4)
+Most recent Invoice Only will be updated when Custom4 = BILL or COLL. 
+billingAccountId: IC Account Number
+billingInfo.totalDueAmount
+use this field to update IC Total Amount Due
+billingInfo.minimumDueAmount
+use this field to update IC Balance Due for BILL and COLL invoices, when source does not equal CHIPS (Custom1).  This field is not used by CHIP sourced invoices.
+use this field to update IC Minimum Due when source equals CHIPS.  Any other sources should be ignored and no further update is needed.
+NOIC Invoice Logic (Custom4)
+All NOIC invoices on an Account will be updated with RTDR.
+Use resourceId = custom5 to find the correct policy.
+  
+The correct balance will be found under the billinginfo for the resourceId provided in custom5.
+policies[].billingInfo.totalDueAmount
+use this field to update IC Total Amount Due 
+policies[].billingInfo.minimumDueAmount
+Use this field to update IC Balance Due when source does not equal CHIPS.  Invoices with other sources do not need balance due updated.
+ 
+use this field to update IC Minimum Due when source equals CHIPS. 
+ 
+Invoices with other sources do not need minimum due updated.
+ 
+Data Pump: Payment
+Posting payment status success
+This service is used by a client to push Invoice Cloud payment details.
+POST
+Path: /payments/status/success
+application/json
+Test: 
+Invoice Cloud Service URL: 
+https://api-test.wnins.com/invoice-cloud
+Invoice Cloud Service Posting Payments Success URL: 
+https://api-test.wnins.com/invoice-cloud/payments/status/success
+Production: 
+Invoice Cloud Service URL: 
+https://api.wnins.com/invoice-cloud
+Invoice Cloud Service Posting Payments Success URL: 
+https://api.wnins.com/invoice-cloud/payments/status/success
+{
+  "billingAccountId": "BC$1234567890001",
+  "paymentType": "CC",
+  "cardType": "VISA",
+  "paymentAmount": "9999999.99",
+"paymentDateTime": "2024-01-01T18:23:20.386+0000",
+  "customerName": "Sample Request",
+  "referenceNumber": "41234567890001000",
+  "paymentSource": "3",
+  "invoiceNumber": "100303498",
+  "paymentGuid": "15c10a2d-ef67-4f66-b489-0bf169c0f734"
+}
+202 – Accepted
+o	successfully received and put in queue for processing
+400 – Bad Request
+o	the request failed due to invalid or missing request parameters
+401 – Unauthorized
+403 – Forbidden
+404 – Not Found
+o	the service is currently unavailable and cannot be found
+405 – Method Not Allowed
+o	only POST is accepted
+415 – Unsupported Media Type
+o	only application/json is supported
+500 – Internal Server Error
+o	unexpected error and should contact support immediately
+502 – Bad Gateway
+o	our service proxy is experiencing an issue
+503 – Service Unavailable
+o	our service proxy is experiencing an issue
+504 – Gateway Timeout
+o	our service proxy is experiencing an issue
+paymentSource: IC Payment Source ID
+billingAccountId: IC Account Number
+paymentType: 
+“ACH”
+“CC”
+cardType:
+NULL value if the payment is being made via ACH/EFT
+“VISA”
+“MASTER_CARD”
+“AMERICAN_EXPRESS”
+“DISCOVER”
+“PAYPAL”
+“VENMO”
+“OTHER” for any payments we cannot specify
+paymentAmount: 
+non-formatted decimal number (no $ or commas)
+two decimal places
+paymentDateTime: 
+yyyy-MM-dd'T'HH:mm:ss.SSSZ
+referenceNumber: custom3
+For Cloudpayv2 payments, sends “Biller Reference” field value instead
+The Value from “Biller Reference” should be stored in custom3 of the invoice created with cpv2 - 
+SA-606
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+paymentGuid: IC Payment GUID
+Data Pump: ACH Reject, Void, Chargeback, Credits
+Posting payment status error
+This service is used by a client to push Invoice Cloud payment returns.
+POST
+Path: /payments/status/error
+application/json
+Test: 
+Invoice Cloud Service URL: 
+https://api-test.wnins.com/invoice-cloud
+Invoice Cloud Service Posting Payments Success URL: 
+https://api-test.wnins.com/invoice-cloud/payments/status/error
+Production: 
+Invoice Cloud Service URL: 
+https://api.wnins.com/invoice-cloud
+Invoice Cloud Service Posting Payments Success URL: 
+https://api.wnins.com/invoice-cloud/payments/status/error
+{
+  "billingAccountId": "BC$1234567890001",
+  "paymentType": "CC",
+  "cardType": "VISA",
+  "paymentAmount": "9999999.99",
+  "paymentDateTime": "2024-01-01T18:23:20.386+0000",
+  "customerName": "Sample Request",
+  "referenceNumber": "41234567890001000",
+  "paymentSource": "3",
+  "invoiceNumber": "100303498",
+  "paymentGuid": "15c10a2d-ef67-4f66-b489-0bf169c0f734"
+  "returnCode": "R01",
+  "returnDateTime": "2024-01-01T18:23:20.386+0000",
+}
+202 – Accepted
+successfully received and put in queue for processing
+400 – Bad Request
+the request failed due to invalid or missing request parameters
+401 – Unauthorized
+403 – Forbidden
+404 – Not Found
+the service is currently unavailable and cannot be found
+405 – Method Not Allowed
+only POST is accepted
+415 – Unsupported Media Type
+only application/json is supported
+500 – Internal Server Error
+unexpected error and should contact support immediately
+502 – Bad Gateway
+our service proxy is experiencing an issue
+503 – Service Unavailable
+our service proxy is experiencing an issue
+504 – Gateway Timeout
+our service proxy is experiencing an issue
+Included Payment Types:
+ACH Rejects: Included as Industry Standard Reject Codes. C Codes will not be included
+Credits/Refunds 
+Chargebacks 
+No negative values should be sent
+returnDateTime: 
+yyyy-MM-dd'T'HH:mm:ss.SSSZ
+paymentDateTime: 
+yyyy-MM-dd'T'HH:mm:ss.SSSZ
+paymentAmount: 
+non-formatted decimal number (no $ or commas)
+two decimal places
+positive value
+billingAccountId: IC Account Number
+cardType:
+NULL value if the payment is being made via ACH/EFT
+“VISA”
+“MASTER_CARD”
+“AMERICAN_EXPRESS”
+“DISCOVER”
+“APPLE_PAY”
+“GOOGLE_PAY”
+“PAYPAL”
+“VENMO”
+paymentSource: IC Payment Source ID
+returnCode = 
+“CHARGEBACK”
+“CREDIT_REFUND”
+“VOID”
+IC Reject Codes
+paymentType: 
+“ACH”
+“CC”
+referenceNumber: custom3
+paymentGuid: IC Payment GUID
+Data Pump: Paperless Enrollment
+Will be included in a Future Phase
+Data Pump: AutoPay Enrollment
+Will be included in a Future Phase
+Bill Presentment
+Will be included in a Future Phase
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: . BIF
+Specification: Invoice Cloud BIF format will be used to upload Invoices. 
+Sample File: 
+ 
+File Transfer Frequency: Daily for every billing cycle
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+File Header
+2
+BillerGuid
+Y
+TRUE
+File Header
+3
+ThirdPartyFileReference
+Y
+FALSE
+File Header
+4
+FileCreationDate
+Y
+TRUE
+File Header
+5
+InvoiceCount
+Y
+TRUE
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+File Header
+7
+RowType
+Y
+TRUE
+Invoice Header
+8
+RecordType
+Y
+TRUE
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Account Balance
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+Minimum Due with Pay In Full
+Invoice Header
+23
+FirstNotifyRequestedDate
+N
+FALSE
+Invoice Header
+24
+SecondNotifyRequestedDate
+Y
+FALSE
+Invoice Header
+25
+ThirdNotifyRequestedDate
+N
+FALSE
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Source System
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Underwriting Company Name
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Reference Number
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Invoice Type
+“BILL”
+”NOIC”
+”COLL”
+bill (BILL), notice of intent to cancel (NOIC), and collections (COLL)
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Policy Identifier
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Minimum Due
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+Invoice Header
+317
+PaymentExpirationDate
+Y
+FALSE
+Invoice Header
+318
+PaymentExpirationMessage
+Y
+FALSE
+Invoice Header
+58
+RowType
+Y
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Record
+61
+Address1
+Y
+FALSE
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Record
+63
+City
+Y
+FALSE
+Customer Record
+64
+State
+Y
+FALSE
+Customer Record
+65
+Zip
+Y
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Customer Record
+70
+RowType
+Y
+TRUE
+Invoice Detail
+Sample Account Information: 
+Billing System
+Account Type
+Displayed on Invoice
+Sample Format
+Send to InvoiceCloud
+Sample Format
+Chips
+Policy
+01 PAP 12345
+01PAP12345
+Chips
+Policy NOIC
+01 PAP 12345
+01PAP12345
+Chips
+Account
+567890
+567890
+Chips
+Account NOIC
+01 PAP 12345
+567890
+Exceed
+Billing Account
+0001234567000
+0001234567000
+Exceed
+Billing Account NOIC
+0001234567000
+0001234567000
+Billing Center
+Invoice Stream
+A123456789-0001
+A1234567890001
+Billing Center
+Invoice Stream NOIC
+A123456789-0001
+A1234567890001
+Cloud Store Payment File
+File Summary/Purpose: The purpose of this file is transfer cloud store payment data from IC to the biller. All cloud store payments can be included in the same payment file. 
+File Extension: .txt
+File Naming Convention: CloudStorePayments-YYYY-MM-DD.txt
+File Delimiter: “,”
+Included Payment Types:
+Payment Channels (CC, ACH, OBD, etc)
+Sample File: 
+ 
+SFTP File Path: 
+File Transfer Frequency: 
+Every day there is a cloud store payment made
+File Format Name: 
+Field Mapping
+Field
+Values
+AccountNumber
+Cloud Store input
+BillAccountNumber
+Cloud Store Input
+CustomerName
+Cloud Store input
+CloudStoreName
+Cloud Store Invoice Type Alias 
+Amount
+Cloud Store input - Payment Amount
+DateandTimeStamp
+Payment Date/Time - yyyy-MM-dd'T'HH:mm:ss.SSSZ
+PaymentMethod
+Payment Method (CC, ACH etc.) 
+Credit Card Type 
+Credit Card Type (VISA, Mastercard, Discover etc.) 
+CustomerAddress
+Cloud Store input
+City
+Cloud Store input
+State
+Cloud Store input
+Zip
+Cloud Store input
+ContactEmailAddress
+Cloud Store input
+ReferenceNumber
+Cloud Store input - Dependent on which Cloud Store is being used
+ClaimNumber
+Cloud Store input - Dependent on which Cloud Store is being used
+BondNumber
+Cloud Store input - Dependent on which Cloud Store is being used
+PaymentGUID
+PaymentGUID associated with the payment 
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+81 
+RTDR Service Version	
+BILL and COLL Invoice Logic (Custom4)
+Most recent Invoice Only will be updated when Custom4 = BILL or COLL.
+billingAccountId: IC Account Number
+billingInfo.totalDueAmount
+use this field to update IC Total Amount Due
+billingInfo.minimumDueAmount
+use this field to update IC Balance Due for BILL and COLL invoices, when source does not equal CHIPS (Custom1).  This field is not used by CHIP sourced invoices.
+use this field to update IC Minimum Due when source equals CHIPS.  Any other sources should be ignored and no further update is needed.
+NOIC Invoice Logic (Custom4)
+All NOIC invoices on an Account will be updated with RTDR.
+Use resourceId = custom5 to find the correct policy.
+  
+The correct balance will be found under the billinginfo for the resourceId provided in custom5.
+policies[].billingInfo.totalDueAmount
+use this field to update IC Total Amount Due
+policies[].billingInfo.minimumDueAmount
+Use this field to update IC Balance Due when source does not equal CHIPS.  Invoices with other sources do not need balance due updated.
+use this field to update IC Minimum Due when source equals CHIPS. Invoices with other sources do not need minimum due updated.
+2
+Y
+8
+RTDR EndPoint/WebService URL	
+https://api-test.wnins.com/billing/{0}
+Y
+11
+DataPump Payments EndPoint/WebService URL	
+https://api-test.wnins.com/invoice-cloud/payments/status/success
+Y
+88
+Secondary RTDR EndPoint/WebService URL	
+https://api-test.wnins.com/auth/oauth/token
+Y
+89
+Secondary RTDR Username if Applicable	
+svc_ic_domain_tst@wnins.com
+Y
+90
+Secondary RTDR Key or Password if Applicable	
+0hvy42h3117bw092
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL	
+https://api-test.wnins.com/invoice-cloud/payments/status/error
+Y
+Site configuration 
+SSO Integration
+iFrame SSO Connect will be used for their integration. SAMLSSO has been abandoned due to the lack of iFraming capabilities
+Invoice Types
+Invoice Types
+164, 165, 166, 167 - Each Invoice Type ID represents a Underwriting Company and whether it is a Personal or Commercial Account
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+BIF 
+AutoPayCollectionDate
+BIF
+BalanceForward
+BIF
+CreditCardServiceFee
+CRM
+FirstNotifyRequestedDate
+BIF
+InvoiceDate
+BIF
+InvoiceDueDate
+BIF
+InvoiceFormatGuid
+BIF Customization
+InvoiceTypeID
+BIF
+LocationReference
+BIF
+MinimumAmountDue
+BIF
+PaymentExpirationDate
+BIF
+PaymentExpirationMessage
+BIF
+PromptPayExpirationDate
+BIF
+SecondNotifyRequestedDate
+BIF
+ThirdNotifyRequestedDate
+BIF
+User Interaction and Design
+Data Flow - Invoice
+Invoices will be uploaded via SOAP API call.
+Data Flow - Adjustments
+Real Time Data Refresh API call will be used to update balances on accounts.
+Data Flow - Payment
+Data Pump API call will be used to send Payments to WNI.
+Data Flow - Void
+Data Pump API call will be used to send Voids to WNI.
+Data Flow - ACH Reject
+Data Pump API call will be used to send Rejects to WNI.
+Data Flow - Change Log
+Data Pump API call will be used to send auto pay and paperless flags for WNI in Phase 2. 
+Data Flow - Bill Presentment
+WNI to decide on whether they will be using PDF Extraction (uploading PDF files to Invoice Cloud) or PDF Linking (Real Time querying to stored PDFs on WNI). This will be decided in a later phase and will not go live with June 2024. There is possibility where WNI will not be using IC’s Bill Presentment. Bill Presentment is not included in the June 2024 deadline.
+Payer Experience
+Payers will access Invoice Cloud from the Biller website. Guest Payments will be handled with Cloud Pay v2 and Registered Payments will be handled through SSO Connect.
+Agent Experience
+Agents will use Cloud Pay v2 iFrames to process payments. Agents do not sign customers up for autopay, paperless or pay by text. 
+Biller Experience
+Invoice Cloud Biller Portal will be used by CRC and Billing Teams. Internal employees will need to sign directly onto IC Biller Portal for all Invoice Cloud processing. Payment Blocks will be handled through the Biller Portal with Internal Employees.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Cloud Payments v2
+Used for Agents to make payments on behalf of the insured. 
+Cloud SSO Connect
+Used for Logged in Insured Experience with IC iFrames. SAML SSO was not possible due to the lack of iFrame capabilities. 
+UploadInvoiceFile
+DeactivateCustomerInvoice
+Tentative
+Remote Authentication
+Register Accounts
+Retrieve Users
+Tentative 
+Create Customer Record
+Tentative 
+Register Customer
+Retrieve Customer GUID
+Tentative
+Retrieve All Invoices
+Tentative
+Retrieve Customer Payment History
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ITG-2987
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Previously all invoice types (custom4) were being updated regardless of the source stored in custom1.  The new logic also has conditions on what to update based on the source.
+BILL and COLL Invoice Logic (Custom4)
+Most recent Invoice Only will be updated when Custom4 = BILL or COLL. 
+billingAccountId: IC Account Number
+billingInfo.totalDueAmount
+use this field to update IC Total Amount Due
+billingInfo.minimumDueAmount
+use this field to update IC Balance Due for BILL and COLL invoices, when source does not equal CHIPS (Custom1).  
+This field is not used by CHIP sourced invoices (IC Balance Due remains the same as found on IC).
+use this field to update IC Minimum Due when source equals CHIPS.  
+Any other sources should be ignored and no further update is needed (IC Minimum Due remains as found in IC).
+NOIC Invoice Logic (Custom4)
+All NOIC invoices on an Account will be updated with RTDR.
+Use resourceId = custom5 to find the correct policy.
+  
+The correct balance will be found under the billinginfo for the resourceId provided in custom5.
+policies[].billingInfo.totalDueAmount
+use this field to update IC Total Amount Due 
+policies[].billingInfo.minimumDueAmount
+Use this field to update IC Balance Due when source does not equal CHIPS. 
+ Invoices with other sources do not need balance due updated (IC BalanceDue remains the same as found on IC)
+use this field to update IC Minimum Due when source equals CHIPS. 
+ 
+Invoices with other sources do not need minimum due updated (IC minimumDue remains the same as found on IC)
+Modify RTDR balance retrieval and update appropriate fields based on new rules provided .
+ URL:/spaces/IM/pages/2884861963/BID+4038+Western+National+Mutual+Insurance+Technical+Design

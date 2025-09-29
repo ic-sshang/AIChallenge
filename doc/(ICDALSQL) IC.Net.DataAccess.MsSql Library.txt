@@ -1,0 +1,47 @@
+Overview
+This library provides data access functionality for Microsoft SQL Server for use with .Net Framework and .Net Core.  There are components tailored for handling sharded databases for billers.  It includes classes and interfaces for managing connection strings, creating database contexts, and accessing data.
+ Runtimes
+.Net 8
+Standard 2.0     
+.Net Framework 4.6.2+
+Namespace
+namespace IC.Net.DataAccess.MsSql
+ 
+Dependencies
+Microsoft.Extensions.Logging.Abstractions
+Microsft.Data.SqlClient
+Example (Master)
+c#
+public class Biller
+{
+  public int BillerId {get;set;}
+  .
+  .
+  .
+}
+.
+.
+.
+var connectionStringProvider = new ManagedIdentityConnectionStringProvider(
+	new DefaultConnectionStringProvider("Server=tcp:ic-dbtest-east-server1.database.windows.net; Database=DBMaster_GoldAzure;")
+);
+using (var database = new IC.Net.DataAccess.MsSql.Database(connectionStringProvider))
+{
+	var billers =
+		( await database.ExecuteQueryAsync<Biller>("dbo.selAzureBillers", new QueryParameter[] { new QueryParameter("Active", true) }, CancellationToken.None) )
+		.ToArray();
+	foreach (var biller in billers)
+	{
+		Console.WriteLine($"BillerId: {biller.BillerId}");
+	}
+}
+Classes
+(ICDALSQL) Database
+ 
+(ICDALSQL) ManagedIdentityConnectionStringProvider
+ 
+(ICDALSQL) BillerShardConnectionStringProvider
+ 
+(ICDALSQL) BillerShardDatabaseFactory
+ 
+ URL:/spaces/ED/pages/3874881608/ICDALSQL+IC.Net.DataAccess.MsSql+Library

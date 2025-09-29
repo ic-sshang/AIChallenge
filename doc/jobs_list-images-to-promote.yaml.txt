@@ -1,0 +1,40 @@
+Code-Generated Docs
+Description
+
+This template lists images (and the chart) to be deployed by helm which will need to be promoted to the prod acr before deployment in the prod env can happen
+This template assumes that the chart to use is currently in the sbx ACR.
+
+Parameters
+Parameter
+Default
+Description
+dependsOn
+[]
+List of any jobs upon which this one is dependent
+chartName
+n/a
+Name of the chart to scan for images
+chartVersion
+n/a
+Version of the chart to scan for images
+version
+n/a
+image.tag to be passed to the chart to scan for images
+environmentsDirectory
+.helm/environments
+Directory containing helm config files for each environment
+environment
+n/a
+Directory containing helm config files for each environment
+spoke
+n/a
+name of the spoke containing target cluster. only used to choose a variable group.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/helm-deploy.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/get-images-in-chart.yaml
+ URL:/spaces/platform/pages/3634495730/jobs+list-images-to-promote.yaml

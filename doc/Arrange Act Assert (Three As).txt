@@ -1,0 +1,23 @@
+Follow the Arrange, Act, and Assert (AAA) pattern.
+Arrange
+Set up the test context (initialize variables, create objects, mock, etc…).
+Act
+Execute the method or behavior being tested.
+Assert
+Verify the expected outcome.
+c#
+[Test]
+public void CalculateTotal_ShouldReturnCorrectAmount()
+{
+  // arrange
+  var shoppingCart = new ShoppingCart();
+  var shoppingCartItem = new ShoppingCartItem { Amount = 10.25m, Description = "MyItem" };
+  shoppingCart.AddItem( shoppingCartItem );
+  
+  // act
+  decimal totalAmount = shoppingCart.CalculateTotal();
+  
+  // assert
+  Assert.Equal( 10.25m, totalAmount );
+}
+ URL:/spaces/ED/pages/3517939713/Arrange+Act+Assert+Three+As

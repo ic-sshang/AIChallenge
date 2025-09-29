@@ -1,0 +1,110 @@
+Overview
+ICChaseScreeningAPI is a .NET 8 Web API for merchant onboarding, document upload, and integration with Chase Payment Solutions. It supports file uploads, merchant creation, document retrieval, and health monitoring.
+Architecture
+•	Web API: Exposes REST endpoints for merchant and document operations.
+•	Core Services: Business logic (MerchantDomainService, UploadFileService, etc.).
+•	Azure Blob Storage: Stores uploaded documents.
+•	Azure Key Vault: Secures secrets and credentials.
+•	Database: Persists merchant and document metadata.
+•	External Integrations: Connects to Chase Payment Solutions.
+Authentication & Security
+•	Most endpoints are [AllowAnonymous] for now.
+•	Azure Key Vault access uses managed identity.
+•	Sensitive configuration is stored in Key Vault or environment variables.
+API Endpoints
+File & Document Endpoints
+POST /api/v1/upload-file
+•	Description: Upload one or more files for a merchant.
+•	Request: multipart/form-data
+•	MerchantId (number, required)
+•	DocumentTypeId (number, required)
+•	Files (file[], required)
+•	
+Sample Request
+ (FormData):
+json
+wide
+760
+MerchantId: 123
+DocumentTypeId: 1
+Files: [file1.pdf, file2.jpg]
+•	
+Response:
+ 200 OK (all succeeded), 207 Multi-Status (partial), 400 BadRequest (all failed)
+json
+wide
+760
+{
+  "total": 2,
+  "success": 1,
+  "failed": 1,
+  "results": [
+    { "message": "File file1.pdf successfully uploaded to blob container" },
+    { "message": "Failed to store file file2.jpg to blob container test-container" }
+      ]
+    }
+GET /api/v1/FetchMerchantDocuments
+•	Description: Fetch documents for a merchant.
+•	Query Parameters:
+•	merchantId (int, optional)
+•	documentTypeId (int, optional)
+•	
+Response
+: 200 OK
+json
+wide
+760
+[
+  {
+    "documentId": 1,
+    "merchantId": 123,
+    "fileName": "file1.pdf",
+    "filePath": "https://.../MerchantId_123/file1.pdf",
+    "statusId": 2
+      }
+    ]
+Merchant Endpoints
+POST /api/v1/merchants
+•	Description: Create a new merchant.
+•	
+Request
+: application/json
+json
+wide
+760
+{
+  "merchantId": 0,
+  "dbaName": "Merchant Inc.",
+  "createdAt": "2025-09-15T12:00:00Z"
+    }
+•	
+Response
+: 200 OK
+json
+wide
+760
+{
+  "merchantId": 999,
+      "status": "Created"
+    }
+GET /api/v1/merchants/{id}
+•	Description: Get merchant details by ID.
+•	
+Response
+: 200 OK
+wide
+760
+{
+  "merchantId": 999,
+  "dbaName": "Merchant Inc.",
+  "dateRecAdded": "2025-09-15T12:00:00Z"
+    }
+Testing
+•	Unit tests: NUnit + Moq
+•	Integration tests: Playwright, WebApplicationFactory
+•	Run with: dotnet test
+Deployment
+•	.NET 8 runtime required
+•	Configure environment variables for secrets and connection strings
+•	Use Azure Managed Identity for Key Vault access
+ URL:/spaces/EA/pages/4658888763/ICChaseScreeningAPI+Solution+Documentation

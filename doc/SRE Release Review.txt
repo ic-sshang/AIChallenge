@@ -1,0 +1,286 @@
+Goal
+The goal of the review is to make sure the knowledge is transferred to an extent of awareness to the SRE team. This will help in the identification of a problem faster and support. This is also an opportunity for the team to provide feedback on support gaps to make the delivery artifacts. 
+Use-Case
+This is a release review checklist when a Product Team needs SRE representation for their Release Review process. Select the checkbox when you finish a step. Once all steps are checked, the item can be considered “Reviewed” by the SRE team.
+Release Readiness Checklist
+
+
+
+
+358
+
+
+incomplete
+
+
+What is the problem this code tries to address
+
+
+
+
+
+
+
+
+359
+
+
+incomplete
+
+
+Have you reviewed the code to understand the logic used to solve
+
+
+
+
+
+
+350
+
+
+incomplete
+
+
+Determine if the item meets the observability requirement
+
+
+
+
+
+
+
+
+351
+
+
+incomplete
+
+
+Does the item have proper logging (Error Logs, Debug Logs, Info Logs, etc.)?
+
+
+
+
+
+
+352
+
+
+incomplete
+
+
+Does the item have Instrumentation (Transactions, Traces, etc.)?
+
+
+
+
+
+
+353
+
+
+incomplete
+
+
+Does the item have/need Alerts? 
+
+
+
+
+
+
+
+
+354
+
+
+incomplete
+
+
+Do we need a Runbook for remediation? 
+
+
+
+
+
+
+355
+
+
+incomplete
+
+
+Does the item need to be added to the team’s Health Check?
+
+
+
+
+
+
+
+
+360
+
+
+incomplete
+
+
+What DB query will help in daily validation?
+
+
+
+
+
+
+357
+
+
+incomplete
+
+
+Describe the upstream and downstream impact
+
+
+
+
+
+
+
+
+361
+
+
+incomplete
+
+
+Does this affect upstream services like BillerPortal where the customer UX would undergo a change?
+
+
+
+
+
+
+362
+
+
+incomplete
+
+
+Downstream impacts are closer to the core services like CTP etc. 
+
+
+
+
+
+
+363
+
+
+incomplete
+
+
+What is the scope of this change with respect to Biller’s and Product?
+
+
+
+
+
+
+
+
+364
+
+
+incomplete
+
+
+Does it impact one or few billers or all of them
+
+
+
+
+
+
+365
+
+
+incomplete
+
+
+Which product behavior is going to change due to this change
+
+
+
+
+
+
+366
+
+
+incomplete
+
+
+Make sure the affected/reported services are set correctly in the EBPP
+
+
+
+
+
+
+367
+
+
+incomplete
+
+
+Make sure that your code is merged into the Main branch (or the branch for production). 
+
+
+
+
+
+
+368
+
+
+incomplete
+
+
+Does this item implement a hard-coded Slack integration? Describe the context of its use.
+
+
+
+
+When an EBPP/INT item is missing a logging requirement, the team will create an SR item and add appropriate notes in the Jira item
+Documentation in JIRA
+Post this checklist in the EBPP Bug Item and write a small summary. A sample will be added here. At some point, we might need our own space in EBPP to document. 
+Sample Notes that should be posted in the EBPP Item.
+Template:
+SRE Review Notes:
+Problem:
+ [Describe what is being changed and how the change is implemented in code.]
+Observability:
+ [Comment on if there is new observability added in these changes. Comment on if there is existing observability.]
+Downstream Impact:
+ [List what products/domains will be affected when this change goes live.]
+Dependent Services:
+ [List what products/domains this change depends on.]
+Billers:
+ [BillerID] - [Biller DBA] OR [Identify conditions for Billers to be affected]
+Product:
+ [Comment the name of the affected Repo/Product]
+Example:
+SRE Review Notes:
+Problem:
+ This item is a new integration for "SystemSolutions" for posting payments via an external API call in DataPump. This is done in code by binding the endpoint from Advanced Setting 11 to an existing service object and then invoking the API using the “postPayment” method with the AcountNumber, PaymentMessage, and PaymentAmount fields as parameters. 
+Observability: 
+The API request and response payloads are being logged via the “logPayload” method. We are also already recording transactions for DataPump. 
+Downstream Impact:
+ Biller Portal (DataPump Management page)
+Dependent Services:
+ CTP, Payment Route
+Billers:
+ All SystemsAndSoftware Billers
+Product:
+ DataPump
+ URL:/spaces/DS/pages/2893512749/SRE+Release+Review

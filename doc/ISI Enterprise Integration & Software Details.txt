@@ -1,0 +1,153 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+N/A
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+IC Web Services
+All BIF customizations are in the ISI file 
+When there’s a change to the balance of an invoice due to activity in ISI Enterprise, ISI sends IC a type 'R' record to overwrite the previous invoice. 
+We also call the following service to update invoice balances but only when we are zeroing out / closing an invoice
+Adjustments/Balances
+ISI uses two methods to update invoice balances:
+BIF invoice 'R' records to replace records due to inactivity
+SetInvoiceBalance
+ is used to zero out / close an invoice
+IC Web Services 
+Payments
+PaymentReportingSOAPWithEchoAndCardTypeFromGMT
+IC Web Services
+ISI uses IC web service to pull payments. The frequency is set by each biller but these services are typically called every 2-5 minutes with a cutoff date/time set to the time of the previous run.
+ISI also pulls batch settlement details for each biller using BillerSettledBatchSummarySOAP. If ISI finds a settled batch they have not seen before, they use the following service to download a list of payments and link them together into a batch for bank reconciliation: BillerSettledBatchDetailSOAP.
+ACH Rejects Posting
+Not Supported
+Void
+Not Supported
+Change Log - AutoPay Enrollment
+ChangeLogReportingAutoPayDataSetFromGMT
+IC Web Services
+The frequency is set by each biller but these services are typically called every 2-5 minutes with a cutoff date/time set to the time of the previous run.
+Change Log - Paperless Enrollment
+ChangeLogReportingPaperlessDataSetFromGMT
+IC Web Services
+The frequency is set by each biller but these services are typically called every 2-5 minutes with a cutoff date/time set to the time of the previous run.
+Change Log - Phone Number
+Not Supported
+Change Log - Email Address
+Not Supported
+Bill Images 
+PDF Linking - Supported
+PDF Extraction - Not Supported
+Template - Not Supported
+ISI Web Services
+ISI GetDocument web service
+ISI refers to the web service URL as the "endpoint" and the key/password the "session ID". The production password/session ID will be the same for all billers but you will need to get a specific URL/endpoint to setup the PDF Linking IT request during test (change the URL/endpoint at go-live). These are configured in CRM Advanced Settings.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+CSRConnect
+Not Supported
+EMV
+Not Supported
+IVR
+Supported
+Standard call flow
+During kick-off, it's important to ask about the 'accountnumber' being a numeric digit (for use in the IVR search as well as displayed on the invoices) so it can be used for the IVR set up. This value (if numeric) would be in the ‘displayaccountnumber’ field for advancedIVRsearch to be used for the search method.
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Not Supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+       Multi-User Log In
+Not Supported
+       Co-Owner Registration
+Not Supported
+ 
+ SSO
+Not Supported*
+*There is no standard SSO integration for the IC/ISI integration. If the biller wants to implement SSO with IC, this would be handled between IC and the biller/vendor hosting the portal and require Solutions Engineer involvement.
+AutoPay Collection Date
+Supported
+in BIF
+Batch Closure
+Custom
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Not Supported
+       Open Item Billing
+Supported
+Block Payment
+Supported
+Managed via the IC Biller Portal
+Conveyance
+Not Supported
+Data Conversions
+Supported
+IC can import conversion data using the biller import tool.
+Email Notification Schedule
+Supported
+in BIF
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Not Supported
+Minimum Payment
+Supported
+in BIF
+Paperless
+Supported
+Partial Payments
+Supported
+in BIF
+Past Due Payments
+Not Supported
+Scheduled Payments
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Not Supported
+IDTech SRED Key
+Not Supported
+Ingenico EMV
+Not Supported
+Other EMV Devices
+Not Supported
+ URL:/spaces/IM/pages/2113896643/ISI+Enterprise+Integration+Software+Details

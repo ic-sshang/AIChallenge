@@ -1,0 +1,35 @@
+By default, our system will use the service fees that are set by the Biller from the invoice file. If the Biller wishes to override the service fees the service fee will need to be changed based on each invoice type. 
+Service fees are divided based on the Product enabled for the Biller. If the Biller wishes to change a service fee based on the Product. The Product must first be selected (e.g. Paypal Credit).
+Service fees set here are only used for submitter transactions, else it pulls from the invoice record.
+The service fee summary provides basic information at a glance
+ “All service fees are set to $X” – every payment source has the same fee
+“Service fees vary by payment source” – payment sources have different fees
+“Service fees for this invoice type have not been configured” – the invoice type is submitter
+* 
+(which means the fees set via this page will be used), but the fees have not been set yet
+“We will use the Service Fees provided from the Invoice Record” – the invoice type is non-submitter 
+no fees were configured on this page yet (they would be ignored anyway)
+*
+ Only applies to non-MCL billers since MCL billers have submitter status set at the terminal level and an invoice type’s payment sources can go to different terminals
+Submitter Service Fee Settings 
+On the Invoice Types page, active submitter invoice types
+* 
+will show an icon to edit “submitter fee settings”
+These settings are only used when a submitter transaction is processed and will otherwise be ignored
+* 
+This icon is shown for all active invoice types in the McLogin CRM
+The submitter fee settings determine if the transaction has the fee split or not based on the card type or if the payment is with ACH
+When a fee is “split”, two (or more) payment records are created in the database and they are processed
+separately (e.g. the fee may go to a terminal just for fees, so IC doesn’t have to sort out what we are owed at month’s end)
+“Single” transactions mean that the processor (e.g. Chase) will automatically take out a fixed fee amount from the single processed transaction
+Query to Find who made changes to Service Fees
+select ChangeDate,TableName,PaymentSourceDesc,PaymentTypeDesc,OldValue,NewValue, FullName 
+from changelogs cl
+left join servicefees as sf on cl.fkid = sf.ServiceFeeID
+left join tblpaymentsource as tps on sf.paymentsourceid = tps.paymentsourceid
+left Join employees as e on e.employeeid = cl.userfkid
+left join tblpaymenttype as pt on pt.paymenttypeid = sf.paymenttypeid
+where cl.tablename like 'servicefees' 
+and sf.paymentsourceid = 15
+order by 1 desc
+ URL:/spaces/DS/pages/2602434566/Service+Fees

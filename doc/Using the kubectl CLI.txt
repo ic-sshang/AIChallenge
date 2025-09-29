@@ -1,0 +1,199 @@
+Overview
+This guide seeks to provide a high-level overview of the 
+kubectl
+ CLI for developers and provide a simple set of common examples for working with Kubernetes clusters, contexts, deployments, pods, etc. This guide will not provide a complete overview of the 
+kubectl
+ CLI - there is documentation linked within that provides that information, if desired.
+Prerequisites
+Install the 
+Azure CLI
+Install the 
+kubectl CLI
+Review 
+Kubernetes Basics
+ - this guide will make the assumption that you have 
+some
+ familiarity with Kubernetes concepts & terminology.
+[OPTIONAL]
+ Some familiarity with the 
+Azure CLI
+. However, relevant commands will be covered by this content.
+Logging Into the Cluster
+Log in to Azure using the 
+az
+ CLI. You will be presented with an SSO window to select the account you wish to use. After selecting an account, the CLI will output a choice of subscriptions to select from. It should maintain the last subscription that was used when working with the CLI, but it may be changed at this point, if desired. Note that 
+az account set --subscription {subscriptionId}
+ may be used to change which subscription is active at any given time.
+bash
+C:\> az login
+Select the account you want to log in with. For more information on login with Azure CLI, see https://go.microsoft.com/fwlink/?linkid=2271136
+
+Retrieving tenants and subscriptions for the selection...
+
+[Tenant and subscription selection]
+
+No     Subscription name     Subscription ID                       Tenant
+-----  --------------------  ------------------------------------  -------------
+[1]    Enterprise Dev/Test   f89b91a0-e110-4fbb-b84b-24c02f68cd81  Invoice Cloud
+[2]    Enterprise Prod       630f6476-2a4d-4faf-8e49-99c119eb08df  Invoice Cloud
+[3]    Primary-Subscription  c1e3635c-98d4-47f5-96e0-926717b6f0c4  Invoice Cloud
+[4] *  Sandbox               1354872a-6bc9-4eb1-a4f0-feb046832e65  Invoice Cloud
+
+The default is marked with an *; the default tenant is 'Invoice Cloud' and subscription is 'Sandbox' (1354872a-6bc9-4eb1-a4f0-feb046832e65).
+
+Select a subscription and tenant (Type a number or Enter for no changes):
+SSO Window opened by 
+az login
+ command
+Once logged into Azure via the CLI, you will need to acquire the appropriate credentials for the AKS cluster you wish to interact with. The Azure CLI provides an extension - 
+az aks
+ for interacting with the managed k8s service in the Azure control plane.
+bash
+# If you know the cluster
+C:\> az aks get-credentials -n aks-arch-poc -g rg-arch-poc
+# Above equivalent to
+# az aks get-credentials --name aks-arch-poc --resource-group rg-arch-poc
+
+
+# If you need to find a cluster in the active subscription, you may list 
+# available clusters in the current subscription using
+C:\> az aks list
+Once the above command runs successfully (if you have the appropriate access), you should see a message indicating that the credentials have been created or merged into 
+~\.kube\config
+. This file, located in your user home directory, will maintain all of your cluster credentials and allow you to switch between “contexts” at will - similar to the process of changing the Azure subscription outlined in the step above.
+Check which cluster you are currently targeting and change it, if desired.
+bash
+C:\> kubectl config current-context
+aks-arch-poc
+
+# To see what contexts you have configured
+C:\> kubectl config get-contexts
+CURRENT   NAME                  CLUSTER               AUTHINFO                                                     NAMESPACE
+*         aks-arch-poc          aks-arch-poc          clusterUser_rg-arch-poc_aks-arch-poc
+          aks-arch-poc-admin    aks-arch-poc          clusterAdmin_rg-arch-poc_aks-arch-poc
+          aks-pri-biller0-dev   aks-pri-biller0-dev   clusterUser_rg-pri-biller-cluster0-dev_aks-pri-biller0-dev
+          aks-pri-biller0-sbx   aks-pri-biller0-sbx   clusterUser_rg-pri-biller-cluster0-sbx_aks-pri-biller0-sbx   ns-biller-report-generator-job-main
+
+# Change the current context
+C:\> kubectl config use-context aks-pri-biller0-sbx
+
+C:\> kubectl config current-context
+aks-pri-biller0-sbx
+
+# Change the Kubernetes namespace you are working in
+C:\> kubectl config set-context aks-pri-biller0-sbx --namespace=default
+# OR, use `--current` if just switching namespace
+C:\> kubectl config set-context --current --namespace=default
+
+# Verify
+C:\> kubectl config get contexts
+CURRENT   NAME                  CLUSTER               AUTHINFO                                                     NAMESPACE
+*         aks-pri-biller0-sbx   aks-pri-biller0-sbx   clusterUser_rg-pri-biller-cluster0-sbx_aks-pri-biller0-sbx   default
+You should now be logged into Azure and connected to a cluster with 
+kubectl
+.
+Interacting With Kubernetes Resources
+Namespaces
+Namespaces in Kubernetes are “logical containers” which group together multiple resources in an isolated manner. In our architecture, individual workloads run under their own namespace and include all of the resources necessary to perform the work they are intended to do - do note that not every Kubernetes resource will fit neatly into a namespace - some Custom Resource Definitions (CRDs) or other resource types will always end up created at a global level.
+To see which namespaces are available in a cluster, use 
+kubectl get
+bash
+C:\> kubectl get namespaces
+NAME                                              STATUS   AGE
+akv2k8s                                           Active   23d
+azure-workload-identity                           Active   23d
+contrast-agent-operator                           Active   23d
+default                                           Active   84d
+keda                                              Active   23d
+kube-node-lease                                   Active   84d
+kube-public                                       Active   84d
+kube-system                                       Active   84d
+newrelic                                          Active   23d
+nginx                                             Active   23d
+ns-biller-conveyance-api-main                     Active   23d
+ns-biller-conveyance-api-platform-1               Active   13d
+ns-biller-conveyance-api-platform-2               Active   13d
+# etc.
+
+
+# Change the Kubernetes namespace you are working in
+C:\> kubectl config set-context --current --namespace=default
+Deployments
+Deployments are top-level items that contain a workload deployment definition. A deployment will typically configure one or more container definitions used to create pods and will contain the necessary metadata needed to deploy the workload - container registry URI, version, health check information, etc.
+Removing resources beneath a deployment will usually result in those resources being recreated automatically. Removing a deployment entirely will remove all of the resources that are defined within and created as a result.
+List All Deployments
+# Use `kubectl get` to view all deployments
+C:\> kubectl get deployments
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+biller-report-generator-job   1/1     1            1           44h
+Re-run a deployment
+Sometimes, you may need to “restart” a deployment to recover from an error condition or to propagate additional changes to the deployment. 
+An example use-case would be an update occurring on the Azure Workload Identity - a restart of the deployment is required for the workload to inherit modified permissions.
+bash
+C:\> kubectl rollout restart deployment biller-report-generator-job
+deployment.apps/biller-report-generator-job restarted
+Running the above command will result in the deployment being re-applied in Kubernetes - resources will be recreated, containers will be re-pulled from the registry, and the process of waiting for the pods to be ready will begin again.
+Pods
+From a development perspective, Pods are likely the most common Kubernetes object that will require interaction. Pods represent a single instance of a process in the cluster - applications, services, cronjobs, secret providers, etc. - these will be where the majority of actual application code is executed, configuration is set, and telemetry is output.
+Listing Pods
+Like other objects in Kubernetes, they can be listed out with 
+kubectl get
+bash
+C:\> kubectl get pods
+NAME                                           READY   STATUS    RESTARTS   AGE
+biller-report-generator-job-5dbd749477-5php7   1/1     Running   0          6m51s
+Pods will typically inherit the name of their corresponding Deployment and will be suffixed by a randomly generated, hyphenated hash value.
+Remote Access of Pods
+If the pod has TTY enabled, you may remote into the pod using
+bash
+C:\> kubectl exec -it biller-report-generator-job-5dbd749477-5php7 -- /bin/sh
+# Note that the -- /bin/sh is the program to execute. 
+# This may also be /bin/bash depending on the Pod's OS.
+
+$> 
+You may notice that this follows the same syntax that 
+docker
+ uses for remoting into pods from the CLI.
+note
+For security reasons, pods should be configured via 
+Dockerfile
+ to use a specific Linux user/group that is the designated owner of the running process - this may be scoped to a specific folder in the Linux filesystem.
+
+
+For security reasons, pods should be configured via 
+Dockerfile
+ to use a specific Linux user/group that is the designated owner of the running process - this may be scoped to a specific folder in the Linux filesystem.
+
+
+Describing Pods and Accessing Logs
+One of the more useful operations available is the ability to 
+describe
+ a resource - this is likely one of the most common troubleshooting actions that will be taken when working with a deployed workload.
+bash
+C:\> kubectl describe pod biller-report-generator-job-5dbd749477-5php7
+# Output excluded for brevity
+The 
+describe
+ command outputs all of the metadata about the pod and provides details on its deployment, status, volumes, and an event log. This is extremely useful for troubleshooting scenarios and will often indicate the source of any issues that are present as the pod tries to 
+allocate cluster resources and provision itself.
+kubectl describe
+ is not limited to pods - the command can also be run for other resources as well. Running this command at the namespace level or for CRD objects can provide insight on the current state of those resources and potentially highlight items that are of value for troubleshooting.
+kubectl
+ can also produce anything logged to the console for a given pod - these logs will contain the same output you would see locally when debugging an application. This information will be highly valuable if there are any application-level issues that are being diagnosed. To view the log output for a given pod, use the 
+kubectl logs <pod-name>
+ command.
+bash
+# Running the below will output logs the pod has written to console output.
+C:\> kubectl logs biller-report-generator-job-5dbd749477-5php7
+# Output excluded for brevity
+
+
+# Pro-tip: For an easier time working with logs - redirect the output to a file.
+C:\> kubectl logs biller-report-generator-job-5dbd749477-5php7 >> brg-log.txt
+Resources
+Command line tool (kubectl) | Kubernetes
+https://learn.microsoft.com/en-us/azure/aks/what-is-aks
+ 
+az | Microsoft Learn
+az aks | Microsoft Learn
+ URL:/spaces/PMK/pages/4298375192/Using+the+kubectl+CLI

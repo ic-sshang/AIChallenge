@@ -1,0 +1,169 @@
+Objective
+This runbook provides a structured daily workflow for SREs. It ensures that the team proactively detects, investigates, and mitigates potential system issues using 
+New Relic
+.
+Daily Workflow Overview
+Each SRE follows this structured routine to maintain system health:
+Morning Health Check
+Active Incident & Ticket Review
+Proactive Monitoring & Deep Dives
+Performance & Capacity Review
+Root Cause Analysis & Knowledge Sharing
+End-of-Day Status Update & Handover
+1. Morning Health Check
+Objective:
+ Ensure all critical systems are running smoothly before the business day begins.
+Steps:
+Check New Relic Dashboards:
+Review 
+APM (Application Performance Monitoring)
+ dashboards for any 
+spikes in response time, error rates, or throughput issues
+.
+Inspect 
+Infrastructure Monitoring
+ for 
+CPU, memory, and disk utilization
+ across key servers.
+Check 
+synthetic monitoring alerts
+ to verify external availability.
+Review New Relic Alerts & Notifications:
+Check for any 
+critical alerts triggered overnight
+.
+Investigate incidents with 
+high priority
+ first.
+Cross-check System Logs:
+Verify logs in 
+New Relic Logs
+ for 
+exceptions, crashes, or anomalies
+.
+Report Findings:
+If an issue is detected, 
+log it as a Jira ticket
+ and prioritize it.
+If no major incidents are found, document a 
+health check summary
+ in Confluence.
+2. Active Incident & Ticket Review
+Objective:
+ Ensure no ongoing incidents are left unaddressed and align with the team.
+Steps:
+Review Open Jira Tickets:
+Check for 
+P1 or P2 issues
+ that need immediate attention.
+Assign tickets based on workload distribution.
+Attend Daily Standup (if applicable):
+Share key insights from the morning health check.
+Discuss ongoing 
+incidents, fixes, and blockers
+.
+Follow Up on Overnight Incidents:
+If an incident is unresolved, escalate accordingly.
+3. Proactive Monitoring & Deep Dives
+Objective:
+ Identify and address performance bottlenecks before they impact users.
+Steps:
+Deep Dive into Slow Transactions:
+Use 
+New Relic APM → Transactions
+ to analyze slow endpoints.
+Identify 
+database queries, external dependencies, or inefficient code
+ causing slowness.
+Check Database Performance (if applicable):
+Use 
+New Relic Database Monitoring
+ to look for 
+long-running queries or high contention
+.
+Inspect Error Logs:
+Look for 
+error trends
+ (e.g., increased 
+HTTP 500s, exceptions, or dependency failures
+).
+Identify Optimization Opportunities:
+Review slow application areas and document 
+possible code-level improvements
+.
+Coordinate with developers if necessary.
+4. Performance & Capacity Review
+Objective:
+ Ensure the system is prepared for peak loads and prevent capacity-related outages.
+Steps:
+Review System Load & Scaling Metrics:
+Check 
+server utilization, database connections, and auto-scaling events
+.
+Ensure the system is 
+optimally scaled
+ based on traffic patterns.
+Analyze Historical Trends:
+Compare current data with 
+previous weeks’ trends
+ to predict potential issues.
+Plan for Upcoming Releases or Load Spikes:
+If a 
+new deployment is scheduled
+, ensure 
+monitoring is in place
+.
+Simulate potential load scenarios using 
+historical performance data
+.
+5. Root Cause Analysis & Knowledge Sharing
+Objective:
+ Document learnings from incidents and improve team knowledge.
+Steps:
+Conduct RCA on Recent Incidents:
+If an incident was resolved, write an 
+incident post-mortem
+ in Confluence.
+Include 
+root cause, resolution steps, and preventive measures
+.
+Update Monitoring Rules & Alerts:
+If an issue wasn't caught in time, 
+adjust alert thresholds in New Relic
+.
+Contribute to Documentation:
+Update 
+troubleshooting guides
+ based on recent findings.
+6. End-of-Day Status Update & Handover
+Objective:
+ Ensure continuity of monitoring and escalate unresolved issues.
+Steps:
+Review Unresolved Issues:
+Check Jira for 
+open critical tickets
+ and 
+escalate if necessary
+.
+Update Team on Critical Insights:
+Send an 
+EOD summary
+ to the team (via Slack or email).
+Handover to On-Call Engineer (if applicable):
+Provide details on 
+potential risks, ongoing incidents, or areas to monitor overnight
+.
+Additional Notes
+On-Call Rotation:
+ If you’re on-call, ensure 
+JSM alert policies
+ are set up for mobile and email notifications.
+Collaboration:
+ Always sync with 
+DevOps, Developers, and Product Teams
+ when necessary.
+Automation:
+ Where possible, automate 
+repetitive health checks using New Relic Synthetics or Scripts
+.
+ URL:/spaces/DS/pages/3969744898/Site+Reliability+Engineer+SRE+Daily+Runbook

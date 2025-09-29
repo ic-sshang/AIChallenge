@@ -1,0 +1,111 @@
+Overview
+This confluence page is intended to be a how-to guide to deliver funds Biller when these funds have failed to be queued in the FundingBatches table in ICGW. The final result of following these instructions is to properly queue the funding batch to be processed on the run following the new batch created.
+Preliminary Research
+First, you need to identify if the funding was 
+not processed
+, or  
+not queued
+. This can be done by querying the biller’s and ICGW_master. If no funding batch was queued, then you can proceed with the next steps. If a funding batch was queue but did not run please consult the ESREs. The following queries should help you identify if there is funding batch queued.
+sql
+-- find the payments in question
+select t.billerid, p.*
+from payments p
+left join fundingbatchdetail fbd on p.paymentid=fbd.paymentid
+left join terminals t on t.terminalid=p.terminalid
+where fbd.fundingbatchid is null
+and Year(paymentdate) > 2023 --date range here
+and t.terminaltypeid=2 -- make sure it is the correct type
+and p.transactiontypeid=1 -- make sure is Sale and not Credit or Voids
+and t.billerid=3244 -- billerid here
+order by p.paymentdate desc
+
+-- Review funding batches
+select * from fundingbatches where terminalid=7603 order by 1 desc
+-- Find Terminal information
+select * from terminals  where terminalid=7603
+
+-- shard
+--Identify OBD payment totals per day,batch,terminal
+select Year(paymentdate) as Year,month(paymentdate)as Month,day(paymentdate) as Day,sum(paymentamount),count(paymentid) as PaymentCount,settledbatchid,termid from payments 
+where paymentsourceid=7
+group by Year(paymentdate),month(paymentdate),day(paymentdate),settledbatchid,termid
+order by 1 desc,2 desc,3 desc
+For OBD
+Set up and execute code
+Clone the IC.Gateway repository.
+Find BaseTest.CS and updated the client object to use the production environment type
+Go to the ThirdPartyFundingTests.cs in IntergrationTests, and find the method ThirdPartyFundingService_1CreateFundingBatchRecord_Success()
+Remove or Comment out the code that creates payment records.
+Change the root of the CreateFundingBatchRecord() from 
+clientDevTest4 
+to 
+client
+[Proceed with caution] 
+Review all the items being assigned to the request object and make sure they are accurate. Ideally, have someone double check your work.
+Sale OR Credit?
+The FundingBatch table is set as a Cash Account from The Billers perspective. Which means that the 
+Sale 
+(Debit)
+ 
+is an 
+increase 
+to the Billers cash account, and a 
+Credit 
+is a 
+decrease 
+to the Billers cash account. 
+Example if you need to 
+send 
+funds 
+to 
+the Biller, you would need to use the 
+Sale 
+fields. On the other hand, if you need to 
+retrieve 
+funds 
+from 
+the Biller, then you need to use the 
+Credit 
+Fields. 
+..
+Double check all the fields below:
+The final code should look somewhat like this:
+c#
+        public void ThirdPartyFundingService_1CreateFundingBatchRecord_Success()
+        {
+            List<String> inclusionList = new List<string>();
+            List<Payment> paymentList = new List<Payment>();
+
+            DateTime tempStartDate = DateTime.Parse("2024-01-20 05:39:43.000");//paymentdate
+            DateTime tempEndDate = DateTime.Parse("2024-01-20 05:41:43.000");
+            int billerId = 189;
+            string tempBatchReference = $"{billerId}|{Guid.NewGuid()}";
+
+
+            // Arrange            
+            CreateFundingBatchRecordRequest request = new CreateFundingBatchRecordRequest();
+
+            request.MerchantAccountID = "1891891890-867";
+            request.CreditCount = 0;
+            request.CreditVolume = 0;
+            request.SaleCount = 135;
+            request.SaleVolume = 21016.11m;
+            request.StartDate = tempStartDate;
+            request.EndDate = tempEndDate;
+            request.InclusionList = string.Empty;
+            request.ExclusionList = string.Empty;
+            request.InquiryOnly = false;
+            request.BatchReference = tempBatchReference;
+
+            // Act            
+            var result = client.ThirdPartyFunding.CreateFundingBatchRecord(request);
+
+            // Assert
+            Assert.AreEqual(result.Message, "CLOSE SUCCESS");
+            Assert.AreEqual(result.Status, 1);
+Post scheduling review.
+At this point you should have executed the code and a funding batch should have been added to the Funding batches table. You should be able to identify the batch with the terminal id used in the code.
+select * from fundingbatches where terminalid=7603 order by 1 desc
+After the Funding batch is queued then it should be picked up and process past 
+4:00 PM CT
+ URL:/spaces/DS/pages/2797076545/Queue+Funding+Batch+for+Billers

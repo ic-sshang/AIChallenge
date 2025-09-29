@@ -1,0 +1,24 @@
+This diagram represents another view on Chase Integration with the addition of the Ledger service and also showing update payment state flows. It also suggests to publish a message for the update of the funding instructions instead of making HTTP call.
+2
+1
+0
+0
+4516085939
+4516020358
+1
+Untitled Diagram-1753209919292.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1753209919292.drawio
+0
+1891
+1711
+Introduction of the service bus makes the publisher lose the context on the execution for the message, since it will be processed on the consumer’s side (in our case IC Chase Payment Processing API and IC Chase Funding API). However when the message gets processed by the respective service, the execution results along with payload will be logged. If the message processes with failure aside from logging, the message will go on the a separate queue to be either discarded or re-processed. Moreover we should be publishing metrics to indicate of any failure scenarios and get alarmed on that.
+The ordering of what gets processed on the service bus is not guaranteed, unless we decide on using the ordered persistent queue. This proposal assumes that the ordering will not be preserved. Both funding instructions and payment states do get updated most likely once a day based on inputs from Chase and that should not lead to collisions. In order to avoid collisions - every update instruction must be as transactional as possible.
+For 
+PaymentStatusUpdated
+ the update will happen within the transaction and will follow the transitions based on the defined state machine for Payment.
+FundingInstructionUpdated
+ details TBD.
+ URL:/spaces/EA/pages/4516020358/Chase+Integration+-+C1+-+add+messaging+and+ledger+-+DRAFT

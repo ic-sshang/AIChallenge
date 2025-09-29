@@ -1,0 +1,103 @@
+Build Configuration for Containerization
+In Visual Studio, add a new build configuration called 
+Docker
+ - following the steps below
+Use the Configuration Manager option in the ‘Build’ context menu.
+Opt to create a new build configuration.
+Create a ‘Docker' build configuration based on ‘Release’
+Make sure to edit the project properties & update the Build output path - verify the 
+Release
+ output path is still valid after copying its build configuration.
+IC-BillerShard 
+sqlproject
+ modification
+Modify the 
+IC-BillerShard.sqlproj
+ file directly - add another set of 
+ItemGroup
+ tags inside of the 
+Project
+ tags (this can be done near the bottom of the file.) and add the following:
+xml
+<!-- MSBuild condition to run this rule only on the 'Docker' configuration -->
+<ItemGroup Condition="'$(Configuration)' == 'Docker'">
+  
+   <!-- External DataSource to 'DBMaster_GoldAzure' - this won't work in a containerized MSSQL -->
+    <Build Remove="External Resources\*.sql" />
+  
+   <!-- External Tables are dependent on External Data Source -->
+    <Build Remove="dbo\External Tables\*.sql" />
+    <Build Remove="pdf\External Tables\*.sql" />
+    <Build Remove="RPT\External Tables\*.sql" />
+    <Build Remove="SMS\External Tables\*.sql" />
+    <Build Remove="TRK\External Tables\*.sql" />
+  
+   <!-- Views are dependent on External Tables -->
+    <Build Remove="dbo\Views\vwEquipment.sql" />
+    <Build Remove="dbo\Views\vwServiceTeams.sql" />
+    <Build Remove="dbo\Views\vwICFTINums.sql" />
+    <Build Remove="dbo\Views\vwEquipmentTracking.sql" />
+    <Build Remove="dbo\Views\vwEquipmentModel.sql" />
+    <Build Remove="dbo\Views\vwEmployees.sql" />
+  </ItemGroup>
+DBMaster_AzureGold 
+sqlproject
+ modification
+Modify the 
+DBMaster_AzureGold.sqlproj
+ file directly - add another set of 
+ItemGroup
+ tags inside of the 
+Project
+ tags (this can be done near the bottom of the file.) and add the following:
+xml
+<!-- MSBuild condition to run this rule only on the 'Docker' configuration -->
+<ItemGroup Condition="'$(Configuration)' == 'Docker'">
+
+   <!-- External DataSource to 'ShardMap' - this won't work in a containerized MSSQL -->
+    <Build Remove="External Resources\MyElasticDBQueryDataSrc.sql" />
+
+   <!-- External Tables are dependent on External Data Source -->
+    <Build Remove="dbo\External Tables\*.sql" />
+    <Build Remove="OBD\External Tables\*.sql" />
+    <Build Remove="pdf\External Tables\*.sql" />
+    <Build Remove="pld\External Tables\*.sql" />
+    <Build Remove="RPT\External Tables\*.sql" />
+    <Build Remove="safe\External Tables\*.sql" />
+    <Build Remove="SMS\External Tables\*.sql" />
+
+   <!-- Views are dependent on External Tables -->
+    <Build Remove="dbo\Views\vwInvAdj.sql" />
+    <Build Remove="dbo\Views\vwEquipment.sql" />
+    <Build Remove="dbo\Views\vwInvPay.sql" />
+    <Build Remove="dbo\Views\vwData.sql" />
+    <Build Remove="dbo\Views\vwCRMPdfLinkMonitor.sql" />
+    <Build Remove="pld\Views\vwInvoices.sql" />
+  </ItemGroup>
+Running the Build with ‘Docker’ Configuration
+Once the schema & stored proc updates have been made from the previous sections, and a new build configuration has been added for Docker that excludes External Tables and dependent views - this solution is ready to be built and containerized. This build can be run directly in Visual Studio or it can be done via command line using the MSBuild CLI:
+powershell
+& "../MSBuild.exe" ./IC-BillerShard/IC-BillerShard.sqlproj \
+/p:OutDir=..\..\db\ \ # Optional - Outputs DACPAC to ./db/ in repository root.
+/p:Configuration=Docker \ # Use the 'Docker' build configuration
+/p:SkipInvalidConfigurations=true;
+The 
+IC-DBMaster-Shard-Container
+ Repository
+To keep a versioned, up-to-date image in sync with both the 
+IC-BillerShard
+ and 
+DBMaster_AzureGold
+ SQL Projects, a monorepository has been created in the
+ Database Azure DevOps Project
+ to own the container build.
+Both the 
+IC-BillerShard
+ and 
+DBMaster_AzureGold
+ repositories are referenced in this repository as 
+git submodules
+, effectively making the 
+IC-DBMaster-Shard-Container
+ repository a wrapper for both. This is more for convenience’s sake - the top-level repository can be checked-out with or without submodules. Checking out the other repositories as submodules effectively gives the developer a single workspace for both Database solution projects and the top-level infrastructure for building & serving a Docker image locally that can host both.
+ URL:/spaces/EA/pages/4612456457/Containerizing+the+Database+Server

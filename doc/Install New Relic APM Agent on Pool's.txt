@@ -1,0 +1,20 @@
+Documentation for the process of setting up the New Relic APM agent on Nodes on the Pool for Azure DevOps.
+ 
+Overview
+I will be going over the procedures that were used to install the New Relic APM agent to track transactions.
+ 
+Instructions
+·        The Visual Studio Project must contain the newrelic.config file which can be obtained here. One Example: 
+dev.azure.com/invoicecloud/Src/_git/ICAutoPayController?path=/ICAutoPayController/newrelic.config
+·        On the Pool start task, we have to set up two commands. One to download the agent msi installer and the other to run the New Relic APM agent msi installer. Provided in the screenshot below is an example.
+·        Enable the agent by using three different methods, but preferably the first method.
+o  1st method
+o  2nd method
+o  3rd method
+Resources: 
+Controller Pool: 
+https://portal.azure.com/#view/Microsoft_Azure_Batch/PoolMenuBlade/~/start-task/batchAccountId/%2Fsubscriptions%2Fc1e3635c-98d4-47f5-96e0-926717b6f0c4%2FresourceGroups%2Frg-azbatch-test%2Fproviders%2FMicrosoft.Batch%2FbatchAccounts%2Ficbatchtest/poolId/ControllerPool
+New Relic APM agent installation guide (make sure you go through the steps):
+https://docs.newrelic.com/install/dotnet/?deployment=windowsInstallNonIis&docker=noDocker#newrelic-config
+ 
+ URL:/spaces/DS/pages/2626388007/Install+New+Relic+APM+Agent+on+Pool+s

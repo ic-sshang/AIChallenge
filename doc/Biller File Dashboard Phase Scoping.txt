@@ -1,0 +1,233 @@
+Problem Alignment
+ 
+EBPP-9829
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-6995
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+How do we group billers together for dashboard upload
+Who do we allow to do this- display Invoice Types by file
+Who do we not allow- backend splits that we need to factor in that won’t work or are too complex, file too large
+Can we show where the biller uploaded from?  Currently we can for FTP, Stratus, but some is backend work that we will show, but can we display others?  No code to support this as of now. 
+Do we want to show username?  No code to support this as of now
+Biller File Upload
+Invoice- Complete on Milestone 1 - Q3 2023
+Discuss with Ross what DS is doing now to alert and correct incorrect file uploads- manual and non manual intervention; are there more ways to improve this to reduce manual work?
+PDF
+PDF Linking, going to show on Milestone 1- redirect to current Biller Portal Page 
+Adjustment Files 
+How do we ensure that billers will upload the correct files? 
+EBPP-3404
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-2435
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+PDF’s Tab
+Conveyance name changes
+Adjustment Files Tab
+Think through Invoice File/Record Adjustments/Conveyance 
+Payment Files Tab
+Conveyance- how will we code to pull this data?  Can show the data, but very time consuming to allow billers to make any changes on a new screen
+Allowing the biller to manipulate a file in real time
+Capture errors and offer help (video/documentation) of how to resolve from the dashboard
+Export of Filters- is this for Invoice, PDF, Adjustment and Payment Files?
+Ability for Cloudie’s to upload any file type- 
+EBPP-7695
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Notify billers when files are not uploaded by X time- 
+EBPP-5506
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Do we add webservices for the dashboard? 
+EBPP-1190
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Help Options
+In-page help: each column should have a clickable badge to view help content (text? video?) which explains how that column works
+Email Notifications
+Do we capture why an email isn’t sent?  Do we display this to billers? Ineligibility status'
+Expiration Dates
+Pay By Text
+Auto Pay 
+Phase 2 ?
+User sees Upload New Files option- add User Sees Help Video Icon to guide billers how to upload the file (limit to just Invoice Files at first?)
+From Anita Peterson- Client Services- Issue Example 
+I wanted to share a report with you – we track cases that are being submitted during a RE/PP Tax cycle.
+ 
+We have gotten 46 so far, and the majority of the cases are because the biller forgot how to use FTP – I highlighted just a few that I was reviewing this morning.  When the biller is able to upload through IC – tax billing is going to be so much easier!
+ 
+Also, I am not sure if we have factored this into the product feature set, but having a start date would be helpful.  Many states cannot start collecting money for taxes until, for example, 7/1.  7/1 falls on a weekend this year.  We have had several requests from billers asking if they can upload but IC would “hold” the bills and not make them available until the 1
+st
+ (at my previous company, we used to have a start date)  Today, billers can choose when the emails are sent out but some billers have already gotten payment and they are not happy about it – for MI billers, we are breaking the law.
+Sarah L or Chris S from training can help us make this video (need to write script)
+Conveyance review, text should be “Conveyance” -
+Is there an “in process” view here? How long does it take to identify these records?
+Whatever process identifies the to-be-conveyed records before doing the conveyance should be invoked here so we can (a) alert the biller, (b) display a count of records, and (c) present a new screen for detailed review of records
+If conveyable records found…
+If review option is enabled…
+(a) alert the biller
+New email modeled after the dup invoice email (need to get a example of this), provide a link to the review screen in the biller portal
+Alert in the biller portal home page?
+(b) display
+icon TBD, talk with Design
+a count of records as “X records pending review”, link to a review screen showing conveyable records
+(c) review screen
+should show the data differences that triggered the conveyance
+each row should have an option to purge from conveyance queue
+should present button for accepting conveyance on all remaining records
+If review option is not enabled…
+(a) alert the biller - NO, do not alert if they don’t need to review (existing functionality)
+(b) display
+icon is green checkmark
+a count of records as “X conveyable records”, link to a review screen showing conveyable records
+(c) review screen should show the data differences that triggered the conveyance
+If conveyable records not found…
+Display green checkmark icon with “0 conveyable records” non-link message
+AutoPay(?) review, text should be “AutoPay” (does this need to become “Balance Forward”?) - 
+(auto pay scheduled and communicated but won’t run bc of change in balance?)
+Example:
+Invoice A exists in the system for $50, scheduled to autopay on 9/23, two days ahead of the 9/25 invoice due date
+On 9/21, Invoice B for $75 arrives in an invoice file, and the $50 on Invoice A balance forwards to Invoice B making the amount due on Invoice B $125
+Because Invoice A is now zero balance, the autopay doesn’t run
+Payer is confused/frustrated because they thought their autopay was all set and invoice would be paid on time, likely prompting angry calls to biller and biller to call IC
+Need to check with CS/CSMs/etc on is there a scenario where the biller must have their new invoice records imported knowing it will trigger balance forward and missed autopays (all future-dated payments?, payment plans?, etc)
+Is there an “in process” view here? How long does it take to identify these records?
+When the system identifies records that will be balance forwarded and impact autopays, we need to identify that on the dashboard
+If biller has “hold” option enabled, the held records should be pulled into an exceptions queue and not block the processing of the other records
+Display
+Icon of green checkmark
+Message of “X records held”, link to review screen showing held records
+Review screen
+Should show invoice number, issued date, due date, amount of invoice that will be balance forwarded
+Should show invoice number, issued date, due date, amount of new invoice
+Should show date of future-data payment (as an indicator of when record hold will be lifted)
+Should there be a callout for any records that will be held past a specific number of days? - Do we need give them an option to “un hold” specific records if they choose?
+If biller does not have “hold” option enabled… let’s wait and see if this is even a use-case that we need to accommodate
+If no records are identified, display:
+Icon of green checkmark
+Message of “0 records held”, no link
+File Review & Release
+Need to check with dev to see if these records are actually imported but kept invisible, or if the file just waits for import
+In scenario where “Pre-loaded BIF Files” is enabled, this 4th review step is displayed
+Icon starts with “no done”
+Provide link to view full file data
+Need mockup of file review page with button - Design / or do we just reuse the existing page??
+On the file review page, provide a button to “release” file
+When button is clicked
+file is queued for import
+user is redirected back to the dashboard and see Icon changed to green checkmark
+ 
+Upload of new file - EBPP-
+EBPP-6995
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+User clicks Upload New File, browses local file system, picks files, begins upload
+If user stays on the upload screen, they are presented with 
+a message that their file will be processed, to return to the dashboard homescreen- change close tab message to tell them to close and review on the homescreen
+When user clicks back to dashboard, new file should be highlighted in the dashboard (what does this look like?) 
+Uploading or Uploaded (when done)
+If user cancels upload, gives cancel msg, with options of “upload new file” (back to previous screen) or “close window” (back to dashboard)
+Need mockup for this screen 
+*Added an example of the Cancel overlay-N
+If error occurs, gives error msg (needs to be meaningful) and give them link back to upload new file (previous screen)
+If user browses away from upload screen before upload is complete, and back to dashboard
+If upload is no longer in process, same visual behavior as “stays until end of upload” (highlight new file)
+If upload is still in process, user will see a new record on the dashboard, with the following visual display in the Upload Status column:
+Animated “in process” gif indicating upload not yet complete
+Date upload was initiated
+“via” how file was provided (ex: Biller Portal, FTP, Stratus, etc) - check with Possums on if “in process” files on non-portal channels is possible?
+The system will determine all attributes it needs for file processing from the file itself, meaning no user entered fields will be provided (file type, invoice type, etc)
+Is this realistic? Need to discuss with Possums
+If file upload fails (error), dashboard should should display error icon with date and channel (is this possible?) - How can user see error msg? Talk with design- 
+*added example, see May Utility Bills file at bottom of list -N
+Audience: Who are we building for?
+High-level Approach
+Product Approach:
+Success
+How do we know if we’ve solved this problem?
+Solution Alignment
+Key Features
+   
+Key Flows  
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+ 
+ 
+Sales
+Do you need sales enablement materials?
+ 
+ 
+Marketing
+Does this impact marketing?
+ 
+ 
+Training
+Do you need to update support content or training?
+ 
+ 
+Implementations
+Changes to questionnaire
+ 
+ 
+Delivery
+Set up and Enablement
+ 
+ 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+ 
+ 
+Support
+Biller questions and support
+ 
+ 
+Legal
+Are there potential legal ramifications?
+ 
+ 
+Reconciliations
+Questions from billers about charges
+ 
+ 
+Jira list
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Key
+Summary
+T
+Created
+Assignee
+Reporter
+P
+Status
+Resolution
+Labels
+No issues found 
+Refresh
+ 
+Next Steps/ Other Ideas:
+ URL:/spaces/PRODUCT/pages/2744254468/Biller+File+Dashboard+Phase+Scoping

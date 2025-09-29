@@ -1,0 +1,8 @@
+Running:
+Azure Sync for Jira Assets
+Not yet running (but hopeful to):
+Atlassian Insight & Jira Service Management
+ (runZero)
+Here’s a command to truncate all values in a JSON to 255 characters to meet Assets' max character limit:
+jq '.. |= (if type == "string" then .[0:255] else . end)' .\assets.json > truncated.json
+ URL:/spaces/platform/pages/4397105508/Imports+We+Run

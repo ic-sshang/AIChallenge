@@ -1,0 +1,2206 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+ 
+API Documentation
+Integrator Web Services
+Summary: HEMIC is using the standard Guidewire Cloud Native Accelerator without customization or additional APIs for the first phase. They will route customers to the IC Customer Portal/Virtual Site.
+Base Code: 
+Guidewire Cloud Native Accelerator Technical Design - Integrations - Confluence (atlassian.net)
+The guidewire Billing Center url: {{pending}}
+Username: 0oa1e2bzuneXpSrKG358
+Password: n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+API Authentication Method: Basic Auth
+Postman Collection: 
+Real Time Data Refresh
+API Details
+Balance Update
+IC Use
+Partner API Name
+Description
+Specifications
+RTDR: Balance Update
+BalanceEnquiry
+Returns account balances
+Standard GW Accelerator
+AccountNumber
+DisplayAccountNumber
+ 
+TotalAmountDue (Monetary): IC Total Amount Due - NOT USED
+InvoiceStreamName - (Not used with IC)
+Adhoc: adhoc details - (Not used with IC)
+PaymentDueDate: IC Due Date
+Amount (Monetary): IC Total Amount Due
+AmountDue (Monetary): IC Balance Due
+EventDate: IC Invoice Date
+InvoiceNumber: IC Invoice Number
+PublicID - (Not used with IC)
+Authorization
+: username:password
+POST 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/getbalanceenquiry
+Request
+json
+{
+  "AccountNumber": "12345678901234",
+  "DisplayAccountNumber": "74839282"
+}
+Status: Balance Enquiry Successful
+Message: User Message
+Response
+json
+"{\"Invoices\":
+[{
+\"AdHoc\":false,
+\"Amount\":\"615.00 usd\",
+\"AmountDue\":\"615.00 usd\",
+\"EventDate\":\"2024-05-01\",
+\"InvoiceNumber\":\"1000000094\",
+\"InvoiceStreamName\":\"Monthly\",
+\"PaymentDueDate\":\"2024-05-26\",
+\"PublicID\":\"bc:SlxaSAnNZMWqPZyAtuNAI\",
+\"Status\":\"Billed\"
+}],
+\"Message\":\"Request Processed\",
+\"Status\":\"Success\",
+\"TotalAmountDue\":\"615.00 usd\"
+}"
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Data Pump
+API Details
+Payments
+IC Use
+Partner API Name
+Description
+Specifications
+Payment Code Mapping
+Payment Source Mapping
+Data Pump: Payment
+PaymentsNotification
+ Posts a payment/credit to GW system
+Optional fields need to be removed completely from the call in order to proceed.
+AccountNumber
+BillingAddress: IC AddressLine1
+PaymentDate
+City
+CustomerName
+DisplayAccountNumber
+EmailAddress
+PaymentGUID
+PaymentType (int)
+1- CC
+2- ACH
+PaymentChannel: IC Payment Source Description
+PhoneNumber (Optional)
+Credit Card = 1
+ACH = 2
+Payment Source ID - Payment Source Description: 
+1 - Web Services 
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Request
+Authorization
+: username:password
+POST 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/addpaymentnotification
+json
+{
+  "AccountNumber": "1000000007",
+  "AltPhoneNumber": "603-294-3083",
+  "BillingAddress": "SanthoshFS",
+  "City": "SanthoshFS",
+  "CustomerName": "SanthoshFS SanthoshFS",
+  "DisplayAccountNumber": "1000000007",
+  "EmailAddress": "SanthoshFS@SanthoshFS.com",
+  "InvoiceNumber": "1000000046",
+  "PaymentAmount": 100.00,
+  "PaymentChannel": "string",
+  "PaymentDate": "04/01/2024",
+  "PaymentGUID": "21041fa9-0a84-4ce6-91c0-d783fc053861",
+  "PaymentType": "2",
+  "PhoneNumber": "603-294-3083",
+  "State": "CA",
+  "Zip": "03801"
+}
+Response
+{
+    "Success": " Payment Notification set successfully ",
+    "Message": “Success***************”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Void, ACH Reject, Credit/Refund, Chargeback
+IC Use
+Partner API Name
+Description
+Specifications
+Payment Code Mapping
+Payment Source Mapping
+Data Pump: Void, ACH Reject, Credit/Refund, Chargeback
+PaymentsNotification
+ Posts a payment/credit to GW system
+Due to the Reversal Reasons being custom per biller, we will be using Advanced Settings to update future billers that do not use the default codes provided in the accelerator.
+Included Payment Types:
+ACH Rejects
+Credits
+Chargebacks
+ 
+PaymentAmount = Amount Rejected/Voided
+PaymentDate = Reject/Void Date
+Reject Codes:
+ReversalReason:
+ACH Rejects: "returnedcheck"
+Chargebacks: "modification"
+Refund/Credits/Voids: "internal"
+Credit Card = 1
+ACH = 2
+Payment Source ID - Payment Source Description: 
+1 - Web Services 
+2 - Biller Portal 
+3 - Customer Portal
+4 - Express Payments
+7 - Online Bank Direct 
+8 - POS - Point of sale
+10 - IVR
+11 - Cloud Payments
+12 - Cloud Store - Consumer Initiated
+13 - Cloud Store - Biller Initiated
+14 - Shopping Cart
+15 - Auto Pay
+16 - Scheduled Payment
+17 - Biller Portal - Easy Pay
+18 - CSR - One Time Pay
+19 - Kiosk
+20 - Mobile Express Payments
+21 - Harris GoMobile
+22 - Recurring Scheduled Payment
+23 - Pay By Text
+26 - Live Agent Payment
+27 - Agent Connect
+Request
+Authorization
+: username:password
+POST 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/addpaymentnotification
+json
+{
+  "AccountNumber": "1000000007",
+  "AltPhoneNumber": "603-294-3083",
+  "BillingAddress": "SanthoshFS",
+  "City": "SanthoshFS",
+  "CustomerName": "SanthoshFS SanthoshFS",
+  "DisplayAccountNumber": "1000000007",
+  "EmailAddress": "SanthoshFS@SanthoshFS.com",
+  "InvoiceNumber": "1000000046",
+  "PaymentAmount": 100.00,
+  "PaymentChannel": "string",
+  "PaymentDate": "04/01/2024",
+  "PaymentGUID": "21041fa9-0a84-4ce6-91c0-d783fc053861",
+  "PaymentType": "2",
+  "PhoneNumber": "603-294-3083",
+  "ReversalReason": "xyz",
+  "State": "CA",
+  "Zip": "03801"
+}
+Response
+"{\"Message\":\"Payment Notification saved successfully\",
+\"PaymentGUID\":\"21041fa9-0a84-4ce6-91c0-d783fc053861\",
+\"Success\":\"Success\"}"
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Paperless Enrollments 
+(If not used, mark N/A)
+IC Use
+Partner API Name
+Description
+Specifications
+Data Pump: Paperless Enrollment
+PaperlessPreference
+Paperless Status
+AccountNumber
+EmailID: IC Email Address
+PaperLess: true/false
+Request
+Authorization
+: username:password
+POST 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/setpaperlesspref
+json
+{
+  "AccountNumber": "1000000011",
+  "EmailID": "praveen@invoice.com",
+  "PaperLess": true
+}
+Response
+Status: PaperLess preference set Successfully
+{
+    " Status ": " PaperLess preference set Successfully "
+    “Message”: “Success"
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Autopay Enrollments and Payment Method Changes 
+(If not used, mark N/A)
+IC Use
+Partner API Name
+Description
+Specifications
+Data Pump: AutoPay Enrollment and Auto Pay Payment Method Changes
+AutoPayNotification
+When AutoPay status is false and Payment Type is 0. The PaymentGUID, CustomerGUID, BankAccountNumber is made optional
+When AutoPay status is  True . The PaymentGUID, CustomerGUID, BankAccountNumber (Last 4 digits) and PaymentType = 1 is sent in the request.
+When AutoPay status is  True  . The PaymentGUID, CustomerGUID, CardNumber (Last 4 digits) and PaymentType =  2 is sent in the request.
+AccountNumber: IC Account Number
+AddressLine1: IC AddressLine1
+AutoPay: True/false
+BankAccountNumber: Last 4 Digits (Used for ACH Payments only)
+if Autopay = False, then field will not be used
+CardNumber: Last 4 Digits (Used for CC Payments only)
+if Autopay = False, then field will not be used
+CustomerName
+DisplayAccountNumber
+EmailAddress
+PaymentGUID: of the PaymentMethod being used for autopay
+PaymentType (int)
+1- ACH
+2- CC
+if Autopay = False, then PaymentType = 0
+Request
+Authorization
+: username:password
+POST 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/setautopaynotification
+{
+  "AccountNumber": "1000000011",
+  "AddressLine1": "Adams123",
+  "AutoPay": true,
+  "BankAccountNumber": "1234",
+  "CardNumber": "4111",
+  "City": "Jhon",
+  "CustomerName": "John AdamsS",
+  "DisplayAccountNumber": "1000000011",
+  "EmailAddress": "john@test.com",
+  "PaymentGUID": "2a3be945-33e3-42f4-8683-c130701e0534",
+  "CustomerGUID": "2a3be945-33e3-42f4-8683-c130701e0534",
+  "PaymentType": 2,
+  "State": "GA",
+  "Zip": "31036"
+}
+Response
+Success: AutoPay status set successfully
+Message: User Message
+{
+    "Success": " AutoPay status set successfully ",
+    "	Message": “Success***************”
+}
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Customer Changes 
+(if not used, Mark N/A) - 
+N/A
+IC Use
+Partner API Name
+Description
+Specifications
+Request
+Response
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+Bill 
+Presentment - N/A
+Bill Presentment
+Bill Presentment
+IC Use
+Partner API Name
+Description
+Specifications
+Bill Presentment
+FetchInvoiceDocument
+BillingID: AccountNumber
+InvoiceNumber: IC Invoice Number
+Request
+Authorization
+: username:password
+Username: {{pending}}
+Password: {{pending}}
+POST {{URL}}
+json
+Response
+Content: String
+DocumentType: String
+MimeType: String - Contains mime type of the document
+Modifications
+IC Use
+Partner API Name
+Description
+Specifications
+Jira Request
+Release Date
+Necessary Settings 
+(
+insert Jira here)
+(
+Advanced Setting 35 must be set to True)
+Request
+Response
+User Stories
+Workflow
+Story
+Assumptions & Requirements
+Steps
+Balance Update
+Invoice Cloud will update balances in real time when the customer record is accessed.
+Integrator webservice is reachable and functioning
+Account exists in Invoice Cloud
+Customer Record is accessed in Invoice Cloud
+Invoice Cloud calls Integrator webservice
+Invoice Cloud updates balance (if IC record is different)
+Customer Block Flags
+Data Pump Payments
+Data Pump Credits
+Data Pump Voids
+Data Pump ACH Rejects
+Data Pump Paperless Enrollment
+Data Pump Autopay Enrollment
+Data Pump Customer Changes
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Single Sign On - N/A
+Purpose/Summary:
+Configuration
+SSOConnect Details
+SAML Configuration
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Agent Connect - N/A
+Purpose/Summary:
+Sample Request:
+Additional Details
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AccountNumber
+Yes
+Yes
+DisplayAccountNumber
+No
+AccountID
+No
+CustomerName
+No
+CustomerName2
+No
+Address1
+No
+Address2
+No
+City
+No
+State
+No
+Zip
+No
+Phone
+No
+EmailAddress
+No
+BlockPaymentsCC
+No
+BlockPaymentsEFT
+No
+CurrentInvoiceNumber
+No
+CurrentInvoiceDueDate
+No
+CurrentInvoiceDate
+No
+CurrentBalanceDue
+No
+InvoiceTypeID
+No
+AllowPartialPayments
+No
+MinimumAmountDue
+No
+InvoiceFormatID
+No
+BillerReference
+No
+RedirectMode
+Yes
+AllowSwipe
+No
+UserType
+Yes
+Yes
+UserLogName
+Yes
+Yes
+LoginGuid
+No
+RequireAuthorization
+No
+RequireEmail
+No
+MessagingSettings
+No
+AccountServices
+No
+AgentConnectViewMode
+No
+CssUrl
+No
+HomeButtonUrl
+No
+Optional Page User Experience Options
+Parameter
+Required
+In Request
+Partner Field name
+Partner Field Description
+InvoiceOptions
+No
+AllowRegisterAccount
+No
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field name
+Partner Field Description
+AllowViewStatement
+No
+AllowRemove
+No
+AllowViewRelated
+No
+AllowRemindMe
+No
+User Stories:
+User Stories
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Agent Payment
+Agent navigates to Integrator portal. Agent clicks Pay Now. Agent is redirected to IC Agent Connect
+Cloud Payments V2 - N/A
+Purpose/Summary:
+Sample Request:
+Additional Details
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+PostBackURL
+False
+BillerReference
+False
+ViewMode
+True
+CssUrl
+False
+Customers
+True
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+DisplayAccountNumber
+False
+Name
+False
+Address
+False
+City
+False
+State
+False
+Zip
+False
+EmailAddress
+False
+Invoices
+False
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+TypeID
+False
+InvoiceDate
+False
+DueDate
+False
+BalanceDue
+False
+CCServiceFee
+False
+ACHServiceFee
+False
+MinimumAmountDue
+False
+AllowPartialPayments
+False
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+AllowEMV
+False
+EMVDeviceID
+False
+EMVLocationID
+False
+CashierName
+False
+AllowCCPayment
+False
+AllowACHPayment
+False
+CreateCustomerRecord
+False
+RemoteAuthenticationToken
+False
+PageLoadOverride
+False
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+AllowRegisterAccount
+Optional
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+AllowRemove
+Optional
+AllowViewRelated
+Optional
+AllowRemindMe
+Optional
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Cloud Payments - N/A
+Purpose:
+Sample Call:
+Additional Details
+Parameter
+Required
+In Call
+Partner Field Name
+Partner Field Description
+Biller_guid
+Y
+N/A- Always provided by IC
+invoice_number
+Y
+balance_due
+Y
+invoice_type_id
+Y
+invoice_date
+N
+invoice_due_date
+N
+create_customer_record
+N
+customer_account_number
+N
+customer_name
+N
+customer_address
+N
+customer_city
+N
+customer_state
+N
+customer_zip
+N
+customer_email_address
+N
+allow_partial_payment
+N
+minimum_payment_amount
+N
+allow_swipe
+N
+allow_emv
+N
+allow_cc_payment
+N
+allow_ach_payment
+N
+allow_paypal_payment
+N
+credit_card_service_fee
+N
+ach_service_fee
+N
+custom_column_1
+N
+custom_column_2
+N
+custom_column_3
+N
+custom_column_4
+N
+return_url
+N
+postback_url
+N
+biller_reference
+N
+emv_device_id
+N
+emv_location_id
+N
+cashier_name
+N
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+Additional 
+WebServices
+Additional WebServices
+API Name
+API Use/Purpose
+UploadInvoiceFile
+Used to upload Billing information/Invoice Date to Invoice Cloud in real time
+Process Credit Card Sale with UserCreditCardGUID
+Used to process refunds/credits through Guidewire Billing Center with a Credit Card Account that was previously used by a user to process a payment
+Process ACH Sale with UserBankGUID
+Used to process refunds/credits through Guidewire Billing Center with a Bank Account that was previously used by a user to process a payment
+Store User Credit Card
+Used to store Credit Card Information on an Account on Guidewire Billing Center, however, this is not PCI compliant and unlikely to be used by the biller.
+Store User Bank Account
+Used to store Bank Account Information on an Account on Guidewire Billing Center, however, this is not PCI compliant and unlikely to be used by the biller.
+Create Customer Record
+Used to create the account on Invoice Cloud ahead of Invoice File creation in order to setup account information and settings (autopay/paperless/paybytext)
+Update Customer AutoPay Status
+Provides the ability for a user to update the Autopay Status on Guidewire Billing Center
+User Stories:
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: .BIF
+File Naming Convention: standard (BID_MMDDYYYYHHMMSS.BIF)
+File Delimiter: 
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Multiple times per day as policies are generated.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+ 
+ 
+ 
+File Header
+2
+BillerGuid
+Y
+TRUE
+ 
+ 
+ 
+File Header
+3
+ThirdPartyFileReference
+ 
+FALSE
+ 
+ 
+ 
+File Header
+4
+FileCreationDate
+Y
+TRUE
+sysdate
+ 
+ 
+File Header
+5
+InvoiceCount
+Y
+TRUE
+ 
+ 
+ 
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+invoice.amount
+ 
+ 
+File Header
+7
+RowType
+Y
+TRUE
+ 
+ 
+ 
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N= New D=Deactivate U=Update R=Rewrite if exists
+New - Send new if there are new invoices created for subsequent changes (2nd policy or changing pay plan from Full Pay to Monthly/Quaterly - consider record type R if new billed invoice is created)
+Update - Update to existing invoice due to new policies/changes
+Rewrite - GW rewrite/reinstate
+Deactivate - 1. For cancellations and send only with status as Cancelled or Scheduled 
+Cancellation.GW
+ should not send for Pending Cancellation. Once deactivated, biller to take payments from insured through collections or late pay.
+For Non-Renew if there was a billed invoice for renewal transaction.
+ 
+ 
+Invoice Header
+9
+InvoiceFormatGuid
+ 
+TRUE
+ 
+Value being passed - “7B6A335B-1468-402D-902C-EA2335865D23
+"
+ 
+ 
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+invoice.invoicenumber
+ 
+*Downpayments have temp invoice numbers
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+BillingDate
+ 
+ 
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDate
+ 
+We do not show cancellation effective date/reinstatement date.
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+DueTotal
+ 
+ 
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+ 
+ 
+ 
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+ 
+ 
+ Always $5
+Invoice Header
+23
+FirstNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+24
+SecondNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+25
+ThirdNotifyRequestedDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due Amount in UI
+ 
+ 
+Invoice Header
+194
+BalanceForward
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+248
+AutoPayCollectionDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+252
+InvoiceTypeID
+ 
+TRUE
+ 
+ 
+ 
+Invoice Header
+317
+PaymentExpirationDate
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+318
+PaymentExpirationMessage
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+345
+BillerInstallmentNumber
+Y
+FALSE
+ 
+ 
+Indicating the priority between billed invoice vs adhoc invoice.
+Scheduled billed Invoice to be series 1,2,3,4,X
+Adhoc invoices to be incremented
+ 
+375
+Active
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+407
+PastDue
+ 
+FALSE
+ 
+ 
+ 
+Invoice Header
+59
+AccountNumber
+Y
+TRUE
+AccountNumber
+ 
+ 
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Insured Name - Primary Named Insured
+ 
+ 
+Customer Record
+61
+Address1
+Y
+FALSE
+ 
+Full Address is one field in GW
+ 
+Customer Record
+62
+Address2
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+63
+City
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+64
+State
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+65
+Zip
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+66
+Phone
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+ 
+ 
+ 
+Customer Record
+356
+BlockPaymentsCC
+ 
+FALSE
+ 
+ 
+ 
+Customer Record
+357
+BlockPaymentsEFT
+ 
+FALSE
+ 
+ 
+ 
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+BillingAccountNumber -DirectBill 
+ProducerCode -AgencyBill
+ 
+ 
+Customer Record
+70
+RowType
+Y
+TRUE
+ 
+ 
+ 
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+131
+JSON Configuration
+Due to the Reversal Reasons being custom per biller, we will be using Advanced Settings to update future billers that do not use the default codes provided in the accelerator. 
+Codes used for ACH Reject, Chargeback, Credit/Refund and Void can be updated using this setting. 
+json
+{
+  "DataPumpConfig": {
+    "ReversalReasons": [
+      {
+        "ReversalType": "Voids",
+        "ReversalCode": "internal"
+      },
+      {
+        "ReversalType": "Credits",
+        "ReversalCode": "internal"
+      },
+      {
+        "ReversalType": "ACHRejects",
+        "ReversalCode": "returnedcheck"
+      },
+      {
+        "ReversalType": "Chargebacks",
+        "ReversalCode": "modification"
+      }
+    ]
+  }
+}
+Example: 
+{ "DataPumpConfig": { "ReversalReasons": [ { "ReversalType": "Voids", "ReversalCode": "internal" }, { "ReversalType": "Credits", "ReversalCode": "internal" }, { "ReversalType": "ACHRejects", "ReversalCode": "returnedcheck" }, { "ReversalType": "Chargebacks", "ReversalCode": "modification" } ] } }
+Y
+8
+RTDR EndPoint/WebService URL	
+TEST: 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/getbalanceenquiry
+Y
+9
+RTDR Username if Applicable	
+0oa1e2bzuneXpSrKG358
+Y
+10
+RTDR Key or Password if Applicable	
+n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+Y
+11
+DataPump Payments EndPoint/WebService URL	
+TEST: 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/addpaymentnotification
+Y
+12
+DataPump Payments EndPoint/WebService Username	
+0oa1e2bzuneXpSrKG358
+Y
+13
+DataPump Payments EndPoint/WebService Password	
+n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+Y
+14
+DataPump Paperless EndPoint/WebService URL	
+TEST: 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/setpaperlesspref
+Y
+15
+DataPump Paperless EndPoint/WebService Username	
+0oa1e2bzuneXpSrKG358
+Y
+16
+DataPump Paperless EndPoint/WebService Password	
+n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+Y
+17
+DataPump AutoPay EndPoint/WebService URL	
+TEST: 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/setautopaynotification
+Y
+18
+DataPump AutoPay EndPoint/WebService Username	
+0oa1e2bzuneXpSrKG358
+Y
+19
+DataPump AutoPay EndPoint/WebService Password	
+n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+Y
+20
+Remote PDF EndPoint/WebService URL	
+NA
+Y
+21
+Remote PDF EndPoint/WebService Username	
+NA
+Y
+22
+Remote PDF EndPoint/WebService Password	
+NA
+Y
+101
+DataPump ACH Rejects EndPoint/WebService URL	
+TEST: 
+https://hemicfoc-gwcp-uat2-igicbc.api.epsilon1-needle.guidewire.net/api/gw/addpaymentnotification
+Y
+102
+DataPump ACH Rejects EndPoint/WebService Username	
+0oa1e2bzuneXpSrKG358
+Y
+103
+DataPump ACH Rejects EndPoint/WebService Password	
+n0wTwqlrbI55wVwGnY21v67uY0AO8ZxTd-85PRuz8hNhHby3v0Gi4ZBAf4bQCFDj
+Y
+Invoice Types
+Invoice Types
+164
+Virtual Site
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+Provided via BIF or BIF customization.
+AutoPayCollectionDate
+BIF customization
+ - Due Date
+BalanceForward
+Provided via BIF or BIF customization.
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - 
+Billing Date + 1
+InvoiceDate
+Provided via BIF
+InvoiceDueDate
+Provided via BIF
+InvoiceFormatGuid
+Provided via BIF
+InvoiceTypeID
+Provided via BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+Provided via BIF
+PaymentExpirationDate
+Provided via BIF or BIF customization.
+PaymentExpirationMessage
+Provided via BIF or BIF customization.
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+Provided via BIF or BIF customization.
+ThirdNotifyRequestedDate
+Provided via BIF or BIF customization.
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+GW REST APIs and IGAPP are used to update the balance on IC with RTDR.
+Data Flow - One Time Payment - Down Payment
+An Invoice data will be sent to Invoice Cloud on the Fly and a payment will be processed through webservice calls in the background. This is not PCI compliant, however, the option is available for the Biller to use.
+Data Flow - Customer Update
+Paperless and Autopay changes will be sent via GW REST API. GW can also update the Autopay field via IC webservice calls in the background. 
+Data Flow - Payment
+All payments will be sent via Data Pump using GW REST APIs. 
+Data Flow - Inline Donation Payments
+Inline Donations are supported to be sent through Data Pump to Guidewire Biling Center. Guidewire Integration will need to be customized to apply the Donations sent by Invoice Cloud accordingly. 
+Data Flow - Void
+Voids are processed through a webservice call in the background. The payment information will be sent via GW REST API call.
+Data Flow - ACH Reject
+ACH Reject information will be sent to GW through their REST API calls. The reject codes provided in GW will be used.
+Data Flow - Bill Presentment
+GW Rest APIs will be used to reflect bill presentment for the user. 
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Agents will be able to make a payment on GW via IC webservices called in the background. This is not PCI compliant. The biller has the option to use IC Products and iFraming to use IC for PCI Compliance. 
+Integration Sizing
+Total Initial LOE (By Story Points)
+30
+In Integration?
+Name
+Category
+Component
+Initial LOE (By Story Points)
+
+
+
+
+1
+
+
+1
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments File Split
+Adjustments
+Biller File Split
+5
+
+
+
+
+2
+
+
+2
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments
+Adjustments
+Native Web Services
+0
+
+
+
+
+3
+
+
+3
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Balance Refresh
+Adjustments
+Real-Time Data Refresh
+5
+
+
+
+
+4
+
+
+4
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustment File Conversion
+Adjustments
+File Conversion
+8
+
+
+
+
+5
+
+
+5
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+HTML Template
+8
+
+
+
+
+6
+
+
+6
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+Native Web Services
+0
+
+
+
+
+7
+
+
+7
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Extraction
+3
+
+
+
+
+8
+
+
+8
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Remote Linking
+2
+
+
+
+
+9
+
+
+9
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+DataPump
+5
+
+
+
+
+10
+
+
+10
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Status Report
+Change Logs
+File Export
+3
+
+
+
+
+11
+
+
+11
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Change Log
+Change Logs
+File Export
+2
+
+
+
+
+12
+
+
+12
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+Native Web Services
+0
+
+
+
+
+13
+
+
+13
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+File Size Split
+Invoices
+Biller File Split
+2
+
+
+
+
+14
+
+
+14
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update File Split
+Invoices
+Biller File Split
+3
+
+
+
+
+15
+
+
+15
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Pre-Processing
+Invoices
+Biller File Split
+8
+
+
+
+
+16
+
+
+16
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Batch Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+17
+
+
+17
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Single Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+18
+
+
+18
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update
+Invoices
+Real-Time Data Refresh
+1
+
+
+
+
+19
+
+
+19
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Real-Time Data Refresh
+5
+
+
+
+
+20
+
+
+20
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice On-Demand
+Invoices
+Real-Time Data Refresh
+13
+
+
+
+
+21
+
+
+21
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice File Conversion
+Invoices
+File Conversion
+8
+
+
+
+
+22
+
+
+22
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Biller API Data Import
+5
+
+
+
+
+23
+
+
+23
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+DataPump
+5
+
+
+
+
+24
+
+
+24
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+DataPump
+5
+
+
+
+
+25
+
+
+25
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+DataPump
+5
+
+
+
+
+26
+
+
+26
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+DataPump
+3
+
+
+
+
+27
+
+
+27
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+File Export
+5
+
+
+
+
+28
+
+
+28
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+File Export
+3
+
+
+
+
+29
+
+
+29
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+File Export
+5
+
+
+
+
+30
+
+
+30
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+File Export
+3
+
+
+
+
+31
+
+
+31
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+Native Web Services
+0
+
+
+
+
+32
+
+
+32
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment File Conversion
+Payments
+File Conversion
+8
+
+
+
+
+33
+
+
+33
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Conveyance File Split
+Customers
+Biller File Split
+13
+
+
+
+
+34
+
+
+34
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update File Split
+Customers
+Biller File Split
+3
+
+
+
+
+35
+
+
+35
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update
+Customers
+Real-Time Data Refresh
+1
+
+
+
+
+36
+
+
+36
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+Real-Time Data Refresh
+5
+
+
+
+
+37
+
+
+37
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+DataPump
+5
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3576201238/BID+3902+HEMIC+-+Guidewire+Technical+Design

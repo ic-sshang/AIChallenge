@@ -1,0 +1,62 @@
+1
+6
+false
+default
+list
+false
+NonProd - DevTest Implementation Plan
+Create NonProd Palo Load Balancer IP 
+A
+ record in the Cloudflare 
+invoicecloud.com
+ Public Zone (much like the 
+pal.invoicecloud.com
+ record).
+Add Firewall Rule to NonProd Palo to ensure only specific traffic can get thru Firewall:
+Cloudflare WARP IP Ranges
+NonProd Palo IP Ranges
+Prod Palo IP Ranges
+Update NonProd Palo to forward all incoming traffic NonPord Kong IP 
+10.152.88.9
+.
+Add DevTest N’s (1 thru 14 excluding 7) hostnames to Cloudflare 
+invoicecloud.com
+ Public Zone pointing to NonProd Palo 
+A
+ record via 
+CNAME
+:
+devtestN
+icg-boarding-devtestN
+ic-reporting-devtestN
+ic-payments-devtestN
+ic-reporting-devtestN
+internal-qaN
+my-devtestN
+Test from laptop.
+Update 
+invoicecloud.com
+ Private DNS Zones to forward traffic for the hostnames above thru Cloudflare CDN DNS.
+Test from NonProd AVD.
+Test from Prod AVD. 
+Cloudflare WARP IP Ranges
+IPv4
+8.29.230.188
+8.29.230.189
+8.29.231.49
+8.29.231.188
+8.29.231.189
+8.29.109.210
+8.29.228.186
+IPv6
+2a09:bac0:1000:16d::/64
+2a09:bac0:1000:16c::/64
+2a09:bac0:1000:1f::/64
+2a09:bac0:1000:27::/64
+2a09:bac0:1001:158::/64
+2a09:bac0:1001:1f::/64
+2a09:bac0:1001:27::/64
+Related Articles
+Cloudflare - InvoiceCloud.com - Infrastructure Documentation - Confluence (atlassian.net)
+GoDaddy - InvoiceCloud.com - Infrastructure Documentation - Confluence (atlassian.net)
+ URL:/spaces/platform/pages/3148283915/Kong+DV2+-+Cloudflare+and+Palo+Configuration

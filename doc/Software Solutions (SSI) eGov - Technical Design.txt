@@ -1,0 +1,1446 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+n/a
+Release Date
+n/a
+Document status
+complete
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+n/a
+File Mapping
+Invoice File
+Regular
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: txt
+File Naming Convention: Bills_20220727_105658.txt
+File Delimiter: NA (fixed length)
+Specification: 
+Sample File: 
+SFTP File Path: …\ToInvoiceCloud\Invoices\UB\Regular
+File Transfer Frequency: Twice a week.
+Import Types: There are two import types for the utility integration - 'UB V2' and 'Utility - Serial Number'. If the biller is looking for IC to capture multiple [meter] serial numbers for display on the template, we need to use the 'Utility - Serial Number' import type. 
+These import types use the same file but IC stores additional data from the 'Utility - Serial Number' type.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+1
+RowType
+TRUE
+File Header
+2
+BillerGuid
+TRUE
+File Header
+4
+FileCreationDate
+TRUE
+File Header
+5
+InvoiceCount
+TRUE
+File Header
+6
+TotalInvoiceAmount
+TRUE
+File Header
+7
+RowType
+TRUE
+Invoice Header
+8
+RecordType
+N
+TRUE
+NA - IC Genereated Value
+RecordTypes.N
+1
+Invoice Header
+9
+InvoiceFormatGuid
+TRUE
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+CONCATENATE(“
+CreationDate
+(
+MMddyyyy)
+” + “
+-UB-
+” + 
+dataLine(0).Substring(1,12)Trim.Replace("-", "").Replace("/", "")
+ & "
+-
+" & 
+dataLines(0).Substring(345, 1)
+.Trim.ToUpper)
+07152021
+-UB-
+2280340002
+-
+N
+'InvoiceDate + “-UB-” + AccountNumber
+Creates Invoice Number from dataline.
+IMPORTANT NOTE: If invoice is DMD, then instead of “-UB-”, it will be “-UBDMD-”
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Returns CreationDate found in the header
+20210715
+InvoiceDate could be found in the Header
+8
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Start Index 123, Length 8
+08052021
+Gets Due Date
+8
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Start Index 73, Length 10
+String
+Gets Total Amount Due. 
+10
+Invoice Header
+38
+Custom1
+FALSE
+Invoice Header
+39
+Custom2
+FALSE
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Start Index 23, Length 10
+String
+Past Due Amount/New Charges Total/ New Payments Total
+10
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Start Index 53, Length 10
+String
+New Adjusts Total/ New Penalties Total /Gross Due Amount
+10
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Start Index 93, Length 10
+String
+Previous Bill/Previous Pay/ Deposit Refund
+10
+Invoice Header
+43
+Custom6
+Y
+FALSE
+Start Index 123, Length 8
+String
+Due Date/ELectric From Date/Electric To Date
+8
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Start Index 147, Length 8
+String
+Water From Date/Water To Date
+8
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Start Index 163, Length 3
+String
+Service Days Elec./ Service Days Water
+3
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Start Index 73, Length 10
+String
+Gets BalanceDue
+10
+Invoice Header
+102
+Custom19
+Y
+FALSE
+Start Index 169, Length 40
+String
+Service Address
+40
+Invoice Header
+103
+Custom20
+Y
+FALSE
+Start Index 209, Length 30
+String
+Customer Name
+30
+Invoice Header
+104
+Custom21
+Y
+FALSE
+Start Index 239, Length 30
+String
+Mailing Address 1
+30
+Invoice Header
+105
+Custom22
+Y
+FALSE
+Start Index 269, Length 30
+String
+Mailing Address 2
+30
+Invoice Header
+106
+Custom23
+Y
+FALSE
+Start Index 299, Length 28
+String
+Mailing City
+28
+Invoice Header
+107
+Custom24
+Y
+FALSE
+Start Index 327, Length 2
+String
+Mailing State
+2
+Invoice Header
+108
+Custom25
+Y
+FALSE
+Start Index 329, Length 10
+String
+Mailing Zipcode
+10
+Invoice Header
+109
+Custom26
+Y
+FALSE
+Start Index 73, Length 10
+String
+Net Due Amount
+10
+Invoice Header
+110
+Custom27
+Y
+FALSE
+CONCATENATE(
+Index 339, Length 1
+ + “*” + 
+Index 340, Length 2
+ + “*”+ 
+Index 341, Length 1
+ + “*” +
+ 
+Index 342, Length 1
+ + “*”+
+ 
+Index 343, Length 1
+ + “*” + 
+Index 344, Length 1
+ + “*”+
+ 
+Index 345, Length 1
+ + “*” + 
+Index 346, Length 1
+ + “*”+ 
+Index 347, Length 1
+)
+String
+"Inside/Outside City"/Customer Class /ACH Flag/Cable Flag/ Delinquent Notice/Final Bill Flag/Budget Billing Flag/Credit Balance Flag
+1
+Invoice Header
+118
+Custom35
+Y
+FALSE
+CONCATENATE(
+Index 348, Length 10
+ + “*” + 
+Index 358, Length 9
+)
+String
+Elec Fuel Adj. Amt./Fuel Adjustment
+10
+Invoice Header
+119
+Custom36
+Y
+FALSE
+Start Index 367, Length 6
+String
+Power Factor
+6
+Invoice Header
+120
+Custom37
+Y
+FALSE
+Start Index 373, Length 20
+String
+Parcel Id
+20
+Invoice Header
+121
+Custom38
+Y
+FALSE
+Start Index 393, Length 8
+String
+ACH Debit Date
+8
+Invoice Header
+122
+Custom39
+Y
+FALSE
+CONCATENATE(
+Index 401, Length 2
+ + 
+“*”
+ +  
+Index 403, Length 2
+) 
+String
+Electric Read Type / Water Read Type
+5
+Invoice Header
+123
+Custom40
+FALSE
+Invoice Header
+124
+Custom41
+Y
+FALSE
+Start Index 405, Length 8
+String
+Last Payment Date
+8
+Invoice Header
+125
+Custom42
+FALSE
+Invoice Header
+126
+Custom43
+FALSE
+Invoice Header
+127
+Custom44
+Y
+FALSE
+Start Index 429, Length 3
+String
+Water # of Units
+3
+Invoice Header
+128
+Custom45
+Y
+FALSE
+CONCATENATE(
+Index 432, Length 1
+ + 
+“*”
+ + 
+Index 463. Length 8
+ + 
+“*” 
++ 
+Index 471, Length 8
+)
+String
+E-mail Bill / Elec Usage /  Water Usage
+19
+Invoice Header
+129
+Custom46
+Y
+FALSE
+Start Index 433, Length 30
+String
+Service City,St,Zip
+30
+Invoice Header
+130
+Custom47
+Y
+FALSE
+Notices(0)
+String
+Assigns the Disconnect Message from invoices when data line prefix starts with “D”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+131
+Custom48
+Y
+FALSE
+Notices(1)
+String
+Assigns the Disconnect Message from invoices when data line prefix starts with “D”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+132
+Custom49
+Y
+FALSE
+Notices(2)
+String
+Assigns the Disconnect Message from invoices when data line prefix starts with “D”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+133
+Custom56
+Y
+FALSE
+Notices(3)
+String
+Assigns the Disconnect Message from invoices when data line prefix starts with “D”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom50
+Y
+FALSE
+CONCATENATE(
+Index 479, Length 1
+ + 
+“*”
+ + 
+Index 480, Length 2
+ + 
+“*”
+ + 
+Index 532, Length 2
+)
+ 
+String
+Special Handling  / No. of Copies /  Township ID
+7
+Custom51
+Y
+FALSE
+Message(0)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom52
+Y
+FALSE
+Message(1)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom53
+Y
+FALSE
+Message(2)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom54
+Y
+FALSE
+Message(3)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom55
+Y
+FALSE
+Message(4)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom57
+Y
+FALSE
+Message(6)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom58
+Y
+FALSE
+Message(7)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom59
+Y
+FALSE
+Message(8)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom60
+Y
+FALSE
+Message(9)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom61
+Y
+FALSE
+Message(10)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom62
+Y
+FALSE
+Message(11)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom63
+Y
+FALSE
+Message(12)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom64
+Y
+FALSE
+Message(13)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom65
+Y
+FALSE
+Message(14)
+String
+Assigns the Message for invoices when dataline prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom66
+Y
+FALSE
+Message(15)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom67
+Y
+FALSE
+Message(16)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom68
+Y
+FALSE
+Message(17)
+String
+Assigns the Message for invoices when data line prefix starts with “M”. Removes the beginning of the prefix before setting the value. 
+Invoice Header
+Custom70
+Y
+FALSE
+Start Index 482, Length 50
+String
+OCR Scan Line
+50
+Invoice Header
+Custom72
+Y
+FALSE
+Start Index 534, Length 30
+String
+Area & Cycle
+30
+Invoice Header
+Custom73
+Y
+FALSE
+Start Index 564. Length 8
+String
+Meter Serial No.
+8
+Invoice Header
+Custom74
+Y
+FALSE
+Start Index 169, Length 40
+String
+Service Address
+40
+Invoice Header
+Custom80
+Y
+FALSE
+Consumption Electric
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom81
+Y
+FALSE
+Consumption Electric
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom82
+Y
+FALSE
+Consumption Electric
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom83
+Y
+FALSE
+Consumption Electric
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom85
+Y
+FALSE
+Consumption Water
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom86
+Y
+FALSE
+Consumption Water
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom87
+Y
+FALSE
+Consumption Water
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom88
+Y
+FALSE
+Consumption Water
+String
+Sets the notice for the delinquent bills. The value is created by CONCATENATE(Index X, Length 8 + “*” + Index X+9, Length 7 + “;”) when X is equal to 1 and increments by 16 until X is equal to 177
+3
+Invoice Header
+Custom89
+Y
+FALSE
+Start Index 575, Length 8
+String
+Gets Late Notice Date if the length of the data line is greater or equal to 582. Else Custom89 = ““
+8
+Invoice Header
+252
+InvoiceTypeID
+N
+TRUE
+NA - IC Generated Value.
+InvoiceTypes.Utility
+Gets InvoiceTypeID from IC Integrator Tool
+Invoice Header
+319
+Echo1
+Y
+FALSE
+Message(5)
+String
+setCustom51to68_Messages
+Message is set when dataline prefix starts with “M”. This message is set to Echo1. 
+Invoice Header
+345
+BillerInstallmentNumber
+N
+FALSE
+NA - IC Generated Value
+0
+Returns 0
+1
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+A function generated value by . Within Index 31, Length 8, CONCATENATE(
+Index 4, Length 2
+ + 
+“/”
+ + 
+Index 6, Length 2
+ + 
+“/”
+ + 
+Index 0, Length 4
+)
+2019
+Return CreationDate.Year (Index 0, Length 4)
+4
+Invoice Header
+347
+BillerInvoiceNumber
+Y
+FALSE
+Start Index 1, Length 12
+“228-03400-02” turns into “2280340002”
+Trims and replaces Substring from dataline with “-” to ““. 
+10
+Invoice Header
+375
+Active
+FALSE
+NA
+Always 1
+Invoice Header
+407
+PastDue
+FALSE
+Invoice Header
+58
+RowType
+TRUE
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Start Index 1, Length 12
+String
+Retrieves the Account Number
+12
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Start Index 209, Length 30
+String
+Retrieves the Customers Name
+30
+Customer Record
+61
+Address1
+Y
+FALSE
+Address1
+String
+Retrieves the Address1.
+If the length of dataLine(0).Substring(239,30) is greater than or equal to 0 and also if dataLines(0).Substring(269, 30).Trim.Length is greater than 0, return dataLine.Substring(269, 30)
+Else If the length of dataLine(0).Substring(239,30) is greater than  0 and also if dataLines(0).Substring(269, 30).Trim.Length is equal than 0, return dataLine.Substring(239, 30)
+Else when it’s neither conditions, just return dataLines(0).Substring(239, 30).Trim to get Address1.
+Customer Record
+62
+Address2
+N
+FALSE
+Address2 (returns empty string)
+String
+Return String.Empty
+0
+Customer Record
+63
+City
+Y
+FALSE
+Start Index 299, Length 28
+String
+Retrieves the City
+28
+Customer Record
+64
+State
+Y
+FALSE
+Start Index 327, Length 2
+String
+Retrieves the State
+2
+Customer Record
+65
+Zip
+Y
+FALSE
+Start Index 329, Length 10
+String
+Retrieves the Zip Code
+10
+Customer Record
+66
+Phone
+FALSE
+Customer Record
+67
+EmailAddress
+FALSE
+Customer Record
+356
+BlockPaymentsCC
+FALSE
+Customer Record
+357
+BlockPaymentsEFT
+FALSE
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Start Index 1, Length 12
+String
+Retrieves the Account Number from datalines and replaces any text “-” to ““
+12
+Customer Record
+70
+RowType
+TRUE
+Invoice Detail
+71
+ProductID
+FALSE
+Invoice Detail
+72
+Description
+Y
+FALSE
+Start Index 1, Length 12
+String
+If dataline.SubString(0,1) prefix is equal to “B”, set value for Description equal to id.Substring(1, 12).Trim.
+Else, If the length of the dataline is greater than 64, then Description is equal to id.Substring(5, 50).Trim. Else if it is not greater than 64, set the Description equal to ““ (String.Empty)
+12
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+Rate Code
+Start Index 13, Length 3
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField1. Else, set this field equal to ““ (String.Empty)
+3
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Service Code
+Start Index 16, Length 3
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField2. Else, set this field equal to ““ (String.Empty)
+3
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+Reading Type
+Start Index 19, Length 3
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField3. Else, set this field equal to ““ (String.Empty)
+3
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+Current Reading
+Start Index 22, Length 8
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField4. Else, set this field equal to ““ (String.Empty)
+8
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Previous Reading
+Start Index 30, Length 8
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField5. Else, set this field equal to ““ (String.Empty)
+8
+Invoice Detail
+88
+CustomField6
+FALSE
+Invoice Detail
+89
+CustomField7
+Y
+FALSE
+Multiplier
+Start Index 38, Length 6
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField7. Else, set this field equal to ““ (String.Empty)
+6
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+Usage
+Start Index 44, Length 8
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField8. Else, set this field equal to ““ (String.Empty)
+8
+Invoice Detail
+91
+CustomField9
+Y
+FALSE
+Units of Measure
+Start Index 52, Length 3
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField9. Else, set this field equal to ““ (String.Empty)
+3
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+Amount Due/Service
+Start Index 55, Length 11
+String
+If dataline.SubString(0,1) prefix equals to "B", set value for CustomField10. 
+Else if the prefix is not “B”, then check if the length of the dataline is greater than 64. If it is, then CustomField10 is equal to id.Substring(55, 11).Trim. Else, set this value equal to ““ (String.Empty)
+11
+Invoice Detail
+208
+CustomField11
+FALSE
+Invoice Detail
+209
+CustomField12
+Y
+FALSE
+ServiceFromDT
+Start Index 147, Length 8
+String
+If dataline(SubString(1,12) equals to “Water”, set CustomField12. Else, set CustomField12 equal to ““ (String.Empty).
+8
+Invoice Detail
+210
+CustomField13
+Y
+FALSE
+ServiceToDT
+Start Index 155, Length 8
+String
+If dataline(SubString(1,12) equals to “Water”, set CustomField13. Else, set CustomField12 equal to ““ (String.Empty).
+8
+Invoice Detail
+Demand
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller. 
+Note: that the only difference between DMD and REG is the invoice number.
+File Extension: txt
+File Naming Convention: Bills_20220727_105658.txt
+File Delimiter: NA (fixed length)
+Specification: 
+Sample File: 
+SFTP File Path: …\ToInvoiceCloud\Invoices\UB\Demand\
+File Transfer Frequency: Twice a week.
+Import Types: There are two import types for the utility integration - 'UB V2' and 'Utility - Serial Number'. If the biller is looking for IC to capture multiple [meter] serial numbers for display on the template, we need to use the 'Utility - Serial Number' import type. 
+These import types use the same file but IC stores additional data from the 'Utility - Serial Number' type.
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+10
+InvoiceNumber
+Y
+TRUE
+CONCATENATE(“
+CreationDate
+(
+MMddyyyy)
+” + “
+-UBDMD-
+” + 
+dataLine(0).Substring(1,12)Trim.Replace("-", "").Replace("/", "")
+ & "
+-
+" & 
+dataLines(0).Substring(345, 1)
+.Trim.ToUpper)
+07152021
+-UBDMD-
+2280340002
+-
+N
+'InvoiceDate + “-UB-” + AccountNumber
+Creates Invoice Number from dataline.
+IMPORTANT NOTE: If invoice is DMD, then instead of “-UB-”, it will be “-UBDMD-”
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DMDDueDate
+Position 576
+Demand Due Date
+8
+Invoice Header
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: Txt
+File Naming Convention: Cust_Bal_Date.txt
+File Delimiter: NA (Fixed Length)
+Specification: 
+Sample File: 
+SFTP File Path: …\ToInvoiceCloud\Adjustments\UB\
+File Transfer Frequency:
+Field Mapping
+IC FileSpecID
+IC Field Name
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Record Type
+305
+RowType
+TRUE
+Set by IC
+File Header
+306
+BillerGuid
+TRUE
+Set by IC
+File Header
+307
+ThirdPartyFileReference
+FALSE
+File Header
+308
+FileCreationDate
+TRUE
+Set by IC
+File Header
+309
+AdjustmentCount
+TRUE
+Set by IC
+File Header
+310
+TotalAdjustmentAmount
+TRUE
+Set by IC
+File Header
+311
+RowType
+TRUE
+Set by IC
+Adjustment Record
+312
+InvoiceNumber
+FALSE
+Adjustment Record
+313
+AccountNumber
+TRUE
+LN(0).Trim.ToString().Substring(0, 3) & "-" & LN(0).Trim.ToString().Substring(3, 5) & "-" & LN(0).Trim.ToString().Substring(8, 2)
+Adjustment Record
+314
+AdjustmentAmount
+TRUE
+LN(1).Trim.ToString()
+Adjustment Balance Amount
+Adjustment Record
+316
+AdjustmentTypeID
+TRUE
+2 = Balance Differential
+Adjustment Record
+341
+AdjustmentDesc
+FALSE
+“Daily Balance File”
+Adjustment Record
+343
+AdjustmentDate
+FALSE
+Current Date ("MM/dd/yyyy")
+Adjustment Record
+351
+BillerInstallmentNumber
+FALSE
+Adjustment Record
+352
+BillerBillYear
+FALSE
+Adjustment Record
+353
+BillerInvoiceNumber
+FALSE
+Adjustment Record
+354
+MatchMethodID
+FALSE
+Adjustment Record
+370
+InvoiceTypeID
+FALSE
+Adjustment Record
+Customer Paperless File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated customer Paperless status data. The biller provides one file that Invoice Cloud processes as two separate files (1=Invoice File, 2=Paperless File). A separate job call SoftwareSolutionsMoveFile copies over the file from the Utility folder to the Paperless folder. Each SSI biller needs to be hard-coded in this application for the functionality to work.
+File Extension: Txt
+File Naming Convention: (same as the REG UB file)
+File Delimiter: NA (Fixed Length)
+Specification: 
+Sample File: 
+SFTP File Path: …\ToInvoiceCloud\Adjustments\UB\
+File Transfer Frequency:
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Field Description
+Record Type
+376
+RowType
+TRUE
+Set by IC
+Always MH
+File Header
+377
+BillerGuid
+TRUE
+Set by IC
+Biller Guid assigned by IC
+File Header
+378
+ThirdPartyFileReference
+FALSE
+File Header
+379
+FileCreationDate
+TRUE
+Set by IC
+The day’s date
+File Header
+381
+AdjustmentCount
+TRUE
+Set by IC
+No. of Records
+File Header
+382
+RowType
+TRUE
+Set by IC
+Always CP
+Adjustment Record
+382
+InvoiceNumber
+FALSE
+Adjustment Record
+383
+AccountNumber
+TRUE
+Position 1 through 12
+Adjustment Record
+384
+InvoiceTypeID
+TRUE
+Hardcoded to 42
+Adjustment Record
+385
+Paperless
+TRUE
+If char at 433 is Y then paperless yes. if 575 is “O” then ignore these owner records.
+Adjustment Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: .txt
+File Naming Convention: ICPaymentsMMddyyyyHHmmss.txt
+File Delimiter: NA
+Specification: 
+Sample File: 
+SFTP File Path: …\FromInvoiceCloud\Payments\
+File Transfer Frequency: Once a day
+Stored Procedure: 
+tps.selBillerPayments
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+AccountNumber
+String
+0-10
+1234567890
+Left justified. Hyphens (-) are to be removed. Space “ “ filled.
+PaymentAmount
+Double
+11-19
+12.34
+Right justified. Zero (0) filled.
+PaymentDate
+Date
+20-26
+MMDDYY
+Right justified. Zero (0) filled.
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer autopay and paperless change log data from IC to the biller
+File Extension: .TXT
+File Naming Convention: ICChangeLog_(DateTime).csv
+File Delimiter: Comma (|)
+Specification: AccountNumber|emailaddress|fieldName|oldValue|newValue|changeDate
+Sample File: 
+ 
+SFTP File Path: …\FromInvoiceCloud\ChangeLogs\
+File Transfer Frequency: Once a day.
+Stored Procedure: 
+dbo.selChangeLogsSoftwareSolutionsAll
+Note: Changelogs for this integration use advanced settings 33 and 34 to keep track of the last change log records we sent so we don’t send ones that we already have.
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+AccountNumber
+String
+NA
+1234567890
+EmailAddress
+String
+NA
+12.34
+FieldName
+String
+NA
+Email/AutoPay/Paperless
+OldValue
+String
+NA
+NewValue
+String
+NA
+ChangeDate
+String
+NA
+MMddyyyyhhmmss
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+33
+Software Solutions - MaxCustomerID
+Special use by engineering to keep track of the last used customerIDs for change logs. Initially this value is 0. Used for file types 
+IF_Software Solutions - Daily Changes
+ all versions.
+NA
+34
+Software Solutions - LastChangeLogDate
+Special use by engineering to keep track of the last exported change log records. Initially this value is any date in the past in m/d/yyyy format. Used for file types 
+IF_Software Solutions - Daily Changes
+ all versions.
+NA
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+On biller questionnaire 
+AutoPayCollectionDate
+On biller questionnaire 
+BalanceForward
+On biller questionnaire (Usually always 1)
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+On biller questionnaire 
+InvoiceDate
+N/A
+InvoiceDueDate
+N/A
+InvoiceFormatGuid
+On biller questionnaire (Usually Extraction)
+InvoiceTypeID
+N/A
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+On biller questionnaire 
+PaymentExpirationMessage
+On biller questionnaire 
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+On biller questionnaire 
+ThirdNotifyRequestedDate
+On biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+att2380857357
+1
+1891303518
+Diagram1
+IM
+att2380333079
+att2380070937
+0
+Data Flow - Adjustments
+att2380070942
+1
+1891303518
+Diagram2
+IM
+att2381053971
+att2380627999
+0
+Data Flow - Payment
+att2380726280
+1
+1891303518
+Diagram3
+IM
+att2381348865
+att2380365833
+0
+Data Flow - Change Log
+att2380103699
+1
+1891303518
+Diagram4
+IM
+att2381316101
+att2380857362
+0
+att2381021192
+1
+1891303518
+Diagram5
+IM
+att2380333091
+att2380333086
+0
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Biller Portal
+Steps for Integrations when converting SSI eGov to SSI VIP
+Steps for Integrations when converting SSI eGov to SSI VIP: 
+BEFORE STARTING THE CONVERSION, please make sure that the biller is on a maintenance window before beginning. If the biller is not in a maintenance window, DO NOT CONVERT this biller. Also, please ensure that the IM has the new account numbers ready for Data Services to use to rewrite the old account numbers before converting over to SSI VIP.
+Deprecated BillerFTPExport V1 Changes, changes going forward are CRM configurable.
+Remove the biller’s export section from BillerFTPExportProcessing in Module1.vb.
+Open up BillerFTPExportProcessing, pull the latest changes, and go to Module1.vb
+CTRL+F the BID# in Module1.vb and find where the biller exports payments and/or change logs. 
+Take a mental note or write down the Application Settings (My.Settings.<BillerApplicationSetting) for this biller. We will need that for Step 3. 
+Select the biller section where the biller comment starts and ends. Screenshot below for reference. 
+Delete the selected biller’s export section from Module1.vb.
+Double check there is no other section in Module1.vb where the Biller’s ID exists in. 
+Remove the biller’s application settings from BillerFTPExportProcessing in BillerFTPExportProcessing’s Properties->Settings
+Right-click BillerFTPExportProcessing project and click on Properties.
+Under Properties, on the left side of the panel, go to Settings.
+Sort the settings list by name. 
+Using the notes from step 2.C, find to application settings for that biller in the list.
+Select and remove/delete the setting(s) from the list and save the changes. 
+Push changes to new branch one by one.
+Stage and Compare the changes for each change one by one. Make sure the changes are only affecting the target biller. 
+When right-clicking and “Compare with Unmodified …” for Settings.Designer.vb, the changes will look something like this:
+This is a strange Visual Studios bug that happens for this class. This class is needed to complete this change. Here are steps to undo all of the “changes” except for your changes to the project. 
+On the right side (the current changes), select everything by CTRL+A, and then on Visual Studios go to Edit → Advanced → Format Document
+This should format the document to the previous changes. Then Save the changes. 
+Once this has been done, go to the very top of the class on the right side and change back the "Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator" to the original version.
+BEFORE
+AFTER
+The final step to fix this Visual Studios bug. Select the lines where _MYTYPE starts and ends from the original code is and replace it on the right side where _MyType starts and ends. Do not save the changes just yet. 
+BEFORE
+AFTER
+After these changes have been made, before saving the changes, click anywhere on the right side (current changes). Doing this will somehow “undo” the copy and paste we just did. Then press CTRL+Z and then press CTRL+S. This resolves this Visual Studios bug. 
+Check and confirm that the biller settings are the only changes in the project.
+Push changes to a new branch. 
+Confirm the biller is Software Solutions by checking the Profile in the CRM. 
+Disable FTP Import and Export Settings.
+Change PartnerID from 
+Software Solutions 
+to 
+Software Solutions VIP 
+in the CRM → Profile → PartnerID
+Update the Integration Summary.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+N/A
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-5920
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Due dates were incorrectly added from the same place as regular bills
+Due Dates for demand bills should use a separate field
+Modify Demand bills to use correct due dates
+ URL:/spaces/IM/pages/1891303518/Software+Solutions+SSI+eGov+-+Technical+Design

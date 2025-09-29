@@ -1,0 +1,117 @@
+Pay by Text Enrollment
+Validation Requirements
+Biller must have SMS enabled (
+BillerInvoicing.AllowSMS
+)
+Customer must exist in system (
+CustomerID > 0
+)
+Limited to single customer payments(
+ids.Count = 1
+)
+Pay by Text registration must be allowed (
+AllowPayByTextRegistration
+)
+Implementation
+CloudPaymentReview.aspx.vb  
+      If CurrentSession.Biller.BillerInvoicing.AllowSMS AndAlso CurrentSession.Invoices(0).CustomerID > 0 AndAlso CurrentSession.AllowPayByTextRegistration Then
+            Dim ids = CurrentSession.Invoices.GetUniqueCustomerIDs()
+            If ids.Count = 1 Then
+                Dim ctrl As _2_Controls_ctrlCustomerPaymentRouteSMS = Page.LoadControl("~/2/controls/ctrlCustomerPaymentRouteSMS.ascx")
+                ctrl.CustomerIDs.AddRange(ids)
+                ctrl.BillerID = CurrentSession.Biller.BillerID
+                phSms.Controls.Add(ctrl)
+            End If
+        End If
+AutoPay Enrollment
+Validation Requirements
+Authenticated user OR biller option enabled for unauthenticated enrollment
+Valid payment method saved (credit card or ACH)
+Customer permissions (account owner/co-owner)
+All invoice types must support AutoPay
+Cannot use digital wallet payment methods
+Implementation
+CloudPaymentReview.aspx.vb
+Dim autoPaySignUpType As SsoAutoPayRegistrationVisibility = SsoAutoPayRegistrationVisibility.NoCustomers
+If [Enum].TryParse(CurrentSession.Biller.BillerOptions(BillerOptions.AutoPaySignUpOneTimePay).Values.BillerValue, autoPaySignUpType) _
+    AndAlso (
+        autoPaySignUpType = SsoAutoPayRegistrationVisibility.AllCustomers _
+        OrElse (autoPaySignUpType = SsoAutoPayRegistrationVisibility.OnlyAuthenticatedCustomers AndAlso CurrentSession.AuthenticatedCustomer IsNot Nothing)
+        ) Then
+
+    'biller option is enabled. Show AutoPay panel if login permissions allow it. Also show if not Authenticated
+    Dim blnShowAutoPayPanel As Boolean = True
+
+    If CurrentSession IsNot Nothing Then
+        blnShowAutoPayPanel = CurrentSession.AllowAutoPayRegistration
+
+        If CurrentSession.AuthenticatedCustomer IsNot Nothing Then
+            If CustomerLoginCollection.Where(Function(a) customerIDs.Contains(a.CustomerID)).All(Function(a) a.HasPermission(PermissionType.Setup_AutoPay) = False) Then
+                blnShowAutoPayPanel = False
+            End If
+        ElseIf IsNothing(CurrentSession.AuthenticatedCustomer) AndAlso CurrentSession.Biller.IsBillerMultiCustomer Then
+            'This supercedes option 82 since unable to confirm this is the owner
+            blnShowAutoPayPanel = False
+        End If
+
+        If blnShowAutoPayPanel AndAlso clsBillers.BillerSupportsShowingAutoPayFeatureInCPForAtLeastOneInvoiceTypeWithInvoiceTypesList(CurrentSession.Biller.BillerID, CurrentSession.Invoices.ToInvoiceTypeIDList()) = False Then
+            blnShowAutoPayPanel = False
+        End If
+    End If
+
+    'disable if using a digital wallet
+    If DigitalWalletSession.HasDigitalWalletSelected = True Then
+        blnShowAutoPayPanel = False
+    End If
+
+    Dim eligibilityStrategy As IBillerAllowsCCAutoPayEligibilityStrategy =
+        AutoPayStrategyFactory.Instance.GetBillerUsesCCAutoPayStrategy(CurrentSession.Biller.BillerID)
+    If blnShowAutoPayPanel AndAlso CurrentSession.SelectedPaymentMethod = CloudPaymentSession.PaymentMethods.CreditCard AndAlso
+        Not CurrentSession.Invoices.ToInvoiceTypeIDList.Where(Function(x) eligibilityStrategy.IsEligibleByInvoiceType(x) = True).Any() Then
+        blnShowAutoPayPanel = False
+    End If
+End If
+Paperless Enrollment
+Validation Requirements
+Authenticated user OR biller option enabled (
+AllowPaperlessSignUpOutsideCP
+)
+Valid invoice type configuration
+Account permissions (owner/co-owner)
+Cannot be overridden by group oversight users
+Implementation
+CloudPaymentReview.aspx.vb
+If CurrentSession.AllowPaperlessRegistration AndAlso (CurrentSession.AuthenticatedCustomer IsNot Nothing OrElse CurrentSession.Biller.BillerOptions(BillerOptions.AllowPaperlessSignUpOutsideCP).Values.BillerValue.ToBoolean()) Then
+
+    If CurrentSession IsNot Nothing AndAlso CurrentSession.AuthenticatedCustomer IsNot Nothing AndAlso
+            CustomerLoginCollection.Where(Function(a) customerIDs.Contains(a.CustomerID)).All(Function(a) a.HasPermission(PermissionType.Setup_Paperless) = False) Then
+        'do not show paperless control at all since the login does not have paperless permission for all customers
+    Else
+        Dim paperlessCtrl As New IC.CustomControls.Two.PaperlessPanel(
+                                            New IC.CustomControls.Two.PaperlessPanel.DelegateInvoices(AddressOf CurrentSession.InvoicesViaFunction),
+                                            New IC.CustomControls.Two.PaperlessPanel.DelegateBiller(AddressOf CurrentSession.BillerViaFunction),
+                                            2, CurrentSession.BillingInformation.Name, CurrentSession.BillingInformation.EmailAddress)
+
+        Dim loginID As Integer = 0
+
+        If CurrentSession.AuthenticatedCustomer IsNot Nothing Then
+            ' If the user is authenticated, pass on value from session.
+            ' We will not update email address for existing login.
+            loginID = CurrentSession.AuthenticatedCustomer.CurrentLogin.LoginID
+            If String.IsNullOrWhiteSpace(CurrentSession.BillingInformation.EmailAddress) = False Then
+                paperlessCtrl.ApplyReadOnlyToEmailTextBox = True
+            End If
+        End If
+
+        ' Case: LoginID = 0 is handled within the paperless control.
+        paperlessCtrl.LoginID = loginID
+
+        phPaperless.Controls.Add(paperlessCtrl)
+    End If
+End If
+Event Tracking
+All enrollments trigger Pendo events
+PENDO_TRACK_EVENT_PAPERLESS_SIGNUP
+PENDO_TRACK_EVENT_PAY_BY_TEXT_SIGNUP  
+PENDO_TRACK_EVENT_AUTOPAY_SIGNUP
+ URL:/spaces/PE/pages/3989962777/Pay+by+Text+AutoPay+and+Paperless

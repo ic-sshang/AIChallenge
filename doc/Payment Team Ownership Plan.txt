@@ -1,0 +1,85 @@
+Objective
+Establish clear ownership for our 3 payment-focused Scrum teams to facilitate the Payfac transition, while maintaining the existing model during customer migration.
+Furthermore, create a framework to support long-term growth, discovery, and continuous maintenance of the Payfac ecosystem.
+Team Structure and Key Considerations
+US Team
+Tendies
+: Focuses on payment operations and transaction processing, ensuring stability, reliability, and continuity in mission-critical payment flows.
+Lead team for transaction processing, reconciliation, and funding—including complex areas like RMM.
+Maintain and support existing systems like ICGateway (Hyperwallet, CASS, PayPal) until fully retired.
+Experienced, US-timezone aligned, with deep expertise in payments, enabling fast incident response and proactive risk mitigation.
+Strong stakeholder communication and collaboration across product, compliance, and operations teams.
+India Teams
+India Team 1 (Pace)
+: Leads discovery and development for merchant onboarding and lifecycle management.
+Drive forward the onboarding strategy and tooling for billers and sub-merchants.
+Engage in Payfac discovery activities and API design related to KYC/AML, underwriting, and status transitions.
+Continuity and ownership over onboarding aligns with the product manager’s ongoing discovery/design work.
+India Team 2
+: Specializes in risk management, compliance, and reporting, supporting discovery and development related to fraud, chargebacks, and compliance tooling.
+Operating asynchronously with US, focused on regulatory adherence and reporting systems.
+Contributes to Payfac and non-Payfac workflows via automation and monitoring systems.
+Logical Domains for Team Breakdown
+Payment Operations (
+Tendies
+)
+Responsibilities:
+Implement Payfac money movement workflows based on discovery insights.
+Maintain and optimize transaction processing, settlement, and reconciliation.
+Provide ongoing support for both Payfac and non-Payfac transactions.
+Own and sunset ICGateway and legacy non-Payfac processors.
+Functionalities:
+Payfac:
+Transaction processing (auth, capture, refunds, voids).
+Settlement (batching, routing, net/gross funding engines).
+File process automation.
+Non-Payfac:
+Maintain ICGateway (Hyperwallet, CASS, PayPal integrations).
+Maintain legacy payment operations.
+Merchant Lifecycle Management (
+India Team 1
+)
+Responsibilities:
+Lead discovery, strategy, research, and development for Payfac onboarding and lifecycle.
+Drive integration with Chase and support onboarding tool enhancement.
+Align engineering work with India-based product management.
+Functionalities:
+Payfac:
+KYC/AML integrations.
+Underwriting automation.
+Merchant lifecycle: onboarding, updates, compliance monitoring.
+Sub-merchant hierarchy: MID/sub-MID account structures, API/workflow design.
+Non-Payfac:
+Maintain any existing onboarding integrations or status management tools.
+Risk and Insights (
+India Team 2
+)
+Responsibilities:
+Lead development of fraud, chargeback handling, and compliance systems.
+Maintain reporting and compliance tools across Payfac and non-Payfac.
+Build customer-facing reporting interfaces.
+Functionalities:
+Fraud detection (rules, scoring).
+Chargeback automation.
+PCI DSS compliance and tooling.
+Customer/biller reporting and internal financial monitoring.
+Team Ownership Breakdown
+Team
+Domain
+Key Responsibilities
+Repos?
+US Team
+Payment Operations
+Implement transaction processing, settlement, funding, and reconciliation for Payfac 
+India Team 1
+Merchant Lifecycle
+Lead Payfac discovery and onboarding development, manage merchant accounts, ensure smooth integrations. Maintain legacy payment processing operations
+India Team 2
+Risk and Insights
+Develop fraud detection, chargeback handling, compliance, and reporting/analytics solutions.
+Note
+All domains—Merchant Lifecycle, Payment Operations, Risk and Insights—are critical for Payfac success.
+Payfac discovery, early-stage implementation, and long-term maintenance will shape team focus areas.
+Existing non-Payfac integrations remain until migration is complete, requiring dual support.
+ 
+ URL:/spaces/PE/pages/4111892502/Payment+Team+Ownership+Plan

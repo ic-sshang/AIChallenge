@@ -1,0 +1,194 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+COMPLETE
+Green
+ 
+Document owner
+ 
+Knowledge transfer
+Input the Gong URL
+Figma Demo
+Payment through Megabyte
+https://www.figma.com/proto/b7ptJzdXTbkrfDMHQTD0Wk/Megabyte-Systems---County-Websites-Prototype?node-id=12-5&starting-point-node-id=12%3A5
+ 
+Agent Experience 
+https://www.figma.com/proto/0QJsj3BPfYAajGiqCkwCvq/Megabyte-Systems---Cashiering?node-id=2-15&starting-point-node-id=2%3A15
+ 
+Summary
+Summary
+Details
+Software Partner Name
+Megabyte
+Software Product Name
+MBPTS
+Software Cashiering System
+Megabyte homegrown
+Supported Versions
+All
+Integration Requirements and Pre-Requisites
+None
+Vertical
+GUB 
+Sample Biller Implementation
+El Dorado County BID 4365
+Planning
+Test Portals
+IC Hosted Test Portal - Megabyte Systems Test BID 4330
+Partner Hosted Test Portal - None
+Biller Test Portal - Not Required
+Rules of Engagement
+Primary contact is John Tucci.  He should be included in all emails to Megabyte regarding implementation.  
+Timeline
+Estimated timeframe to complete implementation - 
+90 days 
+Configuration
+Virtual Site
+Required Options
+ID
+Option Description
+Details
+52
+Customer Portal - Display Paperless Settings for Non-Registered Customers
+By default, the Customer Portal will only display Paperless settings for Registered customers. Some Billers may want those same Paperless settings displayed for Non-registered customers as well. Turning this option ON will enable this functionality.
+SET THIS TO ON
+64
+RTDR - Override 6 Hour Previous RTDR Check
+For Billers with RTDR, we normally would not pull a RTDR Balance if we had a successful balance within the past 6 hours. Enable this to Force a refresh.
+SET THIS TO ON
+84
+Enable Web Service Request and Response Logging
+If enabled, all web service request payloads to Invoice Cloud APIs will be logged, along with our API responses. Logs are available to be viewed under Tools > Web Service Logs.
+SET THIS TO ON
+129
+Display latest $0 or negative balances in Open Invoices and CloudPayV2
+When enabled, the most recent $0 or negative balances will be displayed in the Open Invoices and CloudPayV2. Note: Invoice Type #15 must be enabled for this feature to work.
+SET THIS TO ON
+132
+Disable 24-hour payment check on RTDR for AutoPay Payments
+When enabled this option will override the 24-hour hold period for RTDR on invoices with recent payment activity
+SET THIS TO ON
+152
+Disable 24-hour payment check for RTDR
+RTDR will not refresh balances on invoices with a payment within the previous 24 hours. When enabled, this option will bypass that check
+SET THIS TO ON
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Within 2 days upon request
+BIF file specific to each biller.  
+Adjustment File
+N/A
+RTDR
+Payment File
+N/A
+Data Pump
+Bill Presentment 
+Partner
+Within 2 days upon request
+PDF Linking - URL and credentials, sample biller
+RTDR API (test)
+Partner
+Within 2 days upon request
+RTDR API KEY (test)
+Partner
+Within 2 days upon request
+RTDR API (prod)
+Partner
+Within 2 days upon request
+RTDR API KEY (prod)
+Partner
+Within 2 days upon request
+DataPump API (test)
+Partner
+Within 2 days upon request
+DataPump Passcode (test)
+Partner
+Within 2 days upon request
+DataPump API (prod)
+Partner
+Within 2 days upon request
+DataPump Passcode (prod)
+Partner
+Within 2 days upon request
+County Specific Test Environment for Cashiering 
+Partner
+Within 5 days upon request 
+County Specific Test Environment for WEB
+Partner 
+Within 5 days upon request
+Block CC Flag
+Not sent in integration.  
+Block ACH Flag 
+Not sent in integration.  
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller GUID TEST (for BIF)
+Megabyte (John Tucci)
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key TEST 
+Megabyte (John Tucci)
+Project Assignment 
+Located within CRM on the Profile Tab
+Application API Key TEST (CPV2)
+Megabyte (John Tucci)
+Project Assignment
+Located in the Biller Portal
+Biller GUID PROD (for BIF)
+Megabyte (John Tucci)
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Megabyte (John Tucci)
+Project Assignment 
+Located within CRM on the Profile Tab
+Application API Key PROD (CPV2)
+Megabyte (John Tucci)
+Project Assignment
+Located in the Biller Portal
+Invoice Type ID
+Megabyte (John Tucci)
+Project Assignment 
+Located within CRM on the Profile Tab
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+John Tucci
+Senior Technical PM
+jtucci@megabytesystems.com
+Y
+JOHN TO PROVIDE BACKUP
+ URL:/spaces/IM/pages/3498278913/Megabyte+Implementation+Details

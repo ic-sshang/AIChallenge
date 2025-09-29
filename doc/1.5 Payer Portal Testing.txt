@@ -1,0 +1,39 @@
+Testing information:
+CRM Biller Option 139 - Must be ON
+Shard: 265
+Environments: TEST and PROD
+How to run tests in Visual Studio Code
+PayerBrandingService example -
+dotnet test --filter Category=Jira:EBPP-14276 -e database=TEST  -e shard=265 -e invoicecloudUrl=
+https://apibeta.dev.invoicecloud.com/payer0/pyrbrnd
+ 
+ -e hmacSigningKey="<hmackey>"
+environment variables must be provided are database, shard , 
+invoicecloudUrl
+ and
+ hamcSigningKey.
+invoicecloudUrl :  located in the test-service.yaml (every service has a different url)
+Branding Service Test invoicecloudUrl:  
+https://apibeta.dev.invoicecloud.com/payer0/pyrbrnd
+ 
+BrandingService Prod
+ 
+invoicecloudUrl
+: 
+https://apibeta.invoicecloud.com/payer0/pyrbrnd
+hmacSigningKey: Contact tech lead to get this key
+Testing Pipelines for Services:
+PayerBrandingService: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2071
+PayerUserService: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2101
+PayerAccountService: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2079
+PayerPayByTextService: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2084
+OneTimePaymentService: 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=1710
+Testing pipeline for UI:
+PayerPortal - 
+https://dev.azure.com/invoicecloud/Src/_build?definitionId=2050
+ URL:/spaces/EN/pages/2890268725/1.5+Payer+Portal+Testing

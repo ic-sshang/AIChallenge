@@ -1,0 +1,132 @@
+This document outlines enhancements made to support customizable PAC donation amounts in the one-time payment flow, addressing biller requests for greater flexibility. It details backend and frontend updates across CRM and MyIIS systems, including validation logic, UI changes, and accessibility improvements to ensure compliance and usability.
+Table of Contents
+none
+Worked On By:
+Michael Maldonado (Dev & Automation engineer)
+Victor Cavada (Manual tester)
+David Moreno (Manual tester)
+Luis Mauricio (Manual Tester)
+Emily Herr (Reporter)
+Related Items:
+EBPP-27289
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-27263
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance 
+To support greater flexibility in political donation workflows, we implemented enhancements allowing payers to customize their contribution amounts for PAC donations in the one-time payment route. These changes introduced configurable options—
+custom
+ amounts—along with 
+minimum and maximum value validations
+ to ensure compliance and usability. The updates were necessary to meet specific biller requests for more dynamic donation handling, particularly from 
+The Doctors Company (BID: 4389).
+ The work was tracked under Jira tickets 
+EBPP-27263
+ and 
+EBPP-27289
+, with subtasks ranging from UI updates to validation logic. We collaborated closely with team SPAM, who owns the repositories impacted by these changes, and coordinated testing across both CRM and payment interfaces to ensure seamless integration.
+Problem
+The enhancements were driven by feedback from 
+The Doctors Company (BID: 4389)
+ who requested more flexibility in how payers contribute to PAC donations since we previously only supported fix amounts. Their primary complaint was the 
+lack of customization
+ in the one-time payment flow, where donors were previously restricted to fixed or pre-suggested amounts. This limitation hindered donor engagement and reduced the likelihood of higher contributions.
+To address this, we introduced a 
+custom amount option
+ with configurable 
+minimum and maximum thresholds
+, allowing payers to enter their own donation amounts while still respecting biller-defined constraints. This change was implemented across both the CRM and the MyIIS payment flow, ensuring consistency and control.
+Solution
+MYIIS
+To support customizable PAC donation amounts, we implemented a multi-layered solution across both the 
+CRM configuration interface
+ and the 
+payer-facing MyIIS application
+. The solution required updates to backend validation logic, frontend UI components, and platform configuration settings.
+Technical Requirements
+Pull Request: 
+https://dev.azure.com/invoicecloud/Src/_git/MyIIS/pullrequest/33243?_a=files
+ 
+Backend Logic
+Validation Rules
+:
+Enforced minimum and maximum donation thresholds.
+Allowed optional max values (e.g., only a minimum required).
+Terms Agreement
+:
+Required checkbox for legal compliance before submission.
+Frontend Enhancements
+Custom Amount Input Field
+:
+Dynamically rendered based on biller configuration.
+Includes real-time validation and error messaging.
+Client-Side Validation
+Updated 
+ic-donation-validation.js
+ to:
+Handle dynamic error targets.
+Display contextual messages for invalid entries.
+Improve accessibility with ARIA attributes.
+CRM
+Pull Request: 
+Pull request 32915: EBPP-27263-CustomPACAmount - Repos
+To enable customizable PAC donation amounts in the CRM, this solution introduced a robust configuration and validation system that supports custom donation options. The implementation spans UI enhancements, backend logic, and validation utilities, ensuring both flexibility and data integrity.
+CRM Technical Requirements
+Backend Enhancements
+DonationConfig.vb
+: Added logic to store and retrieve 
+MinDonation
+, 
+MaxDonation
+, 
+FixedAmt1
+, and 
+CustomAmt
+ values.
+PACValidations.vb
+: Introduced a new validation class with methods like:
+VisualBasic
+Public Function IsValidSuggestedAmount(suggestedAmount As Decimal, minimumAmount As Decimal, maximumAmount As Decimal) As Boolean
+    Return suggestedAmount >= Math.Max(minimumAmount, 1D) AndAlso suggestedAmount <= If(maximumAmount = 0D, Decimal.MaxValue, maximumAmount)
+End Function
+
+
+Validation Scenarios
+:
+Suggested amount must be ≥ $1.00
+Minimum must be ≥ $1.00
+Maximum must be ≥ $0.00 or omitted (0.00)
+Suggested must fall between min and max
+Frontend Enhancements
+BillerPoliticalDonationFundConfiguration.aspx
+Replaced legacy fixed amount UI with new 
+radio button options
+:
+Custom Amount
+Fixed Amount
+Added input fields for:
+Suggested Amount
+Minimum Amount
+Maximum Amount
+UI Behavior
+Conditional rendering based on selected option
+Validation messages shown inline
+Accessibility improvements with ARIA and semantic labels
+CRM Configuration
+How to get to One-time Pay settings for political donations
+Testing Procedures
+Configure the Custom Amount options in the CRM
+Suggested Amount
+Min Amount
+Max Amount
+Go to the payment route. In our tests, we used CPV2.
+Ensure that the Suggested amount matches with what was configured in the CRM
+Attempt to make a donation below the min amount set and above the max amount. An error message should be displayed. 
+Make a payment with a donation amount in the threshold of the min and max amount.
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4637818962/Customizable+Political+Donation+Amounts

@@ -1,0 +1,23 @@
+Problem:  
+Currently, there are two different types of Billers that we provide services for Balance Forward and Open Billing.  
+Balance Forward Billers will only have a balance on the most recent invoice and Open Billing Billers will have balances on different invoices, not just the most recent.  
+In regards to the Balance Forward Billers that we cater to Recurring Scheduled Payments does not take into consideration Invoice Type Setting 41 which would let Billers choose to only allow payments on Any Invoice, Most Recent Invoice First, or Oldest Invoice First.  
+Since the wording of the Invoice Type Setting does not clarify that this setting would not work for Recurring Scheduled Payments or the Autopay / SchedulePay Chain in general. Billers and Client Services perceive that this invoice setting would affect these payment routes too.  
+Request:  
+Allow the Invoice Type Setting 41 to dictate which invoice Recurring Scheduled Payments will be applying the payment to.  
+If the Invoice Type Setting 41 is set to Any Invoice, then Recurring Scheduled Payments can be applied to any invoice  
+If the Invoice Type Setting 41 is set to Most Recent Invoice First, then Recurring Scheduled Payments should be applied to the most recent invoice based on the date the invoice record was added in to the database table.  
+If the Invoice Type Setting 41 is set to Oldest Invoice First, then Recurring  Scheduled Payments should be applied to the oldest invoice first based on the date the record was added in the database table.  
+If the Biller deactivated old invoices with a zero balance, the oldest invoice first option should not have problems locating the correct invoice.  
+General User Impact:  
+This change would impact all Billers as now the Recurring Scheduled Payments payment route would take the Invoice Type Setting 41 and unify all the payment routes in following the expectation of the Biller based on the configuration that they have chosen.  
+Currently Impacted Biller: 
+ 
+3522 – Navigant Credit Union  
+Urgency:  
+This request is high urgency for this Biller as they are Balance Forward, and they provide multiple invoices months in advance. Recurring Scheduled Payments is applying payments to the invoice with the closest future invoice due date without checking whether this invoice was the most recent record added.  
+Since Recurring Scheduled Payments runs every day our Client Services Representative will need to check whether there was a recurring scheduled payment was made to an incorrect invoice. If the payment was applied to the incorrect invoice a Database Request would need to be created to clean up the payments and make sure we are displaying correct amounts to the Billers customers. This would need to be done until the logic is fixed.  
+Jira Item:
+DS-6324
+EBPP-18131
+ URL:/spaces/DS/pages/3128786971/Recurring+Scheduled+Payments+Product+Request

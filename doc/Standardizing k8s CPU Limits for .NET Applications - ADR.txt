@@ -1,0 +1,76 @@
+Status
+Proposed
+Participants
+Sean Concannon
+Michael Griehm
+Matthew Alltop
+Martin Henderson
+Scott Miller
+Luke Badgerow
+Chris Ion
+Rama Gaddipati
+Rob Chenault
+Context
+.NET applications deployed in Kubernetes often rely heavily on the 
+ThreadPool
+ to manage asynchronous operations, background tasks, and request handling. The behavior and performance of the ThreadPool are tightly coupled to the number of available CPU cores.
+When CPU limits are set below 1 core (e.g., 500m), the .NET runtime:
+Reduces the number of threads injected into the ThreadPool.
+Delays async continuations and background processing.
+Experiences increased latency and potential timeouts.
+Suffers from contention between GC, JIT, and application threads.
+These issues are exacerbated in production environments with high concurrency or background workloads.
+Alternatives Considered
+Setting CPU limits below 1 core: Rejected due to performance degradation.
+No CPU limits: Rejected due to lack of resource control and potential for noisy neighbor issues.
+Decision
+All .NET applications deployed to Kubernetes must have a 
+CPU limit of at least 2 cores
+ (
+cpu: "2"
+) unless explicitly justified and approved through performance profiling.
+This standard applies to:
+Web APIs
+Background services
+Scheduled jobs
+Worker applications
+Example
+yaml
+requests:
+  cpu: "250m"
+  
+limits:
+  cpu: "2"
+  
+Rationale
+Setting a minimum CPU limit of 2 cores ensures:
+Sufficient parallelism for ThreadPool operations.
+Reduced risk of thread starvation and async delays.
+Better performance for GC and JIT compilation.
+More predictable behavior under load.
+Avoidance of Kubernetes CPU throttling.
+This decision aligns with observed performance characteristics of .NET applications and mitigates common production issues related to resource constraints.
+Exceptions
+Applications with low throughput, minimal concurrency, or short-lived workloads may be exempt from the 2-core limit. 
+These exceptions must be reviewed:
+A performance profile or load test results.
+Justification for the reduced CPU limit.
+A rollback plan in case of performance degradation.
+Consequences
+Positive
+:
+Improved application responsiveness and stability.
+Easier performance tuning and diagnostics.
+Consistent behavior across environments.
+Negative
+:
+Higher resource allocation per pod.
+Potential increase in cluster capacity requirements.
+Next Steps
+Update Helm charts and deployment templates to reflect the new standard.
+Communicate the change to development teams.
+Monitor application performance and adjust as needed.
+Related
+CPU Resource Limits in Kubernetes
+ 
+ URL:/spaces/EA/pages/4516282429/Standardizing+k8s+CPU+Limits+for+.NET+Applications+-+ADR

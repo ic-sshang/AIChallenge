@@ -1,0 +1,189 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+Knowledge transfer
+Input the Gong URL
+Summary
+Summary
+Details
+Software Partner Name
+Avitar Associates
+Software Product Name
+Avitar
+Integration Requirements and Pre-Requisites
+Provide to Avitar:
+Biller ID, Biller GUID, Biller Web Service Key, Invoice Type IDs, and if they are getting EMV readers create and provide API Key (this is created in the biller’s portal). 
+Vertical
+GUB
+Sample Biller Implementation
+Town of Litchfield NH (BID: 1330)
+CloudPay, EBPP, and CloudStore
+Town of Bristol (BID: 1624)
+CloudPay, EBPP, and CloudStore
+Town of Springfield NH (BID: 2142)
+CloudPay, EBPP
+Planning
+Test Portals
+IC Hosted Test Portal - 
+N/A
+Partner Hosted Test Portal -
+N/A
+Biller Test Portal - 
+N/A
+Rules of Engagement
+Reach out to Amy Roberge to kick off project. 
+Provide Biller ID, Biller GUID, Biller Web Service Key, and if they are getting EMV readers create and provide API Key. 
+Add the Avitar Rep to the Welcome Email.
+Include Amy Roberge and the Avitar Rep in Biller Kick-Off Call.
+Timeline
+Estimated timeframe to complete implementation - Under ~60 days 
+Configuration
+Invoice Types
+Invoice Types must be setup exactly as seen in screenshots below:
+Invoice ID 13 (Dog License)
+Invoice ID 33 (Motor Vehicle)
+Invoice ID 8 (Real Estate)
+Invoice ID 0 (Counter Payments)
+Avitar Associates supports more than one OTC Invoice Type
+Ex: See Tow of Bristol (BID 1624)
+All Cloud Store Invoice types
+Virtual Site
+Welcome Text: 
+This is a fee based service.  For credit card transactions, the service fee is either 
+$1.95
+ or 
+2.75%
+ of the transaction amount, whichever is greater. For electronic check (ACH/EFT) transactions the service fee is 
+$0.95
+.
+Dog License:
+Instruction Text:
+"Registered" 
+means that you have already enrolled with this online service to review invoice and payment history, schedule automatic payments, or pay quickly with previously saved payment information.  If you have not registered but you wish to obtain a license for your dog, begin below by locating your pet(s).
+TO VIEW AND PAY YOUR DOG LICENSE BILL:
+Please enter your information into the fields below and click Submit to view the results. The Owner Name and Pet Name are  REQUIRED.
+A current rabies vaccination is required for licensing. If it has expired you will be unable to renew a dog license online and must provide the paperwork from your veterinarian showing it has been updated.
+Search Tip: For best results, for the Owner Name enter a partial name (for example, "John Smith" enter "John") and for the Pet's name enter the exact name.
+Motor Vehicle:
+Instruction Text: 
+"
+Registered
+" means that you have already enrolled with this online service to review invoice and payment history, schedule automatic payments, or pay quickly with previously saved payment information.  If you have not registered but you wish to renew your vehicle's registration, begin below by locating your vehicle(s).
+TO VIEW AND PAY YOUR MOTOR VEHICLE RENEWAL:
+Please enter your information into ALL of the fields below, click Submit, and scroll down to view the results. 
+Search Tip:  
+The required search criteria below can be found either on your renewal notice or your current registration.
+VEHICLE REGISTRATIONS RENEWED ONLINE ARE NOT VALID UNTIL you receive your decals and registration in the mail. 
+CloudStores
+Avitar has a standard setup for CloudStore
+Ex: See Town of Derry (BID 654) or Town of Hampton Falls (BID 872)
+Death Certificate Certified Copy 
+Top Instructions: Please fill out all the required fields, denoted with an asterisk (*). Filling out ALL the fields will help us process your request faster. If you have any questions please contact us at
+Additional Information Text: When you have completed all the information accurately, press Continue to place your request.
+Side Bar: Ask for this information from biller or Avitar
+Cloud Store Fields:
+Marriage Certificates Certified Copy
+Top Instructions: Please fill out all the required fields, denoted with an asterisk (*). Filling out ALL the fields will help us process your request faster. If you have any questions please contact us at
+Additional Information Text: When you have completed all the information accurately, press Continue to place your request.
+Side Bar: Ask for this information from biller or Avitar
+Cloud Store Fields:
+Divorce Certificate Certified Copy
+Top Instructions: Please fill out all the required fields, denoted with an asterisk (*). Filling out ALL the fields will help us process your request faster. If you have any questions please contact us at
+Additional Information Text: When you have completed all the information accurately, press Continue to place your request.
+Side Bar: Ask for this information from biller or Avitar
+Cloud Store Fields:
+Birth Certificate Certified Copy
+Top Instructions: Please fill out all the required fields, denoted with an asterisk (*). Filling out ALL the fields will help us process your request faster. If you have any questions please contact us at
+Additional Information Text: When you have completed all the information accurately, press Continue to place your request.
+Side Bar: Ask for this information from biller or Avitar
+Cloud Store Fields:
+Virtual Site Menu Items
+Virtual Site Page
+Required Options
+N/A
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Partner
+Upon request after kick-off call
+Is the data generic or unique/specific to each biller? Note if partner refers to this item by a different name (example: billing file)
+Adjustment File
+Partner
+Upon request after kick-off call
+Bill Presentment 
+N/A - Universal/Standard Template. Nothing needed from Biller or Partner. 
+Example: 
+Template - mapping/layout, sample biller
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Partner
+Project Assignment 
+BID
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller GUID PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+WebService Key PROD
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Invoice Type IDs
+Partner
+Project Assignment 
+Located within CRM on the Profile Tab
+Biller Portal Support User
+Partner
+Project Assignment 
+Use same password as previous Avitar Accounts
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Amy Roberge
+amy@avitarassociates.com
+603-798-4419 ext 1
+N
+Josh Arend
+josh@avitarassociates.com
+(603) 798-4419
+Y
+ URL:/spaces/IM/pages/2499903674/Avitar+Associates+Implementation+Details

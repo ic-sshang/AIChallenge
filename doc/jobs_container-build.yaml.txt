@@ -1,0 +1,51 @@
+Code-Generated Docs
+Description
+
+This template builds a single container image and pushes it to an ACR - keeping it simple!
+Today, we use the Azure Container Registry Build Task (https://learn.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task) to facilitate this process.
+This pushes the source code to an internally hosted ACR agent pool where the build runs.
+Once the build is complete, the image is pushed directly to the ACR.
+
+Parameters
+Parameter
+Default
+Description
+containerName
+n/a
+Name of the container to be published. Usually repository name lowercased with dashes between words.
+spokeName
+n/a
+Spoke where the app runs. Only used to access the correct variable groups.
+serviceName
+" "
+Usually repo name without the 'service' suffix. Only used to access the correct variable groups. If not provided, service variable groups will not be used.
+extraBuildArgs
+" "
+Extra arguments to pass to the az acr build command. Common use case is to provide credentials for nuget feeds, i.e. --build-arg NUGET_USERNAME=foobar
+targetACR
+n/a
+Either sbx or prd. Determines the container registry to which the image gets published. Should be deprecated in favor of promotion, only allowing sbx as target.
+glbVersion
+1
+Current version of global infrastructure resources. Should usually be updated in the template, not updated in a pipeline's YAML
+srcDirectory
+.
+Root directory of source to be built
+dockerfile
+Dockerfile
+Path to Dockerfile relative to srcDirectory
+gitVersionConfigFile
+GitVersion.yml
+Path to GitVersion.yml
+dependsOn
+[]
+Used for control flow of pipeline. Provide a list job names that should run successfully before this job.
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/linux-container-build.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/calculate-semver.yaml
+ URL:/spaces/platform/pages/3632497397/jobs+container-build.yaml

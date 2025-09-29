@@ -1,0 +1,580 @@
+1
+6
+false
+none
+list
+true
+Component Diagrams
+BackEnd Service - Biller KYC Flow
+[Placeholder] [WIP - Pending a vendor] 
+ICChaseScreeningAPI - JPM Boarding
+2
+1
+0
+0
+4156620971
+4156325986
+1
+ICChaseScreeningAPI.drawio
+7
+7
+https://invoicecloud.atlassian.net/wiki
+ICChaseScreeningAPI.drawio
+0
+821
+931
+Sequence Diagrams
+Biller Boarding IC Process Flow (KYC Prep) (WIP - Pending Vendor) 
+2
+1
+0
+0
+4220027009
+4156325986
+1
+BillerPrepKYCFlow.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+BillerPrepKYCFlow.drawio
+0
+946
+1139
+KYC Process Flow (WIP - Pending Vendor)
+2
+1
+0
+0
+4221894669
+4156325986
+1
+KYCProcessFlow.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+KYCProcessFlow.drawio
+0
+1077
+1027
+JPM Boarding Process Flow (Screening API)
+Step 1: Onboarding a Merchant/Party
+Make an API call to 
+/parties
+ to create and retrieve a partyId. 
+2
+1
+0
+0
+4210720775
+4156325986
+1
+CreateClientJPM.drawio
+5
+5
+https://invoicecloud.atlassian.net/wiki
+CreateClientJPM.drawio
+0
+1449
+402
+Step 2. Additional Details for Screening Process
+After creating a party, additional details must be submitted to complete the screening process. These details include:
+Individual Information
+: Email, addresses, phone number.
+Business Information
+: Business details, etc.
+2
+1
+0
+0
+4210720816
+4156325986
+1
+QuestionsBoarding.drawio
+3
+3
+https://invoicecloud.atlassian.net/wiki
+QuestionsBoarding.drawio
+0
+1442
+402
+Step 3: Begin Screening Process
+After submitting all the necessary details for a party, you can call the 
+JPM Boarding API 
+/validations
+ to initiate the screening process.
+2
+1
+0
+0
+4162027622
+4156325986
+1
+ScreeningSequenceDiagram.drawio
+5
+5
+https://invoicecloud.atlassian.net/wiki
+ScreeningSequenceDiagram.drawio
+0
+974
+402
+Step 4: Retrieve Screening Status
+Make an API call to 
+/parties/{partyId}
+ to get the latest status.
+2
+1
+0
+0
+4161929315
+4156325986
+1
+ScreeningStatusSequence.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+ScreeningStatusSequence.drawio
+0
+1048
+600
+OpenAPI Spec
+yaml
+openapi: 3.0.0
+info:
+  title: ICChaseScreeningAPI
+  description: |-
+    The ICChaseScreeningAPI provides a secure interface for onboarding merchants onto the IC platform, managing their profiles, and facilitating screening and approval through integration with the JPM Onboarding System.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: test@test.com
+security:
+  - bearerAuth: []
+tags:
+  - name: merchant
+    description: Operations related to merchant management
+  - name: screening
+    description: Operations related to merchant screening and approval
+paths:
+  /merchants:
+    post:
+      tags:
+        - merchant
+      summary: Create a new merchant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                merchant:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum: ["ORGANIZATION", "INDIVIDUAL"]
+                      description: The type of the merchant entity
+                    email:
+                      type: string
+                      format: email
+                      maxLength: 320
+                      description: The merchant's contact email
+                    roles:
+                      type: array
+                      items:
+                        type: string
+                        enum: ["CLIENT", "CONTROLLER", "BENEFICIAL_OWNER", "DIRECTOR", "PRIMARY_CONTACT","DECISION_MAKER", "AUTHORIZED_USER"]
+                      description: Roles assigned to the merchant
+                    organization:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum: ["LIMITED_LIABILITY_PARTNERSHIP","LIMITED_PARTNERSHIP", "GENERAL_PARTNERSHIP","LIMITED_LIABILITY_COMPANY","C_CORPORATION","S_CORPORATION","PARTNERSHIP","PUBLICLY_TRADED_COMPANY","NON_PROFIT_CORPORATION","GOVERNMENT_ENTITY","SOLE_PROPRIETORSHIP","UNINCORPORATED_ASSOCIATION"]
+                          description: The legal structure of the organization
+                        name:
+                          type: string
+                          maxLength: 500
+                          description: The name of the organization
+                        country:
+                          type: string
+                          pattern: '^[A-Z]{2}$'
+                          description: The country of formation (ISO 3166-1 alpha-2 code)
+                      required:
+                        - type
+                        - name
+                        - country
+                      description: Details of the merchant's organization
+                    contacts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum: ["INDIVIDUAL"]
+                            description: The type of the contact
+                          email:
+                            type: string
+                            format: email
+                            maxLength: 320
+                            description: The contact's email
+                          roles:
+                            type: array
+                            items:
+                              type: string
+                              enum: ["CONTROLLER", "BENEFICIAL_OWNER", "DIRECTOR", "PRIMARY_CONTACT", "DECISION_MAKER", "AUTHORIZED_USER"]
+                            description: Roles assigned to the contact
+                          firstName:
+                            type: string
+                            maxLength: 30
+                            description: The first name of the individual
+                          lastName:
+                            type: string
+                            maxLength: 30
+                            description: The last name of the individual
+                          country:
+                            type: string
+                            pattern: '^[A-Z]{2}$'
+                            description: The country of residence (ISO 3166-1 alpha-2 code)
+                        required:
+                          - type
+                          - email
+                          - roles
+                          - firstName
+                          - lastName
+                          - country
+                        description: An individual associated with the merchant
+                      description: List of contacts for the merchant
+                    products:
+                      type: array
+                      items:
+                        type: string
+                        enum: ["EMBEDDED_PAYMENTS"]
+                      description: Products the merchant is signing up for
+                  required:
+                    - type
+                    - email
+                    - roles
+                    - organization
+                    - contacts
+                    - products
+                  description: The merchant entity
+              required:
+                - merchant
+            example:
+              merchant:
+                type: "ORGANIZATION"
+                email: "monica@cpgetaways.com"
+                roles: ["CLIENT"]
+                organization:
+                  type: "SOLE_PROPRIETORSHIP"
+                  name: "Central Park Getaways"
+                  country: "US"
+                contacts:
+                  - type: "INDIVIDUAL"
+                    email: "monica@cpgetaways.com"
+                    roles: ["CONTROLLER", "BENEFICIAL_OWNER"]
+                    firstName: "Monica"
+                    lastName: "Gellar"
+                    country: "US"
+                products:
+                  - "EMBEDDED_PAYMENTS"
+      responses:
+        '201':
+          description: Merchant created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  createdAt:
+                    type: string
+              example:
+                id: "1234"
+                createdAt: "2025-03-27T12:00:00Z"
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthenticated
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /merchants/{merchantId}:
+    get:
+      tags:
+        - merchant
+      summary: Retrieve a merchant by ID
+      parameters:
+        - name: merchantId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the merchant
+      responses:
+        '200':
+          description: Merchant details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  emailAddress:
+                    type: string
+                  merchantDBA:
+                    type: string
+                  createdAt:
+                    type: string
+              example:
+                id: "1234"
+                emailAddress: "merchant@example.com"
+                merchantDBA: "Example Corp"
+                createdAt: "2025-03-27T12:00:00Z"
+        '400':
+          description: Invalid merchant ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Merchant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /merchants/{merchantId}/screen:
+    post:
+      tags:
+        - screening
+      summary: Submit Screening Process
+      parameters:
+        - name: merchantId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the merchant
+      responses:
+        '201':
+          description: Merchant submitted for screening
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  emailAddress:
+                    type: string
+                  merchantDBA:
+                    type: string
+                  createdAt:
+                    type: string
+                  profileStatus:
+                    type: string
+        '400':
+          description: Invalid merchant ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Merchant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+        - screening
+      summary: Update Merchant Screening Details
+      description: Partially updates the screening details for a merchant.
+      parameters:
+        - name: merchantId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the merchant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailAddress:
+                  type: string
+              required:
+                - emailAddress
+      responses:
+        '201':
+          description: Screening details updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  emailAddress:
+                    type: string
+                  merchantDBA:
+                    type: string
+                  createdAt:
+                    type: string
+                  profileStatus:
+                    type: string
+        '400':
+          description: Invalid merchant ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthenticated
+        '404':
+          description: Merchant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - screening
+      summary: Retrieve Merchant Screening Status
+      description: Retrieves the current screening status and details for a specified merchant.
+      parameters:
+        - name: merchantId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the merchant
+      responses:
+        '200':
+          description: Merchant Screening details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Merchant'
+              example:
+                id: "12345"
+                emailAddress: "merchant@example.com"
+                merchantDBA: "Example Corp"
+                createdAt: "2025-03-27T12:00:00Z"
+                profileStatus: "Approved"
+        '400':
+          description: Invalid merchant ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Merchant not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+components:
+  schemas:
+    Merchant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        emailAddress:
+          type: string
+          format: email
+        merchantDBA:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        profileStatus:
+          type: string
+          enum:
+            - Pending
+            - Approved
+            - Rejected
+      required:
+        - id
+        - emailAddress
+        - merchantDBA
+        - createdAt
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        statusCode:
+          type: integer
+          example: 404
+      required:
+        - error
+        - message
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+
+Boarding Questions: 
+Demo the experience. 
+Get feedback on the workflow. Is this going to be biller-facing or internal? 
+What about existing billers? IC vs PSN
+Bulk upload of existing billers from PSN? 
+Do we need to gather data from any other area? CRM, Salesforce? 
+What is the KYC process? Customer Facing? 
+ URL:/spaces/EA/pages/4156325986/C3+Draft+-+IC+Chase+Screening+API

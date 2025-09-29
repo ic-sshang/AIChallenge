@@ -1,0 +1,120 @@
+Jira
+INT-13707
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Project Name
+Data Pump
+Author
+ 
+Purpose
+This document provides a structured breakdown of the retry mechanisms implemented across different classes, ensuring everyone can quickly understand the logic and conditions under which retries occur.
+Integration Partner (Biller / CIS)
+Retry Limit
+DataPump Types for Which Retries are Configured
+Retry Wait Period
+Conditions for Retry
+Code Snippet
+Reference
+1
+Muni-Link(202) (CIS)
+3 (Defined by the constant RETRYLIMIT)
+PostPayment
+3000ms (Defined by the constant RETRYWAITPERIOD)
+Status Code 429:
+ Sets the retry flag to True and pauses before retrying.
+Status Code 500 with '429 too many requests' in Content:
+ Sets the retry flag to True and pauses before retrying.
+Status Code 504:
+ Sets the retry flag to True and pauses before retrying.
+Any Other Status Code:
+ No retry.
+ 
+clsMuniLink.vb - Repos
+2
+SapiensCoresuite (233) (CIS)
+3
+PostUnapprovedPayment
+PostPayment
+PostPaperlessChange
+N/A
+If response is null, an exception is thrown.
+If status code is 
+200 OK
+, exit the loop.
+If error occurs: Logs error, increments retry count, retries up to 3 times.
+ If all retries fail, an error message is returned.
+SapiensCoresuitePayments.vb - Repos
+3
+EmPRO (2400)(Biller)
+3
+PostUnapprovedPayment
+PostPayment
+N/A
+Attempts up to 3 times if no successful response is received. Logs each attempt and response.
+EmProIntegration.vb - Repos
+4
+FrankCrum (1491)(Biller)
+3 (For PostPaymentRequest and PostNonApprovedPaymentRequest)
+4 (For PostAutoPayChangeLogRequest method)
+PostPayment
+PostAutopay
+PostPaperless
+PostACHRejects
+PostChargeBacks
+PostNonApprovedPaymentRequest
+N/A
+Attempts up to 3 or 4 times if no successful response. Logs each attempt and response.
+FrankCrumPostPayment.vb - Repos
+5
+KentuckyFarmBureau (3257)(Biller)
+8
+PostPayment
+N/A
+Status Code 00:
+ No retry.
+Status Code 01:
+ Retry.
+WebException:
+ Retry.
+General Exception:
+ Retry.
+Retries up to 8 times if no successful response.
+clsKentuckyFarmBureau.vb - Repos
+6
+SouthernOakInsurance (2817) (Biller)
+3 (Defined by RETRYATTEMPTS)
+PostPayment
+PostNonApprovedPayments
+1000 ms (Defined by RETRYWAITMILLISECONDS)
+Custom Success Check function determines retry. If unsuccessful, retries up to limit.
+SouthernOakPostRequest.vb - Repos
+7
+Epic Premier / 1934-MacNeill (Biller)
+2 (The retry mechanism retries up to 2 times)
+postPayment
+N/A
+N/A
+clsEpicPremier.vb - Repos
+8
+DemoIntegration
+(for test billers like 2002)
+3
+Added Retry mechanism for all Data pump types for Testing
+N/A
+N/A
+DemoIntegration.vb - Repos
+Proposals for enhancement of Retry Mechanism
+Implement 
+exponential backoff
+ for retries to prevent overwhelming services.
+Provide a 
+UI in the CRM portal (DataPump Management screen)
+ to configure retry mechanisms dynamically.
+Use a 
+database-driven approach
+ for storing and managing retry configurations.
+Standardize 
+retry logic based on HTTP status codes
+, ensuring consistent and optimized retry behavior.
+ URL:/spaces/PE/pages/4151181318/Data+Pump+Retry+Mechanism

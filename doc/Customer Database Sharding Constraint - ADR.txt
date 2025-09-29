@@ -1,0 +1,41 @@
+Date
+July 9, 2025
+Status
+Draft
+Context
+We currently shard customer data by provisioning a dedicated database per customer on a single server. We are approaching the maximum number of databases that can be hosted on a single server due to system and operational limits.
+To continue scaling, we must distribute customer databases across multiple servers.
+Options
+Option A: Deterministic Server Mapping
+Use a hashing or partitioning function on customer identifiers (e.g., 
+customer_id % N
+) to determine the target server.
+No need for a central lookup.
+Easy to compute and stateless.
+Option B: Centralized Lookup Table
+Maintain a mapping table (e.g., 
+customer_server_map
+) that stores the server location for each customer.
+Offers flexibility for rebalancing and migrations.
+More complex due to the need for a central service or cache.
+Chosen: 
+Option B - Centralized Lookup Table
+Rationale:
+Flexibility
+: We can move customer databases between servers without changing the customer ID or breaking the mapping logic.
+Operational Control
+: Enables load balancing, server decommissioning, and targeted migrations.
+Observability
+: Easier to audit and monitor server distribution.
+Future-proofing
+: Supports more advanced routing strategies (e.g., based on region, usage patterns).
+Consequences
+Positive:
+Scalable and adaptable to future growth.
+Easier to manage hot/cold customer workloads.
+Enables dynamic rebalancing.
+Negative:
+Adds a dependency on a central lookup service.
+Increases latency for routing.
+Requires high availability and consistency of the lookup table.
+ URL:/spaces/EA/pages/4486168994/Customer+Database+Sharding+Constraint+-+ADR

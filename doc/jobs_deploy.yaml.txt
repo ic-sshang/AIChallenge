@@ -1,0 +1,73 @@
+Code-Generated Docs
+Description
+
+This is a generic deployment template.
+It handles traditional VM file copy based deployments, which includes all of our deployments to web, proxy, and skybot servers.
+
+Parameters
+Parameter
+Default
+Description
+artifact
+n/a
+Name of the artifact being deployed. Most commonly the repository name lowercased.
+version
+n/a
+Version of the artifact being deployed.
+targetDir
+n/a
+Directory on the target VM where the app runs
+vstsFeed
+2107f599-675f-46f6-9748-3b2a064e1b51
+Feed containing the artifact
+targetEnvironment
+n/a
+Name of the environment where the artifact is being deployed
+environmentTags
+" "
+Identifying tags to determine which VM's in the environment the deployment should target
+jobName
+" "
+Name of the deployment job. Used to establish order between jobs within a stage
+dependsOn
+" "
+Name of the job that should run before this one
+preDeploySteps
+[]
+List of steps to run on the target VM before the artifact is copied to its target directory
+postDeploySteps
+[]
+List of steps to run on the target VM at the end of the deployment
+managedIdentityAppName
+" "
+Main component of the MI the app uses. Currently required for any config file transformation to occur.
+environment
+" "
+Identifying tags to determine which VM's in the environment the deployment should target
+serverType
+" "
+Type of server, i.e. web, app, etc. Should be deprecated in future as this is an antipattern.
+serviceConnection
+n/a
+Service connection used to retrieve secrets for config file transformation
+secretStore
+n/a
+Vault containing secrets used in config file transformation
+copySourceDirectory
+$(System.DefaultWorkingDirectory)
+Directory from which artifact should be copied
+maxParallelDeploymentCount
+1
+Number of target VM's that can be deployed simultaneously
+Template Dependencies
+These lists show which templates are consumed by this one, and which templates consume it.
+Used By
+Any templates listed here are calling this one. If there are none, no other templates are dependent on this one.
+flows/deployment-multi-job.yaml
+flows/deployment.yaml
+Uses
+Any templates listed here are called by this one. If there are none, this template is not dependent on any others.
+../tasks/new-relic/create-deployment.yaml
+../tasks/new-relic/get-apm-entity-name.yaml
+secret-injection.yaml
+ URL:/spaces/platform/pages/3635347592/jobs+deploy.yaml

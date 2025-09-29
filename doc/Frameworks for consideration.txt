@@ -1,0 +1,130 @@
+Why?
+Can I use React without a framework?
+ 
+“If you want to build a new app or a new website fully with React, we recommend picking one of the React-powered frameworks popular in the community.
+You can use React without a framework, however we’ve found that most apps and sites eventually build solutions to common problems such as code-splitting, routing, data fetching, and generating HTML. These problems are common to all UI libraries, not just React.
+By starting with a framework, you can get started with React quickly, and avoid essentially building your own framework later.”
+Next.js
+Pros
+https://nextjs.org/
+ 
+Already began our development using this.
+#1 React framework
+First released in 2016. 8+ years old.
+#1 Framework recommendation from the React team
+Very large community (future-safe)
+Utilized by:
+Spotify
+Adobe
+Stripe
+Chic-fil-a
+Hulu
+Zapier
+OpenAI
+etc.
+Built-in, automatic image, font, and script optimizations for improved UX and Core Web vitals
+Example: Image handling – Next.js’s image optimization automatically handles image resizing, lazy loading, and serving the correct image format for each device (like WebP)
+File base routing in pages directory
+Layout.tsx file in routing allows for shared components to persist on other pages without re-renders
+Data Fetching
+Next.js created a hook lib for client-side data fetching 
+SWR
+Options for getting data at build time ahead of a user’s request if needed (runs on the server)
+Automatically splits the code for each page into its own bundle. Only the JS and CSS necessary for the current page are loaded
+Even though we’d be using module federation to dynamically load remote modules, Next.js’s built-in code-splitting optimizes the loading of local routes.
+If a route is not federated, you still benefit from optimized page bundle sizes without needing to configure webpack manually.
+Capacity for all rendering types SSR, SSG, and CSR
+Defaults to SSR though and must be overridden with a ‘use client’ declaration at the top of pages.
+Baked in accessibility features
+ like an A11y linter and route change announcer
+Fast Refresh/HMR
+Enables instant feedback when editing code in dev mode. Even though we’re working with federated micro-frontends, the local routes still benefit from this feature, which speeds up development workflow, allowing us to make changes and see the results immediately, even when dealing with multiple repos.
+Cons
+Support for module federation seems uncertain at the moment.
+ Maintenance mode: deprecation notice: 
+https://github.com/module-federation/core/issues/3153
+ 
+ Potential renewed support from Vercel team (Next.js) and Zack Jackson, MF inventor/main contributor 
+https://x.com/ScriptedAlchemy/status/1866242658680832206
+ 
+Remix
+Pros
+https://remix.run/
+ 
+#2 React Framework
+ recommendation from the React team
+First released in 2020. 4 years old.
+Built and maintained by the React Router team
+90% of Remix is really just React Router: 
+a very old, very stable library that is perhaps the largest dependency in the React ecosystem.
+Very large community (future-safe)
+Utilized by:
+Shopify (acquired Remix)
+Docker
+NASA
+etc.
+Capacity for all rendering types SSR, SSG, and CSR but heavy SSR focus
+File base routing as well
+Seems to support module federation
+https://github.com/module-federation/module-federation-examples/tree/master/remix
+ 
+Cons
+Still supports CSR but heavy focus on SSR
+ModernJS
+Created by the creators of TikTok. 
+Pros
+https://modernjs.dev/en/index.html
+ 
+Module Federation is a 
+first class feature
+. The most seamless framework right now with MF.
+Seems to be mostly a re-implementation of Remix on top of the webpack and Rspack compilers. But, also very similar to Next.js
+File-based routing
+Layout.tsx file in routing directory similar to Next.js and Remix
+Capacity for all rendering types SSR, SSG, and CSR
+Utilizes Rspack
+“Compared to webpack, Rspack has significantly improved build performance, thanks not only to the language advantages brought by Rust, but also to its parallel architecture and incremental compilation features. Benchmarking has shown that Rspack can provide 5-10 times better compilation performance.”
+Cons
+Says there are thousands using it 
+https://github.com/web-infra-dev/modern.js/discussions/4872#:~:text=In%20Bytedance%2C%20there%20are%20at%20least%20thousands%20of%20projects%20in%20production%20that%20use%20Modern.js.
+ (comment from 2023) and they have a showcase tab but it’s mostly displaying TikTok and Chinese applications.
+Vanilla React + Custom Routing, etc.
+Pros
+React isn’t going anywhere, anytime soon. No reliance on a specific framework.
+Can support module federation 
+https://github.com/module-federation/vite
+ 
+Create React App has not been recommended for a few years now
+Vite is much better alternative but a lot of folks are saying it’s not great for large applications.
+Cons
+“with a custom setup it’s easier to get stuck on unsupported dependency versions, and you’ll essentially end up creating your own framework—albeit one with no community or upgrade path (and if it’s anything like the ones we’ve made in the past, more haphazardly designed).” - React docs
+Still need to rely on packages that the frameworks are using like react router, etc.
+Conclusion
+We started work in 
+Next.js
+ and would like to continue but with 
+uncertain future support
+ right now for module-federation we need to choose a different implementation.
+ModernJS
+ has the best out of the box support for module-federation right now and seems very easy to use but it just 
+doesn’t seem to have a large enough following
+ for us to feel super comfortable using it - albeit it is very attractive.
+Plain 
+React, 
+while possible, doesn’t feel like the best route, especially given all that’s stated here: 
+Can I use React without a framework?
+ If we had to decide between that and ModernJS, I think we’d choose ModernJS.
+Remix
+ seems to be the winner.
+Large, stable and robust.
+While not as seamlessly compatible with MF as ModernJS, it does appear to be possible 
+Primary Example from Zack Jackson, MF creator: 
+https://github.com/module-federation/module-federation-examples/tree/master/remix/app1
+ 
+Alternative Example: 
+https://tiny-frontend.github.io/
+ (would need to research the known listed limitations 
+https://tiny-frontend.github.io/guide/architecture.html#current-known-limitations
+ )
+Zack Jackson Message
+ URL:/spaces/PRODUCT/pages/3883073657/Frameworks+for+consideration

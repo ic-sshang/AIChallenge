@@ -1,0 +1,273 @@
+📘 Project Overview
+Purpose of the API
+The ICChaseFundingAPI is a secure, RESTful API built with 
+.NET 8
+ for managing funding instructions and transactions. It supports enterprise-grade security, observability, and is Kubernetes-ready.
+Key Features and Capabilities
+Create Funding Instructions
+: Single and bulk creation
+Status Management
+: Batch updates
+Query Operations
+: Filter by date, status, pagination
+Data Validation
+: Robust input validation and error handling
+Technologies Used
+.NET 8
+Kubernetes
+Serilog
+New Relic
+Swagger
+Azure DevOps
+🏗️ Architecture & Design
+High-Level Architecture Diagram
+You can embed this diagram using the 
+http://draw.io
+ 
+ macro
+ in Confluence:
+wide
+760
++-------------------------------------------------------------+
+|                         Client Applications                |
+| (Swagger UI, Postman, External Systems)                     |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|                    ICChaseFundingAPI.WebApi                |
+|  - API Controllers                                           |
+|  - HMAC Authentication Middleware                            |
+|  - Request Validation & Routing                             |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|                Application Layer (CQRS Handlers)           |
+|  - Command Handlers (Create, Update)                        |
+|  - Query Handlers (Get by Date, Status)                     |
+|  - DTOs and Mappers                                         |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|                    Domain Layer (Core)                     |
+|  - Domain Models                                             |
+|  - Interfaces (Repositories, Services)                      |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|               Infrastructure Layer (Services)              |
+|  - Business Logic                                            |
+|  - HMAC Signature Generator                                 |
+|  - Logging (Serilog + New Relic)                            |
+|  - Health Checks                                            |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|                  Data Access Layer (Repositories)          |
+|  - SQL Server Integration                                   |
+|  - Repository Pattern Implementation                        |
++----------------------------+--------------------------------+
+                             |
+                             v
++-------------------------------------------------------------+
+|                        Database (SQL Server)               |
++-------------------------------------------------------------+
+
++-------------------------------------------------------------+
+|                Kubernetes & Deployment Layer               |
+|  - Helm Charts                                              |
+|  - Environment Variables & Secrets                          |
+|  - Shadow Mode Support                                      |
+|  - Health Probes (Liveness, Readiness, Startup)            |
++-------------------------------------------------------------+
+
+🔌 API Endpoints
+Funding Instruction Endpoints
+Method
+Endpoint
+Description
+Authentication
+GET
+/api/v1/funding-instructions
+Retrieve instructions
+HMAC Query String
+POST
+/api/v1/funding-instructions
+Create instructions
+HMAC JSON Payload
+PATCH
+/api/v1/funding-instructions/status
+Update status
+HMAC JSON Payload
+Health & Monitoring Endpoints 
+(No Authentication Required)
+Method
+Endpoint
+Description
+GET
+/health
+Overall health
+GET
+/health/live
+Liveness probe
+GET
+/health/ready
+Readiness probe
+GET
+/health/startup
+Startup probe
+GET
+/health/version
+Version info
+GET
+/health/database
+DB connectivity
+🔐 Security & Authentication
+HMAC-SHA256 Authentication
+Request-level authentication using HMAC signatures
+Supports both query string and JSON payload formats
+Cross-platform compatibility (Windows/Linux/macOS)
+Shadow Mode
+Enables development-friendly authentication bypass
+Configuration & Secret Management
+JSON
+"HmacConfiguration": {
+"SecretKey": "your-secret-key",
+"HeaderName": "X-HMAC-Signature",
+"AuthenticationShadowMode": true
+}
+📊 Observability & Monitoring
+Logging
+: Serilog with New Relic integration
+Metrics
+: Request tracking and performance monitoring
+Health Checks
+: Kubernetes-ready endpoints
+Correlation Tracking
+: Request tracing across services
+👨‍💻 Developer Experience
+Swagger UI
+: Interactive API documentation
+HMAC Signature Generator Tool
+: CLI-based testing tool
+Testing Strategy
+:
+Unit tests
+Integration tests
+HMAC validation
+🚀 Deployment & Configuration
+Helm/Kubernetes Deployment
+YAML
+env:
+name: HmacConfiguration__SecretKey
+valueFrom:
+secretKeyRef:
+name: hmac-secrets
+key: secret-key
+name: HmacConfiguration__AuthenticationShadowMode
+value: "false"
+Environment URLs
+Environment
+URL
+Shadow Mode
+Purpose
+Development
+biller-v0-dev.invoicecloud-beta.com
+✅ Enabled
+Dev & Testing
+IAT
+biller-v0-iat.invoicecloud-beta.com
+✅ Enabled
+Integration
+Production
+biller-v0.invoicecloud.com
+❌ Disabled
+Live
+Application Settings & Environment Variables
+Shell
+PaymentsDatabase__ConnectionString="your-connection-string"
+HmacConfiguration__SecretKey="your-secret-key"
+HmacConfiguration__AuthenticationShadowMode="false"
+ASPNETCORE_ENVIRONMENT="Production"
+📦 Usage Examples
+Create Funding Instructions
+Shell
+POST /api/v1/funding-instructions
+Content-Type: application/json
+X-HMAC-Signature: <generated-signature>
+{
+"instructions": [
+{
+"bankAccountType": "Checking",
+"receivingDfiRoutingNumber": "123456789",
+"receiverAccountNumber": "A123456789",
+"amount": 100.50,
+"effectiveEntryDate": "2024-01-15T00:00:00Z",
+"instructionType": "Credit"
+}
+]
+}
+Query Instructions
+Shell
+GET /api/v1/funding-instructions?payoutDate=2024-01-15&status=pending&page=1&limit=100
+X-HMAC-Signature: <generated-signature>
+Update Status
+Shell
+PATCH /api/v1/funding-instructions/status
+Content-Type: application/json
+X-HMAC-Signature: <generated-signature>
+{
+"instructionIds": {
+"insructionId": ["F12345", "F12346"]
+},
+"status": "Processed"
+}
+🧪 Testing
+Commands
+Shell
+dotnet test
+dotnet test --filter Category!=IntegrationTest
+dotnet test --filter Category=IntegrationTest
+dotnet test --collect:"XPlat Code Coverage"
+Coverage
+85%+ overall
+90%+ HMAC tests
+End-to-end integration
+Cross-platform validation
+⚙️ CI/CD & Automation
+Automated README Updater Pipeline
+Triggered on merges to 
+main
+ and nightly
+Uses Azure OpenAI for summarization
+PRs titled 
+docs: AI-updated README based on recent changes
+🛠️ Support & Troubleshooting
+Common Issues
+API Connection
+: Check 
+/health
+, config, logs
+HMAC Issues
+: Use generator tool, enable shadow mode, verify keys and payload format
+Getting Help
+Review documentation
+Check logs
+Use dev environment
+Contact Team Titans
+📄 Licensing & Ownership
+Proprietary software owned by 
+InvoiceCloud
+Team Ownership: 
+Team Titans
+Architect: 
+Randy
+Product Manager: 
+Roopa
+Technical Manager: 
+Sudheendra
+ URL:/spaces/EA/pages/4686151718/ICChaseFundingAPI+Solution+Documentation

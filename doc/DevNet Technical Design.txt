@@ -1,0 +1,974 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+Jira ticket 
+Release Date
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+ 
+Salesforce SOW
+Knowledge Transfer
+API Documentation
+Unique Biller Integration Values (will be provided on the Integration Coding Form):
+Each biller will have a separate BaseURL
+Details
+IC Use
+Partner API Name
+Description
+Request
+Response
+Specifications
+Bill Presentment
+Not Named
+Used to generate a URL of the bill
+GET
+[BASEURL]?property_key=?&source=?&year=?
+Example:
+http://audrainmo.devnetwedge.com/TaxBill?property_key=?&source=RE&year=2021
+ 
+http://propertytax.peoriacounty.org/TaxBill/SSRSTaxBill?property_key=0705100008&source=RE&year=2011
+N/A
+Source 
+can be pulled from Custom 5 
+Property_Key can be pulled from Custom 6
+Year can be pulled from Custom 7
+File Mapping
+Invoice File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension:  .txt
+File Naming Convention: 
+File Delimiter: tab delimited
+Specification:
+ 
+Sample File:  
+Sample file with headers (they will not send this version with headers)
+Sample file Audrain
+SFTP File Path: ToInvoiceCloud/Invoices/Taxes
+File Transfer Frequency: Daily (will be used for new bills and adjustments)
+File Split Process
+Each bill and quarterly installments are sent as one line. Since they are sending a list of all bills each day (adjustments and new bills) a file split process is likely needed. To know how many installments are on a bill, the balancedue1-4 can be used. To know if bill exists in IC InvoiceNumber1-4 can be used.
+Installment Logic
+: 
+Each row represents an annual bill, there can be up to 4 installments for each. They are passing Invoice_number_1 - Invoice_number_4.
+Invoice_Number 1-4 will be set or blank depending on the number of installments, Start at Invoice_Number4 and iterate backwards, if it is blank, don’t do anything and continue. If it is set create the installment corresponding to that installment number
+All installments will be created at once, not staggered
+The data is maintained by the biller, if the name or due date is not set, skip. Biller will be instructed to fix their data and bills will be loaded once fixed
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Character Limit
+Record Type
+1
+RowType
+N
+TRUE
+Set by IC - Always ‘FH’
+File Header
+2
+BillerGuid
+N
+TRUE
+Set by IC 
+File Header
+4
+FileCreationDate
+N
+TRUE
+Set by IC 
+File Header
+5
+InvoiceCount
+N
+TRUE
+Set by IC 
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+Set by IC 
+File Header
+7
+RowType
+N
+TRUE
+Set by IC  Always ‘IH’
+Invoice Header
+8
+RecordType
+N
+TRUE
+Set by IC Always 'N'
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+Set by IC 
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+See installment logic above for more details:
+InvoiceNumberFormat is Account
+Year
+Installment
+eg for account 101: 10120211
+Invoice_Number_1
+Invoice_Number_2
+Invoice_Number_3
+Invoice_Number_4
+varchar(255)
+255
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Set by IC - 
+Date invoice is created in IC 
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Use the due date corresponding to the bill installment being created:
+Due_Date_1
+Due_Date_2
+Due_Date_3
+Due_Date_4
+DateTime
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Use the Original_Tax value that corresponds to the bill installment being created:
+Original_Tax_1
+Original_Tax_2
+Original_Tax_3
+Original_Tax_4
+decimal(19,2)
+19
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Use the Penalties that corresponds to the installment  being created:
+Penalties_1
+Penalties_2
+Penalties_3
+Penalties_4
+decimal(19,2)
+19
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Use the Original_Tax value that corresponds to the bill installment being created:
+Original_Tax_1
+Original_Tax_2
+Original_Tax_3
+Original_Tax_4
+decimal(19,2)
+19
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Use the balance that corresponds to the installment being created
+Balance_1
+Balance_2
+Balance_3
+Balance_4
+decimal(19,2)
+19
+Invoice Header
+41
+Custom4
+Y
+FALSE
+Bill_Number
+varchar(20)
+20
+Invoice Header
+42
+Custom5
+Y
+FALSE
+Source
+varchar(20)
+Invoice Header
+43
+Custom6
+Y
+FALSE
+Parcel_Number
+ 
+varchar(20)
+20
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Tax_Year
+int
+Invoice Header
+45
+Custom8
+Y
+FALSE
+Use the fees that corresponds to the installment being created
+Fees_1
+Fees_2
+Fees_3
+Fees_4
+decimal(19,2)
+19
+Invoice Header
+46
+Custom9
+Y
+FALSE
+Use the Interest that corresponds to the installment being created:
+Interest_1
+Interest_2
+Interest_3
+Interest_4
+decimal(19,2)
+19
+19
+47
+Custom10
+Y
+FALSE
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Use the balance that corresponds to the installment being created
+Balance_1
+Balance_2
+Balance_3
+Balance_4
+decimal(19,2)
+19
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+If Source = RE
+8 (Real Estate)
+If Source = PP
+7 (Personal Property)
+If Source = MH
+44 (Mobile Home)
+If Source = ST = School Tax
+11 (school billings) 
+If Source = 
+LC 
+(Merchant Licenses)
+57 (Business Licenses)
+If Source =TC (Tax Claims)
+(?)Tax claims (leave uncoded for now, skip)
+Invoice Header
+345
+BillerInstallmentNumber
+Y
+FALSE
+Use the installment number that corresponds to the installment that is being created (1-4)
+1
+2
+3
+4
+Invoice Header
+346
+BillerBillYear
+Y
+FALSE
+Tax_Year
+int
+Invoice Header
+58
+RowType
+N
+TRUE
+Set by IC Always 'CR”
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account_Number
+varchar(255)
+255
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Owner_Name
+varchar(255)
+255
+Customer Record
+61
+Address1
+Y
+FALSE
+Property_Address_1 + Property_Address_2 (if 2 is not blank)
+varchar(255)
+255
+Customer Record
+63
+City
+Y
+FALSE
+Property_City
+varchar(255)
+255
+Customer Record
+64
+State
+Y
+FALSE
+Property_State
+varchar(10)
+10
+Customer Record
+65
+Zip
+Y
+FALSE
+Property_Zip
+varchar(10)
+10
+Customer Record
+356
+BlockPaymentsCC
+Y
+FALSE
+If AllowPayment = 'Y', set to unblock
+If AllowPayment= 'N', set to block
+Devnet has updated the File export so that if any year for an account is set to "N", then all years would also be set to "N" . 
+char
+Customer Record
+357
+BlockPaymentsEFT
+Y
+FALSE
+If AllowPayment = 'Y', set to unblock
+If AllowPayment= 'N', set to block
+Devnet has updated the File export so that if any year for an account is set to "N", then all years would also be set to "N" . 
+char
+Customer Record
+373
+DisplayAccountNumber
+Y
+FALSE
+Account_Number WITHOUT the two character source (eg instead of RE123, just 123)
+varchar
+255
+CustomerRecord
+70
+RowType
+N
+TRUE
+Set by IC Always ‘ID’
+Invoice Detail
+Adjustment/Daily Balance File
+File Summary/Purpose: The purpose of this file is transfer bill/invoice updated balance data to IC from the biller
+File Extension: .txt
+File Naming Convention: 
+File Delimiter: tab delimited
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Daily
+Installment Logic
+: 
+Each row represents an annual bill, there can be up to 4 installments for each. They are passing Invoice_number_1 - Invoice_number_4.
+They have communicated that balance_1-balance_4 will be either blank or set if there is a corresponding installment. This can be used to tell how many installments are on the bill.
+Start at balance_4 and iterate backwards, if it is blank, don’t do anything and continue. If it is set (0 or another number) create the installment using the corresponding Invoice_number
+Field Mapping
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+Set by IC always AH
+File Header
+306
+BillerGuid
+N
+TRUE
+Set by IC
+File Header
+307
+ThirdPartyFileReference
+N
+FALSE
+File Header
+308
+FileCreationDate
+N
+TRUE
+Set by IC
+File Header
+309
+AdjustmentCount
+N
+TRUE
+Set by IC
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+Set by IC
+File Header
+311
+RowType
+N
+TRUE
+Set by IC Always AR
+Adjustment Record
+312
+InvoiceNumber
+Y
+FALSE
+See installment logic above for more details:
+Invoice_number_1
+Invoice_number_2
+Invoice_number_3
+Invoice_number_4
+varchar(255)
+255
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+Account_Number
+varchar(255)
+255
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+Use the balance that corresponds to the installment being created
+Balance_1
+Balance_2
+Balance_3
+Balance_4
+decimal(19,2)
+19
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+2 (Balance Differential)
+Adjustment Record
+Invoice Update File
+File Summary/Purpose: Since the software partner needs IC to keep updated custom fields and send those back in the payment file, use of the new Invoice Update file is required to update custom fields from the daily adjustment file.
+File Extension: .txt
+File Naming Convention: 
+File Delimiter:  tab delimited
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Character Limit
+Record Type
+38
+Custom1
+Y
+FALSE
+Use the Penalties that corresponds to the installment  being created:
+Penalties_1
+Penalties_2
+Penalties_3
+Penalties_4
+decimal(19,2)
+19
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Use the Original_Tax value that corresponds to the bill installment being created:
+Original_Tax_1
+Original_Tax_2
+Original_Tax_3
+Original_Tax_4
+decimal(19,2)
+19
+Invoice Header
+40
+Custom3
+Y
+FALSE
+Use the balance that corresponds to the installment being created
+Balance_1
+Balance_2
+Balance_3
+Balance_4
+decimal(19,2)
+19
+Invoice Header
+Custom8
+Y
+Use the fees that corresponds to the installment being created
+Fees_1
+Fees_2
+Fees_3
+Fees_4
+decimal(19,2)
+19
+Invoice Header
+Customer Update File
+Summary: Used to update if customer is blocked or not since the update file is only for the invoice record
+File Extension: 
+File Naming Convention: 
+File Delimiter:  tab delimited
+Specification: 
+Sample File: 
+SFTP File Path:
+File Transfer Frequency: Daily
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+58
+RowType
+N
+F
+Set by IC - always CR
+59
+AccountNumber
+Y
+T
+Account_Number
+varchar(255)
+255
+356
+BlockPaymentsCC
+Y
+F
+If AllowPayment = 'Y', set to unblock
+If AllowPayment= 'N', set to block
+char
+357
+BlockPaymentsEFT
+Y
+F
+If AllowPayment = 'Y', set to unblock
+If AllowPayment= 'N', set to block
+char
+Customer Conveyance File
+File Summary/Purpose: IC creates the customer conveyance file from the ‘full file’ the biller provides. IC conveys accounts and invoices when the name on the account changes in the daily file.
+File Extension: .CCF
+File Delimiter: |
+Specification: N/A
+Sample File:
+File Transfer Frequency: Daily
+File Format Name: 
+Field Mapping
+File split identifies if the name has changed and creates a conveyance file with the field mapping. The file split also looks at each record to determine if the record already exists in the system or if it’s a new invoice. If it exists, the balance is updated with an adjustment if the balance in the file differs from the balance on IC. If the invoice does not exist, it creates a new invoice.
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Record Type
+358
+RowType
+Y
+TRUE
+N/A - Generated by IC - Always CH
+File Header
+359
+BillerGuid
+Y
+TRUE
+N/A - BillerGUID assigned by IC
+File Header
+360
+ThirdPartyFileReference
+Y
+FALSE
+Assigned by the Biller. Used for tracking purposes
+File Header
+361
+FileCreationDate
+Y
+TRUE
+N/A - IC to use current date
+File Header
+362
+ConveyanceCount
+Y
+TRUE
+N/A - IC to calculate based on the number of customers in the file to be conveyed
+File Header
+363
+RowType
+Y
+TRUE
+N/A - Generated by IC - Always CC
+Conveyance Record
+364
+CurrentICAccountNumber
+Y
+TRUE
+Account Number that IC is currently using for this customer
+Conveyance Record
+366
+BlockPaymentsCC
+Y
+TRUE
+Always 1 for Yes
+Conveyance Record
+367
+BlockPaymentsACH
+Y
+TRUE
+Always 1 for Yes
+Conveyance Record
+369
+Active
+Y
+TRUE
+Always 0 for No
+Conveyance Record
+374
+ConveyInvoiceNumber
+Y
+FALSE
+Always 1 for Yes
+Conveyance Record
+411
+LinkNewAccount
+Y
+FALSE
+Always 0 for No
+Conveyance Record
+Payment/Lockbox File
+File Summary/Purpose: The purpose of this file is transfer payment data from IC to the biller
+File Extension: 
+.txt
+File Naming Convention: 
+File Delimiter: Tab delimited
+Specification: (Batch file, not API)
+ACH Reject Requirements:
+C-Code Rejects included?
+Yes/
+No
+Include Credits & Chargebacks?
+Credits?
+Yes/
+No
+Chargebacks?
+Yes/
+No
+Sent a Negative value, using dash indicator?
+Yes/
+No
+Alternative credit indication:
+Sample File: 
+See specification
+SFTP File Path:
+File Transfer Frequency: Daily
+Payment File Logic
+:
+No longer need to look at whether AllowPartialPayments is set to 0 or 1.
+       This integration changes need to be made for all DevNet Billers.
+Field Mapping
+Field
+Data Type
+Values
+Account Number
+Varchar (20)
+Pull from Custom6 on Invoice
+Tax Year
+Integer
+Pull from Custom7 on Invoice
+Source
+Varchar (2)
+Source will be determined from Custom5 (can be pulled verbatim)
+RE = Real Estate
+PP = Personal Property
+MH = Mobile Home
+Installment
+Integer
+Pull from BillerInstallmentNumber on Invoice
+Type
+Varchar (3)
+IVR = IVR Payment
+WWW = 
+All others
+Date Paid
+Date
+Date of payment (
+MM/dd/yyyy
+) (padded with 0s if a one digit month, day)
+Tax Paid
+Decimal 
+Tax Paid = Total Paid - Penalty Paid
+Penalty Paid
+Decimal
+Pull from Custom1 on invoice
+Total Paid
+Decimal
+Look payment amount on the payment record in IC database
+Set Total Paid = payment amount from IC payment record
+If payment amount < Penalty Paid (Custom1), set Penalty Paid = Payment amount, and set Tax Paid (Field 7) = 0.00, it can never be blank.
+Paid By
+Varchar (100)
+Name entered in payment route
+Payment Type
+Varchar (10)
+VISA= Visa
+MC = mastercard
+DISCOVER = discover
+AMEX = American Express  (for BID 4011 - Peoria County, IL, AMEX is done on a separate file and not combined)
+ACH = ACH Payments (including autopay and scheduled payments and OBD
+MPP = This is if they are on a payment plan, not needed
+Billing Period
+Integer
+Always 1 for now (Pennsylvania uses multiple, will have to customize that if implementing a Pennsylvania biller)
+Change Log File
+File Summary/Purpose: The purpose of this file is transfer change log data from IC to the biller
+File Extension: 
+.
+csv
+File Naming Convention: 
+File Delimiter: comma delimited
+Specification: 
+Sample File:
+SFTP File Path:
+File Transfer Frequency: (Add note if DLS needs to be accounted for)
+Field Mapping
+Field
+Data Type
+Character Limits
+Format
+Values
+Account Number
+Varchar 
+30 
+Account Number from IC database
+AP Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in AutoPay
+AP Un-Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed un - enrollment in AutoPay
+Email
+Varchar
+100
+Customer email address
+Email Address change date
+Datetime
+MMDDYYYYHHMMSS
+Date email address was change on IC
+Phone Number
+Varchar 
+15
+Phone number of the customer
+Phone Number change date
+Datetime
+MMDDYYYYHHMMSS
+Date phone number was changed on IC
+Paperless Enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer completed enrollment in paperless
+Paperless Un-enrollment
+Datetime
+MMDDYYYYHHMMSS
+Date customer un-enrolled in paperless
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+20
+Used to store the URL where a PDF image will be retrieved from if using PDF linking
+varies from biller to biller
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+Generally set in CRM
+AllowPartialPayments
+Biller by Biller Basis
+AutoPayCollectionDate
+Biller by Biller Basis
+BalanceForward
+Do not set (they keep bills open from year to year)
+CreditCardServiceFee
+Generally set in CRM
+FirstNotifyRequestedDate
+Biller by Biller Basis
+InvoiceDate
+Not needed
+InvoiceDueDate
+Not Needed
+InvoiceFormatGuid
+Biller by Biller Basis
+InvoiceTypeID
+Not needed
+LateFeeDate
+Biller by Biller Basis
+LocationReference
+Biller by Biller Basis
+MinimumAmountDue
+Biller by Biller Basis
+PaymentExpirationDate
+Biller by Biller Basis
+PaymentExpirationMessage
+Biller by Biller Basis
+PromptPayExpirationDate
+Biller by Biller Basis
+RegistrationValue
+Biller by Biller Basis
+SecondNotifyRequestedDate
+Biller by Biller Basis
+ThirdNotifyRequestedDate
+Biller by Biller Basis
+User Interaction and Design
+Data Flow - Invoice
+att2469429346
+2291859471
+1
+Chart1
+att2470608915
+IM
+att2470379581
+0
+Data Flow - Adjustments
+att2469429346
+2291859471
+1
+Chart1
+att2470608915
+IM
+att2470379581
+0
+Data Flow - Payment
+att2816573448
+2291859471
+1
+DevNetPayment
+att2816540688
+IM
+att2816081979
+0
+Data Flow - Void
+Handled manually
+Data Flow - ACH Reject
+Handled manually
+Data Flow - Change Log
+att2470772752
+2291859471
+1
+Chart3
+IM
+att2470051881
+att2469920782
+0
+Data Flow - Bill Presentment
+att2470838289
+2291859471
+1
+Chart4
+IM
+att2470543385
+att2469953567
+0
+Payer Experience
+User can register and login through Invoice Cloud or go through DevNet 
+Biller Experience
+Biller Portal
+User Stories
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+Cloud Payments v2
+Redirect users from DevNet Wedge to IC for payment
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-7170
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Payment exports are not being generated as expected by DevNet. The payment amount passed in the export is incorrect.
+The Tax Paid(Field 7) = Payment Amount(Field 9) - Penalty Paid(Field 8).
+If payment amount < Penalty, set Penalty = Payment amount, and Tax Paid in payment file to 0.00. Value can never be blank.
+No longer need to look at whether AllowPartialPayments is set to 0 or 1. Only look at payment amount on the payment record in IC database and Custom1 on the invoice.
+INT-5061
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/27
+It was looking for merchant licenses at ‘ML’
+It’s actually being sent as ‘LC'
+Import merchant licenses
+INT-4957
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+10/17
+File was failing because biller was sending rows without due dates or names
+Now rows like this are skipped, was communicated to biller they will have to fix to be included
+ITG-2596
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+05/08/2024
+Payment export contained AMEX payments and are within the same file.
+Remove AMEX payments from current file and create a separate export just for AMEX.
+Modify ICPayment outgoing .txt files to remove AMEX and create a separate file for AMEX payments.
+ URL:/spaces/IM/pages/2291859471/DevNet+Technical+Design

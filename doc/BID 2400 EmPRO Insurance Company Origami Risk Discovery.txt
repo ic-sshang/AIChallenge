@@ -1,0 +1,289 @@
+Summary
+Company
+Origami Risk
+Industry/Vertical
+Insurance
+Website
+Make a Payment - EmPRO Insurance Company (myempro.com)
+Software + Version
+Solutions Engineer
+ 
+Integration Manager
+ 
+Invoices
+Invoice Types
+Internal Notes
+Response/Decision Date
+Invoice Type/Business Type
+Premium, Membership, etc.
+Insurance invoice type 164
+If Multiple, can services be billed separately?
+Same invoice or separate invoices?
+na
+Is there an indicator in the file for each service type?
+These will be separate invoice types in IC
+na
+Invoice Billing
+Internal Notes
+Response/Decision Date
+How often are bills produced?
+Daily, Weekly, Monthly, Quarterly, Semi-Annually, Annually etc.
+Monthly, quarterly, semi-annually, annually
+IC Biller Invoice File (BIF)
+Review Specs
+Integrator File
+Review Specs
+How is Integrator File Formatted?
+XML, CSV, Pipe, Print Spool, etc.
+Is there a separate file for updates to an existing bill?
+Do we need to use biller file split to split adjustments and invoices?,
+How can we tell if it is a new invoice Vs an adjustment to an existing invoice?
+Are you able to customize data sent in the files?
+Invoice Functionality
+Internal Notes
+Response/Decision Date
+Does your system produce unique invoice numbers?
+If yes, are these numbers printed on bills, would customers recognize these numbers? If no, what combination of values can we use to create a unique number per invoice?
+How are balances calculated per invoice? (Explain Balance Forward and Open Billing)
+total balance on most recent invoice or balance available on multiple invoices
+Are fees (late fees, penalties, interest, etc.) added to the invoice or the account?
+Do you have a field for Past Due balances?
+Are there any Duplicate invoices?
+     If yes, which bill should IC import?
+Is there a minimum required payment amount?
+Account/Policy Numbers
+Internal Notes
+Response/Decision Date
+Are Account/Policy Numbers unique per person? (Do you have customer numbers?)
+How is billing handled? Policy Based, Account Based or Both? 
+(This will decide on what the IC unique identifier/account number will be) 
+Under what circumstances would Account Numbers change?
+Do you expire previous bills so that payments cannot be made after a certain time? In what scenario(s)?
+How is autopay handled?
+Do you need to block payments (CC or ACH)? How will this be communicated to Invoice Cloud
+File Transfer
+Internal Notes
+Response/Decision Date
+Is there an automated process to produce the file? 
+Files should be sent to IC any time there is a new billing
+SFTP or Webservice?
+Additional Notes
+Balance Updates
+Adjustments
+ 
+Internal Notes
+ 
+Response/Decision Date
+What is the best way for IC to update balances? (API preferred, Files if necessary)
+ RTDR
+ 
+Files
+IC Adjustment File (BAF)
+ review IC BAF
+Can you customize what is produced in the file?
+ Can invoice number be added?
+How often can Adjustments be sent?
+ 
+ 
+Additional Notes
+ 
+ 
+Account Changes
+From Invoice Cloud
+ 
+Description
+ 
+Response/Decision Date
+Invoice Cloud sends Autopay, Paperless, Customer Registrations, Pay by Text, Email Changes is there an API to allow these changes?
+ DataPump
+ 
+If no, What format should we send these items to you? (Prompt for sample file)
+ 
+ 
+From CIS
+ 
+ 
+Invoice Cloud updates blocking of ACH/CC (cash only) customers in real time. Can this status be included in your API Response?
+ 
+ 
+If no, IC Customer Update File (CUF)
+ Review IC CUF Spec
+If no, Billers must manually update blocked payments via biller portal
+ 
+ 
+Additional Notes
+Payments from IC
+Payments from Invoice Cloud
+ 
+Response/Decision Date
+Would you be able to receive an API call to your system when payments are made in Invoice Cloud (Datapump)?
+Yes
+Would you be able to receive a file to your system when customer changes are made?
+ 
+Would that file have to be in a specific format / can we get a sample?
+ 
+Do you have the ability to block people from making certain payments? If so how is this represented (ACH / Credit Card)
+ 
+ACH Rejects
+ Yes
+Additional Notes
+ 
+Bill Presentment
+Bill Presentment
+  
+Response/Decision Date
+Do you produce your own bill images or does your print vendor?
+ Origami to generate bill pdfs. 
+Could we get a sample of the bill itself?
+ Yes
+Does the print vendor have a web service we can call to retrieve bills?
+ Yes
+Do you (or the print vendor) have the ability to send us bills (PDFS) as individually named files?
+ Yes
+How is info exchanged so that paperless customers are not sent physical invoices?
+ 
+Does the bill contain a bill number or any unique identifier?
+ 
+Additional Notes
+ 
+Payer Experience
+General Questions
+ Internal Notes
+  
+Response/Decision Date
+How do your customers make payments today?
+ Check, Lockbox, using IC for ACH,CC, OBD, Paypal, IVR ,Pay by text, Gpay, ApplePay
+What are the customer touchpoints between your billing system and the current payment solution
+ Empro portal, Pay by phone, text
+Insured must go through underwriter/agent to create policy.
+ 
+What are all the payment methods accepted by your system today?
+ 
+How do your customers access the payment system today?
+ Empro portal-SSO connect-iframe, quick pay- pay now customer portal search, redirect.
+They are interested in iFrame, seamless experience. 
+What additional payment features are important to your customers?
+ All IC payment options. 
+ 
+Can I get a walk-through of the Payer / customer experience? Who should I contact to schedule that?
+ Walkthrough complete 9/26/24
+ 
+Specifics
+ 
+ 
+Do You have Single Sign On capabilities or will you be using Invoice Cloud Customer Portal? 
+ SSOconnect via IC
+ 
+If SSO, do you have a Identity Provider for SAML SSO or will you be using SSOConnect?
+SSOConnect
+What part of the user experience will be through your UI and what part of the User experience will be through ours?
+ iFrame UX leaning
+ 
+Will you need balance forward or is each invoice paid separately?
+ Balance forward preferred. 
+ 
+Do you need multi user login?
+ Yes, group policy, designate admin
+ 
+How will existing users be migrated?
+ There will be a conversion process
+ 
+Do you need to link accounts?
+ Yes
+ 
+Do you need IVR payments?
+ Yes
+ 
+Do you want to offer 'Pay By Text'? 
+ Yes
+ 
+Additional Notes
+ 
+ 
+CSR/Agent Experience
+General
+Internal Notes
+  
+Response/Decision Date
+Do you have clerks/agents? 
+ Yes, brokers can create policies and take payments. Only to make a payment. Low phase 2
+How do CSRs / Clerks / Agents access and use the system today?
+ iframe agentconnect. 
+ 
+Specifics
+ 
+ 
+Can clerks/agents process payments by using a customer's stored payment method?
+Agent should not setup autopay, paperless, paybytest. 
+ 
+Do clerks/agents assist customers with self service activities like Paperless / Autopay / Pay by Text? If so, please explain:
+No
+ 
+Do some clerks/agents need different permissions than others? (please explain)
+No
+ 
+Do clerks/agents accept payments at the counter (in-person)? 
+ No in person
+ 
+IF YES:
+ 
+ 
+What type of payments are accepted (eg. Cash, Check, Card): 
+ 
+ 
+Do you use a separate system/software for counter payments and if so what software? 
+ 
+ 
+How do you accept cash payments? 
+ 
+ 
+How do you accept credit card payments?
+ 
+ 
+How do you accept paper checks? 
+ 
+ 
+Do you use a check scanner?
+ 
+ 
+Additional Notes
+ 
+ 
+Can clerks/agents process payments by using a customer's stored payment method?
+ 
+ 
+Insurance Specifics
+Considerations
+ Internal Notes
+   
+Response/Decision Date
+How are quote payments captured?  Is the billing account number or policy number known at this time?  If yes, consider creating the account before a BIF arrives or creating one on the fly.  If no, consider using the Customer Renewal function later to move the Quote Number over to the actual billing/policy number.
+ First invoice is due on the policy effective, which could be a month later. Or 30 days after issue date. 
+Unique Id will stay the same- account number
+Policy Number  - IC account number 
+No need for customer renewal - Policy number is static
+ 
+Agent payments - do the agents need to act on the behalf of the policyholder for payments?  If yes, consider using Agent Connect without a LoginGUID.
+ 
+ 
+Agency payments - do the agency pay with their own agency payment method?  If yes, consider using Agent Connect with a LoginGUID and user role of Account Oversight or Group Oversight.  In order to prevent long lists of linked accounts, it is recommended to link the account to the user and unlink after the transaction is complete.
+ 
+ 
+How are renewals handled - will the billing system call our Customer Renewal API? (i.e., does the policy/account number change every policy term? If so, call the API)
+ Policy Number stays the same
+ 
+Is multi-user needed?  Are the additional users co-owners (LoginType 5), or Oversight (LoginTypes 3&4).  For Plan Administration, consider LoginType 4 - Group Oversight - as well as how Option 122 should be configured.  Group Oversight should stay registered even if the policyholder is unregistered.
+ 4 doctors - each with their own policy, 1 admin, 
+Multi-user needed
+ 
+How is billing handled? Policy Based, Account Based or Both? 
+ Direct billing - Policy based would be IC account
+Group billing would be IC account
+Tell us about how your quote system works and the issuance process of quotes/policies
+ User submits application, reviewed by underwriting staff, sends to insured, then binds quote to policy. Payment for quote is either via check immediately, or on effective date
+ 
+How many phases will there be for go live?
+Additional Notes
+ 
+ 
+ URL:/spaces/IM/pages/3592585218/BID+2400+EmPRO+Insurance+Company+Origami+Risk+Discovery

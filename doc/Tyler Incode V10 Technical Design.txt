@@ -1,0 +1,1326 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+N/A
+ITR
+Document status
+DRAFT
+Document owner
+ 
+Solution engineer
+Knowledge Transfer
+File Mapping
+Invoice File - Utility
+File Extension: XML
+File Naming Convention: 
+File Delimiter: tab
+Specification: 
+Sample File: 
+https://invoicecloud.app.box.com/folder/138891861410
+Project Repository: StratusWebServices
+File Name (Class Name) within Stratus WebServices): InCode_UB_Invoice_Upload_SkipLandlordInvoices.vb
+Class/FileName: InCode_UB_Invoice_Upload_SkipLandlordInvoices.vb
+File Transfer Frequency: 
+Logic Notes
+:
+While the raw file will have the extension “.xml”, in code we handle it on a block by block bases. e.g <account>
+Data to be extracted
+</account>. Where <account> </account> signifies a individual invoice with the data needing to be extracted held within.  The file is not handled as an real xml but more as a text file and on a block by block basis.
+The Data we need will be indicated as such: 
+"Bill_dt=2021"
+. We use the attribute before and the attribute after to “zero in” on the needed data.
+e.g, IF we wanted to get the Bill date we would pass 
+"Bill_dt="
+ and 
+"Drft_dt=
+" and the code/functions will get the data in between these attributes which will be the bill date.
+This file mapping list the Starting and Ending attributes as
+ 
+Beginning attribute syntax/name
+ and 
+Ending Attribute syntax/name
+ 
+Respectively.
+Conditional Logic:
+Some of the billers invoices may not have a attribute that we use to extract data, while other of the biller’s invoices will. We use conditional logic to check and extract the data from this field if we find the attribute in the line/block. Wither a field is conditional or not is indicated by the column  
+Conditional Field
+InCode_UB_Invoice_Upload_SkipLandlordInvoices
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)?
+Required (True/False)
+Beginning attribute syntax/name)
+Ending Attribute syntax/name
+Creation Logic
+Conditional Field
+Partner Feld Name
+Record Type
+1
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+File Header
+2
+BillerGuid
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - current date
+NA
+NA
+NA
+NA
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - invoice count in file
+NA
+NA
+NA
+NA
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - total invoice amount in file
+NA
+NA
+NA
+NA
+File Header
+7
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+8
+RecordType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+NA
+NA
+InvoiceNumber= 
+Billdate
+ +”
+UB
+” +
+Account Number
+No
+NA
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill_dt=
+Drft_dt=
+NA
+No
+Bill Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due_dt=
+Bill_dt=
+NA
+No
+Due Date
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Due=
+Pen=
+NA
+No
+Due
+Invoice Header
+47
+Custom10
+Y
+FALSE
+<Address_info Ssa=
+St_no=
+NA
+No
+Service Address
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due=
+Pen=
+No
+Due
+Invoice Header
+94
+Custom11
+Y
+FALSE
+NA
+NA
+Long Digit Line
+e.g:
+10100262501
+0000000262110
+000000262110
+where 
+10100262501
+ is 
+AccoutNumber 
+with all “-” characters removed
+where 
+0000000262110 
+and 
+000000262110 
+are the 
+BalanceDue 
+padded with 7  leading  0’sand 1 trailing 0’
+NA
+NA
+Invoice Header
+95
+Custom12
+Y
+FALSE
+Svc_pr_read_date=
+Svc_cr_read_date=
+If 
+Svc_pr_read_date=
+ attribute is found extract data. Skip otherwise
+Yes
+Service Data From
+Invoice Header
+96
+Custom13
+Y
+FALSE
+Svc_cr_read_date
+Prorated=
+If 
+Svc_cr_read_date=
+ attribute is found extract data. Skip otherwise
+Yes
+Service Data To
+Invoice Header
+97
+Custom14
+Y
+FALSE
+L_b_amt=
+T_pmts=
+NA
+No
+Previous Balance
+Invoice Header
+98
+Custom15
+Y
+FALSE
+L_p_amt=
+L_b_amt=
+Payments (Previous)
+No
+Previous Payments
+Invoice Header
+99
+Custom16
+Y
+FALSE
+T_amp_adjs=
+T_pens=
+Adjustments 
+No
+Adjustments
+Invoice Header
+100
+Custom17
+Y
+FALSE
+<Amount>
+</Amount>
+If 
+<BillCodeDescription>WATER</BillCodeDescription>
+attribute is found extract data. Skip otherwise
+Yes
+Water Charge
+Invoice Header
+101
+Custom18
+Y
+FALSE
+<Amount>
+</Amount>
+If 
+<BillCodeDescription>KC WATER - RENT</BillCodeDescription>
+ attribute is found extract data. Skip otherwise
+Yes
+KC Water Charge
+Invoice Header
+102
+Custom19
+Y
+FALSE
+<Amount> 
+</Amount>
+If 
+<BillCodeDescription>SERVICE/WATER BASE</BillCodeDescription>
+ attribute is found extract data. Skip otherwise
+Yes
+Service Water Base Charge
+Invoice Header
+103
+Custom20
+Y
+FALSE
+arrear
+Age_1=
+NA
+No
+Past Due Amount
+Invoice Header
+104
+Custom21
+Y
+FALSE
+<Amount>
+</Amount>
+If 
+<BillCodeDescription>BILLING CHARGE</BillCodeDescription>
+ attribute is found extract data. Skip otherwise
+Yes
+Billing Charge
+Invoice Header
+105
+Custom22
+Y
+FALSE
+<Amount>
+</Amount>
+If 
+<BillCodeDescription>STREET LIGHTS</BillCodeDescription>
+ attribute is found extract data. Skip otherwise
+Yes
+Street Light Charge
+Invoice Header
+106
+Custom23
+Y
+FALSE
+B_a1
+B_a2=
+Billing Address 1
+Invoice Header
+107
+Custom24
+Y
+FALSE
+B_a2
+B_city=
+Billing Address 2
+Invoice Header
+186
+LateFeeAmount
+Y
+FALSE
+T_pens
+arrear=
+NA
+No
+Penality Fee
+Invoice Header
+187
+LateFeeDate
+Y
+FALSE
+Pen_dt
+CutOff_dt=
+NA
+No
+Penatliy Fee Date
+Invoice Header
+407
+PastDue
+Y
+FALSE
+arrear
+No leading zero 
+Ex: “0000137.47“
+Age_1=
+NA
+No
+Past Due Amount
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account No=
+Name=
+NA
+No
+Customer Account Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Name=
+Status=
+Customer Name
+No
+Customer Name
+Customer Record
+61
+Address1
+Y
+FALSE
+<Address_info Ssa=
+St_no=
+Customer Address
+No
+Service Address
+Customer Record
+63
+City
+Y
+FALSE
+B_city=
+B_st=
+City Name
+NA
+NA
+Customer Record
+64
+State
+Y
+FALSE
+B_st=
+B_zip=
+Street Name
+NA
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+B_zip=
+/><Bill_det
+Zip Code
+NA
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Detail
+72
+Description
+Y
+FALSE
+NA
+4 Possibilites:
+Basic/Default: Utility Invoice
+Utility Invoice
+If Tier Data included:
+Tier Data
+If monthly Usage Data included:
+Monthly Usage Data
+If Meter Data Included: 
+Meter Data
+NA
+Yes:
+Invoice Detail Records with the following:
+Tier Data
+, 
+Monthly Usage Data, Meter Data
+Will only be created if the invoice included the data to create Tier, Monthly and Meter classes in code
+. 
+There are and will be invoices that do not include this information
+.
+NA
+Invoice Detail
+83
+CustomField1
+N
+FALSE
+NA
+NA
+Month Name
+in 
+“Jan”
+, 
+”Feb”
+ format.
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: “
+Monthly Usage Data
+”
+NA
+Invoice Detail
+84
+CustomField 2
+Y
+FALSE
+NA
+NA
+Monthly Usage Quantity
+: 
+e.g “
+00010300
+”
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: “
+Monthly Usage Data
+”
+NA
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+NA
+NA
+Meter Number:
+e.g
+12345
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Meter Data
+”
+NA
+Invoice Detail
+86
+CustomField 4
+Y
+NA
+NA
+Current Reading:
+e.g
+12345
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Meter Data
+”
+NA
+Invoice Detail
+87
+CustomField 5
+N
+FALSE
+NA
+NA
+Previous Reading:
+e.g
+12345
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Meter Data
+”
+NA
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+NA
+NA
+Usage In CF:
+e.g
+12345
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Meter Data
+”
+NA
+Invoice Detail
+89
+CustomField 7
+N
+FALSE
+NA
+NA
+Tier Name:
+e.g
+Tier 1
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Tier Data
+”
+NA
+Invoice Detail
+90
+CustomField8
+Y
+FALSE
+NA
+NA
+Tier Units:
+e.g
+1234
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Tier Data
+”
+NA
+Invoice Detail
+91
+CustomField9
+FALSE
+NA
+NA
+Tier Total:
+e.g
+12.34
+Yes
+Will only be created If data exist.
+Member of a Invoice Detail of Type: 
+“
+Tier Data
+”
+NA
+Invoice Detail
+Invoice File - Utility
+Summary/Purpose: This file type will allow for the Billing Address to be added as the Address1 and Address2 field instead of Service Address. This will be handled via a JSON Configuration under the Advanced Setting #131. 
+File Extension: XML
+File Naming Convention: 
+File Delimiter: tab
+InvoiceTypeID: 42
+Sample File: 
+ 
+Project Repository: StratusFileProcessor
+File Name (Class Name) within StratusFileProcessor: 
+InCode_UB_Invoice_Upload_Include_Dashes.vb
+Class/FileName: IF_InCode - Utility Invoice Upload - Include Dashes in Account Number
+File Transfer Frequency: Weekly/Monthly/Quarterly
+IF_InCode - Utility Invoice Upload - Include Dashes in Account Number
+1800
+IC FileSpecID
+IC Field
+In File (Y/N)?
+Required (True/False)
+Beginning attribute syntax/name)
+Ending Attribute syntax/name
+Creation Logic
+Conditional Field
+Partner Feld Name
+Record Type
+1
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+File Header
+2
+BillerGuid
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+File Header
+4
+FileCreationDate
+N
+TRUE
+N/A - current date
+NA
+NA
+NA
+NA
+File Header
+5
+InvoiceCount
+N
+TRUE
+N/A - invoice count in file
+NA
+NA
+NA
+NA
+File Header
+6
+TotalInvoiceAmount
+N
+TRUE
+N/A - total invoice amount in file
+NA
+NA
+NA
+NA
+File Header
+7
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+8
+RecordType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+9
+InvoiceFormatGuid
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Header
+10
+InvoiceNumber
+N
+TRUE
+NA
+NA
+InvoiceNumber= 
+Billdate
+ +”
+UB
+” +
+Account Number
+No
+NA
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Bill_dt=
+Drft_dt=
+NA
+No
+Bill Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due_dt=
+Bill_dt=
+NA
+No
+Due Date
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Due=
+Pen=
+NA
+No
+Due
+Invoice Header
+47
+Custom10
+Y
+FALSE
+<Address_info Ssa=
+St_no=
+NA
+No
+Service Address
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Due=
+Pen=
+No
+Due
+Invoice Header
+186
+LateFeeAmount
+Y
+FALSE
+T_pens
+arrear=
+NA
+No
+Penality Fee
+Invoice Header
+187
+LateFeeDate
+Y
+FALSE
+Pen_dt
+CutOff_dt=
+NA
+No
+Penatliy Fee Date
+Invoice Header
+407
+PastDue
+Y
+FALSE
+arrear
+No leading zero 
+Ex: “0000137.47“
+Age_1=
+NA
+No
+Past Due Amount
+Invoice Header
+58
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account No=
+Name=
+NA
+No
+Customer Account Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Name=
+Status=
+Customer Name
+No
+Customer Name
+Customer Record
+61
+Address1
+Y
+FALSE
+<Address_info Ssa=
+St_no=
+Customer Address
+No
+Service Address
+Customer Record
+63
+City
+Y
+FALSE
+B_city=
+B_st=
+City Name
+NA
+NA
+Customer Record
+64
+State
+Y
+FALSE
+B_st=
+B_zip=
+Street Name
+NA
+NA
+Customer Record
+65
+Zip
+Y
+FALSE
+B_zip=
+/><Bill_det
+Zip Code
+NA
+NA
+Customer Record
+70
+RowType
+N
+TRUE
+NA
+NA
+NA
+NA
+NA
+Invoice Detail
+72
+Description
+Y
+FALSE
+NA
+NA
+NA
+Invoice Detail
+Adjustment/Daily Balance File
+File Extension .csv
+File Naming Convention: 
+File Delimiter: comma ,
+Specification: Daily balance file that contains the account number and the current balance of the account for all accounts
+Updates on 11/11/2024:
+Invoice Cloud currently don’t have a V10 adjustment file format, and we are continue to use V9 file format.
+There are some restrictions to keep using V9 format:
+The csv file must contain headers “Formatted Account Number” and “New Balance”
+If there are more than two headers, “New Balance” must be the adjustment account balance. 
+No calculation or filter for balance amount.
+ 
+No special characters in “New Balance” except ' - ' negative sign, but empty/null is allowed. 
+Sample File: 
+File Transfer Frequency: Daily
+Field Mapping
+1800
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+N/A - IC to map
+File Header
+306
+BillerGuid
+N
+TRUE
+N/A - IC generated field
+File Header
+308
+FileCreationDate
+N
+TRUE
+File Header
+309
+AdjustmentCount
+N
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+File Header
+311
+RowType
+N
+TRUE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+Formatted Account Number
+String
+Account Number
+N/A
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+New Balance
+If BALANCE is blank, set balance of account to $0.
+Money
+Current balance of account
+N/A
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+N/A - always balance differential (1 or 2)
+Adjustment Record
+Adjustment/Daily Balance File
+File Summary/Purpose: This file is configured to process updates for account numbers that adhere to either numeric or alphanumeric character set.
+File Extension .csv
+File Naming Convention: 
+IF_InCode UB Adjustment - CSV With Header 
+IF_InCode UB Adjustment - CSV With Header - Include Dashes
+File Delimiter: Comma
+Specification: This is a daily balance file that includes the new balance, formatted account number, and name for all active accounts. This file will include header.
+Sample File: 
+File Transfer Frequency: Daily
+Field Mapping
+1800
+IC FileSpecID
+IC Field Name
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Format
+Partner Field Description
+Partner Field Character Limit
+Record Type
+305
+RowType
+N
+TRUE
+N/A - IC to map
+File Header
+306
+BillerGuid
+N
+TRUE
+N/A - IC generated field
+File Header
+308
+FileCreationDate
+N
+TRUE
+File Header
+309
+AdjustmentCount
+N
+TRUE
+File Header
+310
+TotalAdjustmentAmount
+N
+TRUE
+File Header
+311
+RowType
+N
+TRUE
+Adjustment Record
+313
+AccountNumber
+Y
+TRUE
+Formatted Account Number - Can be Numeric and alphanumeric characters
+String
+Account Number
+N/A
+Adjustment Record
+314
+AdjustmentAmount
+Y
+TRUE
+New Balance
+If BALANCE is blank, set balance of account to $0.
+Money
+Current balance of account
+N/A
+Adjustment Record
+316
+AdjustmentTypeID
+N
+TRUE
+N/A - always balance differential (2)
+Adjustment Record
+Payment/Lockbox File
+File Extension: txt
+File Naming Convention: IC_YYYYMMDD
+File Delimiter: comma
+Specification: N/A
+Sample File: 
+File Transfer Frequency:  After nightly batch close
+Field Mapping
+1800
+Field
+Data Type
+Format
+IC Values
+Details
+Account
+String
+AccountNumber
+Payment Date
+Date
+MM/DD/YYYY
+PaymentDate
+Payment Amount
+Money
+PaymentAmount
+Reference
+String
+Approved 000518
+PAYMENT PROCESSED 614811
+PaymentMessage
+Payment/Lockbox File - Include Offline & Approved Payments only 
+File Summary/Purpose: This file will include Cash and Check offline payments and approved payments in 1 file. Separate file will include any non-approved payments.
+File Type: TBD
+InvoiceTypeID: 42 & 1
+File Extension: txt
+File Naming Convention: 
+Approved & Offline Payments: IC_YYYYMMDD.txt
+Non-Approved Payments: IC_YYYYMMDD-RejectedReversedPayments.txt
+File Delimiter: comma
+Specification: Non approved payments should be in a separate payment file. Include Cash and Check offline payments with all other approved payments.
+Sample File: 
+File Transfer Frequency:  After nightly batch close
+Field Mapping
+1800
+Field
+Data Type
+Format
+IC Values
+Account
+String
+AccountNumber
+Payment Date
+Date
+MM/DD/YYYY
+PaymentDate
+Payment Amount
+Money
+PaymentAmount
+Reference
+String
+Approved 000518
+PAYMENT PROCESSED 614811
+PaymentMessag
+Payment/Lockbox File - Utility Cloud Store Payments 
+File Summary/Purpose: This file will contain any Cloud Store payments that we can link back to a utility account number. That means we'll need to add an "Account Number" field into the Cloud Store's payment flow to capture that information.
+File Type: TBD
+InvoiceTypeID: 68, 69
+File Extension: txt
+File Naming Convention: IC_CloudStore_YYYYMMDD.txt 
+File Delimiter: comma
+Specification: N/A
+Sample File: 
+File Transfer Frequency:  After nightly batch close
+Field Mapping
+1800
+Field
+Data Type
+Format
+IC Values
+Account
+String
+AccountNumber
+Payment Date
+Date
+MM/DD/YYYY
+PaymentDate
+Payment Amount
+Money
+PaymentAmount
+Reference
+String
+PaymentMessage
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+131
+JSON Configuration
+A new JSON configuration (adv setting 131) was added to skip a 
+IsNumeric
+ check that was preventing accounts like “BT-#####-##” from being ingested.
+json
+{
+  "TylerIncode": {
+    "AdjustmentConfigs": {
+      "SkipNumericCheck": true
+    }
+  }
+}
+N
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+on biller questionnaire - BIF customization 
+AutoPayCollectionDate
+on biller questionnaire - BIF customization 
+BalanceForward
+on biller questionnaire - BIF customization 
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+on biller questionnaire - BIF customization 
+InvoiceDate
+invoice file
+InvoiceDueDate
+invoice file
+InvoiceFormatGuid
+BIF customization
+InvoiceTypeID
+N/A
+LateFeeDate
+DateAdd(DateInterval.Day, 1, CDate(row("DUEDATE")))
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+on biller questionnaire - BIF customization 
+ThirdNotifyRequestedDate
+on biller questionnaire - BIF customization 
+User Interaction and Design
+Data Flow - Invoice
+1800
+Data Flow - Adjustments
+1800
+Data Flow - Payment
+1800
+Data Flow - Void
+1800
+Data Flow - ACH Reject
+1800
+Data Flow - Change Log
+1800
+Data Flow - Bill Presentment
+1800
+Payer Experience
+1800
+Biller Experience
+1800
+User Stories
+1800
+Invoice Cloud Web Services
+Web Service Call
+Web Service Name
+API Use/Purpose
+CloudCreditCardProcessing
+CNP_Sale
+Process credit/debit card transaction in a real time. 
+CloudCreditCardProcessing
+CNP_Void
+Void payments that prevents the charge from being finalized, meaning the funds are not deducted from the cardholder’s account.
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+ITG-2193
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+02/23/2024
+No field mapping on PastDue amount 
+Add field mapping for PastDue amount
+Use 
+arrear
+ in the biller’s incoming raw invoice as a field to the PastDue field in IC. 
+ITG-3159
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Biller adjustment file can’t be loaded
+Adjustment file should be loaded and handled for all InCode version
+Create a new format type or add special characters check to existing format type: IF_InCode UB Adjustment - CSV With Header - Include Dashes.
+ITG-3980
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TBD
+Service Address was displaying in Address1 field
+Mailing Address(B_a1 & B_a2) will be store in Address1 and Address2 fields.
+CreateIHRecord to conditionally pull B_a1 and B_a2 as Address1 and Address2 when enabled via Advanced Setting JSON Configuration #131. 
+ URL:/spaces/IM/pages/1912734085/Tyler+Incode+V10+Technical+Design

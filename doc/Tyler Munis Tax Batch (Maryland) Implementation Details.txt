@@ -1,0 +1,133 @@
+Page Navigation
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Summary
+Summary
+Details
+Software Partner Name
+Tyler
+Software Product Name
+Munis
+MUNIS aka Tyler Technologies
+Munis ASP is the FTP solution for a Biller using the Munis software. A Munis integration will have the Stratus desktop application installed on the Biller's machine. The difference between a standard Munis integration and a Munis integration with Munis ASP is that Munis ASP can deliver files via FTP. The software will send Daily Balance Adjustment files to our FTP to a directory assigned for the biller.
+Software Cashiering System
+Tyler Cashiering
+If a Biller wants card readers, SRED is strongly recommended for any Biller without the MUNIS cashier product. 
+EMV devices should only be used with Billers that have an internal cashier solution. 
+To confirm what the Biller has, IM should ask "Do you use Payment Entry or Tyler Cashiering for posting entries into MUNIS?" - If using Payment Entry that indicates no cashier product.
+Supported Versions
+N/A
+Integration Requirements and Pre-Requisites
+Yes
+Stratus Install
+Vertical
+GUB
+Sample Biller Implementation
+BID 2568
+City of Hagerstown
+Planning
+Test Portals
+IC Hosted Test Portal
+Partner Hosted Test Portal
+Biller Test Portal - Needed? Y/N - Required? N
+Rules of Engagement
+Contact Randy Mercier, Consultant/Self-Employ (former MUNIS), 339-203-3000 or 
+rmercier@rdmsoftwareconsulting.com
+) for integration support (Stratus install, sample files)
+Timeline
+~45-60 days
+Configuration
+Invoice Types
+Invoice Types can vary - common values are: 7 Personal Property Taxes, 8 Real Estate Taxes
+Virtual Site
+Standard Field Mapping in CRM
+Personal Property
+Bill Number- mapped to column is invoices-billerinvoicenumber
+Property Location- mapped to column is invoices-custom4
+Owner Name- mapped to column is customers-customername
+Real Estate
+Bill Number- mapped to column is invoices-billerinvoicenumber
+Property Location- mapped to column is invoices-custom4
+Owner Name- mapped to column is customers-customername
+Required Options
+N/A
+Coding Requirements
+Invoice Cloud Coding Requirements
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Randy
+Upon Request
+The data is unique/specific to each biller, the format is standard.
+Adjustment File
+Randy
+Upon Request
+The data is unique/specific to each biller, the format is standard.
+Payment File
+N/A
+N/A
+File is standard across all Munis integrations - use sample file from 
+https://invoicecloud.atlassian.net/wiki/spaces/IM/pages/1835106312/Tyler+Munis+Tax+Batch+Maryland+Technical+Design#Payment%2FLockbox-File
+ 
+Bill Presentment
+Biller
+Upon Request
+Each bill presentment configuration will be unique per biller.
+Stratus Install
+IC
+Upon Request
+IM will need to request Stratus installation and work with Randy for setup.
+Partner Coding Requirements
+What
+Provided To
+When
+note
+Important Details
+
+
+Important Details
+
+
+Biller Name
+Randy
+Project Assignment 
+N/A
+Invoice Type ID
+Randy/Biller
+Project Assignment 
+N/A
+Products Biller Signed Up For
+Randy/Biller
+Project Assignment 
+N/A
+Biller Contact Information
+Randy
+Project Assignment 
+N/A
+Contacts
+Contact Randy Mercier, Consultant/Self-Employ (former MUNIS), 339-203-3000 or 
+rmercier@rdmsoftwareconsulting.com
+) for integration support (Stratus install, sample files)
+ URL:/spaces/IM/pages/1972895894/Tyler+Munis+Tax+Batch+Maryland+Implementation+Details

@@ -1,0 +1,55 @@
+Ideas
+Theme 1: Content Management & Summarization
+Code documentation with respect to a new implementation
+In multi developer setup when we work on single branch (feature branch) the post completion of feature, AI can do documentation of the implementation sourcing all the code check-ins / repo touched / files changes / added business logic or any other change. No need to create any specific documentation separately for the implementation.
+Advantages
+From a developer’s point of view, I can refer what and how things were implemented
+Scope of change
+ 
+Read Me 
+file creation for all the repos, use AI to add/update read me documentation for all the repos and let there be auto refresh of this document whenever any file is changed as part of implementation. Benefit is that is will be a living documentation no one need to manage it.
+Advantages
+Having documentation at the first place, explaining what repo does and key information. Super helpful for new team members.
+A Living document, as it will be auto generated content no manual intervention needed to maintain the document.
+ 
+IC Enginuity 
+version for devs that is fed with code so that as developer I can talk back with the chatbot and ask about some previous implementations.
+ 
+Building Knowledge Graph or Dependency graph
+A giant web showing how different repos are related to each other, where each repo can be a node and let AI build this node-to-node connections
+A drill down version of above point, graph of database objects in each repo i.e., Stored procedure – This can be done using AI, a cross-repo crawler from one repo type to other (.net to sp to database tables)
+A further drill down version i.e., automated test case or unit test case traceability for the repos
+Advantage
+Better traceability / impact analysis / dependency analysis (Everything is under the sun 😊 )
+Building safe environment for the dev & qa to determine the scope of work which will result in 
+data back work estimation
+More predictability with respect to expected completion date of the work because now we will have a visibility how big the work may look like.
+Biggest advantage, all of this can be doing by AI/automation to rebuild the graph whenever a new change is made.
+ 
+Note: 
+The graph theory can be taken to next level if we start doing some more i.e., assign weights to each repo based on business values provided by this repo / number of times it has gone through changes / count of check-ins / count of bug reports against it / count of automated test or unit test cases for it / database objects used in these repos. Once we have got the weights for each node (which is repo) start calculating/assigning the distance between these nodes (repos), smaller the distance between these nodes will represent the importance or dependencies between the nodes. This will also support initiatives like resolving tech debts i.e., a data backed tech debts.  
+ 
+This framework can be extended to jobs / cloud resources / processes we have in place as a part of system.  
+Data Backed Decision Making | Faster Decision Making
+ 
+·         
+Theme 2: Resolving the challenges with respect to “People Dependency”
+o   Build standard documentation / guidelines / rules or naming convention followed by database team for developing database objects / scripts using summarizing or training AI model to understand the patterns or standard followed by DB team. Just think of a DB agent available with us all the time which helps us to build database object as per IC’s standards
+Advantage
+o   Development team can have a reference document, and model can help the dev team (.net devs) to writing DB scripts(let’s say smaller ones) as per the standards followed by DB
+o   This will give opportunity for DB team to focus more on critical design issue rather than working small asks by dev team.
+ 
+·         
+Theme 3: Scrum Process
+o   Calling it out as team mentioned it, availability of sprint reporting data, metrics (jellyfish) and capacity data managed / calculated by AI and suggest the Dev as MS teams notification (or nuggets) how they can improve and what and where they stand as of today.  
+Creation of all scaffolding code
+ structure by taking Architecture document as an input to the agent.
+ Intelligent
+ 
+Impact Analysis
+ - Finding the dependencies through the existing code flows, if we modify some code.
+Intelligent Deployments on code push - 
+Automatic deployments without manual intervention. Though pipelines were there, An agent should be there to monitor all the processes properly followed.
+ Intelligence Merge conflicts resolution - 
+Automatic resolution of code merge conflicts.
+ URL:/spaces/PE/pages/4497604865/Engineering+AI+Use+cases+Ideas

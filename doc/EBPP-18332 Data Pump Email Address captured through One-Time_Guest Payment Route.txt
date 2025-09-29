@@ -1,0 +1,209 @@
+This document details the initial problems that led to EBPP-19332’s creation as well as the approach taken to capture email address updates by unregistered payers in the Virtual Site through DataPump.
+Worked On By:
+David Moreno (Assignee)
+Rob Nickels (Reporter)
+Katelyn Espinoza (Test Engineer)
+Ian Switzer (Integrations Engineer)
+Dolly Tyagi (QA)
+Related Items:
+EBPP-18332
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-18630
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19668
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19339
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance:
+Virginia Beach Public Utilities (BID: 3657) observed that InvoiceCloud does not send email address updates for unregistered customers through the Virtual Site via DataPump. They wanted the email address update to be reflected in their daily change log file. The solution to this was to enhance biller option 131 to allow updating of email addresses entered during one-time payments for unregistered customers, utilizing the new "Allow Unregistered Updates" setting. Consequently, both the previous and updated email addresses are to be recorded in the Change Logs and DataPump. The Integrations team was tasked with managing the modifications related to transmitting data via DataPump to the 
+biller
+/software partner if any.
+Biller option 131 determines when an email address update occurs after a payment.
+Biller option 131:
+Biller Option 131 is designed to verify whether a payer's email address has been updated with the one provided during the payment process. There are four selections available that dictate whether an email address is to be updated. 
+Allow Email Updates
+The default setting is as follows: if a payer inputs an email address during the payment process and the account owner's email address field is blank, the system will populate it with the provided email address. The 'Allow Email Updates' feature is not designed to support insertions into the DataPump table.
+Registered Customer
+Customer Changes Selected
+Results
+Insert Into Change Logs
+Insert Into DataPump
+FALSE
+TRUE
+Update Account Owner’s Email Address
+TRUE
+FALSE
+FALSE
+FALSE
+Update Account Owner’s Email Address
+TRUE 
+FALSE
+TRUE
+TRUE
+Don’t Update 
+FALSE
+FALSE
+TRUE
+FALSE
+Don’t Update
+FALSE
+FALSE
+Allow CC Email Updates
+This selection will update the courtesy email address for the account only if the email address entered by the payer in the payment route is different than the account owner’s email address. Registration does not play a factor in “Allow CC Email Updates”. Regardless of whether the payer is registered or not, as long as the email address is different from the Account Owner’s email address the courtesy email address will be updated. For the sake of testing, we used the unregistered test case to test that when the email address entered was the same as the email address of an unregistered account owner’s email address that we did not update the courtesy email address. The registered test cases were used to test that when the inputted email address from the payment route was different from the registered account owner’s email address, we updated the courtesy email address. Allow CC Email Updates does not support insertions into the DataPump table.
+Registered Customer (Inputted Email Address is Different)
+Customer Changes Selected
+Results
+Insert Into Change Logs
+Insert Into DataPump
+FALSE
+TRUE
+Don’t Update
+FALSE
+FALSE
+FALSE
+FALSE
+Don’t Update
+FALSE
+FALSE
+TRUE
+TRUE
+Update CC’s Email Address 
+TRUE
+FALSE
+TRUE
+FALSE
+Update CC’s Email Address 
+TRUE
+FALSE
+Prevent Email Updates
+This selection will never update the account owner’s email address and the courtesy email address.
+Registered Customer
+Customer Changes Selected
+Results
+Insert Into Change Logs
+Insert Into DataPump
+FALSE
+TRUE
+Don’t Update
+FALSE
+FALSE
+FALSE
+FALSE
+Don’t Update
+FALSE
+FALSE
+TRUE
+TRUE
+Don’t Update 
+FALSE
+FALSE
+TRUE
+FALSE
+Don’t Update
+FALSE
+FALSE
+Allow Unregistered Updates
+This selection should only update the account owner’s email address with the inputted email address in the payment route if the payer is unregistered. The email address must also be different from the account owner’s email address. A payer can be unregistered and still have an email address. For example, we can create a customer in a BIF and pass in an email address. This does not mean the customer is registered; they simply have an email address on file. “Allow Unregistered Updates” does support insertions into the DataPump table.
+Registered Customer
+Customer Changes Selected
+Results
+Insert Into Change Logs
+Insert Into DataPump
+FALSE
+TRUE
+Update Account Owner’s Email Address
+TRUE
+TRUE
+FALSE
+FALSE
+Update Account Owner’s Email Address
+TRUE
+FALSE
+TRUE
+TRUE
+Don’t Update
+FALSE
+FALSE
+TRUE
+FALSE
+Don’t Update
+FALSE
+FALSE
+Solution:
+The best solution determined by the We’ll Do It Live! team was to add a new selection within biller option 131 called “Allow Unregistered Updates”. 
+Within the DefaultUpdateEmailAddressBehavior.vb class, there is a function called UpdateEmailAddress. (
+Code Referenced
+)
+ This determines whether we update the email address depending on what the value of biller option 131 is. A new case was added to this function that checked whether biller option 131 was “Allow Unregistered Updates”. If so, we load the customer by the CustomerID and check that there is a customer in context and that the customer is not registered. If the customer passes this criterion, we will check that the email address entered is different from the account owner’s email address; if they are, we call the Update function (Updates and inserts into Change Log) and SyncCustomerChangesStatus(Inserts change to DataPump) to make the change.
+The Integrations team will take over the DataPump side once we have inserted the record into DataPump.
+How to Test EBPP-18332:
+Upload a new customer using a BIF
+Here are examples of what the BIF should look like for each test. Email addresses must be unique. Create a customer for each test case.
+Allow Email Updates
+//For UnRegistered Test Cases
+7~IH|8~N|9~B57D0132-B3C8-473F-9689-3B21A9C5B4E8|10~EBPP-18332-1|11~04/12/2024|12~05/12/2024|13~100.00|20~0|21~0.00|42~1|252~42|375~1
+58~CR|59~AccountNumber|60~Customer Name|61~Street|64~MA|
+70~ID
+
+//For Registered Test Cases
+7~IH|8~N|9~B57D0132-B3C8-473F-9689-3B21A9C5B4E8|10~EBPP-18332-1|11~04/12/2024|12~05/12/2024|13~100.00|20~0|21~0.00|42~1|252~42|375~1
+58~CR|59~AccountNumber|60~Customer Name|61~Street|64~MA|67~unregistered1@noplace.com
+70~ID
+Allow CC Email Updates
+7~IH|8~N|9~B57D0132-B3C8-473F-9689-3B21A9C5B4E8|10~EBPP-18332-1|11~04/12/2024|12~05/12/2024|13~100.00|20~0|21~0.00|42~1|252~42|375~1
+58~CR|59~AccountNumber|60~Customer Name|61~Street|64~MA|67~unregistered1@noplace.com
+70~ID
+Prevent Email Updates
+7~IH|8~N|9~B57D0132-B3C8-473F-9689-3B21A9C5B4E8|10~EBPP-18332-1|11~04/12/2024|12~05/12/2024|13~100.00|20~0|21~0.00|42~1|252~42|375~1
+58~CR|59~AccountNumber|60~Customer Name|61~Street|64~MA|67~unregistered1@noplace.com
+70~ID
+Allow Unregistered Updates
+7~IH|8~N|9~B57D0132-B3C8-473F-9689-3B21A9C5B4E8|10~EBPP-18332-1|11~04/12/2024|12~05/12/2024|13~100.00|20~0|21~0.00|42~1|252~42|375~1
+58~CR|59~AccountNumber|60~Customer Name|61~Street|64~MA|67~unregistered1@noplace.com
+70~ID
+Register all customers that will be used for the registered customers test cases.
+The following API was used to register the customers
+https://devtest.invoicecloud.com/remoteauthenticationapi/user/RegisterAccountsForUser
+{
+    "EmailAddress": "testEmail@noplace.com",
+    "Password": "testPassword",
+    "Accounts": [
+        {
+            "AccountNumber": "AccountNumber",
+            "LoginTypeID": 1
+        }
+    ]
+}
+Go to the Biller Options page in the CRM and select which option that will be tested
+Biller option 131 determines when an email address update occurs after a payment.
+Go to the DataPump Management Page. Depending on whether the test case requires Customer Changes to be on, select or deselect the Customer Changes option.
+Customer Changes allows the insertion into the DataPump table
+ Run the following query to see the initial values of the test data before the test is executed
+Select CustomerID, BillerID, AccountNumber, CustomerName, EmailAddress, EmailAddressCC, Registered, RegistrationDate, DateRecAdded From dbo.Customers Where CustomerID >= --add the range of the CustomerIDs that will be used for testing
+Select top 10* from ChangeLogs order by 1 desc
+Select top 10* from DataPump order by 1 desc
+Sample data from the SQL query
+Go to the Virtual Site and begin making a payment
+Virtual Site payment route example
+Notice the email address entry. This will be the new value of the email address.
+The email address will be updated when the payment is processed.
+Once the payment is complete go back to the database and run the queries below
+dbo.Customers will show the new value of the email address of the customer if there was any change
+This is also used to show the email address within the customer profile in the Biller Portal
+Changelogs will have a new record 
+if there
+ was a change with the email address and courtesy email address
+DataPump will have a new record if the change was successfully inserted into the DataPump table.
+Select CustomerID, BillerID, AccountNumber, CustomerName, EmailAddress, EmailAddressCC, Registered, RegistrationDate, DateRecAdded From dbo.Customers Where CustomerID >= --add the range of the CustomerIDs that will be used for testing
+Select top 10* from ChangeLogs order by 1 desc
+Select top 10* from DataPump order by 1 desc
+Sample data from the SQL query
+ URL:/spaces/PE/pages/3294855185/EBPP-18332+Data+Pump+Email+Address+captured+through+One-Time+Guest+Payment+Route

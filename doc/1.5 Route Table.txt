@@ -1,0 +1,130 @@
+This document lists all the HTTP endpoints exposed by the Payer services.  These are the “internal” URLs that will be mapped to “external” URLs in the gateway.
+MyIIS
+Dev URL Base: 
+https://devtest6.invoicecloud.com/portal
+Prod URL Base: 
+https://www.invoicecloud.com/portal
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+MYIIS-1
+/2/CustomerReactAuth.aspx
+GET
+Yes
+Yes
+Generates a signed identity payer token request payload based on the user session
+OTP Service
+Dev URL Base: 
+https://apibeta.dev.invoicecloud.com/payer0/otp
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/otp
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+OTP-1
+/api/v1/payertokens
+POST
+No
+Yes
+Validates a signed identity and generates a token with payer login claims
+Branding Service
+Dev URL Base: 
+https://apibeta.dev.invoicecloud.com/payer0/pyrbrnd
+Prod URL Base:
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+API-1
+account image is part of the features api.  this endpoint is DISABLED
+api/v1/branding/theme/accountimage/{accountGuid}
+GET
+Yes
+Provides the biller and payer’s branding theme
+API-1
+API-2
+/api/v1/branding/theme/features
+GET
+Yes
+Provides the payer’s product features, the payer’s biller product features, biller’s logo and DBA, and biller options
+API-3
+api/v1/branding/theme/overridecontactinfo
+GET
+Yes
+Provides the biller’s contact info (email, phone number, extension)
+User Service
+Dev URL Base: 
+https://apibeta.dev.invoicecloud.com/payer0/pyruser
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/pyruser
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+API-9
+/api/v1/permissions
+GET
+Yes
+Provides the authenticated payer’s permissions
+Account Service
+Dev URL Base: 
+https://apibeta.dev.invoicecloud.com/payer0/pyracts
+Prod URL Base:
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+API-4
+/api/v1/accounts
+GET
+Yes
+Get a list of payer accounts
+PayByText Service
+Dev URL Base: 
+https://apibeta.dev.invoicecloud.com/payer0/pay-by-text
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/pay-by-text
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+API-5.1
+/api/v1/accounts/{accountGuid}/enrollment
+POST
+Yes
+Enroll account in Pay by Text
+API-5.2
+/api/v1/accounts/{accountGuid}/enrollment
+GET
+Yes
+Get Pay by Text enrollment status of an account
+API-5.3
+/api/v1/accounts/{accountGuid}/enrollment
+POST
+Yes
+Update Pay by Text enrollment (same as create) 
+API-7
+api/v1/accounts/{accountGuid}/confirmation
+POST
+Yes
+Resend confirmation text
+API-8
+/api/v1/accounts/{accountGuid}/enrollment
+DELETE
+Yes
+Disenroll from pay by text
+ URL:/spaces/EN/pages/2703425679/1.5+Route+Table

@@ -1,0 +1,154 @@
+Page Navigation
+Document Status
+complete
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+See Implementation Details
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+BIF
+Webservices
+Adjustments/Balances
+RTDR
+Webservices
+Muni-Link Account Balances web services returns the current balance due
+Payments
+DataPump
+Webservices
+ACH Rejects Posting
+Not Supported
+Manual posting
+Void
+Not Supported
+Change Log
+Not Supported
+AutoPay Enrollment
+DataPump
+Webservices
+Paperless Enrollment
+DataPump
+Webservices
+Bill Images 
+PDF Linking 
+Webservices
+PDF Linking between IC and Muni-Link is supported. If the biller uses a third party print vendor, that integration would be handled separately.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Supported
+Agent connect is hosted through the Muni-Link portal.  The biller accesses it when looking up an account in their system.  
+Check Free - FISERV - Cash
+Not Supported
+CloudPay
+Not Supported
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported
+Biller will manually need to post payments if implemented
+CSRConnect
+Not Supported
+EMV
+Not Supported
+IVR
+Supported
+Recommended search method- Account Number
+Kiosk
+Not Supported
+Online Bank Direct - OBD
+Supported
+Outbound IVR
+Supported
+POSConnect
+Not Supported
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported
+Handled by Muni-Link via SSO integration
+       Multi-User Log In
+Supported
+This is required
+       Co-Owner Registration
+Supported
+This is required
+ (Advanced setting 79 should be set to 10 to allow for 10 users on an account)
+ 
+ SSO
+Supported
+Through Muni-Link
+AutoPay Collection Date
+Supported
+Determined by biller and setup as BIF customization 
+Batch Closure
+Custom 
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not supported
+Block Payment
+Not supported
+All blocking of payment methods will need to be done in the biller portal.  Cannot block payment method through Muni Link
+Conveyance
+Not supported
+Data Conversions
+Standard
+Muni-Link will provide conversion files through secure upload for ACH Autopay and Paperless.  Work with the designated contact to coordinate file arrival time.  
+In conversion request to IC Engineering to specify the requirements that enrollments be pushed back through DataPump to Muni-Link.
+note
+Effective 10/23/2023, Muni-Link will begin sending user/email address and password information in the ACH Autopay files for IC to create registered users to store the payment information to.
+
+
+Effective 10/23/2023, Muni-Link will begin sending user/email address and password information in the ACH Autopay files for IC to create registered users to store the payment information to.
+
+
+Email Notification Schedule
+Supported 
+Determined by biller and setup as BIF customization 
+Expire Bill for Payment
+N/A
+Minimum Payment
+Supported 
+Passed on BIF file but not used often by billers
+Paperless
+Supported
+Partial Payments
+Supported 
+Received in BIF
+Past Due Payments
+Supported 
+Received in BIF
+Scheduled Payments
+Supported
+Flex Pay
+Supported
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+???
+IDTech SRED Key
+Supported
+Ingenico EMV
+???
+Other EMV Devices
+???
+ URL:/spaces/IM/pages/1949794325/Muni-Link+Integration+Software+Details

@@ -1,0 +1,78 @@
+Overview
+An 
+Identity Provider (IdP) 
+is a software system that manages user identities and simplifies access to applications. Adopting a central IdP solution presents major benefits to an organization by providing a centralized, secure way of allowing external customers to manage their own user accounts, self-serve password resets, and access multiple systems or product offerings in a standardized manner.
+Have you ever logged into a website with your Facebook or Google account? This is an example of an IdP at work in the real world. In the enterprise, common examples of identity providers are Okta/Auth0 and Microsoft’s Azure Entra ID.
+Goals
+Centralization of sign-in across products
+Support third-party Identity Providers, allowing external customers to bring their own.
+Simplified Example - Federated Identity
+Federated identity removes the responsibility of authentication from individual components and allows authentication to be delegated to a central, dedicated identity provider.
+This allows the registration of external SSO providers outside of the company’s network security boundary. 
+i.e.
+ External users can access systems as if they are on the company’s intranet using their preferred login method.
+2
+1
+0
+0
+4071358624
+4070932483
+1
+Untitled Diagram-1740760867678.drawio
+1
+1
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1740760867678.drawio
+0
+541
+541
+Reference Architecture
+2
+1
+0
+0
+4070899895
+4070932483
+1
+Untitled Diagram-1740758513910.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1740758513910.drawio
+0
+764.0127191427141
+1061
+Detailed OIDC Workflow
+2
+1
+0
+0
+4070572436
+4070932483
+1
+Untitled Diagram-1740762553314.drawio
+2
+2
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1740762553314.drawio
+0
+1001
+451
+Glossary
+Authentication
+ - Who a user is - more specifically, is the user who they say they are?
+Authorization
+ - What a user can do.
+JWT - JSON Web Token -
+ An open technical standard for communicating between services using JSON (JavaScript Object Notation)
+OAuth2 (Open Authorization)
+ - Is an open technical standard that allows users to login to a system by way of another. (e.g. Login with Facebook, Google, Microsoft) - OAuth2 is specifically concerned with 
+Authorization.
+OpenId Connect - 
+An extension for OAuth2 that allows the capability for 
+Authentication. 
+Typically, users are granted an identity token through OIDC which can subsequently be used to authenticate and authorize user requests at the API Gateway.
+Identity Provider Solutions - OSS
+https://invoicecloud.atlassian.net/wiki/spaces/PRODUCT/pages/4070440967/SSO-MFA+IAM+Solution+Provider+Comparison+Matrix
+ 
+ URL:/spaces/EA/pages/4070932483/Identity+-+Single+Sign-On+-+PRJ

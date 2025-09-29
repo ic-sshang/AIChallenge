@@ -1,0 +1,38 @@
+Running EmailQueueProcessor
+This document details how to run the EmailQueueProcessor repository. You will need both EmailQueueProcessor and MyIIS repositories. It is assumed that the developer knows the following:
+How to access the bastion server
+How to navigate Azure DevOps
+How to send a test email through the Biller Portal in MyIIS
+Has permission to deploy their pull request.
+Note: If you made a new template, you must copy it to the appropriate folder in E:\Data\AppData\branding in the bastion server.
+Deploying To ICEmailQueueProcessor_QA
+Clone the EmailQueueProcessor repository and create a pull request with your changes.
+NOTE: The following sub bullets are no longer up to date. Testing for EmailQueueProcessing changes for EmailQueueProcessor are TBD.
+If your item also requires changes to the EmailQueueProcessing repository, you will have to build that project and copy your updated IC.EmailQueue.dll to your EmailQueueProcessor folder. 
+Make sure your code changes are also in the IC.EmailQueue project.
+You 
+MUST
+ add “-dev” to the queue triggers for ResendACHRejectEmail.cs, ResendCCExpirationEmail.cs, SendPasswordResetEmail.cs, and SendTestEmail.cs
+Go to Azure DevOps → Src → Pipelines → ICEmailQueueProcessor_QA
+Fill out parameters and run pipeline
+After build is completed go to the Releases tab and have someone with the permissions to approve the build to the next stage.
+Old Process of deploying to ICEmailQueueProcessor_QA_Build
+Click on Run Pipeline → Make sure the agent pool is “IC-Azure” → Select your branch → Run
+Once your pull request is done being built, get approval from a manager for deployment.
+If you get the following error when building your pull request, it is most likely because you have not changed the agent pool to IC-Azure
+Send Test Email via Biller Portal
+You will be running the Biller Portal against production so proceed with caution.
+After you have deployed your branch, go to the prod AVD
+Open Visual Studio and clone the MyIIS repository.
+Open the solution and set the Biller Portal Project as your start up project.
+Go to Build (Top left) → Configuration Manager → And check all the boxes in the build column.
+Hold Ctrl + Shift + F and search “VaultName” → replace “icappsettingsdevtest” with “externalappsettings” in the config files.
+You 
+MUST
+ go to SendTestEmail.aspx.vb → Add “-dev” to “testemailqueue”
+Run MyIIS and navigate to Email Management to send a test email in the Biller Portal
+Note: When submitting your pull request for review, remove the “-dev” so that it is not deployed into production with the test queue triggers.
+You can also confirm an email was sent out or not by going to the Azure Portal → “ICEmailQueue-QA” function app → SendTestEmail →Invocation 
+Link
+ 
+ URL:/spaces/PE/pages/2890236096/How+to+Test+EmailQueueProcessor+Repository

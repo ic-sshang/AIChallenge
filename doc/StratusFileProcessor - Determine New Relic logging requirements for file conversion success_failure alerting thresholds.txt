@@ -1,0 +1,137 @@
+Purpose
+This spike 
+BIF-126
+  aims to identify the logging requirements for the StratusFileProcessor that are necessary for the SRE team to construct effective NRQL queries. These queries will be used to define success and failure thresholds for file conversion alerting.
+Current State
+ 
+As of today we do not have logs with the requested file processing details. We can get a generalized list of failures, but it would not allow easy access to the following information 
+ConversionStatus
+, 
+FileTypeID
+, 
+BillerID
+, 
+StartedDate
+, 
+CompletedDate
+, 
+CanceledDate
+. 
+Expected Outcome
+Partner with SRE to determine their logging requirements to create necessary NRQL queries.
+Determine path forward for implementing the new Logging
+Proposal
+We can add a logging action immediately after 3 stages of file processing. The values for the log can originate from the current 
+BillerFileInfo 
+object and/or the current 
+AlertRecord 
+object. 
+Produce logs based on the 
+BillerFileInfo
+ object (recommended):
+Using a LogBillerFileRecordAction(actual name tbd) method added to the Logger class
+'In FileProcessorBase.ProcessBillerFileInfo
+
+'Mark the record as started
+BFI.MarkAsStarted()
+Logger.LogBillerFileInfoRecord(BFI, "Started") ' Using BillerFileInfo and AlertRecord objects to log
+
+'Mark as completed
+BFI.MarkAsCompleted()
+Logger.LogBillerFileInfoRecord(BFI, "Completed") ' Using BillerFileInfo and AlertRecord objects to log
+
+'Mark as canceled
+BFI.MarkAsCanceled()
+Logger.LogBillerFileInfoRecord(BFI, "Canceled") ' Using BillerFileInfo and AlertRecord objects to log
+<Trace>
+Public Sub LogBillerFileRecordAction(billerFileInfo As IFileInfo, status As String) Implements ILogger.LogBillerFileInfoRecord
+    If billerFileInfo.AlertRecord Is Nothing Then
+        WriteLine("Attempted to log a null AlertRecord for status: {Status}", status)
+        Return
+    End If
+
+    Dim message As String = "FileConversion {Status}: FileId={FileId}, OriginalFileName={OriginalFileName}, FileName={FileName}, BillerId={BillerId}, BillerDBA={BillerDBA}, StartedDate={StartedDate}, CompletedDate={CompletedDate}, CanceledDate={CanceledDate}, MachineName={MachineName}, UploadTypeID={UploadTypeID}"
+    Dim params As Object() = {
+        status,
+        billerFileInfo.FileID,
+        billerFileInfo.OriginalFileName,
+        billerFileInfo.AlertRecord.FileName,
+        billerFileInfo.AlertRecord.BillerID,
+        billerFileInfo.AlertRecord.BillerDBA,
+        billerFileInfo.AlertRecord.StartedDate,
+        billerFileInfo.AlertRecord.CompletedDate,
+        billerFileInfo.AlertRecord.CanceledDate,
+        billerFileInfo.AlertRecord.MachineName,
+        billerFileInfo.AlertRecord.UploadTypeID
+    }
+    If status = "Canceled' Then 
+      Serilog.Log.Error(message, params)
+    Else
+      Serilog.Log.Information(message, params)
+    End If
+    
+End Sub
+Example Log: 
+2025-05-29 20:43:16.723 -05:00 [INF] FileConversion Started: FileId=1, OriginalFileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate=null, CanceledDate=null, MachineName=avd-JJackson1, UploadTypeID="Unknown"
+2025-05-29 20:43:51.848 -05:00 [INF] FileConversion Completed: FileId=1, OriginalFileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate="2025-05-29T20:43:47.0000000", CanceledDate=null, MachineName=avd-JJackson1, UploadTypeID="Unknown"
+2025-05-29 20:43:51.848 -05:00 [INF] FileConversion Canceled: FileId=1, OriginalFileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate=null, CanceledDate="2025-05-29T20:43:47.0000000", MachineName=avd-JJackson1, UploadTypeID="Unknown"
+Produce logs based on the 
+AlertRecord
+ object:
+Using a LogAlertRecord(actual name tbd) method added to the Logger class
+'In FileProcessorBase.ProcessBillerFileInfo
+
+'Mark the record as started
+BFI.MarkAsStarted()
+Logger.LogAlertRecord(BFI.AlertRecord, "Started") ' Using AlertRecord Object to log
+
+'Mark as completed
+BFI.MarkAsCompleted()
+Logger.LogAlertRecord(BFI.AlertRecord, "Completed") ' Using AlertRecord Object to log
+
+'Mark as canceled
+BFI.MarkAsCanceled()
+Logger.LogAlertRecord(BFI.AlertRecord, "Canceled") ' Using AlertRecord Object to log
+<Trace>
+Public Sub LogAlertRecord(alertRecord As IAlertRecord, status As String) Implements ILogger.LogAlertRecord
+    If alertRecord Is Nothing Then
+        WriteLine("Attempted to log a null AlertRecord for status: {Status}", status)
+        Return
+    End If
+
+    Dim message As String = "FileConversion {Status}: FileName={FileName}, BillerId={BillerId}, BillerDBA={BillerDBA}, StartedDate={StartedDate}, CompletedDate={CompletedDate}, CanceledDate={CanceledDate}, MachineName={MachineName}, UploadTypeID={UploadTypeID}"
+    Dim params As Object() = {
+        status,
+        alertRecord.FileName,
+        alertRecord.BillerID,
+        alertRecord.BillerDBA,
+        alertRecord.StartedDate,
+        alertRecord.CompletedDate,
+        alertRecord.CanceledDate,
+        alertRecord.MachineName,
+        alertRecord.UploadTypeID
+    }
+    If status = "Canceled' Then 
+      Serilog.Log.Error(message, params)
+    Else
+      Serilog.Log.Information(message, params)
+    End If
+End Sub
+Example Log: 
+2025-05-29 20:43:16.723 -05:00 [INF] FileConversion Started: FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate=null, CanceledDate=null, MachineName=avd-JJackson1, UploadTypeID="Unknown"
+2025-05-29 20:43:51.848 -05:00 [INF] FileConversion Completed: FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate="2025-05-29T20:43:47.0000000", CanceledDate=null, MachineName=avd-JJackson1, UploadTypeID="Unknown"
+2025-05-29 20:43:51.848 -05:00 [INF] FileConversion Canceled: FileName=BIF_1761_1_20250506121858_172.18.96.1_loggingTestBif4.bif, BillerId=1761, BillerDBA=Invoice Cloud - Luis Gonzalez, StartedDate="2025-05-29T20:43:10.0000000", CompletedDate=null, CanceledDate="2025-05-29T20:43:47.0000000", MachineName=avd-JJackson1, UploadTypeID="Unknown"
+Recommending approach 1.
+ It includes additional logs for FileId, and OriginalFileName along with the rest of the fields in approach 2. 
+NRQL Success/Failure TimeSeries Query Example
+SELECT count(*) 
+FROM Log 
+WHERE entity.name = 'StratusFileProcessor - production-app' 
+AND Message LIKE '%FileConversion%'
+FACET Message.Properties.0, Message.Properties.BillerId
+SINCE 7 DAYS AGO 
+TIMESERIES AUTO
+Note: 
+FileConversion
+ is a temporary name. We need to ensure the value used in message field is unique and not present in logs we do not want to observe. 
+ URL:/spaces/PE/pages/4364566538/StratusFileProcessor+-+Determine+New+Relic+logging+requirements+for+file+conversion+success+failure+alerting+thresholds

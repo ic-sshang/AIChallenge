@@ -1,0 +1,18 @@
+Chase Rejects 
+Imports the data to DB master.
+Purpose:
+Mistyped account number will be rejected.
+Context:
+[In one sentence, explain the appropriate way to use this Card's knowledge so the user knows how it relates to the above purpose.]
+How To Check
+Check if the stored procedure was able to move data from DB master to shard.
+https://invoicecloud.visualstudio.com/Src/_git/ChaseRejects?path=/ChaseRejects/ChaseRejects.vb
+ The stored procedure will grab the data if processed folder contains ‘0' data. Ideally, there will not be any data which has processed data set to '0'. They usually get imported and moved to the respective channel.
+If the stored procedure failed to move data to the Biller shard email will be sent.
+Reject data will be sent to the biller and 
+it_processes@invoicecloud.com
+Reject logs contains Noc’s data and reject data
+Questions to Answer
+Did the stored procedure move data to the Biller shard?
+NewRelic and OpsGenie Alerts
+ URL:/spaces/DS/pages/2522415235/Chase+Rejects

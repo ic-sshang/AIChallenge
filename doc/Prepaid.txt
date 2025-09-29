@@ -1,0 +1,139 @@
+Problem Alignment
+Project 
+Prepaid
+Objective 
+This spec provides a staged introduction to prepaid billing for IC billers. 
+Status 
+In concept
+ Q1 Researching 
+Jira
+EBPP-1697
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Target Release Date 
+On going 
+Team 
+PF Changes 
+The Problem
+From evolving demands of consumers to have more payment options we’ve seen billers across all verticals provide different ways for payers to pay. One vertical in particular that is providing a new payment plan option is GUB, with more billers offering prepay payment plans. Prepaid plans can enhance billers efficiency, biller overhead of work to collect past due balances, and give their payers more options for managing payments.
+Therefore there is an opportunity for InvoiceCloud to provide another payment service option that appeals to a growing consumer trend of multiple payment options, and hopefully minimizes work and payment uncertainty for our billers.
+Why: How do we know this is a real problem and worth solving?
+We have a biller signed to go live in October 2023, Dothan, and a software partner Daffron that are already interested in a prepaid option. Daffron has about 40 billers currently on InvoiceCloud, of which some we know have asked for a prepaid payment option. From a biller perspective we have an opportunity to offer another product that gives billers less workload and reduces past due. Since launching their prepaid product Dothan has reported $92k recovered from past due accounts. 
+Additionally we know consumers expect multiple payment options, and payment methods. We continue to see demand for multiple payment options and methods, and in the work we’ve done to grow these have seen growth in payments. 
+Prepaid provides consumers with a budget friendly solution, and incentive to monitor energy consumption in utilities space. Unlike our existing post billing products, AutoPay and RSP, prepaid solutions allow the consumer to pay in advance, and make multiple payments. This helps payers stay on top of paying their bill and pay when at a time and amount when is convenient for them. 
+Audience: Who are we building for?
+Consumers
+There are a few different user personas of customers we are building prepaid for. These are new payers signing up for prepaid, delinquent payers who are placed on a prepaid plan to pay off their debt and a portion of future payments, and payers who choose to go on a prepaid plan but were already on an existing account. 
+Most billers interviewed have said prepay could be beneficial for people who don’t get traditional paychecks (service workers). 
+Billers
+Billers offering prepaid currently are in Alabama, Washington, and Ohio. The existing billers offering prepaid are on Daffron or North Star CIS.  From research conducted biller’s have said the main benefits prepaid offers for them are not having to chase delinquent payers, as they are able to collect the funds before service. Biller’s also say prepaid gives the payers a more self-service system and takes the burden off the biller.  
+Supporting Research in Progress 
+Supporting Research in progress here:
+https://app.smartsheet.com/b/publish?EQBCT=5a165c9440f7453c88dc667edb3cb1e6
+ 
+Opportunity Sizing:
+Daffron billers are existing billers we know have prepaid. This is a group of about 25 smaller billers. Daffron billers research. ITR 19369 for looking into Daffron count of payers with credit invoices. 
+List of Daffron billers that have payers with Credit balances. The following have over 5% of their payer base with Credit balances: 
+Alaska Village Electric Cooperative, Inc.
+CDE Lightband
+Carteret-Craven Electric Cooperative
+Woodruff Electric Cooperative Corporation
+Concordia Electric Cooperative, Inc.
+ Dothan is a biller in Alabama with an existing prepaid solution using MyUsage, with about 600 payers on their prepaid plan. These 600 payers represent about 2-3% of their payer base, but Dothan reports more payers are joining prepaid every month. They are set to go live in 2023. Denton, a biller which recently went live is also reporting they do prepaid utility services for 600 customers. 
+From research conducted the average ratio of payers per biller using prepaid option we’ve found is about 1-5% of the biller’s payers. Some billers are even managing the prepaid payments manually in an excel document. 
+Taking the above findings and comparing this with our current know GUB biller base we can estimate the following. 
+Current GUB billers - 1,051
+Avg. Invoice Count yearly - 138,635
+Avg. Accounts per biller - 17,034
+Avg. Utility bill Amount
+If all utility billers enable prepaid and each biller has 1% of their accounts enrolled in prepaid and we adopt the Dothan plan (Monthly payments and charged $5 a month) then we would see $10.7M. If half of utility billers (random biller size selection) enable prepaid and each biller has 5% of their accounts enrolled in prepaid and we adopt the Dothan plan then we would see $3.48M.
+Data Pulled:
+High-level Approach
+MVP will have a focus on simply taking payments and notifications to support prepaid. 
+Highly Accessible - must be vastly accessible at any point for a user to make a payment, access support, and view their account balance. As these payers will be accessing their accounts more often than our other post-bill payers (those on AutoPay or RSP, or even simply virtual site, one time payment route), viewing the prepaid balance and paying must be easy. 
+Address 3 Payer Personas - we must support the three payer personas as our biller base using prepaid today and Dothan will need first. For our MVP approach we could focus solely on new and existing payers to start and leave delinquent payers for V2.
+Configurable for each biller - we must support configuration of minimum amounts needed to start and maintain a prepaid account, support variable fee structures for the billers.
+Success
+How do we know if we’ve solved this problem?
+We will know this problem is solved when we have an easy to use, lightweight prepaid plan option to offer billers for a portion of their payers. The prepaid plan should be another option for billers to offer payers. Success for us are biller's reduction in past due invoices, reduced biller workload for issuing invoices and invoice payment reminders, and overall improved biller experience. Success from payer side is increased number of payments processed. 
+Solution Alignment
+Prepaid Lifecycle: 
+https://lucid.app/lucidchart/d96fea20-f6b2-4bf2-a67a-672c9a9f1c79/edit?invitationId=inv_090dea7b-3418-4e45-86f2-d31a705aa87f
+ 
+Key Features
+Account Creation and Sign up: 
+Payers minimum balance amount is set. There is a threshold for setting up the account, minimum amount needed to start the account. This is shown as a credit on the account. 
+Today we use the BIF file to create customers, but the create customers functionality is added to REST customer/add endpoint. BIF will include if customer is on prepaid and credit amount.  
+Biller sets the minimum threshold for all accounts. 
+V2 later we could adjust minimums upon account creation. 
+Billers set the fee structure for all prepaid accounts. This includes the type of fee structure and who to apply the fees too. 
+V2 -Billers will have the option to remove charging fees for delinquent accounts. 
+Payers on prepaid are automatically placed on paperless. 
+V2 - Installment plans to pay off a negative balance. Payers with a negative balance can create a prepaid account with their existing post billing. Biller has option to set the percent of payments made to the prepaid account that will go to negative balance and percent applied to a new bill. 
+Making Payments: 
+Payers have a minimum and maximum that is set to make a payment. This is similar functionality to minimum and maximum payment amounts we have now. 
+Billers need an option to charge fees for prepaid accounts or not. Some billers currently offering Prepaid do not charge fees for prepaid payers. 
+Payer receives confirmation/receipt of when they have made a payment. 
+Payer receives email alert and text alert of when their account is close to reaching the minimum. The minimum is set by the biller.  
+In customer portal payers can see their current prepaid credit amount. Payers can see the history of their payments. 
+Daffon’s request from IC is to add a threshold notification only, and update experience for prepaid payers.
+V2- payer can establish an “autopay for their prepaid” account. This requires a stored payment method, and the payer establishes their payment amount and schedule. This will automatically make payments to add to their prepaid credit account. The payer can change what payment method they would like to use with prepaid account. 
+Billers taking the Payments:
+Billers will have to set a due date for the invoice, or have a system of when to deduct from the prepaid credit account. 
+We will deduct the dollar amount of invoices against the balance of the initial amount and any additional payments submitted by the payer at the time of processing.
+Account Disconnection and Reconnection: 
+Payer receives notification of shut off, via email and text. Notification that their account is shut off. Notification includes the amount due needed to reconnect service. The biller sets the amount needed for reconnection. 
+Biller has the option to require a reconnection fee. This is charged in addition to the amount needed to reconnect the service. 
+Turning off PrePaid:
+The payer’s prepaid account balance cannot be negative to leave prepaid. Any remaining credit on the prepaid account the biller can use refunds to send the credit back to the payer.
+Biller Experience Managing Prepaid: 
+Biller’s will have separate reporting for prepaid payers. This will leverage the existing reporting in…… This includes onboarding a new prepaid payer, viewing payment history, taking a payment from a payer
+Out of Scope/Considerations
+Payers making prepay payments on accounts/ invoice types that are not prepaid. 
+Calculating/Attaining usage data and logic to apply this to when we process payments. The biller will need to determine when the payment processing occurs. 
+Multi-user on the account. 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Y
+Sales
+Do you need sales enablement materials?
+Y
+We will need sales enablement materials for MVP, and later for selling this as another product offering
+Marketing
+Does this impact marketing?
+Y 
+We will need marketing content for positioning this for sales as well as another payment product we offer
+Training
+Do you need to update support content or training?
+Y
+This will need specific training and documentation on a new prepaid product.
+Implementations
+Changes to questionnaire
+Y
+Billers will need to elect this if they want to support prepaid. Billers go live or turning this on will need implementations to configure the prepaid account correctly. 
+Delivery
+Set up and Enablement
+Y
+Yes to help enable billers supporting this. 
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Y
+Yes we will need pricing, positioning support of how we will position our prepaid product.
+Support
+Biller questions and support
+Y 
+Yes, we will need documentation for CS to support the product, troubleshooting documentation and FAQs
+Legal
+Are there potential legal ramifications?
+N
+Reconciliations
+Questions from billers about charges
+Y
+Yes, we need to consider impact to reconciliations.
+ URL:/spaces/PRODUCT/pages/2159771679/Prepaid

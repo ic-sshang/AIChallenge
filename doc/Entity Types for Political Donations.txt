@@ -1,0 +1,194 @@
+This document outlines the implementation of entity type selection—Personal, Corporation, or LLC—for PAC donations, introduced to support compliance needs for The Doctors Company
+WDIL-13 MyIIS UI: Prompt payers to select entity type while contributing to PAC donations in the 1-time payment route
+Worked On By:
+Bruno Saenz (Dev)
+Manuel Hernandez Naya (QA)
+Michael Thorpe (Data Services) 
+Emily Herr (Reporter) 
+Related Items:
+WDIL-13
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+WDIL-63
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-12
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-41
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+At a Glance 
+WDIL-13 introduced new platform functionality to support the selection and storage of payer entity types—
+Personal
+, 
+Corporation
+, or 
+LLC
+—during PAC donation flows. These changes were necessary to meet compliance and reporting requirements for political contributions, as requested by The Doctors Company (BID: 4389) whose operations depend on accurate entity classification. The platform previously lacked support for this feature, prompting collaboration with SPAM. 
+Problem
+During the onboarding of a new biller to the platform, a requirement emerged for capturing payer entity types—individual, corporation, or LLC—specifically for political donations made to DOCPAC. This functionality was not previously supported by the platform, which meant there was no mechanism to prompt payers to identify their entity type during the payment process. The absence of this capability posed a challenge for the new biller, who relies on accurate entity classification to meet regulatory and reporting obligations. To address this gap, we introduced new functionality that leverages CRM configuration to trigger a UI prompt, ensuring entity type selection is captured at the point of payment. This work was initiated to support the onboarding of the new biller and to expand the platform’s compliance capabilities for political contributions.
+Solution
+To support the onboarding of a new biller requiring entity type classification for political donations, we introduced platform-wide enhancements enabling payers to select their 
+entity type
+—
+Personal
+, 
+Corporation
+, or 
+LLC
+—during the payment flow. This new functionality ensures compliance with political contribution regulations and improves data accuracy for downstream reporting. The donation entity type selected is stored in the Donations Detail tab
+le.
+tblDonationEntityType
+Donation details table
+1.1.a New Enum for Entity Types
+A new enumeration DonationEntityType was added to define valid entity types:
+File: 
+DonationEntityType.vb
+1.1.b Updated Data Models
+The 
+BasicInformation
+ class now includes a 
+DonationEntityType
+ property:
+File: 
+BasicInformation.vb
+1.1.c Biller Configuration Support
+New properties were added to 
+DonationConfig.vb
+ to enable entity types per biller:
+File: 
+DonationConfig.vb
+1.1.d 
+UI Integration
+A radio button UI component was added to prompt entity type selection during PAC donation flows:
+Controlled via 
+PoliticalContributionControl.cs
+Styled using 
+ic-entity-type-radio.css
+Files:
+PoliticalContributionControl.cs
+PoliticalContributionPayment.cs
+ic-entity-type-radio.css
+1.1.e 
+Backend Logic
+The 
+DonationManager
+ service was updated to:
+Accept and persist 
+DonationEntityType
+ in 
+SaveDonationDetails
+Log errors and handle exceptions gracefully
+Files:
+DonationManager.cs
+The current CRM configuration allows users to select either no donation entity types or at least two donation entity types.
+Validation logic: 
+BillerPoliticalDonationConfiguration.aspx.vb
+ 
+The following columns were added to the 
+BillerDonationConfig
+ table
+DonationEntityTypePersonal
+DonationEntityTypeCorporation
+DonationEntityTypeLLC
+1.1.f 
+Unit Tests
+New tests validate:
+Tests the New GetEnabledTypesFrom Config function with different combination of entity types
+Behavior with and without contributor info
+Error handling scenarios
+Files:
+DonationManagerTests.cs
+PoliticalPaymentContributionTests.cs
+CRM Setup
+For an active political donation, either no political donation entity types or at least two political donation entity types must be selected.
+Political donation entity type CRM validation
+Testing Procedures
+Workflow that was tested
+Scenarios tested
+WDIL-144
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-151
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-150
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-148
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-143
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-147
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-146
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-145
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-149
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-142
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-187
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+WDIL-128
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-132
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-130
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-129
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-131
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-127
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-141
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+WDIL-155
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+ 
+ URL:/spaces/PE/pages/4584177715/Entity+Types+for+Political+Donations

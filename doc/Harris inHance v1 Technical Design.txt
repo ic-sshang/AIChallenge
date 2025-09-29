@@ -1,0 +1,639 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation
+There are two versions of the inHance integration that IC supports. Below, you will see details for the legacy/traditional inHance integration (V1) that uses a ‘pull’ architecture where inHance pulls data from IC using IC web services. 
+Jira ticket 
+N/A
+Release Date
+N/A
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+N/A
+File Mapping
+Invoice File 
+File Summary/Purpose: The purpose of this file is transfer bill/invoice data to IC from the biller
+File Extension: BIF
+Specification: inHance sends us a BIF in our format through our web services. Below is the information mapped in the Custom Fields.
+File Transfer Frequency: Every 15 minutes
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Partner Field Description
+Record Type
+1
+RowType
+Y
+TRUE
+N/A - Always FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+N/A - Value provided by IC
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Current Date
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Count of invoices in file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Total balance amount of all invoices in file
+File Header
+7
+RowType
+Y
+TRUE
+N/A - Always IH
+Invoice Header
+8
+RecordType
+Y
+TRUE
+N/A - Always R
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+N/A - Value provided by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Invoice number
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Invoice Date
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+Due Date
+Displayed on IC Template
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+Amount Due
+Displayed on IC Template
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+Always 1
+Invoice Header
+38
+Custom1
+Y
+FALSE
+Amount Due After Due Date
+Displayed on IC Template
+Invoice Header
+39
+Custom2
+Y
+FALSE
+Def beg dt
+Invoice Header
+40
+Custom3
+Y
+FALSE
+def end dt
+Invoice Header
+41
+Custom4
+Y
+FALSE
+payments
+Invoice Header
+42
+Custom5
+Y
+FALSE
+is draft customer
+Invoice Header
+43
+Custom6
+Y
+FALSE
+past due balance as of due date
+Invoice Header
+44
+Custom7
+Y
+FALSE
+Invoice Header
+47
+Custom10
+Y
+FALSE
+Chart 1 X elements
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+Amount Due
+Invoice Header
+163
+Custom80
+Y
+FALSE
+AutoPay Message
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+Always 1
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+N/A - Value provided by IC
+Invoice Header
+58
+RowType
+Y
+TRUE
+Always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Account Number
+Displayed on IC Template
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+Displayed on IC Template
+Customer Record
+61
+Address1
+Y
+FALSE
+Address1
+Displayed on IC Template
+Customer Record
+62
+Address2
+Y
+FALSE
+Address2
+Displayed on IC Template
+Customer Record
+63
+City
+Y
+FALSE
+City
+Displayed on IC Template
+Customer Record
+64
+State
+Y
+FALSE
+State
+Displayed on IC Template
+Customer Record
+65
+Zip
+Y
+FALSE
+Zip
+Displayed on IC Template
+Customer Record
+66
+Phone
+Y
+FALSE
+Phone Number
+Customer Record
+67
+EmailAddress
+Y
+FALSE
+Email Address
+Customer Record
+69
+RegistrationValue
+Y
+FALSE
+Phone Number
+Customer Record
+70
+RowType
+Y
+TRUE
+Always ID
+Invoice Detail
+72
+Description
+Y
+FALSE
+Invoice Detail
+79
+LineItemTotal
+Y
+FALSE
+Invoice Detail
+83
+CustomField1
+Y
+FALSE
+Previous Balance
+Invoice Detail
+84
+CustomField2
+Y
+FALSE
+Service Address
+Invoice Detail
+85
+CustomField3
+Y
+FALSE
+group
+Invoice Detail
+86
+CustomField4
+Y
+FALSE
+IC
+Invoice Detail
+87
+CustomField5
+Y
+FALSE
+Parcel number for service location
+Invoice Detail
+88
+CustomField6
+Y
+FALSE
+previous balance for group/income center
+Invoice Detail
+92
+CustomField10
+Y
+FALSE
+Previous Read Date
+If the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+93
+CustomField11
+Y
+FALSE
+Previous Reading
+If the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+217
+CustomField20
+Y
+FALSE
+Current Read Date
+If the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+218
+CustomField21
+Y
+FALSE
+Current Reading
+If the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+219
+CustomField22
+Y
+FALSE
+Current Usage
+Invoice Detail
+220
+CustomField23
+Y
+FALSE
+Estimated
+Invoice Detail
+221
+CustomField24
+Y
+FALSE
+Changed Out
+Invoice Detail
+227
+CustomField30
+Y
+FALSE
+Meter Number (if Single)
+If the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+237
+CustomField40 
+Y
+FALSE
+Previous Read Dates - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+238
+CustomField41
+Y
+FALSE
+Previous Read Dates - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+239
+CustomField42
+Y
+FALSE
+Previous Read Dates - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+240
+CustomField43
+Y
+FALSE
+Previous Read Dates - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+247
+CustomField50
+Y
+FALSE
+Previous Reading - Overflow 
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+248
+CustomField51
+Y
+FALSE
+Previous Reading - Overflow 
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+249
+CustomField52
+Y
+FALSE
+Previous Reading - Overflow 
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+250
+CustomField53
+Y
+FALSE
+Previous Reading - Overflow 
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+264
+CustomField60 
+Y
+FALSE
+Current Read Date - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+265
+CustomField61 
+Y
+FALSE
+Current Read Date - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+266
+CustomField62 
+Y
+FALSE
+Current Read Date - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+267
+CustomField63 
+Y
+FALSE
+Current Read Date - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+274
+CustomField70
+Y
+FALSE
+Current Reading - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+275
+CustomField71 
+Y
+FALSE
+Current Reading - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+276
+CustomField72 
+Y
+FALSE
+Current Reading - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+277
+CustomField73 
+Y
+FALSE
+Current Reading - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+284
+CustomField80 
+Y
+FALSE
+Meter Number - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+285
+CustomField81 
+Y
+FALSE
+Meter Number - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+286
+CustomField82 
+Y
+FALSE
+Meter Number - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+287
+CustomField83 
+Y
+FALSE
+Meter Number - Overflow
+Only used if the flag for multiple meters is turned on, this field will contain 5 values per field, separated by semicolons.
+Invoice Detail
+Advanced Settings
+Setting ID
+Description
+Value
+Is value unique per biller? (Y/N)
+116
+DataPump Payments Paypal Code
+PayPal (default 'Credit Card')
+Yes
+BIF Customization's 
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, on biller questionnaire 
+AllowPartialPayments
+in BIF
+AutoPayCollectionDate
+BIF customization - on biller questionnaire 
+BalanceForward
+in BIF
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+BIF customization - on biller questionnaire 
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF *genereated by IC
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+N/A
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+BIF customization - on biller questionnaire 
+ThirdNotifyRequestedDate
+BIF customization - on biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+att2321711120
+1
+1966735658
+InHanceV1 Invoices
+IM
+att2321448994
+att2321121316
+0
+Data Flow - Adjustments
+att2325446701
+1
+1966735658
+inHance V1 adjustments
+IM
+att2325708830
+att2326134833
+0
+Data Flow - Payment
+att2326233093
+1
+1966735658
+inHance v1 payments
+IM
+att2325086254
+att2326069274
+0
+Data Flow - Change Log
+att2327937043
+1
+1966735658
+inHance V1 changelogs
+IM
+att2326724669
+att2328559633
+0
+Bill Presentment
+Bill Presentment is typically a template, but can be a PDF if the biller has a print vendor.
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Biller Experience
+Billers will access Invoice Cloud from the biller portal and will use the standard IC Biller portal.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+UploadInvoiceFile
+Transmission of BIF file
+UploadEncodedAdjustmentFile
+Balance Updates
+inHance jobs:
+On InHance this is called the "Balance Job". This job run every 15 minutes.
+On InHance this is called the "Balance All Job". This job runs once a week on Sunday.
+Both jobs update the IC ‘BalanceDue’ field
+inHance makes two calls:
+Inhance sends current balances to Invoice Cloud.
+PaymentReportingDataSet
+BillerPaymentWSReportHistoryDataSet
+Payments 
+This job runs every 15 minutes.
+InHance downloads payments made on Invoice Cloud.
+There are 2 ways to handle the payment coming from Invoice Cloud and the choice is (the Biller's) on how it will be handled:
+Through pending payments or live to the account. If you go the pending payments route, all payments downloaded from Invoice Cloud will sit in the View Pending Payments screen under Batch Entries until someone (the biller) goes in and manually posts them.
+If you choose to go the live route, all payments downloaded from Invoice Cloud will be posted directly to the customers’ accounts by a dummy clerk we (inHance) set up named IC Clerk. You (biller) will get a report through Open Transactions for this clerk for all payments made that day.
+ChangeLogReportingDataSet
+ChangeLogReportingAutoPayDataSet
+BillerChangeLogWSReportHistoryDataSet
+BillerAutoPayCustomerReportDataSet
+Change Logs (AutoPay, Paperless, Email, Phone Numbers)
+Customer job: This job runs every hour.
+Auto Pay job: This job runs every hour.
+InHance makes two calls:
+Customer job: This job downloads any flags or minor changes from Invoice Cloud -paperless, emails and phone numbers.
+Auto Pay job: This job downloads a flag that tells inHance that Invoice Cloud will handle the ACH. When inHance downloads this flag, they set the customer to Draft and put dummy bank account info on the account. The bank name is Invoice Cloud Bank and the account number is 000000000 with a dummy routing number. If the biller does not currently handle any bank drafts at all, the biller will need to make sure they are including drafts when printing bills
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-7012
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+8/17/2023
+IC does not have 'PayPal' as payment type in Data Pump class - clsInhance
+Added support for the PayPal payment type in DataPump for InHance billers.
+Not all billers were ready to accept paypal codes via Data Pump. This change should return “Credit Card” by default and if the Advanced Setting 116 is set, return that value instead.
+ URL:/spaces/IM/pages/1966735658/Harris+inHance+v1+Technical+Design

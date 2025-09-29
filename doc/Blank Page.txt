@@ -1,0 +1,54 @@
+Get the SessionID for the event in question
+URL:https://www.invoicecloud.com/portal/(S(cgrurqqdievq4l1t5bwrmhpo))/2/Site.aspx?G=980c8a25-dd8b-40b2-88ca-d08dcb5d4814
+SessionID: S(cgrurqqdievq4l1t5bwrmhpo)
+Go to New Relic > Query your Data
+Run the following query, with the SessionID obtained from the event
+SELECT * from Transaction where error =true and request.headers.aspfiltersessionid = 'S(diqvk1jvnhnlnt5ws14yijop)' since 30 day ago limit max order by timestamp desc
+After your run the query look for the following values: 
+Timestamp
+App Name
+Entity Guid
+Error Type
+Name 
+Your values should look like this:
+Timestamp: February 10, 2023 15:08:19
+App Name: Azure - Portal - McLogin
+Entity Guid: MTQ5OTcwNHxBUE18QVBQTElDQVRJT058Mjg4MTA0ODY1
+Error Type: System.ArgumentOutOfRangeException
+Name: WebTransaction/ASP/billermanualpaymententerinfo.aspx
+Now transition to APM & Services, and click the App Name that matches your values
+Now transition to Event > Errors
+Select a range that captures the date and time of your ‘Timestamp’, and click apply
+Find an event that matches your 'Error Type' and 'Name', and click the link in the error.class
+Confirm your ‘Entity Guid' matches the 'Entity name’
+Now click the ‘Copy to clipboard’ option, and you should get a Stacktrace like the one below, and you should be able to determine the root cause of the issue with it.
+	System.Web.HttpUnhandledException: Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+	Parameter name: length
+	   at System.String.Substring(Int32 startIndex, Int32 length)
+	   at Controls_ctrlInvoiceSummaryCart.CreateViewURL(String InvoiceFormatFileName, String custom1, String invoiceGuid, String BillerGUID) in C:\Users\ICService\AppData\Local\Temp\WebSitePublish\MyIIS-711659816\obj\debug\AspnetCompileMerge\Source\Controls\ctrlInvoiceSummaryCart.ascx.vb:line 735
+	   at Controls_ctrlInvoiceSummaryCart.Repeater1_ItemDataBound(Object sender, RepeaterItemEventArgs e) in C:\Users\ICService\AppData\Local\Temp\WebSitePublish\MyIIS-711659816\obj\debug\AspnetCompileMerge\Source\Controls\ctrlInvoiceSummaryCart.ascx.vb:line 990
+	   at System.Web.UI.WebControls.Repeater.OnItemDataBound(RepeaterItemEventArgs e)
+	   at System.Web.UI.WebControls.Repeater.CreateItem(Int32 itemIndex, ListItemType itemType, Boolean dataBind, Object dataItem)
+	   at System.Web.UI.WebControls.Repeater.AddDataItemsIntoItemsArray(IEnumerable dataSource, Boolean useDataSource)
+	   at System.Web.UI.WebControls.Repeater.PostGetDataAction(IEnumerable dataSource)
+	   at System.Web.UI.WebControls.Repeater.OnDataBinding(EventArgs e)
+	   at Controls_ctrlInvoiceSummaryCart.BindRepeaterWCustomizedColumns() in C:\Users\ICService\AppData\Local\Temp\WebSitePublish\MyIIS-711659816\obj\debug\AspnetCompileMerge\Source\Controls\ctrlInvoiceSummaryCart.ascx.vb:line 728
+	   at Controls_ctrlInvoiceSummaryCart.OnLoad(EventArgs e) in C:\Users\ICService\AppData\Local\Temp\WebSitePublish\MyIIS-711659816\obj\debug\AspnetCompileMerge\Source\Controls\ctrlInvoiceSummaryCart.ascx.vb:line 216
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Control.LoadRecursive()
+	   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+	   --- End of inner exception stack trace ---
+	   at System.Web.UI.Page.HandleError(Exception e)
+	   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+	   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
+	   at System.Web.UI.Page.ProcessRequest()
+	   at System.Web.UI.Page.ProcessRequest(HttpContext context)
+	   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+	   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+	   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ URL:/spaces/DS/pages/2598273057/Blank+Page

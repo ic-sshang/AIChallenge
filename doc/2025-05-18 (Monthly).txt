@@ -1,0 +1,455 @@
+ done
+ not doing
+ doing
+1
+3
+false
+default
+list
+true
+Change Teams
+Server Patching
+ 
+ 
+ 
+ 
+Pipeline Approvers
+Release Manager: 
+ 
+Platform Approver: 
+ 
+Pre Work 
+ 
+ 
+ to notify Customer Service on 
+ the Maintenance Page will go up.  
+ 
+ 
+They do not notify customers any more, they just give customers our maintenance dates ahead of time. 
+ Saturday Evening at 7 PM EST run the Reschedule Jobs Stage of the 
+Preparation Pipeline
+, the Stage Name is 
+Pre-Maintenance
+ 
+Will follow up with 
+ Saturday Evening at Midnight Eastern: (9:30AM IST) 
+Turn off alerting for those servers
+ 
+ 
+Pull web servers IC-Web1 - 5 out of the App Gateway (agw-pri-appgateway0-prd) pool 
+ 
+Notify the 
+platform-team-int
+ channel the VMs are out of the Pool 
+ 
+Run Remediation Scripts once out of the Pool 
+PLAT-2251
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2261
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Notify 
+platform-team-int
+ channel for 
+ to start the patching 
+ 
+ 
+After Updates, do sanity checks on each Server 
+Web Server Sanity Checks
+ (load the CRM using the specific Server URL, i.e. 
+ic-web{N}.invoicecloud.com
+) 
+ 
+ 
+Day of:
+ Notify 
+dailyops
+ slack channel and 
+engineering-maintenance
+ slack channel and 
+eng-monthlymaintenance
+ of maintenance starting 
+ (
+)
+ Sunday morning 4:30 AM EST (2 PM IST) IC-Web6 - 10 - kick off updates manually on servers 
+Turn off alerting for those servers
+ 
+Pull web servers IC-Web6 - 10 out of the App Gateway (agw-pri-appgateway0-prd) pool 
+ 
+Notify the 
+platform-team-int
+ channel the VMs are out of the Pool 
+ 
+ 
+Run Remediation Scripts once out of the Pool for IC-Web6 - 10 
+PLAT-2251
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+PLAT-2261
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Notify 
+platform-team-int
+ channel for 
+ to start the patching 
+ 
+ 
+ 
+ After Updates, do sanity checks on each Server 
+Web Server Sanity Checks
+ (load the CRM using the specific Server URL, i.e. 
+ic-web{N}.invoicecloud.com
+)  
+ 
+ Turn alerts back on
+ 
+ Sunday Morning at 4:45 AM EST (2:15 PM IST) run the second stage of the Preparation Pipeline, the Stage Name is 
+Starting Maintenance
+ 
+Follow up with 
+ 
+ 
+ Sunday Morning at 5:00 AM Eastern, all other changes not outlined in this section can begin.
+Changes
+ App Servers
+ 
+First do the Vulnerability Remediation then start the Patching so the Remediation can get the reboot.
+PLAT-2244
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+JEDI-136
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ Gateway Servers
+ 
+First do the Vulnerability Remediation then start the Patching so the Remediation can get the reboot.
+PLAT-2245
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+JEDI-150
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+Management Servers
+ 
+PLAT-2259
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Why is this not patch
+ed? 
+ 
+ 
+MCC Database Server
+ 
+First do the Vulnerability Remediation then start the Patching so the Remediation can get the reboot.
+PLAT-2252
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+JEDI-152
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+MCCDB3-2
+ 
+ 
+Others MCC Servers 
+ 
+ 
+https://invoicecloud.atlassian.net/wiki/spaces/INFRA/pages/3962929304/Patching+Procedure+Current#MCC-Servers
+ 
+ 
+PDFExtract Servers
+ 
+First do the Vulnerability Remediation then start the Patching so the Remediation can get the reboot.
+PLAT-2267
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+JEDI-153
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Proxy Servers
+PLAT-2267
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+JEDI-135: Patch all Proxy Servers
+1 thru 5 
+ 
+ 
+6 thru 10 
+ 
+ 
+ 
+SFTP Servers
+First do the Vulnerability Remediation then start the Patching so the Remediation can get the reboot.
+PLAT-2268
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+JEDI-151
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Patching for SFTP1 
+ 
+Patching for SFTP2 (Wait for SFTP1 to finish patching before starting this) 
+ 
+ 
+ 
+Terminal Services Licensing Servers
+PLAT-2270
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+ 
+ 
+Web Servers
+PLAT-2251
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IC-Web6 thru 10 
+ 
+ 
+PLAT-2261
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IC-Web6 thru 10 
+ 
+ 
+PLAT-2215
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+IC-Web6 thru 10 
+ 
+ 
+ 
+Biller_Infrastructure
+PLAT-2175
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Link Network to Service Bus Private DNS Zone
+INFRA-1317
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Tag: 
+platform-0/0.18.0
+Pipeline to Run
+ 
+ 
+ 
+Proxy_Infrastructure
+ 
+PLAT-2026
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2027
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2028
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+PLAT-2029
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+Tag: 
+platform-0/0.2.0
+Pipeline to Run
+ 
+ 
+ 
+ICSkybotService on SkyBot VMs 
+INFRA-1323
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+simple uninstall and re-installation of the updates to ICskybotService
+Installation should be on the Skybot controller 
+IC-Skybot2
+ @ 
+10.0.6.21
+Not affected by the patching of the other App Servers
+ICSERVICES EOL May Maintenance Updates - Jose Gonzalez - Confluence
+ 
+ 
+Azure Blob Storage TLS Upgrade to version 1.2
+ 
+JEDI-18
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+TEST engineer
+ 
+ 
+Deletion of loadbalancers with no backends
+ 
+JEDI-7
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+TEST engineer: 
+ 
+Orphaned resources cleanup in primary subscription
+ 
+JEDI-36
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+JEDI-60
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+JEDI-51
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ 
+TEST engineer: 
+ 
+ 
+Subnet and Postgresql server creation in vnet-pri-tooling1-prd  vnet
+ 
+JEDI-71
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Pipeline to Run
+ 
+ 
+TEST engineer: 
+ 
+ 
+Upgrading SFTP basic loadbalancer to standard
+JEDI-48
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+TEST engineer: 
+ 
+ to provide document for TESTing
+ 
+Stopping Unused DNS vms IC-DNS1 and IC-DNS2
+ 
+ 
+JEDI-55
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+TEST engineer : 
+ 
+ Stopping Vm’s and LoadBalancer associated to the Resource group 
+RG-DevTEST
+https://invoicecloud.atlassian.net/browse/JEDI-34
+JEDI-33
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ AppGateway_Infrastructure
+ 
+We ran into an issue with the App Gateway apply during 2025-05-12 Release, an error trying to access a KeyVault Secret during the Azure API’s validation of the App Gateway change requEST, so this blocked the execution of any changes to the App Gateway (which none were expected anyways, would have been a no change after successful validation).  We updated the 
+azurerm
+ Version and the Terraform Version and want to see if that fixes the issue we observed.
+Tag: 
+platform-0/0.30.0
+Pipeline to Run
+ 
+AKS Clusters
+ 
+Script to Run
+TEST Plan
+Run the Smoke TESTs on 
+www.invoicecloud.com
+ after IC-Web1 thru 5 are patched and put back in the Pool.
+ 
+Run the Smoke Tests on 
+www.invoicecloud.com
+ after all changes are done.
+ 
+Run full regression tests on 
+www.invoicecloud.com
+ after all changes are done and smoke tests are done.
+ 
+Post-Steps
+Start the Jobs for Product Integrations - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+Start the Jobs for Product Engineering - 
+Refer to Post-maintenance steps related to Jobs here
+ 
+ 
+Notify 
+dailyops
+ and 
+engineering-maintenance
+ and 
+eng-monthlymaintenance
+ slack channels of maintenance finished and results
+India team
+ 
+Notes from this Maintenance
+this page in Opsgenie 
+https://invoicecloud.app.opsgenie.com/settings/integrations/?page=2
+ has moved to JSM. Will need to track down how to turn off Proxy Alerts through JSM.
+When running updates through AUM, leave the maintenance window time at the default value of 235 minutes. The cumulative updates need time, setting it less than this might result in a failed update and will have to re-run the updates.
+ URL:/spaces/platform/pages/4267081742/2025-05-18+Monthly

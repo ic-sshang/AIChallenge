@@ -1,0 +1,83 @@
+Target release
+Type // to add a target release date
+Epic
+EBPP-19775 
+→ 
+EBPP-19806
+Document status
+DRAFT
+Document owner
+ 
+@ mention owner
+Designer
+ 
+Tech lead
+@ lead
+Technical writers
+ 
+ 
+ 
+ 
+@ writers
+QA
+ 
+ Objective
+Vulnerability was identified by the IC third party security tools. One the vulnerable items is the “jquery.validate-1.17.0.js “ package.
+This document is intended to fix current vulnerability, this may require to upgrade to another package version along with perform some code changes if that is the case.
+ Success metrics
+Ton confirm vulnerability has been removed it is necessary to run the security tool again
+Goal
+Metric
+First step is to confirm HealthCheck response is successful: 
+https://devtest6.invoicecloud.com/agentconnectapi/HealthCheck
+.
+e.g., Customer satisfaction score increases
+Execute attached file named as "ICCSRConnectAPI.postman_collection.json" using production data and confirm the response is successful.
+ Assumptions
+List any assumptions you have about your users, technical constraints, or business goals.
+ Milestones
+Type /planner to create a visual roadmap and help your team stay on track. To edit workstreams or dates, select the placeholder and tap the pencil icon.
+Type /trello to add a card or board to this page or /jira to include a Jira issue, chart, or project.
+ Requirements
+Requirement
+User Story
+Importance
+Jira Issue
+Notes
+Upgrade jquery.validate-1.17.0.js
+Resolve vulnerability for jquery.validate-1.17.0.js
+HIGH
+Red
+EBPP-19642
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+Remove jquery.validate-1.17.0.js 
+ 
+ 
+ 
+ 
+ 
+ User interaction and design
+Type /image to add mockups, diagrams, and screenshots related to the requirements.
+Repository
+Jira Ticket
+ICSSOAuthentication
+EBPP-19642
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+EBPP-19633
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+ 
+ Open Questions
+Question
+Answer
+Date Answered
+e.g., How might we make users more aware of this feature?
+e.g., We'll announce the feature with a blog post and a presentation
+Type // to add a date
+ Out of Scope
+List the features discussed which are out of scope or might be revisited in a later release.
+ URL:/spaces/ED/pages/3338076161/Jquery.Validate

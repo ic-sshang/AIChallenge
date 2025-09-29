@@ -1,0 +1,70 @@
+In order to propose an editable templates project, we need to document and understand all functionality within 
+ICTemplates
+, to plan how the new editable templates project will need to implement these features.
+Repo: 
+ICTemplates
+Branch: 
+Main
+Extensions
+GenericExtensions
+ Module:  Provides extension methods to convert nullable value types to formatted strings.
+StringExtenstions
+ Module: Provides various extension methods for the String class, including methods to format strings as numbers, add text before or after a string, convert strings to nullable numeric and date types, and manipulate string content by inserting text at specific positions or setting decimal offsets.
+DoubleExtensions
+ Module: Provides extension methods for the Double type, including:
+	- 
+AddPercentValue
+: Adds a percentage increase to a Double value
+	- 
+ToString
+: Converts a Double value to a formatted string based on various 
+CurrencyFormat
+ options, such as:
+		- 
+Parentheses
+: Formats negative values with parentheses.
+		- 
+CreditRecord
+: Appends "CR" to negative values.
+		- 
+MinusSign
+: Prefixes or suffixes negative values with a minus sign.
+		- Options to remove the dollar sign or add a space delimiter.
+	- 
+NullableToString
+: Converts a nullable Double value to a formatted string based on the specified 
+CurrencyFormat
+, returning an empty string if the value is Nothing.
+DateExtensions
+ Module: Provides an extension method for the 
+DateTime
+ type to convert a date to a string representation with an ordinal day format (e.g., "1st", "2nd", "3rd", "4th", etc.) based on the specified 
+SpecialDateFormat
+.
+IntegerExtensions
+ Module: Provides extension methods for the Integer type, including methods to convert integer values to thousands (
+ToThousands
+) and hundreds (
+ToHundreds
+), with support for both nullable and non-nullable integers.
+CurrencyFormat
+ Enum: Defines various formats for rendering currency values, including options for displaying credits with parentheses, appended "CR" abbreviations, minus signs, and configurations to include or exclude dollar signs and space delimiters.
+Classes
+Service Classes
+: The project includes various service classes designed to map fields to properties, enhancing code readability and maintainability. These classes also incorporate custom logic for retrieving and representing data, ensuring efficient data handling and processing.
+Functions
+Examples of logic found in functions throughout 
+ICTemplates
+Looking at a list of possible fields for a certain property, loop over the list for the non-empty field and assign it to the property
+Building messages from various fields and hard coded values
+Custom logic for getting/combining Invoice Details such as water - sewer - sprinkler
+Custom logic for adding specific fields to the charge details to display on the invoice
+Custom logic for getting/selecting the quarter 
+Charting Data
+Chart data is being retrieved with the help of a service class where the field data is being manipulated to return a readable list of objects that will be used by the chart as its data source.
+Other things to consider:
+Reversing the order of the data on the chart
+Note: The chart is created using 
+RadChart
+ which according to Telerik documentation is now Obsolete. 
+ URL:/spaces/IM/pages/4054515779/Deep+dive+into+the+features+functions+currently+being+used+in+ICTemplates

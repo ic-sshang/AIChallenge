@@ -1,0 +1,49 @@
+Introduction
+The purpose of this tool is to allow the whitelisting of individual IPs due to payers experiencing infinte reCAPTCHA loops. These loops typically occur when Billers operate out of call centers and multiple instancecs of the same IP are being triggering reCAPTCHA validations in the IC Virual Site.
+Prerequisites
+View: No CRM permission(s) required
+Add/Delete: CRM Permission 56 - Can Manage Virtual Site Recaptcha Whitelist (Insert/Remove IPs)
+Update: Not supported
+Virtual Site Integration
+Adjacent to this tool, updates were made to the Virtual Site to utilize the list of whitelisted IPs stored in the database (managed by this tool). 
+It’s important to note this list of IPs is stored in a temporary memory cache which refreshes 
+every 5
+ 
+minutes
+.
+When an IP is whitelisted via the tool, a delay of up 5 minutes may occur for the payer(s) accessing the Virual Site from the newly whitelisted IP to begin bypassing the reCAPTCHA authentication due to the nature of the memory cache.
+Common New Relic Queries
+Entity: Azure - Portal - McLogin (Virtual Site & Customer Portal)
+SELECT message 
+FROM Log 
+WHERE entity.guid = 'MTQ5OTcwNHxBUE18QVBQTElDQVRJT058Mjg4MTA0ODY1' 
+OR entity.name = 'Azure - Portal - McLogin' 
+AND Message.Properties.Event = 'ReCaptchaSettings - IsReCaptchaAllowedIP' 
+SINCE 30 minutes ago
+With the query above, you can expect to find logs such as the following:
+Triggered by: "ReCaptchaSettings - IsReCaptchaAllowedIP". 
+RemoteIP: "185.197.192.183". 
+UseSystemFeature: True. 
+IsAllowedIP: False. 
+ListCount: 537
+Triggered By - Event which triggered the log
+RemoteIP - Payer remote IP
+UseSystemFeaure - If ‘True', IP whitelist is retrieved from database; If 'False’, IP whitelist is retrieved from text file
+IsAllowedIP - If ‘True', IP was found in whitelist; If 'False’, IP was not found in whitelist
+ListCount - Total number of whitelisted IPs
+The RemoteIP found in these logs will be value that should be whitelisted in the CRM tool.
+SELECT message 
+FROM Log 
+WHERE entity.guid = 'MTQ5OTcwNHxBUE18QVBQTElDQVRJT058Mjg4MTA0ODY1' 
+OR entity.name = 'Azure - Portal - McLogin' 
+AND Message.Properties.Event = 'CacheReCaptchaWhitelist - GetReCaptchaIPWhitelist' 
+SINCE 30 minutes ago 
+With the query above, you can expect to find logs such as the following:
+Triggered by: "CacheReCaptchaWhitelist - GetReCaptchaIPWhitelist". 
+ReCaptcha IP Whitelist cache refreshed. 
+Count: 537
+Triggered By - Event which triggered the log
+ReCaptcha IP Whitelist cache refreshed - Log message
+Count - Total number of whitelisted IPs
+The timestamp of these logs are useful to derive when the IP whitelist cache will next be refreshed.
+ URL:/spaces/DS/pages/3196682294/Virtual+Site+reCAPTCHA+IP+Whitelist+Tool+-+User+Guide

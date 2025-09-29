@@ -1,0 +1,44 @@
+Application Containerization Checklist
+3
+3
+false
+list
+false
+Entry Point Application
+Identify the correct entry point for the Web Application/Service.
+Implement graceful shutdown handling in the entry point application to handle termination signals SIGINT and SIGTERM gracefully.
+Configurations
+Identify if there are any 
+web.config
+ or 
+app.config
+ application settings used in the application.
+Determine if new Environment Variables should be utilized to manage the Configuration Parameters, at least for those Configuration Parameters that change per Environment.
+Environment Variables
+Identify if the Application Code consumes any Environment Variables from the existing Virtual Machine hosting paradigm.
+Secrets
+Identify if there are any Azure Key Vault secrets that get used in the application.
+Local File Storage
+Identify existing use of local file storage on the application.
+If any found, then define the appropriate “local file” storage solution for K8s Hosted (e.g., Azure Blob Storage, Kubernetes Volumes)
+Logging
+Identify the current logging strategy (passive and active) and mechanism.
+Passive logging is considered the best practice and any logging should be done through the console.
+Internal Traffic
+Identify any dependencies on internal traffic and specify the protocol, IP address, and port used by the services.
+Use Kubernetes Services to enable communication between internal services within the cluster.
+External Traffic
+Identify any external traffic and specify the protocol, IP address, and port used when communicating with the external service.
+Ensure that the egress traffic is not blocked and is reachable from within the cluster.
+Dependencies
+Identify any internal and external services that would be considered dependencies in order for the service to be in a healthy state and functioning.
+Use Kubernetes init containers or probes to ensure services are available.
+Health Check Endpoint
+Identify if there is an existing health check that can be used for the probes or if code changes will need to be made.
+Security 
+Ensure the container will run with minimum permissions.
+Do we need to add some other TLS certificates when we run the container or gateway-side security shall be sufficient?
+Docker Design
+Identify the base image and base layers needed.
+Use external traffic to identify what ports to listen to.
+ URL:/spaces/platform/pages/3648028699/Application+Discovery+for+K8s+Migration

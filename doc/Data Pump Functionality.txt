@@ -1,0 +1,37 @@
+#FFFAE6
+                                                                                                                        DOCUMENTATION IS IN PROGRESS
+Introduction
+“
+Data pump sends the transactional data (not only restricted to payments) in near real time to customer’s (Billers) or to Customer Information System (CIS) or Software Integration Partner’s API.
+”
+At a high level
+Data pump is a console application which talks with biller’s / Software integration part’s API
+It is a unidirectional process (a Synchronization service) i.e., from InvoiceCloud to Biller
+As of today, Data pump posts to biller/CIS (the number represents Datapump type ID)
+PaymentProcessing = 1
+PaperlessSync = 2
+AutoPaySync = 3
+AchRejects = 4
+Registrations = 5
+CustomerChanges = 6
+AutoPayMethodChange = 7
+Chargebacks = 8
+ScheduledPaymentProcessing = 9
+ScheduledPaymentChanges = 10
+PayByText = 11
+Pending = 12
+AutoPayMethodDetailChange = 13
+Void = 98
+Why we need Data pump synchronization
+Consider an example
+Customer with account number XXXX has an invoice of $100
+Value at Biller’s system will be $100 & value at InvoiceCloud will be $100
+Customer makes a payment of $25 at InvoiceCloud
+Value at InvoiceCloud system is $75
+Value at Biller’s system $100, as information is not in sync with InvoiceCloud data
+Data pump will trigger the Post Payment process and will call Biller’s / Integration partner system API to post the payment details.
+Details after posting (or sync)
+InvoiceCloud - $75
+Biller’s system - $75
+Useful Information
+ URL:/spaces/PRODUCT/pages/4108484615/Data+Pump+Functionality

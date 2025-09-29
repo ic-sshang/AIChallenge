@@ -1,0 +1,9 @@
+Kong will use a global plugin (zipkin) activated for all routes that will provide tracing data to the New Relic tracing API. 
+ZipKin HTTP Headers
+The below headers are created and sent to backend API to establish distributed tracing.  The headers should be used to enrich application logs and should be forwarded to outbound HTTP request originating from the backend.
+x-b3-traceid
+x-b3-spanid
+x-b3-parentspanid
+x-b3-sampled
+Below are tracing results from the dev cluster for a New Payer API (OTP).
+ URL:/spaces/EN/pages/2761785345/Kong+P1+Distributed+Tracing+-+New+Relic

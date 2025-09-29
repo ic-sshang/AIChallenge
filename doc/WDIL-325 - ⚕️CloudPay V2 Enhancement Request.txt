@@ -1,0 +1,70 @@
+Item link: 
+WDIL-325
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System Jira
+Original Request:
+The Doctors Company is using CPV2 for their consumer portal which is where a new customer can go to get a quote for a new policy and then make a payment to bind the policy. They want to be able to redirect the new customer to their website to register/setup their account once they have made a payment using the 'Go To Homepage' button (see attached screenshot).
+They can change the URL this button is pointed to, but they cannot change the verbiage on the button (they want it to say 'Set Up Your Account' instead of 'Go To Homepage').
+Can we make a change that will enable the biller to change the verbiage on this button? It would need to work for iframes and redirects.
+Requesting Biller: The Doctors Management Company (
+BID: 4389
+)
+Since we already have a setting for the return URL we should follow suit and add the parameter to the same DB record that the URL is stored in 
+CloudPaymentRequests
+ 
+CPv2 Proposed Request
+json
+wide
+760
+{
+    "CREATECUSTOMERRECORD": true,
+    "CUSTOMERS":[
+        {
+            "ACCOUNTNUMBER": "TestingDude1",
+            "NAME": "The Dude",
+            "ADDRESS": "609 Venecia Ave",
+            "CITY": "Testville",
+            "STATE": "CA",
+            "ZIP": "55555",
+            "EMAILADDRESS": "test@test.com",
+            "INVOICES":[
+                {
+                    "INVOICENUMBER": "TestingDude1-071625-1",
+                    "TYPEID": 8,
+                    "BALANCEDUE": 100.00,
+                    "DUEDATE": "07/16/2025",
+                    "INVOICEDATE": "07/30/2025",
+                    "CCSERVICEFEE": 2.00,
+                    "ACHSERVICEFEE": 1.00
+                },
+                {
+                    "INVOICENUMBER": "TestingDude1-071625-2",
+                    "TYPEID": 42,
+                    "BALANCEDUE": 100.00,
+                    "DUEDATE": "07/16/2025",
+                    "INVOICEDATE": "07/30/2025",
+                    "CCSERVICEFEE": 2.00,
+                    "ACHSERVICEFEE": 1.00
+                }
+            ]
+        }
+     ],
+    "AllowSwipe": true,
+    "AllowCCPayment": true,
+    "AllowACHPayment": true,
+    "ReturnURL": "",
+    "HomeButtonText": "", //New Variable
+    "PostBackURL": "",
+    "BillerReference": ""
+}
+Validation
+Should the endpoint ensure the value is not empty when the variable is present?
+Also there should be a character limit
+Code Changes
+Validation can be done inside the CloudPaymentRequestV2 class as well as the declaration of the new variable [
+here
+]
+The area where we insert the Request values should be updated [
+here
+] to support the new parameter coming.
+ URL:/spaces/PE/pages/4684316675/WDIL-325+-+CloudPay+V2+Enhancement+Request

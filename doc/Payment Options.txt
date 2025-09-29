@@ -1,0 +1,56 @@
+The CloudPayV2 API allows configuration of available payment methods through:
+{
+    "AllowCCPayment": true,
+    "AllowACHPayment": true,
+    "AllowSwipe": true,
+    "AllowEMV": true,
+    "AllowPayPalPayment": true
+}
+Biller Options that directly affect Payment Options
+34
+: Block Credit Card Processing 
+35
+: Allow PayNearMe as Payment Method
+46
+: Custom Text for Blocked Payments
+82
+: Allow AutoPay Sign Up Outside CP
+89
+: Default Save Payment Method
+125
+: Require Email for EMV Payments
+Credit Card/EMV
+Physical cards via manual entry or EMV readers
+Digital wallets (Apple/Google Pay)
+Terminal configuration per location via 
+EmvLocationID
+ and 
+EmvDeviceID
+Blocked by BillerOption 34
+ACH/EFT
+Bank account validation through 
+IC.Common.clsCertegy
+RTE/Account verification through MICR data
+PayPal Brands
+PayPal Standard
+PayPal Credit
+Venmo
+Nonce token based authentication
+PayNearMe (Cash)
+Requires:
+Single invoice transactions only
+Same invoice group GUID for multiple invoices
+Active InvoiceTypeSetting 35
+BillerOption 35 enabled
+Save Payment Method
+Controlled by BillerOption 89 (default state)
+Available for authenticated users
+ACH and Credit Card methods only
+Required for AutoPay enrollment
+Service Fees
+Independent fee structures for CC and ACH
+Fees configured at Invoice Type level
+Special handling for multi-invoice payments
+Dynamic fee calculation for EMV/Digital Wallet transactions
+Validation Sequence
+ URL:/spaces/PE/pages/3988848643/Payment+Options

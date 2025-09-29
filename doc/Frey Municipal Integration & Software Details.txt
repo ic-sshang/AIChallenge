@@ -1,0 +1,173 @@
+Frey aPage Navigation
+Document Status
+DONE
+Green
+ 
+Document Owner
+ 
+Knowledge Transfer
+https://us-21061.app.gong.io/call?id=6516424589130894514
+ 
+Data Structure
+Type
+Layout
+Transmission Method
+Details
+Invoice
+Partner CSV File
+SFTP 
+Invoice file drop to SFTP is automated by FREY
+Adjustments/Balances
+Partner CSV File
+SFTP
+This will be a file containing a list of all accounts (ex: Block CC, Block ACH, Total Amount Due, Past Due).  
+Payments
+Partner CSV File
+SFTP
+This process is not automated.  Biller needs to manually import into FREY.  Payment file should export at 3am CST
+ACH Rejects Posting
+ 
+Manually through biller portal
+Void
+Manually through biller portal
+Change Log - AutoPay Enrollment
+IC Spec 
+SFTP
+Process is automated to import into Cubic for the biller.  Change log should export at 3:15am CST.
+Change Log - Paperless Enrollment
+IC Spec
+SFTP
+Process is automated to import into Cubic for the biller.  Change log should export at 3:15am CST.
+Change Log - Phone Number
+IC Spec
+SFTP
+Process is automated to import into Cubic for the biller.  Change log should export at 3:15am CST.
+Change Log - Email Address
+IC Spec
+SFTP
+Process is automated to import into Cubic for the biller.  Change log should export at 3:15am CST.
+Bill Images 
+PDF Linking - Supported
+Webservices
+The integration supports PDF Linking. If the biller wants to provide bill images outside of the standard integration process, the setup would need to be handled directly with the biller. 
+Template- Not supported.
+PDF Extraction-Not supported.
+Supported Products and Features
+Products
+Product
+Type
+Definitions/Details
+AgentConnect
+Not Supported 
+ 
+Check Free - FISERV - Cash
+Supported  
+ 
+CloudPay
+Supported  
+Cloud Pay V2 in use if biller is using Frey portal (known as Cubic) as front end.  CPV2 also in use as one time guest pay.  
+CloudPay Web Services
+Not Supported
+CloudStore
+Supported  
+Not in use by the first biller but can be supported
+.  Transactions would be sent over in Frey format payment file.
+CSRConnect
+Not Supported
+EMV
+Supported  
+Supported through Biller Portal
+IVR
+Supported  
+Recommended search parameter-
+Book-Account Number.  Use field DISPLAY ACCOUNT NUMBER
+Kiosk
+Supported 
+Not in use by the first biller but can be supported
+Online Bank Direct - OBD
+Supported  
+ 
+Use field DISPLAY ACCOUNT NUMBER
+Outbound IVR
+Supported  
+ 
+POSConnect
+Not Supported
+ 
+Features
+Feature
+Type
+Definitions/Details
+Account Registration:
+ 
+Account Linking
+Supported and Required
+User manages on InvoiceCloud portal
+.  Standard email and password linking.  
+       Multi-User Log In
+Supported and Required
+ 
+       Co-Owner Registration
+Supported and Required
+ 
+ 
+ SSO
+Not Supported
+AutoPay Collection Date
+Supported 
+BIF Customization
+Batch Closure
+Supported  
+Custom- 
+11:59 PM biller local time
+Bill Processor
+Not Supported
+Billing Options 
+       Balance Forward
+Required
+       Open Item Billing
+Not Supported
+Block Payment
+Supported 
+Done manually in biller portal.  CANNOT BE DONE IN FREY
+Conveyance
+Supported 
+Auto conveyance may be used on a biller by biller basis
+Data Conversions
+Supported  
+Frey will provide data for conversions
+ of paperless and existing autopay customers
+Email Notification Schedule
+Supported  
+BIF Customization
+Expire Bill for Payment
+Not Supported
+Flex Pay
+Not Supported
+Minimum Payment
+Supported  
+Not in use for first biller but can be supported
+ through a BIF customization
+Paperless
+Supported  
+Partial Payments
+Supported  
+BIF customization 
+Past Due Payments
+Supported 
+Amount provided in customer update file
+Scheduled Payments
+Supported  
+Equipment
+Device
+Type
+Definitions/Details
+Magtek REV Devices
+Supported
+IDTech SRED Key
+Supported
+Ingenico EMV
+Supported
+Other EMV Devices
+Supported
+ URL:/spaces/IM/pages/2351399001/Frey+Municipal+Integration+Software+Details

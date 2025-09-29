@@ -1,0 +1,104 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+ 
+Solution engineer
+ 
+When starting an implementation with GeoCivix reach out to Alexis Davis 
+alexis.davis@geocivix.com
+  to provide the API key for the customer. 
+Partner Coding Requirements
+What
+Provided To
+When
+Biller Name
+GeoCivix
+Project Assignment
+Invoice Type ID
+GeoCivix
+Project Assignment
+API Key TEST
+GeoCivix
+Project Assignment
+API Key PROD
+GeoCivix
+Project Assignment
+API Documentation
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud.
+Payment Processing Demo: 
+https://us-21061.app.gong.io/call?id=7626553259669281930
+ 
+WebServices
+Additional WebServices
+API Name
+API Use/Purpose
+Sample
+/api/v1/cloudpay/cc/sale - Process Credit Card Sale (REST)
+Process permit payments with credit card
+{
+  "InvoiceTypeID": 43,
+  "CardCVV": "111",
+  "CustomerEmailAddress": "eric.leggett@geocivix.com",
+  "CardExpMonth": "3",
+  "CustomerZip": "80715",
+  "TotalAmount": 500,
+  "InvoiceNumber": "Order ID #936843",
+  "CustomerLastName": "Leggett",
+  "CardExpYear": "2028",
+  "CustomerCity": "Tucson",
+  "CardNumber": "'*removed*'",
+  "CustomerFirstName": "Eric",
+  "ConvenienceFee": 0,
+  "CustomerState": "AZ",
+  "CustomerAddress": "123 USA",
+  "CustomerTelephone": "1112223333",
+  "BillerReference": "936843"
+}
+/api/v1/cloudpay/ach/sale - Process ACH Sale (REST)
+Process permit payments with ACH/EFT 
+{
+  "PersonalCheckingAccount": false,
+  "BankAccountNumber": "'*removed*'",
+  "InvoiceTypeID": 43,
+  "CustomerEmailAddress": "eric.leggett@geocivix.com",
+  "CustomerZip": "80715",
+  "TotalAmount": 50,
+  "InvoiceNumber": "Order ID #936841",
+  "CustomerLastName": "Leggett",
+  "CustomerCity": "Tucson",
+  "CustomerFirstName": "Eric",
+  "PersonalSavingsAccount": false,
+  "ConvenienceFee": 0,
+  "CustomerState": "AZ",
+  "BankRTE": "056008849",
+  "CustomerAddress": "123 USA",
+  "CommercialCheckingAccount": true,
+  "CustomerTelephone": "1112223333",
+  "BillerReference": "936841"
+}
+Invoice Types
+Invoice Types
+Permits - 43 
+Virtual Site
+Not Used 
+User Interaction and Design
+Data Flow - Payment
+Payments are made in the backend with REST Webservice calls with InvoiceCloud. GeoCivix is the owner of the UI/UX. 
+Data Flow - Void
+Voids will be processed through Biller Portal if needed.
+Data Flow - ACH Reject
+ACH Rejects can be reviewed through the Biller Portal. 
+Payer Experience
+Payers will process payments on the GeoCivix website. The payment portal will not have any InvoiceCloud verbiage as all payments will be processed in the backend. The data will be entered in GeoCivix and sent to InvoiceCloud via webservice. 
+https://us-21061.app.gong.io/call?id=7626553259669281930
+ 
+Biller Experience
+Payment reporting can be reviewed through the Biller Portal. 
+ URL:/spaces/IM/pages/4474995251/GeoCivix+Technical+Design

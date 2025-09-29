@@ -1,0 +1,157 @@
+This document lists all of the HTTP endpoints exposed for the project.
+Note: The Dev environment URLs can only be used on a terminal server with a host entry for payer-cluster.dev.invoicecloud.com.
+Dev API URL - 
+http://payer-cluster.dev.invoicecloud.com/
+Prod API URL - 
+https://apibeta.invoicecloud.com/payer/
+Prod UI URL - 
+https://payerbeta.invoicecloud.com/onetimepayment
+ 
+OTP Service
+Dev URL Base: 
+http://apibeta.dev.invoicecloud.com/payer/otp0
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/otp
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+OTP-00
+/api/v1/tokens
+POST
+No
+Creates the JWT token to be used with other APIs services
+OTP-01
+/api/v1/invoices/{invoiceGuid}
+GET
+Yes
+Gets the details of the invoice to be paid, optional RTDR
+OTP-02
+TBD
+GET
+Yes
+Gets the UI settings for a biller; logo and user instructions text
+OTP-03
+TBD
+POST
+Yes
+Creates user feedback for experience
+Payment Route Service PR
+Dev URL Base: 
+http://apibeta.dev.invoicecloud.com/payer/payment-route0
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/payment-route
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+PR-00
+/api/v1/invoices/{invoiceGuid}/allowedamounts
+GET
+Yes
+Gets the allowed payment amounts for an invoice
+PR-01
+/api/v1/invoices/{invoiceGuid}/servicefeequote
+POST
+Yes
+Creates a invoice service fee quote, based on payment method, to be added to a invoice payment
+PR-02
+/api/v1/enrollment/{invoiceGuid}/autopay/permissions
+GET
+Yes
+Gets autopay enrollment permissions for a payer
+PR-03
+TBD
+GET
+Yes
+Gets the allowed biller payment methods for the target invoice 
+PR-04
+TBD
+POST
+Yes
+Creates a invoice payment (processes payment)
+PR-05
+/api/v1/payment/confirmation
+POST
+Yes
+Send list of receipts to get the data needed to populate the receipt page in the new UI page.
+AutoPay Service
+Dev URL Base: 
+http://apibeta.dev.invoicecloud.com/payer/autopay0
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/autopay
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+AP-00
+/api/vi/autopay/{invoiceGuid}/permissions
+GET
+Yes
+Gets autopay enrollment permissions for a payer
+AP-01
+/api/v1/autopay/enroll
+PUT
+Yes
+Creates payer registration in AutoPay
+Paperless Service
+Dev URL Base: 
+http://apibeta.dev.invoicecloud.com/payer/pprless0
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/pprless
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+PLS-00
+TBD
+GET
+Yes
+Gets paperless enrollment permissions for a payer
+PLS-01
+TBD
+POST
+Yes
+Creates payer registration in Paperless
+PayByText Service PBT
+Dev URL Base: 
+http://apibeta.dev.invoicecloud.com/payer/paytxt0
+Prod URL Base: 
+https://apibeta.invoicecloud.com/payer/paytxt
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+PBT-00
+/api/v1/customers/{customerGuid}/enrollmentsettings
+GET
+Yes
+Gets PayBytText enrollment permissions for a payer
+PBT-01
+/api/v1/customers/{customerGuid}/enroll
+POST
+Yes
+Creates payer registration in PayByText
+MyIIS SOAP Service
+ID
+Route
+Method
+Auth
+QE 
+Purpose
+MI-00
+/webservices/invoicepaymentfees.asmx
+POST
+Yes
+Gets the service fee based on payment method, invoice data, and biller settings
+ URL:/spaces/EN/pages/2532573208/Route+Table

@@ -1,0 +1,75 @@
+To setup PDFQueueByExtraction you will need to clone the 
+PDFQueueByExtraction repo
+, set PDFs to open with 
+ICInvoiceFileMapper
+, and access 
+Skynet 
+in the term/bastion server browsers.
+PDF Markets / SKYNET
+http://internal.invoicecloud.com/apps/skynet/Authenticate?ReturnUrl=%2Fapps%2Fskynet%2F
+Paste the link above into a term/bastion server’s browser. 
+You will need to input your CRM credentials into the screen below
+Click PDF Utilities, then input the BillerID into the highlighter search bar and press enter.
+PDF templates for the searched biller will be shown now. Your DS-Ticket usually mentions what kind of PDFs will need to be linked (Motor Vehicle/MV, Boat, Personal Property/PP, Real Estate/ RE). This will help narrow down which PDFTemplateID you should look into.
+ICInvoiceFileMapper
+If a PDF opens with Adobe Acrobat, right click it and go to “Open With“ and “Choose another app”
+A page will pop up asking what to open the file with, scroll down, click “More Apps” and click “Look for another App on this PC“.
+Navigate to the Path Below
+E:\Data\AppData\Pdfs\Tools\InvoiceFileMapper
+Click on ICInvoiceFileMapper to confirm.
+When Opening PDFs, this should show up on the side
+You are now set to find markers in PDFs.
+PDFQueueByExtraction setup
+Download/open the PDFQueueByExtraction repo. 
+Make sure you are in main and have pulled from latest. 
+Right click VB PdfQueueByExtraction then click properties. 
+Switch to the Settings tab where the paths for PDFs will be set up.
+(The screenshot above can be used as a template for the folder setup to run PDFQueueByExtraction.)
+First, setup your SourceDirectory. 
+Most users have their folder in the Path below on the bastion servers.
+After, setup the folders below inside your source directory folder.
+A folder to queue the PDFs to rename (usually named 
+1
+)
+A folder for errored PDFs (usually named 
+errors
+)
+A folder for sucessfully renamed PDFs (usually named 
+FileNamePending
+)
+A folder for bursting PDFs (usually named 
+Processed
+)
+A folder for when the program stops and the file is moved (usually named 
+retry
+)
+An optional folder to backup PDFs. (usually named 
+Backup 
+or 
+files
+)
+(Below is an example setup)
+Make sure your newly created folders are in the settings tab shown earlier.
+The errors folder will need subfolders:
+A folder for rejects (usually called 
+rejects
+)
+A folder for when the PDF Template is not found (usually called 
+TemplateNotFound
+)
+A folder for when the PDF template is found, but the markers do not match (usually called 
+ExtractionFailure
+)
+Set the paths in the settings tab
+Make sure to save
+Lastly, check if the necessary IC NuGet Packages are installed.
+Search for NuGet in QuickLaunch and open the page called “Manage NuGet Packages”
+This should bring up the page below. 
+Click on the Gear Icon
+Verify the ICPackages is installed.
+If it is not there, Click on the green plus icon and paste the link found below in the Source textbox.
+https://pkgs.dev.azure.com/invoicecloud/_packaging/ICPackages/nuget/v3/index.json
+Make sure the Name is ICPackages.
+Then click OK.
+You should now be setup to run PDFQueueByExtraction.
+ URL:/spaces/DS/pages/2686779393/PDFQueueByExtraction+Setup

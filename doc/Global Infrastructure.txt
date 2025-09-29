@@ -1,0 +1,110 @@
+This article contains information concerning the InvoiceCloud Global Azure Infrastructure, which are Azure Resources that are intended to be Singleton instances even in a multiple redundancy zone network topology, such as Azure Container Registry or SQL Azure Databases which are resources that possess their own redundancy strategy managed by the Azure platform.
+2
+4
+Azure Resources
+Below are the Azure Resources that are intended to be Singleton instances per:
+ per 
+Environment
+or
+per NonProd 
+Environments 
+(Sandbox and DevTest) combined and Prod 
+Environment 
+isolated
+depending on Resource Type.
+Note that these resources have private data planes, therefore to access the data planes of the resources below the user must use one of the 
+Next Gen Network’s Hub Jumpboxes
+ within the correct 
+Environmental Network Lane
+.
+Resource Group 
+A Resource Group to contain the Global  Singleton Resources listed below in this section, one for NonProd Ecosystem (Sandbox and DevTest Environments)  and one for the Production Environment.
+Naming conventions:  
+NonProd:    
+rg-glb-resources{deployment_version}-sbx
+Production: 
+rg-glb-resources{deployment_version}
+Azure Container Registry
+An Azure Container Registry to house the InvoiceCloud Application Service container images that will be hosted in Azure AKS Clusters or Azure Container Instances.
+Naming conventions: 
+NonProd: 
+acrglbimagerepo{deployment_version}-sbx
+Production: 
+acrglbimagerepo{deployment_version}
+Azure Container Registry Agent Pool
+A set of build agents integrated with each of the Azure Container Registry mentioned above execute the Container image builds for Linux images.
+Naming Conventions: 
+NonProd: 
+agp-glb-agents{deployment_version}-sbx
+Production: 
+agp-glb-agents{deployment_version}
+Azure Kubernetes Service (AKS) Private DNS Zones
+A Private DNS Zone for AKS Clusters within the 
+East US
+ Azure Location.  
+Names: 
+NonProd: 
+privatelink.eastus.azmk8s.io
+Production: 
+privatelink.eastus.azmk8s.io
+A Private DNS Zone for AKS Clusters within the 
+West US
+ Azure Location.  
+Names: 
+NonProd: 
+privatelink.westus.azmk8s.io
+Production: 
+privatelink.westus.azmk8s.io
+Environment Wide KeyVault for common Secrets and TLS Certificates
+This Key Vault contains the SSL Certificates from GoDaddy for the following domains by 
+Environment
+:
+Sandbox
+*.sbx.invoicecloud.com
+DevTest
+*.dev.invoicecloud.com
+Production
+*.invoicecloud.com
+*.pri.invoicecloud.com
+*.sec.invoicecloud.com
+More information of 
+Environment Wide Key Vault
+.
+Naming Convention: 
+kv-glb-vault{deployment_version}{-lower_environment}
+Environment Wide KeyVault for Cryptographic Secrets
+This Key Vault is intended to be used to store the InvoiceCloud Cryptographic Key for use throughout each 
+Environment
+.
+Naming Convention: 
+kv-glb-crypto{deployment_version}{-lower_environment}
+Azure DevOps
+InvoiceCloud currently uses Azure DevOps as a Source Code Management and Deployment platform.
+Below are the Azure DevOps resources related to the Global Singleton Infrastructure provisioning and management.
+Repo
+https://dev.azure.com/invoicecloud/Systems_Src/_git/Global_Infrastructure
+Deployment Pipeline
+https://dev.azure.com/invoicecloud/Systems_Src/_build?definitionId=1339
+Variable Groups
+Sandbox
+Production
+Environments
+Sandbox
+Production
+Terraform Cloud
+InvoiceCloud currently uses Terraform Cloud Workspaces configured with the 
+Local
+ Execution Mode to host Remote State files per Environment.
+Below are the Terraform Cloud Workspaces related to the Global Azure Active Directory Group provisioning and management.
+Workspaces
+Deployment Cycle 1
+Sandbox: 
+https://app.terraform.io/app/InoviceCloud/workspaces/global-infrastructure-sbx-1
+Production:  
+https://app.terraform.io/app/InoviceCloud/workspaces/global-infrastructure-prd-1
+FAQs
+What are 
+global-singletons
+?
+Resources that are meant to only have a single instance per environment, i.e. they do not need to be included in our High Availability strategy (primary, secondary) as they have a High Availability strategy built into the PaaS offering, such as ACR which has it own primary and secondary region High Availability strategy built into the PaaS service.
+ URL:/spaces/icinfradoc/pages/2480111617/Global+Infrastructure

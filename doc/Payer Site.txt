@@ -1,0 +1,3 @@
+We define the payer site as the WebForms pages, controls, classes, and corresponding files within the MyIIS project that comprise the payer experience. Generally, we split the payer site into the unauthenticated “Virtual Site” and authenticated “Customer Portal”. However, there is overlap (shared pages, etc.) and entry points to specific pages can affect their behavior and visual layout, e.g., entering the payment route via CloudPayV2 versus the customer portal.
+As we break up the monolith into more maintainable modules, one suggested breakdown is to split the payer site into the virtual site (landing pages, search), customer portal (authenticated account management), and payment route.
+ URL:/spaces/PE/pages/3809181727/Payer+Site

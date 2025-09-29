@@ -1,0 +1,94 @@
+1
+6
+false
+default
+list
+true
+Status
+Accepted
+Context
+We are designing the architecture for our web applications.  We need to decide on a solution for managing incoming web traffic, support SSL, and provide load balancing.
+Functional and Non Functional Requirements 
+Granular path based routing of incoming HTTP and HTTPS traffic to backend services
+Provide load balancing capabilities
+Preserve the original client IP address for logging, security, and session management
+Support “sticky” sessions (hash load balancing) for MCC Web Servers
+Annual cost must be nominal ~15K 
+Easy to provision
+Easy to configure both from a UI or from a API
+Easy to maintain, prefer IPAAS over self managed hardware/infrastructure
+New Relic observability support
+Technical support
+Options
+Azure Application Gateway
+Cloud Flare Load Balancer
+NGINX Plus
+Azure Application Gateway Diagram
+1
+0
+0
+3317923879
+3304489425
+1
+kongalternatives.drawio.svg
+2
+0
+7
+https://invoicecloud.atlassian.net/wiki
+kongalternatives.drawio.svg
+1
+oARx2cA5TwcqSpZ-VeZQ 1
+217
+auto
+top
+1
+591.5
+Decision
+We have decided to implement the Azure Application Gateway.
+Justification
+Azure Application Gateway aligns with our requirements for routing as well as maintains the current network design where application specific routing takes place (behind Palo).
+No new Vendor agreements or contracts required.
+Current rollout testing plan can be reused.
+Minimal change in Palo, change IP to point to App Gateway instead of Kong.
+Cloud Flare solution had a lot of unknowns and limited knowledge within the team.
+NGINX Plus adds maintenance overhead and unknowns around scaling and limited configuration knowledge within the team.
+Barracuda decommission time constraint limits time to resolve unknowns.
+Azure App Gateway Costing Analysis/Estimation
+Costing based on Cloudflare Traffic analysis
+Facts (based on Cloudflare snapshot of 30 days)
+Application Gateway costs using the pricing described previously are calculated as follows:
+Calculation reference article here
+Throughput Calculation:
+11.78 TB over 30 days (above) rounded off to 12 TB
+Data Transfer = 12 TB / 30 days
+12 TB = 12,000,000 MB
+Mbps: 12,000,000 / (730 * 3600) = 4.566
+Average Requests per Minute: 940,000,000 / 43800 = 21,461
+Peak Traffic Requests per Minute based on NewRelic Query by 
+: 50,000
+Capacity Unit calculation
+Capacity Units are calculated based on Compute Units, Connections, and Throughput based on MB/S
+Estimates based on Load of 60k requests per minute:
+Compute Units: 20
+Throughput: 11 MB/S
+Connections: 23k
+Bytes sent: 17 TB per month
+This Load equates to an Average Capacity Unit Consumption of 35
+It is recommended to have a minimum of 5 App Gateway instances to handle this load with enough excess capacity to account for additional spikes, and a single App Gateway instances equals 10 Reserved Capacity Units.
+NonProd has been running for 2 weeks at a Minimum of 1 App Gateway Instance (10 Capacity Units) which is the minimum allowed and has not had any issues reported nor has had any issues observed via Metric review in NewRelic.
+Just Prod Estimate
+Prod and NonProd Estimate
+Prod and NonProd Estimate with TB Bytes Sent per Cloudflare
+Cost range 
+Per year cost expected between:
+$1,438.62 X 12 = $17,263
+$1,771.42 x 12 =  $21,257
+Consequences
+We will need to configure routing rules and backend pools within the Application Gateway
+An extra layer 7 component will be introduced before Kong
+Regular monitoring and tuning will be needed to ensure optimal performance
+Additional cost to route traffic but is a substantial savings over using Kong for basic HTTP routing
+Related Articles
+App Gateway DV 0 Load Testing - Platform - Confluence (atlassian.net)
+Azure App Gateway - Platform - Confluence (atlassian.net)
+ URL:/spaces/EA/pages/3304489425/HTTP+Routing+-+ADR

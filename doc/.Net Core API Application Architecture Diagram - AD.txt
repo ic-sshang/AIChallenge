@@ -1,0 +1,38 @@
+2
+1
+0
+0
+4092493875
+3975577605
+true
+Untitled Diagram-1676319533390.drawio
+3
+4
+https://invoicecloud.atlassian.net/wiki
+Untitled Diagram-1676319533390.drawio
+0
+1193
+auto
+top
+753
+Cluster
+: Azure Kubernetes
+Node
+: Azure Kubernetes VMs running Ubuntu Linux
+Pod
+: Application workload running on a Node
+Key Vault CSI Driver
+: Integrates Azure Key Vault with k8s.  Enables k8s to use Azure Key Vault secrets in k8s manifests
+Fluent Bit
+: Formats and forwards container logs to New Relic’s log management system
+OTEL Collector
+: Collects, processes, and exports telemetry data (traces and metrics) to New Relic
+New Relic
+:  Observability platform designed to monitor software systems
+Azure Key Vault:  
+Service for managing secrets, keys, and certificates.  There are three levels of Key Vaults for separation;  environment, cluster, and per application.
+Data Store:
+  Azure SQL, Azure Blob
+Message Bus: 
+Azure Service Bus for pub/sub messaging
+ URL:/spaces/EA/pages/3975577605/.Net+Core+API+Application+Architecture+Diagram+-+AD

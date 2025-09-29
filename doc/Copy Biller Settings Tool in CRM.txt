@@ -1,0 +1,213 @@
+Epic Link: 
+EBPP-10766
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+:flag_on:
+atlassian-flag_on
+:flag_on:
+#FFF0B3
+Maintain this section throughout the life of the project
+Project Status
+ Smooth Sailing!
+ We are here as of 
+ 
+ Dark Clouds Above
+ Bad Things, Man
+Phase
+Discovery
+Coding/Testing
+Ext Comm
+Deployment
+Monitoring
+Status
+Complete
+Green
+ 
+IN PROgress
+Blue
+ 
+NOT applicable
+ 
+NOT STARTED
+Red
+ 
+NOT STARTED
+Red
+ 
+Est Completion
+ 
+ 
+-- 
+ 
+ 
+:speaking_head:
+1f5e3
+🗣️
+#ABF5D1
+Prepare this section for the review meeting
+ Problem Alignment
+Implementation Project Managers are often tasked with creating at least 2 BIDs for new Billers; one for Production use and one for ongoing testing. In rare cases, several environments (3-5) must be created to account for all the Biller's lower environments. The configuration for these BIDs must be identical to ensure functionality, behaviors, and outcomes are consistent between testing and live use. This introduces a unique challenge for the Implementation teams, as there are hundreds of settings and configurations that must be checked to ensure consistency.
+ Objective
+Create a new tool in the CRM which allows the user to copy various configurations from one Biller to another. The “source” Biller may exist in any state, but the “target” Biller must be in Demo mode. Configuration areas that are available to copy include Invoice Types (and their settings), Biller Options, E-Mail templates, Virtual Site/Customer Portal components, and/or Invoicing components.
+ Success Metrics
+List the project goals and metrics that will be used to determine its success.
+Goal
+Metric
+Current
+Good
+Great
+Raise revenue
+Gain revenue from start / stop service fees and increased on time payments 
+Process more payments 
+Increased number of payments processed due to start service fees 
+Only collecting on Collier County CloudPay item
+Increased number of payments processed on time, before due date. Long term we want to be influencing people to not go into stop service / policy
+Number of past due invoices per month
+need ITR
+ Target Audience
+Group
+Impact
+IC CS Staff 
+InvoiceCloud internal staff will need tools to support processing stopping service, starting service to tell 
+ User Interaction and Design
+Is this a revision to existing UI or a blue sky approach?
+What deliverables are expected as a result?
+Place mockups, flow diagrams, etc, here when available.
+ Components Impacted
+What components within the Invoice Cloud platform will be impacted
+Component
+Impact
+CRM
+We will need to add some customizable controls for the billers most likely. These may be configurations on days past due to stop service, reconnection fee, email configurations for stop / start service. 
+ Technical Architecture
+What are the right questions to ask or diagrams to provide for this section?
+[Jesus]
+ Testing Plan
+In Scope
+Features/tasks that will be tested
+Out of Scope
+Features/tasks that will not be tested
+Environment/Tools
+Where will this be tested and specific tool/knowledge required
+Risks
+What could impact this plan and mitigation plan
+Resources
+Any test data, files, settings needed for testing
+Assumptions
+What useful constraints are in place
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+[Jesus]
+ Serviceability/Observability
+What are the right questions to ask or diagrams to provide for this section?
+[Jesus]
+:info:
+atlassian-info
+#B3D4FF
+ Project Participants
+Name
+Company
+Team
+Role
+Brian Norton
+InvoiceCloud
+We’ll Do It Live!
+Product Manager
+Jesus Garcia
+InvoiceCloud
+We’ll Do It Live!
+Technical Lead
+Victor Cavada
+InvoiceCloud
+We’ll Do It Live!
+Software Engineer
+Kelsey Tibbs
+InvoiceCloud
+We’ll Do It Live!
+Database Engineer
+Michael Thorpe
+InvoiceCloud
+We’ll Do It Live!
+Database Engineer
+Rob Hoerning
+InvoiceCloud
+We’ll Do It Live!
+Quality Assurance Engineer
+ Requirements
+Requirements supporting background: 
+Previously we have had billers want to use the 3rd notification for sending notifications of close to stop service, however if they are a balance forward biller, which most utilities are, and their shutoff timeline is into the next billing cycle period then it starts to get confusing as to the new invoice and the balance.  
+Its common that billers will want to send a delinquency notification automatically once they get X number of days past the due date.
+Requirement
+Importance
+Jira Link
+Notes
+Must be mobile responsive
+HIGH
+Red
+ Notifications for close to stop service / policy
+ 
+ 
+ 
+Notifications for service / policy reinstated
+Biller Portal updates for Account statuses 
+Payer site updates for Account Statuses 
+ Competitive Analysis
+N/A
+ Dependencies
+Dependencies are around working with a dedicated and narrow group of partners. It will be dependent on integrations with the partners to actually send service or policy updates back. InvoiceCloud will be responsible taking payments and account notifications but the CIS systems will be responsible for posting back for actual shut off service.
+ Assumptions
+List any assumptions you have about your users, technical constrains, business goals, etc.
+This tool is intended to be used by the IC Implementations teams
+The tool will only be available to CRM users with the given user permission. 
+The tool will not permit the user to copy settings to a Live Biller
+The process will allow for up to 100 concurrent executions
+ Timeline
+Event
+Date
+Confidence
+Status
+Kickoff call
+ 
+Incomplete
+Design review
+ 
+incomplete
+Red
+ 
+Deliverable #1 
+ Open Questions
+Question
+Owner
+Answer
+Date Answered
+What is the thing that we need to know?
+ 
+Here is the answer to that question
+Type // to add a date
+ Out of Scope
+List the features discussed which are out of scope of might be revisited in a later release.
+Copying data into live, production Billers
+ Communication Checklist
+Comm Audience
+Task
+Notes/Actions
+Project team members
+Early Access Billers
+All Billers
+Partners
+Internal \ Training
+Internal \ Support+CSM
+Internal \ Sales
+Internal \ Boarding
+Internal \ General
+Add rows if needed
+ URL:/spaces/PRODUCT/pages/2667511809/Copy+Biller+Settings+Tool+in+CRM

@@ -1,0 +1,352 @@
+none
+note
+Overview
+
+
+Overview
+
+
+This is the project implementation phase, with setup and configuration of the CRM, Virtual Site, Biller Portal and Customer Site. Coding steps are done in this phase, and this will ensure that files will load for the next phase of validation. 
+** This section is only needed for implementations that require a new or custom integration.
+note
+Project Roles
+
+
+Project Roles
+
+
+Name
+Team
+1
+Project Manager (PM)
+Implementations
+2
+Implementations Manager (IM)
+Implementations
+3
+Technical Consultant (TC)
+Implementations
+4
+Solution Engineer (SE)
+Integrations
+5
+Integrations Manager (INM)
+Integrations
+7
+Delivery Specialist (DS)
+Implementations
+8
+Biller (B)
+Customer
+9
+Customer Information System (CIS)
+Customer
+10
+Solution Architect (SA)
+Integrations
+Change Log
+Changes Made
+Date
+Author
+Version
+Description
+ 
+ 
+1
+Reviewing/finalizing joint SE/Impl playbook with team
+Process Steps
+Process steps and task owners.
+Sub-Phase
+Category
+Step
+Description
+R / A / C / I
+1
+Discovery
+User Experience
+Payer, Agent, Biller/CSR Experience Walkthrough
+Biller/Partner gives demo of current payer experience, agent experience, and biller/CSR experience to the IC team. IC to seek feedback on what to improve with their current user/payer experience.
+SE completes Payer Experience and CSR/Agent Experience sections of the Discovery Confluence page with Biller.
+SE / INM / PM / IM
+2
+Discovery
+User Experience
+Identity Management/ Web Integration/SSO/Multi-User 
+Identity Management/Web Integration/ SSO/ Multi-User – [
+ 
+ 
+ Need more detail, add definition for success]
+SE / INM / PM / IM
+3
+Review Conversions Process
+Review proposed conversions process to get agreement from CIS/biller on approach.
+SE / INM / PM / IM
+4
+Discovery
+IC System
+Invoicing
+Invoice discovery. SE completes Invoices section of the Discovery Confluence page with Biller/Partner.
+SE / INM / PM / IM
+5
+Discovery
+IC System
+Balance Updates
+Balance update discovery.  SE completes Balance Updates section of the Discovery Confluence page with Biller/Partner.
+SE / INM / PM / IM
+6
+Discovery
+IC System
+Account Changes
+Account changes discovery.  SE completes Account Changes section of the Discovery Confluence page with Biller/Partner.
+SE / INM / PM / IM
+7
+Discovery
+IC System
+Payments
+Payments discovery (includes payments, ACH rejects, credits, chargebacks, voids).  SE completes Payments section of the Discovery Confluence page with Biller/Partner.
+SE / INM / PM / IM
+8
+Discovery
+IC System
+Bill Presentment
+Bill presentment discovery.  SE completes Bill Presentment section of the Discovery Confluence page with Biller/Partner.
+SE / INM / PM / IM
+9
+Discovery
+IC System
+Breakout Sessions (if Applicable)
+Deep dive into specific use cases and complex pieces of the integration and requirements that require further discussion with Biller/Partner.
+Ex: Multiuser, Budget billing, Cashiering,  SSO
+SE / INM / PM / IM
+10
+Design
+Overview
+Create Design Overview Document
+SE gathers design decisions from discovery and place in 
+Solution Design Document
+SE / INM / PM / IM
+11
+Design
+Overview
+Integration UX Mock-Up Design for Payer, Agent, and Biller/CSR Experience
+SE creates initial mock-up UX design and walks through proposed UX design with Biller/Partner.
+SE / INM / PM / IM
+12
+Design
+Overview
+Review Design Overview Document and UX Mock-Up Design
+SE reviews design overview document and proposed UX design with Biller/Partner.
+SE / INM / PM / IM
+13
+Design
+Technical Design
+Identity Management/ Web Integration/SSO/Multi-User
+SE/Biller/Partner finalize Identity Management/Web Integration/SSO/Multi-User design and documents in Confluence.
+SE / INM / PM / IM
+14
+Design
+Technical Design
+Integration UX Mock-Up Design for Payer, Agent, and Biller/CSR Experience
+SE finalizes initial mock-up Integration UX design and documents in Confluence.
+SE / INM / PM / IM
+15
+Design
+Technical Design
+Invoicing
+SE/Biller/Partner finalize technical design for invoicing and SE documents in Confluence.
+SE / INM / PM / IM
+16
+Design
+Technical Design
+Balance Updates
+SE/Biller/Partner finalize technical design for balance updates and SE documents in Confluence.
+SE / INM / PM / IM
+17
+Design
+Technical Design
+Account Changes
+SE/Biller/Partner finalize technical design for account changes and SE documents in Confluence.
+SE / INM / PM / IM
+18
+Design
+Technical Design
+Payments
+SE/Biller/Partner finalize technical design for payments (includes payments, ACH rejects, chargebacks, voids) and SE documents in Confluence.
+SE / INM / PM / IM
+19
+Design
+Technical Design
+Bill Presentment
+SE/Biller/Partner finalize technical design for bill presentment and SE documents in Confluence.
+SE / INM / PM / IM
+20
+Design
+Technical Design
+Sales/Alliances Documentation
+INM documents integration & software details on Integration & Software Details Confluence page.
+Note: Only applies to Partner Integrations and is N/A for Custom Integrations.
+INM / INM / SE / IM
+21
+Design
+Technical Design
+Implementation Documentation
+INM documents implementation details on Implementation Details Confluence page. 
+IM should be included in any conversations with the Partner and review the Implementation Documentation once completed. 
+Note: Only applies to Partner Integrations and is N/A for Custom Integrations.
+INM / INM / IM / SE
+22
+Design
+Review & Approval
+Business Design Review
+IC Sales and Alliances stakeholders review and approve the final integration design.
+Note: Only applies to Partner Integrations and is N/A for Custom Integrations.
+23
+Design
+Review & Approval
+IC Technical Design Review
+IC Integrations Engineering reviews and approves the final integration design in Weekly Design Review meeting on Tuesdays. 
+SE / INM / PM / IM
+24
+Design
+Review & Approval
+Biller/Partner Design Review
+Biller/Partner reviews and approves the final integration design → See 
+Solution Design Document
+ 
+SOP - Project Scope Control - Solution Design Document
+ 
+SE / INM / PM / IM
+25
+Development
+Biller Coding
+Addt'l Products (CloudPay, AgentConnect, etc.)
+Biller/Partner codes to additional Invoice Cloud products (CloudPay, AgentConnect, etc.).
+SE / INM / PM / IM
+26
+Development
+Biller Coding
+Identity Management/Web Integration/SSO/Multi-User
+Biller/Partner codes to Invoice Cloud web services
+SE / INM / PM / IM
+27
+Development
+Biller Coding
+Invoice Data
+Biller/Partner completes coding and provides sample invoice data and/or web service information for coding.
+SE / INM / PM / IM
+28
+Development
+Biller Coding
+Adjustment Data
+Biller/Partner completes coding and provides sample adjustment data and/or web service information for coding.
+SE / INM / PM / IM
+29
+Development
+Biller Coding
+Payment Data
+Biller/Partner completes coding and provides sample payment data and/or web service information for coding (includes payments, ACH rejects, chargebacks, voids).
+SE / INM / PM / IM
+30
+Development
+Biller Coding
+Account Changes
+Biller/Partner completes coding and provides sample account changes data and/or web service information for coding.
+SE / INM / PM / IM
+31
+Development
+Biller Coding
+Bill Presentment Data
+Biller/Partner completes coding and provides sample bill presentment data and/or web service information for coding.
+SE / INM / PM / IM
+32
+Development
+Biller Coding
+Data Gathering (files, web services, credentials, etc.)
+SE gathers all data and coding information for IC Engineering and updates integration technical documentation in Confluence.
+SE / INM / PM / IM
+33
+Development
+Biller Coding
+Submit IC Coding request
+SE submits coding request for Engineering.
+SE / INM / PM / IM
+34
+Development
+IC Coding 
+Invoice Data
+IC codes to Biller/Partner invoice data and/or web service information for coding.
+SE / INM / PM / IM
+35
+Development
+Adjustment Data
+IC codes to Biller/Partner adjustment data and/or web service information for coding.
+SE / INM / PM / IM
+36
+Development
+IC Coding
+Payment Data
+IC codes to Biller/Partner payment data and/or web service information for coding (includes payments, ACH rejects, chargebacks, voids).
+SE / INM / PM / IM
+37
+Development
+IC Coding
+Account Changes
+IC codes to Biller/Partner account changes data and/or web service information for coding.
+SE / INM / PM / IM
+38
+Development
+IC Coding
+Bill Presentment Data
+IC codes to Biller/Partner bill presentment data and/or web service information for coding.
+SE / INM / PM / IM
+39
+Testing
+SIT
+Create & review System Integration Test (SIT) Workbook
+Review tasks/stories/expected results on the SIT workbook with Biller/Partner and update with feedback (if necessary).  
+SE / INM / PM / IM
+40
+Testing
+SIT
+Complete SIT
+Complete SIT tasks in SIT workbook.
+SE / INM / PM / IM
+41
+Testing
+SIT
+SIT Verification
+Verify SIT is complete.
+SE / INM / PM / IM
+42
+Finalize Design
+Documentation
+Update Integration Technical Design Document
+Update integration technical design documentation based on SIT results (if applicable).
+SE / INM / PM / IM
+43
+Finalize Design
+Documentation
+SA Review of Technical Design documentation
+Internal SA review of Technical Design page in Confluence.
+SA / INM / PM,IM / 
+44
+Finalize Design
+Documentation
+Obtain Final Integration Sign-off from Biller and CIS/Core System
+Final approval/sign-off of the integration
+Note: IC may or may not work with CIS/Core System directly depending on the project.
+** For large enterprise custom projects, any product development requirements should be included in the Solution Design and signed off by biller.
+SE / INM / PM / IM
+45
+Integration Release
+Knowledge Transfer
+Hold knowledge transfer session
+Host Integration Technical Design knowledge transfer session with Implementation Team and Client Services Team.
+SE / INM / PM,IM / 
+46
+Integration Release
+Knowledge Transfer
+Send Internal Notification
+Send Integration Release Notification.
+Note: Only applies to Partner Integrations and is N/A for Custom Integrations.
+ URL:/spaces/Implementa/pages/3506962434/P2+-+Integration

@@ -1,0 +1,94 @@
+General Understanding
+Current Authentication Methods
+: What authentication methods are you currently using?
+Ping Identity - SAML for SSO
+Supports web and mobile-based apps
+Current Experience
+: Have you used SSO or MFA in any of your other applications? If so, what has been your experience?
+They are currently using MFA
+MS authenticator, Google authenticator
+Access Boston is the system they sign into (like our Okta), and they see a series of tiles from there
+Support single logout ← IMPORTANT  
+Requirements and Expectations
+Primary Goals
+:
+What are your primary goals for implementing SSO (e.g., improved security, user convenience, reduced IT overhead)?
+What are your primary goals for implementing MFA (e.g., improved security, compliance, user convenience)?
+User Base
+: How many users will need access through SSO and/or use MFA?
+Applications
+: Which applications or services do you want to integrate with SSO and MFA?
+Tightly integrated with their HR system, so when employees are terminated, their access is immediately killed ← IMPORTANT 
+Currently managed with Ping Identity
+Technical Considerations
+Identity Providers
+: Do you have a preferred identity provider (e.g., Okta, Azure AD, Google Identity)?
+Ping Identity
+Authentication Factors
+: Which types of authentication factors are you interested in (e.g., SMS, email, app-based, biometrics)?
+Currently SMS and email and authenticator apps and token keys
+AS MANY OPTIONS AS THEY CAN  ← IMPORTANT 
+SMS is most used version, but they’re pushing people towards apps
+They have the ability to force app use, but probably won’t
+App isn’t perfect, so likely allow many options
+Protocols
+: Are there specific authentication protocols you require or prefer (e.g., SAML, OAuth 2.0, OpenID Connect)?
+Timeout is 15 minutes
+Exceptions are possible, but not for IC due to money involvement
+This is contradictory to the 4hr session duration we currently have
+So this will need to be biller specific?
+Security Requirements
+: What are your security requirements and compliance needs (e.g., MFA, data encryption)?
+Do you expect support will be needed for all users, or a subset?
+User Experience
+Experience
+When they click the link to IC they’ve used for 15 years, they’re redirected to Access Boston and forced to authenticate
+How do we know where to send them?  Do we split the email/password into separate steps?
+User Onboarding
+: How do you envision the user onboarding process with SSO/MFA?
+Users are configured in the biller portal today
+New way is for Identity IQ(?) to be the system of config and then pushed to IC
+Would we need to align detailed permissions between these systems?
+THIS IS A NICE TO HAVE?  
+User Support
+: What kind of user support do you anticipate needing for SSO/MFA implementation?
+How would you want to receive support for adopting SSO/MFA? (video tutorials, KB documentation, 1on1 calls with client services, etc)
+Integration and Maintenance
+Integration Challenges
+: What challenges do you foresee in integrating SSO/MFA with your existing systems?
+Maintenance
+: How do you plan to manage and maintain the SSO/MFA system post-implementation?
+Feedback and Improvement
+Feedback Mechanism
+: How would you like to provide feedback during the implementation process?
+Success Metrics
+: What metrics will you use to measure the success of the SSO implementation?
+Are there any other authentication-related concerns or improvements that you feel should be considered?
+Implementation
+DocuSign is a great example of how to streamline and simplify implementation
+Just code to the protocol, don’t deviate, keep with standard
+Be agnostic to the identity provider 
+ 
+Should always have a backdoor user/pass (admin) that can bypass the SSO in case the provider is down 
+ 
+Other notes
+Gretchen Grozier
+ 2:09 PM
+this is the boilerplate language we use in  Procurement docs - overview of our service: The City of Boston uses Ping Federate for user authentication and Single Sign-On (SSO). Ping Federate supports all the standard authentication protocols, including SAML, OpenID, OpenID Connect, OAuth, WS-Federation, and WS-Trust. Preference will be given to products that utilize these protocols and can integrate with our users’ existing AccessBoston credentials.
+Ping Federate has integration kits for Microsoft IIS, Apache Web Server, Apache Tomcat, IBM WebSphere, and Oracle Weblogic. Developers can utilize Ping Federate functionality directly from .NET, Java, PHP, Perl, and Python.
+The City of Boston also utilizes Ping Access. Ping Access serves as the rules and risk engine that evaluates user access requests in accordance with our policies.
+Factors which are parsed in Ping Access decisions include identity (role-based or attribute- based), network ranges, time ranges, authentication levels, session information, OAuth scopes and attributes. Ping Access can store identity and session information in JSON Web Tokens (JWTs) to provide stateful-like functionality using stateless mechanisms. Ping Access can sign JWTs for higher security, and maintain and act upon session revocation lists.  Preference will be given to products that can utilize the Ping Access pre-built connectors/adapters/templates for easier integration.
+Applications must support 
+both
+ Single Sign-On and Single Sign-Out to be in compliance with City of Boston security policies.
+Further details can be requested from the Identity & Access Management team via 
+accessboston@boston.gov
+Jack McDonnell
+ 2:14 PM
+access.boston.gov
+Jack McDonnell
+ 2:27 PM
+DocuSign's SSO implementation documentation: 
+https://support.docusign.com/s/document-item?language=en_US&rsc_301&bundleId=rrf1583359212854&topicId=njp1583359138365.html&_LANG=enus
+ 
+ URL:/spaces/PRODUCT/pages/3871899649/IAM-SSO-MFA+Interview+-+City+of+Boston

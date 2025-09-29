@@ -1,0 +1,18 @@
+The process to get Key Vault access for a managed identity is:
+Sign in to Service Desk via the OKTA apps.
+Add a new request
+CC - your manager, 
+Request Type: Access Request
+System: Azure Infrastructure
+Description: Request that you need access to the Azure Key Vault for a particular environment.
+Example: Enable key vault access for the mi-MYIIS-web-dt6 managed identity on the DevTest keyvault.
+Example: Enable key vault access for the mi-MYIIS-web-reg managed identity on the Production keyvault.
+New system or update: Optional. Leave empty.
+Internal and external vulnerability scan will be required: Optional Leave empty.
+Security has been considered: Optional leave empty.
+Anticipated go live date: Optional. Feel free to add a date to increase urgency.
+Priority: Medium. The team is quick on these items, so it wont sit there for too long.
+It may take up to an hour for the changes to take place.
+What happens behind the scenes? 
+The team has enabled access to the Azure Key Vault via Azure Active Directory groups. When the team member is working on the ticket, they’ll add the managed identity to the specified group for that environment.
+ URL:/spaces/PE/pages/2419556431/Requesting+Access+to+Azure+Key+Vault+for+Managed+Identities

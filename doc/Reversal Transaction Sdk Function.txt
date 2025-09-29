@@ -1,0 +1,51 @@
+ $(function () {
+$("[id$='btnProcessPayment']").on('click', function () {
+    ReverseTranscation();
+});
+ function ReverseTranscation() {
+        var payload = JSON.parse($("input[id$='hdSaasConexReq']").val());
+        var sdk = new SaaSConex({
+            device: payload.deviceInformation.device,
+            key: payload.deviceInformation.key,
+            debug: false,
+            sslTls: true,
+            environment: payload.deviceInformation.environment,
+            success: function () {
+                //make sure the device can be found on the network
+                sdk.initialize()
+                    .success(function (data) {
+                        reverse(sdk, payload);
+                    })
+                    .failure(function (data) {
+                        console.log("Failed1");
+                    });
+            },
+            failure: function () {
+                //if this fails reset the sdk and display an error message to the user
+                console.log("Failed2");
+            }
+        });
+        function reverse(sdk, payload) {
+            var transaction = sdk.transaction({
+                type: 'REFUND'
+            });
+            transaction.gatewayParams({
+                group: payload.icpaymentinformation.grouptag,
+                transaction_id: '000000045586'
+            });
+js
+        sdk.processTransaction('CREDIT', transaction)
+            .success(function (data) {
+                console.log('Success2');
+                console.log(JSON.stringify(data));
+
+            })
+            .failure(function (data) {
+                console.log('Failed');
+                console.log(JSON.stringify(data));
+            });
+    }
+}
+
+});
+ URL:/spaces/PRODUCT/pages/2674491411/Reversal+Transaction+Sdk+Function

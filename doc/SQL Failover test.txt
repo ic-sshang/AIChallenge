@@ -1,0 +1,45 @@
+SQL Failover in nonprod environment
+Spin up a DevTest West SQL Server, add the databases we have on the east, then enable the failover group. - 
+Identify an application we can use on DevTest that can be regression tested and has the ability to connect to the database using 
+http://ADO.NET
+ . 
+ 
+Likely MyIIS or the RestAPI.
+Identify or create tests that can be run through BlazeMeter to get a sense of the latency. - 
+ / 
+ 
+Run three types of load tests.
+Run the app as is.
+Run the app with the failover group connection string change.
+Run the app with the failover group connection string change and the failover enabled to send traffic to the west. 
+Things where we need to have further discussions on:
+Move a devtest VM over to the west to test out latency from west to east. Needs input from Vasant.
+Utilizing devtest 14 (prod mirror) to run this test. Needs input from Tony since it's used as a prod mirror it needs to be the same as production.
+Alternative is to open up another url we can use.
+test1.invoicecloud.com
+ Need to sync with the EMV team if it is being used. - 
+qa-regression.invoicecloud.com
+ - Needed for regression testing. Will need to remove the IP restriction.
+qa1.invoicecloud.com
+ - outdated, but can work. Will need to remove the IP restriction.
+qa2.invoicecloud.com
+ - outdated, but can work. Will need to remove the IP restriction.
+qa3.invoicecloud.com
+ - no servers behind it, so we can reuse, but will need to update iis to have the bindings. Will need to remove the IP restriction.
+Failover Observations 9/29/2023
+K6 Metrics
+Baseline SQL query 10ms
+Failover SQL query 70ms
+Sql
+After failover connections using SQL authentication failed.  
+The SQL login was not associated with the database user on the west server instance.
+Manually associated the SQL login with the database user.
+Applications
+Gateway
+After deployment the web.config fallback connection strings did not have the failover database name.
+The deployment does not use the key vault for the source values for injecting the fallback connection strings.  ADO library variable groups are used instead.
+Manually updated the web.config on the server.
+CRM
+After failing over the devtest CRM deployments reported database write failures.
+The MI database name was either cached as east or the source is not the keyvault.  Need to investigate.
+ URL:/spaces/icinfradoc/pages/2756771852/SQL+Failover+test

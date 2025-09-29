@@ -1,0 +1,1077 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira tickets
+Document status
+draft
+ 
+Document owner
+ 
+ 
+Solution engineer
+ 
+Invoice Cloud Web Services
+The information in the Invoice Cloud Web Services section reflects the information given to Invoice Cloud at the time of Discovery and Design. It is possible for this information to be updated at any time by a biller or CIS Vendor without notifying Invoice Cloud
+Cloud Payments V2
+Purpose/Summary: This web service based payment integration allows 3rd party applications to utilize a "Pay Now" button within their application to redirect the user to the Invoice Cloud Payment Route where they can enter in all the payment information and submit the payment. Once the payment has been approved, the IC Payment Route will display a printable receipt and provide a method to return the user back to the calling application.
+Sample Request:
+CloudPaymentsV2 
+{
+	"CreateCustomerRecord": true,
+	"Customers": [
+		{
+			"AccountNumber": "ACCT-TEST-001",
+			"Name": "John S",
+			"Address": "123 Main Street",
+			"City": "Tampa",
+			"State": "FL",
+			"Zip": "12345",
+			"EmailAddress": "none@none.com",
+			"Invoices": [
+				{
+					"InvoiceNumber": "INV-TEST-001",
+					"TypeID": 6,
+					"DueDate": "08/20/2099",
+					"InvoiceDate": "04/27/2024",
+					"BalanceDue": 10.00,
+					"CCServiceFee": 1.00,
+					"AchServiceFee": 1.00
+				}
+			]
+		}
+	],
+	"AllowSwipe": false,
+	"AllowCCPayment": true,
+	"AllowACHPayment": true,
+	"AllowEMV": false,
+	"ReturnURL": "",
+	"PostBackURL": "https://www.yourdomain.com/postback.aspx ",
+	"BillerReference": "A unique reference number generated from Biller",
+	"ViewMode": 0,
+	"PageLoadOverride": 1,
+	"PageResultOptions": {
+                    "AllowRegisterAccount": False,
+                    "InvoiceOptions": {
+                        "AllowViewStatement": false,
+                        "AllowRemove": true, 
+                        "AllowViewRelated": False,
+                        "AllowRemindMe": False
+                    }
+                }
+}
+Additional Details
+Biller Request Parameters:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+ReturnURL
+False
+PostBackURL
+False
+Y
+PostBackURL
+Post back URL
+BillerReference
+False
+Y
+BillerReference
+A unique reference number generated from Dona Ana
+ViewMode
+True (Only required if using iframe ViewMode = 1)
+Y
+ViewMode
+0
+CssUrl
+False
+Customers
+True
+Y
+Customers
+Customer Data Object:
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AccountNumber
+True
+Y
+AccountNumber
+DisplayAccountNumber
+False
+Name
+False
+Address
+False
+City
+False
+State
+False
+Zip
+False
+EmailAddress
+False
+Invoices
+False
+Y
+Invoices
+Optional Invoice Data Object
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+InvoiceNumber
+True
+Y
+InvoiceNumber
+TypeID
+False
+Y
+TypeID
+6
+InvoiceDate
+False
+Y
+InvoiceDate
+Invoice date
+DueDate
+False
+Y
+DueDate
+Invoice due date
+BalanceDue
+False
+Y
+BalanceDue
+Total Invoice Amount
+CCServiceFee
+False
+Y
+CCServiceFee
+1.00
+ACHServiceFee
+False
+Y
+ACHServiceFee
+1.00
+MinimumAmountDue
+False
+AllowPartialPayments
+False
+Cloud Payment Settings
+Parameter
+Required
+True/False
+In Request
+Y/N
+Partner Field Name
+Partner Field Description
+AllowSwipe
+False
+AllowEMV
+False
+Y
+AllowEMV
+False
+EMVDeviceID
+False
+EMVLocationID
+False
+CashierName
+False
+AllowCCPayment
+False
+Y
+AllowCCPayment
+True
+AllowACHPayment
+False
+Y
+AllowACHPayment
+True
+CreateCustomerRecord
+False
+Y
+CreateCustomerRecord
+True
+RemoteAuthenticationToken
+False
+PageLoadOverride
+False
+Y
+PageLoadOverride
+1
+Optional Page User Result UI Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+InvoiceOptions
+Optional
+Y
+InvoiceOptions
+AllowRegisterAccount
+Optional
+Y
+AllowRegisterAccount
+False
+Optional Invoice User Experience Options
+Parameter
+Required
+In Request
+Partner Field Name
+Partner Field Description
+AllowViewStatement
+Optional
+Y
+AllowViewStatement
+False
+AllowRemove
+Optional
+Y
+AllowRemove
+True
+AllowViewRelated
+Optional
+Y
+AllowViewRelated
+False
+AllowRemindMe
+Optional
+Y
+AllowRemindMe
+False
+User Stories:
+Avocette Portal + InvoiceCloud Cloud Payments V2(CPV2)
+Workflow
+Story
+Assumptions/Requirements
+Steps
+Webservices
+Sample
+User Registration
+User navigates to Avocette portal and registers through the Avocette member portal. After registration, logged in user makes a payment.
+Registration is Required
+Assumptions:
+Avocette does not know if a Payer is registered with InvoiceCloud
+Check to see if account exists and registration is valid. Registration is required. 
+If account does not exist:
+Create Portal User Account
+Register Account(s) 
+Receive Email to Login the Account(s)
+Registered User Payments workflows
+If account does exist and is not registered:
+Register Accounts
+Receive Email to Login the Account(s)
+Registered User Payments workflows
+Register Page
+User Login Page
+Registered User Payment (Single Invoice)
+A registered user is logged in and makes a payment on a single account, single invoice.
+Account Page display the total amount owing. 
+Invoice Details Page display all invoices separately if it’s more than one.
+Cloud Pay only, Autopay and Paperless sign up won’t be presented with that option during the payment route. 
+Pay-by-Text can’t be removed from the payment route; however, if payer choose it, it will not be sent and text message to sign up Pay-by-Text because payer(s) are not registered customers in InvoiceCloud.
+Assumption:
+User is already registered and authenticated
+Avocette launches CloudPayV2 
+Cloud Payments V2 
+Account Page
+Invoice Details Page
+Billing Information Page
+Payment Process Page
+Redirect to IC
+Payment Successful Page
+Postback Update
+Receipt Generates
+Registered User Payment (Multi Invoices)
+A registered user is logged in and makes  payments on multiple accounts, multiple invoices.
+Account page display the total amount owing(multiple invoices). 
+Invoice Details Page display all invoices separately if it’s more than one. User has the ability to remove invoice(s) 
+Cloud Pay only, Autopay and Paperless sign up won’t be presented with that option during the payment route. 
+Pay-by-Text can’t be removed from the payment route; however, if payer choose it, it will not be sent and text message to sign up Pay-by-Text because payer(s) are not registered customers in InvoiceCloud.
+Assumption:
+User is already registered and authenticated
+Requirement: All accounts must be linked together.
+Avocette launches CloudPayV2 
+Cloud Payments V2 
+Multiple invoices
+Remove one invoice
+Advanced Settings
+Setting ID
+Required/Optional/N/A
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+Invoice Types
+Invoice Types
+Virtual Site
+Required Options
+Input required integration options below.
+ID
+Option Description
+Details
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A, in BIF, On Biller Quesitonnaire - BIF customization
+AllowPartialPayments
+AutoPayCollectionDate
+BalanceForward
+CreditCardServiceFee
+FirstNotifyRequestedDate
+InvoiceDate
+InvoiceDueDate
+InvoiceFormatGuid
+InvoiceTypeID
+LateFeeDate
+LocationReference
+MinimumAmountDue
+PaymentExpirationDate
+PaymentExpirationMessage
+PromptPayExpirationDate
+RegistrationValue
+SecondNotifyRequestedDate
+ThirdNotifyRequestedDate
+User Interaction and Design
+Data Flow - Invoice
+Data Flow - Adjustments
+Data Flow - Invoice Updates
+Data Flow - Customer Update
+Data Flow - Conveyance
+Data Flow - Payment
+Data Flow - Void
+Data Flow - ACH Reject
+Data Flow - Change Log
+Data Flow - Bill Presentment
+Payer Experience
+Payers will access Invoice Cloud from the Biller website (URL redirect). Payers will use the IC Virtual Site and Customer Portal.
+Agent Experience
+Biller Experience
+User Stories
+Integration Sizing
+Total Initial LOE (By Story Points)
+In Integration?
+Name
+Category
+Component
+Initial LOE (By Story Points)
+
+
+
+
+1
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments File Split
+Adjustments
+Biller File Split
+5
+
+
+
+
+2
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustments
+Adjustments
+Native Web Services
+0
+
+
+
+
+3
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Balance Refresh
+Adjustments
+Real-Time Data Refresh
+5
+
+
+
+
+4
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Adjustment File Conversion
+Adjustments
+File Conversion
+8
+
+
+
+
+5
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+HTML Template
+8
+
+
+
+
+6
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+Native Web Services
+0
+
+
+
+
+7
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Extraction
+3
+
+
+
+
+8
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Bill Presentment
+Bill Presentment
+PDF Remote Linking
+2
+
+
+
+
+9
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+DataPump
+5
+
+
+
+
+10
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Status Report
+Change Logs
+File Export
+3
+
+
+
+
+11
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Change Log
+Change Logs
+File Export
+2
+
+
+
+
+12
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Change Logs
+Change Logs
+Native Web Services
+0
+
+
+
+
+13
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+File Size Split
+Invoices
+Biller File Split
+2
+
+
+
+
+14
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update File Split
+Invoices
+Biller File Split
+3
+
+
+
+
+15
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Pre-Processing
+Invoices
+Biller File Split
+8
+
+
+
+
+16
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Batch Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+17
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Single Invoices
+Invoices
+Native Web Services
+0
+
+
+
+
+18
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Update
+Invoices
+Real-Time Data Refresh
+1
+
+
+
+
+19
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Real-Time Data Refresh
+5
+
+
+
+
+20
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice On-Demand
+Invoices
+Real-Time Data Refresh
+13
+
+
+
+
+21
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice File Conversion
+Invoices
+File Conversion
+8
+
+
+
+
+22
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Invoice Generation
+Invoices
+Biller API Data Import
+5
+
+
+
+
+23
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+DataPump
+5
+
+
+
+
+24
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+DataPump
+5
+
+
+
+
+25
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+DataPump
+5
+
+
+
+
+26
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+DataPump
+3
+
+
+
+
+27
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+ACH Rejects
+Payments
+File Export
+5
+
+
+
+
+28
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Chargebacks
+Payments
+File Export
+3
+
+
+
+
+29
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+File Export
+5
+
+
+
+
+30
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Voids
+Payments
+File Export
+3
+
+
+
+
+31
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment Export
+Payments
+Native Web Services
+0
+
+
+
+
+32
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Payment File Conversion
+Payments
+File Conversion
+8
+
+
+
+
+33
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Conveyance File Split
+Customers
+Biller File Split
+13
+
+
+
+
+34
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update File Split
+Customers
+Biller File Split
+3
+
+
+
+
+35
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Customer Update
+Customers
+Real-Time Data Refresh
+1
+
+
+
+
+36
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+Real-Time Data Refresh
+5
+
+
+
+
+37
+
+
+incomplete
+
+
+Y/N
+
+
+
+
+Endpoint Authentication
+DataPump
+5
+Integration Modifications
+Jira INT
+Date Released
+Previous Behavior
+Desired Behavior
+Business Case/Solution
+ URL:/spaces/IM/pages/3502669852/Avocette+Technical+Design

@@ -1,0 +1,414 @@
+Objective:
+To evaluate the feasibility and design for migrating user credentials from Invoice Cloud to SecureAuth. This initiative aims to streamline the SecureAuth enablement process for both new and existing billers by establishing a secure, automated, and scalable workflow for provisioning SecureAuth realms (tenants) and synchronizing user data.
+API Availability:
+Create Organization API
+Used to provision a new Organization (tenant) in SecureAuth.
+Create Identity Pool API
+Used to create an identity pool (Organization level) in SecureAuth.
+Import Configuration API
+Used to migrate user credentials and profile data into SecureAuth.
+These APIs will be integrated into a dedicated Azure Function to support real-time onboarding and migration workflows.
+Process Flow / Trigger Mechanism
+End-to-End Process: User Migration for New/Existing Biller
+We will implement the user migration logic within an Azure Function to enable real-time execution upon biller onboarding to SecureAuth.
+1. Trigger Point
+New Biller:
+Triggered during biller creation via 
+Administration > Biller Wizard
+, when the 
+CIAM (SSO/MFA) Authentication
+ checkbox is selected.
+Existing Biller:
+CIAM toggle under 
+Product > CIAM
+ is enabled from the CRM portal.
+2. Validation
+Check if the Organization already exists in SecureAuth.
+If Yes:
+ Skip Organization creation, proceed to user sync, and verify activation status.
+If No:
+ Proceed to create the Organization.
+3. Organization Creation in SecureAuth
+Send a 
+Create Organization API
+ request to SecureAuth.
+Configure necessary attributes (e.g., Organization name, metadata).
+Capture the 
+id
+ from the response for use in Create Identity Pool API.
+4. Identity Pool Creation in SecureAuth
+Send a Create Identity Pool request to SecureAuth.
+Configure necessary attributes (e.g., workspace id, schema ids).
+Capture the 
+id
+ from the response for use in User Migration API also store in Database.
+4. User Synchronization
+Retrieve associated biller users from the database.
+If no biller user exists, skip Import Configuration API.
+If biller users exist construct the 
+Import Configuration API
+ payload:
+Users
+: Include first name, last name, metadata schema, payload schema, status, and 
+user_pool_id
+.
+User Identifiers
+: Include username (
+uid
+), 
+user_id
+, and 
+user_pool_id
+.
+Verifiable Addresses
+: Include email, status, type, 
+user_id
+, and 
+user_pool_id
+.
+Send the payload to SecureAuth to create users with SSO/MFA settings.
+5. Retry Strategy
+To enhance reliability and handle transient failures (e.g., network issues, temporary API downtime), we will implement a 
+retry mechanism
+ within the Azure Function:
+Retry Attempts:
+ Configurable (e.g., 3 attempts)
+Backoff Strategy:
+ Exponential backoff between retries
+Failure Logging:
+ All failed attempts will be logged with error details
+This ensures that temporary issues do not block the onboarding process and provides visibility into persistent problems.
+6. CRM Database Update
+Update backend database:
+Set 
+CIAM Status
+ to 
+Active (Yes)
+Record 
+Activation Date
+ as current system date/time
+Automatically enable 
+Product > CIAM
+ toggle
+7. UI Feedback
+Success Message:
+“Organization and users successfully created in SecureAuth.”
+Error Handling:
+If any failure occurs, display:
+“An error occurred during Organization or user creation. Please contact support.”
+Create Organization API Details
+POST https://{{tenantID}}.us.connect.secureauth.com/api/system/{{tenantID}}/organizations
+Sample payload:
+json
+{
+  "id": "1876",
+  "name": "TestOrg",
+  "parent_id": "invoice-cloud"
+}
+Key Attributes:
+id
+, 
+parent_id, name
+: According to biller information
+tenantID
+: Received from Azure Key Vault
+Payload fields
+Values
+id
+BID
+name
+Biller name
+parent_id
+“invoice-cloud”
+Sample response:
+json
+{
+    "id": "1878",
+    "name": "TestOrg-1",
+    "description": "",
+    "parent_id": "billerportal",
+    "color": "#6366F1",
+    "metadata": {
+        "payload": null,
+        "schema": {}
+    },
+    "domains": [
+        "invoicecloud.com"
+    ],
+    "authentication_mechanisms": [
+        "totp",
+        "password",
+        "email_otp",
+        "webauthn"
+    ],
+    "deactivated": false,
+    "issuer_url": "https://dev-invoicecloud.us.connect.secureauth.com/dev-invoicecloud/1878",
+    "theme_id": null,
+    "subject_format": "hash",
+    "subject_identifier_algorithm_salt": "X34szG745siaoOTzDD1e87iYpMEp-tBG5rSZacfi-84",
+    "template": false,
+    "number_of_child_organizations": 0
+}
+Create Identity Pool API Details
+Endpoint:
+POST https://{{tenantID}}.us.connect.secureauth.com/api/identity/{{tenantID}}/system/pools?with_idp=true
+Sample payload:
+json
+{
+  "name": "UserPool",
+  "tenant_id": "dev-invoicecloud",
+  "workspace_id": "2689",
+  "payload_schema_id": "5d5ced58793b41178123b2d1cc5fb658",
+  "identifier_case_insensitive": true,
+  "authentication_mechanisms": [
+"totp" ,"password" ,"email_otp" ,"webauthn"
+],
+    "preferred_authentication_mechanism": "password"
+}
+Key Attributes:
+tenantID, payload_schema_id
+: Retrieved from Azure Vault
+workspace_id
+: Received from Create Organization API
+Payload fields
+Values
+name
+Organization name
+workspace_id
+id field value received from Create Organization API/ BID
+identifier_case_insensitive
+true if we want identifier to be case insensitive else false
+tenantID
+From Key Vault
+payload_schema_id
+From Key Vault
+Sample response:
+{
+    "id": "4a943cc8bb7d48b4b1d3b20cf650895d",
+    "tenant_id": "dev-invoicecloud",
+    "workspace_id": "2689",
+    "name": "UserPool",
+    "description": "",
+    "public_registration_allowed": false,
+    "authentication_mechanisms": [
+        "totp",
+        "password",
+        "email_otp",
+        "webauthn"
+    ],
+    "preferred_authentication_mechanism": "password",
+    "second_factor_authentication_mechanisms": null,
+    "second_factor_preferred_authentication_mechanism": "",
+    "payload_schema_id": "default_payload_v2",
+    "metadata_schema_id": "default_metadata_v2",
+    "business_metadata_schema_id": "default_business_metadata_v2",
+    "otp_settings": {
+        "activation": {
+            "length": 8,
+            "ttl": "168h0m0s"
+        },
+        "reset_password": {
+            "length": 8,
+            "ttl": "1h0m0s"
+        },
+        "reset_totp": {
+            "length": 8,
+            "ttl": "1h0m0s"
+        },
+        "enroll_webauthn": {
+            "length": 8,
+            "ttl": "1h0m0s"
+        },
+        "challenge": {
+            "length": 8,
+            "ttl": "5m0s"
+        },
+        "verify_address": {
+            "length": 8,
+            "ttl": "5m0s"
+        },
+        "authentication": {
+            "length": 8,
+            "ttl": "5m0s"
+        }
+    },
+    "metadata": null,
+    "password_settings": {
+        "hashing_method": "pbkdf2",
+        "expires_after": "0s"
+    },
+    "password_policy": {
+        "strength": "fair",
+        "min_length": 8,
+        "special_characters": 0,
+        "capital_letters": 0,
+        "lowercase_letters": 0,
+        "digits": 0,
+        "not_used_since": 0
+    },
+    "deleted": false,
+    "badge_color": "",
+    "system": false,
+    "identifier_case_insensitive": true,
+    "second_factor_threshold": 0,
+    "mfa_session_ttl": "0s",
+    "reset_credentials_settings": {
+        "do_not_allow_users_to_self_reset_credentials": false,
+        "reset_password_older_than": "0001-01-01T00:00:00Z",
+        "reset_webauthn_older_than": "0001-01-01T00:00:00Z",
+        "reset_totp_older_than": "0001-01-01T00:00:00Z"
+    },
+    "totp_settings": {
+        "issuer": "SecureAuth"
+    },
+    "allow_skip_2fa": false,
+    "number_of_users": 0,
+    "number_of_standard_users": 0,
+    "number_of_jit_users": 0
+}
+Import Configuration API Details
+Endpoint:
+PUT https://{{tenantID}}.us.connect.secureauth.com/api/identity/{{tenantID}}/configuration
+Sample payload:
+json
+{
+    "user_credentials": [{
+        "id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+        "expires_at": "2024-10-01T00:00:00Z",
+        "user_id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+        "type": "password",
+        "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+    },
+    {
+        "id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+        "expires_at": "2024-10-01T00:00:00Z",
+        "user_id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+        "type": "password",
+        "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+    }],
+    "user_identifiers": [
+        {
+            "id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+            "identifier": "rsable",
+            "type": "uid",
+            "user_id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        },
+        {
+            "id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+            "identifier": "rsable01",
+            "type": "uid",
+            "user_id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        }
+    ],
+    "user_verifiable_addresses": [
+        {
+            "id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+            "address": "rsable@invoicecloud.com",
+            "status": "active",
+            "type": "email",
+            "user_id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        },
+        {
+            "id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+            "address": "rsable01@invoicecloud.com",
+            "status": "active",
+            "type": "email",
+            "user_id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        }
+    ],
+    "users": [
+        {
+            "id": "7ef9451f-309a-4433-a2b9-3bb023051d96",
+            "metadata_schema_id": "default_metadata_v2",
+            "payload": {
+                "first_name": "demo",
+                "last_name": "test",
+                "user_name": "demotest01"
+            },
+            "payload_schema_id": "d21abb0f6d5f4f259dcc87d6c6b50e33",
+            "status": "active",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        },
+        {
+            "id": "cdcb7a5b-a726-404c-ba66-b8552d9be8fc",
+            "metadata_schema_id": "default_metadata_v2",
+            "payload": {
+                "first_name": "demo",
+                "last_name": "test2",
+                "user_name": "demotest02"
+            },
+            "payload_schema_id": "d21abb0f6d5f4f259dcc87d6c6b50e33",
+            "status": "active",
+            "user_pool_id": "4a943cc8bb7d48b4b1d3b20cf650895d"
+        }
+    ]
+}
+Payload Structure Includes:
+user_credentials
+: Empty for now. (
+Need more discussion internally
+)
+user_identifiers
+: List of user identifiers (e.g., username, user_id, user_pool_id)
+user_verifiable_addresses
+: List of email addresses with status and type
+users
+: User profile data including metadata and schema IDs
+Key Attributes:
+tenantID
+: Retrieved from Azure Vault
+user_pool_id,metadata_schema_id, payload_schema_id
+: Received from Create Identity Pool response
+first_name
+, 
+last_name
+, 
+identifier
+, 
+address
+, 
+id
+: Retrieved from biller user data
+Field Mappings: 
+Payload fields
+Values
+identifier
+Biller user username
+user_id
+Generate new GUID
+user_pool_id
+User pool id from Create Identity Pool response
+address
+Biller user email address
+user_verifiable_addresses.status
+Enum: 
+"active"
+ 
+"inactive"
+id
+Biller user GUID
+users.status
+Enum: 
+"active"
+ 
+"inactive"
+ 
+"deleted"
+ 
+"new"
+metadata_schema_id
+From Create Identity Pool response
+payload_schema_id
+From Create Identity Pool response
+tenantID
+From Key Vault
+Next Steps / Considerations
+Validate schema IDs and metadata configurations.
+Implement Azure Function with retry logic.
+Test end-to-end flow with sample biller data.
+Ensure secure handling of credentials and PII during migration.
+ URL:/spaces/PE/pages/4551606274/Spike+PRISM-692+BillerUser+Migration+to+SecureAuth

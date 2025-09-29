@@ -1,0 +1,47 @@
+3
+3
+false
+list
+false
+Entry Point Application
+Identify the correct entry point for the application. For the services, a console application will be used. Here is an example from 
+ICDatabaseService
+.
+Implement graceful shutdown handling in the entry point application to handle termination signals SIGINT and SIGTERM gracefully.
+Configurations
+Identify if there are any web.config or app.config application settings used in the application.
+Determine if environment variables or Kubernetes ConfigMaps should be utilized to manage the configuration parameters.
+Secrets
+Identify if there are any Azure Key Vault secrets that get used in the application.
+Storage
+Identify existing use of storage on the application.
+Determine if there are any storage requirements for the application.
+Identify the appropriate storage solution (e.g., Azure Blob Storage, Kubernetes Volumes)
+Logging
+Identify the current logging strategy (passive and active) and mechanism.
+Passive logging is considered the best practice and any logging should be done through the console.
+Internal Traffic
+Identify any dependencies on internal traffic and specify the protocol, IP address, and port used by the services.
+Use Kubernetes Services to enable communication between internal services within the cluster.
+External Traffic
+Identify any external traffic and specify the protocol, IP address, and port used when communicating with the external service.
+Ensure that the egress traffic is not blocked and is reachable from within the cluster.
+Dependencies
+Identify any internal and external services that would be considered dependencies in order for the service to be in a healthy state and functioning.
+Use Kubernetes init containers or probes to ensure services are available.
+Health Check Endpoint
+Identify if there is an existing health check that can be used for the probes or if code changes will need to be made.
+Security 
+Ensure the container will run with minimum permissions.
+Do we need to add some other TLS certificates when we run the container or gateway-side security shall be sufficient?
+Resiliency and Fault Tolerance 
+Docker Design
+Identify the base image and base layers needed.
+Use external traffic to identify what ports to listen to.
+References
+ICDatabaseService Application Discovery - Proxy Spoke - Confluence
+ICBusinessService Application Discovery - Proxy Spoke - Confluence
+ICRTDRService Application Discovery - Proxy Spoke - Confluence
+Windows .Net Framework 4.8+ Application Containerization - NET
+ 
+ URL:/spaces/PMK/pages/4301226012/Application+Containerization+Checklist

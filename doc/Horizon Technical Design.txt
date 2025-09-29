@@ -1,0 +1,534 @@
+Fill in project details in the table below. Type /date to quickly add the target release date, /jira to link to Jira epics or issues, and @mention functional owners to keep everyone on the same page.
+Page Navigation:
+Jira ticket 
+EBPP-943
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+EBPP-236
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+ITR
+14559 and 15407 
+Document status
+COMPLETE
+Green
+Document owner
+ 
+Solution engineer
+ 
+Knowledge Transfer
+Gong Recording Technical Transfer
+ & 
+Gong Recording Features and User Experience
+API Documentation
+Unique values per biller:
+API URL: The domain will be unique per biller - will be provided on the Integration Coding Form
+Partnerid
+AuthenticationId
+Specifications:
+Additional Details
+IC Use
+Partner API Name
+Description
+Request & Response Specifications
+RTDR: Balance Update
+InvoicingService method FetchAccount
+URL: 
+https://
+domain
+/invoicecloud/InvoicingService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+InvoiceNumber = Invoice Number
+InquiryType = Open
+Data Pump: Payment
+PaymentService method ApplyPayment
+URL: 
+https://
+domain
+/invoicecloud/PaymentService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+InvoiceNumber = Invoice Number
+Type = Payment Type (EFT or CC)
+Amount = Payment Amount (less service fee)
+ReferenceId = Payment Reference GUID
+FeeAmount = Service Fee Amount
+FeeType = ConvenienceFee hardcoded
+BillerReferenceID = CSRID 
+Data Pump: Change Log
+AccountService method UpdateCustomer
+URL: 
+https://
+domain
+/invoicecloud/AccountService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+Enabled = True (enrolled)/False (un-enrolled)
+Name = Customer Name
+Address1 = Address1
+Address2 = Address2
+City = City
+State = State
+PostalCode = Zip
+CountryCode = Blank (
+The only parameter IC is not passing in this method is the ‘CountryCode’
+)
+EmailAddress = Email Address
+Changes would originate from Biller Portal and BIFs. 
+Data Pump: Paperless Enrollment
+AccountService method UpdatePaperless
+URL: 
+https://
+domain
+/invoicecloud/AccountService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+Enabled = True (enrolled)/False (un-enrolled)
+Data Pump: AutoPay Enrollment
+AccountService method AutoPay
+URL: 
+https://
+domain
+/invoicecloud/AccountService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+Enabled = True (enrolled)/False (un-enrolled)
+Bill Presentment
+InvoicingService method FetchPDF
+URL: 
+https://
+domain
+/invoicecloud/InvoicingService.svc
+PartnerId = Provided by Horizon, unique per biller
+AuthenticationId = Provided by Horizon, unique per biller
+Account = Account Number
+InvoiceNumber = Invoice Number
+File Mapping
+Invoice File
+File Extension: .BIF
+File Naming Convention: standard (BID_MMDDYYYYHHMMSS.BIF)
+File Delimiter: pipe
+Specification: N/A
+Sample File: 
+File Transfer Frequency: Multiple times per day (as policies are generated)
+Field Mapping
+IC FileSpecID
+IC Field
+In File (Y/N)
+Required (T/F)
+Partner Field Name
+Record Type
+1
+RowType
+Y
+TRUE
+n/a - always FH
+File Header
+2
+BillerGuid
+Y
+TRUE
+n/a - provided by IC
+File Header
+4
+FileCreationDate
+Y
+TRUE
+Date file was created
+File Header
+5
+InvoiceCount
+Y
+TRUE
+Total amount of invoices in the file
+File Header
+6
+TotalInvoiceAmount
+Y
+TRUE
+Total invoice amount in the file
+File Header
+7
+RowType
+Y
+TRUE
+n/a - always IH
+Invoice Header
+8
+RecordType
+Y
+TRUE
+n/a - always N
+Invoice Header
+9
+InvoiceFormatGuid
+Y
+TRUE
+n/a - provided by IC
+Invoice Header
+10
+InvoiceNumber
+Y
+TRUE
+Formatting according to client request
+Invoice Header
+11
+InvoiceDate
+Y
+TRUE
+Action Date on open or paid; BillDt on next/future installment
+Invoice Header
+12
+InvoiceDueDate
+Y
+TRUE
+DueDt on open or paid invoices; DueDt on next/future installment
+Invoice Header
+13
+TotalAmountDue
+Y
+TRUE
+CurrentBalance (total open balance on the account when the bill is generated)
+Invoice Header
+20
+AllowPartialPayments
+Y
+FALSE
+n/a - always true/1 for the integration
+Invoice Header
+21
+MinimumAmountDue
+Y
+FALSE
+ActionAmtDue
+Invoice Header
+93
+BalanceDue
+Y
+FALSE
+ActionAmtDue (this should match the minimum amount due on the invoice) 
+Invoice Header
+194
+BalanceForward
+Y
+FALSE
+n/a - always true/1 for the integration
+Invoice Header
+252
+InvoiceTypeID
+Y
+TRUE
+n/a - provided by IC
+Invoice Header
+58
+RowType
+Y
+TRUE
+n/a - always CR
+Customer Record
+59
+AccountNumber
+Y
+TRUE
+Policy Number
+Customer Record
+60
+CustomerName
+Y
+TRUE
+Customer Name
+Customer Record
+61
+Address1
+Y
+FALSE
+Customer Address1
+Customer Record
+62
+Address2
+Y
+FALSE
+Customer Address2
+Customer Record
+63
+City
+Y
+FALSE
+Customer City
+Customer Record
+64
+State
+Y
+FALSE
+Customer State
+Customer Record
+65
+Zip
+Y
+FALSE
+Customer Zip
+Customer Record
+66
+Phone
+Y
+FALSE
+Customer Phone
+Customer Record
+70
+RowType
+Y
+TRUE
+n/a - always ID
+Invoice Detail
+Conveyance File
+File Extension: .CCF
+File Naming Convention: standard (BID_MMDDYYYYHHMMSS.CCF)
+Specification: N/A
+Sample File: 
+SFTP File Path: ToInvoiceCloud\Conveyance
+File Transfer Frequency: Multiple times per day (as needed)
+Field Mapping
+IC File Spec ID
+IC Field
+Required (T/F)
+Biller Field Name
+Biller Field Description
+Record Type
+358
+RowType
+TRUE
+N/A - Always ‘CH’
+N/A
+Conveyance File Header (CH)
+359
+BillerGUID
+TRUE
+N/A - IC generated value
+N/A
+Conveyance File Header (CH)
+360
+ThirdPartyFileReference
+FALSE
+Conveyance File Header (CH)
+361
+FileCreationDate
+TRUE
+N/A - IC generated using current date
+N/A
+Conveyance File Header (CH)
+362
+ConveyanceCount
+TRUE
+N/A - IC generated using Record Count in file
+N/A
+Conveyance File Header (CH)
+363
+RowType
+TRUE
+N/A - Always ‘CC’
+N/A
+Conveyance Record (CC)
+364
+CurrentAccountNumber
+TRUE
+ 
+Conveyance Record (CC)
+365
+NewAccountNumber
+FALSE
+ 
+Conveyance Record (CC)
+411
+LinkNewAccount
+FALSE
+N/A
+Conveyance Record (CC)
+Advanced Settings
+Setting ID
+Description
+Details and Logic
+Value
+Is value unique per biller? (Y/N)
+8
+RTDR EndPoint/WebService URL
+See North Country Insurance Company (BID: 2031) as example
+Y
+9
+RTDR Username if Applicable
+See North Country Insurance Company (BID: 2031) as example
+Y
+10
+RTDR Key or Password if Applicable
+See North Country Insurance Company (BID: 2031) as example
+Y
+11
+DataPump Payments EndPoint/WebService URL
+See North Country Insurance Company (BID: 2031) as example
+Y
+12
+DataPump Payments EndPoint/WebService Username
+See North Country Insurance Company (BID: 2031) as example
+Y
+13
+DataPump Payments EndPoint/WebService Password
+See North Country Insurance Company (BID: 2031) as example
+Y
+14
+DataPump Paperless EndPoint/WebService URL
+See North Country Insurance Company (BID: 2031) as example
+Y
+15
+DataPump Paperless EndPoint/WebService Username
+See North Country Insurance Company (BID: 2031) as example
+Y
+16
+DataPump Paperless EndPoint/WebService Password
+See North Country Insurance Company (BID: 2031) as example
+Y
+17
+DataPump AutoPay EndPoint/WebService URL
+See North Country Insurance Company (BID: 2031) as example
+Y
+18
+DataPump AutoPay EndPoint/WebService Username
+See North Country Insurance Company (BID: 2031) as example
+Y
+19
+DataPump AutoPay EndPoint/WebService Password
+See North Country Insurance Company (BID: 2031) as example
+Y
+20
+Remote PDF EndPoint/WebService URL
+See North Country Insurance Company (BID: 2031) as example
+Y
+21
+Remote PDF EndPoint/WebService Username
+See North Country Insurance Company (BID: 2031) as example
+Y
+22
+Remote PDF EndPoint/WebService Password
+See North Country Insurance Company (BID: 2031) as example
+Y
+BIF Customization's
+Feature
+BIF CUSTOMIZATIONS
+AchServiceFee
+N/A
+AllowPartialPayments
+in BIF
+AutoPayCollectionDate
+on biller questionnaire 
+BalanceForward
+in BIF (required for integration)
+CreditCardServiceFee
+N/A
+FirstNotifyRequestedDate
+on biller questionnaire 
+InvoiceDate
+in BIF
+InvoiceDueDate
+in BIF
+InvoiceFormatGuid
+in BIF
+InvoiceTypeID
+in BIF
+LateFeeDate
+N/A
+LocationReference
+N/A
+MinimumAmountDue
+in BIF
+PaymentExpirationDate
+N/A
+PaymentExpirationMessage
+N/A
+PromptPayExpirationDate
+N/A
+RegistrationValue
+N/A
+SecondNotifyRequestedDate
+on biller questionnaire 
+ThirdNotifyRequestedDate
+on biller questionnaire 
+User Interaction and Design
+Data Flow - Invoice
+att293994776
+183042077
+1
+HorizonInvoiceFileFlow
+IM
+att293994771
+att294617316
+0
+Data Flow - Adjustments
+att293994783
+183042077
+1
+HorzionRTDRFlow
+IM
+att294060189
+att294617333
+0
+Data Flow - Payment
+att293994800
+183042077
+1
+HorizonDataPumpFlow
+IM
+att294158469
+att294060198
+0
+Data Flow - Change Log
+att312770600
+183042077
+1
+change log2
+IM
+att310411365
+att310214732
+0
+Data Flow - Bill Presentment
+att332136461
+183042077
+1
+pdf linking
+IM
+att327745629
+att329908337
+0
+Payer Experience - Guest
+ The payer will go to the biller/Horizon site and instead of logging in, will select ‘Make a Payment’. The payer will enter the policy number, mailing zip code and policy effective date to find their invoice and after selecting ‘RETRIEVE INFO’, the IC dialogue box will appear for a one-time payment.
+Payer Experience - Registered
+ The payer will go to the biller/Horizon site, select ‘Login’, enter their Username and Password, and select the ‘Make A Payment’ button. The payer will then see their policy information available for payment embedded within the All Points software and proceed through the standard Invoice Cloud payment process. They may also proceed with updating Paperless, AutoPay, and Stored Payment Options from this screen. 
+Biller Experience - Existing Business Payment
+From the Horizon All Points system (biller backend system), they will search the policy, select ‘Make a Payment Now’ when the pop-up appears, they will select ‘Continue to Make Payment’ and the IC dialogue box will appear tp make payment via the IC Customer Portal.
+Biller Experience - Configure Payment Options
+From the Horizon All Points system (biller backend system), they will search the policy, select the ‘Configure Payment Options’ button and complete the Saved Payment Methods action via the IC Customer Portal.
+Biller Experience - New Business Payment (Pre-Policy Issuance) 
+From the Horizon All Points system (biller backend system), they will search the policy, select ‘Make Payment’, when the pop-up appears, they will select ‘Continue to Make Payment’ and the IC dialogue box will appear to make payment via the IC Customer Portal Open Invoices Screen.
+Invoice Cloud Web Services
+API Name
+API Use/Purpose
+SOAP webservice (UploadInvoiceFile)
+Upload BIF
+Integration Modifications
+Jira INT
+Date Release
+Previous Behavior
+Desired Behavior
+Business Case / Solution
+INT-1262
+2278e126-27dc-36c8-aef9-a32d91bc7ad7
+System JIRA
+ 
+Dec 2020
+No conveyance process
+ URL:/spaces/IM/pages/183042077/Horizon+Technical+Design

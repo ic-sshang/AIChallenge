@@ -1,0 +1,73 @@
+📌 Issue
+Currently, the 
+Send Test Email
+ component in the email template management module only works when the custom email domain is 
+live
+.
+Users can select:
+Email Template
+Email Type
+Invoice Type
+➡️ However, if the custom email domain is in a 
+test (non-live)
+ state, sending test emails is not supported.
+🔍 Possible Solutions
+Duplicate email sending logic
+Copy from 
+EmailQueueProcessor
+ and 
+IC.EmailQueueFramework
+ into 
+BillerPortal
+.
+Maintain a custom implementation.
+Add a flag in EmailQueueProcessor
+Force-enable custom domains regardless of CRM settings.
+✅ Proposed Solution
+Extend the 
+Test Email function app
+ with minimal changes.
+EmailQueueProcessor
+ → 
+SendTestEmail
+ function currently supports payload:
+BillerId | EmailQueueTypeID | EmailQueueID
+Introduced a 
+new parameter
+:
+ForceEnableCustomEmailDomains (Boolean)
+Passed as the 
+4th parameter
+.
+Overrides DB checks to allow using custom domains even if not live.
+Flag is also passed to 
+IC.EmailQueueFramework
+, which handles 
+domain selection logic
+.
+If enabled → Uses 
+Custom Email Domains
+, even if the feature is turned off.
+✅ Result: Emails can be triggered using 
+Custom Email Domains
+, though the feature is not live yet.
+📂 Branches Created
+Branch name:
+SPARK-338-SPIKE-Use-TestEmails-For-NonLive-Domains
+Repositories:
+MyIIS (BillerPortal)
+EmailQueueProcessor
+IC.EmailQueueFramework
+⚠️ Risks
+Minimal risk, since the new parameter has a 
+default value = False
+.
+No breaking changes to existing flows.
+🖼️ Screenshots
+Triggering email
+ through Biller Portal’s 
+Send Test Email
+ dialog
+Received email
+ from the configured custom domain
+ URL:/spaces/PE/pages/4617764922/SPIKE-Feasibility+to+send+emails+from+Custom+domains+though+feature+is+turned+off.

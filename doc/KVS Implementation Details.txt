@@ -1,0 +1,98 @@
+Page Navigation:
+Summary
+Planning
+Test Portals
+Rules of Engagement
+Timeline
+Configuration
+Required Options
+Coding Requirements
+Partner
+Invoice Cloud
+Document status
+in progress
+Yellow
+ 
+Document owner
+ 
+Knowledge transfer
+n/a
+Summary
+Summary
+Details
+Software Partner Name
+KVS
+Software Product Name
+KVS
+Software Cashiering System
+n/a
+Supported Versions
+n/a
+KVS has a ‘standard’ invoice export from their system that is called the ‘Custom Service File’. This is the standard invoice file layout supported for the integration. 
+Integration Requirements and Pre-Requisites
+n/a
+Vertical
+GUB 
+Sample Biller Implementation
+2720
+Planning
+Test Portals
+IC Hosted Test Portal - N/A
+Partner Hosted Test Portal - N/A
+Biller Test Portal - Not required, biller preference
+Rules of Engagement
+No need to contact KVS as long as biller can pull the sample files themselves. The biller should be able to get support from KVS, if needed. 
+Timeline
+~60-90 days 
+Configuration
+Invoice Types
+Invoice Types are mapped based on where the invoice file(s) are placed on the SFTP. Since the biller has two separate invoice files for school and city tax, the invoice type ID is configured based on file location.
+Need to add mapping
+Virtual Site
+Required Options
+Input required integration options below. The one below is an example:
+ID
+Option Description
+Details
+1
+Allow Adjustments on Closed Invoices
+Enable this option if Payments and Adjustments can be applied to an Invoice that is considered closed. There are cases in which the recommended functionality is to disable this option. One case is Balance Forward, which by definition the balance of the previous Invoice is adjusted out and moved to the new Invoice. No more payments or adjustments should be allowed on that closed Invoice.
+EXAMPLE
+Enabled/Disabled
+Add any additional context as to why the option is required to be enabled/disabled. Include any specific detail was to what will fail/break if this option is not set properly.
+Coding Requirements
+Invoice Cloud Coding Requirements
+If any item in the list does not apply, delete the row
+What
+Provided By
+When
+note
+Important Details
+
+
+Important Details
+
+
+Invoice Data
+Biller or Partner
+Upon request
+Data is unique/specific to each biller. KVS calls this the CustomServiceFileLayout
+Adjustment File
+Biller or Partner
+Upon request
+Data is unique/specific to each biller
+Bill Presentment 
+Biller
+Upon request
+No integration standard - unique to each biller
+Contacts
+Name
+Title/Role
+Email
+Phone
+Escalation Contact
+Karen Balbierz 
+Principal Customer Support Analyst 
+Karen.Balbierz@sprbrk.com
+N
+ URL:/spaces/IM/pages/2530770960/KVS+Implementation+Details

@@ -1,0 +1,31 @@
+To remove a Remote State Resource, first you need to prep the Repo locally by adding the 
+organization
+ and 
+workspace
+to the 
+cloud{}
+ block as demonstrated below:
+terraform {
+  cloud {
+    organization = "InoviceCloud"
+
+    workspaces {
+      name = "avd-workspace-pri-eus-npd-1"
+    }
+  }
+
+  required_providers {
+    azurerm = "~> 3.112.0"
+    azapi = {
+      source  = "azure/azapi"
+      version = "1.13.1"
+    }
+  }
+}
+Then run the following commands to log into the Terrasform Cloud Organization and initialize the repo against the Workspace Remote State:
+terraform login
+
+terraform init
+Finally run the Remove Remote State Resource command as demonstrated below:
+terraform state rm 'azapi_resource_action.vm_start["avd-Rannem1"]'
+ URL:/spaces/platform/pages/3827105911/Remove+Remote+State+Resource

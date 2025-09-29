@@ -1,0 +1,156 @@
+Problem Alignment
+The Problem
+Today, there is no automated way for billers to send past due messages outside of emails to payers. We have a product that sends automated phone calls (Outbound IVR) but this product is infrequently used by only 8 billers. Text messages have higher response rates than email or phone calls according to IVRT, so we want to replace the outbound IVR product with automated messages. 
+Why: How do we know this is a real problem and worth solving?
+We know we need a replacement for outbound IVR. That product was never fully implemented and it is used by only 8 billers.
+We will also need to have an automated reminder platform according to the sales team if we are to continue to sell into enterprise-sized organizations, “To be competitive in the larger accounts for this product, we need an automatic message to go out.” - Matt Braley
+Phone calls also have a low response rate, while text messages have much higher response rates (up to 40% according to IVRT).
+BID
+Biller
+Enabled
+Messages Sent
+Price
+552
+City of Milpitas
+2020-07-06
+0
+No pricing
+1449
+West Bradford Township
+2018-06-14
+0
+No pricing
+1530
+Sandy City
+2018-09-07
+0
+$.15 per message
+2055
+Kimball Township MI
+2021-03-19
+0
+No pricing
+2162
+Ventura County Public Works Agency
+2020-06-30
+0
+$.15 per message
+2230
+Silver Lake Water & Sewer District
+2021-03-03
+0
+$.18 per message
+2316
+City of Pullman WA
+2020-12-29
+0
+$.18 per message
+2372
+Bedford Regional Water Authority
+2021-04-13
+0
+$.15 per message
+Audience: Who are we building for?
+The primary audience for this product is any biller that wants to improve past due collections. There is broad applicability for a product like this across the biller base. Today, to send a reminder text we use Outbound Campaigns, but users do not want to create a custom campaign every time. 
+High-level Approach
+First, we need to decide what we are doing with outbound campaigns. I propose keeping outbound campaigns as a method to send ad-hoc messages to payers. The new automated text feature will only send late reminders. 
+These texts will need to be customizable, similar to the way outbound IVR today is customizable. The biller will have the option to choose the invoice type for the message, the date, number of retries, and the template markers used. We will also need to develop a way to test the texts easily for the biller. 
+To send the texts, we plan on using IVRTs available APIs: 
+TBD
+Further discussions with IVRT are necessary to determine feasibility and pricing. 
+Success
+How do we know if we’ve solved this problem?
+We will know if we are successful based on the results we can drive for billers. We should be able to attribute payments that come from the late payment reminders so we can show the biller that we gained them revenue with this feature. 
+Success
+Open Rate
+Payment Rate
+Low
+20%
+5%
+Medium
+25%
+10%
+High
+30%
+15%+
+Solution Alignment
+Key Features
+Feature
+Priority
+User can customize message with template markers
+High
+User can save and re-use old messages
+Medium
+User can select the date the texts should be sent
+High
+The texts should default to a single message so we are not charged for two messages
+Medium
+The user can select the number of retries
+Medium
+User can select the invoice type
+High
+User can change the criteria for a message to be sent (e.g., 5 days late instead of 10 days)
+Medium
+Texts are sent out from IVRT when specific date triggers pass
+High
+User can specify the time the texts will be sent
+Medium
+User can test a sample message by sending it to a number they enter before sending more broadly
+Medium
+The link included in the text to pay should take the payer directly to the payment route
+High
+If a payer has a saved payment method they can reply to the text to complete the payment
+Medium
+Texts are sent automatically to the payers if they have a number in their customer profile
+High
+Key Flows  
+ 
+Operational Checklist
+Team
+Prompt
+Y/N
+Action (if yes)
+Legal, Sales, IMP, Delivery, Salesforce
+BOF Changes
+Y
+We will need to replace outbound IVR with this solution. 
+Sales
+Do you need sales enablement materials?
+Y
+We will need new sales material for the sales team
+Marketing
+Does this impact marketing?
+Y
+We could do a large marketing release
+Training
+Do you need to update support content or training?
+Y
+New content for training will have to be created
+Implementations
+Changes to questionnaire
+Y
+We will need to add this feature to the questionnaire
+Delivery
+Set up and Enablement
+Y
+Boarding will have to be given instructions on how to set the product up
+Product Marketing
+Do you need a GTM plan? (e.g. pricing, packaging, positioning)
+Y
+Pricing model to be built
+Support
+Biller questions and support
+Y
+Training should be provided with an FAQ guide
+Legal
+Are there potential legal ramifications?
+Y
+We need to determine if we need these users to opt in first 
+Reconciliations
+Questions from billers about charges
+Y
+Might need to speak with reconciliations
+Security, Compliance
+Are there potential security, audit, or compliance ramifications?
+N
+ URL:/spaces/PRODUCT/pages/1939767299/Automated+past+due+text+messages+sent+from+the+biller+portal

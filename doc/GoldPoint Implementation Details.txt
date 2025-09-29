@@ -1,0 +1,112 @@
+Page Navigation:
+Document status
+COMPLETE
+Green
+ 
+Document owner
+ 
+Knowledge Transfer
+Gong URL
+Summary
+Summary
+Details
+Software Partner Name
+GoldPoint (GP)
+Software Product Name
+GoldPoint, EZPay/CIM
+EZPay/CIM is where CSR's can take payments on behalf of borrowers (integrated with IC CloudPay Web Services for Debit Cards. (ACH is not included)
+Software Cashiering System
+N/A
+Supported Versions
+N/A
+Integration Requirements and Pre-Requisites
+None
+GoldPoint will provide the BIF for the integration 
+Vertical
+Consumer Finance
+Sample Biller Implementation
+US Auto Credit 
+Planning
+Test Portals
+Each biller has a test portal that can connect to an IC test portal. GoldPoint does not have a generic test instance to setup with IC.
+Rules of Engagement
+Contact Josh and Shad at GoldPoint (contact sheet below) for allintegration items
+Jessica provides the sample BIF for testing as well as production. Keep her in the loop on project timeline and when files will be needed by IC 
+Timeline
+60-90 days
+Configuration
+Invoice Types
+164 (in BIF)
+Areas in blue below refer to custom logic for
+ BID 1768 only
+Custom1 is used for InvoiceTypeID mapping (InvoiceTypeID value in BIF is ignored and replaced with this mapping). This mapping is setup in Advanced Setting 40.
+Formatting example = 198(830,831)|199(840,841)|183(NA)
+Groups are separated by a pipe
+Number outside the parenthesis is the InvoiceTypeID
+Branches values (from Custom1) are inside the parenthesis, comma separated
+The last group is for defaults, anything not mapped on the previous groups will be set to the InvoiceTypeID for the (NA) group.
+Click here for branch mapping details
+If AmeriFirst adds new branches, an Integration Modification needs to be submitted to IT containing the branch values that need to be mapping to the appropriate InvoiceTypeID. Generally, when a new branch needs to be mapping, the biller also wants as new TD.
+Sample: Please map branches 999 and 000 to Invoice Type ID 44.
+Virtual Site
+Biller will likely use the ‘DisplayAccountNumber’ value for Account Number:
+Required Options
+No known integration required options. If there are required options for the biller, they’re noted in CRM Integration Summary.
+Coding Requirements
+Partner Coding Requirements
+What
+Provided To
+When
+Biller Name
+GoldPoint
+Project Assignment 
+BID
+GoldPoint
+Project Assignment 
+Invoice Format ID
+GoldPoint
+Project Assignment 
+Invoice Format GUID
+GoldPoint
+Project Assignment 
+Biller GUID TEST & PROD
+GoldPoint
+Project Assignment 
+WebService Key TEST & PROD
+GoldPoint
+Project Assignment 
+Invoice Type ID
+GoldPoint
+Project Assignment 
+sFTP credentials PROD (GoldPoint does not automate the daily BIF transfer in test, only in production)
+GoldPoint
+Project Assignment
+Invoice Cloud Coding Requirements
+What
+Provided By
+ETA
+Details
+Invoice Data (BIF)
+GoldPoint
+Upon Request
+Bill Images
+Biller
+Upon Request
+Bill presentment is not supported between IC and GoldPoint. All bill presentment will need to be handled between IC and the biller. The applicable track needs to be submitted for bill presentment.
+Token
+Biller
+Upon Request
+X-institutionNumber
+Biller
+Upon Request
+Contacts
+note
+Each Biller has their own Relationship Manager at GoldPoint that the biller can contact for support.
+
+
+Each Biller has their own Relationship Manager at GoldPoint that the biller can contact for support.
+
+
+1600
+500
+ URL:/spaces/IM/pages/273940497/GoldPoint+Implementation+Details
