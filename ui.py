@@ -1,8 +1,8 @@
 import gradio as gr
 from features.ticket_generator import message_gpt
 from features.chatbot import chat_with_knowledge_base
-from agent.create_tickets import JIRACreator
-from agent.create_files import WebScraper
+from agents.create_tickets import JIRACreator
+from agents.create_files import WebScraper
 
 with gr.Blocks(css="""
                .custom-btn-1 {background-color: #1976d2; color: white; border-radius: 8px;}
