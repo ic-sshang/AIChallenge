@@ -11,6 +11,7 @@ from tiktoken import get_encoding
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.prompts import PromptTemplate
 from config import OPENAI_KEY, File_Dir,IC_OpenAI_URL, IC_Embeddings_APIKEY, IC_Embeddings_URL, IC_Embeddings_Model
+from system_prompt import chatbot_instruction
 
 enc = get_encoding("cl100k_base")
 db_name = ".chroma"
@@ -85,12 +86,12 @@ class Knowledge:
         MAX_TOKENS_PER_MINUTE = 90000  # Leave some buffer from 100k limit
         DELAY_BETWEEN_BATCHES = 1  # seconds
         
-        print(f"Processing {len(chunks)} chunks in batches of {BATCH_SIZE}")
+        print(f"Processing {len(chunks)} chunks in batches of {BATCH_SIZE}", flush=True)
         
         # Calculate total tokens to estimate processing time
         total_tokens = sum(len(enc.encode(chunk.page_content)) for chunk in chunks)
         estimated_minutes = math.ceil(total_tokens / MAX_TOKENS_PER_MINUTE)
-        print(f"Estimated processing time: {estimated_minutes} minutes for {total_tokens} tokens")
+        print(f"Estimated processing time: {estimated_minutes} minutes for {total_tokens} tokens", flush=True)
         
         vectorstore = None
         
@@ -99,29 +100,34 @@ class Knowledge:
             batch_tokens = sum(len(enc.encode(chunk.page_content)) for chunk in batch)
             
             print(f"Processing batch {i//BATCH_SIZE + 1}/{math.ceil(len(chunks)/BATCH_SIZE)} "
-                  f"({len(batch)} docs, {batch_tokens} tokens)")
+                  f"({len(batch)} docs, {batch_tokens} tokens)", flush=True)
             
             try:
                 if vectorstore is None:
                     # Create initial vectorstore with first batch
+                    print("Creating initial vectorstore...", flush=True)
                     vectorstore = Chroma.from_documents(
                         documents=batch,
                         embedding=embedding_function,
                         persist_directory=db_name
                     )
+                    print("Initial vectorstore created successfully", flush=True)
                 else:
                     # Add subsequent batches to existing vectorstore
+                    print("Adding batch to existing vectorstore...", flush=True)
                     vectorstore.add_documents(batch)
+                    # print("Batch added successfully", flush=True)
                 
                 # Add delay to respect rate limits
                 if i + BATCH_SIZE < len(chunks):  # Don't delay after last batch
-                    print(f"Waiting {DELAY_BETWEEN_BATCHES} seconds before next batch...")
+                    # print(f"Waiting {DELAY_BETWEEN_BATCHES} seconds before next batch...", flush=True)
                     time.sleep(DELAY_BETWEEN_BATCHES)
                     
             except Exception as e:
                 if "rate limit" in str(e).lower():
-                    print(f"Rate limit hit. Waiting 60 seconds...")
+                    print(f"Rate limit hit. Waiting 60 seconds...", flush=True)
                     time.sleep(60)
+                    print("Retrying after rate limit wait...", flush=True)
                     # Retry the batch
                     if vectorstore is None:
                         vectorstore = Chroma.from_documents(
@@ -131,11 +137,12 @@ class Knowledge:
                         )
                     else:
                         vectorstore.add_documents(batch)
+                    print("Retry successful", flush=True)
                 else:
-                    print(f"Error processing batch: {e}")
+                    print(f"Error processing batch: {e}", flush=True)
                     raise
         
-        print(f"Vectorstore created with {vectorstore._collection.count()} documents")
+        print(f"Vectorstore created with {vectorstore._collection.count()} documents", flush=True)
         return vectorstore
 
     def create_qa_chain(self):
@@ -152,19 +159,11 @@ class Knowledge:
         chunks = []
         vectorstore = self.get_embeddings_using_Azure(chunks)
         # k is how many chunks to use, can be adjusted based on needs
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 100})
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 300})
 
         qa_prompt = PromptTemplate(
             input_variables=["context", "question"],
-            template="""You are a knowledge assistant.
-        Use only the retrieved documents below to answer. 
-        Give information source URL links and Titles at the end. The URL link MUST be https://invoicecloud.atlassian.net/wiki + URL, for example: https://invoicecloud.atlassian.net/wiki/spaces/ED/pages/4618747905/Quick+Find+Overview. If you can't find the answer, say 'I don't know'.
-
-        Retrieved context:
-        {context}
-
-        Question: {question}
-        Answer:"""
+            template=chatbot_instruction
         )
 
         conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=retriever, memory=memory, combine_docs_chain_kwargs={"prompt": qa_prompt})

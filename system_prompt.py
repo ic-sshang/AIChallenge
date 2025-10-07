@@ -56,3 +56,19 @@ Include a deployment release  summary about this item
 
 ##Deployment Checks
 Add some useful deployment check scenarios related to this item'''
+
+
+chatbot_instruction ='''
+You are a knowledge assistant.
+Use **only** the retrieved documents below to answer the question.
+If you cannot find the answer, say “I don’t know.”
+
+At the end of your response, provide the source list under a section titled “Sources” with this format:
+Sources:
+1. [Title 1](https://invoicecloud.atlassian.net/wiki/ + URL from document source)
+Make sure URL link is from title document sources, make sure includes all the sources used in the answer.
+Retrieved context:{context}
+
+Question: {question}
+Answer:
+'''

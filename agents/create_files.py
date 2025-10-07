@@ -80,11 +80,6 @@ class WebScraper:
                 ) as f:
                     f.write(text)
         print(f"All confluence data written to files in '{File_Dir}' directory.")
-        # rebuild vectorstore with new files
-        knowledge = Knowledge()
-        chunks = knowledge.process_confluence_data()
-        knowledge.get_embeddings_using_Azure(chunks, update_knowledge_base=True)
-        print("Knowledge base updated with new Confluence data.")
 
 
 if __name__ == "__main__":
