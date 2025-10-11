@@ -4,6 +4,7 @@ import io
 from contextlib import redirect_stdout, redirect_stderr
 from features.ticket_generator import message_gpt
 from features.chatbot import chat_with_knowledge_base, Knowledge
+from features.error_analysis import error_analysis_feature
 from agents.create_tickets import JIRACreator
 from agents.create_files import WebScraper
 
@@ -12,10 +13,53 @@ with gr.Blocks(css="""
                .custom-btn-2 {background-color: #e53935; color: white; border-radius: 8px;} 
                .btn-active { background-color: #1976d2 !important; color: white !important; }
                .btn-inactive { background-color: #e0e0e0 !important; color: black !important; }
+               .error-analysis-header { 
+                   background: linear-gradient(90deg, #f3f4f6, #e5e7eb); 
+                   padding: 1rem; 
+                   border-radius: 8px; 
+                   margin-bottom: 1rem; 
+               }
+               .analysis-results {
+                   max-height: 600px;
+                   overflow-y: auto;
+                   padding: 1rem;
+                   border: 1px solid #e0e0e0;
+                   border-radius: 8px;
+                   background-color: #fafafa;
+               }
+               .analysis-results h1 {
+                   color: #1976d2;
+                   border-bottom: 2px solid #1976d2;
+                   padding-bottom: 0.5rem;
+               }
+               .analysis-results h2 {
+                   color: #424242;
+                   margin-top: 1.5rem;
+                   margin-bottom: 0.5rem;
+               }
+               .analysis-results h3 {
+                   color: #666666;
+                   margin-top: 1rem;
+                   margin-bottom: 0.5rem;
+               }
+               .analysis-results code {
+                   background-color: #f5f5f5;
+                   padding: 0.2rem 0.4rem;
+                   border-radius: 3px;
+                   font-family: 'Courier New', monospace;
+               }
+               .analysis-results pre {
+                   background-color: #f5f5f5;
+                   padding: 1rem;
+                   border-radius: 5px;
+                   overflow-x: auto;
+                   border-left: 4px solid #1976d2;
+               }
                """) as main_ui:
     with gr.Row():
         chat_btn = gr.Button("💬 Engineering Q&A",elem_classes=["btn-active"])
-        jira_btn = gr.Button("📝 Jira Creator",elem_classes=["btn-inactive "])
+        jira_btn = gr.Button("📝 Jira Creator",elem_classes=["btn-inactive"])
+        error_btn = gr.Button("🔍 Error Analysis",elem_classes=["btn-inactive"])
         
     with gr.Column(visible=False) as jira_page:
         summary = gr.Textbox(label="Summary", placeholder="Enter issue summary")
@@ -44,6 +88,111 @@ with gr.Blocks(css="""
         submit_btn.click(fn=message_gpt, inputs=[description, model_type], outputs=output_content)
         create_btn.click(fn=JIRACreator.create_ticket, inputs=[summary, output_content, issue_type, email_box, token_box, project_key], outputs=output)
         
+    
+    with gr.Column(visible=False) as error_page:
+        gr.Markdown("## 🔍 Error Analysis & Root Cause Detection")
+        gr.Markdown("Analyze errors by providing an error message and Azure DevOps repository link. The system will examine the codebase and provide detailed root cause analysis optimized for .NET applications.")
+        
+        with gr.Row():
+            with gr.Column(scale=2):
+                error_message = gr.Textbox(
+                    label="Error Message", 
+                    placeholder="Paste your error message here (stack trace, exception, etc.)",
+                    lines=8,
+                    max_lines=15
+                )
+            
+            with gr.Column(scale=1):
+                gr.Markdown("### 💡 Sample Error Messages")
+                sample_errors = error_analysis_feature.get_sample_errors()
+                sample_error_dropdown = gr.Dropdown(
+                    choices=sample_errors,
+                    label="Quick Examples",
+                    value=None,
+                    interactive=True
+                )
+        
+        with gr.Row():
+            with gr.Column(scale=2):
+                repo_url = gr.Textbox(
+                    label="Azure DevOps Repository URL", 
+                    placeholder="https://dev.azure.com/organization/project/_git/repository",
+                    value=""
+                )
+            
+            with gr.Column(scale=1):
+                gr.Markdown("### 📚 Sample Repositories")
+                sample_repos = error_analysis_feature.get_sample_repos()
+                sample_repo_dropdown = gr.Dropdown(
+                    choices=[(f"{repo['name']} - {repo['description']}", repo['url']) for repo in sample_repos],
+                    label="Quick Examples",
+                    value=None,
+                    interactive=True
+                )
+        
+        with gr.Row():
+            analyze_btn = gr.Button("🚀 Start Error Analysis", elem_classes=["custom-btn-1"], size="lg")
+            clear_btn = gr.Button("🗑️ Clear", elem_classes=["custom-btn-2"])
+        
+        gr.Markdown("---")
+        
+        # Analysis Results
+        analysis_output = gr.Markdown(
+            value="",
+            elem_classes=["analysis-results"]
+        )
+        
+        # Add a collapsible raw text version for copying
+        with gr.Accordion("📄 Raw Text (for copying)", open=False):
+            raw_output = gr.Textbox(
+                label="Raw Analysis Text",
+                lines=10,
+                max_lines=20,
+                value="",
+                interactive=False,
+                show_copy_button=True
+            )
+        
+        # Event handlers for error analysis page
+        def use_sample_error(selected_error):
+            if selected_error:
+                return selected_error
+            return ""
+        
+        def use_sample_repo(selected_repo):
+            if selected_repo:
+                return selected_repo
+            return ""
+        
+        def clear_fields():
+            return "", "", "", ""
+        
+        def run_error_analysis(error_msg, repo_link, progress=gr.Progress()):
+            """Run the error analysis and yield progress updates."""
+            if not error_msg.strip() or not repo_link.strip():
+                error_msg = "❌ Please provide both an error message and Azure DevOps repository URL."
+                return error_msg, error_msg
+            
+            result_text = ""
+            try:
+                for update in error_analysis_feature.analyze_error_with_ai(error_msg, repo_link):
+                    result_text += update
+                    # Return both formatted markdown and raw text
+                    yield result_text, result_text
+            except Exception as e:
+                error_text = f"❌ Analysis failed: {str(e)}"
+                final_result = result_text + error_text
+                yield final_result, final_result
+        
+        # Wire up the event handlers
+        sample_error_dropdown.change(use_sample_error, inputs=[sample_error_dropdown], outputs=[error_message])
+        sample_repo_dropdown.change(use_sample_repo, inputs=[sample_repo_dropdown], outputs=[repo_url])
+        clear_btn.click(clear_fields, outputs=[error_message, repo_url, analysis_output, raw_output])
+        analyze_btn.click(
+            run_error_analysis,
+            inputs=[error_message, repo_url],
+            outputs=[analysis_output, raw_output]
+        )
 
     with gr.Column(visible=True) as chat_page:
         chatbot = gr.Chatbot(
@@ -301,18 +450,33 @@ with gr.Blocks(css="""
         return {
                 jira_page: gr.update(visible=True), 
                 chat_page: gr.update(visible=False),
+                error_page: gr.update(visible=False),
                 jira_btn: gr.update(elem_classes=["btn-active"]),
-                chat_btn: gr.update(elem_classes=["btn-inactive"])
+                chat_btn: gr.update(elem_classes=["btn-inactive"]),
+                error_btn: gr.update(elem_classes=["btn-inactive"])
                 }
 
     def show_chat():
         return {
             jira_page: gr.update(visible=False), 
             chat_page: gr.update(visible=True),
+            error_page: gr.update(visible=False),
             jira_btn: gr.update(elem_classes=["btn-inactive"]),
             chat_btn: gr.update(elem_classes=["btn-active"]),
+            error_btn: gr.update(elem_classes=["btn-inactive"])
+            }
+
+    def show_error():
+        return {
+            jira_page: gr.update(visible=False), 
+            chat_page: gr.update(visible=False),
+            error_page: gr.update(visible=True),
+            jira_btn: gr.update(elem_classes=["btn-inactive"]),
+            chat_btn: gr.update(elem_classes=["btn-inactive"]),
+            error_btn: gr.update(elem_classes=["btn-active"])
             }
 
     
-    jira_btn.click(show_jira, outputs=[jira_page, chat_page, jira_btn, chat_btn])
-    chat_btn.click(show_chat, outputs=[jira_page, chat_page, jira_btn, chat_btn])
+    jira_btn.click(show_jira, outputs=[jira_page, chat_page, error_page, jira_btn, chat_btn, error_btn])
+    chat_btn.click(show_chat, outputs=[jira_page, chat_page, error_page, jira_btn, chat_btn, error_btn])
+    error_btn.click(show_error, outputs=[jira_page, chat_page, error_page, jira_btn, chat_btn, error_btn])

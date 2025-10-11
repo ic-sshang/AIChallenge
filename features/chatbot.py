@@ -159,7 +159,7 @@ class Knowledge:
         chunks = []
         vectorstore = self.get_embeddings_using_Azure(chunks)
         # k is how many chunks to use, can be adjusted based on needs
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 300})
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 200})
 
         qa_prompt = PromptTemplate(
             input_variables=["context", "question"],

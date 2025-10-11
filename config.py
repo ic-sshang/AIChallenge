@@ -9,6 +9,7 @@ JIRA_DOMAIN = os.getenv("JIRA_DOMAIN")
 JIRA_EMAIL = os.getenv("JIRA_EMAIL")      
 JIRA_API_TOKEN = os.getenv("JIRA_API_TOKEN")                 
 OPENAI_KEY = os.getenv("OPENAI_KEY")
+Azure_DevOps_Token = os.getenv("Azure_DevOps_Token")
 File_Dir = "doc"
 Space_Keys = ["ED"]
 # ["EA","ED", "ET", "EN", "Implementa", "IM", "PRODUCT", "icinfradoc", "PE", "platform", "PMK","DS"]
