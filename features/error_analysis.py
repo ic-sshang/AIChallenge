@@ -139,19 +139,24 @@ class ErrorAnalysisFeature:
         """
         return [
             {
-                "name": "Invoice Cloud Biller API",
+                "name": "Biller Search API",
                 "url": "https://dev.azure.com/invoicecloud/Biller/_git/BillerSearchAPI",
-                "description": "Azure DevOps C# API repository for billing services"
+                "description": "Quick Find"
             },
             {
-                "name": "Invoice Cloud Src Project",
+                "name": "MyIIS",
                 "url": "https://dev.azure.com/invoicecloud/Src/_git/MyIIS",
-                "description": "Azure DevOps .NET project with IIS configuration"
+                "description": "Shared repo"
             },
             {
-                "name": "Sample .NET Web App",
-                "url": "https://dev.azure.com/invoicecloud/ProjectName/_git/WebApplication",
-                "description": "Sample ASP.NET web application repository"
+                "name": "Biller Reporting Chat API",
+                "url": "https://dev.azure.com/invoicecloud/Biller/_git/BillerReportingChatAPI",
+                "description": "AI reporting"
+            },
+            {
+                "name": "Biller Reporting API",
+                "url": "https://dev.azure.com/invoicecloud/Biller/_git/BillerReportingAPI",
+                "description": "GraphQL schema and resolvers"
             }
         ]
     
@@ -165,35 +170,12 @@ class ErrorAnalysisFeature:
         """
         return [
             # .NET specific errors with stack traces
-            """System.NullReferenceException: Object reference not set to an instance of an object.
-   at BillerPortal.Services.UserService.GetUserById(Int32 userId) in C:\\src\\Services\\UserService.cs:line 45
-   at BillerPortal.Controllers.UserController.GetUser(Int32 id) in C:\\src\\Controllers\\UserController.cs:line 23""",
+            """System.NullReferenceException: Object reference not set to an instance of an object.""",
             
-            """System.ArgumentNullException: Value cannot be null. Parameter name: connectionString
-   at System.Data.SqlClient.SqlConnection..ctor(String connectionString)
-   at BillerPortal.Data.DatabaseContext.CreateConnection() in C:\\src\\Data\\DatabaseContext.cs:line 12""",
+            """System.ArgumentNullException: Value cannot be null.""",
             
-            """System.InvalidOperationException: Unable to resolve service for type 'BillerPortal.Services.IEmailService' while attempting to activate 'BillerPortal.Controllers.NotificationController'.
-   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService()""",
-            
-            """Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
-   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.Execute()
-   at BillerPortal.Data.Repository.SaveChanges() in C:\\src\\Data\\Repository.cs:line 78""",
-            
-            """System.Configuration.ConfigurationErrorsException: Configuration system failed to initialize
-   at System.Configuration.ConfigurationManager.GetSection(String sectionName)
-   at BillerPortal.Configuration.AppSettings.Load() in C:\\src\\Configuration\\AppSettings.cs:line 15""",
-            
-            """System.Data.SqlClient.SqlException: A network-related or instance-specific error occurred while establishing a connection to SQL Server.
-   at System.Data.SqlClient.SqlInternalConnection.OnError()
-   at BillerPortal.Data.SqlRepository.ExecuteQuery() in C:\\src\\Data\\SqlRepository.cs:line 33""",
-            
-            """System.Web.HttpException: The controller for path '/api/billing' was not found or does not implement IController.
-   at System.Web.Mvc.MvcHandler.ProcessRequestInit()""",
-            
-            """System.TypeLoadException: Could not load type 'BillerPortal.Models.InvoiceModel' from assembly 'BillerPortal.Core, Version=1.0.0.0'
-   at BillerPortal.Services.InvoiceService.CreateInvoice() in C:\\src\\Services\\InvoiceService.cs:line 28""",
-            
+            """System.Data.SqlClient.SqlException: A network-related or instance-specific error occurred while establishing a connection to SQL Server.""",
+
             # Configuration and deployment errors
             "System.IO.FileNotFoundException: Could not load file or assembly 'Newtonsoft.Json, Version=13.0.0.0' or one of its dependencies.",
             
@@ -203,11 +185,6 @@ class ErrorAnalysisFeature:
             "System.Web.UI.ViewStateException: Invalid viewstate. Client IP: 192.168.1.100 User-Agent: Mozilla/5.0",
             
             "System.Web.Services.Protocols.SoapException: Server was unable to process request. ---> System.ArgumentException: Invalid billing account number.",
-            
-            # Database and Entity Framework errors
-            "System.Data.Entity.Infrastructure.DbUpdateConcurrencyException: Store update, insert, or delete statement affected an unexpected number of rows (0).",
-            
-            "System.Data.Entity.ModelConfiguration.ModelValidationException: One or more validation errors were detected during model generation",
             
             # Modern .NET Core errors
             "Microsoft.AspNetCore.Http.BadHttpRequestException: Reading the request body timed out due to data arriving too slowly.",
