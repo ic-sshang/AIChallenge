@@ -425,6 +425,11 @@ class ErrorAnalyzer:
         for file_path in relevant_file_paths:
             content = self.get_file_content(owner, repo, file_path)
             if content:
+                # Limit individual file content to prevent token overflow
+                MAX_FILE_CONTENT = 10000  # characters
+                if len(content) > MAX_FILE_CONTENT:
+                    content = content[:MAX_FILE_CONTENT] + f"\n... (file truncated, original size: {len(content)} characters)"
+                
                 file_info = next((f for f in recently_changed_files if f['path'] == file_path), {})
                 relevant_files.append({
                     'path': file_path,
@@ -603,7 +608,7 @@ Return ONLY a JSON array of the most relevant file paths:
                     except (json.JSONDecodeError, KeyError):
                         print("Failed to parse AI response as JSON, using fallback")
                 else:
-                    print(f"Azure OpenAI API error: {response.status_code}")
+                    print(f"Azure OpenAI API error (select relevant files): {response.status_code} {response.text}")
             
             # Fallback to smart selection
             return self._smart_file_selection_fallback(all_files, error_message, max_files)
@@ -725,6 +730,14 @@ Return ONLY a JSON array of the most relevant file paths:
             if progress_callback:
                 progress_callback("🤖 Performing AI-powered root cause analysis...")
             
+            # Debug: Print context size
+            context_chars = len(context)
+            estimated_tokens = context_chars // 4
+            print(f"📊 Context prepared: {context_chars:,} characters (~{estimated_tokens:,} tokens)")
+            
+            if estimated_tokens > 100000:
+                print("⚠️ Warning: Context may be approaching token limits")
+            
             # Perform analysis using AI
             analysis_result = self.perform_ai_analysis(context)
             
@@ -762,21 +775,126 @@ Return ONLY a JSON array of the most relevant file paths:
         Returns:
             Formatted context string
         """
-        context = f"""
-ERROR MESSAGE:
+        # Estimate tokens (rough approximation: 1 token ≈ 4 characters)
+        MAX_TOKENS = 100000  # Leave room for response and system prompt
+        MAX_CHARS = MAX_TOKENS * 4
+        
+        context = f"""ERROR MESSAGE:
 {error_message}
 
 RELEVANT CODE FILES:
 """
         
+        current_length = len(context)
+        files_included = 0
+        
         for file_info in relevant_files:
-            context += f"""
---- FILE: {file_info['path']} ---
-{file_info['content']}
+            file_content = file_info['content']
+            file_path = file_info['path']
+            
+            # Truncate individual file content if too large
+            max_file_chars = min(8000, (MAX_CHARS - current_length) // max(1, len(relevant_files) - files_included))
+            
+            if len(file_content) > max_file_chars:
+                # Extract key parts: beginning, any error-related sections, and end
+                truncated_content = self._smart_truncate_content(file_content, max_file_chars, error_message)
+                file_section = f"""
+--- FILE: {file_path} (TRUNCATED - {len(file_content)} chars total) ---
+{truncated_content}
+[... content truncated for token limit ...]
 
 """
+            else:
+                file_section = f"""
+--- FILE: {file_path} ---
+{file_content}
+
+"""
+            
+            # Check if adding this file would exceed limits
+            if current_length + len(file_section) > MAX_CHARS:
+                context += f"""
+--- ADDITIONAL FILES OMITTED DUE TO TOKEN LIMIT ---
+{len(relevant_files) - files_included} more files were analyzed but omitted from context to stay within token limits.
+Files omitted: {[f['path'] for f in relevant_files[files_included:]]}
+
+"""
+                break
+            
+            context += file_section
+            current_length += len(file_section)
+            files_included += 1
         
         return context
+    
+    def _smart_truncate_content(self, content: str, max_chars: int, error_message: str) -> str:
+        """
+        Intelligently truncate file content while preserving relevant parts.
+        
+        Args:
+            content: Full file content
+            max_chars: Maximum characters to keep
+            error_message: Error message to find relevant sections
+            
+        Returns:
+            Truncated content with most relevant parts preserved
+        """
+        if len(content) <= max_chars:
+            return content
+        
+        lines = content.split('\n')
+        
+        # Extract keywords from error message for relevance scoring
+        error_keywords = re.findall(r'\b[A-Za-z_][A-Za-z0-9_]*\b', error_message.lower())
+        error_keywords = [k for k in error_keywords if len(k) > 3]
+        
+        # Score lines based on relevance
+        scored_lines = []
+        for i, line in enumerate(lines):
+            score = 0
+            line_lower = line.lower()
+            
+            # Higher score for lines containing error keywords
+            for keyword in error_keywords:
+                if keyword in line_lower:
+                    score += 10
+            
+            # Score for important code patterns
+            if any(pattern in line_lower for pattern in ['public', 'private', 'class', 'method', 'function', 'sub ', 'dim ', 'if ', 'try', 'catch', 'throw']):
+                score += 3
+            
+            # Score for configuration and important declarations
+            if any(pattern in line_lower for pattern in ['config', 'connection', 'setting', 'import', 'using', 'namespace']):
+                score += 2
+            
+            scored_lines.append((i, line, score))
+        
+        # Always include the beginning (class/namespace declarations)
+        beginning_lines = lines[:min(20, len(lines))]
+        
+        # Sort by relevance and take top scoring lines
+        scored_lines.sort(key=lambda x: x[2], reverse=True)
+        
+        # Take top relevant lines while maintaining some order
+        relevant_lines = []
+        used_chars = len('\n'.join(beginning_lines))
+        
+        # Add beginning
+        for line in beginning_lines:
+            relevant_lines.append(line)
+        
+        # Add most relevant lines if we have space
+        remaining_chars = max_chars - used_chars
+        for line_num, line, score in scored_lines:
+            if score > 0 and line_num >= 20:  # Skip lines already included in beginning
+                if len(line) + 1 <= remaining_chars:  # +1 for newline
+                    relevant_lines.append(f"... (line {line_num + 1}) ...")
+                    relevant_lines.append(line)
+                    remaining_chars -= len(line) + 1
+                    if remaining_chars < 100:  # Leave some room
+                        break
+        
+        return '\n'.join(relevant_lines)
     
     def perform_ai_analysis(self, context: str) -> str:
         """
@@ -876,7 +994,7 @@ Focus on practical, implementable solutions specific to this error and codebase.
 """
                     return analysis_with_metadata
                 else:
-                    print(f"Azure OpenAI API error: {response.status_code}")
+                    print(f"Azure OpenAI API error: {response.status_code} {response.text}")
                     return self._fallback_analysis_template(context)
             else:
                 print("OpenAI credentials not available, using fallback analysis")
