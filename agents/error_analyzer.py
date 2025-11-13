@@ -799,26 +799,26 @@ RELEVANT CODE FILES:
                 # Extract key parts: beginning, any error-related sections, and end
                 truncated_content = self._smart_truncate_content(file_content, max_file_chars, error_message)
                 file_section = f"""
---- FILE: {file_path} (TRUNCATED - {len(file_content)} chars total) ---
-{truncated_content}
-[... content truncated for token limit ...]
+                    --- FILE: {file_path} (TRUNCATED - {len(file_content)} chars total) ---
+                    {truncated_content}
+                    [... content truncated for token limit ...]
 
-"""
+                    """
             else:
                 file_section = f"""
---- FILE: {file_path} ---
-{file_content}
+                    --- FILE: {file_path} ---
+                    {file_content}
 
-"""
+                    """
             
             # Check if adding this file would exceed limits
             if current_length + len(file_section) > MAX_CHARS:
                 context += f"""
---- ADDITIONAL FILES OMITTED DUE TO TOKEN LIMIT ---
-{len(relevant_files) - files_included} more files were analyzed but omitted from context to stay within token limits.
-Files omitted: {[f['path'] for f in relevant_files[files_included:]]}
+                    --- ADDITIONAL FILES OMITTED DUE TO TOKEN LIMIT ---
+                    {len(relevant_files) - files_included} more files were analyzed but omitted from context to stay within token limits.
+                    Files omitted: {[f['path'] for f in relevant_files[files_included:]]}
 
-"""
+                    """
                 break
             
             context += file_section

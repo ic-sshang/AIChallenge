@@ -4,6 +4,8 @@ import os
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
+from azure_keyvault import AzureKeyVaultClient
+
 load_dotenv()
 JIRA_DOMAIN = os.getenv("JIRA_DOMAIN")
 JIRA_EMAIL = os.getenv("JIRA_EMAIL")      
@@ -19,10 +21,12 @@ IC_OpenAI_URL = "https://ca-pri-playground2-dev.openai.azure.com/openai/deployme
 IC_Embeddings_URL = "https://arch-ai-svc.cognitiveservices.azure.com/"
 IC_Embeddings_APIKEY = os.getenv("IC_Embeddings_APIKEY")
 IC_Embeddings_Model = "text-embedding-ada-002"
-# vault_url = "https://kv-glb-vault1-dev.vault.azure.net/"
-# secret_name = "Playground-OpenAi-ApiKey"
-# credential = DefaultAzureCredential()
 
-# client = SecretClient(vault_url=vault_url, credential=credential)
-# secret = client.get_secret(secret_name)          # Optional: specify version with get_secret(name, version)
-# print("Secret value:", secret.value)
+
+# using Azure keyvault to get secrete
+vault_url = "https://arch-kv-poc.vault.azure.net/" #"https://kv-glb-vault1-dev.vault.azure.net/"
+secret_name = "text-embedding-ada-002-key" #"Playground-OpenAi-ApiKey"
+client = AzureKeyVaultClient(vault_url) 
+
+secret = client.get_secret(secret_name)  
+#print("Secret value:", secret)
