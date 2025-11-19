@@ -6,3 +6,4 @@
 ## Run in DEV
   - start in loal
   uvicorn app:app --reload --host 0.0.0.0 --port 8000
+ - go to localhost:8000
