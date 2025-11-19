@@ -192,9 +192,9 @@ class ErrorAnalyzer:
             headers['Authorization'] = f'Basic {credentials}'
         
         try:
-            print(f"🔍 Fetching file content: {organization}/{project}/{repo} -> {file_path}")
-            print(f"📡 Request URL: {url}")
-            print(f"📋 Parameters: {params}")
+            # print(f"🔍 Fetching file content: {organization}/{project}/{repo} -> {file_path}")
+            # print(f"📡 Request URL: {url}")
+            # print(f"📋 Parameters: {params}")
             
             response = requests.get(url, headers=headers, params=params)
             
@@ -235,7 +235,7 @@ class ErrorAnalyzer:
                 elif content.startswith('ï»¿'):
                     content = content[3:]  # Remove UTF-8 BOM bytes
             
-            print(f"✅ Successfully fetched file content: {file_path} ({len(content)} characters)")
+            # print(f"✅ Successfully fetched file content: {file_path} ({len(content)} characters)")
             return content
             
         except Exception as e:
@@ -1106,60 +1106,3 @@ var result = myObject?.SomeProperty?.SomeMethod();
 """
         
         return analysis
-    
-
-if __name__ == "__main__":
-    # Example usage with recent changes focus
-    analyzer = ErrorAnalyzer()
-    error_msg = r'''System.Web.HttpUnhandledException: Exception of type 'System.Web.HttpUnhandledException' was thrown. ---> System.NullReferenceException: Object reference not set to an instance of an object.
-	   at BillerPortal.Dialogs_RemoveLogin.ConfigureDefaultDialogBox() in C:\agent\_work\42\s\BillerPortal\Dialogs\RemoveLogin.aspx.vb:line 318
-	   at BillerPortal.Dialogs_RemoveLogin.Page_Load(Object sender, EventArgs e) in C:\agent\_work\42\s\BillerPortal\Dialogs\RemoveLogin.aspx.vb:line 146
-	   at System.Web.UI.Control.OnLoad(EventArgs e)
-	   at System.Web.UI.Control.LoadRecursive()
-	   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
-	   --- End of inner exception stack trace ---
-	   at System.Web.UI.Page.HandleError(Exception e)
-	   at System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
-	   at System.Web.UI.Page.ProcessRequest(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint)
-	   at System.Web.UI.Page.ProcessRequest()
-	   at System.Web.UI.Page.ProcessRequest(HttpContext context)
-	   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-	   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
-	   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)'''
-    repo_url = "https://dev.azure.com/invoicecloud/Src/_git/MyIIS"
-    
-    def simple_progress(message):
-        """Simple progress callback to avoid readline issues"""
-        print(f"Progress: {message}")
-    
-    print("🚀 Testing ErrorAnalyzer with Recent Changes Focus (Past 14 Days)")
-    print("=" * 70)
-    
-    # Test with 14 days (default)
-    result = analyzer.analyze_error(error_msg, repo_url, progress_callback=simple_progress, days=14)
-    
-    print("=" * 70)
-    if result['success']:
-        print("✅ Analysis completed successfully!")
-        print(f"📊 Analysis Scope: {result.get('analysis_scope', 'N/A')}")
-        print(f"📂 Repository: {result.get('repo_info', 'N/A')}")
-        print(f"📄 Files Analyzed: {len(result.get('files_analyzed', []))}")
-        
-        # Show commit information for analyzed files
-        commit_info = result.get('commit_info', [])
-        if commit_info:
-            print(f"\n📝 Recent Commit Information:")
-            for info in commit_info[:5]:  # Show first 5
-                print(f"  - {info['path']}")
-                print(f"    Last Commit: {info['last_commit_id'][:8]} - {info['last_commit_message'][:50]}...")
-                print(f"    Change Type: {info['change_type']}")
-        
-        print(f"\n📋 Files: {result.get('files_analyzed', [])}")
-        print("\n🔍 Analysis Result:")
-        print("-" * 50)
-        print(result['analysis'])
-    else:
-        print(f"❌ Analysis failed: {result['error']}")
-        
-    print("=" * 70)
-    print("🏁 Test completed.")
