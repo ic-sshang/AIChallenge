@@ -10,15 +10,32 @@ from langchain.schema import Document
 from tiktoken import get_encoding
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.prompts import PromptTemplate
-from config import OPENAI_KEY, File_Dir,IC_OpenAI_URL, IC_Embeddings_APIKEY, IC_Embeddings_URL, IC_Embeddings_Model
+from config import OPENAI_KEY, File_Dir,IC_OpenAI_URL, IC_Embeddings_APIKEY, IC_Embeddings_URL, IC_Embeddings_Model, vector_store_address, vector_store_password
 from system_prompt import chatbot_instruction
+from langchain_community.vectorstores.azuresearch import AzureSearch
+from azure.search.documents.indexes import SearchIndexClient
+from azure.core.credentials import AzureKeyCredential
+from azure.core.exceptions import ResourceNotFoundError
 
 enc = get_encoding("cl100k_base")
 db_name = ".chroma"
+index_name = "langchain_vector_demo"
 
 class Knowledge:
     def __init__(self):
         pass
+
+    def _azure_index_exists(self, index_name: str) -> bool:
+        """Return True when the Azure AI Search index is already provisioned."""
+        client = SearchIndexClient(
+            endpoint=vector_store_address,
+            credential=AzureKeyCredential(vector_store_password),
+        )
+        try:
+            client.get_index(index_name)
+            return True
+        except ResourceNotFoundError:
+            return False
 
     # Chunk size and overlap can be adjusted based on needs 
     def chunk_text(self, text):  
@@ -62,7 +79,7 @@ class Knowledge:
         print(f"Total chunks created: {len(all_chunks)}")
         return all_chunks
     
-    def get_embeddings_using_Azure(self, chunks, update_knowledge_base = False):
+    def get_embeddings_using_Azure(self, chunks, update_knowledge_base = False) -> AzureSearch:
         """Get or create embeddings using Azure OpenAI."""
         emb = AzureOpenAIEmbeddings(
                 model = IC_Embeddings_Model,
@@ -70,10 +87,17 @@ class Knowledge:
                 api_key = IC_Embeddings_APIKEY,
                 openai_api_version="2024-02-01"
             )
-        if os.path.exists(db_name) and not update_knowledge_base:
+        index_exists = self._azure_index_exists(index_name)
+        if index_exists and not update_knowledge_base:
             # load existing vectorstore
-            vectorstore = Chroma(persist_directory=db_name, embedding_function=emb)
-            print(f"Loaded vectorstore with {vectorstore._collection.count()} documents")
+            # vectorstore = Chroma(persist_directory=db_name, embedding_function=emb)
+            vectorstore: AzureSearch = AzureSearch(
+                azure_search_endpoint=vector_store_address,
+                azure_search_key=vector_store_password,
+                index_name=index_name,
+                embedding_function=emb.embed_query,
+            )
+            print(f"Loaded vector store !!")
             return vectorstore
         else:
             # create new vectorstore with rate limiting
@@ -106,16 +130,23 @@ class Knowledge:
                 if vectorstore is None:
                     # Create initial vectorstore with first batch
                     print("Creating initial vectorstore...", flush=True)
-                    vectorstore = Chroma.from_documents(
-                        documents=batch,
-                        embedding=embedding_function,
-                        persist_directory=db_name
+                    # vectorstore = Chroma.from_documents(
+                    #     documents=batch,
+                    #     embedding=embedding_function,
+                    #     persist_directory=db_name
+                    # )
+                    vectorstore: AzureSearch = AzureSearch(
+                        azure_search_endpoint=vector_store_address,
+                        azure_search_key=vector_store_password,
+                        index_name=index_name,
+                        embedding_function=embedding_function.embed_query,
                     )
+                    vectorstore.add_documents(documents=batch)
                     print("Initial vectorstore created successfully", flush=True)
                 else:
                     # Add subsequent batches to existing vectorstore
                     print("Adding batch to existing vectorstore...", flush=True)
-                    vectorstore.add_documents(batch)
+                    vectorstore.add_documents(documents=batch)
                     # print("Batch added successfully", flush=True)
                 
                 # Add delay to respect rate limits
@@ -130,19 +161,26 @@ class Knowledge:
                     print("Retrying after rate limit wait...", flush=True)
                     # Retry the batch
                     if vectorstore is None:
-                        vectorstore = Chroma.from_documents(
-                            documents=batch,
-                            embedding=embedding_function,
-                            persist_directory=db_name
+                        # vectorstore = Chroma.from_documents(
+                        #     documents=batch,
+                        #     embedding=embedding_function,
+                        #     persist_directory=db_name
+                        # )
+                        vectorstore: AzureSearch = AzureSearch(
+                            azure_search_endpoint=vector_store_address,
+                            azure_search_key=vector_store_password,
+                            index_name=index_name,
+                            embedding_function=embedding_function.embed_query,
                         )
+                        vectorstore.add_documents(documents=batch)
                     else:
-                        vectorstore.add_documents(batch)
+                        vectorstore.add_documents(documents=batch)
                     print("Retry successful", flush=True)
                 else:
                     print(f"Error processing batch: {e}", flush=True)
                     raise
         
-        print(f"Vectorstore created with {vectorstore._collection.count()} documents", flush=True)
+        print(f"Vectorstore created!!", flush=True)
         return vectorstore
 
     def create_qa_chain(self):
@@ -157,9 +195,9 @@ class Knowledge:
         # set up the conversation memory for the chat
         memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
         chunks = []
-        vectorstore = self.get_embeddings_using_Azure(chunks)
+        vectorstore: AzureSearch = self.get_embeddings_using_Azure(chunks)
         # k is how many chunks to use, can be adjusted based on needs
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 200})
+        retriever = vectorstore.as_retriever(k=200)
 
         qa_prompt = PromptTemplate(
             input_variables=["context", "question"],

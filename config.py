@@ -21,7 +21,8 @@ IC_OpenAI_URL = "https://ca-pri-playground2-dev.openai.azure.com/openai/deployme
 IC_Embeddings_URL = "https://arch-ai-svc.cognitiveservices.azure.com/"
 IC_Embeddings_APIKEY = os.getenv("IC_Embeddings_APIKEY")
 IC_Embeddings_Model = "text-embedding-ada-002"
-
+vector_store_address = "https://arch-ai-search-poc.search.windows.net"
+vector_store_password = os.getenv("Vector_Store_Password")
 
 # using Azure keyvault to get secrete
 vault_url = "https://arch-kv-poc.vault.azure.net/" #"https://kv-glb-vault1-dev.vault.azure.net/"
