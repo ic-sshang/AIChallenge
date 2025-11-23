@@ -65,6 +65,8 @@ class Settings:
     ic_embeddings_model: str = _get_env("IC_EMBEDDINGS_MODEL", "text-embedding-ada-002")
     vector_store_address: str = _get_env("VECTOR_STORE_ADDRESS", "https://arch-ai-search-poc.search.windows.net")
     vector_store_password: Optional[str] = _get_env("Vector_Store_Password")
+    azure_storage_connection_string: Optional[str] = _get_env("AZURE_STORAGE_CONNECTION_STRING")
+    blob_container_name: str = _get_env("BLOB_CONTAINER_NAME", "confluence-pages")
 
 
 
@@ -86,6 +88,8 @@ IC_Embeddings_Model = settings.ic_embeddings_model
 vector_store_address = settings.vector_store_address
 vector_store_password = settings.vector_store_password
 vault_url = settings.key_vault_url
+AZURE_STORAGE_CONNECTION_STRING = settings.azure_storage_connection_string
+BLOB_CONTAINER_NAME = settings.blob_container_name
 
 
 def get_openai_key() -> Optional[str]:
