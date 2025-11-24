@@ -1,8 +1,10 @@
 """Gradio UI that connects to FastAPI backend."""
 
+from fastapi import FastAPI
 import gradio as gr
 import requests
 from typing import List, Dict
+import uvicorn
 
 # Backend API URL - adjust for your deployment
 API_BASE_URL = "http://localhost:8000"
@@ -278,4 +280,8 @@ with gr.Blocks(css="""
 
 
 if __name__ == "__main__":
-    main_ui.launch(server_name="0.0.0.0", server_port=7860)
+    # main_ui.launch(server_name="0.0.0.0", server_port=7860)
+    app = FastAPI()
+    app = gr.mount_gradio_app(app, main_ui, path="")
+    uvicorn.run(app, host="0.0.0.0", port=7860)
+
