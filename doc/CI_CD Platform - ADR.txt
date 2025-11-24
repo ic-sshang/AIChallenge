@@ -1,8 +1,0 @@
-Today we are using Azure DevOps for our CI/CD platform.  We are starting to look at other systems in this space for improved delivery.
-Below is a list of requirements, pain points, questions, and wants as it relates to a CI/CD system and our current processes.
-PAIN: Unable to easily see what version of software is deployed to deployment targets.
-PAIN: There are too many pipelines.  Pipelines and artifacts have to be filtered/noise.  Side effect of having all code repositories under one ADO project and not being able to delete pipelines due to auditing requirements.
-WANT:  Group deployments by a release.  Being able to action all or some of the deployments in the release group.
-QUESTION: What is our data retention policy for deployment history.  What is our SLA for compliance on deployment auditing (SOC, PCI, etc…).
-WANT: Decouple the audit history from the CI/CD system for portability and maintainability.   
- URL:/spaces/EA/pages/4001234959/CI+CD+Platform+-+ADR

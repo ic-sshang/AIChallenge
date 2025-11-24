@@ -1,5 +1,0 @@
-The Skybot system is a job scheduler.  The system has a control plane API and multiple app servers (agents) that are used to execute the jobs on.   The control plane API is used to configure the schedules.  The agents will pick up the configurations and run jobs per their configurations.
-Testing Skybot jobs should cover:
-Ensuring the job can run correctly on a given app server (MI connections, external dependencies)
-Ensuring the Skybot job configuration for a job is valid and can be executed (THIS TEST SHOULD BE SKIPPED FOR JOBS THAT ARE CHAINED WITH OTHER JOBS)
- URL:/spaces/ED/pages/3374219284/Deployment+Testing

@@ -1,5 +1,0 @@
-BatchCloseProcessor 
- is a Queue Trigger Azure Function, it’s a responsibility to decide how to close Biller’s batches, we currently only close by module or frontend, also known in code as the BatchCloseType. Once it’s decided which batch close type to use, it collects module/frontend IDs. For each module/frontend ID we will then queue the ID, alongside the biller’s data, to the 
-BatchCloseExecutor
-, which will take care of closing the batches for all terminals with the given module/frontend ID. 
- URL:/spaces/PE/pages/2627043726/BatchCloseProcessor

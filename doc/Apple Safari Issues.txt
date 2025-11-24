@@ -1,7 +1,0 @@
-We saw an issue in the Safari browser trying to make a jump to Invoice Cloud. However, they were failing on this jump due to multiple sessions being made in the redirects. We later found out that the redirects were being caused by an invalid session that was found in New Relic on the first session acquired. The reason for their first session expiring was due to their session signature being changed by acquiring new cookies. The reason they were acquiring new cookies was due to the default setting in Safari called “prevent cross-site tracking cookies” being enabled. 
-I’ve put together steps to show how to disable this setting and get a successful jump to InvoiceCloud.
-DS item in reference: 
-[DS-4437] Since agent connect was implemented they have been experiencing an issue within spryengage when they press cont. to pay info and try to process a payment. They say it is getting a frown face and not letting them proceed. - JIRA (atlassian.net)
-EBPP item in reference: 
-[EBPP-14454] - JIRA (atlassian.net)
- URL:/spaces/DS/pages/2848915501/Apple+Safari+Issues

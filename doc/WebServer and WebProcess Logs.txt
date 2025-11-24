@@ -1,8 +1,0 @@
-sql
-select * from webmethodlogs  where cast(DateRecAdded as date) ='2022-12-14'
-select * from tblwebmethod
-select * from webservicelogs order by 1 desc
--- webprocess logs are logging from the internal services like RTDR etc, the DB to query is IC_Perflogging and Biller Shard
-select * from webprocesslogs where cast(startdate as date) ='2022-12-02' and processlog like '%FD%'
-Webservice Log Storage
- URL:/spaces/DS/pages/2537521482/WebServer+and+WebProcess+Logs

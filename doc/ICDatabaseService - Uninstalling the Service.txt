@@ -1,8 +1,0 @@
-Uninstalling using the uninstaller
-The installer automatically generates an uninstaller at execution.  To uninstall, locate it here:
-Double-click the installer.  Yes, you can trust it.
-Successful removal will result with this screen.  Again, it has details that could be helpful diagnosing issues.  The installer handles stopping the Windows Service as well before the uninstallation.
-Additional verification can be done by opening up Services and looking for “InvoiceCloud Database Service”.  If it doesn’t exist, it worked as expected.  
-If uninstall fails
-I have encountered cases where the uninstaller will remove the files but the Windows Service stays registered in Services.  If that happens you can open CMD as an Administrator and run the following command.  It will remove it.  You will then have to close Services and re-open it to confirm it completely removed it.
- URL:/spaces/ED/pages/3905683495/ICDatabaseService+-+Uninstalling+the+Service

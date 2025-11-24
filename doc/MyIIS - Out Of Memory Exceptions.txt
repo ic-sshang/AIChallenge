@@ -1,6 +1,0 @@
-There was an issue on our Semco PaperlessRedirect Page causing the page to redirect to a 404.aspx that would redirect to 
-invoicecloud.net
- page.
-We traced this issue with the infrastructure team that there was an exception being thrown on the specific application named SemcoTest2 on Web 4. We noticed an out-of-memory exception being thrown on the application not even reaching the page. This was due to the worker process w3wp.exe having a high virtual memory of getting close to the maximum allowed virtual memory of 4 GB. We took the web server out of rotation and made sure to locate the right worker process for this application. We retrieved the dump file of the worker process and debugged the dump file on Visual Studio. We loaded our symbols and ran the debugger with managed only to run the diagnostic analysis and found the exceptions that were being thrown in the analysis results. We found out that the worker process was receiving 103 objects disposed exceptions being thrown that were not handled in trying to compute the Hash that we were creating on the parameters being sent to us. A great help was using a memory profiler from Jetbrains that is not free but helpful if acquired. (dotMemory)
-Out-of-memory exceptions are tricky but not impossible. Hang on and enjoy the ride.
- URL:/spaces/DS/pages/2848063740/MyIIS+-+Out+Of+Memory+Exceptions

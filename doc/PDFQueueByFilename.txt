@@ -1,9 +1,0 @@
-Summary
-Sets up worker threads. Retrieve pdf files from the machine's {\Pdfs\InvoicesByFilename\Pending} location. Retrieve list of billers. Log number of files to process, set up worker threads. Threads loop through the pdf files, reading each one and moving it to Azure blob storage. File details are saved to a local PDF table. Errors are logged. Data regarding the file is logged into a db log table. File is then moved from the {\Pending} folder to {\Processed} folder. BillerPendingPDFS bulk insert is called when there are greater than 100 records in the local PDF table. Once all pdf files have been processed, any remaining records for the bulk insert are inserted to the db. Process exits when all worker threads have completed and completion has been logged. 
-Features
-Healthcheck
-Azure KeyVault
-Logging (Console and New Relic)
-Threading
-File transfers
- URL:/spaces/IM/pages/3834216489/PDFQueueByFilename

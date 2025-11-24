@@ -1,6 +1,0 @@
-Dashboard
-https://onenr.io/0dQe6rL3Nwe
-https://onenr.io/0Bj3Z4NWvRX
-NRQL we can leverage for looking at jobs on NR.
-SELECT uniqueCount(processId) as 'Throughput'  FROM ProcessSample WHERE commandName like 'BillerFtpProcessing.exe'    LIMIT MAX  FACET hostname, processDisplayName   SINCE 2 days ago TIMESERIES auto  COMPARE WITH  2 weeks ago    
- URL:/spaces/DS/pages/2497642528/Critical+Job+SOPs

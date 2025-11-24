@@ -1,4 +1,0 @@
-MyIIS is the legacy application that payer’s sign into and then, were applicable, get redirected into the 1.5 UI.   In order to support session interop between the them changes are required in MyIIS.
-MyIIS is a part of a code repo that is shared between two web applications; MyIIS and the Biller Portal.  IC.Common is a shared library in the code repo that is used in both web applications.  
-If you make changes to IC.Common for MyIIS you need to copy the IC.Common.dll from the MyIIS BIN folder into the BillerPortal BIN folder and check-in this hard reference.  This will ensure the Biller Portal has the latest IC.Common DLL during the deployment.
- URL:/spaces/EN/pages/2961408026/How+To+Handle+MyIIS+Changes+-+15PE

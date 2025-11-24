@@ -1,9 +1,0 @@
-In the DEV 
-Environment
- there may be multiple Instances of the same Application deployed to support Feature and Branch based development and testing on Kubernetes and Azure Resources within that Environment.
-The Kubernetes Resources specific to each Application Instance are segmented within the Application’s AKS Cluster via Namespaces, i.e. each Application Instance will get its own set of Kubernetes Namespaces that represent the Application Services for that Application Instance.
-The Azure Resources specific to each Application Instance are segmented within the Application’s Azure Subscription via Resource Groups, i.e. each Application Instance will get its own Resource Group within the Application’s Azure Subscription that contains the Resources for each of the Application Services related to that Application Instance.
-Each Application Instance will have its own Application Instance Identifier (and Short Identifier) defined which will be used in the Resource Naming Conventions to avoid Resource Naming collision within the Kubernetes and Azure ecosystems. The default Application Instance Identifier is 
-main
-.
- URL:/spaces/platform/pages/4567793694/Application+Instances+in+DEV
