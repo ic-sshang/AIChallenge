@@ -4,6 +4,9 @@
 ## Install Python packages
   - pip install -r requirements.txt
 ## Run in DEV
-  - start in loal
-  uvicorn app:app --reload --host 0.0.0.0 --port 8000
- - go to localhost:8000
+  - start server
+    python api.py
+  - start client 
+    python ui_client.py
+  - start sync job
+    python sync_confluence.py
