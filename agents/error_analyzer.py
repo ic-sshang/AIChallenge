@@ -96,7 +96,6 @@ class ErrorAnalyzer:
         headers = {}
         if self.azure_devops_token:
             # Use Basic authentication with PAT
-            import base64
             credentials = base64.b64encode(f':{self.azure_devops_token}'.encode()).decode()
             headers['Authorization'] = f'Basic {credentials}'
         
@@ -187,7 +186,6 @@ class ErrorAnalyzer:
         
         headers = {}
         if self.azure_devops_token:
-            import base64
             credentials = base64.b64encode(f':{self.azure_devops_token}'.encode()).decode()
             headers['Authorization'] = f'Basic {credentials}'
         
@@ -277,7 +275,6 @@ class ErrorAnalyzer:
         
         headers = {}
         if self.azure_devops_token:
-            import base64
             credentials = base64.b64encode(f':{self.azure_devops_token}'.encode()).decode()
             headers['Authorization'] = f'Basic {credentials}'
         
